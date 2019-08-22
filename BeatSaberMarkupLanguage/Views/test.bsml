@@ -1,0 +1,7 @@
+<vertical>
+  <text text='Gamer Time' align='Center'></text>
+  <horizontal pad-left='30' pad-right='30'>
+    <button id='redbutton' glow-color='red' text='Test Button'></button>
+    <button text='Test Button 2'></button>
+  </horizontal>
+</vertical>
