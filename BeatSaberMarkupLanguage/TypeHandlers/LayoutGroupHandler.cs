@@ -19,11 +19,17 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "padTop", new[]{"pad-top"} },
             { "padBottom", new[]{ "pad-bottom" } },
             { "padLeft", new[]{ "pad-left" } },
-            { "padRight", new[]{ "pad-right" } }
+            { "padRight", new[]{ "pad-right" } },
+            { "pad", new[]{ "pad" } }
         };
         public override void HandleType(Component obj, Dictionary<string, string> data, Dictionary<string, Action> actions)
         {
             LayoutGroup layoutGroup = (obj as LayoutGroup);
+            if (data.ContainsKey("pad"))
+            {
+                int padding = int.Parse(data["pad"]);
+                layoutGroup.padding = new RectOffset(padding, padding, padding, padding);
+            }
             layoutGroup.padding = new RectOffset(data.ContainsKey("padLeft") ? int.Parse(data["padLeft"]) : layoutGroup.padding.left, data.ContainsKey("padRight") ? int.Parse(data["padRight"]) : layoutGroup.padding.right, data.ContainsKey("padTop") ? int.Parse(data["padTop"]) : layoutGroup.padding.top, data.ContainsKey("padBottom") ? int.Parse(data["padBottom"]) : layoutGroup.padding.bottom);
         }
     }
