@@ -14,11 +14,15 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
     {
         private Dictionary<string, string> Backgrounds => new Dictionary<string, string>()
         {
-            { "round-rect-panel", "RoundRectPanel" }
+            { "round-rect-panel", "RoundRectPanel" },
+            { "panel-bottom", "PanelBottom" },
+            { "panel-top", "PanelTop" }
         };
         private Dictionary<string, string> ObjectNames => new Dictionary<string, string>()
         {
-            { "round-rect-panel", "MinScoreInfo" }
+            { "round-rect-panel", "MinScoreInfo" },
+            { "panel-bottom", "BG" },
+            { "panel-top", "HeaderPanel" }
         };
         public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
         {
