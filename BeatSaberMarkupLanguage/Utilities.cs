@@ -10,6 +10,7 @@ namespace BeatSaberMarkupLanguage
 {
     public static class Utilities
     {
+
         public static List<T> GetListOfType<T>(params object[] constructorArgs)
         {
             List<T> objects = new List<T>();

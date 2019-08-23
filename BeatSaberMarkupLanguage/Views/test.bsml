@@ -4,9 +4,13 @@
   </horizontal>
   <horizontal bg='round-rect-panel' pad='8'>
     <text text='Testing out some nicely formatted business'></text>
+    <vertical>
+      <list visible-cells='3' id='list' select-cell='cell click'></list>
+    </vertical>
   </horizontal>
   <horizontal bg='round-rect-panel' pad='6' spacing='10'>
     <button on-click='click' glow-color='green' text='Test Button'></button>
-    <button text='Test Button 2'></button>
+    <button on-click='list#PageDown' text='Scroll Down'></button>
+    <button on-click='list#PageUp' text='Scroll Up'></button>
   </horizontal>
 </vertical>

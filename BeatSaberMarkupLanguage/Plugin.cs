@@ -3,9 +3,11 @@ using BS_Utils.Utilities;
 using IPA;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static BeatSaberMarkupLanguage.Components.CustomListTableData;
 
 namespace BeatSaberMarkupLanguage
 {
@@ -37,7 +39,18 @@ namespace BeatSaberMarkupLanguage
         private IEnumerator PresentTest()
         {
             yield return new WaitForSeconds(1);
-            Resources.FindObjectsOfTypeAll<MainFlowCoordinator>().First().InvokeMethod("PresentViewController", new object[] { BeatSaberUI.CreateViewController<TestViewController>(), null, false });
+            TestViewController testViewController = BeatSaberUI.CreateViewController<TestViewController>();
+            testViewController.didActivate += delegate
+            {
+                List<CustomCellInfo> test = new List<CustomCellInfo>();
+                for(int i = 0; i<10; i++)
+                {
+                    test.Add(new CustomCellInfo("test" + i, "yee haw"));
+                }
+                testViewController.tableData.data = test;
+                testViewController.tableData.tableView.ReloadData();
+            };
+            Resources.FindObjectsOfTypeAll<MainFlowCoordinator>().First().InvokeMethod("PresentViewController", new object[] { testViewController, null, false });
         }
 
         public void OnApplicationQuit()

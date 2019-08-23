@@ -1,4 +1,6 @@
 ﻿using BeatSaberMarkupLanguage.Attributes;
+using BeatSaberMarkupLanguage.Components;
+using HMUI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,10 +18,19 @@ namespace BeatSaberMarkupLanguage.ViewControllers
         [UIComponent("sometext")]
         public TextMeshProUGUI text;
 
+        [UIComponent("list")]
+        public CustomListTableData tableData;
+
         [UIAction("click")]
         private void ButtonPress()
         {
             text.text = "It works!";
+        }
+
+        [UIAction("cell click")]
+        private void CellClick(TableView tableView, int index)
+        {
+            text.text = tableData.data[index].text;
         }
     }
 }

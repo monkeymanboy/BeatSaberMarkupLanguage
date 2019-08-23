@@ -82,6 +82,7 @@
     <Compile Include="BSMLAction.cs" />
     <Compile Include="BSMLParser.cs" />
     <Compile Include="Components\Backgroundable.cs" />
+    <Compile Include="Components\CustomListTableData.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tags\BackgroundTag.cs" />
@@ -89,11 +90,13 @@
     <Compile Include="Tags\ButtonTag.cs" />
     <Compile Include="Tags\GridLayoutTag.cs" />
     <Compile Include="Tags\HorizontalLayoutTag.cs" />
+    <Compile Include="Tags\ListTag.cs" />
     <Compile Include="Tags\TextTag.cs" />
     <Compile Include="Tags\VerticalLayoutTag.cs" />
     <Compile Include="TypeHandlers\BackgroundableHandler.cs" />
     <Compile Include="TypeHandlers\ButtonHandler.cs" />
     <Compile Include="TypeHandlers\ContentSizeFitterHandler.cs" />
+    <Compile Include="TypeHandlers\CustomListTableDataHandler.cs" />
     <Compile Include="TypeHandlers\GridLayoutGroupHandler.cs" />
     <Compile Include="TypeHandlers\HorizontalOrVerticalLayoutGroupHandler.cs" />
     <Compile Include="TypeHandlers\LayoutGroupHandler.cs" />
