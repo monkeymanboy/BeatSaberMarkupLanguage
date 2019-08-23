@@ -93,6 +93,7 @@
     <Compile Include="TypeHandlers\RectTransformHandler.cs" />
     <Compile Include="TypeHandlers\TextMeshProUGUIHandler.cs" />
     <Compile Include="TypeHandlers\TypeHandler.cs" />
+    <Compile Include="Utilities.cs" />
     <Compile Include="ViewControllers\BSMLResourceViewController.cs" />
     <Compile Include="ViewControllers\BSMLViewController.cs" />
     <Compile Include="ViewControllers\TestViewController.cs" />

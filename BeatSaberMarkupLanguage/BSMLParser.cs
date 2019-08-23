@@ -16,10 +16,15 @@ namespace BeatSaberMarkupLanguage
     {
         public const float SCREEN_WIDTH = 160;
         public const float SCREEN_HEIGHT = 80;
+        
+        private List<BSMLTag> tags;
+        private List<TypeHandler> typeHandlers;
 
-        //Todo think of better way to deal with these
-        private List<BSMLTag> tags = new BSMLTag[] { new ButtonTag(), new VerticalLayoutTag(), new HorizontalLayoutTag(), new TextTag() }.ToList();
-        private List<TypeHandler> typeHandlers = new TypeHandler[] { new RectTransformHandler(), new ButtonHandler(), new HorizontalOrVerticalLayoutGroupHandler(), new LayoutGroupHandler(), new TextMeshProUGUIHandler() }.ToList();
+        public void Awake()
+        {
+            tags = Utilities.GetListOfType<BSMLTag>();
+            typeHandlers = Utilities.GetListOfType<TypeHandler>();
+        }
 
         private XmlDocument doc = new XmlDocument();
         public void Parse(string content, GameObject parent, object host = null)
