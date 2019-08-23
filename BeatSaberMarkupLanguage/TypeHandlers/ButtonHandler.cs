@@ -40,10 +40,10 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             }
             if (data.ContainsKey("onClick"))
             {
-                if(!actions.ContainsKey(data["onClick"]))
-                    throw new Exception("on-click action '" + data["onClick"] + "' not found");
                 button.onClick.AddListener(delegate
                 {
+                    if (!actions.ContainsKey(data["onClick"]))
+                        throw new Exception("on-click action '" + data["onClick"] + "' not found");
                     actions[data["onClick"]].Invoke();
                 });
             }
