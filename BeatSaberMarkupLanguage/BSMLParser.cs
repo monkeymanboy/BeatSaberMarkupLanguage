@@ -30,17 +30,14 @@ namespace BeatSaberMarkupLanguage
         public void Parse(string content, GameObject parent, object host = null)
         {
             doc.LoadXml(content);
-            Dictionary<string, Action> actions = new Dictionary<string, Action>();
+            Dictionary<string, BSMLAction> actions = new Dictionary<string, BSMLAction>();
             if (host != null)
             {
                 foreach (MethodInfo methodInfo in host.GetType().GetMethods(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic))
                 {
                     UIAction uiaction = methodInfo.GetCustomAttributes(typeof(UIAction), true).FirstOrDefault() as UIAction;
                     if (uiaction != null)
-                        actions.Add(uiaction.id, delegate
-                        {
-                            methodInfo.Invoke(host, new object[] { });
-                        });
+                        actions.Add(uiaction.id, new BSMLAction(host, methodInfo));
                 }
             }
             foreach(XmlNode node in doc.ChildNodes)
@@ -49,7 +46,7 @@ namespace BeatSaberMarkupLanguage
             }
         }
 
-        private GameObject HandleNode(XmlNode node, GameObject parent, object host, Dictionary<string, Action> actions)
+        private GameObject HandleNode(XmlNode node, GameObject parent, object host, Dictionary<string, BSMLAction> actions)
         {
             BSMLTag currentTag = tags.First(x => x.Aliases.Contains(node.Name));
             GameObject currentNode = currentTag.CreateObject(parent.transform);

@@ -20,7 +20,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "onClick", new[]{"on-click"} }
         };
 
-        public override void HandleType(Component obj, Dictionary<string, string> data, Dictionary<string, Action> actions)
+        public override void HandleType(Component obj, Dictionary<string, string> data, Dictionary<string, BSMLAction> actions)
         {
             Button button = obj as Button;
             Polyglot.LocalizedTextMeshProUGUI localizer = obj.GetComponentInChildren<Polyglot.LocalizedTextMeshProUGUI>();
@@ -42,7 +42,10 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             {
                 if(!actions.ContainsKey(data["onClick"]))
                     throw new Exception("on-click action '" + data["onClick"] + "' not found");
-                button.onClick.AddListener(new UnityAction(actions[data["onClick"]]));
+                button.onClick.AddListener(delegate
+                {
+                    actions[data["onClick"]].Invoke();
+                });
             }
         }
     }

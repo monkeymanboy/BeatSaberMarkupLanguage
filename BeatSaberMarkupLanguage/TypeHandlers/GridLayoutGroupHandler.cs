@@ -19,7 +19,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "spacingY", new[]{ "spacing-y"} }
         };
 
-        public override void HandleType(Component obj, Dictionary<string, string> data, Dictionary<string, Action> actions)
+        public override void HandleType(Component obj, Dictionary<string, string> data, Dictionary<string, BSMLAction> actions)
         {
             GridLayoutGroup gridLayout = obj as GridLayoutGroup;
             gridLayout.cellSize = new Vector2(data.ContainsKey("cellSizeX") ? float.Parse(data["cellSizeX"]) : gridLayout.cellSize.x, data.ContainsKey("cellSizeY") ? float.Parse(data["cellSizeY"]) : gridLayout.cellSize.y);

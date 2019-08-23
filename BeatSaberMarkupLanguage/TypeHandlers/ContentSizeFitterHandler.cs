@@ -19,7 +19,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "verticalFit", new[]{ "vertical-fit "} }
         };
 
-        public override void HandleType(Component obj, Dictionary<string, string> data, Dictionary<string, Action> actions)
+        public override void HandleType(Component obj, Dictionary<string, string> data, Dictionary<string, BSMLAction> actions)
         {
             foreach(KeyValuePair<string, string> pair in data)
             {

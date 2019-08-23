@@ -14,7 +14,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             get;
         }
 
-        public abstract void HandleType(Component obj, Dictionary<string, string> data, Dictionary<string, Action> actions);
+        public abstract void HandleType(Component obj, Dictionary<string, string> data, Dictionary<string, BSMLAction> actions);
     }
     public class ComponentHandler : Attribute
     {

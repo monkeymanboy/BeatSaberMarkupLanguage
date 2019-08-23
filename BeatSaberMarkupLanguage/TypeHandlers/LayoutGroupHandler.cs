@@ -22,7 +22,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "padRight", new[]{ "pad-right" } },
             { "pad", new[]{ "pad" } }
         };
-        public override void HandleType(Component obj, Dictionary<string, string> data, Dictionary<string, Action> actions)
+        public override void HandleType(Component obj, Dictionary<string, string> data, Dictionary<string, BSMLAction> actions)
         {
             LayoutGroup layoutGroup = (obj as LayoutGroup);
             if (data.ContainsKey("pad"))
