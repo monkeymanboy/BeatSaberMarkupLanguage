@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TMPro;
 using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.ViewControllers
@@ -12,7 +13,13 @@ namespace BeatSaberMarkupLanguage.ViewControllers
     {
         public override string ResourceName => "BeatSaberMarkupLanguage.Views.test.bsml";
 
-        [UIComponent("redbutton")]
-        public Button button;
+        [UIComponent("sometext")]
+        public TextMeshProUGUI text;
+
+        [UIAction("click")]
+        private void ButtonPress()
+        {
+            text.text = "It works!";
+        }
     }
 }

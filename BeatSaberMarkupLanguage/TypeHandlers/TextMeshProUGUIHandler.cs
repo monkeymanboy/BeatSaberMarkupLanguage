@@ -18,7 +18,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "alignment", new[]{"align"} }
         };
 
-        public override void HandleType(Component obj, Dictionary<string, string> data)
+        public override void HandleType(Component obj, Dictionary<string, string> data, Dictionary<string, Action> actions)
         {
             TextMeshProUGUI textMesh = obj as TextMeshProUGUI;
             if (data.ContainsKey("text"))

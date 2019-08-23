@@ -75,6 +75,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\UIAction.cs" />
     <Compile Include="Attributes\UIComponent.cs" />
     <Compile Include="Attributes\UIObject.cs" />
     <Compile Include="BeatSaberUI.cs" />

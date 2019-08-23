@@ -21,7 +21,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "padLeft", new[]{ "pad-left" } },
             { "padRight", new[]{ "pad-right" } }
         };
-        public override void HandleType(Component obj, Dictionary<string, string> data)
+        public override void HandleType(Component obj, Dictionary<string, string> data, Dictionary<string, Action> actions)
         {
             LayoutGroup layoutGroup = (obj as LayoutGroup);
             layoutGroup.padding = new RectOffset(data.ContainsKey("padLeft") ? int.Parse(data["padLeft"]) : layoutGroup.padding.left, data.ContainsKey("padRight") ? int.Parse(data["padRight"]) : layoutGroup.padding.right, data.ContainsKey("padTop") ? int.Parse(data["padTop"]) : layoutGroup.padding.top, data.ContainsKey("padBottom") ? int.Parse(data["padBottom"]) : layoutGroup.padding.bottom);

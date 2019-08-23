@@ -20,7 +20,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "childControlWidth", new[]{ "child-control-width" } },
             { "childControlHeight", new[]{ "child-control-height" } }
         };
-        public override void HandleType(Component obj, Dictionary<string, string> data)
+        public override void HandleType(Component obj, Dictionary<string, string> data, Dictionary<string, Action> actions)
         {
             HorizontalOrVerticalLayoutGroup layoutGroup = (obj as HorizontalOrVerticalLayoutGroup);
             foreach (KeyValuePair<string, string> pair in data)

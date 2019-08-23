@@ -18,7 +18,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
         {
             if (firstActivation)
             {
-                BSMLParser.instance.Parse(Content, gameObject);
+                BSMLParser.instance.Parse(Content, gameObject, this);
             }
             didActivate?.Invoke(firstActivation, type);
         }

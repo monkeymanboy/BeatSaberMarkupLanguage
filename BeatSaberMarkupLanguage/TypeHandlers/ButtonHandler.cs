@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.TypeHandlers
@@ -15,11 +16,13 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
         public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
         {
             { "text", new[]{"text"} },
-            { "glowColor", new[]{"glow-color"} }
+            { "glowColor", new[]{"glow-color"} },
+            { "onClick", new[]{"on-click"} }
         };
 
-        public override void HandleType(Component obj, Dictionary<string, string> data)
+        public override void HandleType(Component obj, Dictionary<string, string> data, Dictionary<string, Action> actions)
         {
+            Button button = obj as Button;
             Polyglot.LocalizedTextMeshProUGUI localizer = obj.GetComponentInChildren<Polyglot.LocalizedTextMeshProUGUI>();
             if (localizer != null)
                 GameObject.Destroy(localizer);
@@ -34,6 +37,12 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             } else
             {
                 glowImage.gameObject.SetActive(false);
+            }
+            if (data.ContainsKey("onClick"))
+            {
+                if(!actions.ContainsKey(data["onClick"]))
+                    throw new Exception("on-click action '" + data["onClick"] + "' not found");
+                button.onClick.AddListener(new UnityAction(actions[data["onClick"]]));
             }
         }
     }
