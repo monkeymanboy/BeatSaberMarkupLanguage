@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BeatSaberMarkupLanguage.Components;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,7 +18,10 @@ namespace BeatSaberMarkupLanguage.Tags
             GameObject gameObject = new GameObject();
             gameObject.name = "BSMLVerticalLayoutGroup";
             gameObject.transform.SetParent(parent, false);
-            VerticalLayoutGroup layoutGroup = gameObject.AddComponent<VerticalLayoutGroup>();
+            gameObject.AddComponent<VerticalLayoutGroup>();
+            ContentSizeFitter contentSizeFitter = gameObject.AddComponent<ContentSizeFitter>();
+            contentSizeFitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
+            gameObject.AddComponent<Backgroundable>();
             RectTransform rectTransform = gameObject.transform as RectTransform;
             rectTransform.sizeDelta = new Vector2(BSMLParser.SCREEN_WIDTH, BSMLParser.SCREEN_HEIGHT);
             return gameObject;

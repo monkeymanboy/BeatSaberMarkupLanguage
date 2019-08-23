@@ -9,18 +9,17 @@ using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.Tags
 {
-    public class HorizontalLayoutTag : BSMLTag
+    public class GridLayoutTag : BSMLTag
     {
-        public override string[] Aliases => new[] { "horizontal" };
+        public override string[] Aliases => new[] { "grid" };
 
         public override GameObject CreateObject(Transform parent)
         {
             GameObject gameObject = new GameObject();
-            gameObject.name = "BSMLHorizontalLayoutGroup";
+            gameObject.name = "BSMLGridLayoutGroup";
             gameObject.transform.SetParent(parent, false);
-            gameObject.AddComponent<HorizontalLayoutGroup>();
-            ContentSizeFitter contentSizeFitter = gameObject.AddComponent<ContentSizeFitter>();
-            contentSizeFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+            gameObject.AddComponent<GridLayoutGroup>();
+            gameObject.AddComponent<ContentSizeFitter>();
             gameObject.AddComponent<Backgroundable>();
             RectTransform rectTransform = gameObject.transform as RectTransform;
             rectTransform.sizeDelta = new Vector2(BSMLParser.SCREEN_WIDTH, BSMLParser.SCREEN_HEIGHT);

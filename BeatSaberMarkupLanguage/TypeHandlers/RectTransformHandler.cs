@@ -12,14 +12,14 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
     {
         public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
         {
-            { "anchorMinX", new[]{ "anchorMinX" } },
-            { "anchorMinY", new[]{ "anchorMinY" } },
-            { "anchorMaxX", new[]{ "anchorMaxX" } },
-            { "anchorMaxY", new[]{ "anchorMaxY" } },
-            { "anchorPosX", new[]{ "anchorPosX" } },
-            { "anchorPosY", new[]{ "anchorPosY" } },
-            { "sizeDeltaX", new[]{ "sizeDeltaX" } },
-            { "sizeDeltaY", new[]{ "sizeDeltaY" } }
+            { "anchorMinX", new[]{ "anchor-min-x" } },
+            { "anchorMinY", new[]{ "anchor-min-y" } },
+            { "anchorMaxX", new[]{ "anchor-max-x" } },
+            { "anchorMaxY", new[]{ "anchor-max-y" } },
+            { "anchorPosX", new[]{ "anchor-pos-x" } },
+            { "anchorPosY", new[]{ "anchor-pos-y" } },
+            { "sizeDeltaX", new[]{ "size-delta-x" } },
+            { "sizeDeltaY", new[]{ "size-delta-y" } }
         };
 
         public override void HandleType(Component obj, Dictionary<string, string> data, Dictionary<string, Action> actions)

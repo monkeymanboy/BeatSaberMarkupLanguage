@@ -1,7 +1,9 @@
-<vertical>
-  <text id ='sometext' text='Gamer Time' align='Center'></text>
-  <horizontal pad-left='30' pad-right='30'>
-    <button on-click='click' glow-color='red' text='Test Button'></button>
-    <button text='Test Button 2'></button>
-  </horizontal>
+<vertical pad-top='10' pad-bottom='10'>
+  <vertical bg='round-rect-panel'>
+    <text id ='sometext' text='Gamer Time' align='Center'></text>
+    <horizontal bg-color='#FF000012' bg='round-rect-panel' pad-left='10' pad-right='10' pad-top='10' pad-bottom='10'>
+      <button on-click='click' glow-color='green' text='Test Button'></button>
+      <button text='Test Button 2'></button>
+    </horizontal>
+  </vertical>
 </vertical>
