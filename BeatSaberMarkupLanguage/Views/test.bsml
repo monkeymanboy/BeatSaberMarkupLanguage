@@ -1,9 +1,12 @@
-<vertical pad-top='10' pad-bottom='10'>
-  <vertical bg='round-rect-panel'>
-    <text id ='sometext' text='Gamer Time' align='Center'></text>
-    <horizontal bg-color='#FF000012' bg='round-rect-panel' pad-left='10' pad-right='10' pad-top='10' pad-bottom='10'>
-      <button on-click='click' glow-color='green' text='Test Button'></button>
-      <button text='Test Button 2'></button>
-    </horizontal>
-  </vertical>
+<vertical child-control-height='false'>
+  <horizontal bg='panel-top' pad-left='10' pad-right='10' horizontal-fit='PreferredSize'>
+    <text id ='sometext' text='Header Text' align='Center' font-size='10'></text>
+  </horizontal>
+  <horizontal bg='round-rect-panel' pad='8'>
+    <text text='Testing out some nicely formatted business'></text>
+  </horizontal>
+  <horizontal bg='round-rect-panel' pad='6' spacing='10'>
+    <button on-click='click' glow-color='green' text='Test Button'></button>
+    <button text='Test Button 2'></button>
+  </horizontal>
 </vertical>
