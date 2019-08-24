@@ -29,6 +29,14 @@ namespace BeatSaberMarkupLanguage.Tags
             sizeFitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
             sizeFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
+            RectTransform buttonTransform = button.transform.GetChild(0) as RectTransform;
+            RectTransform glow = MonoBehaviour.Instantiate(Resources.FindObjectsOfTypeAll<GameObject>().Last(x => (x.name == "GlowContainer")), button.transform).transform as RectTransform;
+            glow.localPosition = buttonTransform.localPosition;
+            glow.anchoredPosition = buttonTransform.anchoredPosition;
+            glow.anchorMin = buttonTransform.anchorMin;
+            glow.anchorMax = buttonTransform.anchorMax;
+            glow.sizeDelta = buttonTransform.sizeDelta;
+
             button.gameObject.SetActive(true);
             return button.gameObject;
         }
