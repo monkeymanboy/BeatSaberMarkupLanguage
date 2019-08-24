@@ -18,7 +18,8 @@ namespace BeatSaberMarkupLanguage.Components
         public string reuseIdentifier = "BSMLListTableCell";
         private LevelListTableCell songListTableCellInstance;
         public TableView tableView;
-        
+
+        public bool expandCell = false;
         public LevelListTableCell GetTableCell(bool beatmapCharacteristicImages = false)
         {
             LevelListTableCell tableCell = (LevelListTableCell)tableView.DequeueReusableCellForIdentifier(reuseIdentifier);
@@ -42,6 +43,7 @@ namespace BeatSaberMarkupLanguage.Components
         public virtual TableCell CellForIdx(TableView tableView, int idx)
         {
             LevelListTableCell tableCell = GetTableCell();
+            if(expandCell) tableCell.GetPrivateField<TextMeshProUGUI>("_songNameText").rectTransform.anchorMax = new Vector3(2, 1, 0);
             tableCell.GetPrivateField<TextMeshProUGUI>("_songNameText").text = data[idx].text;
             tableCell.GetPrivateField<TextMeshProUGUI>("_authorText").text = data[idx].subtext;
             tableCell.GetPrivateField<RawImage>("_coverRawImage").texture = data[idx].icon == null ? Texture2D.blackTexture : data[idx].icon;

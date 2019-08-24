@@ -21,7 +21,8 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "visibleCells", new[]{ "visible-cells"} },
             { "cellSize", new[]{ "cell-size"} },
             { "id", new[]{ "id" } },
-            { "listWidth", new[] { "list-width" } }
+            { "listWidth", new[] { "list-width" } },
+            { "expandCell", new[] { "expand-cell" } }
         };
 
         public override void HandleType(Component obj, Dictionary<string, string> data, Dictionary<string, BSMLAction> actions)
@@ -35,8 +36,10 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                     actions[data["selectCell"]].Invoke(table, index);
                 };
             }
-            if(data.ContainsKey("cellSize"))
+            if (data.ContainsKey("cellSize"))
                 tableData.cellSize = float.Parse(data["cellSize"]);
+            if (data.ContainsKey("expandCell"))
+                tableData.expandCell = bool.Parse(data["expandCell"]);
             RectTransform viewport = tableData.tableView.GetComponentInChildren<ScrollRect>().viewport;
             viewport.sizeDelta = new Vector2(data.ContainsKey("listWidth") ? float.Parse(data["listWidth"]) : 60, tableData.cellSize * (data.ContainsKey("visibleCells") ? float.Parse(data["visibleCells"]) : 8));
             obj.gameObject.GetComponent<LayoutElement>().preferredHeight = viewport.sizeDelta.y;
