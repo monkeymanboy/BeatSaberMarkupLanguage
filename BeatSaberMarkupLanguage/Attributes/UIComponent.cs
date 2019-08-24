@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BeatSaberMarkupLanguage.Attributes
 {
-    class UIComponent : Attribute
+    public class UIComponent : Attribute
     {
         public string id;
         public UIComponent(string id)

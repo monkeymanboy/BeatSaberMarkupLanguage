@@ -11,9 +11,6 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
     [ComponentHandler(typeof(LayoutGroup))]
     public class LayoutGroupHandler : TypeHandler
     {
-        /*
-        public UnityEngine.TextAnchor childAlignment { get; set; }
-        public RectOffset padding { get; set; }*/
         public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
         {
             { "padTop", new[]{"pad-top"} },

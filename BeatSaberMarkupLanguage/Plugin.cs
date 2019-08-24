@@ -31,7 +31,7 @@ namespace BeatSaberMarkupLanguage
         {
             if (scene.name == "MenuCore")
             {
-                Resources.FindObjectsOfTypeAll<GameScenesManager>().FirstOrDefault().StartCoroutine(PresentTest());
+                //Resources.FindObjectsOfTypeAll<GameScenesManager>().FirstOrDefault().StartCoroutine(PresentTest());
             }
         }
 

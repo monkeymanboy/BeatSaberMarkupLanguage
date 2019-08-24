@@ -91,8 +91,10 @@
     <Compile Include="Tags\ButtonTag.cs" />
     <Compile Include="Tags\GridLayoutTag.cs" />
     <Compile Include="Tags\HorizontalLayoutTag.cs" />
+    <Compile Include="Tags\LeaderboardTag.cs" />
     <Compile Include="Tags\ListTag.cs" />
     <Compile Include="Tags\PageButtonTag.cs" />
+    <Compile Include="Tags\TextPageScrollViewTag.cs" />
     <Compile Include="Tags\TextTag.cs" />
     <Compile Include="Tags\VerticalLayoutTag.cs" />
     <Compile Include="TypeHandlers\BackgroundableHandler.cs" />
@@ -102,9 +104,11 @@
     <Compile Include="TypeHandlers\GridLayoutGroupHandler.cs" />
     <Compile Include="TypeHandlers\HorizontalOrVerticalLayoutGroupHandler.cs" />
     <Compile Include="TypeHandlers\LayoutGroupHandler.cs" />
+    <Compile Include="TypeHandlers\LeaderboardHandler.cs" />
     <Compile Include="TypeHandlers\PageButtonHandler.cs" />
     <Compile Include="TypeHandlers\RectTransformHandler.cs" />
     <Compile Include="TypeHandlers\TextMeshProUGUIHandler.cs" />
+    <Compile Include="TypeHandlers\TextPageScrollViewHandler.cs" />
     <Compile Include="TypeHandlers\TypeHandler.cs" />
     <Compile Include="Utilities.cs" />
     <Compile Include="ViewControllers\BSMLResourceViewController.cs" />
@@ -112,7 +116,9 @@
     <Compile Include="ViewControllers\TestViewController.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Views\test.bsml" />
+    <EmbeddedResource Include="Views\test.bsml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="manifest.json" />
