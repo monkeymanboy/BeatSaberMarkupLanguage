@@ -22,10 +22,10 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 switch(Enum.Parse(typeof(PageButtonDirection), data["direction"]))
                 {
                     case PageButtonDirection.Up:
-                        obj.transform.localRotation = Quaternion.Euler(0, 0, 0);
+                        obj.transform.localRotation = Quaternion.Euler(0, 0, -180);
                         break;
                     case PageButtonDirection.Down:
-                        obj.transform.localRotation = Quaternion.Euler(0, 0, -180);
+                        obj.transform.localRotation = Quaternion.Euler(0, 0, 0);
                         break;
                     case PageButtonDirection.Left:
                         obj.transform.localRotation = Quaternion.Euler(0, 0, -90);

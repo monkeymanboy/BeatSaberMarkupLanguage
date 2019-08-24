@@ -21,9 +21,10 @@ namespace BeatSaberMarkupLanguage.Tags
             button.name = "BSMLPageButton";
             button.gameObject.AddComponent<PageButton>();
             LayoutElement layoutElement = button.gameObject.AddComponent<LayoutElement>();
+            layoutElement.preferredWidth = 40;
+            layoutElement.preferredHeight = 6;
             layoutElement.flexibleHeight = 0;
             layoutElement.flexibleWidth = 0;
-            layoutElement.preferredWidth = 30;
             ContentSizeFitter sizeFitter = button.gameObject.AddComponent<ContentSizeFitter>();
             sizeFitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
             sizeFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
