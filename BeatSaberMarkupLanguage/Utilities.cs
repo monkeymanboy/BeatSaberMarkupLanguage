@@ -30,7 +30,7 @@ namespace BeatSaberMarkupLanguage
             PropertyInfo[] pinfos = type.GetProperties(flags);
             foreach (var pinfo in pinfos)
             {
-                if (pinfo.CanWrite)
+                if (pinfo.CanWrite && pinfo.Name != "name")
                 {
                     try
                     {

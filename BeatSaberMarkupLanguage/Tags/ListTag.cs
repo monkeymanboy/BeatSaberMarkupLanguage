@@ -19,9 +19,7 @@ namespace BeatSaberMarkupLanguage.Tags
         {
             RectTransform container = new GameObject("BSMLListContainer", typeof(RectTransform)).transform as RectTransform;
             LayoutElement layoutElement = container.gameObject.AddComponent<LayoutElement>();
-            layoutElement.preferredWidth = 60;
             container.SetParent(parent, false);
-            container.sizeDelta = new Vector2(60f, 0f);
 
             GameObject gameObject = new GameObject();
             gameObject.name = "BSMLList";

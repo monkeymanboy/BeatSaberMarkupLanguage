@@ -29,15 +29,17 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             TextMeshProUGUI label = obj.GetComponentInChildren<TextMeshProUGUI>();
             if (label != null && data.ContainsKey("text"))
                 label.text = data["text"];
-            Image glowImage = obj.gameObject.GetComponentsInChildren<Image>().First(x => x.gameObject.name == "Glow");
-            if (data.ContainsKey("glowColor") && data["glowColor"] != "none")
-            {
-                ColorUtility.TryParseHtmlString(data["glowColor"], out Color color);
-                glowImage.color = color;
-            } else
-            {
-                glowImage.gameObject.SetActive(false);
-            }
+            Image glowImage = obj.gameObject.GetComponentsInChildren<Image>().FirstOrDefault(x => x.gameObject.name == "Glow");
+            if(glowImage != null)
+                if (data.ContainsKey("glowColor") && data["glowColor"] != "none")
+                {
+                    ColorUtility.TryParseHtmlString(data["glowColor"], out Color color);
+                    glowImage.color = color;
+                }
+                else
+                {
+                    glowImage.gameObject.SetActive(false);
+                }
             if (data.ContainsKey("onClick"))
             {
                 button.onClick.AddListener(delegate
