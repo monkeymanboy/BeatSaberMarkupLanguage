@@ -9,6 +9,8 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
+using static BeatSaberMarkupLanguage.Components.CustomListTableData;
+using static HMUI.TableView;
 
 namespace BeatSaberMarkupLanguage.TypeHandlers
 {
@@ -22,7 +24,10 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "cellSize", new[]{ "cell-size"} },
             { "id", new[]{ "id" } },
             { "listWidth", new[] { "list-width" } },
-            { "expandCell", new[] { "expand-cell" } }
+            { "listHeight", new[] { "list-height" } },
+            { "expandCell", new[] { "expand-cell" } },
+            { "listStyle", new[] { "list-style" } },
+            { "listDirection", new[] { "list-direction" } }
         };
 
         public override void HandleType(Component obj, Dictionary<string, string> data, Dictionary<string, BSMLAction> actions)
@@ -36,11 +41,26 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                     actions[data["selectCell"]].Invoke(table, index);
                 };
             }
+            if (data.ContainsKey("listDirection"))
+                tableData.tableView.SetPrivateField("_tableType", (TableType)Enum.Parse(typeof(TableType), data["listDirection"]));
+            if (data.ContainsKey("listStyle"))
+                tableData.Style = (ListStyle) Enum.Parse(typeof(ListStyle), data["listStyle"]);
             if (data.ContainsKey("cellSize"))
                 tableData.cellSize = float.Parse(data["cellSize"]);
             if (data.ContainsKey("expandCell"))
                 tableData.expandCell = bool.Parse(data["expandCell"]);
-            (obj.gameObject.transform as RectTransform).sizeDelta = new Vector2(data.ContainsKey("listWidth") ? float.Parse(data["listWidth"]) : 60, tableData.cellSize * (data.ContainsKey("visibleCells") ? float.Parse(data["visibleCells"]) : 8));
+            switch (tableData.tableView.tableType)
+            {
+                case TableType.Vertical:
+                    (obj.gameObject.transform as RectTransform).sizeDelta = new Vector2(data.ContainsKey("listWidth") ? float.Parse(data["listWidth"]) : 60, tableData.cellSize * (data.ContainsKey("visibleCells") ? float.Parse(data["visibleCells"]) : 7));
+                    tableData.tableView.contentTransform.anchorMin = new Vector2(0, 1);
+                    break;
+                case TableType.Horizontal:
+                    (obj.gameObject.transform as RectTransform).sizeDelta = new Vector2(tableData.cellSize * (data.ContainsKey("visibleCells") ? float.Parse(data["visibleCells"]) : 4), data.ContainsKey("listHeight") ? float.Parse(data["listHeight"]) : 40);
+                    tableData.tableView.contentTransform.anchorMin = new Vector2(1, 0);
+                    break;
+            }
+            
             obj.gameObject.GetComponent<LayoutElement>().preferredHeight = (obj.gameObject.transform as RectTransform).sizeDelta.y;
             obj.gameObject.GetComponent<LayoutElement>().preferredWidth = (obj.gameObject.transform as RectTransform).sizeDelta.x;
             tableData.tableView.gameObject.SetActive(true);
