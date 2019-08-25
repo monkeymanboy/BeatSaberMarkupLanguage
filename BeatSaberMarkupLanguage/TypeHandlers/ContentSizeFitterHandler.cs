@@ -1,4 +1,5 @@
-﻿using BS_Utils.Utilities;
+﻿using BeatSaberMarkupLanguage.Parser;
+using BS_Utils.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +20,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "verticalFit", new[]{ "vertical-fit "} }
         };
 
-        public override void HandleType(Component obj, Dictionary<string, string> data, Dictionary<string, BSMLAction> actions)
+        public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)
         {
             foreach(KeyValuePair<string, string> pair in data)
             {

@@ -1,6 +1,6 @@
 <vertical child-control-height='false'>
   <horizontal bg='panel-top' pad-left='10' pad-right='10' horizontal-fit='PreferredSize'>
-    <text id ='sometext' text='Header Text' align='Center' font-size='10'></text>
+    <text id ='sometext' text='~header' align='Center' font-size='10'></text>
   </horizontal>
   <horizontal bg='round-rect-panel' pad='8'>
     <text text='Testing out some nicely formatted business'></text>

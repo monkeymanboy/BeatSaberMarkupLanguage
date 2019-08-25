@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BeatSaberMarkupLanguage.Parser;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,7 +19,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "alignment", new[]{"align"} }
         };
 
-        public override void HandleType(Component obj, Dictionary<string, string> data, Dictionary<string, BSMLAction> actions)
+        public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)
         {
             TextMeshProUGUI textMesh = obj as TextMeshProUGUI;
             if (data.ContainsKey("text"))

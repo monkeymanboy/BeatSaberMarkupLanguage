@@ -1,4 +1,5 @@
 ﻿using BeatSaberMarkupLanguage.Components;
+using BeatSaberMarkupLanguage.Parser;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,7 +31,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "backgroundColor", new[]{ "bg-color", "background-color" } }
         };
 
-        public override void HandleType(Component obj, Dictionary<string, string> data, Dictionary<string, BSMLAction> actions)
+        public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)
         {
             if (!data.ContainsKey("background")) return;
             if (!Backgrounds.ContainsKey(data["background"]))

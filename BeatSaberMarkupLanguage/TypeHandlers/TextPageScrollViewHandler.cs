@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BeatSaberMarkupLanguage.Parser;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,7 +15,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
         {
             { "text", new[]{ "text" } }
         };
-        public override void HandleType(Component obj, Dictionary<string, string> data, Dictionary<string, BSMLAction> actions)
+        public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)
         {
             TextPageScrollView scrollView = (obj as TextPageScrollView);
             if (data.ContainsKey("text"))

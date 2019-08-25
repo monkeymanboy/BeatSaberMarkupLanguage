@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BeatSaberMarkupLanguage.Parser;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,7 +23,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "sizeDeltaY", new[]{ "size-delta-y" } }
         };
 
-        public override void HandleType(Component obj, Dictionary<string, string> data, Dictionary<string, BSMLAction> actions)
+        public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)
         {
             RectTransform rectTransform = obj as RectTransform;
             rectTransform.anchorMin = new Vector2(data.ContainsKey("anchorMinX") ? float.Parse(data["anchorMinX"]) : rectTransform.anchorMin.x, data.ContainsKey("anchorMinY") ? float.Parse(data["anchorMinY"]) : rectTransform.anchorMin.y);

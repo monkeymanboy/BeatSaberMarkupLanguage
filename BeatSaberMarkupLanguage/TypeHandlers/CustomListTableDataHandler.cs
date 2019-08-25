@@ -1,4 +1,5 @@
 ﻿using BeatSaberMarkupLanguage.Components;
+using BeatSaberMarkupLanguage.Parser;
 using BS_Utils.Utilities;
 using HMUI;
 using System;
@@ -30,15 +31,15 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "listDirection", new[] { "list-direction" } }
         };
 
-        public override void HandleType(Component obj, Dictionary<string, string> data, Dictionary<string, BSMLAction> actions)
+        public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)
         {
             CustomListTableData tableData = obj as CustomListTableData;
             if (data.ContainsKey("selectCell"))
             {
                 tableData.tableView.didSelectCellWithIdxEvent += delegate(HMUI.TableView table, int index) {
-                    if (!actions.ContainsKey(data["selectCell"]))
+                    if (!parserParams.actions.ContainsKey(data["selectCell"]))
                         throw new Exception("select-cell action '" + data["onClick"] + "' not found");
-                    actions[data["selectCell"]].Invoke(table, index);
+                    parserParams.actions[data["selectCell"]].Invoke(table, index);
                 };
             }
             if (data.ContainsKey("listDirection"))
@@ -67,8 +68,8 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             if (data.ContainsKey("id"))
             {
                 TableViewScroller scroller = tableData.tableView.GetPrivateField<TableViewScroller>("_scroller");
-                actions.Add(data["id"] + "#PageUp", new BSMLAction(scroller, scroller.GetType().GetMethod("PageScrollUp", BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)));
-                actions.Add(data["id"] + "#PageDown", new BSMLAction(scroller, scroller.GetType().GetMethod("PageScrollDown", BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)));
+                parserParams.actions.Add(data["id"] + "#PageUp", new BSMLAction(scroller, scroller.GetType().GetMethod("PageScrollUp", BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)));
+                parserParams.actions.Add(data["id"] + "#PageDown", new BSMLAction(scroller, scroller.GetType().GetMethod("PageScrollDown", BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)));
             }
         }
     }

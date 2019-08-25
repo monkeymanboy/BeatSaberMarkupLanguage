@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BeatSaberMarkupLanguage.Parser;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,7 +21,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "onClick", new[]{"on-click"} }
         };
 
-        public override void HandleType(Component obj, Dictionary<string, string> data, Dictionary<string, BSMLAction> actions)
+        public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)
         {
             Button button = obj as Button;
             Polyglot.LocalizedTextMeshProUGUI localizer = obj.GetComponentInChildren<Polyglot.LocalizedTextMeshProUGUI>();
@@ -44,9 +45,9 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             {
                 button.onClick.AddListener(delegate
                 {
-                    if (!actions.ContainsKey(data["onClick"]))
+                    if (!parserParams.actions.ContainsKey(data["onClick"]))
                         throw new Exception("on-click action '" + data["onClick"] + "' not found");
-                    actions[data["onClick"]].Invoke();
+                    parserParams.actions[data["onClick"]].Invoke();
                 });
             }
         }

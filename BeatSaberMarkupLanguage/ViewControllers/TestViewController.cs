@@ -15,6 +15,9 @@ namespace BeatSaberMarkupLanguage.ViewControllers
     {
         public override string ResourceName => "BeatSaberMarkupLanguage.Views.test.bsml";
 
+        [UIValue("header")]
+        public string headerText = "Header comes from code!";
+
         [UIComponent("sometext")]
         public TextMeshProUGUI text;
 

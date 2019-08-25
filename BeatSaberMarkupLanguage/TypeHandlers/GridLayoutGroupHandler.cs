@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BeatSaberMarkupLanguage.Parser;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,7 +20,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "spacingY", new[]{ "spacing-y"} }
         };
 
-        public override void HandleType(Component obj, Dictionary<string, string> data, Dictionary<string, BSMLAction> actions)
+        public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)
         {
             GridLayoutGroup gridLayout = obj as GridLayoutGroup;
             gridLayout.cellSize = new Vector2(data.ContainsKey("cellSizeX") ? float.Parse(data["cellSizeX"]) : gridLayout.cellSize.x, data.ContainsKey("cellSizeY") ? float.Parse(data["cellSizeY"]) : gridLayout.cellSize.y);
