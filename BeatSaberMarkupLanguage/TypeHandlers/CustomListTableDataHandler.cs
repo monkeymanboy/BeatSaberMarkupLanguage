@@ -40,10 +40,9 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 tableData.cellSize = float.Parse(data["cellSize"]);
             if (data.ContainsKey("expandCell"))
                 tableData.expandCell = bool.Parse(data["expandCell"]);
-            RectTransform viewport = tableData.tableView.GetComponentInChildren<ScrollRect>().viewport;
-            viewport.sizeDelta = new Vector2(data.ContainsKey("listWidth") ? float.Parse(data["listWidth"]) : 60, tableData.cellSize * (data.ContainsKey("visibleCells") ? float.Parse(data["visibleCells"]) : 8));
-            obj.gameObject.GetComponent<LayoutElement>().preferredHeight = viewport.sizeDelta.y;
-            obj.gameObject.GetComponent<LayoutElement>().preferredWidth = viewport.sizeDelta.x;
+            (obj.gameObject.transform as RectTransform).sizeDelta = new Vector2(data.ContainsKey("listWidth") ? float.Parse(data["listWidth"]) : 60, tableData.cellSize * (data.ContainsKey("visibleCells") ? float.Parse(data["visibleCells"]) : 8));
+            obj.gameObject.GetComponent<LayoutElement>().preferredHeight = (obj.gameObject.transform as RectTransform).sizeDelta.y;
+            obj.gameObject.GetComponent<LayoutElement>().preferredWidth = (obj.gameObject.transform as RectTransform).sizeDelta.x;
             tableData.tableView.gameObject.SetActive(true);
             if (data.ContainsKey("id"))
             {
