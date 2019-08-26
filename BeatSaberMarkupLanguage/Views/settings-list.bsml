@@ -1,0 +1,5 @@
+<bg size-delta-y='0'>
+  <page-button on-click='list#PageUp' direction='Up' anchor-pos-y='40' button-width='30'></page-button>
+  <list id='list' select-cell='settings-click' list-style='Simple' list-width='30'></list>
+  <page-button on-click='list#PageDown' direction='Down' anchor-pos-y='-25' button-width='30'></page-button>
+</bg>

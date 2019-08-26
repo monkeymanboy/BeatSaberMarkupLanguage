@@ -1,0 +1,8 @@
+<bg size-delta-x='0' size-delta-y='14' anchor-min-x='0' anchor-max-x='1' anchor-min-y='0' anchor-max-y='0'>
+  <bg bg='panel-bottom' size-delta-x='-20' size-delta-y='14' anchor-min-x='0' anchor-max-x='1' anchor-min-y='1' anchor-max-y='1' anchor-pos-x='10'></bg>
+  <horizontal horizontal-fit='PreferredSize' child-control-height='false' child-expand-height='false' child-align='MiddleCenter' anchor-min-y='1' anchor-max-y='1' pad-left='6' pad-right='6' spacing='2'>
+    <button on-click='cancel-click' text='cancel'></button>
+    <button on-click='ok-click' text='ok'></button>
+    <button on-click='apply-click' text='apply'></button>
+  </horizontal>
+</bg>

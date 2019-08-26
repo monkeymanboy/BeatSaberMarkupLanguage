@@ -18,7 +18,8 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "padBottom", new[]{ "pad-bottom" } },
             { "padLeft", new[]{ "pad-left" } },
             { "padRight", new[]{ "pad-right" } },
-            { "pad", new[]{ "pad" } }
+            { "pad", new[]{ "pad" } },
+            { "childAlign", new[] { "child-align" } }
         };
         public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)
         {
@@ -29,6 +30,8 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 layoutGroup.padding = new RectOffset(padding, padding, padding, padding);
             }
             layoutGroup.padding = new RectOffset(data.ContainsKey("padLeft") ? int.Parse(data["padLeft"]) : layoutGroup.padding.left, data.ContainsKey("padRight") ? int.Parse(data["padRight"]) : layoutGroup.padding.right, data.ContainsKey("padTop") ? int.Parse(data["padTop"]) : layoutGroup.padding.top, data.ContainsKey("padBottom") ? int.Parse(data["padBottom"]) : layoutGroup.padding.bottom);
+            if(data.ContainsKey("childAlign"))
+                layoutGroup.childAlignment = (TextAnchor) Enum.Parse(typeof(TextAnchor), data["childAlign"]);
         }
     }
 }

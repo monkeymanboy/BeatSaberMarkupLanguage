@@ -28,7 +28,7 @@ namespace BeatSaberMarkupLanguage
         }
 
         private XmlDocument doc = new XmlDocument();
-        public void Parse(string content, GameObject parent, object host = null)
+        public BSMLParserParams Parse(string content, GameObject parent, object host = null)
         {
             doc.LoadXml(content);
             BSMLParserParams parserParams = new BSMLParserParams();
@@ -58,6 +58,7 @@ namespace BeatSaberMarkupLanguage
             {
                 HandleNode(node, parent, parserParams);
             }
+            return parserParams;
         }
 
         private GameObject HandleNode(XmlNode node, GameObject parent, BSMLParserParams parserParams)

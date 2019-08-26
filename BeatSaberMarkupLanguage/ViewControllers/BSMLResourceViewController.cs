@@ -17,13 +17,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
         public override string Content {
             get
             {
-                Assembly assembly = Assembly.GetAssembly(this.GetType());
-                
-                using (Stream stream = assembly.GetManifestResourceStream(ResourceName))
-                using (StreamReader reader = new StreamReader(stream))
-                {
-                    return reader.ReadToEnd();
-                }
+                return Utilities.GetResourceContent(Assembly.GetAssembly(this.GetType()), ResourceName);
             }
         }
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -10,6 +11,14 @@ namespace BeatSaberMarkupLanguage
 {
     public static class Utilities
     {
+        public static string GetResourceContent(Assembly assembly, string resource)
+        {
+            using (Stream stream = assembly.GetManifestResourceStream(resource))
+            using (StreamReader reader = new StreamReader(stream))
+            {
+                return reader.ReadToEnd();
+            }
+        }
 
         public static List<T> GetListOfType<T>(params object[] constructorArgs)
         {

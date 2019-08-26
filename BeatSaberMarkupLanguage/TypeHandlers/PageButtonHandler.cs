@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.TypeHandlers
 {
@@ -14,7 +15,8 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
     {
         public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
         {
-            { "direction", new[]{"dir", "direction"} }
+            { "direction", new[]{"dir", "direction"} },
+            { "buttonWidth", new[]{ "button-width" } }
         };
 
         public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)
@@ -35,6 +37,12 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                         obj.transform.localRotation = Quaternion.Euler(0, 0, 90);
                         break;
                 };
+            if (data.ContainsKey("buttonWidth"))
+            {
+                LayoutElement layoutElement = obj.gameObject.GetComponent<LayoutElement>();
+                layoutElement.preferredWidth = float.Parse(data["buttonWidth"]);
+                (obj.transform.GetChild(0).transform as RectTransform).sizeDelta = new Vector2(layoutElement.preferredWidth, layoutElement.preferredHeight);
+            }
         }
         public enum PageButtonDirection
         {

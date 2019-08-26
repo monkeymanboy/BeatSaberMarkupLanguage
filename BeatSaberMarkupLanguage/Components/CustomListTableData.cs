@@ -35,6 +35,9 @@ namespace BeatSaberMarkupLanguage.Components
                     case ListStyle.Box:
                         cellSize = tableView.tableType == TableView.TableType.Horizontal ? 30f : 35f;
                         break;
+                    case ListStyle.Simple:
+                        cellSize = 8f;
+                        break;
                 }
                 listStyle = value;
             }
@@ -42,6 +45,7 @@ namespace BeatSaberMarkupLanguage.Components
 
         private LevelListTableCell songListTableCellInstance;
         private LevelPackTableCell levelPackTableCellInstance;
+        private MainSettingsTableCell mainSettingsTableCellInstance;
 
         public bool expandCell = false;
         public LevelListTableCell GetTableCell(bool beatmapCharacteristicImages = false)
@@ -66,15 +70,27 @@ namespace BeatSaberMarkupLanguage.Components
         }
         public LevelPackTableCell GetLevelPackTableCell()
         {
-            LevelPackTableCell levelPackTableCellInstance = (LevelPackTableCell)tableView.DequeueReusableCellForIdentifier(reuseIdentifier);
-            if (!levelPackTableCellInstance)
+            LevelPackTableCell tableCell = (LevelPackTableCell)tableView.DequeueReusableCellForIdentifier(reuseIdentifier);
+            if (!tableCell)
             {
                 if (levelPackTableCellInstance == null)
                     levelPackTableCellInstance = Resources.FindObjectsOfTypeAll<LevelPackTableCell>().First(x => x.name == "LevelPackTableCell");
-                levelPackTableCellInstance = Instantiate(levelPackTableCellInstance);
+                tableCell = Instantiate(levelPackTableCellInstance);
             }
-            levelPackTableCellInstance.reuseIdentifier = reuseIdentifier;
-            return levelPackTableCellInstance;
+            tableCell.reuseIdentifier = reuseIdentifier;
+            return tableCell;
+        }
+        public MainSettingsTableCell GetMainSettingsTableCell()
+        {
+            MainSettingsTableCell tableCell = (MainSettingsTableCell)tableView.DequeueReusableCellForIdentifier(reuseIdentifier);
+            if (!tableCell)
+            {
+                if (mainSettingsTableCellInstance == null)
+                    mainSettingsTableCellInstance = Resources.FindObjectsOfTypeAll<MainSettingsTableCell>().First(x => x.name == "MainSettingsTableCell");
+                tableCell = Instantiate(mainSettingsTableCellInstance);
+            }
+            tableCell.reuseIdentifier = reuseIdentifier;
+            return tableCell;
         }
 
         public virtual TableCell CellForIdx(TableView tableView, int idx)
@@ -98,6 +114,10 @@ namespace BeatSaberMarkupLanguage.Components
                     packCoverImage.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.one * 0.5f, 100, 1);
                     packCoverImage.mainTexture.wrapMode = TextureWrapMode.Clamp;
                     return cell;
+                case ListStyle.Simple:
+                    MainSettingsTableCell simpleCell = GetMainSettingsTableCell();
+                    simpleCell.settingsSubMenuText = data[idx].text;
+                    return simpleCell;
             }
             return null;
         }
@@ -118,7 +138,7 @@ namespace BeatSaberMarkupLanguage.Components
             public string subtext;
             public Texture2D icon;
 
-            public CustomCellInfo(string text, string subtext, Texture2D icon = null)
+            public CustomCellInfo(string text, string subtext = null, Texture2D icon = null)
             {
                 this.text = text;
                 this.subtext = subtext;
@@ -128,7 +148,7 @@ namespace BeatSaberMarkupLanguage.Components
 
         public enum ListStyle
         {
-            List, Box
+            List, Box, Simple
         }
     }
 }
