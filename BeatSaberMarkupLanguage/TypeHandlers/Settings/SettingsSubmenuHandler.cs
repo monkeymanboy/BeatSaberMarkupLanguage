@@ -1,0 +1,38 @@
+﻿using BeatSaberMarkupLanguage.Components.Settings;
+using BeatSaberMarkupLanguage.Parser;
+using BeatSaberMarkupLanguage.ViewControllers;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using TMPro;
+using UnityEngine;
+
+namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
+{
+    [ComponentHandler(typeof(SubmenuText))]
+    public class SettingsSubmenuHandler : TypeHandler
+    {
+        public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
+        {
+            { "text", new[]{"text"} },
+            { "fontSize", new[]{"font-size"} },
+            { "alignment", new[]{"align"} },
+            { "overflowMode", new[]{"overflow-mode"} }
+        };
+
+        public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)
+        {
+            TextMeshProUGUI textMesh = (obj as SubmenuText).submenuText;
+            if (data.ContainsKey("text"))
+                textMesh.text = data["text"];
+            if (data.ContainsKey("fontSize"))
+                textMesh.fontSize = float.Parse(data["fontSize"]);
+            if (data.ContainsKey("alignment"))
+                textMesh.alignment = (TextAlignmentOptions)Enum.Parse(typeof(TextAlignmentOptions), data["alignment"]);
+            if (data.ContainsKey("overflowMode"))
+                textMesh.overflowMode = (TextOverflowModes)Enum.Parse(typeof(TextOverflowModes), data["overflowMode"]);
+        }
+    }
+}

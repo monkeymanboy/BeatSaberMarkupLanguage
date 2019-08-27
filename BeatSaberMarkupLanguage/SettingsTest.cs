@@ -20,8 +20,9 @@ namespace BeatSaberMarkupLanguage
 
         public void Update()
         {
+            /*
             Console.WriteLine("Bool Test:" + boolTest);
-            Console.WriteLine("List Test:" + listChoice);
+            Console.WriteLine("List Test:" + listChoice);*/
         }
     }
 }

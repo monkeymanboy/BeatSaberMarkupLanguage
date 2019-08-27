@@ -84,9 +84,11 @@
     <Compile Include="Attributes\UIObject.cs" />
     <Compile Include="Attributes\UIValue.cs" />
     <Compile Include="BeatSaberUI.cs" />
+    <Compile Include="Components\ClickableText.cs" />
     <Compile Include="Components\Settings\BoolSetting.cs" />
     <Compile Include="Components\Settings\IncDecSetting.cs" />
     <Compile Include="Components\Settings\ListSetting.cs" />
+    <Compile Include="Components\Settings\SubmenuText.cs" />
     <Compile Include="Parser\BSMLAction.cs" />
     <Compile Include="BSMLParser.cs" />
     <Compile Include="Components\Backgroundable.cs" />
@@ -115,6 +117,7 @@
     <Compile Include="Tags\Settings\BoolSettingTag.cs" />
     <Compile Include="Tags\Settings\IncDecSettingTag.cs" />
     <Compile Include="Tags\Settings\ListSettingTag.cs" />
+    <Compile Include="Tags\Settings\SubmenuTag.cs" />
     <Compile Include="Tags\TextPageScrollViewTag.cs" />
     <Compile Include="Tags\TextTag.cs" />
     <Compile Include="Tags\VerticalLayoutTag.cs" />
@@ -129,6 +132,7 @@
     <Compile Include="TypeHandlers\LeaderboardHandler.cs" />
     <Compile Include="TypeHandlers\PageButtonHandler.cs" />
     <Compile Include="TypeHandlers\RectTransformHandler.cs" />
+    <Compile Include="TypeHandlers\Settings\SettingsSubmenuHandler.cs" />
     <Compile Include="TypeHandlers\Settings\BoolSettingsHandler.cs" />
     <Compile Include="TypeHandlers\Settings\ListSettingHandler.cs" />
     <Compile Include="TypeHandlers\TextMeshProUGUIHandler.cs" />

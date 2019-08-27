@@ -50,23 +50,21 @@ namespace BeatSaberMarkupLanguage.Settings
             if (settingsMenus.Count == 0)
             {
                 VRUIViewController aboutController = BeatSaberUI.CreateViewController<VRUIViewController>();
-                aboutController.rectTransform.sizeDelta = new Vector2(110, 0);
-                aboutController.rectTransform.anchorMin = new Vector2(0.5f, 0);
-                aboutController.rectTransform.anchorMax = new Vector2(0.5f, 1);
-                BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), "BeatSaberMarkupLanguage.Views.settings-container.bsml"), aboutController.gameObject, this);
-                settingsMenus.Add(new SettingsMenu("About", aboutController, BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), "BeatSaberMarkupLanguage.Views.settings-about.bsml"), content, this)));
+                SetupViewControllerTransform(aboutController);
+                settingsMenus.Add(new SettingsMenu("About", aboutController, BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), "BeatSaberMarkupLanguage.Views.settings-about.bsml"), CreateSettingsContainer(aboutController.gameObject), this)));
             }
             VRUIViewController viewController = BeatSaberUI.CreateViewController<VRUIViewController>();
-            viewController.rectTransform.sizeDelta = new Vector2(110, 0);
-            viewController.rectTransform.anchorMin = new Vector2(0.5f, 0);
-            viewController.rectTransform.anchorMax = new Vector2(0.5f, 1);
+            SetupViewControllerTransform(viewController);
             GameObject parent = viewController.gameObject;
             if (includeAutoFormatting)
-            {
-                BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), "BeatSaberMarkupLanguage.Views.settings-container.bsml"), viewController.gameObject, this);
-                parent = content;
-            }
+                parent = CreateSettingsContainer(parent);
             settingsMenus.Add(new SettingsMenu(name, viewController, BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetCallingAssembly(), resource), parent, host)));
+        }
+
+        public GameObject CreateSettingsContainer(GameObject gameObject)
+        {
+            BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), "BeatSaberMarkupLanguage.Views.settings-container.bsml"), gameObject, this);
+            return content;
         }
 
         public IEnumerator AddButtonToMainScreen()
@@ -98,6 +96,13 @@ namespace BeatSaberMarkupLanguage.Settings
             Resources.FindObjectsOfTypeAll<MainFlowCoordinator>().First().InvokeMethod("PresentFlowCoordinator", new object[] {flowCoordinator, new Action(delegate{
                 flowCoordinator.ShowInitial();
             }), false, false });
+        }
+
+        public static void SetupViewControllerTransform(VRUIViewController viewController)
+        {
+            viewController.rectTransform.sizeDelta = new Vector2(110, 0);
+            viewController.rectTransform.anchorMin = new Vector2(0.5f, 0);
+            viewController.rectTransform.anchorMax = new Vector2(0.5f, 1);
         }
     }
 }

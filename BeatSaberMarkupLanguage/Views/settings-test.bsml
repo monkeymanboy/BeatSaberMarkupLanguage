@@ -1,4 +1,8 @@
 <settings-container>
   <bool-setting text='bool test' value='bool-test'></bool-setting>
-  <list-setting text='list test' value='list-choice' choices='list-options'></list-setting>
+  <settings-submenu text='Open Submenu'>
+    <settings-container>
+      <list-setting text='list test' value='list-choice' choices='list-options'></list-setting>
+    </settings-container>
+  </settings-submenu>
 </settings-container>
