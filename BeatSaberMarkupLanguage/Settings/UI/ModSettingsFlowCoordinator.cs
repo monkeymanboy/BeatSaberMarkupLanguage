@@ -30,7 +30,7 @@ namespace BeatSaberMarkupLanguage.Settings
 
                 settingsMenuListViewController = BeatSaberUI.CreateViewController<SettingsMenuListViewController>();
                 settingsMenuListViewController.clickedMenu += OpenMenu;
-                SetViewControllersToNavigationConctroller(navigationController, settingsMenuListViewController);
+                SetViewControllerToNavigationConctroller(navigationController, settingsMenuListViewController);
                 ProvideInitialViewControllers(navigationController);
             }
         }
@@ -56,6 +56,7 @@ namespace BeatSaberMarkupLanguage.Settings
         private void Ok()
         {
             Apply();
+            Destroy(BSMLSettings.instance);
             Resources.FindObjectsOfTypeAll<MenuTransitionsHelperSO>().First().RestartGame(skipHealthWarning: true);
         }
 

@@ -16,8 +16,28 @@ using static BeatSaberMarkupLanguage.Components.CustomListTableData;
 
 namespace BeatSaberMarkupLanguage.Settings
 {
-    public class BSMLSettings : PersistentSingleton<BSMLSettings>
+    public class BSMLSettings : MonoBehaviour
     {
+        private static BSMLSettings _instance = null;
+        public static BSMLSettings instance
+        {
+            get
+            {
+                if (!_instance)
+                    _instance = new GameObject("BSMLSettings").AddComponent<BSMLSettings>();
+                return _instance;
+            }
+            private set
+            {
+                _instance = value;
+            }
+        }
+
+        void Awake()
+        {
+            DontDestroyOnLoad(this.gameObject);
+        }
+
         public List<CustomCellInfo> settingsMenus = new List<CustomCellInfo>();
 
         private ModSettingsFlowCoordinator flowCoordinator;
@@ -35,7 +55,6 @@ namespace BeatSaberMarkupLanguage.Settings
                 aboutController.rectTransform.anchorMax = new Vector2(0.5f, 1);
                 BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), "BeatSaberMarkupLanguage.Views.settings-container.bsml"), aboutController.gameObject, this);
                 settingsMenus.Add(new SettingsMenu("About", aboutController, BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), "BeatSaberMarkupLanguage.Views.settings-about.bsml"), content, this)));
-                StartCoroutine(AddButtonToMainScreen());
             }
             VRUIViewController viewController = BeatSaberUI.CreateViewController<VRUIViewController>();
             viewController.rectTransform.sizeDelta = new Vector2(110, 0);
@@ -50,10 +69,10 @@ namespace BeatSaberMarkupLanguage.Settings
             settingsMenus.Add(new SettingsMenu(name, viewController, BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetCallingAssembly(), resource), parent, host)));
         }
 
-        private IEnumerator AddButtonToMainScreen()
+        public IEnumerator AddButtonToMainScreen()
         {
             Transform transform = null;
-            while (transform == null) {//In case some goof tries to make their settings too early
+            while (transform == null) {
                 try
                 {
                     transform = GameObject.Find("MainMenuViewController/BottomPanel/Buttons").transform as RectTransform;

@@ -86,6 +86,7 @@
     <Compile Include="BeatSaberUI.cs" />
     <Compile Include="Components\Settings\BoolSetting.cs" />
     <Compile Include="Components\Settings\IncDecSetting.cs" />
+    <Compile Include="Components\Settings\ListSetting.cs" />
     <Compile Include="Parser\BSMLAction.cs" />
     <Compile Include="BSMLParser.cs" />
     <Compile Include="Components\Backgroundable.cs" />
@@ -97,10 +98,11 @@
     <Compile Include="Parser\BSMLValue.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SettingsTest.cs" />
     <Compile Include="Settings\BSMLSettings.cs" />
     <Compile Include="Settings\UI\ModSettingsFlowCoordinator.cs" />
     <Compile Include="Settings\SettingsMenu.cs" />
-    <Compile Include="Settings\UI\ViewControllers\SettingsMenuListViewController.cs" />
+    <Compile Include="Settings\UI\SettingsMenuListViewController.cs" />
     <Compile Include="Tags\BackgroundTag.cs" />
     <Compile Include="Tags\BSMLTag.cs" />
     <Compile Include="Tags\ButtonTag.cs" />
@@ -111,6 +113,7 @@
     <Compile Include="Tags\PageButtonTag.cs" />
     <Compile Include="Tags\SettingsContainerTag.cs" />
     <Compile Include="Tags\Settings\BoolSettingTag.cs" />
+    <Compile Include="Tags\Settings\IncDecSettingTag.cs" />
     <Compile Include="Tags\Settings\ListSettingTag.cs" />
     <Compile Include="Tags\TextPageScrollViewTag.cs" />
     <Compile Include="Tags\TextTag.cs" />
@@ -127,6 +130,7 @@
     <Compile Include="TypeHandlers\PageButtonHandler.cs" />
     <Compile Include="TypeHandlers\RectTransformHandler.cs" />
     <Compile Include="TypeHandlers\Settings\BoolSettingsHandler.cs" />
+    <Compile Include="TypeHandlers\Settings\ListSettingHandler.cs" />
     <Compile Include="TypeHandlers\TextMeshProUGUIHandler.cs" />
     <Compile Include="TypeHandlers\TextPageScrollViewHandler.cs" />
     <Compile Include="TypeHandlers\TypeHandler.cs" />
@@ -154,6 +158,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Views\settings-container.bsml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\settings-test.bsml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

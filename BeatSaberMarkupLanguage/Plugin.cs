@@ -27,13 +27,14 @@ namespace BeatSaberMarkupLanguage
         {
 
         }
-
+        bool init = true;
         public void OnActiveSceneChanged(Scene _, Scene scene)
         {
             if (scene.name == "MenuCore")
             {
-                BSMLSettings.instance.AddSettingsMenu("test", "BeatSaberMarkupLanguage.Views.test.bsml", BeatSaberUI.CreateViewController<TestViewController>());
-                Resources.FindObjectsOfTypeAll<GameScenesManager>().FirstOrDefault().StartCoroutine(PresentTest());
+                if(init)BSMLSettings.instance.AddSettingsMenu("Test", "BeatSaberMarkupLanguage.Views.settings-test.bsml", SettingsTest.instance);
+                //Resources.FindObjectsOfTypeAll<GameScenesManager>().FirstOrDefault().StartCoroutine(PresentTest());
+                if (BSMLSettings.instance.settingsMenus.Count>0) BSMLSettings.instance.StartCoroutine(BSMLSettings.instance.AddButtonToMainScreen());
             }
         }
 
@@ -41,8 +42,6 @@ namespace BeatSaberMarkupLanguage
         private IEnumerator PresentTest()
         {
             yield return new WaitForSeconds(1);
-
-            /*
             TestViewController testViewController = BeatSaberUI.CreateViewController<TestViewController>();
             testViewController.didActivate += delegate
             {
@@ -55,7 +54,6 @@ namespace BeatSaberMarkupLanguage
                 testViewController.tableData.tableView.ReloadData();
             };
             Resources.FindObjectsOfTypeAll<MainFlowCoordinator>().First().InvokeMethod("PresentViewController", new object[] { testViewController, null, false });
-            */
         }
 
         public void OnApplicationQuit()

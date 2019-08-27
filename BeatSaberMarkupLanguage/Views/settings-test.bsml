@@ -1,0 +1,4 @@
+<settings-container>
+  <bool-setting text='bool test' value='bool-test'></bool-setting>
+  <list-setting text='list test' value='list-choice' choices='list-options'></list-setting>
+</settings-container>
