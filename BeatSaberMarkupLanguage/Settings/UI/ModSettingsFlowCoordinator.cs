@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using VRUI;
+using static BeatSaberMarkupLanguage.Components.CustomListTableData;
 
 namespace BeatSaberMarkupLanguage.Settings
 {
@@ -21,14 +22,15 @@ namespace BeatSaberMarkupLanguage.Settings
 
         protected override void DidActivate(bool firstActivation, ActivationType activationType)
         {
-            if (activationType == ActivationType.AddedToHierarchy)
+            if (firstActivation)
             {
+                title = "Mod Settings";
                 navigationController = BeatSaberUI.CreateViewController<VRUINavigationController>();
                 BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), "BeatSaberMarkupLanguage.Views.settings-buttons.bsml"), navigationController.gameObject, this);
 
                 settingsMenuListViewController = BeatSaberUI.CreateViewController<SettingsMenuListViewController>();
                 settingsMenuListViewController.clickedMenu += OpenMenu;
-                SetViewControllersToNavigationConctroller(navigationController, settingsMenuListViewController/*, settingsMenuListViewController.selectedMenu.viewController*/);
+                SetViewControllersToNavigationConctroller(navigationController, settingsMenuListViewController);
                 ProvideInitialViewControllers(navigationController);
             }
         }
@@ -41,6 +43,13 @@ namespace BeatSaberMarkupLanguage.Settings
                 PopViewControllerFromNavigationController(navigationController, null, immediately: true);
             }
             PushViewControllerToNavigationController(navigationController, viewController, null, wasActive);
+            activeController = viewController;
+        }
+        public void ShowInitial()
+        {
+            if (activeController != null) return;
+            settingsMenuListViewController.list.tableView.SelectCellWithIdx(0);
+            OpenMenu((BSMLSettings.instance.settingsMenus.First() as SettingsMenu).viewController);
         }
 
         [UIAction("ok-click")]
@@ -53,14 +62,22 @@ namespace BeatSaberMarkupLanguage.Settings
         [UIAction("apply-click")]
         private void Apply()
         {
-            //emit apply event
+            EmitEventToAll("apply");
         }
 
         [UIAction("cancel-click")]
         private void Cancel()
         {
             Resources.FindObjectsOfTypeAll<MainFlowCoordinator>().First().InvokeMethod("DismissFlowCoordinator", new object[] { this, null, false });
-            //emit reset to variable state event
+            EmitEventToAll("cancel");
+        }
+
+        private void EmitEventToAll(string ev)
+        {
+            foreach (CustomCellInfo cellInfo in BSMLSettings.instance.settingsMenus)
+            {
+                (cellInfo as SettingsMenu).parserParams.EmitEvent(ev);
+            }
         }
     }
 }

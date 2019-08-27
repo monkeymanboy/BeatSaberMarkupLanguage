@@ -16,7 +16,8 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
         {
             { "text", new[]{"text"} },
             { "fontSize", new[]{"font-size"} },
-            { "alignment", new[]{"align"} }
+            { "alignment", new[]{"align"} },
+            { "overflowMode", new[]{"overflow-mode"} }
         };
 
         public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)
@@ -27,7 +28,9 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             if (data.ContainsKey("fontSize"))
                 textMesh.fontSize = float.Parse(data["fontSize"]);
             if(data.ContainsKey("alignment"))
-            textMesh.alignment = (TextAlignmentOptions) Enum.Parse(typeof(TextAlignmentOptions), data["alignment"]);
+                textMesh.alignment = (TextAlignmentOptions) Enum.Parse(typeof(TextAlignmentOptions), data["alignment"]);
+            if (data.ContainsKey("overflowMode"))
+                textMesh.overflowMode = (TextOverflowModes)Enum.Parse(typeof(TextOverflowModes), data["overflowMode"]);
         }
     }
 }

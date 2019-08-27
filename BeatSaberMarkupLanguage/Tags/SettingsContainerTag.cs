@@ -1,5 +1,4 @@
-﻿using BeatSaberMarkupLanguage.Components;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,21 +8,22 @@ using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.Tags
 {
-    public class VerticalLayoutTag : BSMLTag
+    public class SettingsContainerTag : BSMLTag
     {
-        public override string[] Aliases => new[] { "vertical" };
+        public override string[] Aliases => new[] { "settings-container" };
 
         public override GameObject CreateObject(Transform parent)
         {
             GameObject gameObject = new GameObject();
-            gameObject.name = "BSMLVerticalLayoutGroup";
+            gameObject.name = "BSMLSettingsContainer";
             gameObject.transform.SetParent(parent, false);
-            gameObject.AddComponent<VerticalLayoutGroup>();
+            VerticalLayoutGroup layoutGroup = gameObject.AddComponent<VerticalLayoutGroup>();
+            layoutGroup.childControlHeight = false;
+            layoutGroup.childForceExpandHeight = false;
+            layoutGroup.childAlignment = TextAnchor.MiddleCenter;
+            layoutGroup.spacing = 0.5f;
             ContentSizeFitter contentSizeFitter = gameObject.AddComponent<ContentSizeFitter>();
-            contentSizeFitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
-            gameObject.AddComponent<Backgroundable>();
             RectTransform rectTransform = gameObject.transform as RectTransform;
-            rectTransform.sizeDelta = new Vector2(BSMLParser.SCREEN_WIDTH, BSMLParser.SCREEN_HEIGHT);
             gameObject.AddComponent<LayoutElement>();
             return gameObject;
         }

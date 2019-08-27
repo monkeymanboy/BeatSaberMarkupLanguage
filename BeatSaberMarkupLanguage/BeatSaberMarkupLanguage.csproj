@@ -84,6 +84,8 @@
     <Compile Include="Attributes\UIObject.cs" />
     <Compile Include="Attributes\UIValue.cs" />
     <Compile Include="BeatSaberUI.cs" />
+    <Compile Include="Components\Settings\BoolSetting.cs" />
+    <Compile Include="Components\Settings\IncDecSetting.cs" />
     <Compile Include="Parser\BSMLAction.cs" />
     <Compile Include="BSMLParser.cs" />
     <Compile Include="Components\Backgroundable.cs" />
@@ -107,6 +109,9 @@
     <Compile Include="Tags\LeaderboardTag.cs" />
     <Compile Include="Tags\ListTag.cs" />
     <Compile Include="Tags\PageButtonTag.cs" />
+    <Compile Include="Tags\SettingsContainerTag.cs" />
+    <Compile Include="Tags\Settings\BoolSettingTag.cs" />
+    <Compile Include="Tags\Settings\ListSettingTag.cs" />
     <Compile Include="Tags\TextPageScrollViewTag.cs" />
     <Compile Include="Tags\TextTag.cs" />
     <Compile Include="Tags\VerticalLayoutTag.cs" />
@@ -116,10 +121,12 @@
     <Compile Include="TypeHandlers\CustomListTableDataHandler.cs" />
     <Compile Include="TypeHandlers\GridLayoutGroupHandler.cs" />
     <Compile Include="TypeHandlers\HorizontalOrVerticalLayoutGroupHandler.cs" />
+    <Compile Include="TypeHandlers\LayoutElementHandler.cs" />
     <Compile Include="TypeHandlers\LayoutGroupHandler.cs" />
     <Compile Include="TypeHandlers\LeaderboardHandler.cs" />
     <Compile Include="TypeHandlers\PageButtonHandler.cs" />
     <Compile Include="TypeHandlers\RectTransformHandler.cs" />
+    <Compile Include="TypeHandlers\Settings\BoolSettingsHandler.cs" />
     <Compile Include="TypeHandlers\TextMeshProUGUIHandler.cs" />
     <Compile Include="TypeHandlers\TextPageScrollViewHandler.cs" />
     <Compile Include="TypeHandlers\TypeHandler.cs" />
@@ -141,6 +148,12 @@
     <EmbeddedResource Include="Views\settings-list.bsml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\settings-about.bsml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\settings-container.bsml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

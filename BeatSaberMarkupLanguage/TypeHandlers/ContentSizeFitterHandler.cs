@@ -17,7 +17,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
         public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
         {
             { "horizontalFit", new[]{ "horizontal-fit" } },
-            { "verticalFit", new[]{ "vertical-fit "} }
+            { "verticalFit", new[]{ "vertical-fit"} }
         };
 
         public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)

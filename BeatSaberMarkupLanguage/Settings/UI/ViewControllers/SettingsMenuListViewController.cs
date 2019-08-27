@@ -24,11 +24,14 @@ namespace BeatSaberMarkupLanguage.Settings.UI.ViewControllers
         protected override void DidActivate(bool firstActivation, ActivationType type)
         {
             base.DidActivate(firstActivation, type);
-            rectTransform.sizeDelta = new Vector2(35, 0);
-            rectTransform.anchorMin = new Vector2(0.5f, 0);
-            rectTransform.anchorMax = new Vector2(0.5f, 1);
-            list.data = BSMLSettings.instance.settingsMenus;
-            list.tableView.ReloadData();
+            if (firstActivation)
+            {
+                rectTransform.sizeDelta = new Vector2(35, 0);
+                rectTransform.anchorMin = new Vector2(0.5f, 0);
+                rectTransform.anchorMax = new Vector2(0.5f, 1);
+                list.data = BSMLSettings.instance.settingsMenus;
+                list.tableView.ReloadData();
+            }
         }
 
         [UIAction("settings-click")]

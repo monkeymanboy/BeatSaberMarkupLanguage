@@ -24,6 +24,7 @@ namespace BeatSaberMarkupLanguage.Tags
             gameObject.AddComponent<Backgroundable>();
             RectTransform rectTransform = gameObject.transform as RectTransform;
             rectTransform.sizeDelta = new Vector2(BSMLParser.SCREEN_WIDTH, BSMLParser.SCREEN_HEIGHT);
+            gameObject.AddComponent<LayoutElement>();
             return gameObject;
         }
     }
