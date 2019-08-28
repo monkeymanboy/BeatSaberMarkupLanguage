@@ -36,7 +36,7 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
                 ModSettingsFlowCoordinator settingsFlowCoordinator = Resources.FindObjectsOfTypeAll<ModSettingsFlowCoordinator>().FirstOrDefault();
                 if (settingsFlowCoordinator)
                 {
-                    settingsFlowCoordinator.OpenMenu(submenuController, true);
+                    settingsFlowCoordinator.OpenMenu(submenuController, true, false);
                 }
             };
             submenuController.gameObject.AddComponent<SubmenuText>().submenuText = clickableText;

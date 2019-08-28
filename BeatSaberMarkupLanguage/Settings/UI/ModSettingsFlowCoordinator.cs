@@ -43,16 +43,17 @@ namespace BeatSaberMarkupLanguage.Settings
         }
         public void OpenMenu(VRUIViewController viewController)
         {
-            OpenMenu(viewController, false);
+            OpenMenu(viewController, false, false);
         }
 
-        public void OpenMenu(VRUIViewController viewController, bool isSubmenu)
+        public void OpenMenu(VRUIViewController viewController, bool isSubmenu, bool isBack)
         {
-            if (isSubmenu)
-                submenuStack.Push(activeController);
-            else
-                submenuStack.Clear();
-            bool wasActive = activeController != null;
+            if(!isBack)
+                if (isSubmenu)
+                    submenuStack.Push(activeController);
+                else
+                    submenuStack.Clear();
+                bool wasActive = activeController != null;
             if (wasActive)
             {
                 PopViewControllerFromNavigationController(navigationController, null, immediately: true);
@@ -91,7 +92,7 @@ namespace BeatSaberMarkupLanguage.Settings
         private void Back()
         {
             if(submenuStack.Count>0)
-                OpenMenu(submenuStack.Pop());
+                OpenMenu(submenuStack.Pop(), false, true);
         }
 
         private void EmitEventToAll(string ev)
