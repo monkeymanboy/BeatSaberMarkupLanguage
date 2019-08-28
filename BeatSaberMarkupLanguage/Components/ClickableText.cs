@@ -12,7 +12,7 @@ namespace BeatSaberMarkupLanguage.Components
     //Yoinked from customui, it do be like that sometimes
     public class ClickableText : TextMeshProUGUI, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler, IEventSystemHandler
     {
-        public Color highlightColor = Color.cyan;
+        public Color highlightColor = new Color(0.60f, 0.80f, 1);
         public Color defaultColor = Color.white;
         public Action<PointerEventData> OnClickEvent, PointerEnterEvent, PointerExitEvent;
         public void OnPointerClick(PointerEventData eventData)

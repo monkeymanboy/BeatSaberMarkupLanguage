@@ -18,13 +18,27 @@ namespace BeatSaberMarkupLanguage
         public const float SCREEN_WIDTH = 160;
         public const float SCREEN_HEIGHT = 80;
         
-        private List<BSMLTag> tags;
+        private Dictionary<string, BSMLTag> tags = new Dictionary<string, BSMLTag>();
         private List<TypeHandler> typeHandlers;
 
         public void Awake()
         {
-            tags = Utilities.GetListOfType<BSMLTag>();
+            foreach(BSMLTag tag in Utilities.GetListOfType<BSMLTag>())
+            {
+                RegisterTag(tag);
+            }
             typeHandlers = Utilities.GetListOfType<TypeHandler>();
+        }
+        public void RegisterTag(BSMLTag tag)
+        {
+            foreach (string alias in tag.Aliases)
+            {
+                tags.Add(alias, tag);
+            }
+        }
+        public void RegisterTypeHandler(TypeHandler typeHandler)
+        {
+            typeHandlers.Add(typeHandler);
         }
 
         private XmlDocument doc = new XmlDocument();
@@ -63,7 +77,9 @@ namespace BeatSaberMarkupLanguage
 
         private GameObject HandleNode(XmlNode node, GameObject parent, BSMLParserParams parserParams)
         {
-            BSMLTag currentTag = tags.First(x => x.Aliases.Contains(node.Name));
+            if (!tags.ContainsKey(node.Name))
+                throw new Exception("Tag type '" + node.Name + "' not found");
+            BSMLTag currentTag = tags[node.Name];
             GameObject currentNode = currentTag.CreateObject(parent.transform);
             foreach (TypeHandler typeHandler in typeHandlers)
             {

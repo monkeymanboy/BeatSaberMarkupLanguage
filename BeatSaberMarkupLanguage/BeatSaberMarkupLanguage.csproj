@@ -108,6 +108,7 @@
     <Compile Include="Tags\BackgroundTag.cs" />
     <Compile Include="Tags\BSMLTag.cs" />
     <Compile Include="Tags\ButtonTag.cs" />
+    <Compile Include="Tags\ClickableTextTag.cs" />
     <Compile Include="Tags\GridLayoutTag.cs" />
     <Compile Include="Tags\HorizontalLayoutTag.cs" />
     <Compile Include="Tags\LeaderboardTag.cs" />
@@ -123,6 +124,7 @@
     <Compile Include="Tags\VerticalLayoutTag.cs" />
     <Compile Include="TypeHandlers\BackgroundableHandler.cs" />
     <Compile Include="TypeHandlers\ButtonHandler.cs" />
+    <Compile Include="TypeHandlers\ClickableTextHandler.cs" />
     <Compile Include="TypeHandlers\ContentSizeFitterHandler.cs" />
     <Compile Include="TypeHandlers\CustomListTableDataHandler.cs" />
     <Compile Include="TypeHandlers\GridLayoutGroupHandler.cs" />

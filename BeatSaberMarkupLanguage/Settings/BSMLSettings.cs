@@ -41,30 +41,18 @@ namespace BeatSaberMarkupLanguage.Settings
         public List<CustomCellInfo> settingsMenus = new List<CustomCellInfo>();
 
         private ModSettingsFlowCoordinator flowCoordinator;
-
-        [UIObject("content")]
-        private GameObject content;
         
-        public void AddSettingsMenu(string name, string resource, object host, bool includeAutoFormatting = true)
+        public void AddSettingsMenu(string name, string resource, object host)
         {
             if (settingsMenus.Count == 0)
             {
                 VRUIViewController aboutController = BeatSaberUI.CreateViewController<VRUIViewController>();
                 SetupViewControllerTransform(aboutController);
-                settingsMenus.Add(new SettingsMenu("About", aboutController, BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), "BeatSaberMarkupLanguage.Views.settings-about.bsml"), CreateSettingsContainer(aboutController.gameObject), this)));
+                settingsMenus.Add(new SettingsMenu("About", aboutController, BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), "BeatSaberMarkupLanguage.Views.settings-about.bsml"), aboutController.gameObject, this)));
             }
             VRUIViewController viewController = BeatSaberUI.CreateViewController<VRUIViewController>();
             SetupViewControllerTransform(viewController);
-            GameObject parent = viewController.gameObject;
-            if (includeAutoFormatting)
-                parent = CreateSettingsContainer(parent);
-            settingsMenus.Add(new SettingsMenu(name, viewController, BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetCallingAssembly(), resource), parent, host)));
-        }
-
-        public GameObject CreateSettingsContainer(GameObject gameObject)
-        {
-            BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), "BeatSaberMarkupLanguage.Views.settings-container.bsml"), gameObject, this);
-            return content;
+            settingsMenus.Add(new SettingsMenu(name, viewController, BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetCallingAssembly(), resource), viewController.gameObject, host)));
         }
 
         public IEnumerator AddButtonToMainScreen()

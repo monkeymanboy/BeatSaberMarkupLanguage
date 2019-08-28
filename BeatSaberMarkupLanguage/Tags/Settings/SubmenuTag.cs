@@ -36,14 +36,13 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
                 ModSettingsFlowCoordinator settingsFlowCoordinator = Resources.FindObjectsOfTypeAll<ModSettingsFlowCoordinator>().FirstOrDefault();
                 if (settingsFlowCoordinator)
                 {
-                    settingsFlowCoordinator.OpenMenu(submenuController);
+                    settingsFlowCoordinator.OpenMenu(submenuController, true);
                 }
             };
-            GameObject container = BSMLSettings.instance.CreateSettingsContainer(submenuController.gameObject);
-            container.AddComponent<SubmenuText>().submenuText = clickableText;
+            submenuController.gameObject.AddComponent<SubmenuText>().submenuText = clickableText;
 
             gameObj.SetActive(true);
-            return container;
+            return submenuController.gameObject;
         }
     }
 }

@@ -20,6 +20,8 @@ namespace BeatSaberMarkupLanguage.Settings
 
         protected VRUIViewController activeController;
 
+        private Stack<VRUIViewController> submenuStack = new Stack<VRUIViewController>();
+
         protected override void DidActivate(bool firstActivation, ActivationType activationType)
         {
             if (firstActivation)
@@ -32,11 +34,24 @@ namespace BeatSaberMarkupLanguage.Settings
                 settingsMenuListViewController.clickedMenu += OpenMenu;
                 SetViewControllerToNavigationConctroller(navigationController, settingsMenuListViewController);
                 ProvideInitialViewControllers(navigationController);
+                
+                foreach (CustomCellInfo cellInfo in BSMLSettings.instance.settingsMenus)
+                {
+                    (cellInfo as SettingsMenu).parserParams.AddEvent("back", Back);
+                }
             }
         }
-
         public void OpenMenu(VRUIViewController viewController)
         {
+            OpenMenu(viewController, false);
+        }
+
+        public void OpenMenu(VRUIViewController viewController, bool isSubmenu)
+        {
+            if (isSubmenu)
+                submenuStack.Push(activeController);
+            else
+                submenuStack.Clear();
             bool wasActive = activeController != null;
             if (wasActive)
             {
@@ -71,6 +86,12 @@ namespace BeatSaberMarkupLanguage.Settings
         {
             Resources.FindObjectsOfTypeAll<MainFlowCoordinator>().First().InvokeMethod("DismissFlowCoordinator", new object[] { this, null, false });
             EmitEventToAll("cancel");
+        }
+
+        private void Back()
+        {
+            if(submenuStack.Count>0)
+                OpenMenu(submenuStack.Pop());
         }
 
         private void EmitEventToAll(string ev)
