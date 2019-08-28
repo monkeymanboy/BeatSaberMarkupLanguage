@@ -19,7 +19,8 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
             { "value", new[]{ "value"} },
             { "initialValue", new[]{ "initial-value"} },
             { "setEvent", new[]{ "set-event"} },
-            { "getEvent", new[]{ "get-event"} }
+            { "getEvent", new[]{ "get-event"} },
+            { "applyOnChange", new[] { "apply-on-change" } }
         };
 
         public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)
@@ -27,6 +28,8 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
             BoolSetting boolSetting = obj as BoolSetting;
             if (data.ContainsKey("text"))
                 boolSetting.LabelText = data["text"];
+            if (data.ContainsKey("applyOnChange"))
+                boolSetting.updateOnChange = bool.Parse(data["applyOnChange"]);
             if (data.ContainsKey("initialValue"))
                 boolSetting.Value = bool.Parse(data["initialValue"]);
             if (data.ContainsKey("onChange"))

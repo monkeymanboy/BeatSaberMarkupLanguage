@@ -1,6 +1,6 @@
 <settings-container>
   <dropdown-list-setting text='Dropdown Test' value='list-choice' choices='list-options'></dropdown-list-setting>
-  <settings-submenu text='Open Submenu'>
+  <settings-submenu text='Open Submenu' hover-hint='we got hover hints boi'>
     <settings-container>
       <bool-setting text='bool test' value='bool-test'></bool-setting>
       <clickable-text text='Back' click-event='back'></clickable-text>

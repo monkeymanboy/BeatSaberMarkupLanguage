@@ -1,6 +1,7 @@
 ﻿using BeatSaberMarkupLanguage.Components.Settings;
 using BeatSaberMarkupLanguage.Parser;
 using BeatSaberMarkupLanguage.ViewControllers;
+using BS_Utils.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +20,8 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
             { "text", new[]{"text"} },
             { "fontSize", new[]{"font-size"} },
             { "alignment", new[]{"align"} },
-            { "overflowMode", new[]{"overflow-mode"} }
+            { "overflowMode", new[]{"overflow-mode"} },
+            { "hoverHint", new[]{ "hover-hint" } }
         };
 
         public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)
@@ -33,6 +35,12 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
                 textMesh.alignment = (TextAlignmentOptions)Enum.Parse(typeof(TextAlignmentOptions), data["alignment"]);
             if (data.ContainsKey("overflowMode"))
                 textMesh.overflowMode = (TextOverflowModes)Enum.Parse(typeof(TextOverflowModes), data["overflowMode"]);
+            if (data.ContainsKey("hoverHint"))
+            {
+                HoverHint hover = textMesh.gameObject.AddComponent<HoverHint>();
+                hover.text = data["hoverHint"];
+                hover.SetPrivateField("_hoverHintController", Resources.FindObjectsOfTypeAll<HoverHintController>().First());
+            }
         }
     }
 }

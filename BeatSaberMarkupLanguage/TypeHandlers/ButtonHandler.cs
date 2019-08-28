@@ -18,7 +18,8 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
         {
             { "text", new[]{"text"} },
             { "glowColor", new[]{"glow-color"} },
-            { "onClick", new[]{"on-click"} }
+            { "onClick", new[]{"on-click"} },
+            { "clickEvent", new[]{"click-event"} }
         };
 
         public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)
@@ -48,6 +49,12 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                     if (!parserParams.actions.ContainsKey(data["onClick"]))
                         throw new Exception("on-click action '" + data["onClick"] + "' not found");
                     parserParams.actions[data["onClick"]].Invoke();
+                });
+            }
+            if (data.ContainsKey("clickEvent"))
+            {
+                button.onClick.AddListener(delegate {
+                    parserParams.EmitEvent(data["clickEvent"]);
                 });
             }
         }
