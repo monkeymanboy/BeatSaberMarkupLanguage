@@ -6,11 +6,23 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage
 {
     public static class Utilities
     {
+        private static Sprite _editIcon = null;
+        public static Sprite EditIcon
+        {
+            get
+            {
+                if (!_editIcon)
+                    _editIcon = Resources.FindObjectsOfTypeAll<Image>().First(x => x.sprite?.texture.name == "EditIcon").sprite;
+                return _editIcon;
+            }
+        }
+
         public static string GetResourceContent(Assembly assembly, string resource)
         {
             using (Stream stream = assembly.GetManifestResourceStream(resource))

@@ -1,5 +1,6 @@
 ﻿using BeatSaberMarkupLanguage.Components.Settings;
 using BeatSaberMarkupLanguage.Parser;
+using HMUI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,8 +10,8 @@ using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
 {
-    [ComponentHandler(typeof(ListSetting))]
-    public class ListSettingHandler : TypeHandler
+    [ComponentHandler(typeof(DropDownListSetting))]
+    public class DropDownListSettingHandler : TypeHandler
     {
         public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
         {
@@ -25,9 +26,9 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
 
         public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)
         {
-            ListSetting listSetting = obj as ListSetting;
+            DropDownListSetting listSetting = obj as DropDownListSetting;
             if (data.ContainsKey("text"))
-                listSetting.LabelText = data["text"];
+                listSetting.dropdown.SetLabelText(data["text"]);
             if (data.ContainsKey("applyOnChange"))
                 listSetting.updateOnChange = bool.Parse(data["applyOnChange"]);
             if (data.ContainsKey("onChange"))
@@ -53,6 +54,8 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
             parserParams.AddEvent(data.ContainsKey("setEvent") ? data["setEvent"] : "apply", listSetting.ApplyValue);
             parserParams.AddEvent(data.ContainsKey("getEvent") ? data["getEvent"] : "cancel", listSetting.ReceiveValue);
             listSetting.Setup();
+            listSetting.dropdown.ReloadData();
+            listSetting.gameObject.SetActive(true);
         }
     }
 }

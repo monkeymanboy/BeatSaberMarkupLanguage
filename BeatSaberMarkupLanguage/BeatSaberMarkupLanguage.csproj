@@ -86,6 +86,7 @@
     <Compile Include="BeatSaberUI.cs" />
     <Compile Include="Components\ClickableText.cs" />
     <Compile Include="Components\Settings\BoolSetting.cs" />
+    <Compile Include="Components\Settings\DropDownListSetting.cs" />
     <Compile Include="Components\Settings\IncDecSetting.cs" />
     <Compile Include="Components\Settings\ListSetting.cs" />
     <Compile Include="Components\Settings\SubmenuText.cs" />
@@ -116,6 +117,7 @@
     <Compile Include="Tags\PageButtonTag.cs" />
     <Compile Include="Tags\SettingsContainerTag.cs" />
     <Compile Include="Tags\Settings\BoolSettingTag.cs" />
+    <Compile Include="Tags\Settings\DropdownListSettingTag.cs" />
     <Compile Include="Tags\Settings\IncDecSettingTag.cs" />
     <Compile Include="Tags\Settings\ListSettingTag.cs" />
     <Compile Include="Tags\Settings\SubmenuTag.cs" />
@@ -134,6 +136,7 @@
     <Compile Include="TypeHandlers\LeaderboardHandler.cs" />
     <Compile Include="TypeHandlers\PageButtonHandler.cs" />
     <Compile Include="TypeHandlers\RectTransformHandler.cs" />
+    <Compile Include="TypeHandlers\Settings\DropDownListSettingHandler.cs" />
     <Compile Include="TypeHandlers\Settings\SettingsSubmenuHandler.cs" />
     <Compile Include="TypeHandlers\Settings\BoolSettingsHandler.cs" />
     <Compile Include="TypeHandlers\Settings\ListSettingHandler.cs" />
@@ -161,9 +164,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Views\settings-about.bsml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Views\settings-container.bsml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Views\settings-test.bsml" />

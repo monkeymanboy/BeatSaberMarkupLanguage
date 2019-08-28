@@ -1,8 +1,8 @@
 <settings-container>
-  <bool-setting text='bool test' value='bool-test'></bool-setting>
+  <dropdown-list-setting text='Dropdown Test' value='list-choice' choices='list-options'></dropdown-list-setting>
   <settings-submenu text='Open Submenu'>
     <settings-container>
-      <list-setting text='list test' value='list-choice' choices='list-options'></list-setting>
+      <bool-setting text='bool test' value='bool-test'></bool-setting>
       <clickable-text text='Back' click-event='back'></clickable-text>
     </settings-container>
   </settings-submenu>
