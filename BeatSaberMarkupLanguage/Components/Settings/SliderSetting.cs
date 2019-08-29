@@ -41,6 +41,10 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             slider.valueDidChangeEvent += OnChange;
             StartCoroutine(SetInitialText());
         }
+        private void OnEnable()
+        {
+            StartCoroutine(SetInitialText());
+        }
         IEnumerator SetInitialText()//I don't really like this but for some reason I can't get the inital starting text any other quick way and this works perfectly fine
         {
             yield return new WaitForFixedUpdate();
