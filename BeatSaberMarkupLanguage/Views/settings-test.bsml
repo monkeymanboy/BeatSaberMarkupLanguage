@@ -1,4 +1,5 @@
 <settings-container>
+  <slider-setting text='slider test' min='-10' max='50' increment='1' value='slider-value' integer-only='true'></slider-setting>
   <dropdown-list-setting text='Dropdown Test' value='list-choice' choices='list-options'></dropdown-list-setting>
   <settings-submenu text='Open Submenu' hover-hint='we got hover hints boi'>
     <settings-container>

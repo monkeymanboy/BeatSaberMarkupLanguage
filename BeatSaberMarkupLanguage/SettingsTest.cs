@@ -18,9 +18,13 @@ namespace BeatSaberMarkupLanguage
         [UIValue("bool-test")]
         bool boolTest = true;
 
+        [UIValue("slider-value")]
+        int sliderValue = 5;
+
         public void Update()
         {
             /*
+            Console.WriteLine(sliderValue);
             Console.WriteLine("Bool Test:" + boolTest);
             Console.WriteLine("List Test:" + listChoice);*/
         }
