@@ -74,5 +74,33 @@ namespace BeatSaberMarkupLanguage
         }
 
         //end of yoink
+
+        public static class ImageResources
+        {
+            public static Material NoGlowMat
+            {
+                get
+                {
+                    if (noGlowMat == null)
+                    {
+                        noGlowMat = new Material(Resources.FindObjectsOfTypeAll<Material>().Where(m => m.name == "UINoGlow").First());
+                        noGlowMat.name = "UINoGlowCustom";
+                    }
+                    return noGlowMat;
+                }
+            }
+            private static Material noGlowMat;
+
+            private static Sprite _blankSprite = null;
+            public static Sprite BlankSprite
+            {
+                get
+                {
+                    if (!_blankSprite)
+                        _blankSprite = Sprite.Create(Texture2D.blackTexture, new Rect(), Vector2.zero);
+                    return _blankSprite;
+                }
+            }
+        }
     }
 }

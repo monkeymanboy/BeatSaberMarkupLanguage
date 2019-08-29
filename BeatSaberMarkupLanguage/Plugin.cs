@@ -20,7 +20,12 @@ namespace BeatSaberMarkupLanguage
 
         public void OnSceneLoaded(Scene scene, LoadSceneMode sceneMode)
         {
-
+            if (scene.name == "MenuCore")
+            {
+                //BSMLSettings.instance.AddSettingsMenu("Test", "BeatSaberMarkupLanguage.Views.settings-test.bsml", SettingsTest.instance);
+                //Resources.FindObjectsOfTypeAll<GameScenesManager>().FirstOrDefault().StartCoroutine(PresentTest());
+                if (BSMLSettings.instance.settingsMenus.Count > 0) BSMLSettings.instance.StartCoroutine(BSMLSettings.instance.AddButtonToMainScreen());
+            }
         }
 
         public void OnSceneUnloaded(Scene scene)
@@ -29,14 +34,9 @@ namespace BeatSaberMarkupLanguage
         }
         public void OnActiveSceneChanged(Scene _, Scene scene)
         {
-            if(_.name == "PCInit" && scene.name == "EmptyTransition")
+            if (_.name == "PCInit" && scene.name == "EmptyTransition")
                 GameObject.Destroy(BSMLSettings.instance.gameObject);//For if the game is restarted
-            if (scene.name == "MenuCore")
-            {
-                //BSMLSettings.instance.AddSettingsMenu("Test", "BeatSaberMarkupLanguage.Views.settings-test.bsml", SettingsTest.instance);
-                //Resources.FindObjectsOfTypeAll<GameScenesManager>().FirstOrDefault().StartCoroutine(PresentTest());
-                if (BSMLSettings.instance.settingsMenus.Count>0) BSMLSettings.instance.StartCoroutine(BSMLSettings.instance.AddButtonToMainScreen());
-            }
+            
         }
 
         //It's just for testing so don't yell at me
@@ -47,7 +47,7 @@ namespace BeatSaberMarkupLanguage
             testViewController.didActivate += delegate
             {
                 List<CustomCellInfo> test = new List<CustomCellInfo>();
-                for(int i = 0; i<10; i++)
+                for (int i = 0; i < 10; i++)
                 {
                     test.Add(new CustomCellInfo("test" + i, "yee haw"));
                 }

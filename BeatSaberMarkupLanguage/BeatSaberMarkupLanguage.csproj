@@ -115,6 +115,7 @@
     <Compile Include="Tags\ClickableTextTag.cs" />
     <Compile Include="Tags\GridLayoutTag.cs" />
     <Compile Include="Tags\HorizontalLayoutTag.cs" />
+    <Compile Include="Tags\ImageTag.cs" />
     <Compile Include="Tags\LeaderboardTag.cs" />
     <Compile Include="Tags\ListTag.cs" />
     <Compile Include="Tags\PageButtonTag.cs" />
@@ -136,6 +137,7 @@
     <Compile Include="TypeHandlers\CustomListTableDataHandler.cs" />
     <Compile Include="TypeHandlers\GridLayoutGroupHandler.cs" />
     <Compile Include="TypeHandlers\HorizontalOrVerticalLayoutGroupHandler.cs" />
+    <Compile Include="TypeHandlers\ImageTypeHandler.cs" />
     <Compile Include="TypeHandlers\LayoutElementHandler.cs" />
     <Compile Include="TypeHandlers\LayoutGroupHandler.cs" />
     <Compile Include="TypeHandlers\LeaderboardHandler.cs" />
