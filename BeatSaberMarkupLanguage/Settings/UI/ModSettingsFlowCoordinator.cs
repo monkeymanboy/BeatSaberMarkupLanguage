@@ -72,7 +72,6 @@ namespace BeatSaberMarkupLanguage.Settings
         private void Ok()
         {
             Apply();
-            Destroy(BSMLSettings.instance);
             Resources.FindObjectsOfTypeAll<MenuTransitionsHelperSO>().First().RestartGame(skipHealthWarning: true);
         }
 

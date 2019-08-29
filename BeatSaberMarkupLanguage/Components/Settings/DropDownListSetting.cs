@@ -92,7 +92,6 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         }
         public void ApplyValue()
         {
-            Console.WriteLine("APPLYING VALUE: " + Value.ToString());
             if (associatedValue != null)
                 associatedValue.SetValue(Value);
         }

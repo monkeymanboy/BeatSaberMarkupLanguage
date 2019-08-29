@@ -44,6 +44,8 @@ namespace BeatSaberMarkupLanguage.Settings
         
         public void AddSettingsMenu(string name, string resource, object host)
         {
+            if (settingsMenus.Any(x => x.text == name))
+                return;
             if (settingsMenus.Count == 0)
             {
                 VRUIViewController aboutController = BeatSaberUI.CreateViewController<VRUIViewController>();
