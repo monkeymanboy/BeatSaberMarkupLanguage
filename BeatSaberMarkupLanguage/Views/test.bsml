@@ -1,16 +1,22 @@
-<vertical child-control-height='false'>
-  <horizontal bg='panel-top' pad-left='10' pad-right='10' horizontal-fit='PreferredSize'>
-    <text id ='sometext' text='~header' align='Center' font-size='10'></text>
-  </horizontal>
-  <horizontal bg='round-rect-panel' pad='8'>
-    <text text='Testing out some nicely formatted business'></text>
-    <list visible-cells='3' id='list' select-cell='cell click'></list>
-  </horizontal>
-  <horizontal bg='round-rect-panel' pad='6' spacing='10'>
-    <button on-click='click' glow-color='green' text='Test Button'></button>
-    <vertical spacing='6'>
-      <page-button on-click='list#PageUp' direction='Up' glow-color='red'></page-button>
-      <page-button on-click='list#PageDown' direction='Down'></page-button>
-    </vertical>
-  </horizontal>
-</vertical>
+<bg>
+  <vertical child-control-height='false'>
+    <horizontal bg='panel-top' pad-left='10' pad-right='10' horizontal-fit='PreferredSize'>
+      <text id ='sometext' text='~header' align='Center' font-size='10'></text>
+    </horizontal>
+    <horizontal bg='round-rect-panel' pad='8'>
+      <text text='Testing out some nicely formatted business'></text>
+      <list visible-cells='3' id='list' select-cell='cell click'></list>
+    </horizontal>
+    <horizontal bg='round-rect-panel' pad='6' spacing='10'>
+      <button on-click='click' glow-color='green' text='Test Button'></button>
+      <vertical spacing='6'>
+        <page-button on-click='list#PageUp' direction='Up' glow-color='red'></page-button>
+        <page-button on-click='list#PageDown' direction='Down'></page-button>
+      </vertical>
+    </horizontal>
+  </vertical>
+  <bottom-button-panel>
+    <button on-click='click' text='Yee Haw'></button>
+    <button on-click='click' text='Cowboy'></button>
+  </bottom-button-panel>
+</bg>

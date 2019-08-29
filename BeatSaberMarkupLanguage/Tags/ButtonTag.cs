@@ -14,7 +14,7 @@ namespace BeatSaberMarkupLanguage.Tags
 
         public override GameObject CreateObject(Transform parent)
         {
-            Button button = MonoBehaviour.Instantiate(Resources.FindObjectsOfTypeAll<Button>().Last(x => (x.name == "PlayButton")), parent, false);
+            Button button = MonoBehaviour.Instantiate(Resources.FindObjectsOfTypeAll<Button>().Last(x => (x.name == (parent.GetComponent<StartMiddleEndButtonsGroup>()==null ? "PlayButton" : "CreditsButton"))), parent, false);
             button.name = "BSMLButton";
             return button.gameObject;
         }

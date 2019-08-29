@@ -20,8 +20,8 @@ namespace BeatSaberMarkupLanguage.Tags
             gameObject.transform.SetParent(parent, false);
             gameObject.AddComponent<ContentSizeFitter>();
             gameObject.AddComponent<Backgroundable>();
-            //RectTransform rectTransform = gameObject.transform as RectTransform;
-            //rectTransform.sizeDelta = new Vector2(BSMLParser.SCREEN_WIDTH, BSMLParser.SCREEN_HEIGHT);
+            RectTransform rectTransform = gameObject.transform as RectTransform;
+            rectTransform.sizeDelta = new Vector2(0, 0);
             return gameObject;
         }
     }
