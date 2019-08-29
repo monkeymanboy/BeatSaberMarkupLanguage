@@ -22,7 +22,7 @@ namespace BeatSaberMarkupLanguage
         {
             if (scene.name == "MenuCore")
             {
-                BSMLSettings.instance.AddSettingsMenu("Test", "BeatSaberMarkupLanguage.Views.settings-test.bsml", SettingsTest.instance);
+                //BSMLSettings.instance.AddSettingsMenu("Test", "BeatSaberMarkupLanguage.Views.settings-test.bsml", SettingsTest.instance);
                 //Resources.FindObjectsOfTypeAll<GameScenesManager>().FirstOrDefault().StartCoroutine(PresentTest());
                 if (BSMLSettings.instance.settingsMenus.Count > 0) BSMLSettings.instance.StartCoroutine(BSMLSettings.instance.AddButtonToMainScreen());
             }
