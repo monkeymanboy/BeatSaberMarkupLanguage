@@ -21,10 +21,14 @@ namespace BeatSaberMarkupLanguage
         [UIValue("slider-value")]
         int sliderValue = 5;
 
+        [UIValue("string-value")]
+        string testString = "Shazam";
+
         public void Update()
         {
             /*
             Console.WriteLine(sliderValue);
+            Console.WriteLine(testString);
             Console.WriteLine("Bool Test:" + boolTest);
             Console.WriteLine("List Test:" + listChoice);*/
         }

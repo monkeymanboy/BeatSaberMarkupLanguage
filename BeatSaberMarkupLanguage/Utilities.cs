@@ -18,7 +18,7 @@ namespace BeatSaberMarkupLanguage
             get
             {
                 if (!_editIcon)
-                    _editIcon = Resources.FindObjectsOfTypeAll<Image>().First(x => x.sprite?.texture.name == "EditIcon").sprite;
+                    _editIcon = Resources.FindObjectsOfTypeAll<Image>().First(x => x.sprite?.name == "EditIcon").sprite;
                 return _editIcon;
             }
         }

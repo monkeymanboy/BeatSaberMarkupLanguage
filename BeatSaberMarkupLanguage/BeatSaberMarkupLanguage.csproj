@@ -90,6 +90,7 @@
     <Compile Include="Components\Settings\IncDecSetting.cs" />
     <Compile Include="Components\Settings\ListSetting.cs" />
     <Compile Include="Components\Settings\SliderSetting.cs" />
+    <Compile Include="Components\Settings\StringSetting.cs" />
     <Compile Include="Components\Settings\SubmenuText.cs" />
     <Compile Include="Parser\BSMLAction.cs" />
     <Compile Include="BSMLParser.cs" />
@@ -122,6 +123,7 @@
     <Compile Include="Tags\Settings\IncDecSettingTag.cs" />
     <Compile Include="Tags\Settings\ListSettingTag.cs" />
     <Compile Include="Tags\Settings\SliderSettingTag.cs" />
+    <Compile Include="Tags\Settings\StringSettingTag.cs" />
     <Compile Include="Tags\Settings\SubmenuTag.cs" />
     <Compile Include="Tags\TextPageScrollViewTag.cs" />
     <Compile Include="Tags\TextTag.cs" />
@@ -143,12 +145,14 @@
     <Compile Include="TypeHandlers\Settings\BoolSettingsHandler.cs" />
     <Compile Include="TypeHandlers\Settings\ListSettingHandler.cs" />
     <Compile Include="TypeHandlers\Settings\SliderSettingHandler.cs" />
+    <Compile Include="TypeHandlers\Settings\StringSettingHandler.cs" />
     <Compile Include="TypeHandlers\TextMeshProUGUIHandler.cs" />
     <Compile Include="TypeHandlers\TextPageScrollViewHandler.cs" />
     <Compile Include="TypeHandlers\TypeHandler.cs" />
     <Compile Include="Utilities.cs" />
     <Compile Include="ViewControllers\BSMLResourceViewController.cs" />
     <Compile Include="ViewControllers\BSMLViewController.cs" />
+    <Compile Include="ViewControllers\KeyboardViewController.cs" />
     <Compile Include="ViewControllers\TestViewController.cs" />
   </ItemGroup>
   <ItemGroup>
