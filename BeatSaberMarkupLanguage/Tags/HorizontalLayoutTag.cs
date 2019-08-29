@@ -23,7 +23,9 @@ namespace BeatSaberMarkupLanguage.Tags
             contentSizeFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
             gameObject.AddComponent<Backgroundable>();
             RectTransform rectTransform = gameObject.transform as RectTransform;
-            rectTransform.sizeDelta = new Vector2(BSMLParser.SCREEN_WIDTH, BSMLParser.SCREEN_HEIGHT);
+            rectTransform.anchorMin = new Vector2(0, 0);
+            rectTransform.anchorMax = new Vector2(1, 1);
+            rectTransform.sizeDelta = new Vector2(0, 0);
             gameObject.AddComponent<LayoutElement>();
             return gameObject;
         }

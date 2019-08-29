@@ -24,6 +24,15 @@ namespace BeatSaberMarkupLanguage
         [UIValue("string-value")]
         string testString = "Shazam";
 
+        [UIAction("#apply")]
+        public void OnApply()
+        {
+            Console.WriteLine(sliderValue);
+            Console.WriteLine(testString);
+            Console.WriteLine("Bool Test:" + boolTest);
+            Console.WriteLine("List Test:" + listChoice);
+        }
+
         public void Update()
         {
             /*

@@ -14,10 +14,7 @@ using UnityEngine;
 namespace BeatSaberMarkupLanguage
 {
     public class BSMLParser : PersistentSingleton<BSMLParser>
-    {
-        public const float SCREEN_WIDTH = 160;
-        public const float SCREEN_HEIGHT = 80;
-        
+    {   
         private Dictionary<string, BSMLTag> tags = new Dictionary<string, BSMLTag>();
         private List<TypeHandler> typeHandlers;
 
@@ -71,6 +68,10 @@ namespace BeatSaberMarkupLanguage
             foreach(XmlNode node in doc.ChildNodes)
             {
                 HandleNode(node, parent, parserParams);
+            }
+            foreach(KeyValuePair<string, BSMLAction> action in parserParams.actions.Where(x => x.Key.StartsWith("#")))
+            {
+                parserParams.AddEvent(action.Key.Substring(1), delegate { action.Value.Invoke(); });
             }
             return parserParams;
         }

@@ -16,14 +16,14 @@ namespace BeatSaberMarkupLanguage.Tags
 
         public override GameObject CreateObject(Transform parent)
         {
-            GameObject gameObject = new GameObject("ATImage");
+            GameObject gameObject = new GameObject("BSMLImage");
 
             RawImage image = gameObject.AddComponent<RawImage>();
             image.material = Utilities.ImageResources.NoGlowMat;
             image.rectTransform.sizeDelta = new Vector2(20f, 20f);
             image.rectTransform.SetParent(parent, false);
             image.texture = Utilities.ImageResources.BlankSprite.texture;
-
+            gameObject.AddComponent<LayoutElement>();
             return gameObject;
         }
     }
