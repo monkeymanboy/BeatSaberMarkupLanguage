@@ -50,7 +50,10 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         private void OnChange(TextSlider _, float val)
         {
             text.text = TextForValue(slider.value);
-            onChange?.Invoke(isInt ? (int)slider.value : slider.value);
+            if (isInt)
+                onChange?.Invoke((int)slider.value);
+            else
+                onChange?.Invoke(slider.value);
             if (updateOnChange)
             {
                 ApplyValue();
