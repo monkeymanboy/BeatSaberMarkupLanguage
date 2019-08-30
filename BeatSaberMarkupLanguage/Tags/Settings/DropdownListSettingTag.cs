@@ -17,7 +17,7 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
         public override string[] Aliases => new[] { "dropdown-list-setting" };
         public override GameObject CreateObject(Transform parent)
         {
-            LabelAndValueDropdownWithTableView dropdown = MonoBehaviour.Instantiate(Resources.FindObjectsOfTypeAll<LabelAndValueDropdownWithTableView>().First(), parent, false);
+            LabelAndValueDropdownWithTableView dropdown = MonoBehaviour.Instantiate(Resources.FindObjectsOfTypeAll<LabelAndValueDropdownWithTableView>().First(x => x.name == "NormalLevels"), parent, false);
             dropdown.gameObject.SetActive(false);
             dropdown.name = "BSMLDropDownList";
             dropdown.GetPrivateField<TextMeshProUGUI>("_labelText").fontSize = 5;
