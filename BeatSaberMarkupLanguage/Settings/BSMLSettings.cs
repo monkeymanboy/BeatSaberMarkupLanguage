@@ -18,6 +18,7 @@ namespace BeatSaberMarkupLanguage.Settings
 {
     public class BSMLSettings : MonoBehaviour
     {
+        private Button button;
         private static BSMLSettings _instance = null;
         public static BSMLSettings instance
         {
@@ -55,6 +56,7 @@ namespace BeatSaberMarkupLanguage.Settings
             VRUIViewController viewController = BeatSaberUI.CreateViewController<VRUIViewController>();
             SetupViewControllerTransform(viewController);
             settingsMenus.Add(new SettingsMenu(name, viewController, BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetCallingAssembly(), resource), viewController.gameObject, host)));
+            button?.gameObject.SetActive(true);
         }
 
         public IEnumerator AddButtonToMainScreen()
@@ -71,10 +73,11 @@ namespace BeatSaberMarkupLanguage.Settings
                 }
                 yield return new WaitForFixedUpdate();
             }
-            Button button = Instantiate(transform.GetChild(0), transform).GetComponent<Button>();
+            button = Instantiate(transform.GetChild(0), transform).GetComponent<Button>();
             button.transform.GetChild(0).GetChild(1).GetComponentInChildren<LocalizedTextMeshProUGUI>().Key = "Mod Settings";
             button.onClick.AddListener(PresentSettings);
             button.transform.SetSiblingIndex(0);
+            if(settingsMenus.Count == 0)button.gameObject.SetActive(false);
         }
 
         private void PresentSettings()

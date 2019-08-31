@@ -31,7 +31,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
             if (data.ContainsKey("text"))
                 listSetting.dropdown.SetLabelText(data["text"]);
             if (data.ContainsKey("applyOnChange"))
-                listSetting.updateOnChange = bool.Parse(data["applyOnChange"]);
+                listSetting.updateOnChange = Parse.Bool(data["applyOnChange"]);
             if (data.ContainsKey("formatter"))
                 listSetting.formatter = parserParams.actions[data["formatter"]];
             if (data.ContainsKey("onChange"))

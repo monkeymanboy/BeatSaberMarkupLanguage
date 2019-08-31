@@ -32,7 +32,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
             if (data.ContainsKey("formatter"))
                 listSetting.formatter = parserParams.actions[data["formatter"]];
             if (data.ContainsKey("applyOnChange"))
-                listSetting.updateOnChange = bool.Parse(data["applyOnChange"]);
+                listSetting.updateOnChange = Parse.Bool(data["applyOnChange"]);
             if (data.ContainsKey("onChange"))
             {
                 if (!parserParams.actions.ContainsKey(data["onChange"]))

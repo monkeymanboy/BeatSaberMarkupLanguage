@@ -26,7 +26,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             if (data.ContainsKey("text"))
                 textMesh.text = data["text"];
             if (data.ContainsKey("fontSize"))
-                textMesh.fontSize = float.Parse(data["fontSize"]);
+                textMesh.fontSize = Parse.Float(data["fontSize"]);
             if(data.ContainsKey("alignment"))
                 textMesh.alignment = (TextAlignmentOptions) Enum.Parse(typeof(TextAlignmentOptions), data["alignment"]);
             if (data.ContainsKey("overflowMode"))

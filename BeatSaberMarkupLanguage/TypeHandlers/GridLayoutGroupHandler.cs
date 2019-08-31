@@ -23,8 +23,8 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
         public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)
         {
             GridLayoutGroup gridLayout = obj as GridLayoutGroup;
-            gridLayout.cellSize = new Vector2(data.ContainsKey("cellSizeX") ? float.Parse(data["cellSizeX"]) : gridLayout.cellSize.x, data.ContainsKey("cellSizeY") ? float.Parse(data["cellSizeY"]) : gridLayout.cellSize.y);
-            gridLayout.spacing = new Vector2(data.ContainsKey("spacingX") ? float.Parse(data["spacingX"]) : gridLayout.spacing.x, data.ContainsKey("spacingY") ? float.Parse(data["spacingY"]) : gridLayout.spacing.y);
+            gridLayout.cellSize = new Vector2(data.ContainsKey("cellSizeX") ? Parse.Float(data["cellSizeX"]) : gridLayout.cellSize.x, data.ContainsKey("cellSizeY") ? Parse.Float(data["cellSizeY"]) : gridLayout.cellSize.y);
+            gridLayout.spacing = new Vector2(data.ContainsKey("spacingX") ? Parse.Float(data["spacingX"]) : gridLayout.spacing.x, data.ContainsKey("spacingY") ? Parse.Float(data["spacingY"]) : gridLayout.spacing.y);
         }
     }
 }

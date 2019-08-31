@@ -28,10 +28,10 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
         public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)
         {
             RectTransform rectTransform = obj as RectTransform;
-            rectTransform.anchorMin = new Vector2(data.ContainsKey("anchorMinX") ? float.Parse(data["anchorMinX"]) : rectTransform.anchorMin.x, data.ContainsKey("anchorMinY") ? float.Parse(data["anchorMinY"]) : rectTransform.anchorMin.y);
-            rectTransform.anchorMax = new Vector2(data.ContainsKey("anchorMaxX") ? float.Parse(data["anchorMaxX"]) : rectTransform.anchorMax.x, data.ContainsKey("anchorMaxY") ? float.Parse(data["anchorMaxY"]) : rectTransform.anchorMax.y);
-            rectTransform.anchoredPosition = new Vector2(data.ContainsKey("anchorPosX") ? float.Parse(data["anchorPosX"]) : rectTransform.anchoredPosition.x, data.ContainsKey("anchorPosY") ? float.Parse(data["anchorPosY"]) : rectTransform.anchoredPosition.y);
-            rectTransform.sizeDelta = new Vector2(data.ContainsKey("sizeDeltaX") ? float.Parse(data["sizeDeltaX"]) : rectTransform.sizeDelta.x, data.ContainsKey("sizeDeltaY") ? float.Parse(data["sizeDeltaY"]) : rectTransform.sizeDelta.y);
+            rectTransform.anchorMin = new Vector2(data.ContainsKey("anchorMinX") ? Parse.Float(data["anchorMinX"]) : rectTransform.anchorMin.x, data.ContainsKey("anchorMinY") ? Parse.Float(data["anchorMinY"]) : rectTransform.anchorMin.y);
+            rectTransform.anchorMax = new Vector2(data.ContainsKey("anchorMaxX") ? Parse.Float(data["anchorMaxX"]) : rectTransform.anchorMax.x, data.ContainsKey("anchorMaxY") ? Parse.Float(data["anchorMaxY"]) : rectTransform.anchorMax.y);
+            rectTransform.anchoredPosition = new Vector2(data.ContainsKey("anchorPosX") ? Parse.Float(data["anchorPosX"]) : rectTransform.anchoredPosition.x, data.ContainsKey("anchorPosY") ? Parse.Float(data["anchorPosY"]) : rectTransform.anchoredPosition.y);
+            rectTransform.sizeDelta = new Vector2(data.ContainsKey("sizeDeltaX") ? Parse.Float(data["sizeDeltaX"]) : rectTransform.sizeDelta.x, data.ContainsKey("sizeDeltaY") ? Parse.Float(data["sizeDeltaY"]) : rectTransform.sizeDelta.y);
             if (data.ContainsKey("hoverHint"))
             {
                 HoverHint hover = obj.gameObject.AddComponent<HoverHint>();

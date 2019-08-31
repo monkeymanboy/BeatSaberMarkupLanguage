@@ -47,17 +47,17 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             if (data.ContainsKey("listStyle"))
                 tableData.Style = (ListStyle) Enum.Parse(typeof(ListStyle), data["listStyle"]);
             if (data.ContainsKey("cellSize"))
-                tableData.cellSize = float.Parse(data["cellSize"]);
+                tableData.cellSize = Parse.Float(data["cellSize"]);
             if (data.ContainsKey("expandCell"))
-                tableData.expandCell = bool.Parse(data["expandCell"]);
+                tableData.expandCell = Parse.Bool(data["expandCell"]);
             switch (tableData.tableView.tableType)
             {
                 case TableType.Vertical:
-                    (obj.gameObject.transform as RectTransform).sizeDelta = new Vector2(data.ContainsKey("listWidth") ? float.Parse(data["listWidth"]) : 60, tableData.cellSize * (data.ContainsKey("visibleCells") ? float.Parse(data["visibleCells"]) : 7));
+                    (obj.gameObject.transform as RectTransform).sizeDelta = new Vector2(data.ContainsKey("listWidth") ? Parse.Float(data["listWidth"]) : 60, tableData.cellSize * (data.ContainsKey("visibleCells") ? Parse.Float(data["visibleCells"]) : 7));
                     tableData.tableView.contentTransform.anchorMin = new Vector2(0, 1);
                     break;
                 case TableType.Horizontal:
-                    (obj.gameObject.transform as RectTransform).sizeDelta = new Vector2(tableData.cellSize * (data.ContainsKey("visibleCells") ? float.Parse(data["visibleCells"]) : 4), data.ContainsKey("listHeight") ? float.Parse(data["listHeight"]) : 40);
+                    (obj.gameObject.transform as RectTransform).sizeDelta = new Vector2(tableData.cellSize * (data.ContainsKey("visibleCells") ? Parse.Float(data["visibleCells"]) : 4), data.ContainsKey("listHeight") ? Parse.Float(data["listHeight"]) : 40);
                     tableData.tableView.contentTransform.anchorMin = new Vector2(1, 0);
                     break;
             }

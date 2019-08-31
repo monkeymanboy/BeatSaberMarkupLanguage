@@ -36,15 +36,15 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
             if (data.ContainsKey("formatter"))
                 sliderSetting.formatter = parserParams.actions[data["formatter"]];
             if (data.ContainsKey("applyOnChange"))
-                sliderSetting.updateOnChange = bool.Parse(data["applyOnChange"]);
+                sliderSetting.updateOnChange = Parse.Bool(data["applyOnChange"]);
             if (data.ContainsKey("isInt"))
-                sliderSetting.isInt = bool.Parse(data["isInt"]);
+                sliderSetting.isInt = Parse.Bool(data["isInt"]);
             if (data.ContainsKey("increment"))
-                sliderSetting.increments = float.Parse(data["increment"]);
+                sliderSetting.increments = Parse.Float(data["increment"]);
             if (data.ContainsKey("minValue"))
-                sliderSetting.slider.minValue = float.Parse(data["minValue"]);
+                sliderSetting.slider.minValue = Parse.Float(data["minValue"]);
             if (data.ContainsKey("maxValue"))
-                sliderSetting.slider.maxValue = float.Parse(data["maxValue"]);
+                sliderSetting.slider.maxValue = Parse.Float(data["maxValue"]);
             if (data.ContainsKey("onChange"))
             {
                 if (!parserParams.actions.ContainsKey(data["onChange"]))

@@ -40,7 +40,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             if (data.ContainsKey("buttonWidth"))
             {
                 LayoutElement layoutElement = obj.gameObject.GetComponent<LayoutElement>();
-                layoutElement.preferredWidth = float.Parse(data["buttonWidth"]);
+                layoutElement.preferredWidth = Parse.Float(data["buttonWidth"]);
                 (obj.transform.GetChild(0).transform as RectTransform).sizeDelta = new Vector2(layoutElement.preferredWidth, layoutElement.preferredHeight);
             }
         }

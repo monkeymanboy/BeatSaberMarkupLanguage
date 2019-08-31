@@ -28,11 +28,11 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             {
                 if (pair.Key == "spacing")
                 {
-                    layoutGroup.SetProperty(pair.Key, float.Parse(pair.Value));
+                    layoutGroup.SetProperty(pair.Key, Parse.Float(pair.Value));
                 }
                 else
                 {
-                    layoutGroup.SetProperty(pair.Key, bool.Parse(pair.Value));
+                    layoutGroup.SetProperty(pair.Key, Parse.Bool(pair.Value));
                 }
             }
         }

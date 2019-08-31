@@ -26,10 +26,10 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             LayoutGroup layoutGroup = (obj as LayoutGroup);
             if (data.ContainsKey("pad"))
             {
-                int padding = int.Parse(data["pad"]);
+                int padding = Parse.Int(data["pad"]);
                 layoutGroup.padding = new RectOffset(padding, padding, padding, padding);
             }
-            layoutGroup.padding = new RectOffset(data.ContainsKey("padLeft") ? int.Parse(data["padLeft"]) : layoutGroup.padding.left, data.ContainsKey("padRight") ? int.Parse(data["padRight"]) : layoutGroup.padding.right, data.ContainsKey("padTop") ? int.Parse(data["padTop"]) : layoutGroup.padding.top, data.ContainsKey("padBottom") ? int.Parse(data["padBottom"]) : layoutGroup.padding.bottom);
+            layoutGroup.padding = new RectOffset(data.ContainsKey("padLeft") ? Parse.Int(data["padLeft"]) : layoutGroup.padding.left, data.ContainsKey("padRight") ? Parse.Int(data["padRight"]) : layoutGroup.padding.right, data.ContainsKey("padTop") ? Parse.Int(data["padTop"]) : layoutGroup.padding.top, data.ContainsKey("padBottom") ? Parse.Int(data["padBottom"]) : layoutGroup.padding.bottom);
             if(data.ContainsKey("childAlign"))
                 layoutGroup.childAlignment = (TextAnchor) Enum.Parse(typeof(TextAnchor), data["childAlign"]);
         }

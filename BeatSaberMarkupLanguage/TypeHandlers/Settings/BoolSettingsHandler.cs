@@ -29,9 +29,9 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
             if (data.ContainsKey("text"))
                 boolSetting.LabelText = data["text"];
             if (data.ContainsKey("applyOnChange"))
-                boolSetting.updateOnChange = bool.Parse(data["applyOnChange"]);
+                boolSetting.updateOnChange = Parse.Bool(data["applyOnChange"]);
             if (data.ContainsKey("initialValue"))
-                boolSetting.Value = bool.Parse(data["initialValue"]);
+                boolSetting.Value = Parse.Bool(data["initialValue"]);
             if (data.ContainsKey("onChange"))
             {
                 if (!parserParams.actions.ContainsKey(data["onChange"]))
