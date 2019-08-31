@@ -21,7 +21,8 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
             { "setEvent", new[]{ "set-event"} },
             { "getEvent", new[]{ "get-event"} },
             { "options", new[]{ "options", "choices" } },
-            { "applyOnChange", new[] { "apply-on-change" } }
+            { "applyOnChange", new[] { "apply-on-change" } },
+            { "formatter", new[] { "formatter" } }
         };
 
         public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)
@@ -31,6 +32,8 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
                 listSetting.dropdown.SetLabelText(data["text"]);
             if (data.ContainsKey("applyOnChange"))
                 listSetting.updateOnChange = bool.Parse(data["applyOnChange"]);
+            if (data.ContainsKey("formatter"))
+                listSetting.formatter = parserParams.actions[data["formatter"]];
             if (data.ContainsKey("onChange"))
             {
                 if (!parserParams.actions.ContainsKey(data["onChange"]))

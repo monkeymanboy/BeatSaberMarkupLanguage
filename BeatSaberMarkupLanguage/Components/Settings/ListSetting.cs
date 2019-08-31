@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BeatSaberMarkupLanguage.Parser;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 {
     public class ListSetting : IncDecSetting
     {
+        public BSMLAction formatter;
         public List<object> values;
         private int index;
         public object Value
@@ -70,7 +72,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         {
             EnableDec = index > 0;
             EnableInc = index < values.Count - 1;
-            Text = Value.ToString();
+            Text = formatter == null ? Value.ToString() : (formatter.Invoke(Value) as string);
         }
     }
 }

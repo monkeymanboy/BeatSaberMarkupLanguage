@@ -9,8 +9,8 @@ using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
 {
-    [ComponentHandler(typeof(ListSetting))]
-    public class ListSettingHandler : TypeHandler
+    [ComponentHandler(typeof(ListSliderSetting))]
+    public class ListSliderSettingHandler : TypeHandler
     {
         public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
         {
@@ -26,7 +26,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
 
         public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)
         {
-            ListSetting listSetting = obj as ListSetting;
+            ListSliderSetting listSetting = obj as ListSliderSetting;
             if (data.ContainsKey("text"))
                 listSetting.LabelText = data["text"];
             if (data.ContainsKey("formatter"))

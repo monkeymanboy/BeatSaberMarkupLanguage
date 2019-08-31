@@ -24,7 +24,8 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
             { "increment", new[] { "increment" } },
             { "minValue", new[] { "min" } },
             { "maxValue", new[] { "max" } },
-            { "isInt", new[] { "integer-only" } }
+            { "isInt", new[] { "integer-only" } },
+            { "formatter", new[] { "formatter" } }
         };
 
         public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)
@@ -32,6 +33,8 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
             SliderSetting sliderSetting = obj as SliderSetting;
             if (data.ContainsKey("text"))
                 sliderSetting.LabelText = data["text"];
+            if (data.ContainsKey("formatter"))
+                sliderSetting.formatter = parserParams.actions[data["formatter"]];
             if (data.ContainsKey("applyOnChange"))
                 sliderSetting.updateOnChange = bool.Parse(data["applyOnChange"]);
             if (data.ContainsKey("isInt"))

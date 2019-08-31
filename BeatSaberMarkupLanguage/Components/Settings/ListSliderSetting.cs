@@ -8,23 +8,36 @@ using System.Text;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.Components.Settings
 {
-    public class SliderSetting : GenericSliderSetting
+    public class ListSliderSetting : GenericSliderSetting
     {
         public BSMLAction formatter;
         public BSMLAction onChange;
         public BSMLValue associatedValue;
         public bool updateOnChange = false;
-        public bool isInt = false;
-        public float increments;
+        public List<object> values;
+
+        public object Value
+        {
+            get
+            {
+                return values[(int)(slider.value*(values.Count-1))];
+            }
+            set
+            {
+                slider.value = values.IndexOf(value) * 1f / values.Count;
+                text.text = TextForValue(Value);
+            }
+        }
 
         public void Setup()
         {
+            slider.minValue = 0;
+            slider.maxValue = 1;
             text = slider.GetComponentInChildren<TextMeshProUGUI>();
-            slider.numberOfSteps = (int)((slider.maxValue - slider.minValue) / increments) + 1;
+            slider.numberOfSteps = values.Count;
             ReceiveValue();
             slider.valueDidChangeEvent += OnChange;
             StartCoroutine(SetInitialText());
@@ -36,18 +49,15 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         IEnumerator SetInitialText()//I don't really like this but for some reason I can't get the inital starting text any other quick way and this works perfectly fine
         {
             yield return new WaitForFixedUpdate();
-            text.text = TextForValue(slider.value);
+            text.text = TextForValue(Value);
             yield return new WaitForSeconds(0.1f);//if the first one is too fast, don't yell at me pls
-            text.text = TextForValue(slider.value);
+            text.text = TextForValue(Value);
         }
 
         private void OnChange(TextSlider _, float val)
         {
-            text.text = TextForValue(slider.value);
-            if (isInt)
-                onChange?.Invoke((int)slider.value);
-            else
-                onChange?.Invoke(slider.value);
+            text.text = TextForValue(Value);
+            onChange?.Invoke(Value);
             if (updateOnChange)
             {
                 ApplyValue();
@@ -56,22 +66,16 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         public void ApplyValue()
         {
             if (associatedValue != null)
-                if (isInt)
-                    associatedValue.SetValue((int)slider.value);
-                else
-                    associatedValue.SetValue(slider.value);
+                    associatedValue.SetValue(Value);
         }
         public void ReceiveValue()
         {
             if (associatedValue != null)
-                slider.value = isInt ? (int)associatedValue.GetValue() : (float)associatedValue.GetValue();
-            text.text = TextForValue(slider.value);
+                Value = associatedValue.GetValue();
         }
 
-        protected string TextForValue(float value)
+        protected string TextForValue(object value)
         {
-            if (isInt)
-                return formatter == null ? ((int)value).ToString() : (formatter.Invoke((int)value) as string);
             return formatter == null ? value.ToString() : (formatter.Invoke(value) as string);
         }
     }

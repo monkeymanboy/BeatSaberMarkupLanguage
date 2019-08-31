@@ -33,6 +33,12 @@ namespace BeatSaberMarkupLanguage
             Console.WriteLine("List Test:" + listChoice);
         }
 
+        [UIAction("format")]
+        public string Format(int number)
+        {
+            return number + "x";
+        }
+
         public void Update()
         {
             /*

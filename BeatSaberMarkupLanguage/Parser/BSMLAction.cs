@@ -17,9 +17,9 @@ namespace BeatSaberMarkupLanguage.Parser
             this.methodInfo = methodInfo;
         }
 
-        public void Invoke(params object[] parameters)
+        public object Invoke(params object[] parameters)
         {
-            methodInfo.Invoke(host, parameters);
+            return methodInfo.Invoke(host, parameters);
         }
     }
 }

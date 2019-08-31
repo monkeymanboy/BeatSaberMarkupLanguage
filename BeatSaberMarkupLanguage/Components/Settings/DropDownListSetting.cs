@@ -12,6 +12,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 {
     class DropDownListSetting : MonoBehaviour, IDataSource
     {
+        public BSMLAction formatter;
         public List<object> values;
 
         public TableView tableView;
@@ -112,7 +113,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 
         private void UpdateState()
         {
-            dropdown.SetValueText(Value.ToString());
+            dropdown.SetValueText(formatter == null ? Value.ToString() : (formatter.Invoke(Value) as string));
         }
     }
 }
