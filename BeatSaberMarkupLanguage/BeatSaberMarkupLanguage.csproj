@@ -83,6 +83,7 @@
     <Compile Include="Attributes\UIAction.cs" />
     <Compile Include="Attributes\UIComponent.cs" />
     <Compile Include="Attributes\UIObject.cs" />
+    <Compile Include="Attributes\UIParams.cs" />
     <Compile Include="Attributes\UIValue.cs" />
     <Compile Include="BeatSaberUI.cs" />
     <Compile Include="Components\ClickableText.cs" />

@@ -57,6 +57,10 @@ namespace BeatSaberMarkupLanguage
                     UIValue uivalue = fieldInfo.GetCustomAttributes(typeof(UIValue), true).FirstOrDefault() as UIValue;
                     if (uivalue != null)
                         parserParams.values.Add(uivalue.id, new BSMLFieldValue(host, fieldInfo));
+
+                    UIParams uiParams = fieldInfo.GetCustomAttributes(typeof(UIParams), true).FirstOrDefault() as UIParams;
+                    if (uiParams != null)
+                        fieldInfo.SetValue(host, parserParams);
                 }
                 foreach (PropertyInfo propertyInfo in host.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic))
                 {
