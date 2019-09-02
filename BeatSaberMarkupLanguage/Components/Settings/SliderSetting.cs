@@ -72,7 +72,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         {
             if (isInt)
                 return formatter == null ? ((int)Math.Round(value)).ToString() : (formatter.Invoke((int)Math.Round(value)) as string);
-            return formatter == null ? value.ToString() : (formatter.Invoke(value) as string);
+            return formatter == null ? value.ToString("N2") : (formatter.Invoke(value) as string);
         }
     }
 }
