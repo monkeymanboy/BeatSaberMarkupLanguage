@@ -10,8 +10,8 @@
     <horizontal bg='round-rect-panel' pad='6' spacing='10'>
       <button on-click='click' glow-color='green' text='Test Button'></button>
       <vertical spacing='6'>
-        <page-button on-click='list#PageUp' direction='Up' glow-color='red'></page-button>
-        <page-button on-click='list#PageDown' direction='Down'></page-button>
+        <page-button click-event='list#PageUp' direction='Up' glow-color='red'></page-button>
+        <page-button click-event='list#PageDown' direction='Down'></page-button>
       </vertical>
     </horizontal>
   </vertical>

@@ -68,8 +68,8 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             if (data.ContainsKey("id"))
             {
                 TableViewScroller scroller = tableData.tableView.GetPrivateField<TableViewScroller>("_scroller");
-                parserParams.actions.Add(data["id"] + "#PageUp", new BSMLAction(scroller, scroller.GetType().GetMethod("PageScrollUp", BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)));
-                parserParams.actions.Add(data["id"] + "#PageDown", new BSMLAction(scroller, scroller.GetType().GetMethod("PageScrollDown", BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)));
+                parserParams.AddEvent(data["id"] + "#PageUp", scroller.PageScrollUp);
+                parserParams.AddEvent(data["id"] + "#PageDown", scroller.PageScrollDown);
             }
         }
     }
