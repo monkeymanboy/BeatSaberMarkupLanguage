@@ -23,11 +23,11 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         {
             get
             {
-                return values[(int)(slider.value*(values.Count-1))];
+                return values[(int)Math.Round(slider.value)];
             }
             set
             {
-                slider.value = values.IndexOf(value) * 1f / values.Count;
+                slider.value = values.IndexOf(value) * 1f;
                 text.text = TextForValue(Value);
             }
         }
@@ -35,7 +35,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         public void Setup()
         {
             slider.minValue = 0;
-            slider.maxValue = 1;
+            slider.maxValue = values.Count()-1;
             text = slider.GetComponentInChildren<TextMeshProUGUI>();
             slider.numberOfSteps = values.Count;
             ReceiveValue();
