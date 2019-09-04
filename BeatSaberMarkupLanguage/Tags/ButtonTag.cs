@@ -16,6 +16,7 @@ namespace BeatSaberMarkupLanguage.Tags
         {
             Button button = MonoBehaviour.Instantiate(Resources.FindObjectsOfTypeAll<Button>().Last(x => (x.name == (parent.GetComponent<StartMiddleEndButtonsGroup>()==null ? "PlayButton" : "CreditsButton"))), parent, false);
             button.name = "BSMLButton";
+            button.interactable = true;
             return button.gameObject;
         }
     }
