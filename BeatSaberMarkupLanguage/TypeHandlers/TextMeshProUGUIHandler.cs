@@ -35,13 +35,13 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 textMesh.alignment = (TextAlignmentOptions) Enum.Parse(typeof(TextAlignmentOptions), data["alignment"]);
             if (data.ContainsKey("overflowMode"))
                 textMesh.overflowMode = (TextOverflowModes)Enum.Parse(typeof(TextOverflowModes), data["overflowMode"]);
-            if (data.ContainsKey("bold"))
+            if (data.ContainsKey("bold") && Parse.Bool(data["bold"]))
                 textMesh.text = $"<b>{textMesh.text}</b>";
-            if (data.ContainsKey("italics"))
+            if (data.ContainsKey("italics") && Parse.Bool(data["italics"]))
                 textMesh.text = $"<i>{textMesh.text}</i>";
-            if (data.ContainsKey("underlined"))
+            if (data.ContainsKey("underlined") && Parse.Bool(data["underlined"]))
                 textMesh.text = $"<u>{textMesh.text}</u>";
-            if (data.ContainsKey("strikethrough"))
+            if (data.ContainsKey("strikethrough") && Parse.Bool(data["strikethrough"]))
                 textMesh.text = $"<s>{textMesh.text}</s>";
         }
     }
