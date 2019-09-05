@@ -17,7 +17,11 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "text", new[]{"text"} },
             { "fontSize", new[]{"font-size"} },
             { "alignment", new[]{"align"} },
-            { "overflowMode", new[]{"overflow-mode"} }
+            { "overflowMode", new[]{"overflow-mode"} },
+            { "bold", new[]{"bold"} },
+            { "italics", new[]{ "italics" } },
+            { "underlined", new[]{ "underlined" } },
+            { "strikethrough", new[]{ "strikethrough" } }
         };
 
         public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)
@@ -31,6 +35,14 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 textMesh.alignment = (TextAlignmentOptions) Enum.Parse(typeof(TextAlignmentOptions), data["alignment"]);
             if (data.ContainsKey("overflowMode"))
                 textMesh.overflowMode = (TextOverflowModes)Enum.Parse(typeof(TextOverflowModes), data["overflowMode"]);
+            if (data.ContainsKey("bold"))
+                textMesh.text = $"<b>{textMesh.text}</b>";
+            if (data.ContainsKey("italics"))
+                textMesh.text = $"<i>{textMesh.text}</i>";
+            if (data.ContainsKey("underlined"))
+                textMesh.text = $"<u>{textMesh.text}</u>";
+            if (data.ContainsKey("strikethrough"))
+                textMesh.text = $"<s>{textMesh.text}</s>";
         }
     }
 }
