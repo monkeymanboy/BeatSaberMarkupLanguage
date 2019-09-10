@@ -8,11 +8,17 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using static BeatSaberMarkupLanguage.Components.CustomListTableData;
+using IPALogger = IPA.Logging.Logger;
 
 namespace BeatSaberMarkupLanguage
 {
     public class Plugin : IBeatSaberPlugin
     {
+        public void Init (IPALogger logger)
+        {
+            Logger.log = logger;
+        }
+
         public void OnSceneLoaded(Scene scene, LoadSceneMode sceneMode)
         {
             if (scene.name == "MenuCore")

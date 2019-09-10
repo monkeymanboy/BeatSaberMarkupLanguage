@@ -359,8 +359,8 @@ namespace BeatSaberMarkupLanguage.ViewControllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Unable to parse keyboard at position {p} : [{Keyboard}]");
-                Console.WriteLine(ex.ToString());
+                Logger.log.Error($"Unable to parse keyboard at position {p} : [{Keyboard}]");
+                Logger.log.Error(ex);
             }
 
             return this;

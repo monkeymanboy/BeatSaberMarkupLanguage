@@ -1,6 +1,5 @@
 ﻿using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Parser;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -29,10 +28,10 @@ namespace BeatSaberMarkupLanguage
         [UIAction("#apply")]
         public void OnApply()
         {
-            Console.WriteLine(sliderValue);
-            Console.WriteLine(testString);
-            Console.WriteLine("Bool Test:" + boolTest);
-            Console.WriteLine("List Test:" + listChoice);
+            Logger.log.Info($"{sliderValue}");
+            Logger.log.Info($"{testString}");
+            Logger.log.Info($"Bool Test: {boolTest}");
+            Logger.log.Info($"List Test: {listChoice}");
         }
 
         [UIAction("format")]
@@ -43,10 +42,10 @@ namespace BeatSaberMarkupLanguage
 
         public void Update()
         {
-            //Console.WriteLine(sliderValue);
-            //Console.WriteLine(testString);
-            //Console.WriteLine("Bool Test:" + boolTest);
-            //Console.WriteLine("List Test:" + listChoice);
+            //Logger.log.Info($"{sliderValue}");
+            //Logger.log.Info($"{testString}");
+            //Logger.log.Info($"Bool Test: {boolTest}");
+            //Logger.log.Info($"List Test: {listChoice}");
         }
     }
 }

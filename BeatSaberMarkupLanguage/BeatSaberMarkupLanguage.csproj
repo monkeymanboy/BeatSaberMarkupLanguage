@@ -96,6 +96,7 @@
     <Compile Include="Components\Settings\SliderSetting.cs" />
     <Compile Include="Components\Settings\StringSetting.cs" />
     <Compile Include="Components\Settings\SubmenuText.cs" />
+    <Compile Include="Logger.cs" />
     <Compile Include="Parse.cs" />
     <Compile Include="Parser\BSMLAction.cs" />
     <Compile Include="BSMLParser.cs" />
