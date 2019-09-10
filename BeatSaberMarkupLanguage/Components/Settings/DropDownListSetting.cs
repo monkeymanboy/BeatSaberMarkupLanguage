@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using BeatSaberMarkupLanguage.Parser;
 using HMUI;
 using UnityEngine;
@@ -10,23 +7,23 @@ using static HMUI.TableView;
 
 namespace BeatSaberMarkupLanguage.Components.Settings
 {
-    class DropDownListSetting : MonoBehaviour, IDataSource
+    internal class DropDownListSetting : MonoBehaviour, IDataSource
     {
+        private string reuseIdentifier = "BSMLDropdownSetting";
+        private EnvironmentTableCell tableCellInstance;
+
+        private int index;
+
         public BSMLAction formatter;
         public List<object> values;
 
         public TableView tableView;
         public LabelAndValueDropdownWithTableView dropdown;
 
-        private string reuseIdentifier = "BSMLDropdownSetting";
-        private EnvironmentTableCell tableCellInstance;
-
-
         public BSMLAction onChange;
         public BSMLValue associatedValue;
         public bool updateOnChange;
 
-        private int index;
         public object Value
         {
             get
@@ -37,7 +34,11 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             set
             {
                 index = values.IndexOf(value);
-                if (index < 0) index = 0;
+                if (index < 0)
+                {
+                    index = 0;
+                }
+
                 UpdateState();
             }
         }
@@ -48,9 +49,13 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             if (!tableCell)
             {
                 if (tableCellInstance == null)
+                {
                     tableCellInstance = Resources.FindObjectsOfTypeAll<EnvironmentTableCell>().First();
+                }
+
                 tableCell = Instantiate(tableCellInstance);
             }
+
             tableCell.reuseIdentifier = reuseIdentifier;
             return tableCell;
         }
@@ -70,10 +75,14 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         public int NumberOfCells()
         {
             if (values == null)
+            {
                 return 0;
-            return values.Count();
+            }
+            else
+            {
+                return values.Count();
+            }
         }
-
 
         public void Setup()
         {
@@ -91,11 +100,15 @@ namespace BeatSaberMarkupLanguage.Components.Settings
                 ApplyValue();
             }
         }
+
         public void ApplyValue()
         {
             if (associatedValue != null)
+            {
                 associatedValue.SetValue(Value);
+            }
         }
+
         public void ReceiveValue()
         {
             if (associatedValue != null)
@@ -107,8 +120,15 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 
         private void ValidateRange()
         {
-            if (index >= values.Count) index = values.Count - 1;
-            if (index < 0) index = 0;
+            if (index >= values.Count)
+            {
+                index = values.Count - 1;
+            }
+
+            if (index < 0)
+            {
+                index = 0;
+            }
         }
 
         private void UpdateState()

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -24,7 +20,7 @@ namespace BeatSaberMarkupLanguage.Tags
 
             textMesh.rectTransform.anchorMin = new Vector2(0.5f, 0.5f);
             textMesh.rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
-            
+
             return gameObj;
         }
     }

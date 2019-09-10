@@ -1,19 +1,16 @@
 ﻿using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Settings.UI.ViewControllers;
 using BS_Utils.Utilities;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using VRUI;
 using static BeatSaberMarkupLanguage.Components.CustomListTableData;
 
 namespace BeatSaberMarkupLanguage.Settings
 {
-    class ModSettingsFlowCoordinator : FlowCoordinator
+    internal class ModSettingsFlowCoordinator : FlowCoordinator
     {
         protected SettingsMenuListViewController settingsMenuListViewController;
         protected VRUINavigationController navigationController;
@@ -34,13 +31,14 @@ namespace BeatSaberMarkupLanguage.Settings
                 settingsMenuListViewController.clickedMenu += OpenMenu;
                 SetViewControllerToNavigationConctroller(navigationController, settingsMenuListViewController);
                 ProvideInitialViewControllers(navigationController);
-                
+
                 foreach (CustomCellInfo cellInfo in BSMLSettings.instance.settingsMenus)
                 {
                     (cellInfo as SettingsMenu).parserParams.AddEvent("back", Back);
                 }
             }
         }
+
         public void OpenMenu(VRUIViewController viewController)
         {
             OpenMenu(viewController, false, false);
@@ -48,22 +46,35 @@ namespace BeatSaberMarkupLanguage.Settings
 
         public void OpenMenu(VRUIViewController viewController, bool isSubmenu, bool isBack)
         {
-            if(!isBack)
+            if (!isBack)
+            {
                 if (isSubmenu)
+                {
                     submenuStack.Push(activeController);
+                }
                 else
+                {
                     submenuStack.Clear();
-                bool wasActive = activeController != null;
+                }
+            }
+
+            bool wasActive = activeController != null;
             if (wasActive)
             {
                 PopViewControllerFromNavigationController(navigationController, null, immediately: true);
             }
+
             PushViewControllerToNavigationController(navigationController, viewController, null, wasActive);
             activeController = viewController;
         }
+
         public void ShowInitial()
         {
-            if (activeController != null) return;
+            if (activeController != null)
+            {
+                return;
+            }
+
             settingsMenuListViewController.list.tableView.SelectCellWithIdx(0);
             OpenMenu((BSMLSettings.instance.settingsMenus.First() as SettingsMenu).viewController);
         }
@@ -90,8 +101,10 @@ namespace BeatSaberMarkupLanguage.Settings
 
         private void Back()
         {
-            if(submenuStack.Count>0)
+            if (submenuStack.Count > 0)
+            {
                 OpenMenu(submenuStack.Pop(), false, true);
+            }
         }
 
         private void EmitEventToAll(string ev)

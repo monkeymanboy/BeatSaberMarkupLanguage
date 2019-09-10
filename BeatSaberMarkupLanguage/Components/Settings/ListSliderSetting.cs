@@ -4,8 +4,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 
@@ -21,10 +19,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 
         public object Value
         {
-            get
-            {
-                return values[(int)Math.Round(slider.value)];
-            }
+            get => values[(int)Math.Round(slider.value)];
             set
             {
                 slider.value = values.IndexOf(value) * 1f;
@@ -35,18 +30,21 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         public void Setup()
         {
             slider.minValue = 0;
-            slider.maxValue = values.Count()-1;
+            slider.maxValue = values.Count() - 1;
             text = slider.GetComponentInChildren<TextMeshProUGUI>();
             slider.numberOfSteps = values.Count;
             ReceiveValue();
             slider.valueDidChangeEvent += OnChange;
             StartCoroutine(SetInitialText());
         }
+
         private void OnEnable()
         {
             StartCoroutine(SetInitialText());
         }
-        IEnumerator SetInitialText()//I don't really like this but for some reason I can't get the inital starting text any other quick way and this works perfectly fine
+
+        // I don't really like this but for some reason I can't get the initial starting text any other quick way and this works perfectly fine
+        private IEnumerator SetInitialText()
         {
             yield return new WaitForFixedUpdate();
             text.text = TextForValue(Value);
@@ -63,15 +61,21 @@ namespace BeatSaberMarkupLanguage.Components.Settings
                 ApplyValue();
             }
         }
+
         public void ApplyValue()
         {
             if (associatedValue != null)
-                    associatedValue.SetValue(Value);
+            {
+                associatedValue.SetValue(Value);
+            }
         }
+
         public void ReceiveValue()
         {
             if (associatedValue != null)
+            {
                 Value = associatedValue.GetValue();
+            }
         }
 
         protected string TextForValue(object value)

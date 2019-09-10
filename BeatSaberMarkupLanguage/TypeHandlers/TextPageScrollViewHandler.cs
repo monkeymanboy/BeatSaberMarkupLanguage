@@ -1,9 +1,5 @@
 ﻿using BeatSaberMarkupLanguage.Parser;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.TypeHandlers
@@ -15,6 +11,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
         {
             { "text", new[]{ "text" } }
         };
+
         public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)
         {
             TextPageScrollView scrollView = (obj as TextPageScrollView);

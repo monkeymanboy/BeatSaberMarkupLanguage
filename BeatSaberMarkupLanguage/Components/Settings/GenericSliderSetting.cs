@@ -1,10 +1,4 @@
 ﻿using HMUI;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 
@@ -19,10 +13,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 
         public string LabelText
         {
-            set
-            {
-                label.text = value;
-            }
+            set => label.text = value;
         }
     }
 }

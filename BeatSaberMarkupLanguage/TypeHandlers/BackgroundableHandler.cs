@@ -1,12 +1,7 @@
 ﻿using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.Parser;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.TypeHandlers
 {
@@ -23,7 +18,10 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
         {
             Backgroundable backgroundable = obj as Backgroundable;
             if (data.ContainsKey("background"))
+            {
                 backgroundable.ApplyBackground(data["background"]);
+            }
+
             if (data.ContainsKey("backgroundColor") && data["backgroundColor"] != "none")
             {
                 ColorUtility.TryParseHtmlString(data["backgroundColor"], out Color color);

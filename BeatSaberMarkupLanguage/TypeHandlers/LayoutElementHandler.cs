@@ -1,9 +1,5 @@
 ﻿using BeatSaberMarkupLanguage.Parser;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,11 +19,19 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
         {
             LayoutElement layoutElement = obj as LayoutElement;
             if (data.ContainsKey("ignoreLayout"))
+            {
                 layoutElement.ignoreLayout = Parse.Bool(data["ignoreLayout"]);
+            }
+
             if (data.ContainsKey("preferredWidth"))
+            {
                 layoutElement.preferredWidth = Parse.Float(data["preferredWidth"]);
+            }
+
             if (data.ContainsKey("preferredHeight"))
+            {
                 layoutElement.preferredHeight = Parse.Float(data["preferredHeight"]);
+            }
         }
     }
 }

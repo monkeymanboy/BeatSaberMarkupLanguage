@@ -1,9 +1,4 @@
 ﻿using BeatSaberMarkupLanguage.Parser;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -23,34 +18,22 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 
         public bool EnableDec
         {
-            set
-            {
-                decButton.interactable = value;
-            }
+            set => decButton.interactable = value;
         }
 
         public bool EnableInc
         {
-            set
-            {
-                incButton.interactable = value;
-            }
+            set => incButton.interactable = value;
         }
 
         public string Text
         {
-            set
-            {
-                text.text = value;
-            }
+            set => text.text = value;
         }
 
         public string LabelText
         {
-            set
-            {
-                label.text = value;
-            }
+            set => label.text = value;
         }
 
         protected virtual void OnEnable()

@@ -2,9 +2,6 @@
 using BeatSaberMarkupLanguage.Parser;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.TypeHandlers
@@ -23,15 +20,21 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             ClickableText clickableText = obj as ClickableText;
             if (data.ContainsKey("onClick"))
             {
-                clickableText.OnClickEvent += delegate {
+                clickableText.OnClickEvent += delegate
+                {
                     if (!parserParams.actions.ContainsKey(data["onClick"]))
+                    {
                         throw new Exception("on-click action '" + data["onClick"] + "' not found");
+                    }
+
                     parserParams.actions[data["onClick"]].Invoke();
                 };
             }
+
             if (data.ContainsKey("clickEvent"))
             {
-                clickableText.OnClickEvent += delegate {
+                clickableText.OnClickEvent += delegate
+                {
                     parserParams.EmitEvent(data["clickEvent"]);
                 };
             }

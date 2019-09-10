@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,8 +11,8 @@ namespace BeatSaberMarkupLanguage.ViewControllers
 {
     public class KeyboardViewController : VRUIViewController
     {
+        private KEYBOARD keyboard;
 
-        KEYBOARD keyboard;
         public Action<string> enterPressed;
         public string startingText;
 
@@ -33,38 +31,37 @@ namespace BeatSaberMarkupLanguage.ViewControllers
                 keyboardRect.localScale *= 1.6f;
                 keyboardRect.anchoredPosition = new Vector2(6, -10);
             }
+
             keyboard.KeyboardText.text = startingText;
             keyboard.DrawCursor();
-            
         }
-
     }
+
     // Experimental chat console
     public class KEYBOARD
     {
         public List<KEY> keys = new List<KEY>();
 
-        bool EnableInputField = true;
-        bool Shift = false;
-        bool Caps = false;
-        RectTransform container;
-        Vector2 currentposition;
-        Vector2 baseposition;
-        public event Action<string> EnterPressed;
-        float scale = 0.5f; // BUG: Effect of changing this has NOT beed tested. assume changing it doesn't work.
-        float padding = 0.5f;
-        float buttonwidth = 12f;
+        private KEY dummy = new KEY(); // This allows for some lazy programming, since unfound key searches will point to this instead of null. It still logs an error though
+
+        private bool EnableInputField = true;
+        private bool Shift = false;
+        private bool Caps = false;
+        private RectTransform container;
+        private Vector2 currentposition;
+        private Vector2 baseposition;
+        private float scale = 0.5f; // BUG: Effect of changing this has NOT been tested. assume changing it doesn't work.
+        private float padding = 0.5f;
+        private float buttonwidth = 12f;
+
         public TextMeshProUGUI KeyboardText;
+        public event Action<string> EnterPressed;
         public TextMeshProUGUI KeyboardCursor;
         public Button BaseButton;
 
-
-        KEY dummy = new KEY(); // This allows for some lazy programming, since unfound key searches will point to this instead of null. It still logs an error though
-
-        // Keyboard spaces and CR/LF are significicant.
+        // Keyboard spaces and CR/LF are significant.
         // A slash following a space or CR/LF alters the width of the space
         // CR on an empty line results in a half life advance
-
         public const string QWERTY =
 @"[CLEAR]/20
 (`~) (1!) (2@) (3#) (4$) (5%) (6^) (7&) (8*) (9() (0)) (-_) (=+) [<--]/15
@@ -96,81 +93,96 @@ namespace BeatSaberMarkupLanguage.ViewControllers
 /23 (!!) (@@) [SPACE]/40 (##) (__)";
 
 
-
-
-
         public KEY this[string index]
         {
             get
             {
-                foreach (KEY key in keys) if (key.name == index) return key;
+                foreach (KEY key in keys)
+                {
+                    if (key.name == index)
+                    {
+                        return key;
+                    }
+                }
 
                 return dummy;
             }
-
         }
-
 
         public void SetButtonType(string ButtonName = "KeyboardButton")
         {
             BaseButton = Resources.FindObjectsOfTypeAll<Button>().First(x => (x.name == ButtonName));
-            if (BaseButton == null) BaseButton = Resources.FindObjectsOfTypeAll<Button>().First(x => (x.name == "KeyboardButton"));
+            if (BaseButton == null)
+            {
+                BaseButton = Resources.FindObjectsOfTypeAll<Button>().First(x => (x.name == "KeyboardButton"));
+            }
         }
+
         public void SetValue(string keylabel, string value)
         {
             bool found = false;
-            foreach (KEY key in keys) if (key.name == keylabel)
+            foreach (KEY key in keys)
+            {
+                if (key.name == keylabel)
                 {
                     found = true;
                     key.value = value;
                     //key.shifted = value;
                 }
-
+            }
         }
 
         public void SetAction(string keyname, Action<KEY> action)
         {
             bool found = false;
-            foreach (KEY key in keys) if (key.name == keyname)
+            foreach (KEY key in keys)
+            {
+                if (key.name == keyname)
                 {
                     found = true;
                     key.keyaction = action;
                 }
-
+            }
         }
 
-
-        KEY AddKey(string keylabel, float width = 12, float height = 10, int color = 0xffffff)
+        private KEY AddKey(string keylabel, float width = 12, float height = 10, int color = 0xffffff)
         {
-            var position = currentposition;
+            Vector2 position = currentposition;
             //position.x += width / 4;
 
             Color co = Color.white;
-
             co.r = (float)(color & 0xff) / 255;
             co.g = (float)((color >> 8) & 0xff) / 255;
             co.b = (float)((color >> 16) & 0xff) / 255;
+
             KEY key = new KEY(this, position, keylabel, width, height, co);
             keys.Add(key);
             //currentposition.x += width / 2 + padding;
+
             return key;
         }
 
-        KEY AddKey(string keylabel, string Shifted, float width = 12, float height = 10)
+        private KEY AddKey(string keylabel, string Shifted, float width = 12, float height = 10)
         {
             KEY key = AddKey(keylabel, width);
             key.shifted = Shifted;
             return key;
         }
 
-
-        // BUG: Refactor this within a keybard parser subclass once everything works.
-        void EmitKey(ref float spacing, ref float Width, ref string Label, ref string Key, ref bool space, ref string newvalue, ref float height, ref int color)
+        // BUG: Refactor this within a keyboard parser subclass once everything works.
+        private void EmitKey(ref float spacing, ref float Width, ref string Label, ref string Key, ref bool space, ref string newvalue, ref float height, ref int color)
         {
             currentposition.x += spacing;
 
-            if (Label != "") AddKey(Label, Width, height, color).Set(newvalue);
-            else if (Key != "") AddKey(Key[0].ToString(), Key[1].ToString()).Set(newvalue);
+            if (Label != "")
+            {
+                AddKey(Label, Width, height, color).Set(newvalue);
+            }
+            else if (Key != "")
+            {
+                AddKey(Key[0].ToString(), Key[1].ToString()).Set(newvalue);
+            }
+
             spacing = 0;
             Width = buttonwidth;
             height = 10f;
@@ -179,27 +191,37 @@ namespace BeatSaberMarkupLanguage.ViewControllers
             newvalue = "";
             color = 0xffffff;
             space = false;
+
             return;
         }
 
-        bool ReadFloat(ref String data, ref int Position, ref float result)
+        private bool ReadFloat(ref String data, ref int Position, ref float result)
         {
-            if (Position >= data.Length) return false;
+            if (Position >= data.Length)
+            {
+                return false;
+            }
+
             int start = Position;
             while (Position < data.Length)
             {
                 char c = data[Position];
-                if (!((c >= '0' && c <= '9') || c == '+' || c == '-' || c == '.')) break;
+                if (!((c >= '0' && c <= '9') || c == '+' || c == '-' || c == '.'))
+                {
+                    break;
+                }
+
                 Position++;
             }
 
-
-            if (float.TryParse(data.Substring(start, Position - start), out result)) return true;
+            if (float.TryParse(data.Substring(start, Position - start), out result))
+            {
+                return true;
+            }
 
             Position = start;
             return false;
         }
-
 
         // Very basic parser for the keyboard grammar - no doubt can be improved. Tricky to implement because of special characters.
         // It might possible to make grep do this, but it would be even harder to read than this!
@@ -218,10 +240,8 @@ namespace BeatSaberMarkupLanguage.ViewControllers
 
             try
             {
-
                 while (p < Keyboard.Length)
                 {
-
                     switch (Keyboard[p])
                     {
                         case '@': // Position key
@@ -237,59 +257,58 @@ namespace BeatSaberMarkupLanguage.ViewControllers
                                     baseposition.y = currentposition.y;
                                 }
                             }
+
                             continue;
-
                         case 'S': // Scale
-                            {
-                                EmitKey(ref spacing, ref width, ref Label, ref Key, ref space, ref newvalue, ref height, ref color);
-                                p++;
-                                ReadFloat(ref Keyboard, ref p, ref this.scale);
-                                continue;
-                            }
+                            EmitKey(ref spacing, ref width, ref Label, ref Key, ref space, ref newvalue, ref height, ref color);
+                            p++;
+                            ReadFloat(ref Keyboard, ref p, ref this.scale);
 
+                            continue;
                         case '\r':
                             space = true;
-                            break;
 
+                            break;
                         case '\n':
                             EmitKey(ref spacing, ref width, ref Label, ref Key, ref space, ref newvalue, ref height, ref color);
                             space = true;
                             NextRow();
-                            break;
 
+                            break;
                         case ' ':
                             space = true;
                             //spacing += padding;
-                            break;
 
+                            break;
                         case '[':
                             EmitKey(ref spacing, ref width, ref Label, ref Key, ref space, ref newvalue, ref height, ref color);
-
                             space = false;
                             p++;
                             int label = p;
-                            while (p < Keyboard.Length && Keyboard[p] != ']') p++;
-                            Label = Keyboard.Substring(label, p - label);
-                            break;
+                            while (p < Keyboard.Length && Keyboard[p] != ']')
+                            {
+                                p++;
+                            }
 
+                            Label = Keyboard.Substring(label, p - label);
+
+                            break;
                         case '(':
                             EmitKey(ref spacing, ref width, ref Label, ref Key, ref space, ref newvalue, ref height, ref color);
-
                             p++;
                             Key = Keyboard.Substring(p, 2);
                             p += 2;
                             space = false;
-                            break;
 
+                            break;
                         case '#':
                             // BUG: Make this support alpha and 6/8 digit forms
                             p++;
                             color = int.Parse(Keyboard.Substring(p, 6), System.Globalization.NumberStyles.HexNumber);
                             p += 6;
+
                             continue;
-
                         case '/':
-
                             p++;
                             float number = 0;
                             if (ReadFloat(ref Keyboard, ref p, ref number))
@@ -302,23 +321,33 @@ namespace BeatSaberMarkupLanguage.ViewControllers
 
                                 if (space)
                                 {
-                                    if (Label != "" || Key != "") EmitKey(ref spacing, ref width, ref Label, ref Key, ref space, ref newvalue, ref height, ref color);
+                                    if (Label != "" || Key != "")
+                                    {
+                                        EmitKey(ref spacing, ref width, ref Label, ref Key, ref space, ref newvalue, ref height, ref color);
+                                    }
+
                                     spacing = number;
                                 }
-                                else width = number;
+                                else
+                                {
+                                    width = number;
+                                }
+
                                 continue;
                             }
 
                             break;
-
                         case '\'':
                             p++;
                             int newvaluep = p;
-                            while (p < Keyboard.Length && Keyboard[p] != '\'') p++;
+                            while (p < Keyboard.Length && Keyboard[p] != '\'')
+                            {
+                                p++;
+                            }
+
                             newvalue = Keyboard.Substring(newvaluep, p - newvaluep);
+
                             break;
-
-
                         default:
                             return this;
                     }
@@ -327,7 +356,6 @@ namespace BeatSaberMarkupLanguage.ViewControllers
                 }
 
                 EmitKey(ref spacing, ref width, ref Label, ref Key, ref space, ref newvalue, ref height, ref color);
-
             }
             catch (Exception ex)
             {
@@ -338,7 +366,6 @@ namespace BeatSaberMarkupLanguage.ViewControllers
             return this;
         }
 
-
         // Default actions may be called more than once. Make sure to only set any overrides that replace these AFTER all keys have been added
         public KEYBOARD DefaultActions()
         {
@@ -347,6 +374,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
             SetAction("<--", Backspace);
             SetAction("SHIFT", SHIFT);
             SetAction("CAPS", CAPS);
+
             return this;
         }
 
@@ -361,7 +389,6 @@ namespace BeatSaberMarkupLanguage.ViewControllers
             SetButtonType();
 
             // BUG: Make this an input field maybe
-
             KeyboardText = BeatSaberUI.CreateText(container, "", new Vector2(0, 23f));
             KeyboardText.fontSize = 6f;
             KeyboardText.color = Color.white;
@@ -369,9 +396,6 @@ namespace BeatSaberMarkupLanguage.ViewControllers
             KeyboardText.enableWordWrapping = false;
             KeyboardText.text = "";
             KeyboardText.enabled = this.EnableInputField;
-            //KeyboardText
-
-
 
             KeyboardCursor = BeatSaberUI.CreateText(container, "|", new Vector2(0, 0));
             KeyboardCursor.fontSize = 6f;
@@ -385,14 +409,11 @@ namespace BeatSaberMarkupLanguage.ViewControllers
             // We protect this since setting nonexistent keys will throw.
 
             // BUG: These are here on a temporary basis, they will be moving out as soon as API is finished
-
-
             if (DefaultKeyboard != "")
             {
                 AddKeys(DefaultKeyboard);
                 DefaultActions();
             }
-
 
             return;
         }
@@ -410,7 +431,6 @@ namespace BeatSaberMarkupLanguage.ViewControllers
             return this;
         }
 
-
         public void Clear(KEY key)
         {
             key.kb.KeyboardText.text = "";
@@ -418,17 +438,21 @@ namespace BeatSaberMarkupLanguage.ViewControllers
 
         public void Enter(KEY key)
         {
-            var typedtext = key.kb.KeyboardText.text;
+            string typedtext = key.kb.KeyboardText.text;
             EnterPressed?.Invoke(typedtext);
             key.kb.KeyboardText.text = "";
         }
 
-        void Backspace(KEY key)
+        private void Backspace(KEY key)
         {
             // BUG: This is terribly long winded... 
-            if (key.kb.KeyboardText.text.Length > 0) key.kb.KeyboardText.text = key.kb.KeyboardText.text.Substring(0, key.kb.KeyboardText.text.Length - 1); // Is there a cleaner way to say this?
+            if (key.kb.KeyboardText.text.Length > 0)
+            {
+                key.kb.KeyboardText.text = key.kb.KeyboardText.text.Substring(0, key.kb.KeyboardText.text.Length - 1); // Is there a cleaner way to say this?
+            }
         }
-        void SHIFT(KEY key)
+
+        private void SHIFT(KEY key)
         {
             key.kb.Shift = !key.kb.Shift;
 
@@ -436,13 +460,19 @@ namespace BeatSaberMarkupLanguage.ViewControllers
             {
                 string x = key.kb.Shift ? k.shifted : k.value;
                 //if (key.kb.Caps) x = k.value.ToUpper();
-                if (k.shifted != "") k.mybutton.SetButtonText(x);
+                if (k.shifted != "")
+                {
+                    k.mybutton.SetButtonText(x);
+                }
 
-                if (k.name == "SHIFT") k.mybutton.GetComponentInChildren<Image>().color = key.kb.Shift ? Color.green : Color.white;
+                if (k.name == "SHIFT")
+                {
+                    k.mybutton.GetComponentInChildren<Image>().color = key.kb.Shift ? Color.green : Color.white;
+                }
             }
         }
 
-        void CAPS(KEY key)
+        private void CAPS(KEY key)
         {
             key.kb.Caps = !key.kb.Caps;
             key.mybutton.GetComponentInChildren<Image>().color = key.kb.Caps ? Color.green : Color.white;
@@ -450,17 +480,17 @@ namespace BeatSaberMarkupLanguage.ViewControllers
 
         public void DrawCursor()
         {
-            if (!EnableInputField) return;
+            if (!EnableInputField)
+            {
+                return;
+            }
 
             Vector2 v = KeyboardText.GetPreferredValues(KeyboardText.text + "|");
-
             v.y = 23f; // BUG: This needs to be derived from the text position
                        // BUG: I do not know why that 30f is here, It makes things work, but I can't understand WHY! Me stupid.
             v.x = v.x / 2 + 30f - 0.5f; // BUG: The .5 gets rid of the trailing |, but technically, we need to calculate its width and store it
             (KeyboardCursor.transform as RectTransform).anchoredPosition = v;
         }
-
-
 
         public class KEY
         {
@@ -478,13 +508,12 @@ namespace BeatSaberMarkupLanguage.ViewControllers
                     this.value = Value;
                     //this.shifted = Value;
                 }
+
                 return this;
             }
 
-            public KEY()
-            {
-                // This key is not intialized at all
-            }
+            // Default constructor. (This key is not initialized at all)
+            public KEY() { }
 
             public KEY(KEYBOARD kb, Vector2 position, string text, float width, float height, Color color)
             {
@@ -499,7 +528,6 @@ namespace BeatSaberMarkupLanguage.ViewControllers
 
                 TMP_Text txt = mybutton.GetComponentInChildren<TMP_Text>();
                 mybutton.ToggleWordWrapping(false);
-
                 mybutton.transform.localScale = new Vector3(kb.scale, kb.scale, 1.0f);
                 mybutton.SetButtonTextSize(5f);
                 mybutton.SetButtonText(text);
@@ -514,7 +542,6 @@ namespace BeatSaberMarkupLanguage.ViewControllers
                 }
 
                 // Adjust starting position so button aligns to upper left of current drawing position
-
                 position.x += kb.scale * width / 2;
                 position.y -= kb.scale * height / 2;
                 (mybutton.transform as RectTransform).anchoredPosition = position;
@@ -527,7 +554,6 @@ namespace BeatSaberMarkupLanguage.ViewControllers
 
                 mybutton.onClick.AddListener(delegate ()
                 {
-
                     if (keyaction != null)
                     {
                         keyaction(this);
@@ -544,15 +570,21 @@ namespace BeatSaberMarkupLanguage.ViewControllers
                         return;
                     }
 
+                    string x = kb.Shift ? shifted : value;
+                    if (x == "")
                     {
-                        string x = kb.Shift ? shifted : value;
-                        if (x == "") x = value;
-                        if (kb.Caps) x = value.ToUpper();
-                        kb.KeyboardText.text += x;
-                        kb.DrawCursor();
-
+                        x = value;
                     }
+
+                    if (kb.Caps)
+                    {
+                        x = value.ToUpper();
+                    }
+
+                    kb.KeyboardText.text += x;
+                    kb.DrawCursor();
                 });
+
                 HoverHint _MyHintText = mybutton.gameObject.AddComponent<HoverHint>();
                 _MyHintText.text = value;
                 _MyHintText.SetPrivateField("_hoverHintController", Resources.FindObjectsOfTypeAll<HoverHintController>().First());
@@ -560,4 +592,3 @@ namespace BeatSaberMarkupLanguage.ViewControllers
         }
     }
 }
-

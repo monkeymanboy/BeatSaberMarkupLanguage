@@ -2,11 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.TypeHandlers
@@ -27,12 +24,19 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             Button button = obj as Button;
             Polyglot.LocalizedTextMeshProUGUI localizer = obj.GetComponentInChildren<Polyglot.LocalizedTextMeshProUGUI>();
             if (localizer != null)
+            {
                 GameObject.Destroy(localizer);
+            }
+
             TextMeshProUGUI label = obj.GetComponentInChildren<TextMeshProUGUI>();
             if (label != null && data.ContainsKey("text"))
+            {
                 label.text = data["text"];
+            }
+
             Image glowImage = obj.gameObject.GetComponentsInChildren<Image>().FirstOrDefault(x => x.gameObject.name == "Glow");
-            if(glowImage != null)
+            if (glowImage != null)
+            {
                 if (data.ContainsKey("glowColor") && data["glowColor"] != "none")
                 {
                     ColorUtility.TryParseHtmlString(data["glowColor"], out Color color);
@@ -42,18 +46,25 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 {
                     glowImage.gameObject.SetActive(false);
                 }
+            }
+
             if (data.ContainsKey("onClick"))
             {
                 button.onClick.AddListener(delegate
                 {
                     if (!parserParams.actions.ContainsKey(data["onClick"]))
+                    {
                         throw new Exception("on-click action '" + data["onClick"] + "' not found");
+                    }
+
                     parserParams.actions[data["onClick"]].Invoke();
                 });
             }
+
             if (data.ContainsKey("clickEvent"))
             {
-                button.onClick.AddListener(delegate {
+                button.onClick.AddListener(delegate
+                {
                     parserParams.EmitEvent(data["clickEvent"]);
                 });
             }

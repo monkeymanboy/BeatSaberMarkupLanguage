@@ -2,9 +2,6 @@
 using BeatSaberMarkupLanguage.Parser;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
@@ -27,34 +24,59 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
         public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)
         {
             ListSliderSetting listSetting = obj as ListSliderSetting;
+
             if (data.ContainsKey("text"))
+            {
                 listSetting.LabelText = data["text"];
+            }
+
             if (data.ContainsKey("formatter"))
+            {
                 listSetting.formatter = parserParams.actions[data["formatter"]];
+            }
+
             if (data.ContainsKey("applyOnChange"))
+            {
                 listSetting.updateOnChange = Parse.Bool(data["applyOnChange"]);
+            }
+
             if (data.ContainsKey("onChange"))
             {
                 if (!parserParams.actions.ContainsKey(data["onChange"]))
+                {
                     throw new Exception("on-change action '" + data["onChange"] + "' not found");
+                }
+
                 listSetting.onChange = parserParams.actions[data["onChange"]];
             }
+
             if (data.ContainsKey("value"))
             {
                 if (!parserParams.values.ContainsKey(data["value"]))
+                {
                     throw new Exception("value '" + data["value"] + "' not found");
+                }
+
                 listSetting.associatedValue = parserParams.values[data["value"]];
             }
+
             if (data.ContainsKey("options"))
             {
                 if (!parserParams.values.ContainsKey(data["options"]))
+                {
                     throw new Exception("options '" + data["options"] + "' not found");
+                }
+
                 listSetting.values = parserParams.values[data["options"]].GetValue() as List<object>;
             }
             else
+            {
                 throw new Exception("list must have associated options");
+            }
+
             parserParams.AddEvent(data.ContainsKey("setEvent") ? data["setEvent"] : "apply", listSetting.ApplyValue);
             parserParams.AddEvent(data.ContainsKey("getEvent") ? data["getEvent"] : "cancel", listSetting.ReceiveValue);
+
             listSetting.Setup();
         }
     }

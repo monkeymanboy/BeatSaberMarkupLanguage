@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,12 +11,16 @@ namespace BeatSaberMarkupLanguage
     public static class Utilities
     {
         private static Sprite _editIcon = null;
+
         public static Sprite EditIcon
         {
             get
             {
                 if (!_editIcon)
+                {
                     _editIcon = Resources.FindObjectsOfTypeAll<Image>().First(x => x.sprite?.name == "EditIcon").sprite;
+                }
+
                 return _editIcon;
             }
         }
@@ -26,9 +28,11 @@ namespace BeatSaberMarkupLanguage
         public static string GetResourceContent(Assembly assembly, string resource)
         {
             using (Stream stream = assembly.GetManifestResourceStream(resource))
-            using (StreamReader reader = new StreamReader(stream))
             {
-                return reader.ReadToEnd();
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    return reader.ReadToEnd();
+                }
             }
         }
 
@@ -39,6 +43,7 @@ namespace BeatSaberMarkupLanguage
             {
                 objects.Add((T)Activator.CreateInstance(type, constructorArgs));
             }
+
             return objects;
         }
 
@@ -46,10 +51,14 @@ namespace BeatSaberMarkupLanguage
         public static T GetCopyOf<T>(this Component comp, T other) where T : Component
         {
             Type type = comp.GetType();
-            if (type != other.GetType()) return null; // type mis-match
+            if (type != other.GetType())
+            {
+                return null; // type mismatch
+            }
+
             BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
             PropertyInfo[] pinfos = type.GetProperties(flags);
-            foreach (var pinfo in pinfos)
+            foreach (PropertyInfo pinfo in pinfos)
             {
                 if (pinfo.CanWrite && pinfo.Name != "name")
                 {
@@ -57,14 +66,19 @@ namespace BeatSaberMarkupLanguage
                     {
                         pinfo.SetValue(comp, pinfo.GetValue(other, null), null);
                     }
-                    catch { } // In case of NotImplementedException being thrown. For some reason specifying that exception didn't seem to catch it, so I didn't catch anything specific.
+                    catch
+                    {
+                        // In case of NotImplementedException being thrown. For some reason specifying that exception didn't seem to catch it, so I didn't catch anything specific.
+                    }
                 }
             }
+
             FieldInfo[] finfos = type.GetFields(flags);
-            foreach (var finfo in finfos)
+            foreach (FieldInfo finfo in finfos)
             {
                 finfo.SetValue(comp, finfo.GetValue(other));
             }
+
             return comp as T;
         }
 
@@ -77,6 +91,9 @@ namespace BeatSaberMarkupLanguage
 
         public static class ImageResources
         {
+            private static Material noGlowMat;
+            private static Sprite _blankSprite = null;
+
             public static Material NoGlowMat
             {
                 get
@@ -86,18 +103,20 @@ namespace BeatSaberMarkupLanguage
                         noGlowMat = new Material(Resources.FindObjectsOfTypeAll<Material>().Where(m => m.name == "UINoGlow").First());
                         noGlowMat.name = "UINoGlowCustom";
                     }
+
                     return noGlowMat;
                 }
             }
-            private static Material noGlowMat;
 
-            private static Sprite _blankSprite = null;
             public static Sprite BlankSprite
             {
                 get
                 {
                     if (!_blankSprite)
+                    {
                         _blankSprite = Sprite.Create(Texture2D.blackTexture, new Rect(), Vector2.zero);
+                    }
+
                     return _blankSprite;
                 }
             }

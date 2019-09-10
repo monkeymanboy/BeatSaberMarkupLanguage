@@ -3,19 +3,15 @@ using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.ViewControllers;
 using HMUI;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using VRUI;
 
 namespace BeatSaberMarkupLanguage.Settings.UI.ViewControllers
 {
-    class SettingsMenuListViewController : BSMLResourceViewController
+    internal class SettingsMenuListViewController : BSMLResourceViewController
     {
         public override string ResourceName => "BeatSaberMarkupLanguage.Views.settings-list.bsml";
-        
+
         [UIComponent("list")]
         public CustomListTableData list;
 

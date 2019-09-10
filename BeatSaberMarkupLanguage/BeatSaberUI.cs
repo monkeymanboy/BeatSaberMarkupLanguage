@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,7 +6,7 @@ using VRUI;
 
 namespace BeatSaberMarkupLanguage
 {
-    //This class is is stuff yoinked from customui to remove the need for a dependency on it
+    //This class is stuff yoinked from CustomUI to remove the need for a dependency on it
     public static class BeatSaberUI
     {
         /// <summary>
@@ -33,7 +29,7 @@ namespace BeatSaberMarkupLanguage
         /// <summary>
         /// Creates a TextMeshProUGUI component.
         /// </summary>
-        /// <param name="parent">Thet ransform to parent the new TextMeshProUGUI component to.</param>
+        /// <param name="parent">The transform to parent the new TextMeshProUGUI component to.</param>
         /// <param name="text">The text to be displayed.</param>
         /// <param name="anchoredPosition">The position the button should be anchored to.</param>
         /// <returns>The newly created TextMeshProUGUI component.</returns>
@@ -45,7 +41,7 @@ namespace BeatSaberMarkupLanguage
         /// <summary>
         /// Creates a TextMeshProUGUI component.
         /// </summary>
-        /// <param name="parent">Thet transform to parent the new TextMeshProUGUI component to.</param>
+        /// <param name="parent">The transform to parent the new TextMeshProUGUI component to.</param>
         /// <param name="text">The text to be displayed.</param>
         /// <param name="anchoredPosition">The position the text component should be anchored to.</param>
         /// <param name="sizeDelta">The size of the text components RectTransform.</param>
@@ -76,10 +72,15 @@ namespace BeatSaberMarkupLanguage
         {
             Polyglot.LocalizedTextMeshProUGUI localizer = _button.GetComponentInChildren<Polyglot.LocalizedTextMeshProUGUI>();
             if (localizer != null)
+            {
                 GameObject.Destroy(localizer);
+            }
+
             TextMeshProUGUI tmpUgui = _button.GetComponentInChildren<TextMeshProUGUI>();
             if (tmpUgui != null)
+            {
                 tmpUgui.text = _text;
+            }
         }
 
         public static void SetButtonTextSize(this Button _button, float _fontSize)
@@ -101,15 +102,18 @@ namespace BeatSaberMarkupLanguage
         public static void SetButtonIcon(this Button _button, Sprite _icon)
         {
             if (_button.GetComponentsInChildren<Image>().Count() > 1)
+            {
                 _button.GetComponentsInChildren<Image>().First(x => x.name == "Icon").sprite = _icon;
+            }
         }
 
         public static void SetButtonBackground(this Button _button, Sprite _background)
         {
             if (_button.GetComponentsInChildren<Image>().Count() > 0)
+            {
                 _button.GetComponentsInChildren<Image>()[0].sprite = _background;
+            }
         }
         #endregion
-
     }
 }
