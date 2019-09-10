@@ -445,10 +445,10 @@ namespace BeatSaberMarkupLanguage.ViewControllers
 
         private void Backspace(KEY key)
         {
-            // BUG: This is terribly long winded... 
-            if (key.kb.KeyboardText.text.Length > 0)
+            int length = key.kb.KeyboardText.text.Length;
+            if (length > 0)
             {
-                key.kb.KeyboardText.text = key.kb.KeyboardText.text.Substring(0, key.kb.KeyboardText.text.Length - 1); // Is there a cleaner way to say this?
+                key.kb.KeyboardText.text = key.kb.KeyboardText.text.Remove(length - 1);
             }
         }
 
@@ -459,7 +459,11 @@ namespace BeatSaberMarkupLanguage.ViewControllers
             foreach (KEY k in key.kb.keys)
             {
                 string x = key.kb.Shift ? k.shifted : k.value;
-                //if (key.kb.Caps) x = k.value.ToUpper();
+                //if (key.kb.Caps)
+                //{
+                //    x = k.value.ToUpper();
+                //}
+
                 if (k.shifted != "")
                 {
                     k.mybutton.SetButtonText(x);
