@@ -21,9 +21,7 @@ namespace BeatSaberMarkupLanguage
         public void Awake()
         {
             foreach (BSMLTag tag in Utilities.GetListOfType<BSMLTag>())
-            {
                 RegisterTag(tag);
-            }
 
             typeHandlers = Utilities.GetListOfType<TypeHandler>();
         }
@@ -31,9 +29,7 @@ namespace BeatSaberMarkupLanguage
         public void RegisterTag(BSMLTag tag)
         {
             foreach (string alias in tag.Aliases)
-            {
                 tags.Add(alias, tag);
-            }
         }
 
         public void RegisterTypeHandler(TypeHandler typeHandler)
@@ -52,45 +48,33 @@ namespace BeatSaberMarkupLanguage
                 {
                     UIAction uiaction = methodInfo.GetCustomAttributes(typeof(UIAction), true).FirstOrDefault() as UIAction;
                     if (uiaction != null)
-                    {
                         parserParams.actions.Add(uiaction.id, new BSMLAction(host, methodInfo));
-                    }
                 }
 
                 foreach (FieldInfo fieldInfo in host.GetType().GetFields(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic))
                 {
                     UIValue uivalue = fieldInfo.GetCustomAttributes(typeof(UIValue), true).FirstOrDefault() as UIValue;
                     if (uivalue != null)
-                    {
                         parserParams.values.Add(uivalue.id, new BSMLFieldValue(host, fieldInfo));
-                    }
 
                     UIParams uiParams = fieldInfo.GetCustomAttributes(typeof(UIParams), true).FirstOrDefault() as UIParams;
                     if (uiParams != null)
-                    {
                         fieldInfo.SetValue(host, parserParams);
-                    }
                 }
 
                 foreach (PropertyInfo propertyInfo in host.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic))
                 {
                     UIValue uivalue = propertyInfo.GetCustomAttributes(typeof(UIValue), true).FirstOrDefault() as UIValue;
                     if (uivalue != null)
-                    {
                         parserParams.values.Add(uivalue.id, new BSMLPropertyValue(host, propertyInfo));
-                    }
                 }
             }
 
             foreach (XmlNode node in doc.ChildNodes)
-            {
                 HandleNode(node, parent, parserParams);
-            }
 
             foreach (KeyValuePair<string, BSMLAction> action in parserParams.actions.Where(x => x.Key.StartsWith("#")))
-            {
                 parserParams.AddEvent(action.Key.Substring(1), delegate { action.Value.Invoke(); });
-            }
 
             return parserParams;
         }
@@ -98,9 +82,7 @@ namespace BeatSaberMarkupLanguage
         private GameObject HandleNode(XmlNode node, GameObject parent, BSMLParserParams parserParams)
         {
             if (!tags.ContainsKey(node.Name))
-            {
                 throw new Exception("Tag type '" + node.Name + "' not found");
-            }
 
             BSMLTag currentTag = tags[node.Name];
             GameObject currentNode = currentTag.CreateObject(parent.transform);
@@ -121,9 +103,7 @@ namespace BeatSaberMarkupLanguage
                                 {
                                     string valueID = value.Substring(1);
                                     if (!parserParams.values.ContainsKey(valueID))
-                                    {
                                         throw new Exception("No UIValue exists with the id '" + valueID + "'");
-                                    }
 
                                     data.Add(parameters.Key, parserParams.values[valueID].GetValue().ToString());
                                 }
@@ -148,22 +128,16 @@ namespace BeatSaberMarkupLanguage
                 {
                     UIComponent uicomponent = fieldInfo.GetCustomAttributes(typeof(UIComponent), true).FirstOrDefault() as UIComponent;
                     if (uicomponent != null && uicomponent.id == node.Attributes["id"].Value)
-                    {
                         fieldInfo.SetValue(host, currentNode.GetComponent(fieldInfo.FieldType));
-                    }
 
                     UIObject uiobject = fieldInfo.GetCustomAttributes(typeof(UIObject), true).FirstOrDefault() as UIObject;
                     if (uiobject != null && uiobject.id == node.Attributes["id"].Value)
-                    {
                         fieldInfo.SetValue(host, currentNode);
-                    }
                 }
             }
 
             foreach (XmlNode childNode in node.ChildNodes)
-            {
                 HandleNode(childNode, currentNode, parserParams);
-            }
 
             return currentNode;
         }

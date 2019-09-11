@@ -42,18 +42,12 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         {
             text.text = TextForValue(slider.value);
             if (isInt)
-            {
                 onChange?.Invoke((int)Math.Round(slider.value));
-            }
             else
-            {
                 onChange?.Invoke(slider.value);
-            }
 
             if (updateOnChange)
-            {
                 ApplyValue();
-            }
         }
 
         public void ApplyValue()
@@ -61,22 +55,16 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             if (associatedValue != null)
             {
                 if (isInt)
-                {
                     associatedValue.SetValue((int)Math.Round(slider.value));
-                }
                 else
-                {
                     associatedValue.SetValue(slider.value);
-                }
             }
         }
 
         public void ReceiveValue()
         {
             if (associatedValue != null)
-            {
                 slider.value = isInt ? (int)associatedValue.GetValue() : (float)associatedValue.GetValue();
-            }
 
             text.text = TextForValue(slider.value);
         }
@@ -84,13 +72,9 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         protected string TextForValue(float value)
         {
             if (isInt)
-            {
                 return formatter == null ? ((int)Math.Round(value)).ToString() : (formatter.Invoke((int)Math.Round(value)) as string);
-            }
             else
-            {
                 return formatter == null ? value.ToString("N2") : (formatter.Invoke(value) as string);
-            }
         }
     }
 }

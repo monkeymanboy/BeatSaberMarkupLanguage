@@ -72,47 +72,35 @@ namespace BeatSaberMarkupLanguage
         {
             Polyglot.LocalizedTextMeshProUGUI localizer = _button.GetComponentInChildren<Polyglot.LocalizedTextMeshProUGUI>();
             if (localizer != null)
-            {
                 GameObject.Destroy(localizer);
-            }
 
             TextMeshProUGUI tmpUgui = _button.GetComponentInChildren<TextMeshProUGUI>();
             if (tmpUgui != null)
-            {
                 tmpUgui.text = _text;
-            }
         }
 
         public static void SetButtonTextSize(this Button _button, float _fontSize)
         {
             if (_button.GetComponentInChildren<TextMeshProUGUI>() != null)
-            {
                 _button.GetComponentInChildren<TextMeshProUGUI>().fontSize = _fontSize;
-            }
         }
 
         public static void ToggleWordWrapping(this Button _button, bool enableWordWrapping)
         {
             if (_button.GetComponentInChildren<TextMeshProUGUI>() != null)
-            {
                 _button.GetComponentInChildren<TextMeshProUGUI>().enableWordWrapping = enableWordWrapping;
-            }
         }
 
         public static void SetButtonIcon(this Button _button, Sprite _icon)
         {
             if (_button.GetComponentsInChildren<Image>().Count() > 1)
-            {
                 _button.GetComponentsInChildren<Image>().First(x => x.name == "Icon").sprite = _icon;
-            }
         }
 
         public static void SetButtonBackground(this Button _button, Sprite _background)
         {
             if (_button.GetComponentsInChildren<Image>().Count() > 0)
-            {
                 _button.GetComponentsInChildren<Image>()[0].sprite = _background;
-            }
         }
         #endregion
     }

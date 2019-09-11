@@ -35,33 +35,23 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 tableData.tableView.didSelectCellWithIdxEvent += delegate (TableView table, int index)
                 {
                     if (!parserParams.actions.ContainsKey(data["selectCell"]))
-                    {
                         throw new Exception("select-cell action '" + data["onClick"] + "' not found");
-                    }
 
                     parserParams.actions[data["selectCell"]].Invoke(table, index);
                 };
             }
 
             if (data.ContainsKey("listDirection"))
-            {
                 tableData.tableView.SetPrivateField("_tableType", (TableType)Enum.Parse(typeof(TableType), data["listDirection"]));
-            }
 
             if (data.ContainsKey("listStyle"))
-            {
                 tableData.Style = (ListStyle)Enum.Parse(typeof(ListStyle), data["listStyle"]);
-            }
 
             if (data.ContainsKey("cellSize"))
-            {
                 tableData.cellSize = Parse.Float(data["cellSize"]);
-            }
 
             if (data.ContainsKey("expandCell"))
-            {
                 tableData.expandCell = Parse.Bool(data["expandCell"]);
-            }
 
             switch (tableData.tableView.tableType)
             {

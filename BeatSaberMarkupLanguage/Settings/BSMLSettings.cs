@@ -26,9 +26,7 @@ namespace BeatSaberMarkupLanguage.Settings
             get
             {
                 if (!_instance)
-                {
                     _instance = new GameObject("BSMLSettings").AddComponent<BSMLSettings>();
-                }
 
                 return _instance;
             }
@@ -43,9 +41,7 @@ namespace BeatSaberMarkupLanguage.Settings
         public void AddSettingsMenu(string name, string resource, object host)
         {
             if (settingsMenus.Any(x => x.text == name))
-            {
                 return;
-            }
 
             if (settingsMenus.Count == 0)
             {
@@ -79,17 +75,13 @@ namespace BeatSaberMarkupLanguage.Settings
             button.transform.SetSiblingIndex(0);
 
             if (settingsMenus.Count == 0)
-            {
                 button.gameObject.SetActive(false);
-            }
         }
 
         private void PresentSettings()
         {
             if (flowCoordinator == null)
-            {
                 flowCoordinator = new GameObject().AddComponent<ModSettingsFlowCoordinator>();
-            }
 
             Resources.FindObjectsOfTypeAll<MainFlowCoordinator>().First().InvokeMethod("PresentFlowCoordinator", new object[] {flowCoordinator, new Action(delegate{
                 flowCoordinator.ShowInitial();

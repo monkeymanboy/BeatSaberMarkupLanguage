@@ -12,9 +12,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
         protected override void DidActivate(bool firstActivation, ActivationType type)
         {
             if (firstActivation)
-            {
                 BSMLParser.instance.Parse(Content, gameObject, this);
-            }
 
             didActivate?.Invoke(firstActivation, type);
         }

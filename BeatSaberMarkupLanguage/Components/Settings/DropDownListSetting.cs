@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using BeatSaberMarkupLanguage.Parser;
+﻿using BeatSaberMarkupLanguage.Parser;
 using HMUI;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using static HMUI.TableView;
 
@@ -35,9 +35,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             {
                 index = values.IndexOf(value);
                 if (index < 0)
-                {
                     index = 0;
-                }
 
                 UpdateState();
             }
@@ -49,9 +47,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             if (!tableCell)
             {
                 if (tableCellInstance == null)
-                {
                     tableCellInstance = Resources.FindObjectsOfTypeAll<EnvironmentTableCell>().First();
-                }
 
                 tableCell = Instantiate(tableCellInstance);
             }
@@ -75,13 +71,9 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         public int NumberOfCells()
         {
             if (values == null)
-            {
                 return 0;
-            }
             else
-            {
                 return values.Count();
-            }
         }
 
         public void Setup()
@@ -96,17 +88,13 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             UpdateState();
             onChange?.Invoke(Value);
             if (updateOnChange)
-            {
                 ApplyValue();
-            }
         }
 
         public void ApplyValue()
         {
             if (associatedValue != null)
-            {
                 associatedValue.SetValue(Value);
-            }
         }
 
         public void ReceiveValue()
@@ -121,14 +109,10 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         private void ValidateRange()
         {
             if (index >= values.Count)
-            {
                 index = values.Count - 1;
-            }
 
             if (index < 0)
-            {
                 index = 0;
-            }
         }
 
         private void UpdateState()

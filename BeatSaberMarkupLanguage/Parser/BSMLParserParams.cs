@@ -13,21 +13,15 @@ namespace BeatSaberMarkupLanguage.Parser
         public void AddEvent(string id, Action action)
         {
             if (events.ContainsKey(id))
-            {
                 events[id] += action;
-            }
             else
-            {
                 events.Add(id, action);
-            }
         }
 
         public void EmitEvent(string id)
         {
             if (events.ContainsKey(id))
-            {
                 events[id].Invoke();
-            }
         }
     }
 }

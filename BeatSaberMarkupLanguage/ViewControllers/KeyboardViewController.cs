@@ -100,9 +100,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
                 foreach (KEY key in keys)
                 {
                     if (key.name == index)
-                    {
                         return key;
-                    }
                 }
 
                 return dummy;
@@ -113,9 +111,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
         {
             BaseButton = Resources.FindObjectsOfTypeAll<Button>().First(x => (x.name == ButtonName));
             if (BaseButton == null)
-            {
                 BaseButton = Resources.FindObjectsOfTypeAll<Button>().First(x => (x.name == "KeyboardButton"));
-            }
         }
 
         public void SetValue(string keylabel, string value)
@@ -175,13 +171,9 @@ namespace BeatSaberMarkupLanguage.ViewControllers
             currentposition.x += spacing;
 
             if (Label != "")
-            {
                 AddKey(Label, Width, height, color).Set(newvalue);
-            }
             else if (Key != "")
-            {
                 AddKey(Key[0].ToString(), Key[1].ToString()).Set(newvalue);
-            }
 
             spacing = 0;
             Width = buttonwidth;
@@ -198,26 +190,20 @@ namespace BeatSaberMarkupLanguage.ViewControllers
         private bool ReadFloat(ref String data, ref int Position, ref float result)
         {
             if (Position >= data.Length)
-            {
                 return false;
-            }
 
             int start = Position;
             while (Position < data.Length)
             {
                 char c = data[Position];
                 if (!((c >= '0' && c <= '9') || c == '+' || c == '-' || c == '.'))
-                {
                     break;
-                }
 
                 Position++;
             }
 
             if (float.TryParse(data.Substring(start, Position - start), out result))
-            {
                 return true;
-            }
 
             Position = start;
             return false;
@@ -286,10 +272,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
                             p++;
                             int label = p;
                             while (p < Keyboard.Length && Keyboard[p] != ']')
-                            {
                                 p++;
-                            }
-
                             Label = Keyboard.Substring(label, p - label);
 
                             break;
@@ -322,9 +305,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
                                 if (space)
                                 {
                                     if (Label != "" || Key != "")
-                                    {
                                         EmitKey(ref spacing, ref width, ref Label, ref Key, ref space, ref newvalue, ref height, ref color);
-                                    }
 
                                     spacing = number;
                                 }
@@ -341,10 +322,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
                             p++;
                             int newvaluep = p;
                             while (p < Keyboard.Length && Keyboard[p] != '\'')
-                            {
                                 p++;
-                            }
-
                             newvalue = Keyboard.Substring(newvaluep, p - newvaluep);
 
                             break;
@@ -447,9 +425,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
         {
             int length = key.kb.KeyboardText.text.Length;
             if (length > 0)
-            {
                 key.kb.KeyboardText.text = key.kb.KeyboardText.text.Remove(length - 1);
-            }
         }
 
         private void SHIFT(KEY key)
@@ -460,19 +436,13 @@ namespace BeatSaberMarkupLanguage.ViewControllers
             {
                 string x = key.kb.Shift ? k.shifted : k.value;
                 //if (key.kb.Caps)
-                //{
                 //    x = k.value.ToUpper();
-                //}
 
                 if (k.shifted != "")
-                {
                     k.mybutton.SetButtonText(x);
-                }
 
                 if (k.name == "SHIFT")
-                {
                     k.mybutton.GetComponentInChildren<Image>().color = key.kb.Shift ? Color.green : Color.white;
-                }
             }
         }
 
@@ -485,9 +455,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
         public void DrawCursor()
         {
             if (!EnableInputField)
-            {
                 return;
-            }
 
             Vector2 v = KeyboardText.GetPreferredValues(KeyboardText.text + "|");
             v.y = 23f; // BUG: This needs to be derived from the text position
@@ -570,20 +538,15 @@ namespace BeatSaberMarkupLanguage.ViewControllers
                         kb.KeyboardText.text += value.Substring(0, value.Length - 4);
                         kb.Enter(this);
                         kb.DrawCursor();
-
                         return;
                     }
 
                     string x = kb.Shift ? shifted : value;
                     if (x == "")
-                    {
                         x = value;
-                    }
 
                     if (kb.Caps)
-                    {
                         x = value.ToUpper();
-                    }
 
                     kb.KeyboardText.text += x;
                     kb.DrawCursor();

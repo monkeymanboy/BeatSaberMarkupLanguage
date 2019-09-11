@@ -16,9 +16,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
         {
             TextPageScrollView scrollView = (obj as TextPageScrollView);
             if (data.ContainsKey("text"))
-            {
                 scrollView.SetText(data["text"]);
-            }
         }
     }
 }

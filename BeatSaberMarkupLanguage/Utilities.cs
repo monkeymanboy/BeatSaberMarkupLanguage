@@ -17,9 +17,7 @@ namespace BeatSaberMarkupLanguage
             get
             {
                 if (!_editIcon)
-                {
                     _editIcon = Resources.FindObjectsOfTypeAll<Image>().First(x => x.sprite?.name == "EditIcon").sprite;
-                }
 
                 return _editIcon;
             }
@@ -40,9 +38,7 @@ namespace BeatSaberMarkupLanguage
         {
             List<T> objects = new List<T>();
             foreach (Type type in Assembly.GetAssembly(typeof(T)).GetTypes().Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(typeof(T))))
-            {
                 objects.Add((T)Activator.CreateInstance(type, constructorArgs));
-            }
 
             return objects;
         }
@@ -52,9 +48,7 @@ namespace BeatSaberMarkupLanguage
         {
             Type type = comp.GetType();
             if (type != other.GetType())
-            {
                 return null; // type mismatch
-            }
 
             BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
             PropertyInfo[] pinfos = type.GetProperties(flags);
@@ -75,9 +69,7 @@ namespace BeatSaberMarkupLanguage
 
             FieldInfo[] finfos = type.GetFields(flags);
             foreach (FieldInfo finfo in finfos)
-            {
                 finfo.SetValue(comp, finfo.GetValue(other));
-            }
 
             return comp as T;
         }
@@ -113,9 +105,7 @@ namespace BeatSaberMarkupLanguage
                 get
                 {
                     if (!_blankSprite)
-                    {
                         _blankSprite = Sprite.Create(Texture2D.blackTexture, new Rect(), Vector2.zero);
-                    }
 
                     return _blankSprite;
                 }

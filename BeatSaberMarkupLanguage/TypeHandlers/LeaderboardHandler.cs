@@ -17,9 +17,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
         {
             LeaderboardTableView table = (obj as LeaderboardTableView);
             if (data.ContainsKey("cellSize"))
-            {
                 table.SetPrivateField("_rowHeight", Parse.Float(data["cellSize"]));
-            }
         }
     }
 }

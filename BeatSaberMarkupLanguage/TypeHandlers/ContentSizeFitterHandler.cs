@@ -20,9 +20,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
         public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)
         {
             foreach (KeyValuePair<string, string> pair in data)
-            {
                 obj.SetProperty(pair.Key, Enum.Parse(typeof(FitMode), pair.Value));
-            }
         }
     }
 }

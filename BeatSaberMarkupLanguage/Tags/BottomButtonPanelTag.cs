@@ -19,9 +19,7 @@ namespace BeatSaberMarkupLanguage.Tags
             StartMiddleEndButtonsGroup group = MonoBehaviour.Instantiate(Resources.FindObjectsOfTypeAll<StartMiddleEndButtonsGroup>().First(x => (x.name == "Buttons")), container, false);
             group.name = "BSMLBottomPanelButtons";
             foreach (Transform transform in group.transform)
-            {
                 GameObject.Destroy(transform.gameObject);
-            }
 
             return group.gameObject;
         }

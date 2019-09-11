@@ -37,25 +37,19 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         {
             onChange?.Invoke(Value);
             if (updateOnChange)
-            {
                 ApplyValue();
-            }
         }
 
         public void ApplyValue()
         {
             if (associatedValue != null)
-            {
                 associatedValue.SetValue(Value);
-            }
         }
 
         public void ReceiveValue()
         {
             if (associatedValue != null)
-            {
                 Value = (bool)associatedValue.GetValue();
-            }
         }
 
         private void UpdateState()

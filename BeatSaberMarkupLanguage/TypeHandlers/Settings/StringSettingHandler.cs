@@ -25,26 +25,18 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
             StringSetting stringSetting = obj as StringSetting;
 
             if (data.ContainsKey("text"))
-            {
                 stringSetting.LabelText = data["text"];
-            }
 
             if (data.ContainsKey("applyOnChange"))
-            {
                 stringSetting.updateOnChange = Parse.Bool(data["applyOnChange"]);
-            }
 
             if (data.ContainsKey("initialValue"))
-            {
                 stringSetting.Text = data["initialValue"];
-            }
 
             if (data.ContainsKey("onChange"))
             {
                 if (!parserParams.actions.ContainsKey(data["onChange"]))
-                {
                     throw new Exception("on-change action '" + data["onChange"] + "' not found");
-                }
 
                 stringSetting.onChange = parserParams.actions[data["onChange"]];
             }
@@ -52,9 +44,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
             if (data.ContainsKey("value"))
             {
                 if (!parserParams.values.ContainsKey(data["value"]))
-                {
                     throw new Exception("value '" + data["value"] + "' not found");
-                }
 
                 stringSetting.associatedValue = parserParams.values[data["value"]];
             }

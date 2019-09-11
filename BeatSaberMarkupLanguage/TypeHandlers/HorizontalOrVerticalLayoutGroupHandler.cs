@@ -24,13 +24,9 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             foreach (KeyValuePair<string, string> pair in data)
             {
                 if (pair.Key == "spacing")
-                {
                     layoutGroup.SetProperty(pair.Key, Parse.Float(pair.Value));
-                }
                 else
-                {
                     layoutGroup.SetProperty(pair.Key, Parse.Bool(pair.Value));
-                }
             }
         }
     }

@@ -1,11 +1,7 @@
 ﻿using BeatSaberMarkupLanguage.Components.Settings;
 using BeatSaberMarkupLanguage.Parser;
-using HMUI;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
@@ -30,26 +26,18 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
             DropDownListSetting listSetting = obj as DropDownListSetting;
 
             if (data.ContainsKey("text"))
-            {
                 listSetting.dropdown.SetLabelText(data["text"]);
-            }
 
             if (data.ContainsKey("applyOnChange"))
-            {
                 listSetting.updateOnChange = Parse.Bool(data["applyOnChange"]);
-            }
 
             if (data.ContainsKey("formatter"))
-            {
                 listSetting.formatter = parserParams.actions[data["formatter"]];
-            }
 
             if (data.ContainsKey("onChange"))
             {
                 if (!parserParams.actions.ContainsKey(data["onChange"]))
-                {
                     throw new Exception("on-change action '" + data["onChange"] + "' not found");
-                }
 
                 listSetting.onChange = parserParams.actions[data["onChange"]];
             }
@@ -57,9 +45,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
             if (data.ContainsKey("value"))
             {
                 if (!parserParams.values.ContainsKey(data["value"]))
-                {
                     throw new Exception("value '" + data["value"] + "' not found");
-                }
 
                 listSetting.associatedValue = parserParams.values[data["value"]];
             }
@@ -67,9 +53,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
             if (data.ContainsKey("options"))
             {
                 if (!parserParams.values.ContainsKey(data["options"]))
-                {
                     throw new Exception("options '" + data["options"] + "' not found");
-                }
 
                 listSetting.values = parserParams.values[data["options"]].GetValue() as List<object>;
             }

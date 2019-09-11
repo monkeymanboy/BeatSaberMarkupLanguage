@@ -30,9 +30,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 
             layoutGroup.padding = new RectOffset(data.ContainsKey("padLeft") ? Parse.Int(data["padLeft"]) : layoutGroup.padding.left, data.ContainsKey("padRight") ? Parse.Int(data["padRight"]) : layoutGroup.padding.right, data.ContainsKey("padTop") ? Parse.Int(data["padTop"]) : layoutGroup.padding.top, data.ContainsKey("padBottom") ? Parse.Int(data["padBottom"]) : layoutGroup.padding.bottom);
             if (data.ContainsKey("childAlign"))
-            {
                 layoutGroup.childAlignment = (TextAnchor)Enum.Parse(typeof(TextAnchor), data["childAlign"]);
-            }
         }
     }
 }

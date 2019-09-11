@@ -32,9 +32,7 @@ namespace BeatSaberMarkupLanguage
         public void OnActiveSceneChanged(Scene prevScene, Scene nextScene)
         {
             if (prevScene.name == "PCInit" && nextScene.name == "EmptyTransition")
-            {
-                GameObject.Destroy(BSMLSettings.instance.gameObject);//For if the game is restarted
-            }
+                GameObject.Destroy(BSMLSettings.instance.gameObject); // For if the game is restarted
         }
 
         public void OnApplicationStart() { }
@@ -53,9 +51,7 @@ namespace BeatSaberMarkupLanguage
             {
                 List<CustomCellInfo> test = new List<CustomCellInfo>();
                 for (int i = 0; i < 10; i++)
-                {
                     test.Add(new CustomCellInfo("test" + i, "yee haw"));
-                }
 
                 testViewController.tableData.data = test;
                 testViewController.tableData.tableView.ReloadData();

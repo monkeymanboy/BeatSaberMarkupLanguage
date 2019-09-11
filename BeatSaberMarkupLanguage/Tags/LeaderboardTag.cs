@@ -15,9 +15,7 @@ namespace BeatSaberMarkupLanguage.Tags
             table.name = "BSMLLeaderboard";
             table.GetPrivateField<LeaderboardTableCell>("_cellPrefab").GetPrivateField<TextMeshProUGUI>("_scoreText").enableWordWrapping = false;
             foreach (Transform child in table.transform.GetChild(0).GetChild(0)) //This is to ensure if a leaderboard with scores already on it gets cloned that old scores are cleared off
-            {
                 GameObject.Destroy(child.gameObject);
-            }
 
             return table.gameObject;
         }

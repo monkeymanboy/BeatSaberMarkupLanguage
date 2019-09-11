@@ -53,9 +53,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             if (settingsFlowCoordinator)
             {
                 if (keyboardViewController == null)
-                {
                     keyboardViewController = BeatSaberUI.CreateViewController<KeyboardViewController>();
-                }
 
                 keyboardViewController.startingText = Text;
                 keyboardViewController.enterPressed = null;
@@ -74,25 +72,19 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             Text = text;
             onChange?.Invoke(Text);
             if (updateOnChange)
-            {
                 ApplyValue();
-            }
         }
 
         public void ApplyValue()
         {
             if (associatedValue != null)
-            {
                 associatedValue.SetValue(Text);
-            }
         }
 
         public void ReceiveValue()
         {
             if (associatedValue != null)
-            {
                 Text = (string)associatedValue.GetValue();
-            }
         }
     }
 }

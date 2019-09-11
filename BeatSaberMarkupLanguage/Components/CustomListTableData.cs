@@ -57,9 +57,7 @@ namespace BeatSaberMarkupLanguage.Components
             if (!tableCell)
             {
                 if (songListTableCellInstance == null)
-                {
                     songListTableCellInstance = Resources.FindObjectsOfTypeAll<LevelListTableCell>().First(x => (x.name == "LevelListTableCell"));
-                }
 
                 tableCell = Instantiate(songListTableCellInstance);
             }
@@ -67,9 +65,7 @@ namespace BeatSaberMarkupLanguage.Components
             if (!beatmapCharacteristicImages)
             {
                 foreach (UnityEngine.UI.Image i in tableCell.GetPrivateField<UnityEngine.UI.Image[]>("_beatmapCharacteristicImages"))
-                {
                     i.enabled = false;
-                }
             }
 
             tableCell.SetPrivateField("_beatmapCharacteristicAlphas", new float[0]);
@@ -84,9 +80,7 @@ namespace BeatSaberMarkupLanguage.Components
             if (!tableCell)
             {
                 if (levelPackTableCellInstance == null)
-                {
                     levelPackTableCellInstance = Resources.FindObjectsOfTypeAll<LevelPackTableCell>().First(x => x.name == "LevelPackTableCell");
-                }
 
                 tableCell = Instantiate(levelPackTableCellInstance);
             }
@@ -101,9 +95,7 @@ namespace BeatSaberMarkupLanguage.Components
             if (!tableCell)
             {
                 if (mainSettingsTableCellInstance == null)
-                {
                     mainSettingsTableCellInstance = Resources.FindObjectsOfTypeAll<MainSettingsTableCell>().First(x => x.name == "MainSettingsTableCell");
-                }
 
                 tableCell = Instantiate(mainSettingsTableCellInstance);
             }
@@ -119,9 +111,7 @@ namespace BeatSaberMarkupLanguage.Components
                 case ListStyle.List:
                     LevelListTableCell tableCell = GetTableCell();
                     if (expandCell)
-                    {
                         tableCell.GetPrivateField<TextMeshProUGUI>("_songNameText").rectTransform.anchorMax = new Vector3(2, 1, 0);
-                    }
 
                     tableCell.GetPrivateField<TextMeshProUGUI>("_songNameText").text = data[idx].text;
                     tableCell.GetPrivateField<TextMeshProUGUI>("_authorText").text = data[idx].subtext;

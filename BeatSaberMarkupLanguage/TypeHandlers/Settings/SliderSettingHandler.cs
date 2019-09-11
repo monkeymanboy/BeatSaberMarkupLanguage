@@ -30,46 +30,30 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
             SliderSetting sliderSetting = obj as SliderSetting;
 
             if (data.ContainsKey("text"))
-            {
                 sliderSetting.LabelText = data["text"];
-            }
 
             if (data.ContainsKey("formatter"))
-            {
                 sliderSetting.formatter = parserParams.actions[data["formatter"]];
-            }
 
             if (data.ContainsKey("applyOnChange"))
-            {
                 sliderSetting.updateOnChange = Parse.Bool(data["applyOnChange"]);
-            }
 
             if (data.ContainsKey("isInt"))
-            {
                 sliderSetting.isInt = Parse.Bool(data["isInt"]);
-            }
 
             if (data.ContainsKey("increment"))
-            {
                 sliderSetting.increments = Parse.Float(data["increment"]);
-            }
 
             if (data.ContainsKey("minValue"))
-            {
                 sliderSetting.slider.minValue = Parse.Float(data["minValue"]);
-            }
 
             if (data.ContainsKey("maxValue"))
-            {
                 sliderSetting.slider.maxValue = Parse.Float(data["maxValue"]);
-            }
 
             if (data.ContainsKey("onChange"))
             {
                 if (!parserParams.actions.ContainsKey(data["onChange"]))
-                {
                     throw new Exception("on-change action '" + data["onChange"] + "' not found");
-                }
 
                 sliderSetting.onChange = parserParams.actions[data["onChange"]];
             }
@@ -77,9 +61,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
             if (data.ContainsKey("value"))
             {
                 if (!parserParams.values.ContainsKey(data["value"]))
-                {
                     throw new Exception("value '" + data["value"] + "' not found");
-                }
 
                 sliderSetting.associatedValue = parserParams.values[data["value"]];
             }

@@ -18,9 +18,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
         {
             Backgroundable backgroundable = obj as Backgroundable;
             if (data.ContainsKey("background"))
-            {
                 backgroundable.ApplyBackground(data["background"]);
-            }
 
             if (data.ContainsKey("backgroundColor") && data["backgroundColor"] != "none")
             {
