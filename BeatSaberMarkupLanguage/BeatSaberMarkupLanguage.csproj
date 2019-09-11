@@ -177,9 +177,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Views\settings-about.bsml" />
     <EmbeddedResource Include="Views\settings-test.bsml" />
+    <EmbeddedResource Include="Resources\icon.png" />
+    <EmbeddedResource Include="Resources\description.md" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy "$(TargetPath)" "$(BeatSaberDir)\Plugins"</PostBuildEvent>
   </PropertyGroup>
+  <ProjectExtensions />
 </Project>
