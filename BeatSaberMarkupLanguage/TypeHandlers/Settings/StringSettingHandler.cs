@@ -24,33 +24,33 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
         {
             StringSetting stringSetting = obj as StringSetting;
 
-            if (data.ContainsKey("text"))
-                stringSetting.LabelText = data["text"];
+            if (data.TryGetValue("text", out string text))
+                stringSetting.LabelText = text;
 
-            if (data.ContainsKey("applyOnChange"))
-                stringSetting.updateOnChange = Parse.Bool(data["applyOnChange"]);
+            if (data.TryGetValue("applyOnChange", out string applyOnChange))
+                stringSetting.updateOnChange = Parse.Bool(applyOnChange);
 
-            if (data.ContainsKey("initialValue"))
-                stringSetting.Text = data["initialValue"];
+            if (data.TryGetValue("initialValue", out string initialValue))
+                stringSetting.Text = initialValue;
 
-            if (data.ContainsKey("onChange"))
+            if (data.TryGetValue("onChange", out string onChange))
             {
-                if (!parserParams.actions.ContainsKey(data["onChange"]))
-                    throw new Exception("on-change action '" + data["onChange"] + "' not found");
+                if (!parserParams.actions.TryGetValue(onChange, out BSMLAction onChangeAction))
+                    throw new Exception("on-change action '" + onChange + "' not found");
 
-                stringSetting.onChange = parserParams.actions[data["onChange"]];
+                stringSetting.onChange = onChangeAction;
             }
 
-            if (data.ContainsKey("value"))
+            if (data.TryGetValue("value", out string value))
             {
-                if (!parserParams.values.ContainsKey(data["value"]))
-                    throw new Exception("value '" + data["value"] + "' not found");
+                if (!parserParams.values.TryGetValue(value, out BSMLValue associatedValue))
+                    throw new Exception("value '" + value + "' not found");
 
-                stringSetting.associatedValue = parserParams.values[data["value"]];
+                stringSetting.associatedValue = associatedValue;
             }
 
-            parserParams.AddEvent(data.ContainsKey("setEvent") ? data["setEvent"] : "apply", stringSetting.ApplyValue);
-            parserParams.AddEvent(data.ContainsKey("getEvent") ? data["getEvent"] : "cancel", stringSetting.ReceiveValue);
+            parserParams.AddEvent(data.TryGetValue("setEvent", out string setEvent) ? setEvent : "apply", stringSetting.ApplyValue);
+            parserParams.AddEvent(data.TryGetValue("getEvent", out string getEvent) ? getEvent : "cancel", stringSetting.ReceiveValue);
 
             stringSetting.Setup();
         }

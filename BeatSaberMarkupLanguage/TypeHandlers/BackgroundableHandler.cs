@@ -17,12 +17,12 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
         public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)
         {
             Backgroundable backgroundable = obj as Backgroundable;
-            if (data.ContainsKey("background"))
-                backgroundable.ApplyBackground(data["background"]);
+            if (data.TryGetValue("background", out string background))
+                backgroundable.ApplyBackground(background);
 
-            if (data.ContainsKey("backgroundColor") && data["backgroundColor"] != "none")
+            if (data.TryGetValue("backgroundColor", out string backgroundColor) && backgroundColor != "none")
             {
-                ColorUtility.TryParseHtmlString(data["backgroundColor"], out Color color);
+                ColorUtility.TryParseHtmlString(backgroundColor, out Color color);
                 backgroundable.background.color = color;
             }
         }

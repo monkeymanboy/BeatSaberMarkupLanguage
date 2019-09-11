@@ -18,14 +18,14 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
         public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)
         {
             LayoutElement layoutElement = obj as LayoutElement;
-            if (data.ContainsKey("ignoreLayout"))
-                layoutElement.ignoreLayout = Parse.Bool(data["ignoreLayout"]);
+            if (data.TryGetValue("ignoreLayout", out string ignoreLayout))
+                layoutElement.ignoreLayout = Parse.Bool(ignoreLayout);
 
-            if (data.ContainsKey("preferredWidth"))
-                layoutElement.preferredWidth = Parse.Float(data["preferredWidth"]);
+            if (data.TryGetValue("preferredWidth", out string preferredWidth))
+                layoutElement.preferredWidth = Parse.Float(preferredWidth);
 
-            if (data.ContainsKey("preferredHeight"))
-                layoutElement.preferredHeight = Parse.Float(data["preferredHeight"]);
+            if (data.TryGetValue("preferredHeight", out string preferredHeight))
+                layoutElement.preferredHeight = Parse.Float(preferredHeight);
         }
     }
 }

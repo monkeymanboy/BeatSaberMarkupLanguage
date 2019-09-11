@@ -25,22 +25,22 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
         {
             TextMeshProUGUI textMesh = (obj as SubmenuText).submenuText;
 
-            if (data.ContainsKey("text"))
-                textMesh.text = data["text"];
+            if (data.TryGetValue("text", out string text))
+                textMesh.text = text;
 
-            if (data.ContainsKey("fontSize"))
-                textMesh.fontSize = Parse.Float(data["fontSize"]);
+            if (data.TryGetValue("fontSize", out string fontSize))
+                textMesh.fontSize = Parse.Float(fontSize);
 
-            if (data.ContainsKey("alignment"))
-                textMesh.alignment = (TextAlignmentOptions)Enum.Parse(typeof(TextAlignmentOptions), data["alignment"]);
+            if (data.TryGetValue("alignment", out string alignment))
+                textMesh.alignment = (TextAlignmentOptions)Enum.Parse(typeof(TextAlignmentOptions), alignment);
 
-            if (data.ContainsKey("overflowMode"))
-                textMesh.overflowMode = (TextOverflowModes)Enum.Parse(typeof(TextOverflowModes), data["overflowMode"]);
+            if (data.TryGetValue("overflowMode", out string overflowMode))
+                textMesh.overflowMode = (TextOverflowModes)Enum.Parse(typeof(TextOverflowModes), overflowMode);
 
-            if (data.ContainsKey("hoverHint"))
+            if (data.TryGetValue("hoverHint", out string hoverHint))
             {
                 HoverHint hover = textMesh.gameObject.AddComponent<HoverHint>();
-                hover.text = data["hoverHint"];
+                hover.text = hoverHint;
                 hover.SetPrivateField("_hoverHintController", Resources.FindObjectsOfTypeAll<HoverHintController>().First());
             }
         }

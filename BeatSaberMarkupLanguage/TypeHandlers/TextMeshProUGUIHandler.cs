@@ -24,28 +24,28 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
         public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)
         {
             TextMeshProUGUI textMesh = obj as TextMeshProUGUI;
-            if (data.ContainsKey("text"))
-                textMesh.text = data["text"];
+            if (data.TryGetValue("text", out string text))
+                textMesh.text = text;
 
-            if (data.ContainsKey("fontSize"))
-                textMesh.fontSize = Parse.Float(data["fontSize"]);
+            if (data.TryGetValue("fontSize", out string fontSize))
+                textMesh.fontSize = Parse.Float(fontSize);
 
-            if (data.ContainsKey("alignment"))
-                textMesh.alignment = (TextAlignmentOptions)Enum.Parse(typeof(TextAlignmentOptions), data["alignment"]);
+            if (data.TryGetValue("alignment", out string alignment))
+                textMesh.alignment = (TextAlignmentOptions)Enum.Parse(typeof(TextAlignmentOptions), alignment);
 
-            if (data.ContainsKey("overflowMode"))
-                textMesh.overflowMode = (TextOverflowModes)Enum.Parse(typeof(TextOverflowModes), data["overflowMode"]);
+            if (data.TryGetValue("overflowMode", out string overflowMode))
+                textMesh.overflowMode = (TextOverflowModes)Enum.Parse(typeof(TextOverflowModes), overflowMode);
 
-            if (data.ContainsKey("bold") && Parse.Bool(data["bold"]))
+            if (data.TryGetValue("bold", out string bold) && Parse.Bool(bold))
                 textMesh.text = $"<b>{textMesh.text}</b>";
 
-            if (data.ContainsKey("italics") && Parse.Bool(data["italics"]))
+            if (data.TryGetValue("italics", out string italics) && Parse.Bool(italics))
                 textMesh.text = $"<i>{textMesh.text}</i>";
 
-            if (data.ContainsKey("underlined") && Parse.Bool(data["underlined"]))
+            if (data.TryGetValue("underlined", out string underlined) && Parse.Bool(underlined))
                 textMesh.text = $"<u>{textMesh.text}</u>";
 
-            if (data.ContainsKey("strikethrough") && Parse.Bool(data["strikethrough"]))
+            if (data.TryGetValue("strikethrough", out string strikethrough) && Parse.Bool(strikethrough))
                 textMesh.text = $"<s>{textMesh.text}</s>";
         }
     }

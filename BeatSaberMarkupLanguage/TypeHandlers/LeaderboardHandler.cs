@@ -16,8 +16,8 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
         public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)
         {
             LeaderboardTableView table = (obj as LeaderboardTableView);
-            if (data.ContainsKey("cellSize"))
-                table.SetPrivateField("_rowHeight", Parse.Float(data["cellSize"]));
+            if (data.TryGetValue("cellSize", out string cellSize))
+                table.SetPrivateField("_rowHeight", Parse.Float(cellSize));
         }
     }
 }

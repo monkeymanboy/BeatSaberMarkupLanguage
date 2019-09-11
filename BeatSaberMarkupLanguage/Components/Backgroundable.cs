@@ -29,10 +29,10 @@ namespace BeatSaberMarkupLanguage.Components
             if (background != null)
                 throw new Exception("Cannot add multiple backgrounds");
 
-            if (!Backgrounds.ContainsKey(name))
+            if (!Backgrounds.TryGetValue(name, out string backgroundName))
                 throw new Exception("Background type '" + name + "' not found");
 
-            background = gameObject.AddComponent(Resources.FindObjectsOfTypeAll<Image>().Last(x => x.gameObject.name == ObjectNames[name] && x.sprite?.name == Backgrounds[name]));
+            background = gameObject.AddComponent(Resources.FindObjectsOfTypeAll<Image>().Last(x => x.gameObject.name == ObjectNames[name] && x.sprite?.name == backgroundName));
         }
     }
 }

@@ -23,9 +23,9 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 
         public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)
         {
-            if (data.ContainsKey("direction"))
+            if (data.TryGetValue("direction", out string direction))
             {
-                switch (Enum.Parse(typeof(PageButtonDirection), data["direction"]))
+                switch (Enum.Parse(typeof(PageButtonDirection), direction))
                 {
                     case PageButtonDirection.Up:
                         obj.transform.localRotation = Quaternion.Euler(0, 0, -180);
@@ -42,10 +42,10 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 }
             }
 
-            if (data.ContainsKey("buttonWidth"))
+            if (data.TryGetValue("buttonWidth", out string buttonWidth))
             {
                 LayoutElement layoutElement = obj.gameObject.GetComponent<LayoutElement>();
-                layoutElement.preferredWidth = Parse.Float(data["buttonWidth"]);
+                layoutElement.preferredWidth = Parse.Float(buttonWidth);
                 (obj.transform.GetChild(0).transform as RectTransform).sizeDelta = new Vector2(layoutElement.preferredWidth, layoutElement.preferredHeight);
             }
         }

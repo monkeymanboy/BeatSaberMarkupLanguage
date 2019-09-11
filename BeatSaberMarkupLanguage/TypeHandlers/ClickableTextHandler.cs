@@ -18,22 +18,22 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
         public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)
         {
             ClickableText clickableText = obj as ClickableText;
-            if (data.ContainsKey("onClick"))
+            if (data.TryGetValue("onClick", out string onClick))
             {
                 clickableText.OnClickEvent += delegate
                 {
-                    if (!parserParams.actions.ContainsKey(data["onClick"]))
-                        throw new Exception("on-click action '" + data["onClick"] + "' not found");
+                    if (!parserParams.actions.TryGetValue(onClick, out BSMLAction onClickAction))
+                        throw new Exception("on-click action '" + onClick + "' not found");
 
-                    parserParams.actions[data["onClick"]].Invoke();
+                    onClickAction.Invoke();
                 };
             }
 
-            if (data.ContainsKey("clickEvent"))
+            if (data.TryGetValue("clickEvent", out string clickEvent))
             {
                 clickableText.OnClickEvent += delegate
                 {
-                    parserParams.EmitEvent(data["clickEvent"]);
+                    parserParams.EmitEvent(clickEvent);
                 };
             }
         }

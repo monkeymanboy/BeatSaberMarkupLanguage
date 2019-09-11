@@ -81,10 +81,9 @@ namespace BeatSaberMarkupLanguage
 
         private GameObject HandleNode(XmlNode node, GameObject parent, BSMLParserParams parserParams)
         {
-            if (!tags.ContainsKey(node.Name))
+            if (!tags.TryGetValue(node.Name, out BSMLTag currentTag))
                 throw new Exception("Tag type '" + node.Name + "' not found");
 
-            BSMLTag currentTag = tags[node.Name];
             GameObject currentNode = currentTag.CreateObject(parent.transform);
             foreach (TypeHandler typeHandler in typeHandlers)
             {
@@ -102,10 +101,10 @@ namespace BeatSaberMarkupLanguage
                                 if (value.StartsWith("~"))
                                 {
                                     string valueID = value.Substring(1);
-                                    if (!parserParams.values.ContainsKey(valueID))
+                                    if (!parserParams.values.TryGetValue(valueID, out BSMLValue uiValue))
                                         throw new Exception("No UIValue exists with the id '" + valueID + "'");
 
-                                    data.Add(parameters.Key, parserParams.values[valueID].GetValue().ToString());
+                                    data.Add(parameters.Key, uiValue.GetValue().ToString());
                                 }
                                 else
                                 {

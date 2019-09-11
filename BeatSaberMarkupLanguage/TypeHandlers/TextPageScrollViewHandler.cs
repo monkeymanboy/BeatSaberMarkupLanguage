@@ -15,8 +15,8 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
         public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)
         {
             TextPageScrollView scrollView = (obj as TextPageScrollView);
-            if (data.ContainsKey("text"))
-                scrollView.SetText(data["text"]);
+            if (data.TryGetValue("text", out string text))
+                scrollView.SetText(text);
         }
     }
 }

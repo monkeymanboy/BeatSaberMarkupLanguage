@@ -30,37 +30,37 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
         public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)
         {
             CustomListTableData tableData = obj as CustomListTableData;
-            if (data.ContainsKey("selectCell"))
+            if (data.TryGetValue("selectCell", out string selectCell))
             {
                 tableData.tableView.didSelectCellWithIdxEvent += delegate (TableView table, int index)
                 {
-                    if (!parserParams.actions.ContainsKey(data["selectCell"]))
+                    if (!parserParams.actions.TryGetValue(selectCell, out BSMLAction action))
                         throw new Exception("select-cell action '" + data["onClick"] + "' not found");
 
-                    parserParams.actions[data["selectCell"]].Invoke(table, index);
+                    action.Invoke(table, index);
                 };
             }
 
-            if (data.ContainsKey("listDirection"))
-                tableData.tableView.SetPrivateField("_tableType", (TableType)Enum.Parse(typeof(TableType), data["listDirection"]));
+            if (data.TryGetValue("listDirection", out string listDirection))
+                tableData.tableView.SetPrivateField("_tableType", (TableType)Enum.Parse(typeof(TableType), listDirection));
 
-            if (data.ContainsKey("listStyle"))
-                tableData.Style = (ListStyle)Enum.Parse(typeof(ListStyle), data["listStyle"]);
+            if (data.TryGetValue("listStyle", out string listStyle))
+                tableData.Style = (ListStyle)Enum.Parse(typeof(ListStyle), listStyle);
 
-            if (data.ContainsKey("cellSize"))
-                tableData.cellSize = Parse.Float(data["cellSize"]);
+            if (data.TryGetValue("cellSize", out string cellSize))
+                tableData.cellSize = Parse.Float(cellSize);
 
-            if (data.ContainsKey("expandCell"))
-                tableData.expandCell = Parse.Bool(data["expandCell"]);
+            if (data.TryGetValue("expandCell", out string expandCell))
+                tableData.expandCell = Parse.Bool(expandCell);
 
             switch (tableData.tableView.tableType)
             {
                 case TableType.Vertical:
-                    (obj.gameObject.transform as RectTransform).sizeDelta = new Vector2(data.ContainsKey("listWidth") ? Parse.Float(data["listWidth"]) : 60, tableData.cellSize * (data.ContainsKey("visibleCells") ? Parse.Float(data["visibleCells"]) : 7));
+                    (obj.gameObject.transform as RectTransform).sizeDelta = new Vector2(data.TryGetValue("listWidth", out string vListWidth) ? Parse.Float(vListWidth) : 60, tableData.cellSize * (data.TryGetValue("visibleCells", out string vVisibleCells) ? Parse.Float(vVisibleCells) : 7));
                     tableData.tableView.contentTransform.anchorMin = new Vector2(0, 1);
                     break;
                 case TableType.Horizontal:
-                    (obj.gameObject.transform as RectTransform).sizeDelta = new Vector2(tableData.cellSize * (data.ContainsKey("visibleCells") ? Parse.Float(data["visibleCells"]) : 4), data.ContainsKey("listHeight") ? Parse.Float(data["listHeight"]) : 40);
+                    (obj.gameObject.transform as RectTransform).sizeDelta = new Vector2(tableData.cellSize * (data.TryGetValue("visibleCells", out string hVisibleCells) ? Parse.Float(hVisibleCells) : 4), data.TryGetValue("listHeight", out string hListHeight) ? Parse.Float(hListHeight) : 40);
                     tableData.tableView.contentTransform.anchorMin = new Vector2(1, 0);
                     break;
             }
@@ -69,11 +69,11 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             obj.gameObject.GetComponent<LayoutElement>().preferredWidth = (obj.gameObject.transform as RectTransform).sizeDelta.x;
             tableData.tableView.gameObject.SetActive(true);
 
-            if (data.ContainsKey("id"))
+            if (data.TryGetValue("id", out string id))
             {
                 TableViewScroller scroller = tableData.tableView.GetPrivateField<TableViewScroller>("_scroller");
-                parserParams.AddEvent(data["id"] + "#PageUp", scroller.PageScrollUp);
-                parserParams.AddEvent(data["id"] + "#PageDown", scroller.PageScrollDown);
+                parserParams.AddEvent(id + "#PageUp", scroller.PageScrollUp);
+                parserParams.AddEvent(id + "#PageDown", scroller.PageScrollDown);
             }
         }
     }

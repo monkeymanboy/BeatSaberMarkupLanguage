@@ -27,15 +27,15 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 GameObject.Destroy(localizer);
 
             TextMeshProUGUI label = obj.GetComponentInChildren<TextMeshProUGUI>();
-            if (label != null && data.ContainsKey("text"))
-                label.text = data["text"];
+            if (label != null && data.TryGetValue("text", out string text))
+                label.text = text;
 
             Image glowImage = obj.gameObject.GetComponentsInChildren<Image>().FirstOrDefault(x => x.gameObject.name == "Glow");
             if (glowImage != null)
             {
-                if (data.ContainsKey("glowColor") && data["glowColor"] != "none")
+                if (data.TryGetValue("glowColor", out string glowColor) && glowColor != "none")
                 {
-                    ColorUtility.TryParseHtmlString(data["glowColor"], out Color color);
+                    ColorUtility.TryParseHtmlString(glowColor, out Color color);
                     glowImage.color = color;
                 }
                 else
@@ -44,22 +44,22 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 }
             }
 
-            if (data.ContainsKey("onClick"))
+            if (data.TryGetValue("onClick", out string onClick))
             {
                 button.onClick.AddListener(delegate
                 {
-                    if (!parserParams.actions.ContainsKey(data["onClick"]))
-                        throw new Exception("on-click action '" + data["onClick"] + "' not found");
+                    if (!parserParams.actions.TryGetValue(onClick, out BSMLAction onClickAction))
+                        throw new Exception("on-click action '" + onClick + "' not found");
 
-                    parserParams.actions[data["onClick"]].Invoke();
+                    onClickAction.Invoke();
                 });
             }
 
-            if (data.ContainsKey("clickEvent"))
+            if (data.TryGetValue("clickEvent", out string clickEvent))
             {
                 button.onClick.AddListener(delegate
                 {
-                    parserParams.EmitEvent(data["clickEvent"]);
+                    parserParams.EmitEvent(clickEvent);
                 });
             }
         }
