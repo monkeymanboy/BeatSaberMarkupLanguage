@@ -20,7 +20,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         {
             ReceiveValue();
         }
-        
+
         public override void DecButtonPressed()
         {
             Value = false;
@@ -44,7 +44,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 
         public void ApplyValue()
         {
-            if(associatedValue != null)
+            if (associatedValue != null)
             {
                 associatedValue.SetValue(Value);
             }
@@ -52,7 +52,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 
         public void ReceiveValue()
         {
-            if(associatedValue != null)
+            if (associatedValue != null)
             {
                 Value = (bool)associatedValue.GetValue();
             }

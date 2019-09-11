@@ -9,7 +9,7 @@ using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.Components.Settings
 {
-    internal class StringSetting : MonoBehaviour
+    public class StringSetting : MonoBehaviour
     {
         private static KeyboardViewController keyboardViewController;
 

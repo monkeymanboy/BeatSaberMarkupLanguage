@@ -7,7 +7,7 @@ using static HMUI.TableView;
 
 namespace BeatSaberMarkupLanguage.Components.Settings
 {
-    internal class DropDownListSetting : MonoBehaviour, IDataSource
+    public class DropDownListSetting : MonoBehaviour, IDataSource
     {
         private string reuseIdentifier = "BSMLDropdownSetting";
         private EnvironmentTableCell tableCellInstance;

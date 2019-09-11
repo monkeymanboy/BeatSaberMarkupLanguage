@@ -2,5 +2,5 @@
 
 namespace BeatSaberMarkupLanguage.Attributes
 {
-    internal class UIParams : Attribute { }
+    public class UIParams : Attribute { }
 }

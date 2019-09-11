@@ -14,7 +14,7 @@ namespace BeatSaberMarkupLanguage
 {
     public class Plugin : IBeatSaberPlugin
     {
-        public void Init (IPALogger logger)
+        public void Init(IPALogger logger)
         {
             Logger.log = logger;
         }
@@ -29,9 +29,9 @@ namespace BeatSaberMarkupLanguage
             }
         }
 
-        public void OnActiveSceneChanged(Scene _, Scene scene)
+        public void OnActiveSceneChanged(Scene prevScene, Scene nextScene)
         {
-            if (_.name == "PCInit" && scene.name == "EmptyTransition")
+            if (prevScene.name == "PCInit" && nextScene.name == "EmptyTransition")
             {
                 GameObject.Destroy(BSMLSettings.instance.gameObject);//For if the game is restarted
             }

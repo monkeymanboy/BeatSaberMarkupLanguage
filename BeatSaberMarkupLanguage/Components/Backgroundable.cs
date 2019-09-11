@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.Components
 {
-    class Backgroundable : MonoBehaviour
+    public class Backgroundable : MonoBehaviour
     {
         private static Dictionary<string, string> Backgrounds => new Dictionary<string, string>()
         {
