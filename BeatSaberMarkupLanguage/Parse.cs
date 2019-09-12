@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BeatSaberMarkupLanguage
 {
@@ -20,6 +16,7 @@ namespace BeatSaberMarkupLanguage
                 throw new Exception("Could not parse float: " + s);
             }
         }
+
         public static bool Bool(string s)
         {
             try
@@ -31,6 +28,7 @@ namespace BeatSaberMarkupLanguage
                 throw new Exception("Could not parse bool: " + s);
             }
         }
+
         public static int Int(string s)
         {
             try

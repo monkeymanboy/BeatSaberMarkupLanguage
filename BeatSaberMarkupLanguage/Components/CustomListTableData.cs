@@ -1,10 +1,7 @@
 ﻿using BS_Utils.Utilities;
 using HMUI;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,17 +10,27 @@ namespace BeatSaberMarkupLanguage.Components
 {
     public class CustomListTableData : MonoBehaviour, TableView.IDataSource
     {
+        public enum ListStyle
+        {
+            List, Box, Simple
+        }
+
+        private ListStyle listStyle = ListStyle.List;
+
+        private LevelListTableCell songListTableCellInstance;
+        private LevelPackTableCell levelPackTableCellInstance;
+        private MainSettingsTableCell mainSettingsTableCellInstance;
+
         public List<CustomCellInfo> data = new List<CustomCellInfo>();
         public float cellSize = 8.5f;
         public string reuseIdentifier = "BSMLListTableCell";
         public TableView tableView;
-        private ListStyle listStyle = ListStyle.List;
+
+        public bool expandCell = false;
+
         public ListStyle Style
         {
-            get
-            {
-                return listStyle;
-            }
+            get => listStyle;
             set
             {
                 //Sets the default cell size for certain styles
@@ -39,22 +46,19 @@ namespace BeatSaberMarkupLanguage.Components
                         cellSize = 8f;
                         break;
                 }
+
                 listStyle = value;
             }
         }
 
-        private LevelListTableCell songListTableCellInstance;
-        private LevelPackTableCell levelPackTableCellInstance;
-        private MainSettingsTableCell mainSettingsTableCellInstance;
-
-        public bool expandCell = false;
         public LevelListTableCell GetTableCell(bool beatmapCharacteristicImages = false)
         {
             LevelListTableCell tableCell = (LevelListTableCell)tableView.DequeueReusableCellForIdentifier(reuseIdentifier);
             if (!tableCell)
             {
-                if(songListTableCellInstance == null)
+                if (songListTableCellInstance == null)
                     songListTableCellInstance = Resources.FindObjectsOfTypeAll<LevelListTableCell>().First(x => (x.name == "LevelListTableCell"));
+
                 tableCell = Instantiate(songListTableCellInstance);
             }
 
@@ -63,11 +67,13 @@ namespace BeatSaberMarkupLanguage.Components
                 foreach (UnityEngine.UI.Image i in tableCell.GetPrivateField<UnityEngine.UI.Image[]>("_beatmapCharacteristicImages"))
                     i.enabled = false;
             }
+
             tableCell.SetPrivateField("_beatmapCharacteristicAlphas", new float[0]);
             tableCell.SetPrivateField("_beatmapCharacteristicImages", new UnityEngine.UI.Image[0]);
             tableCell.reuseIdentifier = reuseIdentifier;
             return tableCell;
         }
+
         public LevelPackTableCell GetLevelPackTableCell()
         {
             LevelPackTableCell tableCell = (LevelPackTableCell)tableView.DequeueReusableCellForIdentifier(reuseIdentifier);
@@ -75,11 +81,14 @@ namespace BeatSaberMarkupLanguage.Components
             {
                 if (levelPackTableCellInstance == null)
                     levelPackTableCellInstance = Resources.FindObjectsOfTypeAll<LevelPackTableCell>().First(x => x.name == "LevelPackTableCell");
+
                 tableCell = Instantiate(levelPackTableCellInstance);
             }
+
             tableCell.reuseIdentifier = reuseIdentifier;
             return tableCell;
         }
+
         public MainSettingsTableCell GetMainSettingsTableCell()
         {
             MainSettingsTableCell tableCell = (MainSettingsTableCell)tableView.DequeueReusableCellForIdentifier(reuseIdentifier);
@@ -87,8 +96,10 @@ namespace BeatSaberMarkupLanguage.Components
             {
                 if (mainSettingsTableCellInstance == null)
                     mainSettingsTableCellInstance = Resources.FindObjectsOfTypeAll<MainSettingsTableCell>().First(x => x.name == "MainSettingsTableCell");
+
                 tableCell = Instantiate(mainSettingsTableCellInstance);
             }
+
             tableCell.reuseIdentifier = reuseIdentifier;
             return tableCell;
         }
@@ -99,10 +110,13 @@ namespace BeatSaberMarkupLanguage.Components
             {
                 case ListStyle.List:
                     LevelListTableCell tableCell = GetTableCell();
-                    if (expandCell) tableCell.GetPrivateField<TextMeshProUGUI>("_songNameText").rectTransform.anchorMax = new Vector3(2, 1, 0);
+                    if (expandCell)
+                        tableCell.GetPrivateField<TextMeshProUGUI>("_songNameText").rectTransform.anchorMax = new Vector3(2, 1, 0);
+
                     tableCell.GetPrivateField<TextMeshProUGUI>("_songNameText").text = data[idx].text;
                     tableCell.GetPrivateField<TextMeshProUGUI>("_authorText").text = data[idx].subtext;
                     tableCell.GetPrivateField<RawImage>("_coverRawImage").texture = data[idx].icon == null ? Texture2D.blackTexture : data[idx].icon;
+
                     return tableCell;
                 case ListStyle.Box:
                     LevelPackTableCell cell = GetLevelPackTableCell();
@@ -110,15 +124,19 @@ namespace BeatSaberMarkupLanguage.Components
                     cell.GetPrivateField<TextMeshProUGUI>("_packNameText").text = data[idx].text;
                     cell.GetPrivateField<TextMeshProUGUI>("_infoText").text = data[idx].subtext;
                     UnityEngine.UI.Image packCoverImage = cell.GetPrivateField<UnityEngine.UI.Image>("_coverImage");
+
                     Texture2D tex = data[idx].icon == null ? Texture2D.blackTexture : data[idx].icon;
                     packCoverImage.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.one * 0.5f, 100, 1);
                     packCoverImage.mainTexture.wrapMode = TextureWrapMode.Clamp;
+
                     return cell;
                 case ListStyle.Simple:
                     MainSettingsTableCell simpleCell = GetMainSettingsTableCell();
                     simpleCell.settingsSubMenuText = data[idx].text;
+
                     return simpleCell;
             }
+
             return null;
         }
 
@@ -145,10 +163,5 @@ namespace BeatSaberMarkupLanguage.Components
                 this.icon = icon;
             }
         };
-
-        public enum ListStyle
-        {
-            List, Box, Simple
-        }
     }
 }

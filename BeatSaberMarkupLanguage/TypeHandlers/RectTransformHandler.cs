@@ -1,10 +1,7 @@
 ﻿using BeatSaberMarkupLanguage.Parser;
 using BS_Utils.Utilities;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.TypeHandlers
@@ -28,14 +25,15 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
         public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)
         {
             RectTransform rectTransform = obj as RectTransform;
-            rectTransform.anchorMin = new Vector2(data.ContainsKey("anchorMinX") ? Parse.Float(data["anchorMinX"]) : rectTransform.anchorMin.x, data.ContainsKey("anchorMinY") ? Parse.Float(data["anchorMinY"]) : rectTransform.anchorMin.y);
-            rectTransform.anchorMax = new Vector2(data.ContainsKey("anchorMaxX") ? Parse.Float(data["anchorMaxX"]) : rectTransform.anchorMax.x, data.ContainsKey("anchorMaxY") ? Parse.Float(data["anchorMaxY"]) : rectTransform.anchorMax.y);
-            rectTransform.anchoredPosition = new Vector2(data.ContainsKey("anchorPosX") ? Parse.Float(data["anchorPosX"]) : rectTransform.anchoredPosition.x, data.ContainsKey("anchorPosY") ? Parse.Float(data["anchorPosY"]) : rectTransform.anchoredPosition.y);
-            rectTransform.sizeDelta = new Vector2(data.ContainsKey("sizeDeltaX") ? Parse.Float(data["sizeDeltaX"]) : rectTransform.sizeDelta.x, data.ContainsKey("sizeDeltaY") ? Parse.Float(data["sizeDeltaY"]) : rectTransform.sizeDelta.y);
-            if (data.ContainsKey("hoverHint"))
+            rectTransform.anchorMin = new Vector2(data.TryGetValue("anchorMinX", out string anchorMinX) ? Parse.Float(anchorMinX) : rectTransform.anchorMin.x, data.TryGetValue("anchorMinY", out string anchorMinY) ? Parse.Float(anchorMinY) : rectTransform.anchorMin.y);
+            rectTransform.anchorMax = new Vector2(data.TryGetValue("anchorMaxX", out string anchorMaxX) ? Parse.Float(anchorMaxX) : rectTransform.anchorMax.x, data.TryGetValue("anchorMaxY", out string anchorMaxY) ? Parse.Float(anchorMaxY) : rectTransform.anchorMax.y);
+            rectTransform.anchoredPosition = new Vector2(data.TryGetValue("anchorPosX", out string anchorPosX) ? Parse.Float(anchorPosX) : rectTransform.anchoredPosition.x, data.TryGetValue("anchorPosY", out string anchorPosY) ? Parse.Float(anchorPosY) : rectTransform.anchoredPosition.y);
+            rectTransform.sizeDelta = new Vector2(data.TryGetValue("sizeDeltaX", out string sizeDeltaX) ? Parse.Float(sizeDeltaX) : rectTransform.sizeDelta.x, data.TryGetValue("sizeDeltaY", out string sizeDeltaY) ? Parse.Float(sizeDeltaY) : rectTransform.sizeDelta.y);
+
+            if (data.TryGetValue("hoverHint", out string hoverHint))
             {
                 HoverHint hover = obj.gameObject.AddComponent<HoverHint>();
-                hover.text = data["hoverHint"];
+                hover.text = hoverHint;
                 hover.SetPrivateField("_hoverHintController", Resources.FindObjectsOfTypeAll<HoverHintController>().First());
             }
         }

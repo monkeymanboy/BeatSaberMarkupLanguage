@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BeatSaberMarkupLanguage.Parser
 {
@@ -13,15 +10,17 @@ namespace BeatSaberMarkupLanguage.Parser
         public Dictionary<string, BSMLValue> values = new Dictionary<string, BSMLValue>();
         public Dictionary<string, Action> events = new Dictionary<string, Action>();
 
-        public void AddEvent(string id, Action action){
+        public void AddEvent(string id, Action action)
+        {
             if (events.ContainsKey(id))
                 events[id] += action;
-            else events.Add(id, action);
+            else
+                events.Add(id, action);
         }
 
         public void EmitEvent(string id)
         {
-            if(events.ContainsKey(id))
+            if (events.ContainsKey(id))
                 events[id].Invoke();
         }
     }

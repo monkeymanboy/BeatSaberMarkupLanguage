@@ -2,11 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.TypeHandlers
@@ -28,33 +25,41 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             Polyglot.LocalizedTextMeshProUGUI localizer = obj.GetComponentInChildren<Polyglot.LocalizedTextMeshProUGUI>();
             if (localizer != null)
                 GameObject.Destroy(localizer);
+
             TextMeshProUGUI label = obj.GetComponentInChildren<TextMeshProUGUI>();
-            if (label != null && data.ContainsKey("text"))
-                label.text = data["text"];
+            if (label != null && data.TryGetValue("text", out string text))
+                label.text = text;
+
             Image glowImage = obj.gameObject.GetComponentsInChildren<Image>().FirstOrDefault(x => x.gameObject.name == "Glow");
-            if(glowImage != null)
-                if (data.ContainsKey("glowColor") && data["glowColor"] != "none")
+            if (glowImage != null)
+            {
+                if (data.TryGetValue("glowColor", out string glowColor) && glowColor != "none")
                 {
-                    ColorUtility.TryParseHtmlString(data["glowColor"], out Color color);
+                    ColorUtility.TryParseHtmlString(glowColor, out Color color);
                     glowImage.color = color;
                 }
                 else
                 {
                     glowImage.gameObject.SetActive(false);
                 }
-            if (data.ContainsKey("onClick"))
+            }
+
+            if (data.TryGetValue("onClick", out string onClick))
             {
                 button.onClick.AddListener(delegate
                 {
-                    if (!parserParams.actions.ContainsKey(data["onClick"]))
-                        throw new Exception("on-click action '" + data["onClick"] + "' not found");
-                    parserParams.actions[data["onClick"]].Invoke();
+                    if (!parserParams.actions.TryGetValue(onClick, out BSMLAction onClickAction))
+                        throw new Exception("on-click action '" + onClick + "' not found");
+
+                    onClickAction.Invoke();
                 });
             }
-            if (data.ContainsKey("clickEvent"))
+
+            if (data.TryGetValue("clickEvent", out string clickEvent))
             {
-                button.onClick.AddListener(delegate {
-                    parserParams.EmitEvent(data["clickEvent"]);
+                button.onClick.AddListener(delegate
+                {
+                    parserParams.EmitEvent(clickEvent);
                 });
             }
         }

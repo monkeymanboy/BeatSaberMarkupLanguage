@@ -1,20 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace BeatSaberMarkupLanguage.Components
 {
-    //Yoinked from customui, it do be like that sometimes
+    // Yoinked from CustomUI, it do be like that sometimes
     public class ClickableText : TextMeshProUGUI, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler, IEventSystemHandler
     {
         public Color highlightColor = new Color(0.60f, 0.80f, 1);
         public Color defaultColor = Color.white;
         public Action<PointerEventData> OnClickEvent, PointerEnterEvent, PointerExitEvent;
+
         public void OnPointerClick(PointerEventData eventData)
         {
             color = defaultColor;

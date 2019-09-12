@@ -1,14 +1,10 @@
-﻿using BeatSaberMarkupLanguage.Attributes;
-using BS_Utils.Utilities;
+﻿using BS_Utils.Utilities;
 using Polyglot;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using VRUI;
@@ -20,39 +16,40 @@ namespace BeatSaberMarkupLanguage.Settings
     {
         private Button button;
         private static BSMLSettings _instance = null;
+
+        private ModSettingsFlowCoordinator flowCoordinator;
+
+        public List<CustomCellInfo> settingsMenus = new List<CustomCellInfo>();
+
         public static BSMLSettings instance
         {
             get
             {
                 if (!_instance)
                     _instance = new GameObject("BSMLSettings").AddComponent<BSMLSettings>();
+
                 return _instance;
             }
-            private set
-            {
-                _instance = value;
-            }
+            private set => _instance = value;
         }
 
-        void Awake()
+        private void Awake()
         {
             DontDestroyOnLoad(this.gameObject);
         }
 
-        public List<CustomCellInfo> settingsMenus = new List<CustomCellInfo>();
-
-        private ModSettingsFlowCoordinator flowCoordinator;
-        
         public void AddSettingsMenu(string name, string resource, object host)
         {
             if (settingsMenus.Any(x => x.text == name))
                 return;
+
             if (settingsMenus.Count == 0)
             {
                 VRUIViewController aboutController = BeatSaberUI.CreateViewController<VRUIViewController>();
                 SetupViewControllerTransform(aboutController);
                 settingsMenus.Add(new SettingsMenu("About", aboutController, BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), "BeatSaberMarkupLanguage.Views.settings-about.bsml"), aboutController.gameObject, this)));
             }
+
             VRUIViewController viewController = BeatSaberUI.CreateViewController<VRUIViewController>();
             SetupViewControllerTransform(viewController);
             settingsMenus.Add(new SettingsMenu(name, viewController, BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetCallingAssembly(), resource), viewController.gameObject, host)));
@@ -62,30 +59,30 @@ namespace BeatSaberMarkupLanguage.Settings
         public IEnumerator AddButtonToMainScreen()
         {
             Transform transform = null;
-            while (transform == null) {
+            while (transform == null)
+            {
                 try
                 {
                     transform = GameObject.Find("MainMenuViewController/BottomPanel/Buttons").transform as RectTransform;
                 }
-                catch
-                {
-
-                }
+                catch { }
                 yield return new WaitForFixedUpdate();
             }
+
             button = Instantiate(transform.GetChild(0), transform).GetComponent<Button>();
             button.transform.GetChild(0).GetChild(1).GetComponentInChildren<LocalizedTextMeshProUGUI>().Key = "Mod Settings";
             button.onClick.AddListener(PresentSettings);
             button.transform.SetSiblingIndex(0);
-            if(settingsMenus.Count == 0)button.gameObject.SetActive(false);
+
+            if (settingsMenus.Count == 0)
+                button.gameObject.SetActive(false);
         }
 
         private void PresentSettings()
         {
-            if(flowCoordinator == null)
-            {
+            if (flowCoordinator == null)
                 flowCoordinator = new GameObject().AddComponent<ModSettingsFlowCoordinator>();
-            }
+
             Resources.FindObjectsOfTypeAll<MainFlowCoordinator>().First().InvokeMethod("PresentFlowCoordinator", new object[] {flowCoordinator, new Action(delegate{
                 flowCoordinator.ShowInitial();
             }), false, false });

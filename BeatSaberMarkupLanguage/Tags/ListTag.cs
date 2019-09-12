@@ -1,11 +1,6 @@
 ﻿using BeatSaberMarkupLanguage.Components;
 using BS_Utils.Utilities;
 using HMUI;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -24,6 +19,7 @@ namespace BeatSaberMarkupLanguage.Tags
             GameObject gameObject = new GameObject();
             gameObject.name = "BSMLList";
             gameObject.SetActive(false);
+
             TableView tableView = gameObject.AddComponent<TableView>();
             CustomListTableData tableData = container.gameObject.AddComponent<CustomListTableData>();
             tableData.tableView = tableView;

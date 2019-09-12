@@ -1,10 +1,5 @@
 ﻿using BeatSaberMarkupLanguage.Components;
-using HMUI;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,11 +16,13 @@ namespace BeatSaberMarkupLanguage.Tags
             button.name = "BSMLPageButton";
             button.interactable = true;
             button.gameObject.AddComponent<PageButton>();
+
             LayoutElement layoutElement = button.gameObject.AddComponent<LayoutElement>();
             layoutElement.preferredWidth = 40;
             layoutElement.preferredHeight = 6;
             layoutElement.flexibleHeight = 0;
             layoutElement.flexibleWidth = 0;
+
             ContentSizeFitter sizeFitter = button.gameObject.AddComponent<ContentSizeFitter>();
             sizeFitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
             sizeFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
