@@ -47,7 +47,8 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         private IEnumerator SetInitialText()
         {
             yield return new WaitForFixedUpdate();
-            yield return new WaitForSeconds(0.1f); // Wait a little longer
+            text.text = TextForValue(Value);
+            yield return new WaitForSeconds(0.1f); // If the first one is too fast, don't yell at me pls
             text.text = TextForValue(Value);
         }
 
