@@ -59,7 +59,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         public TableCell CellForIdx(TableView tableView, int idx)
         {
             EnvironmentTableCell environmentTableCell = GetTableCell();
-            environmentTableCell.text = values[idx].ToString();
+            environmentTableCell.text = formatter == null ? values[idx].ToString() : (formatter.Invoke(values[idx]) as string);
             return environmentTableCell;
         }
 
