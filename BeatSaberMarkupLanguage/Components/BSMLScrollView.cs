@@ -8,7 +8,6 @@ namespace BeatSaberMarkupLanguage.Components
     {
         public override void Setup()
         {
-            Console.WriteLine("Setup");
             _contentHeight = (_contentRectTransform.GetChild(0).transform as RectTransform).rect.height;
             _scrollPageHeight = _viewport.rect.height;
             bool active = _contentHeight > _viewport.rect.height;

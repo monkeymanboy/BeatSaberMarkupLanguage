@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.Components
 {
@@ -9,6 +10,7 @@ namespace BeatSaberMarkupLanguage.Components
 
         private void Start()
         {
+            LayoutRebuilder.ForceRebuildLayoutImmediate(transform as RectTransform);
             StartCoroutine(SetupScrollView());
         }
         private IEnumerator SetupScrollView()
