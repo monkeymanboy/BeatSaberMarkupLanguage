@@ -4,6 +4,7 @@ using BeatSaberMarkupLanguage.Tags;
 using BeatSaberMarkupLanguage.TypeHandlers;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Xml;
@@ -17,9 +18,12 @@ namespace BeatSaberMarkupLanguage
         private List<TypeHandler> typeHandlers;
 
         private XmlDocument doc = new XmlDocument();
+        private XmlReaderSettings readerSettings = new XmlReaderSettings();
 
         public void Awake()
         {
+            readerSettings.IgnoreComments = true;
+
             foreach (BSMLTag tag in Utilities.GetListOfType<BSMLTag>())
                 RegisterTag(tag);
 
@@ -39,7 +43,7 @@ namespace BeatSaberMarkupLanguage
 
         public BSMLParserParams Parse(string content, GameObject parent, object host = null)
         {
-            doc.LoadXml(content);
+            doc.Load(XmlReader.Create(new StringReader(content), readerSettings));
             BSMLParserParams parserParams = new BSMLParserParams();
             parserParams.host = host;
             if (host != null)
