@@ -18,6 +18,8 @@ namespace BeatSaberMarkupLanguage.Settings
         protected VRUIViewController activeController;
 
         private Stack<VRUIViewController> submenuStack = new Stack<VRUIViewController>();
+        private bool isPresenting;
+        public bool isAnimating;
 
         protected override void DidActivate(bool firstActivation, ActivationType activationType)
         {
@@ -31,7 +33,7 @@ namespace BeatSaberMarkupLanguage.Settings
                 settingsMenuListViewController.clickedMenu += OpenMenu;
                 SetViewControllerToNavigationConctroller(navigationController, settingsMenuListViewController);
                 ProvideInitialViewControllers(navigationController);
-
+                
                 foreach (CustomCellInfo cellInfo in BSMLSettings.instance.settingsMenus)
                     (cellInfo as SettingsMenu).parserParams.AddEvent("back", Back);
             }
@@ -44,6 +46,7 @@ namespace BeatSaberMarkupLanguage.Settings
 
         public void OpenMenu(VRUIViewController viewController, bool isSubmenu, bool isBack)
         {
+            if (isPresenting) return;
             if (!isBack)
             {
                 if (isSubmenu)
@@ -55,8 +58,10 @@ namespace BeatSaberMarkupLanguage.Settings
             bool wasActive = activeController != null;
             if (wasActive)
                 PopViewControllerFromNavigationController(navigationController, null, immediately: true);
-
-            PushViewControllerToNavigationController(navigationController, viewController, null, wasActive);
+            PushViewControllerToNavigationController(navigationController, viewController, delegate
+            {
+                isPresenting = false;
+            }, wasActive);
             activeController = viewController;
         }
 
@@ -67,6 +72,7 @@ namespace BeatSaberMarkupLanguage.Settings
 
             settingsMenuListViewController.list.tableView.SelectCellWithIdx(0);
             OpenMenu((BSMLSettings.instance.settingsMenus.First() as SettingsMenu).viewController);
+            isPresenting = true;
         }
 
         [UIAction("ok-click")]
@@ -85,6 +91,7 @@ namespace BeatSaberMarkupLanguage.Settings
         [UIAction("cancel-click")]
         private void Cancel()
         {
+            if (isPresenting || isAnimating) return;
             Resources.FindObjectsOfTypeAll<MainFlowCoordinator>().First().InvokeMethod("DismissFlowCoordinator", new object[] { this, null, false });
             EmitEventToAll("cancel");
         }

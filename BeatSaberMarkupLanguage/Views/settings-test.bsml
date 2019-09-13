@@ -1,4 +1,4 @@
-<settings-container>
+<scrollable-settings-container>
   <string-setting text='string test' value='string-value'></string-setting>
   <slider-setting text='slider test' min='-10' max='50' increment='1' value='slider-value' integer-only='true' formatter='format'></slider-setting>
   <list-slider-setting text='Dropdown Test' value='list-choice' choices='list-options'></list-slider-setting>
@@ -8,4 +8,5 @@
       <clickable-text text='Back' click-event='back'></clickable-text>
     </settings-container>
   </settings-submenu>
-</settings-container>
+  <string-setting text='string 3' value='string-value'></string-setting>
+</scrollable-settings-container>

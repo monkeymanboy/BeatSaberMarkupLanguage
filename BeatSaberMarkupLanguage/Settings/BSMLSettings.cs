@@ -82,9 +82,10 @@ namespace BeatSaberMarkupLanguage.Settings
         {
             if (flowCoordinator == null)
                 flowCoordinator = new GameObject().AddComponent<ModSettingsFlowCoordinator>();
-
+            flowCoordinator.isAnimating = true;
             Resources.FindObjectsOfTypeAll<MainFlowCoordinator>().First().InvokeMethod("PresentFlowCoordinator", new object[] {flowCoordinator, new Action(delegate{
                 flowCoordinator.ShowInitial();
+                flowCoordinator.isAnimating = false;
             }), false, false });
         }
 

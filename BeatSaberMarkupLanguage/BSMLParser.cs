@@ -85,12 +85,14 @@ namespace BeatSaberMarkupLanguage
                 throw new Exception("Tag type '" + node.Name + "' not found");
 
             GameObject currentNode = currentTag.CreateObject(parent.transform);
+            List<ComponentTypeWithData> componentTypes = new List<ComponentTypeWithData>();
             foreach (TypeHandler typeHandler in typeHandlers)
             {
                 Component component = currentNode.GetComponent((typeHandler.GetType().GetCustomAttributes(typeof(ComponentHandler), true).FirstOrDefault() as ComponentHandler).type);
                 if (component != null)
                 {
-                    Dictionary<string, string> data = new Dictionary<string, string>();
+                    ComponentTypeWithData componentType = new ComponentTypeWithData();
+                    componentType.data = new Dictionary<string, string>();
                     foreach (KeyValuePair<string, string[]> parameters in typeHandler.Props)
                     {
                         foreach (string alias in parameters.Value)
@@ -104,20 +106,24 @@ namespace BeatSaberMarkupLanguage
                                     if (!parserParams.values.TryGetValue(valueID, out BSMLValue uiValue))
                                         throw new Exception("No UIValue exists with the id '" + valueID + "'");
 
-                                    data.Add(parameters.Key, uiValue.GetValue().ToString());
+                                    componentType.data.Add(parameters.Key, uiValue.GetValue().ToString());
                                 }
                                 else
                                 {
-                                    data.Add(parameters.Key, value);
+                                    componentType.data.Add(parameters.Key, value);
                                 }
 
                                 break;
                             }
                         }
                     }
-
-                    typeHandler.HandleType(component, data, parserParams);
+                    componentType.typeHandler = typeHandler;
+                    componentType.component = component;
+                    componentTypes.Add(componentType);
                 }
+            }
+            foreach(ComponentTypeWithData componentType in componentTypes){
+                componentType.typeHandler.HandleType(componentType.component, componentType.data, parserParams);
             }
 
             object host = parserParams.host;
@@ -138,7 +144,19 @@ namespace BeatSaberMarkupLanguage
             foreach (XmlNode childNode in node.ChildNodes)
                 HandleNode(childNode, currentNode, parserParams);
 
+            foreach (ComponentTypeWithData componentType in componentTypes)
+            {
+                componentType.typeHandler.HandleTypeAfterChildren(componentType.component, componentType.data, parserParams);
+            }
+
             return currentNode;
+        }
+
+        internal struct ComponentTypeWithData
+        {
+            public TypeHandler typeHandler;
+            public Component component;
+            public Dictionary<string, string> data;
         }
     }
 }

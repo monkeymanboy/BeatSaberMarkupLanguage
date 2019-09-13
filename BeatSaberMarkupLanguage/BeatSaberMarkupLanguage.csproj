@@ -86,7 +86,9 @@
     <Compile Include="Attributes\UIParams.cs" />
     <Compile Include="Attributes\UIValue.cs" />
     <Compile Include="BeatSaberUI.cs" />
+    <Compile Include="Components\BSMLScrollView.cs" />
     <Compile Include="Components\ClickableText.cs" />
+    <Compile Include="Components\ScrollViewContent.cs" />
     <Compile Include="Components\Settings\BoolSetting.cs" />
     <Compile Include="Components\Settings\DropDownListSetting.cs" />
     <Compile Include="Components\Settings\GenericSliderSetting.cs" />
@@ -125,6 +127,7 @@
     <Compile Include="Tags\LeaderboardTag.cs" />
     <Compile Include="Tags\ListTag.cs" />
     <Compile Include="Tags\PageButtonTag.cs" />
+    <Compile Include="Tags\ScrollableSettingsContainerTag.cs" />
     <Compile Include="Tags\SettingsContainerTag.cs" />
     <Compile Include="Tags\Settings\BoolSettingTag.cs" />
     <Compile Include="Tags\Settings\DropdownListSettingTag.cs" />
