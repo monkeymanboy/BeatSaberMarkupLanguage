@@ -80,6 +80,8 @@ namespace BeatSaberMarkupLanguage
             foreach (KeyValuePair<string, BSMLAction> action in parserParams.actions.Where(x => x.Key.StartsWith("#")))
                 parserParams.AddEvent(action.Key.Substring(1), delegate { action.Value.Invoke(); });
 
+            parserParams.EmitEvent("post-parse");
+            
             return parserParams;
         }
 
