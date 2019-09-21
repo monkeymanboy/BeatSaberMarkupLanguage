@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.Parser
 {
     public class BSMLParserParams
     {
         public object host;
+        public Dictionary<string, GameObject> objectsWithID = new Dictionary<string, GameObject>();
         public Dictionary<string, BSMLAction> actions = new Dictionary<string, BSMLAction>();
         public Dictionary<string, BSMLValue> values = new Dictionary<string, BSMLValue>();
         public Dictionary<string, Action> events = new Dictionary<string, Action>();

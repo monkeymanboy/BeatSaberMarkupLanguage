@@ -119,6 +119,10 @@ namespace BeatSaberMarkupLanguage
 
                                 break;
                             }
+                            if(alias == "_children")
+                            {
+                                componentType.data.Add(parameters.Key, node.InnerXml);
+                            }
                         }
                     }
                     componentType.typeHandler = typeHandler;
@@ -133,6 +137,7 @@ namespace BeatSaberMarkupLanguage
             object host = parserParams.host;
             if (host != null && node.Attributes["id"] != null)
             {
+                parserParams.objectsWithID.Add(node.Attributes["id"].Value, currentNode);
                 foreach (FieldInfo fieldInfo in host.GetType().GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public))
                 {
                     UIComponent uicomponent = fieldInfo.GetCustomAttributes(typeof(UIComponent), true).FirstOrDefault() as UIComponent;
@@ -144,9 +149,9 @@ namespace BeatSaberMarkupLanguage
                         fieldInfo.SetValue(host, currentNode);
                 }
             }
-
-            foreach (XmlNode childNode in node.ChildNodes)
-                HandleNode(childNode, currentNode, parserParams);
+            if (currentTag.AddChildren)
+                foreach (XmlNode childNode in node.ChildNodes)
+                    HandleNode(childNode, currentNode, parserParams);
 
             foreach (ComponentTypeWithData componentType in componentTypes)
             {

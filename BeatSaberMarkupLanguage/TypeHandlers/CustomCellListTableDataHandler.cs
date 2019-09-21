@@ -6,13 +6,12 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using static BeatSaberMarkupLanguage.Components.CustomListTableData;
 using static HMUI.TableView;
 
 namespace BeatSaberMarkupLanguage.TypeHandlers
 {
-    [ComponentHandler(typeof(CustomListTableData))]
-    public class CustomListTableDataHandler : TypeHandler
+    [ComponentHandler(typeof(CustomCellListTableData))]
+    public class CustomCellListTableDataHandler : TypeHandler
     {
         public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
         {
@@ -22,14 +21,14 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "id", new[]{ "id" } },
             { "listWidth", new[] { "list-width" } },
             { "listHeight", new[] { "list-height" } },
-            { "expandCell", new[] { "expand-cell" } },
-            { "listStyle", new[] { "list-style" } },
-            { "listDirection", new[] { "list-direction" } }
+            { "listDirection", new[] { "list-direction" } },
+            { "data", new[] { "contents", "data" } },
+            { "cellTemplate", new[] { "_children" } }
         };
 
         public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)
         {
-            CustomListTableData tableData = obj as CustomListTableData;
+            CustomCellListTableData tableData = obj as CustomCellListTableData;
             if (data.TryGetValue("selectCell", out string selectCell))
             {
                 tableData.tableView.didSelectCellWithIdxEvent += delegate (TableView table, int index)
@@ -37,27 +36,24 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                     if (!parserParams.actions.TryGetValue(selectCell, out BSMLAction action))
                         throw new Exception("select-cell action '" + data["onClick"] + "' not found");
 
-                    action.Invoke(table, index);
+                    action.Invoke(table, (table.dataSource as CustomCellListTableData).data[index]);
                 };
             }
 
             if (data.TryGetValue("listDirection", out string listDirection))
                 tableData.tableView.SetPrivateField("_tableType", (TableType)Enum.Parse(typeof(TableType), listDirection));
 
-            if (data.TryGetValue("listStyle", out string listStyle))
-                tableData.Style = (ListStyle)Enum.Parse(typeof(ListStyle), listStyle);
-
             if (data.TryGetValue("cellSize", out string cellSize))
                 tableData.cellSize = Parse.Float(cellSize);
 
-            if (data.TryGetValue("expandCell", out string expandCell))
-                tableData.expandCell = Parse.Bool(expandCell);
+            if (data.TryGetValue("cellTemplate", out string cellTemplate))
+                tableData.cellTemplate = "<bg>"+cellTemplate+"</bg>";
 
             if (data.TryGetValue("data", out string value))
             {
                 if (!parserParams.values.TryGetValue(value, out BSMLValue contents))
                     throw new Exception("value '" + value + "' not found");
-                tableData.data = contents.GetValue() as List<CustomCellInfo>;
+                tableData.data = contents.GetValue() as List<object>;
                 tableData.tableView.ReloadData();
             }
 

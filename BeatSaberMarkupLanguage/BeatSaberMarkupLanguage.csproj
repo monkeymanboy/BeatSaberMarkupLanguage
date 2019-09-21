@@ -88,6 +88,7 @@
     <Compile Include="BeatSaberUI.cs" />
     <Compile Include="Components\BSMLScrollView.cs" />
     <Compile Include="Components\ClickableText.cs" />
+    <Compile Include="Components\CustomCellListTableData.cs" />
     <Compile Include="Components\ScrollViewContent.cs" />
     <Compile Include="Components\Settings\BoolSetting.cs" />
     <Compile Include="Components\Settings\DropDownListSetting.cs" />
@@ -121,6 +122,7 @@
     <Compile Include="Tags\BSMLTag.cs" />
     <Compile Include="Tags\ButtonTag.cs" />
     <Compile Include="Tags\ClickableTextTag.cs" />
+    <Compile Include="Tags\CustomListTag.cs" />
     <Compile Include="Tags\GridLayoutTag.cs" />
     <Compile Include="Tags\HorizontalLayoutTag.cs" />
     <Compile Include="Tags\ImageTag.cs" />
@@ -145,6 +147,7 @@
     <Compile Include="TypeHandlers\ButtonHandler.cs" />
     <Compile Include="TypeHandlers\ClickableTextHandler.cs" />
     <Compile Include="TypeHandlers\ContentSizeFitterHandler.cs" />
+    <Compile Include="TypeHandlers\CustomCellListTableDataHandler.cs" />
     <Compile Include="TypeHandlers\CustomListTableDataHandler.cs" />
     <Compile Include="TypeHandlers\GridLayoutGroupHandler.cs" />
     <Compile Include="TypeHandlers\HorizontalOrVerticalLayoutGroupHandler.cs" />
