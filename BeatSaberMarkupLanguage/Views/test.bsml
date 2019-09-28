@@ -7,7 +7,9 @@
       <custom-list visible-cells='3' id='list' contents='contents' select-cell='cell click'>
         <horizontal>
           <text text='~title'></text>
-          <text id='cell-selected' text='SELECTED'></text>
+          <text tags='selected' text='SELECTED'></text>
+          <text tags='hovered' text='HOVERED'></text>
+          <text tags='un-selected-un-hovered' text='NORMAL'></text>
           <button text='button' on-click='button-click'></button>
         </horizontal>
       </custom-list>

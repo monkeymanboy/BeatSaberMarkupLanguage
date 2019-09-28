@@ -23,6 +23,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "listHeight", new[] { "list-height" } },
             { "listDirection", new[] { "list-direction" } },
             { "data", new[] { "contents", "data" } },
+            { "cellClickable", new[] { "clickable-cells" } },
             { "cellTemplate", new[] { "_children" } }
         };
 
@@ -48,6 +49,9 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 
             if (data.TryGetValue("cellTemplate", out string cellTemplate))
                 tableData.cellTemplate = "<bg>"+cellTemplate+"</bg>";
+
+            if (data.TryGetValue("cellClickable", out string cellClickable))
+                tableData.clickableCells = Parse.Bool(cellClickable);
 
             if (data.TryGetValue("data", out string value))
             {

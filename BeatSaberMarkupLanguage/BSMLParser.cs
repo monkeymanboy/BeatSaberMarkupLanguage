@@ -139,7 +139,6 @@ namespace BeatSaberMarkupLanguage
             object host = parserParams.host;
             if (host != null && node.Attributes["id"] != null)
             {
-                parserParams.objectsWithID.Add(node.Attributes["id"].Value, currentNode);
                 foreach (FieldInfo fieldInfo in host.GetType().GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public))
                 {
                     UIComponent uicomponent = fieldInfo.GetCustomAttributes(typeof(UIComponent), true).FirstOrDefault() as UIComponent;
@@ -151,6 +150,9 @@ namespace BeatSaberMarkupLanguage
                         fieldInfo.SetValue(host, currentNode);
                 }
             }
+            if (host != null && node.Attributes["tags"] != null)
+                parserParams.AddObjectTags(currentNode, node.Attributes["tags"].Value.Split(','));
+
             if (currentTag.AddChildren)
                 foreach (XmlNode childNode in node.ChildNodes)
                     HandleNode(childNode, currentNode, parserParams);

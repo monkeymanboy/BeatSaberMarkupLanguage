@@ -12,15 +12,20 @@ namespace BeatSaberMarkupLanguage.Components
         public string cellTemplate;
         public float cellSize = 8.5f;
         public TableView tableView;
+        public bool clickableCells = true;
 
         public virtual TableCell CellForIdx(TableView tableView, int idx)
         {
             CustomCellTableCell tableCell = new GameObject().AddComponent<CustomCellTableCell>();
-            tableCell.gameObject.AddComponent<Touchable>();
-            tableCell.interactable = true;
+            if (clickableCells)
+            {
+                tableCell.gameObject.AddComponent<Touchable>();
+                tableCell.interactable = true;
+            }
             tableCell.reuseIdentifier = "BSMLCustomCellListCell";
             tableCell.name = "BSMLCustomTableCell";
             tableCell.parserParams = BSMLParser.instance.Parse(cellTemplate, tableCell.gameObject, data[idx]);
+            tableCell.SetupPostParse();
             return tableCell;
         }
 
@@ -37,6 +42,16 @@ namespace BeatSaberMarkupLanguage.Components
     public class CustomCellTableCell : TableCell
     {
         public BSMLParserParams parserParams;
+        public List<GameObject> selectedTags;
+        public List<GameObject> hoveredTags;
+        public List<GameObject> neitherTags;
+
+        internal void SetupPostParse()
+        {
+            selectedTags = parserParams.GetObjectsWithTag("selected");
+            hoveredTags = parserParams.GetObjectsWithTag("hovered");
+            neitherTags = parserParams.GetObjectsWithTag("un-selected-un-hovered");
+        }
 
         protected override void SelectionDidChange(TransitionType transitionType)
         {
@@ -50,14 +65,20 @@ namespace BeatSaberMarkupLanguage.Components
 
         public virtual void RefreshVisuals()
         {
-            if (parserParams.objectsWithID.TryGetValue("cell-selected", out GameObject selected))
+            foreach (GameObject gameObject in selectedTags)
             {
-                selected.SetActive(base.selected);
+                gameObject.SetActive(base.selected);
             }
-            if (parserParams.objectsWithID.TryGetValue("cell-unselected", out GameObject unselected))
+            foreach (GameObject gameObject in hoveredTags)
             {
-                unselected.SetActive(!base.selected);
+                gameObject.SetActive(base.highlighted);
             }
+            foreach (GameObject gameObject in neitherTags)
+            {
+                gameObject.SetActive(!(base.selected || base.highlighted));
+            }
+            if (parserParams.actions.TryGetValue("refresh-visuals", out BSMLAction action))
+                action.Invoke(base.selected, base.highlighted);
         }
     }
 }
