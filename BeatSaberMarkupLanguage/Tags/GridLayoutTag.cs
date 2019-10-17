@@ -1,9 +1,4 @@
 ﻿using BeatSaberMarkupLanguage.Components;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,8 +16,12 @@ namespace BeatSaberMarkupLanguage.Tags
             gameObject.AddComponent<GridLayoutGroup>();
             gameObject.AddComponent<ContentSizeFitter>();
             gameObject.AddComponent<Backgroundable>();
+
             RectTransform rectTransform = gameObject.transform as RectTransform;
-            rectTransform.sizeDelta = new Vector2(BSMLParser.SCREEN_WIDTH, BSMLParser.SCREEN_HEIGHT);
+            rectTransform.anchorMin = new Vector2(0, 0);
+            rectTransform.anchorMax = new Vector2(1, 1);
+            rectTransform.sizeDelta = new Vector2(0, 0);
+
             return gameObject;
         }
     }

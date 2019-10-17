@@ -2,9 +2,6 @@
 using BeatSaberMarkupLanguage.Parser;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
@@ -20,38 +17,54 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
             { "setEvent", new[]{ "set-event"} },
             { "getEvent", new[]{ "get-event"} },
             { "options", new[]{ "options", "choices" } },
-            { "applyOnChange", new[] { "apply-on-change" } }
+            { "applyOnChange", new[] { "apply-on-change" } },
+            { "formatter", new[] { "formatter" } }
         };
 
         public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)
         {
             ListSetting listSetting = obj as ListSetting;
-            if (data.ContainsKey("text"))
-                listSetting.LabelText = data["text"];
-            if (data.ContainsKey("applyOnChange"))
-                listSetting.updateOnChange = bool.Parse(data["applyOnChange"]);
-            if (data.ContainsKey("onChange"))
+
+            if (data.TryGetValue("text", out string text))
+                listSetting.LabelText = text;
+
+            if (data.TryGetValue("formatter", out string formatter))
+                listSetting.formatter = parserParams.actions[formatter];
+
+            if (data.TryGetValue("applyOnChange", out string applyOnChange))
+                listSetting.updateOnChange = Parse.Bool(applyOnChange);
+
+            if (data.TryGetValue("onChange", out string onChange))
             {
-                if (!parserParams.actions.ContainsKey(data["onChange"]))
-                    throw new Exception("on-change action '" + data["onChange"] + "' not found");
-                listSetting.onChange = parserParams.actions[data["onChange"]];
+                if (!parserParams.actions.TryGetValue(onChange, out BSMLAction onChangeAction))
+                    throw new Exception("on-change action '" + onChange + "' not found");
+
+                listSetting.onChange = onChangeAction;
             }
-            if (data.ContainsKey("value"))
+
+            if (data.TryGetValue("value", out string value))
             {
-                if (!parserParams.values.ContainsKey(data["value"]))
-                    throw new Exception("value '" + data["value"] + "' not found");
-                listSetting.associatedValue = parserParams.values[data["value"]];
+                if (!parserParams.values.TryGetValue(value, out BSMLValue associatedValue))
+                    throw new Exception("value '" + value + "' not found");
+
+                listSetting.associatedValue = associatedValue;
             }
-            if (data.ContainsKey("options"))
+
+            if (data.TryGetValue("options", out string options))
             {
-                if (!parserParams.values.ContainsKey(data["options"]))
-                    throw new Exception("options '" + data["options"] + "' not found");
-                listSetting.values = parserParams.values[data["options"]].GetValue() as List<object>;
+                if (!parserParams.values.TryGetValue(options, out BSMLValue values))
+                    throw new Exception("options '" + options + "' not found");
+
+                listSetting.values = values.GetValue() as List<object>;
             }
             else
+            {
                 throw new Exception("list must have associated options");
-            parserParams.AddEvent(data.ContainsKey("setEvent") ? data["setEvent"] : "apply", listSetting.ApplyValue);
-            parserParams.AddEvent(data.ContainsKey("getEvent") ? data["getEvent"] : "cancel", listSetting.ReceiveValue);
+            }
+
+            parserParams.AddEvent(data.TryGetValue("setEvent", out string setEvent) ? setEvent : "apply", listSetting.ApplyValue);
+            parserParams.AddEvent(data.TryGetValue("getEvent", out string getEvent) ? getEvent : "cancel", listSetting.ReceiveValue);
+
             listSetting.Setup();
         }
     }

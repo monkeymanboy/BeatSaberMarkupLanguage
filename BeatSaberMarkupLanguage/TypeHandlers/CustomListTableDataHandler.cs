@@ -4,10 +4,6 @@ using BS_Utils.Utilities;
 using HMUI;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 using static BeatSaberMarkupLanguage.Components.CustomListTableData;
@@ -34,42 +30,58 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
         public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)
         {
             CustomListTableData tableData = obj as CustomListTableData;
-            if (data.ContainsKey("selectCell"))
+            if (data.TryGetValue("selectCell", out string selectCell))
             {
-                tableData.tableView.didSelectCellWithIdxEvent += delegate(HMUI.TableView table, int index) {
-                    if (!parserParams.actions.ContainsKey(data["selectCell"]))
+                tableData.tableView.didSelectCellWithIdxEvent += delegate (TableView table, int index)
+                {
+                    if (!parserParams.actions.TryGetValue(selectCell, out BSMLAction action))
                         throw new Exception("select-cell action '" + data["onClick"] + "' not found");
-                    parserParams.actions[data["selectCell"]].Invoke(table, index);
+
+                    action.Invoke(table, index);
                 };
             }
-            if (data.ContainsKey("listDirection"))
-                tableData.tableView.SetPrivateField("_tableType", (TableType)Enum.Parse(typeof(TableType), data["listDirection"]));
-            if (data.ContainsKey("listStyle"))
-                tableData.Style = (ListStyle) Enum.Parse(typeof(ListStyle), data["listStyle"]);
-            if (data.ContainsKey("cellSize"))
-                tableData.cellSize = float.Parse(data["cellSize"]);
-            if (data.ContainsKey("expandCell"))
-                tableData.expandCell = bool.Parse(data["expandCell"]);
+
+            if (data.TryGetValue("listDirection", out string listDirection))
+                tableData.tableView.SetPrivateField("_tableType", (TableType)Enum.Parse(typeof(TableType), listDirection));
+
+            if (data.TryGetValue("listStyle", out string listStyle))
+                tableData.Style = (ListStyle)Enum.Parse(typeof(ListStyle), listStyle);
+
+            if (data.TryGetValue("cellSize", out string cellSize))
+                tableData.cellSize = Parse.Float(cellSize);
+
+            if (data.TryGetValue("expandCell", out string expandCell))
+                tableData.expandCell = Parse.Bool(expandCell);
+
+            if (data.TryGetValue("data", out string value))
+            {
+                if (!parserParams.values.TryGetValue(value, out BSMLValue contents))
+                    throw new Exception("value '" + value + "' not found");
+                tableData.data = contents.GetValue() as List<CustomCellInfo>;
+                tableData.tableView.ReloadData();
+            }
+
             switch (tableData.tableView.tableType)
             {
                 case TableType.Vertical:
-                    (obj.gameObject.transform as RectTransform).sizeDelta = new Vector2(data.ContainsKey("listWidth") ? float.Parse(data["listWidth"]) : 60, tableData.cellSize * (data.ContainsKey("visibleCells") ? float.Parse(data["visibleCells"]) : 7));
+                    (obj.gameObject.transform as RectTransform).sizeDelta = new Vector2(data.TryGetValue("listWidth", out string vListWidth) ? Parse.Float(vListWidth) : 60, tableData.cellSize * (data.TryGetValue("visibleCells", out string vVisibleCells) ? Parse.Float(vVisibleCells) : 7));
                     tableData.tableView.contentTransform.anchorMin = new Vector2(0, 1);
                     break;
                 case TableType.Horizontal:
-                    (obj.gameObject.transform as RectTransform).sizeDelta = new Vector2(tableData.cellSize * (data.ContainsKey("visibleCells") ? float.Parse(data["visibleCells"]) : 4), data.ContainsKey("listHeight") ? float.Parse(data["listHeight"]) : 40);
+                    (obj.gameObject.transform as RectTransform).sizeDelta = new Vector2(tableData.cellSize * (data.TryGetValue("visibleCells", out string hVisibleCells) ? Parse.Float(hVisibleCells) : 4), data.TryGetValue("listHeight", out string hListHeight) ? Parse.Float(hListHeight) : 40);
                     tableData.tableView.contentTransform.anchorMin = new Vector2(1, 0);
                     break;
             }
-            
+
             obj.gameObject.GetComponent<LayoutElement>().preferredHeight = (obj.gameObject.transform as RectTransform).sizeDelta.y;
             obj.gameObject.GetComponent<LayoutElement>().preferredWidth = (obj.gameObject.transform as RectTransform).sizeDelta.x;
             tableData.tableView.gameObject.SetActive(true);
-            if (data.ContainsKey("id"))
+
+            if (data.TryGetValue("id", out string id))
             {
                 TableViewScroller scroller = tableData.tableView.GetPrivateField<TableViewScroller>("_scroller");
-                parserParams.actions.Add(data["id"] + "#PageUp", new BSMLAction(scroller, scroller.GetType().GetMethod("PageScrollUp", BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)));
-                parserParams.actions.Add(data["id"] + "#PageDown", new BSMLAction(scroller, scroller.GetType().GetMethod("PageScrollDown", BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)));
+                parserParams.AddEvent(id + "#PageUp", scroller.PageScrollUp);
+                parserParams.AddEvent(id + "#PageDown", scroller.PageScrollDown);
             }
         }
     }

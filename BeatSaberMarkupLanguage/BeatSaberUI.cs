@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using BS_Utils.Utilities;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,7 +7,7 @@ using VRUI;
 
 namespace BeatSaberMarkupLanguage
 {
-    //This class is is stuff yoinked from customui to remove the need for a dependency on it
+    //This class is stuff yoinked from CustomUI to remove the need for a dependency on it
     public static class BeatSaberUI
     {
         /// <summary>
@@ -33,7 +30,7 @@ namespace BeatSaberMarkupLanguage
         /// <summary>
         /// Creates a TextMeshProUGUI component.
         /// </summary>
-        /// <param name="parent">Thet ransform to parent the new TextMeshProUGUI component to.</param>
+        /// <param name="parent">The transform to parent the new TextMeshProUGUI component to.</param>
         /// <param name="text">The text to be displayed.</param>
         /// <param name="anchoredPosition">The position the button should be anchored to.</param>
         /// <returns>The newly created TextMeshProUGUI component.</returns>
@@ -45,7 +42,7 @@ namespace BeatSaberMarkupLanguage
         /// <summary>
         /// Creates a TextMeshProUGUI component.
         /// </summary>
-        /// <param name="parent">Thet transform to parent the new TextMeshProUGUI component to.</param>
+        /// <param name="parent">The transform to parent the new TextMeshProUGUI component to.</param>
         /// <param name="text">The text to be displayed.</param>
         /// <param name="anchoredPosition">The position the text component should be anchored to.</param>
         /// <param name="sizeDelta">The size of the text components RectTransform.</param>
@@ -77,6 +74,7 @@ namespace BeatSaberMarkupLanguage
             Polyglot.LocalizedTextMeshProUGUI localizer = _button.GetComponentInChildren<Polyglot.LocalizedTextMeshProUGUI>();
             if (localizer != null)
                 GameObject.Destroy(localizer);
+
             TextMeshProUGUI tmpUgui = _button.GetComponentInChildren<TextMeshProUGUI>();
             if (tmpUgui != null)
                 tmpUgui.text = _text;
@@ -85,17 +83,13 @@ namespace BeatSaberMarkupLanguage
         public static void SetButtonTextSize(this Button _button, float _fontSize)
         {
             if (_button.GetComponentInChildren<TextMeshProUGUI>() != null)
-            {
                 _button.GetComponentInChildren<TextMeshProUGUI>().fontSize = _fontSize;
-            }
         }
 
         public static void ToggleWordWrapping(this Button _button, bool enableWordWrapping)
         {
             if (_button.GetComponentInChildren<TextMeshProUGUI>() != null)
-            {
                 _button.GetComponentInChildren<TextMeshProUGUI>().enableWordWrapping = enableWordWrapping;
-            }
         }
 
         public static void SetButtonIcon(this Button _button, Sprite _icon)
@@ -111,5 +105,13 @@ namespace BeatSaberMarkupLanguage
         }
         #endregion
 
+        public static DismissableNavigationController CreateDismissableNavigationController()
+        {
+            DismissableNavigationController navigationController = CreateViewController<DismissableNavigationController>();
+            Button backButton = GameObject.Instantiate(Resources.FindObjectsOfTypeAll<Button>().First(x => x.name == "BackArrowButton"), navigationController.transform);
+            backButton.name = "BSMLBackButton";
+            navigationController.SetPrivateField("_backButton", backButton);
+            return navigationController;
+        }
     }
 }

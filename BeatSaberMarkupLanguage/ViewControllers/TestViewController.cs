@@ -1,13 +1,8 @@
 ﻿using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components;
 using HMUI;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TMPro;
-using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.ViewControllers
 {
@@ -22,7 +17,23 @@ namespace BeatSaberMarkupLanguage.ViewControllers
         public TextMeshProUGUI text;
 
         [UIComponent("list")]
-        public CustomListTableData tableData;
+        public CustomCellListTableData tableData;
+
+        [UIValue("contents")]
+        public List<object> contents
+        {
+            get
+            {
+                List<object> list = new List<object>();
+                list.Add(new TestListObject("first"));
+                list.Add(new TestListObject("second"));
+                list.Add(new TestListObject("third"));
+                list.Add(new TestListObject("fourth"));
+                list.Add(new TestListObject("fifth"));
+                list.Add(new TestListObject("sixth"));
+                return list;
+            }
+        }
 
         [UIAction("click")]
         private void ButtonPress()
@@ -31,9 +42,24 @@ namespace BeatSaberMarkupLanguage.ViewControllers
         }
 
         [UIAction("cell click")]
-        private void CellClick(TableView tableView, int index)
+        private void CellClick(TableView tableView, TestListObject testObj)
         {
-            text.text = tableData.data[index].text;
+            Logger.log.Debug("Clicked - " + testObj.title);
+        }
+    }
+    public class TestListObject
+    {
+        [UIValue("title")]
+        public string title;
+        public TestListObject(string title)
+        {
+            this.title = title;
+        }
+
+        [UIAction("button-click")]
+        void ClickedButton()
+        {
+            Logger.log.Debug("Button - " + title);
         }
     }
 }

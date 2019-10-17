@@ -1,22 +1,31 @@
 <bg>
-  <vertical child-control-height='false'>
+  <vertical>
     <horizontal bg='panel-top' pad-left='10' pad-right='10' horizontal-fit='PreferredSize'>
       <text id ='sometext' text='~header' align='Center' font-size='10'></text>
     </horizontal>
     <horizontal bg='round-rect-panel' pad='8'>
-      <text text='Testing out some nicely formatted business'></text>
-      <list visible-cells='3' id='list' select-cell='cell click'></list>
+      <custom-list visible-cells='3' id='list' contents='contents' select-cell='cell click'>
+        <horizontal>
+          <text text='~title'></text>
+          <text tags='selected' text='SELECTED'></text>
+          <text tags='hovered' text='HOVERED'></text>
+          <text tags='un-selected-un-hovered' text='NORMAL'></text>
+          <button text='button' on-click='button-click'></button>
+        </horizontal>
+      </custom-list>
     </horizontal>
     <horizontal bg='round-rect-panel' pad='6' spacing='10'>
       <button on-click='click' glow-color='green' text='Test Button'></button>
       <vertical spacing='6'>
-        <page-button on-click='list#PageUp' direction='Up' glow-color='red'></page-button>
-        <page-button on-click='list#PageDown' direction='Down'></page-button>
+        <page-button click-event='list#PageUp' direction='Up' glow-color='red'></page-button>
+        <page-button click-event='list#PageDown' direction='Down'></page-button>
       </vertical>
     </horizontal>
   </vertical>
+  <!--
   <bottom-button-panel>
     <button on-click='click' text='Yee Haw'></button>
     <button on-click='click' text='Cowboy'></button>
   </bottom-button-panel>
+  -->
 </bg>

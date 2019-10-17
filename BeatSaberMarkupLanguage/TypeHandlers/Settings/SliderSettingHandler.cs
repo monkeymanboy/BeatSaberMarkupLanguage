@@ -2,9 +2,6 @@
 using BeatSaberMarkupLanguage.Parser;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
@@ -24,38 +21,54 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
             { "increment", new[] { "increment" } },
             { "minValue", new[] { "min" } },
             { "maxValue", new[] { "max" } },
-            { "isInt", new[] { "integer-only" } }
+            { "isInt", new[] { "integer-only" } },
+            { "formatter", new[] { "formatter" } }
         };
 
         public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)
         {
             SliderSetting sliderSetting = obj as SliderSetting;
-            if (data.ContainsKey("text"))
-                sliderSetting.LabelText = data["text"];
-            if (data.ContainsKey("applyOnChange"))
-                sliderSetting.updateOnChange = bool.Parse(data["applyOnChange"]);
-            if (data.ContainsKey("isInt"))
-                sliderSetting.isInt = bool.Parse(data["isInt"]);
-            if (data.ContainsKey("increment"))
-                sliderSetting.increments = float.Parse(data["increment"]);
-            if (data.ContainsKey("minValue"))
-                sliderSetting.slider.minValue = float.Parse(data["minValue"]);
-            if (data.ContainsKey("maxValue"))
-                sliderSetting.slider.maxValue = float.Parse(data["maxValue"]);
-            if (data.ContainsKey("onChange"))
+
+            if (data.TryGetValue("text", out string text))
+                sliderSetting.LabelText = text;
+
+            if (data.TryGetValue("formatter", out string formatter))
+                sliderSetting.formatter = parserParams.actions[formatter];
+
+            if (data.TryGetValue("applyOnChange", out string applyOnChange))
+                sliderSetting.updateOnChange = Parse.Bool(applyOnChange);
+
+            if (data.TryGetValue("isInt", out string isInt))
+                sliderSetting.isInt = Parse.Bool(isInt);
+
+            if (data.TryGetValue("increment", out string increment))
+                sliderSetting.increments = Parse.Float(increment);
+
+            if (data.TryGetValue("minValue", out string minValue))
+                sliderSetting.slider.minValue = Parse.Float(minValue);
+
+            if (data.TryGetValue("maxValue", out string maxValue))
+                sliderSetting.slider.maxValue = Parse.Float(maxValue);
+
+            if (data.TryGetValue("onChange", out string onChange))
             {
-                if (!parserParams.actions.ContainsKey(data["onChange"]))
-                    throw new Exception("on-change action '" + data["onChange"] + "' not found");
-                sliderSetting.onChange = parserParams.actions[data["onChange"]];
+                if (!parserParams.actions.TryGetValue(onChange, out BSMLAction onChangeAction))
+                    throw new Exception("on-change action '" + onChange + "' not found");
+
+                sliderSetting.onChange = onChangeAction;
             }
-            if (data.ContainsKey("value"))
+
+            if (data.TryGetValue("value", out string value))
             {
-                if (!parserParams.values.ContainsKey(data["value"]))
-                    throw new Exception("value '" + data["value"] + "' not found");
-                sliderSetting.associatedValue = parserParams.values[data["value"]];
+                if (!parserParams.values.TryGetValue(value, out BSMLValue associatedValue))
+                    throw new Exception("value '" + value + "' not found");
+
+                sliderSetting.associatedValue = associatedValue;
             }
-            parserParams.AddEvent(data.ContainsKey("setEvent") ? data["setEvent"] : "apply", sliderSetting.ApplyValue);
-            parserParams.AddEvent(data.ContainsKey("getEvent") ? data["getEvent"] : "cancel", sliderSetting.ReceiveValue);
+
+            parserParams.AddEvent(data.TryGetValue("setEvent", out string setEvent) ? setEvent : "apply", sliderSetting.ApplyValue);
+            parserParams.AddEvent(data.TryGetValue("getEvent", out string getEvent) ? getEvent : "cancel", sliderSetting.ReceiveValue);
+
             sliderSetting.Setup();
         }
     }

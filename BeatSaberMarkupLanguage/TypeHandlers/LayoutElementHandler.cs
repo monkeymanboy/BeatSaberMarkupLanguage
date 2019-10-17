@@ -1,9 +1,5 @@
 ﻿using BeatSaberMarkupLanguage.Parser;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,12 +18,14 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
         public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)
         {
             LayoutElement layoutElement = obj as LayoutElement;
-            if (data.ContainsKey("ignoreLayout"))
-                layoutElement.ignoreLayout = bool.Parse(data["ignoreLayout"]);
-            if (data.ContainsKey("preferredWidth"))
-                layoutElement.preferredWidth = float.Parse(data["preferredWidth"]);
-            if (data.ContainsKey("preferredHeight"))
-                layoutElement.preferredHeight = float.Parse(data["preferredHeight"]);
+            if (data.TryGetValue("ignoreLayout", out string ignoreLayout))
+                layoutElement.ignoreLayout = Parse.Bool(ignoreLayout);
+
+            if (data.TryGetValue("preferredWidth", out string preferredWidth))
+                layoutElement.preferredWidth = Parse.Float(preferredWidth);
+
+            if (data.TryGetValue("preferredHeight", out string preferredHeight))
+                layoutElement.preferredHeight = Parse.Float(preferredHeight);
         }
     }
 }

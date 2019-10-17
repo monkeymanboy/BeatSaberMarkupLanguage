@@ -2,9 +2,6 @@
 using BeatSaberMarkupLanguage.Parser;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
@@ -26,26 +23,35 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
         public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)
         {
             BoolSetting boolSetting = obj as BoolSetting;
-            if (data.ContainsKey("text"))
-                boolSetting.LabelText = data["text"];
-            if (data.ContainsKey("applyOnChange"))
-                boolSetting.updateOnChange = bool.Parse(data["applyOnChange"]);
-            if (data.ContainsKey("initialValue"))
-                boolSetting.Value = bool.Parse(data["initialValue"]);
-            if (data.ContainsKey("onChange"))
+
+            if (data.TryGetValue("text", out string text))
+                boolSetting.LabelText = text;
+
+            if (data.TryGetValue("applyOnChange", out string applyOnChange))
+                boolSetting.updateOnChange = Parse.Bool(applyOnChange);
+
+            if (data.TryGetValue("initialValue", out string initialValue))
+                boolSetting.Value = Parse.Bool(initialValue);
+
+            if (data.TryGetValue("onChange", out string onChange))
             {
-                if (!parserParams.actions.ContainsKey(data["onChange"]))
-                    throw new Exception("on-change action '" + data["onChange"] + "' not found");
-                boolSetting.onChange = parserParams.actions[data["onChange"]];
+                if (!parserParams.actions.TryGetValue(onChange, out BSMLAction onChangeAction))
+                    throw new Exception("on-change action '" + onChange + "' not found");
+
+                boolSetting.onChange = onChangeAction;
             }
-            if (data.ContainsKey("value"))
+
+            if (data.TryGetValue("value", out string value))
             {
-                if (!parserParams.values.ContainsKey(data["value"]))
-                    throw new Exception("value '" + data["value"] + "' not found");
-                boolSetting.associatedValue = parserParams.values[data["value"]];
+                if (!parserParams.values.TryGetValue(value, out BSMLValue associatedValue))
+                    throw new Exception("value '" + value + "' not found");
+
+                boolSetting.associatedValue = associatedValue;
             }
-            parserParams.AddEvent(data.ContainsKey("setEvent") ? data["setEvent"] : "apply", boolSetting.ApplyValue);
-            parserParams.AddEvent(data.ContainsKey("getEvent") ? data["getEvent"] : "cancel", boolSetting.ReceiveValue);
+
+            parserParams.AddEvent(data.TryGetValue("setEvent", out string setEvent) ? setEvent : "apply", boolSetting.ApplyValue);
+            parserParams.AddEvent(data.TryGetValue("getEvent", out string getEvent) ? getEvent : "cancel", boolSetting.ReceiveValue);
+
             boolSetting.Setup();
         }
     }
