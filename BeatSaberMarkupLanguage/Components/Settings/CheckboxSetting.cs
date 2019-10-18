@@ -52,7 +52,8 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 
         public void CheckboxToggled(bool value)
         {
-            ApplyValue();
+            onChange?.Invoke(checkbox.isOn);
+            if (updateOnChange) ApplyValue();
         }
 
         public void ApplyValue()
