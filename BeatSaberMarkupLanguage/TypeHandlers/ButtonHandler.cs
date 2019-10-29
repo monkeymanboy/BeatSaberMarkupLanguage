@@ -16,7 +16,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "text", new[]{"text"} },
             { "glowColor", new[]{"glow-color"} },
             { "onClick", new[]{"on-click"} },
-            { "clickEvent", new[]{"click-event"} }
+            { "clickEvent", new[]{"click-event", "event-click"} }
         };
 
         public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)
