@@ -69,7 +69,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                     break;
                 case TableType.Horizontal:
                     (obj.gameObject.transform as RectTransform).sizeDelta = new Vector2(tableData.cellSize * (data.TryGetValue("visibleCells", out string hVisibleCells) ? Parse.Float(hVisibleCells) : 4), data.TryGetValue("listHeight", out string hListHeight) ? Parse.Float(hListHeight) : 40);
-                    tableData.tableView.contentTransform.anchorMin = new Vector2(1, 0);
+                    tableData.tableView.contentTransform.anchorMin = new Vector2(0.5f, 0);
                     break;
             }
 
