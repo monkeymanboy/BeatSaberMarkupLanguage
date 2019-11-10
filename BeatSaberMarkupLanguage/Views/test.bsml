@@ -1,19 +1,21 @@
 <bg>
   <vertical>
+    <!--
     <horizontal bg='panel-top' pad-left='10' pad-right='10' horizontal-fit='PreferredSize'>
       <text id ='sometext' text='~header' align='Center' font-size='10'></text>
     </horizontal>
+  -->
     <horizontal bg='round-rect-panel' pad='8'>
-      <custom-list visible-cells='3' id='list' contents='contents' select-cell='cell click'>
-        <horizontal>
-          <text text='~title'></text>
-          <text tags='selected' text='SELECTED'></text>
-          <text tags='hovered' text='HOVERED'></text>
-          <text tags='un-selected-un-hovered' text='NORMAL'></text>
-          <button text='button' on-click='button-click'></button>
-        </horizontal>
-      </custom-list>
+      <macro.for-each hosts='contents'>
+        <macro.if value='should-glow'>
+          <button text='~title' on-click='button-click' glow-color='red'></button>
+        </macro.if>
+        <macro.if value='!should-glow'>
+          <button text='~title' on-click='button-click'></button>
+        </macro.if>
+      </macro.for-each>
     </horizontal>
+    <!--
     <horizontal bg='round-rect-panel' pad='6' spacing='10'>
       <button on-click='click' glow-color='green' text='Test Button'></button>
       <vertical spacing='6'>
@@ -21,6 +23,7 @@
         <page-button click-event='list#PageDown' direction='Down'></page-button>
       </vertical>
     </horizontal>
+  -->
   </vertical>
   <!--
   <bottom-button-panel>

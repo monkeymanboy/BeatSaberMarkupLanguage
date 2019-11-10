@@ -25,12 +25,12 @@ namespace BeatSaberMarkupLanguage.ViewControllers
             get
             {
                 List<object> list = new List<object>();
-                list.Add(new TestListObject("first"));
-                list.Add(new TestListObject("second"));
-                list.Add(new TestListObject("third"));
-                list.Add(new TestListObject("fourth"));
-                list.Add(new TestListObject("fifth"));
-                list.Add(new TestListObject("sixth"));
+                list.Add(new TestListObject("first", false));
+                list.Add(new TestListObject("second", true));
+                list.Add(new TestListObject("third", true));
+                list.Add(new TestListObject("fourth", false));
+                list.Add(new TestListObject("fifth", true));
+                list.Add(new TestListObject("sixth", false));
                 return list;
             }
         }
@@ -51,9 +51,12 @@ namespace BeatSaberMarkupLanguage.ViewControllers
     {
         [UIValue("title")]
         public string title;
-        public TestListObject(string title)
+        [UIValue("should-glow")]
+        public bool shouldGlow;
+        public TestListObject(string title, bool shouldGlow)
         {
             this.title = title;
+            this.shouldGlow = shouldGlow;
         }
 
         [UIAction("button-click")]

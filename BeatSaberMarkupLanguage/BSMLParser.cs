@@ -1,4 +1,5 @@
 ﻿using BeatSaberMarkupLanguage.Attributes;
+using BeatSaberMarkupLanguage.Macros;
 using BeatSaberMarkupLanguage.Parser;
 using BeatSaberMarkupLanguage.Tags;
 using BeatSaberMarkupLanguage.TypeHandlers;
@@ -14,7 +15,12 @@ namespace BeatSaberMarkupLanguage
 {
     public class BSMLParser : PersistentSingleton<BSMLParser>
     {
+        internal static string MACRO_PREFIX => "macro.";
+        internal static string RETRIEVE_VALUE_PREFIX => "~";
+        internal static string SUBSCRIVE_EVENT_ACTION_PREFIX => "#";
+
         private Dictionary<string, BSMLTag> tags = new Dictionary<string, BSMLTag>();
+        private Dictionary<string, BSMLMacro> macros = new Dictionary<string, BSMLMacro>();
         private List<TypeHandler> typeHandlers;
 
         private XmlDocument doc = new XmlDocument();
@@ -27,6 +33,9 @@ namespace BeatSaberMarkupLanguage
             foreach (BSMLTag tag in Utilities.GetListOfType<BSMLTag>())
                 RegisterTag(tag);
 
+            foreach (BSMLMacro macro in Utilities.GetListOfType<BSMLMacro>())
+                RegisterMacro(macro);
+
             typeHandlers = Utilities.GetListOfType<TypeHandler>();
         }
 
@@ -34,6 +43,11 @@ namespace BeatSaberMarkupLanguage
         {
             foreach (string alias in tag.Aliases)
                 tags.Add(alias, tag);
+        }
+        public void RegisterMacro(BSMLMacro macro)
+        {
+            foreach (string alias in macro.Aliases)
+                macros.Add(MACRO_PREFIX + alias, macro);
         }
 
         public void RegisterTypeHandler(TypeHandler typeHandler)
@@ -44,6 +58,11 @@ namespace BeatSaberMarkupLanguage
         public BSMLParserParams Parse(string content, GameObject parent, object host = null)
         {
             doc.Load(XmlReader.Create(new StringReader(content), readerSettings));
+            return Parse(doc, parent, host);
+        }
+
+        public BSMLParserParams Parse(XmlNode parentNode, GameObject parent, object host = null)
+        {
             BSMLParserParams parserParams = new BSMLParserParams();
             parserParams.host = host;
             if (host != null)
@@ -74,18 +93,25 @@ namespace BeatSaberMarkupLanguage
                 }
             }
 
-            foreach (XmlNode node in doc.ChildNodes)
+            foreach (XmlNode node in parentNode.ChildNodes)
                 HandleNode(node, parent, parserParams);
 
-            foreach (KeyValuePair<string, BSMLAction> action in parserParams.actions.Where(x => x.Key.StartsWith("#")))
+            foreach (KeyValuePair<string, BSMLAction> action in parserParams.actions.Where(x => x.Key.StartsWith(SUBSCRIVE_EVENT_ACTION_PREFIX)))
                 parserParams.AddEvent(action.Key.Substring(1), delegate { action.Value.Invoke(); });
 
             parserParams.EmitEvent("post-parse");
-            
+
             return parserParams;
         }
 
-        private GameObject HandleNode(XmlNode node, GameObject parent, BSMLParserParams parserParams)
+        public void HandleNode(XmlNode node, GameObject parent, BSMLParserParams parserParams)
+        {
+            if (node.Name.StartsWith(MACRO_PREFIX))
+                HandleMacroNode(node, parent, parserParams);
+            else
+                HandleTagNode(node, parent, parserParams);
+        }
+        private void HandleTagNode(XmlNode node, GameObject parent, BSMLParserParams parserParams)
         {
             if (!tags.TryGetValue(node.Name, out BSMLTag currentTag))
                 throw new Exception("Tag type '" + node.Name + "' not found");
@@ -98,41 +124,14 @@ namespace BeatSaberMarkupLanguage
                 if (component != null)
                 {
                     ComponentTypeWithData componentType = new ComponentTypeWithData();
-                    componentType.data = new Dictionary<string, string>();
-                    foreach (KeyValuePair<string, string[]> parameters in typeHandler.Props)
-                    {
-                        foreach (string alias in parameters.Value)
-                        {
-                            if (node.Attributes[alias] != null)
-                            {
-                                string value = node.Attributes[alias].Value;
-                                if (value.StartsWith("~"))
-                                {
-                                    string valueID = value.Substring(1);
-                                    if (!parserParams.values.TryGetValue(valueID, out BSMLValue uiValue))
-                                        throw new Exception("No UIValue exists with the id '" + valueID + "'");
-
-                                    componentType.data.Add(parameters.Key, uiValue.GetValue().ToString());
-                                }
-                                else
-                                {
-                                    componentType.data.Add(parameters.Key, value);
-                                }
-
-                                break;
-                            }
-                            if(alias == "_children")
-                            {
-                                componentType.data.Add(parameters.Key, node.InnerXml);
-                            }
-                        }
-                    }
+                    componentType.data = GetParameters(node, typeHandler.Props, parserParams);
                     componentType.typeHandler = typeHandler;
                     componentType.component = component;
                     componentTypes.Add(componentType);
                 }
             }
-            foreach(ComponentTypeWithData componentType in componentTypes){
+            foreach (ComponentTypeWithData componentType in componentTypes)
+            {
                 componentType.typeHandler.HandleType(componentType.component, componentType.data, parserParams);
             }
 
@@ -161,8 +160,48 @@ namespace BeatSaberMarkupLanguage
             {
                 componentType.typeHandler.HandleTypeAfterChildren(componentType.component, componentType.data, parserParams);
             }
+        }
+        private void HandleMacroNode(XmlNode node, GameObject parent, BSMLParserParams parserParams)
+        {
+            if (!macros.TryGetValue(node.Name, out BSMLMacro currentMacro))
+                throw new Exception("Macro type '" + node.Name + "' not found");
 
-            return currentNode;
+            Dictionary<string, string> properties = GetParameters(node, currentMacro.Props, parserParams);
+            currentMacro.Execute(node, parent, properties, parserParams);
+        }
+
+        private Dictionary<string, string> GetParameters(XmlNode node, Dictionary<string, string[]> properties, BSMLParserParams parserParams)
+        {
+            Dictionary<string, string> parameters = new Dictionary<string, string>();
+            foreach (KeyValuePair<string, string[]> propertyAliases in properties)
+            {
+                foreach (string alias in propertyAliases.Value)
+                {
+                    if (node.Attributes[alias] != null)
+                    {
+                        string value = node.Attributes[alias].Value;
+                        if (value.StartsWith(RETRIEVE_VALUE_PREFIX))
+                        {
+                            string valueID = value.Substring(1);
+                            if (!parserParams.values.TryGetValue(valueID, out BSMLValue uiValue))
+                                throw new Exception("No UIValue exists with the id '" + valueID + "'");
+
+                            parameters.Add(propertyAliases.Key, uiValue.GetValue().ToString());
+                        }
+                        else
+                        {
+                            parameters.Add(propertyAliases.Key, value);
+                        }
+
+                        break;
+                    }
+                    if (alias == "_children")
+                    {
+                        parameters.Add(propertyAliases.Key, node.InnerXml);
+                    }
+                }
+            }
+            return parameters;
         }
 
         internal struct ComponentTypeWithData
