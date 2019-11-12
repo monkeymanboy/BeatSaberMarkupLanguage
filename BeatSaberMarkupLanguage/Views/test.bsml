@@ -1,30 +1,33 @@
 <bg>
-  <vertical>
-    <!--
-    <horizontal bg='panel-top' pad-left='10' pad-right='10' horizontal-fit='PreferredSize'>
-      <text id ='sometext' text='~header' align='Center' font-size='10'></text>
-    </horizontal>
-  -->
-    <horizontal bg='round-rect-panel' pad='8'>
-      <macro.for-each hosts='contents'>
-        <macro.if value='should-glow'>
-          <button text='~title' on-click='button-click' glow-color='red'></button>
-        </macro.if>
-        <macro.if value='!should-glow'>
-          <button text='~title' on-click='button-click'></button>
-        </macro.if>
-      </macro.for-each>
-    </horizontal>
-    <!--
-    <horizontal bg='round-rect-panel' pad='6' spacing='10'>
-      <button on-click='click' glow-color='green' text='Test Button'></button>
-      <vertical spacing='6'>
-        <page-button click-event='list#PageUp' direction='Up' glow-color='red'></page-button>
-        <page-button click-event='list#PageDown' direction='Down'></page-button>
-      </vertical>
-    </horizontal>
-  -->
-  </vertical>
+  <tab-selector tab-tag='new-tab'></tab-selector>
+  <tab tags='new-tab' tab-name='Header and Stuff'>
+    <vertical>
+      <horizontal bg='panel-top' pad-left='10' pad-right='10' horizontal-fit='PreferredSize'>
+        <text id ='sometext' text='~header' align='Center' font-size='10'></text>
+      </horizontal>
+      <horizontal bg='round-rect-panel' pad='6' spacing='10'>
+        <button on-click='click' glow-color='green' text='Test Button'></button>
+        <vertical spacing='6'>
+          <page-button click-event='list#PageUp' direction='Up' glow-color='red'></page-button>
+          <page-button click-event='list#PageDown' direction='Down'></page-button>
+        </vertical>
+      </horizontal>
+    </vertical>
+  </tab>
+  <tab tags='new-tab' tab-name='Buttons'>
+    <vertical>
+      <horizontal bg='round-rect-panel' pad='8'>
+        <macro.for-each hosts='contents'>
+          <macro.if value='should-glow'>
+            <button text='~title' on-click='button-click' glow-color='red'></button>
+          </macro.if>
+          <macro.if value='!should-glow'>
+            <button text='~title' on-click='button-click'></button>
+          </macro.if>
+        </macro.for-each>
+      </horizontal>
+    </vertical>
+  </tab>
   <!--
   <bottom-button-panel>
     <button on-click='click' text='Yee Haw'></button>

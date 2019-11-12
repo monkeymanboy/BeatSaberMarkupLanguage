@@ -78,6 +78,10 @@
     <Reference Include="UnityEngine.VRModule">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.VRModule.dll</HintPath>
     </Reference>
+    <Reference Include="Zenject, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\Zenject.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\UIAction.cs" />
@@ -100,10 +104,14 @@
     <Compile Include="Components\Settings\SliderSetting.cs" />
     <Compile Include="Components\Settings\StringSetting.cs" />
     <Compile Include="Components\Settings\SubmenuText.cs" />
+    <Compile Include="Components\Tab.cs" />
+    <Compile Include="Components\TabSelector.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Macros\BSMLMacro.cs" />
     <Compile Include="Macros\ForEachMacro.cs" />
     <Compile Include="Macros\IfMacro.cs" />
+    <Compile Include="MenuButtons\MenuButton.cs" />
+    <Compile Include="MenuButtons\MenuButtons.cs" />
     <Compile Include="Parse.cs" />
     <Compile Include="Parser\BSMLAction.cs" />
     <Compile Include="BSMLParser.cs" />
@@ -145,6 +153,8 @@
     <Compile Include="Tags\Settings\SliderSettingTag.cs" />
     <Compile Include="Tags\Settings\StringSettingTag.cs" />
     <Compile Include="Tags\Settings\SubmenuTag.cs" />
+    <Compile Include="Tags\TabSelectorTag.cs" />
+    <Compile Include="Tags\TabTag.cs" />
     <Compile Include="Tags\TextPageScrollViewTag.cs" />
     <Compile Include="Tags\TextTag.cs" />
     <Compile Include="Tags\VerticalLayoutTag.cs" />
@@ -169,6 +179,8 @@
     <Compile Include="TypeHandlers\Settings\ListSettingHandler.cs" />
     <Compile Include="TypeHandlers\Settings\SliderSettingHandler.cs" />
     <Compile Include="TypeHandlers\Settings\StringSettingHandler.cs" />
+    <Compile Include="TypeHandlers\TabHandler.cs" />
+    <Compile Include="TypeHandlers\TabSelectorHandler.cs" />
     <Compile Include="TypeHandlers\TextMeshProUGUIHandler.cs" />
     <Compile Include="TypeHandlers\TextPageScrollViewHandler.cs" />
     <Compile Include="TypeHandlers\TypeHandler.cs" />
@@ -192,6 +204,12 @@
     <EmbeddedResource Include="Resources\icon.png" />
     <EmbeddedResource Include="Resources\description.md" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\main-left-screen.bsml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy "$(TargetPath)" "$(BeatSaberDir)\Plugins"</PostBuildEvent>

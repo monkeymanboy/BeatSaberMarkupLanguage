@@ -16,7 +16,8 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "text", new[]{"text"} },
             { "glowColor", new[]{"glow-color"} },
             { "onClick", new[]{"on-click"} },
-            { "clickEvent", new[]{"click-event", "event-click"} }
+            { "clickEvent", new[]{"click-event", "event-click"} },
+            { "interactable", new[]{ "interactable" } }
         };
 
         public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)
@@ -29,6 +30,9 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             TextMeshProUGUI label = obj.GetComponentInChildren<TextMeshProUGUI>();
             if (label != null && data.TryGetValue("text", out string text))
                 label.text = text;
+
+            if (data.TryGetValue("interactable", out string interactableString))
+                button.interactable = bool.Parse(interactableString);
 
             Image glowImage = obj.gameObject.GetComponentsInChildren<Image>().FirstOrDefault(x => x.gameObject.name == "Glow");
             if (glowImage != null)

@@ -15,17 +15,17 @@ namespace BeatSaberMarkupLanguage
         public void Init(IPALogger logger)
         {
             Logger.log = logger;
+            BSEvents.menuSceneLoadedFresh += MenuLoadFresh;
+        }
+        public void MenuLoadFresh()
+        {
+            //BSMLSettings.instance.AddSettingsMenu("Test", "BeatSaberMarkupLanguage.Views.settings-test.bsml", SettingsTest.instance);
+            //Resources.FindObjectsOfTypeAll<GameScenesManager>().FirstOrDefault().StartCoroutine(PresentTest());
+            BSMLSettings.instance.StartCoroutine(BSMLSettings.instance.AddButtonToMainScreen());
+            MenuButtons.MenuButtons.instance.Setup();
         }
 
-        public void OnSceneLoaded(Scene scene, LoadSceneMode sceneMode)
-        {
-            if (scene.name == "MenuCore")
-            {
-                //BSMLSettings.instance.AddSettingsMenu("Test", "BeatSaberMarkupLanguage.Views.settings-test.bsml", SettingsTest.instance);
-                //Resources.FindObjectsOfTypeAll<GameScenesManager>().FirstOrDefault().StartCoroutine(PresentTest());
-                BSMLSettings.instance.StartCoroutine(BSMLSettings.instance.AddButtonToMainScreen());
-            }
-        }
+        public void OnSceneLoaded(Scene scene, LoadSceneMode sceneMode) { }
 
         public void OnActiveSceneChanged(Scene prevScene, Scene nextScene)
         {
