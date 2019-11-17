@@ -132,6 +132,7 @@
     <Compile Include="Tags\BackgroundTag.cs" />
     <Compile Include="Tags\BottomButtonPanelTag.cs" />
     <Compile Include="Tags\BSMLTag.cs" />
+    <Compile Include="Tags\BackButtonTag.cs" />
     <Compile Include="Tags\ButtonTag.cs" />
     <Compile Include="Tags\ClickableTextTag.cs" />
     <Compile Include="Tags\CustomListTag.cs" />
