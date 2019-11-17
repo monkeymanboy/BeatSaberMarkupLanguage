@@ -1,9 +1,10 @@
-﻿using BeatSaberMarkupLanguage.Attributes;
+using System;
+using BeatSaberMarkupLanguage.Attributes;
 using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.MenuButtons
 {
-    public abstract class MenuButton
+    public class MenuButton
     {
         [UIComponent("button")]
         internal Button button;
@@ -15,10 +16,11 @@ namespace BeatSaberMarkupLanguage.MenuButtons
         public string _HoverHint => HoverHint;
         [UIValue("start-interactable")]
         public bool _StartInteractable => StartInteractable;
-        
-        public abstract string Text { get; }
-        public abstract string HoverHint { get; }
-        public virtual bool StartInteractable => true;
+
+        public virtual string Text { get; protected set; }
+        public virtual string HoverHint { get; protected set; }
+        protected virtual bool StartInteractable => true;
+        public virtual Action OnClick { get; protected set; }
         public bool Interactable
         {
             get => button.interactable;
@@ -27,8 +29,19 @@ namespace BeatSaberMarkupLanguage.MenuButtons
         [UIAction("button-click")]
         public void _OnClick()
         {
-            OnClick();
+            OnClick?.Invoke();
         }
-        public abstract void OnClick();
+        
+        protected MenuButton() { }
+        public MenuButton(string text, string hoverHint, Action onClick)
+        {
+            Text = text;
+            HoverHint = hoverHint ?? string.Empty;
+            OnClick = onClick;
+        }
+
+        public MenuButton(string text, Action onClick)
+        : this(text, string.Empty, onClick)
+        { }
     }
 }
