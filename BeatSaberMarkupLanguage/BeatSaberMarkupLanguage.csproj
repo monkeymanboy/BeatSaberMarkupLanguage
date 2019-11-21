@@ -15,7 +15,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
+    <DebugType>portable</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
@@ -93,6 +93,7 @@
     <Compile Include="Components\BSMLScrollView.cs" />
     <Compile Include="Components\ClickableText.cs" />
     <Compile Include="Components\CustomCellListTableData.cs" />
+    <Compile Include="Components\NotifyUpdater.cs" />
     <Compile Include="Components\ScrollViewContent.cs" />
     <Compile Include="Components\Settings\BoolSetting.cs" />
     <Compile Include="Components\Settings\CheckboxSetting.cs" />
@@ -112,6 +113,7 @@
     <Compile Include="Macros\IfMacro.cs" />
     <Compile Include="MenuButtons\MenuButton.cs" />
     <Compile Include="MenuButtons\MenuButtons.cs" />
+    <Compile Include="Notify\INotifiableHost.cs" />
     <Compile Include="Parse.cs" />
     <Compile Include="Parser\BSMLAction.cs" />
     <Compile Include="BSMLParser.cs" />
@@ -213,7 +215,8 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy "$(TargetPath)" "$(BeatSaberDir)\Plugins"</PostBuildEvent>
+    <PostBuildEvent>copy "$(TargetPath)" "$(BeatSaberDir)\Plugins"
+copy "$(AssemblyName).pdb" "$(BeatSaberDir)\Plugins"</PostBuildEvent>
   </PropertyGroup>
   <ProjectExtensions />
 </Project>

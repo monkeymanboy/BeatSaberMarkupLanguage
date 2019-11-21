@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.Parser
@@ -9,7 +10,8 @@ namespace BeatSaberMarkupLanguage.Parser
         public object host;
         public Dictionary<string, BSMLAction> actions = new Dictionary<string, BSMLAction>();
         public Dictionary<string, BSMLValue> values = new Dictionary<string, BSMLValue>();
-
+        public Dictionary<string, PropertyInfo> propertyMap = new Dictionary<string, PropertyInfo>();
+        
         private Dictionary<string, Action> events = new Dictionary<string, Action>();
         private Dictionary<string, List<GameObject>> objectsWithTag = new Dictionary<string, List<GameObject>>();
 

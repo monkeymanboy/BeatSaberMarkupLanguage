@@ -185,8 +185,12 @@ namespace BeatSaberMarkupLanguage
                             string valueID = value.Substring(1);
                             if (!parserParams.values.TryGetValue(valueID, out BSMLValue uiValue))
                                 throw new Exception("No UIValue exists with the id '" + valueID + "'");
-
-                            parameters.Add(propertyAliases.Key, uiValue.GetValue().ToString());
+                            parameters.Add(propertyAliases.Key, uiValue.GetValue()?.ToString());
+                            if (uiValue is BSMLPropertyValue propVal)
+                                if (propVal != null)
+                                    parserParams.propertyMap.Add(propertyAliases.Key, propVal.propertyInfo);
+                                else
+                                    Logger.log?.Warn($"PropertyValue is null for {propertyAliases.Key}");
                         }
                         else
                         {

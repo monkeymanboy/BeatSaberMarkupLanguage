@@ -1,4 +1,6 @@
-﻿using BeatSaberMarkupLanguage.Parser;
+﻿using BeatSaberMarkupLanguage.Components;
+using BeatSaberMarkupLanguage.Notify;
+using BeatSaberMarkupLanguage.Parser;
 using System;
 using System.Collections.Generic;
 using TMPro;
@@ -21,32 +23,48 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "strikethrough", new[]{ "strikethrough" } }
         };
 
+        public Dictionary<string, Action<TextMeshProUGUI, string>> Setters => new Dictionary<string, Action<TextMeshProUGUI, string>>()
+        {
+            {"text", new Action<TextMeshProUGUI,string>((textMesh, value) => textMesh.text = value) },
+            {"fontSize", new Action<TextMeshProUGUI,string>((textMesh, value) => textMesh.fontSize = Parse.Float(value)) },
+            {"alignment", new Action<TextMeshProUGUI,string>((textMesh, value) => textMesh.alignment = (TextAlignmentOptions)Enum.Parse(typeof(TextAlignmentOptions), value)) },
+            {"overflowMode", new Action<TextMeshProUGUI,string>((textMesh, value) => textMesh.overflowMode = (TextOverflowModes)Enum.Parse(typeof(TextOverflowModes), value)) },
+            {"bold", new Action<TextMeshProUGUI, string>((textMesh, value) => textMesh.fontStyle = SetStyle(textMesh.fontStyle, FontStyles.Bold, value)) },
+            {"italics", new Action<TextMeshProUGUI,string>((textMesh, value) => textMesh.fontStyle = SetStyle(textMesh.fontStyle, FontStyles.Italic, value))  },
+            {"underlined", new Action<TextMeshProUGUI,string>((textMesh, value) => textMesh.fontStyle = SetStyle(textMesh.fontStyle, FontStyles.Underline, value))  },
+            {"strikethrough", new Action<TextMeshProUGUI,string>((textMesh, value) => textMesh.fontStyle = SetStyle(textMesh.fontStyle, FontStyles.Strikethrough, value))  },
+        };
+
         public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)
         {
             TextMeshProUGUI textMesh = obj as TextMeshProUGUI;
-            if (data.TryGetValue("text", out string text))
-                textMesh.text = text;
+            NotifyUpdater updater = null;
+            if (parserParams.host is INotifiableHost notifyHost)
+            {
+                Logger.log?.Warn($"host is INotifiableHost");
+                updater = textMesh.gameObject.AddComponent<NotifyUpdater>();
+                updater.NotifyHost = notifyHost;
+                updater.ActionDict = new Dictionary<string, Action<object>>();
+            }
+            foreach (var pair in data)
+            {
+                if (Setters.TryGetValue(pair.Key, out var action))
+                {
+                    action.Invoke(textMesh, pair.Value);
+                    if (parserParams.propertyMap.TryGetValue(pair.Key, out var prop))
+                        updater?.ActionDict.Add(prop.Name, val => action.Invoke(textMesh, val.ToString()));
+                }
+                else
+                    Logger.log?.Warn($"Tag {pair.Key} not supported for {nameof(TextMeshProUGUI)}");
+            }
+        }
 
-            if (data.TryGetValue("fontSize", out string fontSize))
-                textMesh.fontSize = Parse.Float(fontSize);
-
-            if (data.TryGetValue("alignment", out string alignment))
-                textMesh.alignment = (TextAlignmentOptions)Enum.Parse(typeof(TextAlignmentOptions), alignment);
-
-            if (data.TryGetValue("overflowMode", out string overflowMode))
-                textMesh.overflowMode = (TextOverflowModes)Enum.Parse(typeof(TextOverflowModes), overflowMode);
-
-            if (data.TryGetValue("bold", out string bold) && Parse.Bool(bold))
-                textMesh.text = $"<b>{textMesh.text}</b>";
-
-            if (data.TryGetValue("italics", out string italics) && Parse.Bool(italics))
-                textMesh.text = $"<i>{textMesh.text}</i>";
-
-            if (data.TryGetValue("underlined", out string underlined) && Parse.Bool(underlined))
-                textMesh.text = $"<u>{textMesh.text}</u>";
-
-            if (data.TryGetValue("strikethrough", out string strikethrough) && Parse.Bool(strikethrough))
-                textMesh.text = $"<s>{textMesh.text}</s>";
+        private static FontStyles SetStyle(FontStyles existing, FontStyles modifyStyle, string flag)
+        {
+            if (bool.TryParse(flag, out bool flagBool) && flagBool)
+                return existing |= modifyStyle;
+            else
+                return existing &= ~modifyStyle;
         }
     }
 }
