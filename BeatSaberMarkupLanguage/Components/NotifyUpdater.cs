@@ -34,11 +34,20 @@ namespace BeatSaberMarkupLanguage.Components
         private void NotifyHost_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (!isActiveAndEnabled) // TODO: Better to subscribe/unsubscribe OnEnable/OnDisable?
-                return;
-            var prop = sender.GetType().GetProperty(e.PropertyName);
-            if (ActionDict.TryGetValue(e.PropertyName, out var action))
-                action?.Invoke(prop.GetValue(sender));
+            {
 
+                Logger.log?.Warn($"PropertyChanged: {e.PropertyName}, but not active. ({gameObject.GetInstanceID()}.{GetInstanceID()})");
+                return;
+            }
+            Logger.log?.Warn($"PropertyChanged: {e.PropertyName} ({gameObject.name} - {gameObject.GetInstanceID()}.{GetInstanceID()})");
+            var prop = sender.GetType().GetProperty(e.PropertyName);
+            string val = string.Empty;
+            if (ActionDict.TryGetValue(e.PropertyName, out var action))
+            {
+                val = prop.GetValue(sender).ToString();
+                action?.Invoke(prop.GetValue(sender));
+            }
+            Logger.log?.Warn($"     New Value: {val}");
         }
 
         private Dictionary<string, Action<object>> _actionDict;
@@ -53,8 +62,19 @@ namespace BeatSaberMarkupLanguage.Components
             }
         }
 
+        void OnEnable()
+        {
+            Logger.log?.Warn($"NotifyUpdater enabled. {isActiveAndEnabled}");
+        }
+
+        void OnDisable()
+        {
+            Logger.log?.Warn($"NotifyUpdater disabled.");
+        }
+
         void OnDestroy()
         {
+            Logger.log?.Warn($"NotifyUpdater destroyed.");
             _actionDict?.Clear();
             NotifyHost = null;
         }
