@@ -51,7 +51,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 if (Setters.TryGetValue(pair.Key, out var action))
                 {
                     action.Invoke(textMesh, pair.Value);
-                    if (parserParams.propertyMap.TryGetValue(pair.Key, out var prop))
+                    if (updater != null && parserParams.propertyMap.TryGetValue(pair.Key, out var prop))
                         updater?.ActionDict.Add(prop.Name, val => action.Invoke(textMesh, val.ToString()));
                 }
                 else
