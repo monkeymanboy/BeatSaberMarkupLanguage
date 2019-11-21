@@ -35,23 +35,26 @@ namespace BeatSaberMarkupLanguage.Components
         {
             if (!isActiveAndEnabled) // TODO: Better to subscribe/unsubscribe OnEnable/OnDisable?
             {
-
-                Logger.log?.Warn($"PropertyChanged: {e.PropertyName}, but not active. ({gameObject.GetInstanceID()}.{GetInstanceID()})");
+                Logger.log.Error($"Shouldn't ever see this, event was unsubscribed in OnDisable()");
                 return;
             }
-            Logger.log?.Warn($"PropertyChanged: {e.PropertyName} ({gameObject.name} - {gameObject.GetInstanceID()}.{GetInstanceID()})");
             var prop = sender.GetType().GetProperty(e.PropertyName);
             string val = string.Empty;
-            if (ActionDict.TryGetValue(e.PropertyName, out var action))
+            Action<object> action = null;
+            if (ActionDict?.TryGetValue(e.PropertyName, out action) ?? false)
             {
+
+                Logger.log?.Warn($"PropertyChanged: {e.PropertyName} ({gameObject.name} - {gameObject.GetInstanceID()}.{GetInstanceID()})");
                 val = prop.GetValue(sender).ToString();
                 action?.Invoke(prop.GetValue(sender));
+                Logger.log?.Warn($"     New Value: {val}");
             }
-            Logger.log?.Warn($"     New Value: {val}");
+            else
+                Logger.log?.Warn($"{gameObject.name}: No Action defined for {e.PropertyName}");
         }
 
         private Dictionary<string, Action<object>> _actionDict;
-        public Dictionary<string, Action<object>> ActionDict
+        private Dictionary<string, Action<object>> ActionDict
         {
             get { return _actionDict; }
             set
@@ -62,13 +65,37 @@ namespace BeatSaberMarkupLanguage.Components
             }
         }
 
+        public bool AddAction(string propertyName, Action<object> action)
+        {
+            if (ActionDict == null)
+                ActionDict = new Dictionary<string, Action<object>>();
+            ActionDict.Add(propertyName, action);
+            return true;
+        }
+
+        public bool RemoveAction(string propertyName)
+        {
+            if (ActionDict != null)
+                return ActionDict.Remove(propertyName);
+            return false;
+        }
+
         void OnEnable()
         {
             Logger.log?.Warn($"NotifyUpdater enabled. {isActiveAndEnabled}");
+            if (NotifyHost != null)
+            {
+                NotifyHost.PropertyChanged -= NotifyHost_PropertyChanged;
+                NotifyHost.PropertyChanged += NotifyHost_PropertyChanged;
+            }
         }
 
         void OnDisable()
         {
+            if (NotifyHost != null)
+            {
+                NotifyHost.PropertyChanged -= NotifyHost_PropertyChanged;
+            }
             Logger.log?.Warn($"NotifyUpdater disabled.");
         }
 
