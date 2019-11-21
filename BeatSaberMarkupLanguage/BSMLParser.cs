@@ -173,6 +173,7 @@ namespace BeatSaberMarkupLanguage
         private Dictionary<string, string> GetParameters(XmlNode node, Dictionary<string, string[]> properties, BSMLParserParams parserParams)
         {
             Dictionary<string, string> parameters = new Dictionary<string, string>();
+            bool isNotifyHost = typeof(Notify.INotifiableHost).IsAssignableFrom(parserParams.host.GetType());
             foreach (KeyValuePair<string, string[]> propertyAliases in properties)
             {
                 foreach (string alias in propertyAliases.Value)
@@ -186,7 +187,7 @@ namespace BeatSaberMarkupLanguage
                             if (!parserParams.values.TryGetValue(valueID, out BSMLValue uiValue))
                                 throw new Exception("No UIValue exists with the id '" + valueID + "'");
                             parameters.Add(propertyAliases.Key, uiValue.GetValue()?.ToString());
-                            if (uiValue is BSMLPropertyValue propVal)
+                            if (isNotifyHost && uiValue is BSMLPropertyValue propVal)
                                 if (propVal != null)
                                     parserParams.propertyMap.Add(propertyAliases.Key, propVal.propertyInfo);
                                 else
