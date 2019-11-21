@@ -132,12 +132,14 @@ namespace BeatSaberMarkupLanguage
                 {
                     ComponentTypeWithData componentType = new ComponentTypeWithData();
                     componentType.data = GetParameters(node, typeHandler.Props, parserParams, out var propertyMap);
-                    Logger.log?.Info($"Created ComponentTypeWithData {component.name}.{component.gameObject.GetInstanceID()}.{component.GetInstanceID()}");
-                    if (propertyMap != null)
+                    if ((propertyMap?.Count ?? 0) > 0)
+                    {
+                        Logger.log?.Info($"{node.Name} has mapped properties:");
                         foreach (var item in propertyMap)
                         {
                             Logger.log?.Info($"    {item.Key} => {item.Value}");
                         }
+                    }
                     componentType.propertyMap = propertyMap;
                     componentType.typeHandler = typeHandler;
                     componentType.component = component;
