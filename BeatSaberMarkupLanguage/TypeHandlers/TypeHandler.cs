@@ -26,7 +26,19 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
         {
             if (componentType.component is T obj)
             {
-                NotifyUpdater updater = componentType.component.gameObject.GetComponent<NotifyUpdater>() ?? componentType.component.gameObject.GetComponent<NotifyUpdater>();
+
+                NotifyUpdater updater = null;
+                if (parserParams.host is INotifiableHost notifyHost && (componentType.propertyMap?.Count ?? 0) > 0)
+                {
+                    updater = componentType.component.gameObject.GetComponent<NotifyUpdater>();
+                    if (updater == null)
+                    {
+                        updater = componentType.component.gameObject.GetComponent<NotifyUpdater>();
+                        Logger.log?.Critical($"Adding NotifyUpdater to {componentType.component.name}");
+                        updater = componentType.component.gameObject.AddComponent<NotifyUpdater>();
+                        updater.NotifyHost = notifyHost;
+                    }
+                }
                 foreach (KeyValuePair<string, string> pair in componentType.data)
                 {
                     if (Setters.TryGetValue(pair.Key, out Action<T, string> action))

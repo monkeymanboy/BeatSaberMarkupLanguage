@@ -148,12 +148,6 @@ namespace BeatSaberMarkupLanguage
             }
             foreach (ComponentTypeWithData componentType in componentTypes)
             {
-                if (parserParams.host is INotifiableHost notifyHost && (componentType.propertyMap?.Count ?? 0) > 0)
-                {
-                    Logger.log?.Critical($"Adding NotifyUpdater to {componentType.component.name}");
-                    NotifyUpdater updater = componentType.component.gameObject.AddComponent<NotifyUpdater>();
-                    updater.NotifyHost = notifyHost;
-                }
                 componentType.typeHandler.HandleType(componentType, parserParams);
 
             }

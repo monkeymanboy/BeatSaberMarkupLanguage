@@ -43,7 +43,6 @@ namespace BeatSaberMarkupLanguage.Components
             Action<object> action = null;
             if (ActionDict?.TryGetValue(e.PropertyName, out action) ?? false)
             {
-
                 Logger.log?.Warn($"PropertyChanged: {e.PropertyName} ({gameObject.name} - {gameObject.GetInstanceID()}.{GetInstanceID()})");
                 val = prop.GetValue(sender).ToString();
                 action?.Invoke(prop.GetValue(sender));
