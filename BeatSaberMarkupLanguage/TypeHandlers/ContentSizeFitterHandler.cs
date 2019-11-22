@@ -9,7 +9,7 @@ using static UnityEngine.UI.ContentSizeFitter;
 namespace BeatSaberMarkupLanguage.TypeHandlers
 {
     [ComponentHandler(typeof(ContentSizeFitter))]
-    public class ContentSizeFitterHandler : TypeHandler
+    public class ContentSizeFitterHandler : TypeHandler<ContentSizeFitter>
     {
         public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
         {
@@ -17,10 +17,10 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "verticalFit", new[]{ "vertical-fit"} }
         };
 
-        public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)
+        public override Dictionary<string, Action<ContentSizeFitter, string>> Setters => new Dictionary<string, Action<ContentSizeFitter, string>>()
         {
-            foreach (KeyValuePair<string, string> pair in data)
-                obj.SetProperty(pair.Key, Enum.Parse(typeof(FitMode), pair.Value));
-        }
+            {"horizontalFit", new Action<ContentSizeFitter, string>((component, value) => component.horizontalFit = (FitMode)Enum.Parse(typeof(FitMode), value)) },
+            {"verticalFit", new Action<ContentSizeFitter, string>((component, value) => component.verticalFit = (FitMode)Enum.Parse(typeof(FitMode), value)) }
+        };
     }
 }

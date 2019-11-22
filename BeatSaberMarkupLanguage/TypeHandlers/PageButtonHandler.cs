@@ -8,7 +8,7 @@ using UnityEngine.UI;
 namespace BeatSaberMarkupLanguage.TypeHandlers
 {
     [ComponentHandler(typeof(PageButton))]
-    public class PageButtonHandler : TypeHandler
+    public class PageButtonHandler : TypeHandler<PageButton>
     {
         public enum PageButtonDirection
         {
@@ -21,33 +21,37 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "buttonWidth", new[]{ "button-width" } }
         };
 
-        public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)
+        public override Dictionary<string, Action<PageButton, string>> Setters => new Dictionary<string, Action<PageButton, string>>()
         {
-            if (data.TryGetValue("direction", out string direction))
-            {
-                switch (Enum.Parse(typeof(PageButtonDirection), direction))
-                {
-                    case PageButtonDirection.Up:
-                        obj.transform.localRotation = Quaternion.Euler(0, 0, -180);
-                        break;
-                    case PageButtonDirection.Down:
-                        obj.transform.localRotation = Quaternion.Euler(0, 0, 0);
-                        break;
-                    case PageButtonDirection.Left:
-                        obj.transform.localRotation = Quaternion.Euler(0, 0, -90);
-                        break;
-                    case PageButtonDirection.Right:
-                        obj.transform.localRotation = Quaternion.Euler(0, 0, 90);
-                        break;
-                }
-            }
+            {"direction", new Action<PageButton, string>(SetButtonDirection) },
+            {"buttonWidth", new Action<PageButton, string>(SetButtonWidth) }
+        };
 
-            if (data.TryGetValue("buttonWidth", out string buttonWidth))
+        public static void SetButtonDirection(PageButton component, string value)
+        {
+            switch (Enum.Parse(typeof(PageButtonDirection), value))
             {
-                LayoutElement layoutElement = obj.gameObject.GetComponent<LayoutElement>();
-                layoutElement.preferredWidth = Parse.Float(buttonWidth);
-                (obj.transform.GetChild(0).transform as RectTransform).sizeDelta = new Vector2(layoutElement.preferredWidth, layoutElement.preferredHeight);
+                case PageButtonDirection.Up:
+                    component.transform.localRotation = Quaternion.Euler(0, 0, -180);
+                    break;
+                case PageButtonDirection.Down:
+                    component.transform.localRotation = Quaternion.Euler(0, 0, 0);
+                    break;
+                case PageButtonDirection.Left:
+                    component.transform.localRotation = Quaternion.Euler(0, 0, -90);
+                    break;
+                case PageButtonDirection.Right:
+                    component.transform.localRotation = Quaternion.Euler(0, 0, 90);
+                    break;
             }
+        }
+
+        public static void SetButtonWidth(PageButton component, string value)
+        {
+
+            LayoutElement layoutElement = component.gameObject.GetComponent<LayoutElement>();
+            layoutElement.preferredWidth = Parse.Float(value);
+            (component.transform.GetChild(0).transform as RectTransform).sizeDelta = new Vector2(layoutElement.preferredWidth, layoutElement.preferredHeight);
         }
     }
 }

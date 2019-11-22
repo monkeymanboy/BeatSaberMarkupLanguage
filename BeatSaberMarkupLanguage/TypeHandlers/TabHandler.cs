@@ -7,19 +7,16 @@ using UnityEngine;
 namespace BeatSaberMarkupLanguage.TypeHandlers
 {
     [ComponentHandler(typeof(Tab))]
-    public class TabHandler : TypeHandler
+    public class TabHandler : TypeHandler<Tab>
     {
         public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
         {
             { "tabName", new[]{"tab-name"} }
         };
 
-        public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)
+        public override Dictionary<string, Action<Tab, string>> Setters => new Dictionary<string, Action<Tab, string>>()
         {
-            Tab tab = (obj as Tab);
-            if (!data.TryGetValue("tabName", out string tabName))
-                throw new Exception("Tab must have a tab-name");
-            tab.tabName = tabName;
-        }
+            {"tabName", new Action<Tab, string>((component, value) => component.tabName = !string.IsNullOrEmpty(value) ? value : throw new ArgumentNullException("tabName cannot be null or empty for Tab")) }
+        };
     }
 }

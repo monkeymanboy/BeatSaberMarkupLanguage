@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,7 +10,7 @@ using UnityEngine.UI;
 namespace BeatSaberMarkupLanguage.TypeHandlers
 {
     [ComponentHandler(typeof(Button))]
-    public class ButtonHandler : TypeHandler
+    public class ButtonHandler : TypeHandler<Button>
     {
         public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
         {
@@ -20,33 +21,44 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "interactable", new[]{ "interactable" } }
         };
 
-        public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)
+        public override Dictionary<string, Action<Button, string>> Setters => new Dictionary<string, Action<Button, string>>()
         {
-            Button button = obj as Button;
-            Polyglot.LocalizedTextMeshProUGUI localizer = obj.GetComponentInChildren<Polyglot.LocalizedTextMeshProUGUI>();
-            if (localizer != null)
-                GameObject.Destroy(localizer);
+            {"text", new Action<Button, string>((component, value) => component.SetButtonText(value)) },
+            {"glowColor", new Action<Button, string>(SetGlow) },
+            {"interactable", new Action<Button, string>(SetInteractable) }
+        };
 
-            TextMeshProUGUI label = obj.GetComponentInChildren<TextMeshProUGUI>();
-            if (label != null && data.TryGetValue("text", out string text))
-                label.text = text;
-
-            if (data.TryGetValue("interactable", out string interactableString))
-                button.interactable = bool.Parse(interactableString);
-
-            Image glowImage = obj.gameObject.GetComponentsInChildren<Image>().FirstOrDefault(x => x.gameObject.name == "Glow");
-            if (glowImage != null)
+        public static void SetGlow(Button button, string glowColor)
+        {
+            Logger.log?.Critical($"Attempting to set glowColor to {glowColor}");
+            Image glowImage = button.gameObject.GetComponentsInChildren<Image>().FirstOrDefault(x => x.gameObject.name == "Glow");
             {
-                if (data.TryGetValue("glowColor", out string glowColor) && glowColor != "none")
+                if (glowColor != "none")
                 {
                     ColorUtility.TryParseHtmlString(glowColor, out Color color);
                     glowImage.color = color;
+                    Logger.log?.Critical($"Setting glowColor to {color.ToString()}");
                 }
                 else
                 {
                     glowImage.gameObject.SetActive(false);
                 }
             }
+        }
+
+        public static void SetInteractable(Button button, string flag)
+        {
+            if (bool.TryParse(flag, out bool interactable))
+                button.interactable = interactable;
+        }
+
+        public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams, Dictionary<string, PropertyInfo> propertyMap = null)
+        {
+            Polyglot.LocalizedTextMeshProUGUI localizer = obj.GetComponentInChildren<Polyglot.LocalizedTextMeshProUGUI>();
+            if (localizer != null)
+                GameObject.Destroy(localizer);
+            Button button = obj as Button;
+            base.HandleType(button, data, parserParams, propertyMap);
 
             if (data.TryGetValue("onClick", out string onClick))
             {
