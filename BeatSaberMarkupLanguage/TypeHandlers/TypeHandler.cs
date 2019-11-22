@@ -5,52 +5,42 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
+using static BeatSaberMarkupLanguage.BSMLParser;
 
 namespace BeatSaberMarkupLanguage.TypeHandlers
 {
     public abstract class TypeHandler
     {
         public abstract Dictionary<string, string[]> Props { get; }
-        public virtual void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams) { }
-        public virtual void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams, Dictionary<string, PropertyInfo> propertyMap)
-        {
-            HandleType(obj, data, parserParams);
-        }
-        public virtual void HandleTypeAfterChildren(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams, Dictionary<string, PropertyInfo> propertyMap = null) { }
+        public virtual void HandleType(ComponentTypeWithData componentType, BSMLParserParams parserParams) { }
+        public virtual void HandleTypeAfterChildren(ComponentTypeWithData componentType, BSMLParserParams parserParams) { }
     }
 
     public abstract class TypeHandler<T> : TypeHandler
         where T : Component
     {
         public abstract Dictionary<string, Action<T, string>> Setters { get; }
-        public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)
-        {
-            if (obj is T castObj)
-                HandleType(castObj, data, parserParams, null);
-        }
 
-        public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams, Dictionary<string, PropertyInfo> propertyMap)
+        //public virtual void HandleType(T obj, Dictionary<string, string> data, BSMLParserParams parserParams, Dictionary<string, PropertyInfo> propertyMap = null)
+        public override void HandleType(ComponentTypeWithData componentType, BSMLParserParams parserParams)
         {
-            if (obj is T castObj)
-                HandleType(castObj, data, parserParams, propertyMap);
-        }
-
-        public virtual void HandleType(T obj, Dictionary<string, string> data, BSMLParserParams parserParams, Dictionary<string, PropertyInfo> propertyMap = null)
-        {
-            NotifyUpdater updater = obj.gameObject.GetComponent<NotifyUpdater>() ?? obj.gameObject.GetComponent<NotifyUpdater>();
-            foreach (KeyValuePair<string, string> pair in data)
+            if (componentType.component is T obj)
             {
-                if (Setters.TryGetValue(pair.Key, out Action<T, string> action))
+                NotifyUpdater updater = componentType.component.gameObject.GetComponent<NotifyUpdater>() ?? componentType.component.gameObject.GetComponent<NotifyUpdater>();
+                foreach (KeyValuePair<string, string> pair in componentType.data)
                 {
-                    action.Invoke(obj, pair.Value);
-                    if (updater != null && propertyMap != null && propertyMap.TryGetValue(pair.Key, out PropertyInfo prop))
+                    if (Setters.TryGetValue(pair.Key, out Action<T, string> action))
                     {
-                        Logger.log?.Warn($"Mapping {pair.Key} to property {prop.Name}");
-                        updater?.AddAction(prop.Name, val => action.Invoke(obj, val.ToString()));
+                        action.Invoke(obj, pair.Value);
+                        if (updater != null && componentType.propertyMap != null && componentType.propertyMap.TryGetValue(pair.Key, out PropertyInfo prop))
+                        {
+                            Logger.log?.Warn($"Mapping {pair.Key} to property {prop.Name}");
+                            updater?.AddAction(prop.Name, val => action.Invoke(obj, val.ToString()));
+                        }
                     }
+                    else
+                        Logger.log?.Warn($"Tag {pair.Key} not supported for {componentType.component.GetType().Name}");
                 }
-                else
-                    Logger.log?.Warn($"Tag {pair.Key} not supported for {obj.GetType().Name}");
             }
         }
     }

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using static BeatSaberMarkupLanguage.BSMLParser;
 
 namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
 {
@@ -21,23 +22,23 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
             { "hoverHint", new[]{ "hover-hint" } }
         };
 
-        public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)
+        public override void HandleType(ComponentTypeWithData componentType, BSMLParserParams parserParams)
         {
-            TextMeshProUGUI textMesh = (obj as SubmenuText).submenuText;
+            TextMeshProUGUI textMesh = (componentType.component as SubmenuText).submenuText;
 
-            if (data.TryGetValue("text", out string text))
+            if (componentType.data.TryGetValue("text", out string text))
                 textMesh.text = text;
 
-            if (data.TryGetValue("fontSize", out string fontSize))
+            if (componentType.data.TryGetValue("fontSize", out string fontSize))
                 textMesh.fontSize = Parse.Float(fontSize);
 
-            if (data.TryGetValue("alignment", out string alignment))
+            if (componentType.data.TryGetValue("alignment", out string alignment))
                 textMesh.alignment = (TextAlignmentOptions)Enum.Parse(typeof(TextAlignmentOptions), alignment);
 
-            if (data.TryGetValue("overflowMode", out string overflowMode))
+            if (componentType.data.TryGetValue("overflowMode", out string overflowMode))
                 textMesh.overflowMode = (TextOverflowModes)Enum.Parse(typeof(TextOverflowModes), overflowMode);
 
-            if (data.TryGetValue("hoverHint", out string hoverHint))
+            if (componentType.data.TryGetValue("hoverHint", out string hoverHint))
             {
                 HoverHint hover = textMesh.gameObject.AddComponent<HoverHint>();
                 hover.text = hoverHint;

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using static BeatSaberMarkupLanguage.BSMLParser;
 
 namespace BeatSaberMarkupLanguage.TypeHandlers
 {
@@ -16,11 +17,11 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "spacingY", new[]{ "spacing-y"} }
         };
 
-        public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)
+        public override void HandleType(ComponentTypeWithData componentType, BSMLParserParams parserParams)
         {
-            GridLayoutGroup gridLayout = obj as GridLayoutGroup;
-            gridLayout.cellSize = new Vector2(data.TryGetValue("cellSizeX", out string cellSizeX) ? Parse.Float(cellSizeX) : gridLayout.cellSize.x, data.TryGetValue("cellSizeY", out string cellSizeY) ? Parse.Float(cellSizeY) : gridLayout.cellSize.y);
-            gridLayout.spacing = new Vector2(data.TryGetValue("spacingX", out string spacingX) ? Parse.Float(spacingX) : gridLayout.spacing.x, data.TryGetValue("spacingY", out string spacingY) ? Parse.Float(spacingY) : gridLayout.spacing.y);
+            GridLayoutGroup gridLayout = componentType.component as GridLayoutGroup;
+            gridLayout.cellSize = new Vector2(componentType.data.TryGetValue("cellSizeX", out string cellSizeX) ? Parse.Float(cellSizeX) : gridLayout.cellSize.x, componentType.data.TryGetValue("cellSizeY", out string cellSizeY) ? Parse.Float(cellSizeY) : gridLayout.cellSize.y);
+            gridLayout.spacing = new Vector2(componentType.data.TryGetValue("spacingX", out string spacingX) ? Parse.Float(spacingX) : gridLayout.spacing.x, componentType.data.TryGetValue("spacingY", out string spacingY) ? Parse.Float(spacingY) : gridLayout.spacing.y);
         }
     }
 }

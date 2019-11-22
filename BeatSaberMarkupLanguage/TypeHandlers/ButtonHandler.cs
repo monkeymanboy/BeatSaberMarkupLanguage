@@ -6,6 +6,7 @@ using System.Reflection;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static BeatSaberMarkupLanguage.BSMLParser;
 
 namespace BeatSaberMarkupLanguage.TypeHandlers
 {
@@ -52,15 +53,15 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 button.interactable = interactable;
         }
 
-        public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams, Dictionary<string, PropertyInfo> propertyMap = null)
+        public override void HandleType(ComponentTypeWithData componentType, BSMLParserParams parserParams)
         {
-            Polyglot.LocalizedTextMeshProUGUI localizer = obj.GetComponentInChildren<Polyglot.LocalizedTextMeshProUGUI>();
+            Polyglot.LocalizedTextMeshProUGUI localizer = componentType.component.GetComponentInChildren<Polyglot.LocalizedTextMeshProUGUI>();
             if (localizer != null)
                 GameObject.Destroy(localizer);
-            Button button = obj as Button;
-            base.HandleType(button, data, parserParams, propertyMap);
+            Button button = componentType.component as Button;
+            base.HandleType(componentType, parserParams);
 
-            if (data.TryGetValue("onClick", out string onClick))
+            if (componentType.data.TryGetValue("onClick", out string onClick))
             {
                 button.onClick.AddListener(delegate
                 {
@@ -71,7 +72,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 });
             }
 
-            if (data.TryGetValue("clickEvent", out string clickEvent))
+            if (componentType.data.TryGetValue("clickEvent", out string clickEvent))
             {
                 button.onClick.AddListener(delegate
                 {

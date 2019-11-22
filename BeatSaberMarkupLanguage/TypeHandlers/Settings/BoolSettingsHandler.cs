@@ -3,6 +3,7 @@ using BeatSaberMarkupLanguage.Parser;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using static BeatSaberMarkupLanguage.BSMLParser;
 
 namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
 {
@@ -20,20 +21,20 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
             { "applyOnChange", new[] { "apply-on-change" } }
         };
 
-        public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)
+        public override void HandleType(ComponentTypeWithData componentType, BSMLParserParams parserParams)
         {
-            BoolSetting boolSetting = obj as BoolSetting;
+            BoolSetting boolSetting = componentType.component as BoolSetting;
 
-            if (data.TryGetValue("text", out string text))
+            if (componentType.data.TryGetValue("text", out string text))
                 boolSetting.LabelText = text;
 
-            if (data.TryGetValue("applyOnChange", out string applyOnChange))
+            if (componentType.data.TryGetValue("applyOnChange", out string applyOnChange))
                 boolSetting.updateOnChange = Parse.Bool(applyOnChange);
 
-            if (data.TryGetValue("initialValue", out string initialValue))
+            if (componentType.data.TryGetValue("initialValue", out string initialValue))
                 boolSetting.Value = Parse.Bool(initialValue);
 
-            if (data.TryGetValue("onChange", out string onChange))
+            if (componentType.data.TryGetValue("onChange", out string onChange))
             {
                 if (!parserParams.actions.TryGetValue(onChange, out BSMLAction onChangeAction))
                     throw new Exception("on-change action '" + onChange + "' not found");
@@ -41,7 +42,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
                 boolSetting.onChange = onChangeAction;
             }
 
-            if (data.TryGetValue("value", out string value))
+            if (componentType.data.TryGetValue("value", out string value))
             {
                 if (!parserParams.values.TryGetValue(value, out BSMLValue associatedValue))
                     throw new Exception("value '" + value + "' not found");
@@ -49,8 +50,8 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
                 boolSetting.associatedValue = associatedValue;
             }
 
-            parserParams.AddEvent(data.TryGetValue("setEvent", out string setEvent) ? setEvent : "apply", boolSetting.ApplyValue);
-            parserParams.AddEvent(data.TryGetValue("getEvent", out string getEvent) ? getEvent : "cancel", boolSetting.ReceiveValue);
+            parserParams.AddEvent(componentType.data.TryGetValue("setEvent", out string setEvent) ? setEvent : "apply", boolSetting.ApplyValue);
+            parserParams.AddEvent(componentType.data.TryGetValue("getEvent", out string getEvent) ? getEvent : "cancel", boolSetting.ReceiveValue);
 
             boolSetting.Setup();
         }

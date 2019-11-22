@@ -2,6 +2,7 @@
 using BS_Utils.Utilities;
 using System.Collections.Generic;
 using UnityEngine;
+using static BeatSaberMarkupLanguage.BSMLParser;
 
 namespace BeatSaberMarkupLanguage.TypeHandlers
 {
@@ -13,10 +14,10 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "cellSize", new[]{"cell-size"} }
         };
 
-        public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)
+        public override void HandleType(ComponentTypeWithData componentType, BSMLParserParams parserParams)
         {
-            LeaderboardTableView table = (obj as LeaderboardTableView);
-            if (data.TryGetValue("cellSize", out string cellSize))
+            LeaderboardTableView table = (componentType.component as LeaderboardTableView);
+            if (componentType.data.TryGetValue("cellSize", out string cellSize))
                 table.SetPrivateField("_rowHeight", Parse.Float(cellSize));
         }
     }

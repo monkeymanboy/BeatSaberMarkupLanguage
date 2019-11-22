@@ -154,7 +154,7 @@ namespace BeatSaberMarkupLanguage
                     NotifyUpdater updater = componentType.component.gameObject.AddComponent<NotifyUpdater>();
                     updater.NotifyHost = notifyHost;
                 }
-                componentType.typeHandler.HandleType(componentType.component, componentType.data, parserParams, componentType.propertyMap);
+                componentType.typeHandler.HandleType(componentType, parserParams);
 
             }
 
@@ -181,7 +181,7 @@ namespace BeatSaberMarkupLanguage
 
             foreach (ComponentTypeWithData componentType in componentTypes)
             {
-                componentType.typeHandler.HandleTypeAfterChildren(componentType.component, componentType.data, parserParams);
+                componentType.typeHandler.HandleTypeAfterChildren(componentType, parserParams);
             }
         }
         private void HandleMacroNode(XmlNode node, GameObject parent, BSMLParserParams parserParams)
@@ -235,7 +235,7 @@ namespace BeatSaberMarkupLanguage
             return parameters;
         }
 
-        internal struct ComponentTypeWithData
+        public struct ComponentTypeWithData
         {
             public TypeHandler typeHandler;
             public Component component;
