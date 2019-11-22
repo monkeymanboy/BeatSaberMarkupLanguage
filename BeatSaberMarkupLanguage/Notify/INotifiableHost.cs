@@ -8,8 +8,10 @@ namespace BeatSaberMarkupLanguage.Notify
 {
     public interface INotifiableHost
     {
-        event EventHandler<PropertyChangedEventArgs> PropertyChanged;
+        event PropertyChangedEventHandler PropertyChanged;
     }
+
+    public delegate void PropertyChangedEventHandler(object sender, PropertyChangedEventArgs e);
 
     public class PropertyChangedEventArgs : EventArgs
     {

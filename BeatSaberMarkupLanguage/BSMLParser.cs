@@ -190,7 +190,7 @@ namespace BeatSaberMarkupLanguage
         private Dictionary<string, string> GetParameters(XmlNode node, Dictionary<string, string[]> properties, BSMLParserParams parserParams, out Dictionary<string, PropertyInfo> propertyMap)
         {
             Dictionary<string, string> parameters = new Dictionary<string, string>();
-            bool isNotifyHost = typeof(Notify.INotifiableHost).IsAssignableFrom(parserParams.host.GetType());
+            bool isNotifyHost = typeof(INotifiableHost).IsAssignableFrom(parserParams.host.GetType());
             propertyMap = null;
             if (isNotifyHost)
                 propertyMap = new Dictionary<string, PropertyInfo>();
