@@ -196,7 +196,10 @@ namespace BeatSaberMarkupLanguage
                 propertyMap = new Dictionary<string, PropertyInfo>();
             foreach (KeyValuePair<string, string[]> propertyAliases in properties)
             {
-                foreach (string alias in propertyAliases.Value)
+                var aliasList = new List<string>(propertyAliases.Value);
+                if (!aliasList.Contains(propertyAliases.Key))
+                    aliasList.Add(propertyAliases.Key);
+                foreach (string alias in aliasList)
                 {
                     if (node.Attributes[alias] != null)
                     {

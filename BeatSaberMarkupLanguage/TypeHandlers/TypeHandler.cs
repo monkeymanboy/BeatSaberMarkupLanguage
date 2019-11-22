@@ -12,7 +12,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
     public abstract class TypeHandler
     {
         public abstract Dictionary<string, string[]> Props { get; }
-        public virtual void HandleType(ComponentTypeWithData componentType, BSMLParserParams parserParams) { }
+        public abstract void HandleType(ComponentTypeWithData componentType, BSMLParserParams parserParams);
         public virtual void HandleTypeAfterChildren(ComponentTypeWithData componentType, BSMLParserParams parserParams) { }
     }
 
@@ -51,7 +51,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                         }
                     }
                     else
-                        Logger.log?.Warn($"Tag {pair.Key} not supported for {componentType.component.GetType().Name}");
+                        Logger.log?.Warn($"Tag {pair.Key} not supported for {componentType.component.GetType().Name}.{typeof(T).Name} ({componentType.component.name}) with {componentType.typeHandler.GetType().Name}");
                 }
             }
         }

@@ -16,7 +16,9 @@ namespace BeatSaberMarkupLanguage.Tags
             button.name = "BSMLPageButton";
             button.interactable = true;
             button.gameObject.AddComponent<PageButton>();
-
+            //Image glowImage = button.gameObject.GetComponentsInChildren<Image>().FirstOrDefault(x => x.gameObject.name == "Glow");
+            //if (glowImage != null)
+            //    glowImage.gameObject.SetActive(false);
             LayoutElement layoutElement = button.gameObject.AddComponent<LayoutElement>();
             layoutElement.preferredWidth = 40;
             layoutElement.preferredHeight = 6;
@@ -34,6 +36,7 @@ namespace BeatSaberMarkupLanguage.Tags
             glow.anchorMin = buttonTransform.anchorMin;
             glow.anchorMax = buttonTransform.anchorMax;
             glow.sizeDelta = buttonTransform.sizeDelta;
+            //glow.gameObject.SetActive(false);
 
             button.gameObject.SetActive(true);
             return button.gameObject;
