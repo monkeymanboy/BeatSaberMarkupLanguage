@@ -14,8 +14,8 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "background", new[]{ "bg", "background" } },
             { "backgroundColor", new[]{ "bg-color", "background-color" } }
         };
-
-        public override Dictionary<string, Action<Backgroundable, string>> Setters => new Dictionary<string, Action<Backgroundable, string>>()
+        public override Dictionary<string, Action<Backgroundable, string>> Setters => _setters;
+        private Dictionary<string, Action<Backgroundable, string>> _setters = new Dictionary<string, Action<Backgroundable, string>>()
         {
             {"background", new Action<Backgroundable, string>((component, value) => component.ApplyBackground(value)) },
             {"backgroundColor", new Action<Backgroundable, string>(TrySetBackgroundColor) }

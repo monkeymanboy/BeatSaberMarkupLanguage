@@ -31,6 +31,7 @@ namespace BeatSaberMarkupLanguage.Tags
 
             RectTransform buttonTransform = button.transform.GetChild(0) as RectTransform;
             RectTransform glow = MonoBehaviour.Instantiate(Resources.FindObjectsOfTypeAll<GameObject>().Last(x => (x.name == "GlowContainer")), button.transform).transform as RectTransform;
+            // TODO: Glow doesn't work if the Button's glow is disabled first it seems.
             glow.localPosition = buttonTransform.localPosition;
             glow.anchoredPosition = buttonTransform.anchoredPosition;
             glow.anchorMin = buttonTransform.anchorMin;

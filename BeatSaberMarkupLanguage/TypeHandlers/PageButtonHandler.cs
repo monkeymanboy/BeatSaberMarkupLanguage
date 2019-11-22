@@ -21,7 +21,8 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "buttonWidth", new[]{ "button-width" } }
         };
 
-        public override Dictionary<string, Action<PageButton, string>> Setters => new Dictionary<string, Action<PageButton, string>>()
+        public override Dictionary<string, Action<PageButton, string>> Setters => _setters;
+        private Dictionary<string, Action<PageButton, string>> _setters = new Dictionary<string, Action<PageButton, string>>()
         {
             {"direction", new Action<PageButton, string>(SetButtonDirection) },
             {"buttonWidth", new Action<PageButton, string>(SetButtonWidth) }

@@ -21,8 +21,8 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "underlined", new[]{ "underlined" } },
             { "strikethrough", new[]{ "strikethrough" } }
         };
-
-        public override Dictionary<string, Action<TextMeshProUGUI, string>> Setters => new Dictionary<string, Action<TextMeshProUGUI, string>>()
+        public override Dictionary<string, Action<TextMeshProUGUI, string>> Setters => _setters;
+        private Dictionary<string, Action<TextMeshProUGUI, string>> _setters = new Dictionary<string, Action<TextMeshProUGUI, string>>()
         {
             {"text", new Action<TextMeshProUGUI,string>((textMesh, value) => textMesh.text = value) },
             {"fontSize", new Action<TextMeshProUGUI,string>((textMesh, value) => textMesh.fontSize = Parse.Float(value)) },

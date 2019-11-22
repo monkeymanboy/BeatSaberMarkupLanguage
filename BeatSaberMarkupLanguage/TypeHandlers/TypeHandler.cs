@@ -33,8 +33,6 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                     updater = componentType.component.gameObject.GetComponent<NotifyUpdater>();
                     if (updater == null)
                     {
-                        updater = componentType.component.gameObject.GetComponent<NotifyUpdater>();
-                        Logger.log?.Critical($"Adding NotifyUpdater to {componentType.component.name}");
                         updater = componentType.component.gameObject.AddComponent<NotifyUpdater>();
                         updater.NotifyHost = notifyHost;
                     }
@@ -46,12 +44,11 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                         action.Invoke(obj, pair.Value);
                         if (updater != null && componentType.propertyMap != null && componentType.propertyMap.TryGetValue(pair.Key, out PropertyInfo prop))
                         {
-                            Logger.log?.Warn($"Mapping {pair.Key} to property {prop.Name}");
                             updater?.AddAction(prop.Name, val => action.Invoke(obj, val.ToString()));
                         }
                     }
                     else
-                        Logger.log?.Warn($"Tag {pair.Key} not supported for {componentType.component.GetType().Name}.{typeof(T).Name} ({componentType.component.name}) with {componentType.typeHandler.GetType().Name}");
+                        Logger.log?.Warn($"Tag {pair.Key} not supported (or manually handled) for {componentType.component.GetType().Name}.{typeof(T).Name} ({componentType.component.name}) with {componentType.typeHandler.GetType().Name}");
                 }
             }
         }

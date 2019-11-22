@@ -17,7 +17,8 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "verticalFit", new[]{ "vertical-fit"} }
         };
 
-        public override Dictionary<string, Action<ContentSizeFitter, string>> Setters => new Dictionary<string, Action<ContentSizeFitter, string>>()
+        public override Dictionary<string, Action<ContentSizeFitter, string>> Setters => _setters;
+        private Dictionary<string, Action<ContentSizeFitter, string>> _setters = new Dictionary<string, Action<ContentSizeFitter, string>>()
         {
             {"horizontalFit", new Action<ContentSizeFitter, string>((component, value) => component.horizontalFit = (FitMode)Enum.Parse(typeof(FitMode), value)) },
             {"verticalFit", new Action<ContentSizeFitter, string>((component, value) => component.verticalFit = (FitMode)Enum.Parse(typeof(FitMode), value)) }

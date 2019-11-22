@@ -22,6 +22,14 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "interactable", new[]{ "interactable" } }
         };
 
+        public override Dictionary<string, Action<Button, string>> Setters => _setters;
+        private Dictionary<string, Action<Button, string>> _setters = new Dictionary<string, Action<Button, string>>()
+        {
+            {"text", new Action<Button, string>(SetLabel)},
+            {"glowColor", new Action<Button, string>(SetGlow) },
+            {"interactable", new Action<Button, string>(SetInteractable) }
+        };
+
         public override void HandleType(ComponentTypeWithData componentType, BSMLParserParams parserParams)
         {
             try
@@ -34,7 +42,6 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 Polyglot.LocalizedTextMeshProUGUI localizer = componentType.component.GetComponentInChildren<Polyglot.LocalizedTextMeshProUGUI>();
                 if (localizer != null)
                     GameObject.Destroy(localizer);
-                base.HandleType(componentType, parserParams);
 
                 if (componentType.data.TryGetValue("onClick", out string onClick))
                 {
@@ -54,19 +61,13 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                         parserParams.EmitEvent(clickEvent);
                     });
                 }
+                base.HandleType(componentType, parserParams);
             }
             catch (Exception ex)
             {
                 Logger.log?.Error(ex);
             }
         }
-
-        public override Dictionary<string, Action<Button, string>> Setters => new Dictionary<string, Action<Button, string>>()
-        {
-            {"text", new Action<Button, string>(SetLabel)},
-            {"glowColor", new Action<Button, string>(SetGlow) },
-            {"interactable", new Action<Button, string>(SetInteractable) }
-        };
 
         public static void SetLabel(Button button, string value)
         {
@@ -77,7 +78,6 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 
         public static void SetGlow(Button button, string glowColor)
         {
-            Logger.log?.Critical($"Attempting to set glowColor to {glowColor}");
             Image glowImage = button.gameObject.GetComponentsInChildren<Image>().FirstOrDefault(x => x.gameObject.name == "Glow");
             if (glowImage == null)
                 return;

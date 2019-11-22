@@ -13,7 +13,8 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "text", new[]{ "text" } }
         };
 
-        public override Dictionary<string, Action<TextPageScrollView, string>> Setters => new Dictionary<string, Action<TextPageScrollView, string>>()
+        public override Dictionary<string, Action<TextPageScrollView, string>> Setters => _setters;
+        private Dictionary<string, Action<TextPageScrollView, string>> _setters = new Dictionary<string, Action<TextPageScrollView, string>>()
         {
             {"text", new Action<TextPageScrollView, string>((component, value) => component.SetText(value ?? string.Empty)) }
         };
