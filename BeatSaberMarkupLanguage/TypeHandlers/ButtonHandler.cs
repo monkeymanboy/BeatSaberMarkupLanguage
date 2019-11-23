@@ -78,13 +78,14 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 
         public static void SetGlow(Button button, string glowColor)
         {
-            Image glowImage = button.gameObject.GetComponentsInChildren<Image>().FirstOrDefault(x => x.gameObject.name == "Glow");
+            Image glowImage = button.gameObject.GetComponentsInChildren<Image>(true).Where(x => x.gameObject.name == "Glow").FirstOrDefault();
             if (glowImage == null)
                 return;
             if (glowColor != "none")
             {
                 ColorUtility.TryParseHtmlString(glowColor, out Color color);
                 glowImage.color = color;
+                glowImage.gameObject.SetActive(true);
             }
             else
             {
