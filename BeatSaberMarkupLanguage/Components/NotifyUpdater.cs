@@ -26,7 +26,8 @@ namespace BeatSaberMarkupLanguage.Components
                 if (_notifyHost != null)
                 {
                     _notifyHost.PropertyChanged -= NotifyHost_PropertyChanged;
-                    _notifyHost.PropertyChanged += NotifyHost_PropertyChanged;
+                    if (!isActiveAndEnabled)
+                        _notifyHost.PropertyChanged += NotifyHost_PropertyChanged;
                 }
             }
         }
@@ -43,13 +44,15 @@ namespace BeatSaberMarkupLanguage.Components
             Action<object> action = null;
             if (ActionDict?.TryGetValue(e.PropertyName, out action) ?? false)
             {
-                Logger.log?.Warn($"PropertyChanged: {e.PropertyName} ({gameObject.name} - {gameObject.GetInstanceID()}.{GetInstanceID()})");
+                //Logger.log?.Warn($"PropertyChanged: {e.PropertyName} ({gameObject.name} - {gameObject.GetInstanceID()}.{GetInstanceID()})");
                 val = prop.GetValue(sender).ToString();
                 action?.Invoke(prop.GetValue(sender));
-                Logger.log?.Warn($"     New Value: {val}");
+                //Logger.log?.Warn($"     New Value: {val}");
             }
             else
+            {
                 Logger.log?.Warn($"{gameObject.name}: No Action defined for {e.PropertyName}");
+            }
         }
 
         private Dictionary<string, Action<object>> _actionDict;
@@ -81,7 +84,7 @@ namespace BeatSaberMarkupLanguage.Components
 
         void OnEnable()
         {
-            Logger.log?.Warn($"NotifyUpdater enabled. {isActiveAndEnabled}");
+            Logger.log?.Debug($"NotifyUpdater enabled. {isActiveAndEnabled}");
             if (NotifyHost != null)
             {
                 NotifyHost.PropertyChanged -= NotifyHost_PropertyChanged;
@@ -95,12 +98,12 @@ namespace BeatSaberMarkupLanguage.Components
             {
                 NotifyHost.PropertyChanged -= NotifyHost_PropertyChanged;
             }
-            Logger.log?.Warn($"NotifyUpdater disabled.");
+            Logger.log?.Debug($"NotifyUpdater disabled.");
         }
 
         void OnDestroy()
         {
-            Logger.log?.Warn($"NotifyUpdater destroyed.");
+            Logger.log?.Debug($"NotifyUpdater destroyed.");
             _actionDict?.Clear();
             NotifyHost = null;
         }
