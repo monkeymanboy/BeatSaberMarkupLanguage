@@ -16,9 +16,6 @@ namespace BeatSaberMarkupLanguage.Tags
             button.name = "BSMLPageButton";
             button.interactable = true;
             button.gameObject.AddComponent<PageButton>();
-            //Image glowImage = button.gameObject.GetComponentsInChildren<Image>().FirstOrDefault(x => x.gameObject.name == "Glow");
-            //if (glowImage != null)
-            //    glowImage.gameObject.SetActive(false);
             LayoutElement layoutElement = button.gameObject.AddComponent<LayoutElement>();
             layoutElement.preferredWidth = 40;
             layoutElement.preferredHeight = 6;
@@ -31,13 +28,14 @@ namespace BeatSaberMarkupLanguage.Tags
 
             RectTransform buttonTransform = button.transform.GetChild(0) as RectTransform;
             RectTransform glow = MonoBehaviour.Instantiate(Resources.FindObjectsOfTypeAll<GameObject>().Last(x => (x.name == "GlowContainer")), button.transform).transform as RectTransform;
-            // TODO: Glow doesn't work if the Button's glow is disabled first it seems.
+            glow.gameObject.name = "BSMLPageButtonGlowContainer";
+            glow.SetParent(buttonTransform);
             glow.localPosition = buttonTransform.localPosition;
             glow.anchoredPosition = buttonTransform.anchoredPosition;
             glow.anchorMin = buttonTransform.anchorMin;
             glow.anchorMax = buttonTransform.anchorMax;
             glow.sizeDelta = buttonTransform.sizeDelta;
-            //glow.gameObject.SetActive(false);
+
 
             button.gameObject.SetActive(true);
             return button.gameObject;

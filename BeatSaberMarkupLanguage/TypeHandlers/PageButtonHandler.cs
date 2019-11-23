@@ -2,6 +2,7 @@
 using BeatSaberMarkupLanguage.Parser;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -52,7 +53,18 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 
             LayoutElement layoutElement = component.gameObject.GetComponent<LayoutElement>();
             layoutElement.preferredWidth = Parse.Float(value);
-            (component.transform.GetChild(0).transform as RectTransform).sizeDelta = new Vector2(layoutElement.preferredWidth, layoutElement.preferredHeight);
+            RectTransform buttonTransform = component.transform.GetChild(0).transform as RectTransform;
+            buttonTransform.sizeDelta = new Vector2(layoutElement.preferredWidth, layoutElement.preferredHeight);
+
+            RectTransform glowTransform = buttonTransform.Find("BSMLPageButtonGlowContainer") as RectTransform;
+            if (glowTransform != null)
+            {
+                glowTransform.localPosition = buttonTransform.localPosition;
+                glowTransform.anchoredPosition = buttonTransform.anchoredPosition;
+                glowTransform.anchorMin = buttonTransform.anchorMin;
+                glowTransform.anchorMax = buttonTransform.anchorMax;
+                glowTransform.sizeDelta = buttonTransform.sizeDelta;
+            }
         }
     }
 }
