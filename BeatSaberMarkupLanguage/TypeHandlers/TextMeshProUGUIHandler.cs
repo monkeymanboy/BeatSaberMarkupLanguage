@@ -20,7 +20,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "faceColor", new[]{ "faceColor" } },
             { "outlineColor", new[]{ "outlineColor" } }, // Outline not supported for Teko fonts
             { "outlineWidth", new[]{ "outlineWidth" } },
-            { "richText", new[]{ "richText" } },
+            { "richText", new[]{ "richText" } }, // Enabled by default
             { "alignment", new[]{"align"} },
             { "overflowMode", new[]{"overflow-mode"} },
             { "bold", new[]{"bold"} },
@@ -57,7 +57,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 
         private static void SetFont(TextMeshProUGUI textMesh, string fontName)
         {
-
+            Logger.log?.Critical($"TextMeshProUGUI: {textMesh.name} is richText enabled? {textMesh.richText}");
             TMP_FontAsset fontAsset = Resources.FindObjectsOfTypeAll<TMP_FontAsset>().Where(t => 
                 string.Equals(t.name, fontName, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
             if (fontAsset != null)
