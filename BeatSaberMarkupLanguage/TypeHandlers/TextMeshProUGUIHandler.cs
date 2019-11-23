@@ -11,11 +11,12 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
     [ComponentHandler(typeof(TextMeshProUGUI))]
     public class TextMeshProUGUIHandler : TypeHandler<TextMeshProUGUI>
     {
+
         public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
         {
+            { "font", new[]{ "font" } },
             { "text", new[]{"text"} },
             { "fontSize", new[]{"font-size"} },
-            { "font", new[]{ "font" } },
             { "color", new[]{ "color" } },
             { "faceColor", new[]{ "faceColor" } },
             { "outlineColor", new[]{ "outlineColor" } }, // Outline not supported for Teko fonts
@@ -29,11 +30,11 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "strikethrough", new[]{ "strikethrough" } }
         };
         public override Dictionary<string, Action<TextMeshProUGUI, string>> Setters => _setters;
-        private Dictionary<string, Action<TextMeshProUGUI, string>> _setters = new Dictionary<string, Action<TextMeshProUGUI, string>>()
+        private static Dictionary<string, Action<TextMeshProUGUI, string>> _setters = new Dictionary<string, Action<TextMeshProUGUI, string>>()
         {
+            {"font", new Action<TextMeshProUGUI,string>(SetFont) },
             {"text", new Action<TextMeshProUGUI,string>((textMesh, value) => textMesh.text = value) },
             {"fontSize", new Action<TextMeshProUGUI,string>((textMesh, value) => textMesh.fontSize = Parse.Float(value)) },
-            {"font", new Action<TextMeshProUGUI,string>(SetFont) },
             {"color", new Action<TextMeshProUGUI, string>((textMesh, value) => textMesh.color = GetColor(value)) },
             {"faceColor", new Action<TextMeshProUGUI, string>((textMesh, value) => textMesh.faceColor = GetColor(value)) },
             {"outlineColor", new Action<TextMeshProUGUI, string>((textMesh, value) => textMesh.outlineColor = GetColor(value)) },
@@ -57,14 +58,27 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 
         private static void SetFont(TextMeshProUGUI textMesh, string fontName)
         {
-            Logger.log?.Critical($"TextMeshProUGUI: {textMesh.name} is richText enabled? {textMesh.richText}");
-            TMP_FontAsset fontAsset = Resources.FindObjectsOfTypeAll<TMP_FontAsset>().Where(t => 
+            TMP_FontAsset fontAsset = Resources.FindObjectsOfTypeAll<TMP_FontAsset>().Where(t =>
                 string.Equals(t.name, fontName, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
             if (fontAsset != null)
             {
                 textMesh.gameObject.SetActive(false);
-                MonoBehaviour.DestroyImmediate(textMesh.font);
+                MonoBehaviour.Destroy(textMesh.font);
+                // TODO: Setting the font doesn't apply colors to the new font, but this doesn't work
+                //var color = textMesh.color;
+                //var faceColor = textMesh.faceColor;
+                //var outlineColor = textMesh.outlineColor;
+                //var outlineWidth = textMesh.outlineWidth;
+                //textMesh.color = Color.white;
+                //textMesh.faceColor = Color.white;
+                //textMesh.outlineColor = Color.white;
+                //textMesh.outlineWidth = 0;
                 textMesh.font = MonoBehaviour.Instantiate(fontAsset);
+                //textMesh.ForceMeshUpdate();
+                //textMesh.color = color;
+                //textMesh.faceColor = faceColor;
+                //textMesh.outlineColor = outlineColor;
+                //textMesh.outlineWidth = outlineWidth;
                 textMesh.gameObject.SetActive(true);
             }
             else
@@ -78,7 +92,8 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
         {
             if (ColorUtility.TryParseHtmlString(colorStr, out Color color))
                 return color;
-            return (Color)Enum.Parse(typeof(Color), colorStr);
+            Logger.log?.Warn($"Color {colorStr}, is not a valid color.");
+            return Color.white;
         }
     }
 }
