@@ -29,33 +29,34 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             {"buttonWidth", new Action<PageButton, string>(SetButtonWidth) }
         };
 
-        public static void SetButtonDirection(PageButton component, string value)
+        public static void SetButtonDirection(PageButton button, string value)
         {
+            var layoutElement = button.gameObject.GetComponent<LayoutElement>();
+            RectTransform buttonTransform = button.transform as RectTransform;
             switch (Enum.Parse(typeof(PageButtonDirection), value))
             {
                 case PageButtonDirection.Up:
-                    component.transform.localRotation = Quaternion.Euler(0, 0, -180);
+                    buttonTransform.localRotation = Quaternion.Euler(0, 0, -180);
                     break;
                 case PageButtonDirection.Down:
-                    component.transform.localRotation = Quaternion.Euler(0, 0, 0);
+                    buttonTransform.localRotation = Quaternion.Euler(0, 0, 0);
                     break;
                 case PageButtonDirection.Left:
-                    component.transform.localRotation = Quaternion.Euler(0, 0, -90);
+                    buttonTransform.localRotation = Quaternion.Euler(0, 0, -90);
                     break;
                 case PageButtonDirection.Right:
-                    component.transform.localRotation = Quaternion.Euler(0, 0, 90);
+                    buttonTransform.localRotation = Quaternion.Euler(0, 0, 90);
                     break;
             }
         }
 
-        public static void SetButtonWidth(PageButton component, string value)
+        public static void SetButtonWidth(PageButton button, string value)
         {
-
-            LayoutElement layoutElement = component.gameObject.GetComponent<LayoutElement>();
-            layoutElement.preferredWidth = Parse.Float(value);
-            RectTransform buttonTransform = component.transform.GetChild(0).transform as RectTransform;
-            buttonTransform.sizeDelta = new Vector2(layoutElement.preferredWidth, layoutElement.preferredHeight);
-
+            LayoutElement layoutElement = button.gameObject.GetComponent<LayoutElement>();
+            float widthValue = Parse.Float(value);
+            RectTransform buttonTransform = button.transform.GetChild(0).transform as RectTransform;
+            layoutElement.minWidth = widthValue;
+            buttonTransform.sizeDelta = new Vector2(widthValue, layoutElement.minHeight);
             RectTransform glowTransform = buttonTransform.Find("BSMLPageButtonGlowContainer") as RectTransform;
             if (glowTransform != null)
             {

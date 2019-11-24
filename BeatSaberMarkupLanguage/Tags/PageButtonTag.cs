@@ -17,16 +17,17 @@ namespace BeatSaberMarkupLanguage.Tags
             button.interactable = true;
             button.gameObject.AddComponent<PageButton>();
             LayoutElement layoutElement = button.gameObject.AddComponent<LayoutElement>();
-            layoutElement.preferredWidth = 40;
-            layoutElement.preferredHeight = 6;
+            layoutElement.minWidth = 40;
+            layoutElement.minHeight = 6;
             layoutElement.flexibleHeight = 0;
             layoutElement.flexibleWidth = 0;
 
             ContentSizeFitter sizeFitter = button.gameObject.AddComponent<ContentSizeFitter>();
-            sizeFitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
-            sizeFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+            sizeFitter.horizontalFit = ContentSizeFitter.FitMode.MinSize;
+            sizeFitter.verticalFit = ContentSizeFitter.FitMode.MinSize;
 
             RectTransform buttonTransform = button.transform.GetChild(0) as RectTransform;
+            (button.transform as RectTransform).pivot = new Vector2(.5f, .5f);
             RectTransform glow = MonoBehaviour.Instantiate(Resources.FindObjectsOfTypeAll<GameObject>().Last(x => (x.name == "GlowContainer")), button.transform).transform as RectTransform;
             glow.gameObject.name = "BSMLPageButtonGlowContainer";
             glow.SetParent(buttonTransform);
