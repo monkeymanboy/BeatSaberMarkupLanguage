@@ -1,5 +1,7 @@
 ﻿using BeatSaberMarkupLanguage.Attributes;
+using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.Macros;
+using BeatSaberMarkupLanguage.Notify;
 using BeatSaberMarkupLanguage.Parser;
 using BeatSaberMarkupLanguage.Tags;
 using BeatSaberMarkupLanguage.TypeHandlers;
@@ -89,7 +91,9 @@ namespace BeatSaberMarkupLanguage
                 {
                     UIValue uivalue = propertyInfo.GetCustomAttributes(typeof(UIValue), true).FirstOrDefault() as UIValue;
                     if (uivalue != null)
+                    {
                         parserParams.values.Add(uivalue.id, new BSMLPropertyValue(host, propertyInfo));
+                    }
                 }
             }
 
@@ -113,26 +117,31 @@ namespace BeatSaberMarkupLanguage
         }
         private void HandleTagNode(XmlNode node, GameObject parent, BSMLParserParams parserParams)
         {
+
             if (!tags.TryGetValue(node.Name, out BSMLTag currentTag))
                 throw new Exception("Tag type '" + node.Name + "' not found");
 
             GameObject currentNode = currentTag.CreateObject(parent.transform);
+
             List<ComponentTypeWithData> componentTypes = new List<ComponentTypeWithData>();
             foreach (TypeHandler typeHandler in typeHandlers)
             {
                 Component component = currentNode.GetComponent((typeHandler.GetType().GetCustomAttributes(typeof(ComponentHandler), true).FirstOrDefault() as ComponentHandler).type);
+
                 if (component != null)
                 {
                     ComponentTypeWithData componentType = new ComponentTypeWithData();
-                    componentType.data = GetParameters(node, typeHandler.Props, parserParams);
+                    componentType.data = GetParameters(node, typeHandler.Props, parserParams, out var propertyMap);
+                    componentType.propertyMap = propertyMap;
                     componentType.typeHandler = typeHandler;
                     componentType.component = component;
-                    componentTypes.Add(componentType);
+                    componentTypes.Add(componentType); ;
                 }
             }
             foreach (ComponentTypeWithData componentType in componentTypes)
             {
-                componentType.typeHandler.HandleType(componentType.component, componentType.data, parserParams);
+                componentType.typeHandler.HandleType(componentType, parserParams);
+
             }
 
             object host = parserParams.host;
@@ -158,7 +167,7 @@ namespace BeatSaberMarkupLanguage
 
             foreach (ComponentTypeWithData componentType in componentTypes)
             {
-                componentType.typeHandler.HandleTypeAfterChildren(componentType.component, componentType.data, parserParams);
+                componentType.typeHandler.HandleTypeAfterChildren(componentType, parserParams);
             }
         }
         private void HandleMacroNode(XmlNode node, GameObject parent, BSMLParserParams parserParams)
@@ -166,16 +175,23 @@ namespace BeatSaberMarkupLanguage
             if (!macros.TryGetValue(node.Name, out BSMLMacro currentMacro))
                 throw new Exception("Macro type '" + node.Name + "' not found");
 
-            Dictionary<string, string> properties = GetParameters(node, currentMacro.Props, parserParams);
+            Dictionary<string, string> properties = GetParameters(node, currentMacro.Props, parserParams, out _);
             currentMacro.Execute(node, parent, properties, parserParams);
         }
 
-        private Dictionary<string, string> GetParameters(XmlNode node, Dictionary<string, string[]> properties, BSMLParserParams parserParams)
+        private Dictionary<string, string> GetParameters(XmlNode node, Dictionary<string, string[]> properties, BSMLParserParams parserParams, out Dictionary<string, PropertyInfo> propertyMap)
         {
             Dictionary<string, string> parameters = new Dictionary<string, string>();
+            bool isNotifyHost = typeof(INotifiableHost).IsAssignableFrom(parserParams.host.GetType());
+            propertyMap = null;
+            if (isNotifyHost)
+                propertyMap = new Dictionary<string, PropertyInfo>();
             foreach (KeyValuePair<string, string[]> propertyAliases in properties)
             {
-                foreach (string alias in propertyAliases.Value)
+                var aliasList = new List<string>(propertyAliases.Value);
+                if (!aliasList.Contains(propertyAliases.Key))
+                    aliasList.Add(propertyAliases.Key);
+                foreach (string alias in aliasList)
                 {
                     if (node.Attributes[alias] != null)
                     {
@@ -185,8 +201,12 @@ namespace BeatSaberMarkupLanguage
                             string valueID = value.Substring(1);
                             if (!parserParams.values.TryGetValue(valueID, out BSMLValue uiValue))
                                 throw new Exception("No UIValue exists with the id '" + valueID + "'");
-
-                            parameters.Add(propertyAliases.Key, uiValue.GetValue().ToString());
+                            parameters.Add(propertyAliases.Key, uiValue.GetValue()?.ToString());
+                            if (isNotifyHost && uiValue is BSMLPropertyValue propVal)
+                                if (propVal != null)
+                                    propertyMap.Add(propertyAliases.Key, propVal.propertyInfo);
+                                else
+                                    Logger.log?.Warn($"PropertyValue is null for {propertyAliases.Key}");
                         }
                         else
                         {
@@ -204,11 +224,12 @@ namespace BeatSaberMarkupLanguage
             return parameters;
         }
 
-        internal struct ComponentTypeWithData
+        public struct ComponentTypeWithData
         {
             public TypeHandler typeHandler;
             public Component component;
             public Dictionary<string, string> data;
+            public Dictionary<string, PropertyInfo> propertyMap;
         }
     }
 }

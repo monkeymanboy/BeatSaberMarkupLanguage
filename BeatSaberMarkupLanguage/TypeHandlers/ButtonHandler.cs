@@ -2,70 +2,103 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static BeatSaberMarkupLanguage.BSMLParser;
 
 namespace BeatSaberMarkupLanguage.TypeHandlers
 {
     [ComponentHandler(typeof(Button))]
-    public class ButtonHandler : TypeHandler
+    public class ButtonHandler : TypeHandler<Button>
     {
         public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
         {
             { "text", new[]{"text"} },
-            { "glowColor", new[]{"glow-color"} },
-            { "onClick", new[]{"on-click"} },
-            { "clickEvent", new[]{"click-event", "event-click"} },
+            { "glowColor", new[]{ "glow-color" } },
+            { "onClick", new[]{ "on-click" } },
+            { "clickEvent", new[]{ "click-event", "event-click"} },
             { "interactable", new[]{ "interactable" } }
         };
 
-        public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)
+        public override Dictionary<string, Action<Button, string>> Setters => _setters;
+        private Dictionary<string, Action<Button, string>> _setters = new Dictionary<string, Action<Button, string>>()
         {
-            Button button = obj as Button;
-            Polyglot.LocalizedTextMeshProUGUI localizer = obj.GetComponentInChildren<Polyglot.LocalizedTextMeshProUGUI>();
-            if (localizer != null)
-                GameObject.Destroy(localizer);
+            {"text", new Action<Button, string>(SetLabel)},
+            {"glowColor", new Action<Button, string>(SetGlow) },
+            {"interactable", new Action<Button, string>(SetInteractable) }
+        };
 
-            TextMeshProUGUI label = obj.GetComponentInChildren<TextMeshProUGUI>();
-            if (label != null && data.TryGetValue("text", out string text))
-                label.text = text;
-
-            if (data.TryGetValue("interactable", out string interactableString))
-                button.interactable = bool.Parse(interactableString);
-
-            Image glowImage = obj.gameObject.GetComponentsInChildren<Image>().FirstOrDefault(x => x.gameObject.name == "Glow");
-            if (glowImage != null)
+        public override void HandleType(ComponentTypeWithData componentType, BSMLParserParams parserParams)
+        {
+            try
             {
-                if (data.TryGetValue("glowColor", out string glowColor) && glowColor != "none")
-                {
-                    ColorUtility.TryParseHtmlString(glowColor, out Color color);
-                    glowImage.color = color;
-                }
-                else
-                {
+                Button button = componentType.component as Button;
+
+                Image glowImage = button.gameObject.GetComponentsInChildren<Image>().FirstOrDefault(x => x.gameObject.name == "Glow");
+                if (glowImage != null)
                     glowImage.gameObject.SetActive(false);
+                Polyglot.LocalizedTextMeshProUGUI localizer = componentType.component.GetComponentInChildren<Polyglot.LocalizedTextMeshProUGUI>();
+                if (localizer != null)
+                    GameObject.Destroy(localizer);
+
+                if (componentType.data.TryGetValue("onClick", out string onClick))
+                {
+                    button.onClick.AddListener(delegate
+                    {
+                        if (!parserParams.actions.TryGetValue(onClick, out BSMLAction onClickAction))
+                            throw new Exception("on-click action '" + onClick + "' not found");
+
+                        onClickAction.Invoke();
+                    });
                 }
-            }
 
-            if (data.TryGetValue("onClick", out string onClick))
-            {
-                button.onClick.AddListener(delegate
+                if (componentType.data.TryGetValue("clickEvent", out string clickEvent))
                 {
-                    if (!parserParams.actions.TryGetValue(onClick, out BSMLAction onClickAction))
-                        throw new Exception("on-click action '" + onClick + "' not found");
-
-                    onClickAction.Invoke();
-                });
+                    button.onClick.AddListener(delegate
+                    {
+                        parserParams.EmitEvent(clickEvent);
+                    });
+                }
+                base.HandleType(componentType, parserParams);
             }
-
-            if (data.TryGetValue("clickEvent", out string clickEvent))
+            catch (Exception ex)
             {
-                button.onClick.AddListener(delegate
-                {
-                    parserParams.EmitEvent(clickEvent);
-                });
+                Logger.log?.Error(ex);
             }
         }
+
+        public static void SetLabel(Button button, string value)
+        {
+            TextMeshProUGUI label = button.GetComponentInChildren<TextMeshProUGUI>();
+            if (label != null)
+                label.text = value;
+        }
+
+        public static void SetGlow(Button button, string glowColor)
+        {
+            Image glowImage = button.gameObject.GetComponentsInChildren<Image>(true).Where(x => x.gameObject.name == "Glow").FirstOrDefault();
+            if (glowImage == null)
+                return;
+            if (glowColor != "none")
+            {
+                ColorUtility.TryParseHtmlString(glowColor, out Color color);
+                glowImage.color = color;
+                glowImage.gameObject.SetActive(true);
+            }
+            else
+            {
+                glowImage.gameObject.SetActive(false);
+            }
+
+        }
+
+        public static void SetInteractable(Button button, string flag)
+        {
+            if (bool.TryParse(flag, out bool interactable))
+                button.interactable = interactable;
+        }
+
     }
 }

@@ -3,6 +3,7 @@ using BS_Utils.Utilities;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using static BeatSaberMarkupLanguage.BSMLParser;
 
 namespace BeatSaberMarkupLanguage.TypeHandlers
 {
@@ -18,10 +19,10 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "childControlHeight", new[]{ "child-control-height" } }
         };
 
-        public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)
+        public override void HandleType(ComponentTypeWithData componentType, BSMLParserParams parserParams)
         {
-            HorizontalOrVerticalLayoutGroup layoutGroup = (obj as HorizontalOrVerticalLayoutGroup);
-            foreach (KeyValuePair<string, string> pair in data)
+            HorizontalOrVerticalLayoutGroup layoutGroup = (componentType.component as HorizontalOrVerticalLayoutGroup);
+            foreach (KeyValuePair<string, string> pair in componentType.data)
             {
                 if (pair.Key == "spacing")
                     layoutGroup.SetProperty(pair.Key, Parse.Float(pair.Value));

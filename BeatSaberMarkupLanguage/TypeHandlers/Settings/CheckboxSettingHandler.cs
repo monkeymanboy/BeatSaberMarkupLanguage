@@ -3,6 +3,7 @@ using BeatSaberMarkupLanguage.Parser;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using static BeatSaberMarkupLanguage.BSMLParser;
 
 namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
 {
@@ -20,19 +21,19 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
             { "applyOnChange", new[] { "apply-on-change" } }
         };
 
-        public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)
+        public override void HandleType(ComponentTypeWithData componentType, BSMLParserParams parserParams)
         {
-            CheckboxSetting checkboxSetting = obj as CheckboxSetting;
-            if (data.TryGetValue("text", out string text))
+            CheckboxSetting checkboxSetting = componentType.component as CheckboxSetting;
+            if (componentType.data.TryGetValue("text", out string text))
                 checkboxSetting.Text = text;
 
-            if (data.TryGetValue("applyOnChange", out string applyOnChange))
+            if (componentType.data.TryGetValue("applyOnChange", out string applyOnChange))
                 checkboxSetting.updateOnChange = Parse.Bool(applyOnChange);
 
-            if (data.TryGetValue("initialValue", out string initialValue))
+            if (componentType.data.TryGetValue("initialValue", out string initialValue))
                 checkboxSetting.Text = initialValue;
 
-            if (data.TryGetValue("onChange", out string onChange))
+            if (componentType.data.TryGetValue("onChange", out string onChange))
             {
                 if (!parserParams.actions.TryGetValue(onChange, out BSMLAction onChangeAction))
                     throw new Exception("on-change action '" + onChange + "' not found");
@@ -40,7 +41,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
                 checkboxSetting.onChange = onChangeAction;
             }
 
-            if (data.TryGetValue("value", out string value))
+            if (componentType.data.TryGetValue("value", out string value))
             {
                 if (!parserParams.values.TryGetValue(value, out BSMLValue associatedValue))
                     throw new Exception("value '" + value + "' not found");
@@ -48,8 +49,8 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
                 checkboxSetting.associatedValue = associatedValue;
             }
 
-            parserParams.AddEvent(data.TryGetValue("setEvent", out string setEvent) ? setEvent : "apply", checkboxSetting.ApplyValue);
-            parserParams.AddEvent(data.TryGetValue("getEvent", out string getEvent) ? getEvent : "cancel", checkboxSetting.ReceiveValue);
+            parserParams.AddEvent(componentType.data.TryGetValue("setEvent", out string setEvent) ? setEvent : "apply", checkboxSetting.ApplyValue);
+            parserParams.AddEvent(componentType.data.TryGetValue("getEvent", out string getEvent) ? getEvent : "cancel", checkboxSetting.ReceiveValue);
 
             checkboxSetting.Setup();
         }

@@ -3,6 +3,7 @@ using BeatSaberMarkupLanguage.Parser;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using static BeatSaberMarkupLanguage.BSMLParser;
 
 namespace BeatSaberMarkupLanguage.TypeHandlers
 {
@@ -14,11 +15,11 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "tabTag", new[]{"tab-tag"} }
         };
 
-        public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)
+        public override void HandleType(ComponentTypeWithData componentType, BSMLParserParams parserParams)
         {
-            TabSelector tabSelector = (obj as TabSelector);
+            TabSelector tabSelector = (componentType.component as TabSelector);
             tabSelector.parserParams = parserParams;
-            if (!data.TryGetValue("tabTag", out string tabTag))
+            if (!componentType.data.TryGetValue("tabTag", out string tabTag))
                 throw new Exception("Tab Selector must have a tab-tag");
             tabSelector.tabTag = tabTag;
             parserParams.AddEvent("post-parse", tabSelector.Setup);
