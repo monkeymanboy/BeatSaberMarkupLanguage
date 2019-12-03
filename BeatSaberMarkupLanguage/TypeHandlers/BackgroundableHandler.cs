@@ -1,5 +1,4 @@
 ﻿using BeatSaberMarkupLanguage.Components;
-using BeatSaberMarkupLanguage.Parser;
 using System;
 using System.Collections.Generic;
 using UnityEngine;

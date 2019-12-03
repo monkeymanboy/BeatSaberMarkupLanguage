@@ -62,13 +62,6 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             }
         }
 
-        public static void SetLabel(Button button, string value)
-        {
-            TextMeshProUGUI label = button.GetComponentInChildren<TextMeshProUGUI>();
-            if (label != null)
-                label.text = value;
-        }
-
         public static void SetGlow(Button button, string glowColor)
         {
             Image glowImage = button.gameObject.GetComponentsInChildren<Image>(true).Where(x => x.gameObject.name == "Glow").FirstOrDefault();
