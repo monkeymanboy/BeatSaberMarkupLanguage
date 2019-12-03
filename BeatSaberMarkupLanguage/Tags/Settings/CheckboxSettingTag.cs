@@ -1,4 +1,5 @@
-﻿using BeatSaberMarkupLanguage.Components.Settings;
+﻿using BeatSaberMarkupLanguage.Components;
+using BeatSaberMarkupLanguage.Components.Settings;
 using Polyglot;
 using System.Linq;
 using TMPro;
@@ -25,11 +26,12 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
             Object.Destroy(gameObject.GetComponent<HoverHint>()); //When parsing, "RectTransform" will already add a new one. No need for this.
             CheckboxSetting checkboxSetting = gameObject.AddComponent<CheckboxSetting>();
             checkboxSetting.checkbox = gameObject.GetComponent<Toggle>();
-            checkboxSetting.text = gameObject.GetComponentInChildren<TextMeshProUGUI>();
-            checkboxSetting.text.fontSize = 5; //Change some settings to conform more to the List Dropdown/IncDec settings controllers
-            checkboxSetting.text.rectTransform.localPosition = Vector2.zero;
-            checkboxSetting.text.rectTransform.anchoredPosition = Vector2.zero;
-            checkboxSetting.text.rectTransform.sizeDelta = Vector2.zero;
+            TextMeshProUGUI text = gameObject.GetComponentInChildren<TextMeshProUGUI>();
+            text.fontSize = 5; //Change some settings to conform more to the List Dropdown/IncDec settings controllers
+            text.rectTransform.localPosition = Vector2.zero;
+            text.rectTransform.anchoredPosition = Vector2.zero;
+            text.rectTransform.sizeDelta = Vector2.zero;
+            gameObject.AddComponent<ExternalComponents>().components.Add(text);
 
             LayoutElement layout = gameObject.GetComponent<LayoutElement>(); //If Beat Games decides to add one later down the road.
             if (layout is null) layout = gameObject.AddComponent<LayoutElement>(); //For the time being, they dont have one, so time to add one myself!

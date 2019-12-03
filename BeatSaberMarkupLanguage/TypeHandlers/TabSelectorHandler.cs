@@ -2,7 +2,6 @@
 using BeatSaberMarkupLanguage.Parser;
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 using static BeatSaberMarkupLanguage.BSMLParser;
 
 namespace BeatSaberMarkupLanguage.TypeHandlers

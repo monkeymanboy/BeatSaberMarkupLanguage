@@ -12,7 +12,6 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
     {
         public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
         {
-            { "text", new[]{ "text" } },
             { "onChange", new[]{ "on-change" } },
             { "value", new[]{ "value" } },
             { "initialValue", new[]{ "initial-value" } },
@@ -24,14 +23,12 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
         public override void HandleType(ComponentTypeWithData componentType, BSMLParserParams parserParams)
         {
             CheckboxSetting checkboxSetting = componentType.component as CheckboxSetting;
-            if (componentType.data.TryGetValue("text", out string text))
-                checkboxSetting.Text = text;
 
             if (componentType.data.TryGetValue("applyOnChange", out string applyOnChange))
                 checkboxSetting.updateOnChange = Parse.Bool(applyOnChange);
 
             if (componentType.data.TryGetValue("initialValue", out string initialValue))
-                checkboxSetting.Text = initialValue;
+                checkboxSetting.CheckboxValue = Parse.Bool(initialValue);
 
             if (componentType.data.TryGetValue("onChange", out string onChange))
             {

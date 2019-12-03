@@ -8,5 +8,6 @@ namespace BeatSaberMarkupLanguage.Tags
         public virtual bool AddChildren { get => true; }
 
         public abstract GameObject CreateObject(Transform parent);
+        public virtual void Setup() { }
     }
 }

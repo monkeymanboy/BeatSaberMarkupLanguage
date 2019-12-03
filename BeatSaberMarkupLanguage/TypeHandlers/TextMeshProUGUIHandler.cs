@@ -1,8 +1,5 @@
-﻿using BeatSaberMarkupLanguage.Components;
-using BeatSaberMarkupLanguage.Parser;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -14,14 +11,14 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 
         public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
         {
-            { "font", new[]{ "font" } },
+            //{ "font", new[]{ "font" } },
             { "text", new[]{"text"} },
             { "fontSize", new[]{"font-size"} },
             { "color", new[]{ "color" } },
-            { "faceColor", new[]{ "faceColor" } },
-            { "outlineColor", new[]{ "outlineColor" } }, // Outline not supported for Teko fonts
-            { "outlineWidth", new[]{ "outlineWidth" } },
-            { "richText", new[]{ "richText" } }, // Enabled by default
+            { "faceColor", new[]{ "face-color" } },
+            { "outlineColor", new[]{ "outline-color" } }, // Outline not supported for Teko fonts
+            { "outlineWidth", new[]{ "outline-width" } },
+            { "richText", new[]{ "rich-text" } }, // Enabled by default
             { "alignment", new[]{"align"} },
             { "overflowMode", new[]{"overflow-mode"} },
             { "bold", new[]{"bold"} },
@@ -29,10 +26,9 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "underlined", new[]{ "underlined" } },
             { "strikethrough", new[]{ "strikethrough" } }
         };
-        public override Dictionary<string, Action<TextMeshProUGUI, string>> Setters => _setters;
-        private static Dictionary<string, Action<TextMeshProUGUI, string>> _setters = new Dictionary<string, Action<TextMeshProUGUI, string>>()
+        public override Dictionary<string, Action<TextMeshProUGUI, string>> Setters => new Dictionary<string, Action<TextMeshProUGUI, string>>()
         {
-            {"font", new Action<TextMeshProUGUI,string>(SetFont) },
+            //{"font", new Action<TextMeshProUGUI,string>(SetFont) },
             {"text", new Action<TextMeshProUGUI,string>((textMesh, value) => textMesh.text = value) },
             {"fontSize", new Action<TextMeshProUGUI,string>((textMesh, value) => textMesh.fontSize = Parse.Float(value)) },
             {"color", new Action<TextMeshProUGUI, string>((textMesh, value) => textMesh.color = GetColor(value)) },
@@ -50,12 +46,14 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 
         private static FontStyles SetStyle(FontStyles existing, FontStyles modifyStyle, string flag)
         {
-            if (bool.TryParse(flag, out bool flagBool) && flagBool)
+            if (Parse.Bool(flag))
                 return existing |= modifyStyle;
             else
                 return existing &= ~modifyStyle;
         }
-
+        /* TODO: Fix fonts
+         * Also add table of safe font names
+         * 
         private static void SetFont(TextMeshProUGUI textMesh, string fontName)
         {
             TMP_FontAsset fontAsset = Resources.FindObjectsOfTypeAll<TMP_FontAsset>().Where(t =>
@@ -86,7 +84,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 var fontList = Resources.FindObjectsOfTypeAll<TMP_FontAsset>();
                 Logger.log?.Warn($"Font {fontName} not found. Available fonts: {string.Join(", ", fontList?.Where(f => !f.name.Contains("(Clone)")).Select(f => f.name))}");
             }
-        }
+        }*/
 
         private static Color GetColor(string colorStr)
         {

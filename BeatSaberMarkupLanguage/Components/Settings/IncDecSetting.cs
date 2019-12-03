@@ -10,8 +10,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         public BSMLAction onChange;
         public BSMLValue associatedValue;
         public bool updateOnChange = false;
-
-        public TextMeshProUGUI label;
+        
         public TextMeshProUGUI text;
         public Button decButton;
         public Button incButton;
@@ -29,11 +28,6 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         public string Text
         {
             set => text.text = value;
-        }
-
-        public string LabelText
-        {
-            set => label.text = value;
         }
 
         protected virtual void OnEnable()

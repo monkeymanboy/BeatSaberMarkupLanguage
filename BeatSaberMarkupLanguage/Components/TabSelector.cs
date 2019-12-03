@@ -17,9 +17,11 @@ namespace BeatSaberMarkupLanguage.Components
             tabs.Clear();
             foreach(GameObject gameObject in parserParams.GetObjectsWithTag(tabTag))
             {
-                tabs.Add(gameObject.GetComponent<Tab>());
+                Tab tab = gameObject.GetComponent<Tab>();
+                tabs.Add(tab);
+                tab.selector = this;
             }
-            textSegmentedControl.SetTexts(tabs.Select(x => x.tabName).ToArray());
+            Refresh();
             textSegmentedControl.didSelectCellEvent -= TabSelected;
             textSegmentedControl.didSelectCellEvent += TabSelected;
             textSegmentedControl.SelectCellWithNumber(0);
@@ -31,6 +33,10 @@ namespace BeatSaberMarkupLanguage.Components
             {
                 tabs[i].gameObject.SetActive(i == index);
             }
+        }
+        public void Refresh()
+        {
+            textSegmentedControl.SetTexts(tabs.Select(x => x.TabName).ToArray());
         }
     }
 }

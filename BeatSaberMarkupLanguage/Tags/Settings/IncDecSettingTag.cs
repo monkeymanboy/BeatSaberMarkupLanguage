@@ -1,4 +1,5 @@
-﻿using BeatSaberMarkupLanguage.Components.Settings;
+﻿using BeatSaberMarkupLanguage.Components;
+using BeatSaberMarkupLanguage.Components.Settings;
 using Polyglot;
 using System.Linq;
 using TMPro;
@@ -22,11 +23,13 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
             boolSetting.text = gameObject.transform.GetChild(1).GetComponentsInChildren<TextMeshProUGUI>().First();
             boolSetting.decButton = gameObject.transform.GetChild(1).GetComponentsInChildren<Button>().First();
             boolSetting.incButton = gameObject.transform.GetChild(1).GetComponentsInChildren<Button>().Last();
-            boolSetting.label = gameObject.GetComponentInChildren<TextMeshProUGUI>();
 
-            MonoBehaviour.Destroy(boolSetting.label.GetComponent<LocalizedTextMeshProUGUI>());
+            TextMeshProUGUI text = gameObject.GetComponentInChildren<TextMeshProUGUI>();
+            text.text = "Default Text";
+            gameObject.AddComponent<ExternalComponents>().components.Add(text);
+            MonoBehaviour.Destroy(text.GetComponent<LocalizedTextMeshProUGUI>());
+
             gameObject.GetComponent<LayoutElement>().preferredWidth = 90;
-            boolSetting.LabelText = "Default Text";
 
             gameObject.SetActive(true);
             return gameObject;

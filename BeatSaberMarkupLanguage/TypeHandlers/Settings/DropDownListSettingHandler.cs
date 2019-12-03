@@ -12,7 +12,6 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
     {
         public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
         {
-            { "text", new[]{ "text" } },
             { "onChange", new[]{ "on-change"} },
             { "value", new[]{ "value"} },
             { "setEvent", new[]{ "set-event"} },
@@ -25,9 +24,6 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
         public override void HandleType(ComponentTypeWithData componentType, BSMLParserParams parserParams)
         {
             DropDownListSetting listSetting = componentType.component as DropDownListSetting;
-
-            if (componentType.data.TryGetValue("text", out string text))
-                listSetting.dropdown.SetLabelText(text);
 
             if (componentType.data.TryGetValue("applyOnChange", out string applyOnChange))
                 listSetting.updateOnChange = Parse.Bool(applyOnChange);

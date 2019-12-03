@@ -4,6 +4,16 @@ namespace BeatSaberMarkupLanguage.Components
 {
     public class Tab : MonoBehaviour
     {
-        public string tabName;
+        private string tabName;
+        public string TabName
+        {
+            get => tabName;
+            set
+            {
+                tabName = value;
+                selector?.Refresh();
+            }
+        }
+        public TabSelector selector;
     }
 }

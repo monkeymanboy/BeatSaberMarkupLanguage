@@ -12,7 +12,6 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
     {
         public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
         {
-            { "text", new[]{ "text" } },
             { "onChange", new[]{ "on-change"} },
             { "value", new[]{ "value"} },
             { "setEvent", new[]{ "set-event"} },
@@ -25,9 +24,6 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
         public override void HandleType(ComponentTypeWithData componentType, BSMLParserParams parserParams)
         {
             ListSliderSetting listSetting = componentType.component as ListSliderSetting;
-
-            if (componentType.data.TryGetValue("text", out string text))
-                listSetting.LabelText = text;
 
             if (componentType.data.TryGetValue("formatter", out string formatter))
                 listSetting.formatter = parserParams.actions[formatter];

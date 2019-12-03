@@ -1,8 +1,6 @@
 ﻿using BeatSaberMarkupLanguage.Components;
-using BeatSaberMarkupLanguage.Parser;
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.TypeHandlers
 {
@@ -14,10 +12,9 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "tabName", new[]{"tab-name"} }
         };
 
-        public override Dictionary<string, Action<Tab, string>> Setters => _setters;
-        private Dictionary<string, Action<Tab, string>> _setters = new Dictionary<string, Action<Tab, string>>()
+        public override Dictionary<string, Action<Tab, string>> Setters => new Dictionary<string, Action<Tab, string>>()
         {
-            {"tabName", new Action<Tab, string>((component, value) => component.tabName = !string.IsNullOrEmpty(value) ? value : throw new ArgumentNullException("tabName cannot be null or empty for Tab")) }
+            {"tabName", new Action<Tab, string>((component, value) => component.TabName = !string.IsNullOrEmpty(value) ? value : throw new ArgumentNullException("tabName cannot be null or empty for Tab")) }
         };
     }
 }

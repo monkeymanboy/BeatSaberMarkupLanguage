@@ -1,9 +1,9 @@
 <bg>
   <tab-selector tab-tag='new-tab'></tab-selector>
-  <tab tags='new-tab' tab-name='Header and Stuff'>
+  <tab tags='new-tab' tab-name='~header'>
     <vertical>
       <horizontal bg='panel-top' pad-left='10' pad-right='10' horizontal-fit='PreferredSize'>
-        <text id ='sometext' text='~header' align='Center' font-size='10'></text>
+        <text text='~header' color='red' align='Center' font-size='10'></text>
       </horizontal>
       <horizontal bg='round-rect-panel' pad='6' spacing='10'>
         <button on-click='click' glow-color='green' text='Test Button'></button>

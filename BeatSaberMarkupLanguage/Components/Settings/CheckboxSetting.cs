@@ -15,8 +15,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         public BSMLAction onChange;
         public BSMLValue associatedValue;
         public bool updateOnChange = false;
-
-        public TextMeshProUGUI text;
+        
         public Toggle checkbox;
 
         public bool EnableCheckbox
@@ -27,12 +26,6 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         public bool CheckboxValue
         {
             set => checkbox.isOn = value;
-        }
-
-        public string Text
-        {
-            get => text.text;
-            set => text.text = value;
         }
 
         protected virtual void OnEnable()

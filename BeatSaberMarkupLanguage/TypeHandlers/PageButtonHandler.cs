@@ -18,20 +18,17 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 
         public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
         {
-            { "direction", new[]{"dir", "direction"} },
-            { "buttonWidth", new[]{ "button-width" } }
+            { "direction", new[]{"dir", "direction"} }
         };
 
-        public override Dictionary<string, Action<PageButton, string>> Setters => _setters;
-        private Dictionary<string, Action<PageButton, string>> _setters = new Dictionary<string, Action<PageButton, string>>()
+        public override Dictionary<string, Action<PageButton, string>> Setters => new Dictionary<string, Action<PageButton, string>>()
         {
-            {"direction", new Action<PageButton, string>(SetButtonDirection) },
-            {"buttonWidth", new Action<PageButton, string>(SetButtonWidth) }
+            {"direction", new Action<PageButton, string>(SetButtonDirection) }
         };
 
         public static void SetButtonDirection(PageButton button, string value)
         {
-            var layoutElement = button.gameObject.GetComponent<LayoutElement>();
+            LayoutElement layoutElement = button.gameObject.GetComponent<LayoutElement>();
             RectTransform buttonTransform = button.transform as RectTransform;
             switch (Enum.Parse(typeof(PageButtonDirection), value))
             {
@@ -47,24 +44,6 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 case PageButtonDirection.Right:
                     buttonTransform.localRotation = Quaternion.Euler(0, 0, 90);
                     break;
-            }
-        }
-
-        public static void SetButtonWidth(PageButton button, string value)
-        {
-            LayoutElement layoutElement = button.gameObject.GetComponent<LayoutElement>();
-            float widthValue = Parse.Float(value);
-            RectTransform buttonTransform = button.transform.GetChild(0).transform as RectTransform;
-            layoutElement.minWidth = widthValue;
-            buttonTransform.sizeDelta = new Vector2(widthValue, layoutElement.minHeight);
-            RectTransform glowTransform = buttonTransform.Find("BSMLPageButtonGlowContainer") as RectTransform;
-            if (glowTransform != null)
-            {
-                glowTransform.localPosition = buttonTransform.localPosition;
-                glowTransform.anchoredPosition = buttonTransform.anchoredPosition;
-                glowTransform.anchorMin = buttonTransform.anchorMin;
-                glowTransform.anchorMax = buttonTransform.anchorMax;
-                glowTransform.sizeDelta = buttonTransform.sizeDelta;
             }
         }
     }

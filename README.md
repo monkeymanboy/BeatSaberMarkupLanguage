@@ -5,6 +5,12 @@ More info on the [wiki](https://github.com/monkeymanboy/BeatSaberMarkupLanguage/
 
 ## For developers
 
+### TODO
+- Revamp wiki
+- Add custom tabs on left free play screen
+- Add gameplay modifiers
+- Fix custom fonts
+
 ### Contributing to Beat Saber Markup Language
 In order to build this project, please create the file `BeatSaberMarkupLanguage.csproj.user` and add your Beat Saber directory path to it in the project directory.
 This file should not be uploaded to GitHub and is filtered out by the .gitignore.

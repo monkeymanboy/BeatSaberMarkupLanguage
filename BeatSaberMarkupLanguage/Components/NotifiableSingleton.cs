@@ -1,24 +1,12 @@
 ﻿using BeatSaberMarkupLanguage.Notify;
 using System;
 using System.Runtime.CompilerServices;
-using VRUI;
+using UnityEngine;
 
-namespace BeatSaberMarkupLanguage.ViewControllers
+namespace BeatSaberMarkupLanguage.Components
 {
-    public abstract class BSMLViewController : VRUIViewController, INotifiableHost
+    public class NotifiableSingleton<T> : PersistentSingleton<T>, INotifiableHost where T : MonoBehaviour
     {
-        public abstract string Content { get; }
-
-        public Action<bool, ActivationType> didActivate;
-
-        protected override void DidActivate(bool firstActivation, ActivationType type)
-        {
-            if (firstActivation)
-                BSMLParser.instance.Parse(Content, gameObject, this);
-
-            didActivate?.Invoke(firstActivation, type);
-        }
-
         public event PropertyChangedEventHandler PropertyChanged;
         protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {

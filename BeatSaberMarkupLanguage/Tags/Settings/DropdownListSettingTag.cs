@@ -1,6 +1,8 @@
-﻿using BeatSaberMarkupLanguage.Components.Settings;
+﻿using BeatSaberMarkupLanguage.Components;
+using BeatSaberMarkupLanguage.Components.Settings;
 using BS_Utils.Utilities;
 using HMUI;
+using System;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -12,12 +14,24 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
     {
         public override string[] Aliases => new[] { "dropdown-list-setting" };
 
+        private LabelAndValueDropdownWithTableView safePrefab;
+        public override void Setup()
+        {
+            Console.WriteLine("SETUP SAFE PREFAB");
+            safePrefab = MonoBehaviour.Instantiate(Resources.FindObjectsOfTypeAll<LabelAndValueDropdownWithTableView>().First(x => x.name == "NormalLevels"), null, false);
+            safePrefab.gameObject.SetActive(false);
+            safePrefab.name = "BSMLDropDownListPrefab";
+        }
+
         public override GameObject CreateObject(Transform parent)
         {
-            LabelAndValueDropdownWithTableView dropdown = MonoBehaviour.Instantiate(Resources.FindObjectsOfTypeAll<LabelAndValueDropdownWithTableView>().First(x => x.name == "NormalLevels"), parent, false);
+            Console.WriteLine("CREATE");
+            LabelAndValueDropdownWithTableView dropdown = MonoBehaviour.Instantiate(safePrefab, parent, false);
             dropdown.gameObject.SetActive(false);
             dropdown.name = "BSMLDropDownList";
-            dropdown.GetPrivateField<TextMeshProUGUI>("_labelText").fontSize = 5;
+            TextMeshProUGUI text = dropdown.GetPrivateField<TextMeshProUGUI>("_labelText");
+            text.fontSize = 5;
+            dropdown.gameObject.AddComponent<ExternalComponents>().components.Add(text);
 
             LayoutElement layoutElement = dropdown.gameObject.AddComponent<LayoutElement>();
             layoutElement.preferredHeight = 8;

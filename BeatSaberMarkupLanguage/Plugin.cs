@@ -29,6 +29,8 @@ namespace BeatSaberMarkupLanguage
 
         public void OnActiveSceneChanged(Scene prevScene, Scene nextScene)
         {
+            if(nextScene.name == "MenuCore")
+                BSMLParser.instance.MenuSceneLoaded();
             if (prevScene.name == "PCInit" && nextScene.name == "EmptyTransition")
                 GameObject.Destroy(BSMLSettings.instance.gameObject); // For if the game is restarted
         }

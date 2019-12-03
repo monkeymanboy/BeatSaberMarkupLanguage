@@ -35,7 +35,9 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
                     settingsFlowCoordinator.OpenMenu(submenuController, true, false);
             };
 
-            submenuController.gameObject.AddComponent<SubmenuText>().submenuText = clickableText;
+            ExternalComponents externalComponents = submenuController.gameObject.AddComponent<ExternalComponents>();
+            externalComponents.components.Add(clickableText);
+            externalComponents.components.Add(clickableText.rectTransform);
 
             gameObj.SetActive(true);
             return submenuController.gameObject;

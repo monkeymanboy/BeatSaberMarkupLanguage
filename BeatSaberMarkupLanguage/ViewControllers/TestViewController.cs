@@ -1,21 +1,28 @@
 ﻿using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components;
+using BeatSaberMarkupLanguage.Notify;
 using HMUI;
 using System.Collections.Generic;
 using TMPro;
 
 namespace BeatSaberMarkupLanguage.ViewControllers
 {
-    public class TestViewController : BSMLResourceViewController
+    public class TestViewController : BSMLResourceViewController, INotifiableHost
     {
         public override string ResourceName => "BeatSaberMarkupLanguage.Views.test.bsml";
 
         [UIValue("header")]
+        public string HeaderText
+        {
+            get => headerText;
+            set
+            {
+                headerText = value;
+                NotifyPropertyChanged();
+            }
+        }
         public string headerText = "Header comes from code!";
-
-        [UIComponent("sometext")]
-        public TextMeshProUGUI text;
-
+        
         [UIComponent("list")]
         public CustomCellListTableData tableData;
 
@@ -38,7 +45,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
         [UIAction("click")]
         private void ButtonPress()
         {
-            text.text = "It works!";
+            HeaderText = "It works!";
         }
 
         [UIAction("cell click")]

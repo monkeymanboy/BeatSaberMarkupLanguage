@@ -1,4 +1,5 @@
-﻿using BeatSaberMarkupLanguage.Components.Settings;
+﻿using BeatSaberMarkupLanguage.Components;
+using BeatSaberMarkupLanguage.Components.Settings;
 using Polyglot;
 using System.Linq;
 using TMPro;
@@ -23,14 +24,16 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
             StringSetting stringSetting = gameObject.AddComponent<StringSetting>();
             GameObject.Destroy(gameObject.transform.GetChild(1).GetComponentsInChildren<Button>().First().gameObject);
             stringSetting.text = gameObject.transform.GetChild(1).GetComponentsInChildren<TextMeshProUGUI>().First();
-            stringSetting.label = gameObject.GetComponentInChildren<TextMeshProUGUI>();
             stringSetting.editButton = gameObject.transform.GetChild(1).GetComponentsInChildren<Button>().Last();
-
-            MonoBehaviour.Destroy(stringSetting.label.GetComponent<LocalizedTextMeshProUGUI>());
+            
+            TextMeshProUGUI text = gameObject.GetComponentInChildren<TextMeshProUGUI>();
+            text.text = "Default Text";
+            gameObject.AddComponent<ExternalComponents>().components.Add(text);
+            MonoBehaviour.Destroy(text.GetComponent<LocalizedTextMeshProUGUI>());
+            
             gameObject.GetComponent<LayoutElement>().preferredWidth = 90;
             stringSetting.text.alignment = TextAlignmentOptions.MidlineRight;
             stringSetting.text.enableWordWrapping = false;
-            stringSetting.LabelText = "Default Text";
             stringSetting.Text = "Default Text";
 
             Image icon = stringSetting.editButton.transform.Find("Arrow").GetComponent<Image>();

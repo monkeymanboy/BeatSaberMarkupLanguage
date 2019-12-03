@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,17 +14,14 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
     {
         public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
         {
-            { "text", new[]{"text"} },
             { "glowColor", new[]{ "glow-color" } },
             { "onClick", new[]{ "on-click" } },
             { "clickEvent", new[]{ "click-event", "event-click"} },
             { "interactable", new[]{ "interactable" } }
         };
 
-        public override Dictionary<string, Action<Button, string>> Setters => _setters;
-        private Dictionary<string, Action<Button, string>> _setters = new Dictionary<string, Action<Button, string>>()
+        public override Dictionary<string, Action<Button, string>> Setters => new Dictionary<string, Action<Button, string>>()
         {
-            {"text", new Action<Button, string>(SetLabel)},
             {"glowColor", new Action<Button, string>(SetGlow) },
             {"interactable", new Action<Button, string>(SetInteractable) }
         };
@@ -39,9 +35,6 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 Image glowImage = button.gameObject.GetComponentsInChildren<Image>().FirstOrDefault(x => x.gameObject.name == "Glow");
                 if (glowImage != null)
                     glowImage.gameObject.SetActive(false);
-                Polyglot.LocalizedTextMeshProUGUI localizer = componentType.component.GetComponentInChildren<Polyglot.LocalizedTextMeshProUGUI>();
-                if (localizer != null)
-                    GameObject.Destroy(localizer);
 
                 if (componentType.data.TryGetValue("onClick", out string onClick))
                 {
@@ -96,8 +89,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 
         public static void SetInteractable(Button button, string flag)
         {
-            if (bool.TryParse(flag, out bool interactable))
-                button.interactable = interactable;
+            button.interactable = Parse.Bool(flag);
         }
 
     }

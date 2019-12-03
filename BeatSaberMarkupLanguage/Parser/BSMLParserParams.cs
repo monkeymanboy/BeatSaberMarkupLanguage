@@ -14,18 +14,24 @@ namespace BeatSaberMarkupLanguage.Parser
         private Dictionary<string, Action> events = new Dictionary<string, Action>();
         private Dictionary<string, List<GameObject>> objectsWithTag = new Dictionary<string, List<GameObject>>();
 
-        public void AddEvent(string id, Action action)
+        public void AddEvent(string ids, Action action)
         {
-            if (events.ContainsKey(id))
-                events[id] += action;
-            else
-                events.Add(id, action);
+            foreach (string id in ids.Split(','))
+            {
+                if (events.ContainsKey(id))
+                    events[id] += action;
+                else
+                    events.Add(id, action);
+            }
         }
 
-        public void EmitEvent(string id)
+        public void EmitEvent(string ids)
         {
-            if (events.ContainsKey(id))
-                events[id].Invoke();
+            foreach (string id in ids.Split(','))
+            {
+                if (events.ContainsKey(id))
+                    events[id].Invoke();
+            }
         }
         
         public void AddObjectTags(GameObject gameObject, params string[] tags)

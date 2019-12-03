@@ -12,7 +12,6 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
     {
         public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
         {
-            { "text", new[]{ "text" } },
             { "onChange", new[]{ "on-change"} },
             { "value", new[]{ "value"} },
             { "initialValue", new[]{ "initial-value"} },
@@ -24,9 +23,6 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
         public override void HandleType(ComponentTypeWithData componentType, BSMLParserParams parserParams)
         {
             BoolSetting boolSetting = componentType.component as BoolSetting;
-
-            if (componentType.data.TryGetValue("text", out string text))
-                boolSetting.LabelText = text;
 
             if (componentType.data.TryGetValue("applyOnChange", out string applyOnChange))
                 boolSetting.updateOnChange = Parse.Bool(applyOnChange);

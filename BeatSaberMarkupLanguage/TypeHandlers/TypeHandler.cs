@@ -3,7 +3,6 @@ using BeatSaberMarkupLanguage.Notify;
 using BeatSaberMarkupLanguage.Parser;
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using UnityEngine;
 using static BeatSaberMarkupLanguage.BSMLParser;
 
@@ -11,6 +10,15 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 {
     public abstract class TypeHandler
     {
+        private Dictionary<string, string[]> cachedProps;
+        public Dictionary<string, string[]> CachedProps
+        {
+            get{
+                if (cachedProps == null)
+                    cachedProps = Props;
+                return cachedProps;
+            }
+        }
         public abstract Dictionary<string, string[]> Props { get; }
         public abstract void HandleType(ComponentTypeWithData componentType, BSMLParserParams parserParams);
         public virtual void HandleTypeAfterChildren(ComponentTypeWithData componentType, BSMLParserParams parserParams) { }
@@ -19,9 +27,19 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
     public abstract class TypeHandler<T> : TypeHandler
         where T : Component
     {
+
+        private Dictionary<string, Action<T, string>> cachedSetters;
+        public Dictionary<string, Action<T, string>> CachedSetters
+        {
+            get
+            {
+                if (cachedSetters == null)
+                    cachedSetters = Setters;
+                return cachedSetters;
+            }
+        }
         public abstract Dictionary<string, Action<T, string>> Setters { get; }
 
-        //public virtual void HandleType(T obj, Dictionary<string, string> data, BSMLParserParams parserParams, Dictionary<string, PropertyInfo> propertyMap = null)
         public override void HandleType(ComponentTypeWithData componentType, BSMLParserParams parserParams)
         {
             if (componentType.component is T obj)
@@ -39,12 +57,12 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 }
                 foreach (KeyValuePair<string, string> pair in componentType.data)
                 {
-                    if (Setters.TryGetValue(pair.Key, out Action<T, string> action))
+                    if (CachedSetters.TryGetValue(pair.Key, out Action<T, string> action))
                     {
                         action.Invoke(obj, pair.Value);
-                        if (updater != null && componentType.propertyMap != null && componentType.propertyMap.TryGetValue(pair.Key, out PropertyInfo prop))
+                        if (componentType.propertyMap != null && componentType.propertyMap.TryGetValue(pair.Key, out BSMLPropertyValue prop))
                         {
-                            updater?.AddAction(prop.Name, val => action.Invoke(obj, val.ToString()));
+                            updater?.AddAction(prop.propertyInfo.Name, val => action.Invoke(obj, val.ToString()));
                         }
                     }
                     else

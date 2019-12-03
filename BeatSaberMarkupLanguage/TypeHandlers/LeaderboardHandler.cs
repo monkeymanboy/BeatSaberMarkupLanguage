@@ -1,24 +1,20 @@
-﻿using BeatSaberMarkupLanguage.Parser;
-using BS_Utils.Utilities;
+﻿using BS_Utils.Utilities;
+using System;
 using System.Collections.Generic;
-using UnityEngine;
-using static BeatSaberMarkupLanguage.BSMLParser;
 
 namespace BeatSaberMarkupLanguage.TypeHandlers
 {
     [ComponentHandler(typeof(LeaderboardTableView))]
-    public class LeaderboardHandler : TypeHandler
+    public class LeaderboardHandler : TypeHandler<LeaderboardTableView>
     {
         public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
         {
             { "cellSize", new[]{"cell-size"} }
         };
 
-        public override void HandleType(ComponentTypeWithData componentType, BSMLParserParams parserParams)
+        public override Dictionary<string, Action<LeaderboardTableView, string>> Setters => new Dictionary<string, Action<LeaderboardTableView, string>>()
         {
-            LeaderboardTableView table = (componentType.component as LeaderboardTableView);
-            if (componentType.data.TryGetValue("cellSize", out string cellSize))
-                table.SetPrivateField("_rowHeight", Parse.Float(cellSize));
-        }
+            {"cellSize", new Action<LeaderboardTableView, string>((component, value) => component.SetPrivateField("_rowHeight", Parse.Float(value))) }
+        };
     }
 }
