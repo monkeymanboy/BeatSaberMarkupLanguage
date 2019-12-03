@@ -17,6 +17,8 @@
   <tab tags='new-tab' tab-name='Buttons'>
     <vertical>
       <horizontal bg='round-rect-panel' pad='8'>
+
+        <page-button click-event='list#PageUp' direction='Left' glow-color='red'></page-button>
         <macro.for-each hosts='contents'>
           <macro.if value='should-glow'>
             <button text='~title' on-click='button-click' glow-color='red'></button>
@@ -25,6 +27,7 @@
             <button text='~title' on-click='button-click'></button>
           </macro.if>
         </macro.for-each>
+        <page-button click-event='list#PageDown' direction='Right'></page-button>
       </horizontal>
     </vertical>
   </tab>

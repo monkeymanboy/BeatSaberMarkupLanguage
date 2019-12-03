@@ -29,21 +29,31 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
         public static void SetButtonDirection(PageButton button, string value)
         {
             LayoutElement layoutElement = button.gameObject.GetComponent<LayoutElement>();
-            RectTransform buttonTransform = button.transform as RectTransform;
+            RectTransform buttonTransform = button.transform.Find("Arrow") as RectTransform;
+            bool isHorizontal = false;
             switch (Enum.Parse(typeof(PageButtonDirection), value))
             {
                 case PageButtonDirection.Up:
-                    buttonTransform.localRotation = Quaternion.Euler(0, 0, -180);
-                    break;
-                case PageButtonDirection.Down:
+                    isHorizontal = true;
                     buttonTransform.localRotation = Quaternion.Euler(0, 0, 0);
                     break;
-                case PageButtonDirection.Left:
-                    buttonTransform.localRotation = Quaternion.Euler(0, 0, -90);
+                case PageButtonDirection.Down:
+                    isHorizontal = true;
+                    buttonTransform.localRotation = Quaternion.Euler(0, 0, -180);
                     break;
-                case PageButtonDirection.Right:
+                case PageButtonDirection.Left:
+                    isHorizontal = false;
                     buttonTransform.localRotation = Quaternion.Euler(0, 0, 90);
                     break;
+                case PageButtonDirection.Right:
+                    isHorizontal = false;
+                    buttonTransform.localRotation = Quaternion.Euler(0, 0, -90);
+                    break;
+            }
+            if(layoutElement.preferredHeight == -1 && layoutElement.preferredWidth == -1) //Establish default dimensions if they weren't changed
+            {
+                layoutElement.preferredWidth = isHorizontal?40:6;
+                layoutElement.preferredHeight = isHorizontal?6:40;
             }
         }
     }

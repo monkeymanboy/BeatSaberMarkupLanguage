@@ -17,8 +17,8 @@ namespace BeatSaberMarkupLanguage.Tags
             button.interactable = true;
             button.gameObject.AddComponent<PageButton>();
             LayoutElement layoutElement = button.gameObject.AddComponent<LayoutElement>();
-            layoutElement.preferredWidth = 40;
-            layoutElement.preferredHeight = 6;
+            layoutElement.preferredWidth = -1;
+            layoutElement.preferredHeight = -1;
             layoutElement.flexibleHeight = 0;
             layoutElement.flexibleWidth = 0;
 

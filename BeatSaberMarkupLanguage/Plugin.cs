@@ -20,7 +20,7 @@ namespace BeatSaberMarkupLanguage
         public void MenuLoadFresh()
         {
             //BSMLSettings.instance.AddSettingsMenu("Test", "BeatSaberMarkupLanguage.Views.settings-test.bsml", SettingsTest.instance);
-            //Resources.FindObjectsOfTypeAll<GameScenesManager>().FirstOrDefault().StartCoroutine(PresentTest());
+            Resources.FindObjectsOfTypeAll<GameScenesManager>().FirstOrDefault().StartCoroutine(PresentTest());
             BSMLSettings.instance.StartCoroutine(BSMLSettings.instance.AddButtonToMainScreen());
             MenuButtons.MenuButtons.instance.Setup();
         }

@@ -35,9 +35,6 @@ namespace BeatSaberMarkupLanguage.ViewControllers
                 list.Add(new TestListObject("first", false));
                 list.Add(new TestListObject("second", true));
                 list.Add(new TestListObject("third", true));
-                list.Add(new TestListObject("fourth", false));
-                list.Add(new TestListObject("fifth", true));
-                list.Add(new TestListObject("sixth", false));
                 return list;
             }
         }
