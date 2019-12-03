@@ -50,10 +50,13 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                     buttonTransform.localRotation = Quaternion.Euler(0, 0, -90);
                     break;
             }
-            if(layoutElement.preferredHeight == -1 && layoutElement.preferredWidth == -1) //Establish default dimensions if they weren't changed
+            if(layoutElement.preferredHeight == -1) //Establish default dimensions if they weren't changed
             {
-                layoutElement.preferredWidth = isHorizontal?40:6;
                 layoutElement.preferredHeight = isHorizontal?6:40;
+            }
+            if (layoutElement.preferredWidth == -1)
+            {
+                layoutElement.preferredWidth = isHorizontal ? 40 : 6;
             }
         }
     }
