@@ -138,20 +138,8 @@ namespace BeatSaberMarkupLanguage
             List<ComponentTypeWithData> componentTypes = new List<ComponentTypeWithData>();
             foreach (TypeHandler typeHandler in typeHandlers)
             {
-                Type typeOfComponent = (typeHandler.GetType().GetCustomAttributes(typeof(ComponentHandler), true).FirstOrDefault() as ComponentHandler).type;
-                Component component = null;
-                ExternalComponents externalComponents = currentNode.GetComponent<ExternalComponents>();
-                if (externalComponents != null)
-                {
-                    foreach(Component externalComponent in externalComponents.components)
-                    {
-                        if (typeOfComponent.IsAssignableFrom(externalComponent.GetType()))
-                            component = externalComponent;
-                    }
-                }
-                if(component == null)
-                    component = currentNode.GetComponent(typeOfComponent);
-
+                Type type = (typeHandler.GetType().GetCustomAttributes(typeof(ComponentHandler), true).FirstOrDefault() as ComponentHandler).type;
+                Component component = GetExternalComponent(currentNode, type);
                 if (component != null)
                 {
                     ComponentTypeWithData componentType = new ComponentTypeWithData();
@@ -175,14 +163,14 @@ namespace BeatSaberMarkupLanguage
                 {
                     UIComponent uicomponent = fieldInfo.GetCustomAttributes(typeof(UIComponent), true).FirstOrDefault() as UIComponent;
                     if (uicomponent != null && uicomponent.id == node.Attributes["id"].Value)
-                        fieldInfo.SetValue(host, currentNode.GetComponent(fieldInfo.FieldType));
+                        fieldInfo.SetValue(host, GetExternalComponent(currentNode, fieldInfo.FieldType));
 
                     UIObject uiobject = fieldInfo.GetCustomAttributes(typeof(UIObject), true).FirstOrDefault() as UIObject;
                     if (uiobject != null && uiobject.id == node.Attributes["id"].Value)
                         fieldInfo.SetValue(host, currentNode);
                 }
             }
-            if (host != null && node.Attributes["tags"] != null)
+            if (node.Attributes["tags"] != null)
                 parserParams.AddObjectTags(currentNode, node.Attributes["tags"].Value.Split(','));
 
             if (currentTag.AddChildren)
@@ -194,6 +182,26 @@ namespace BeatSaberMarkupLanguage
                 componentType.typeHandler.HandleTypeAfterChildren(componentType, parserParams);
             }
         }
+
+        private Component GetExternalComponent(GameObject gameObject, Type type)
+        {
+            Component component = null;
+            ExternalComponents externalComponents = gameObject.GetComponent<ExternalComponents>();
+            if (externalComponents != null)
+            {
+                foreach (Component externalComponent in externalComponents.components)
+                {
+                    if (type.IsAssignableFrom(externalComponent.GetType()))
+                        component = externalComponent;
+                }
+            }
+
+            if (component == null)
+                component = gameObject.GetComponent(type);
+
+            return component;
+        }
+
         private void HandleMacroNode(XmlNode node, GameObject parent, BSMLParserParams parserParams)
         {
             if (!macros.TryGetValue(node.Name, out BSMLMacro currentMacro))

@@ -22,7 +22,10 @@ namespace BeatSaberMarkupLanguage.ViewControllers
             }
         }
         public string headerText = "Header comes from code!";
-        
+
+        [UIComponent("test-external")]
+        public TextMeshProUGUI buttonText;
+
         [UIComponent("list")]
         public CustomCellListTableData tableData;
 
@@ -43,6 +46,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
         private void ButtonPress()
         {
             HeaderText = "It works!";
+            buttonText.text = "Clicked";
         }
 
         [UIAction("cell click")]
