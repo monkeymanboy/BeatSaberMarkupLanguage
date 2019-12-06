@@ -13,7 +13,7 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
         public override GameObject CreateObject(Transform parent)
         {
             BoolSettingsController baseSetting = MonoBehaviour.Instantiate(Resources.FindObjectsOfTypeAll<BoolSettingsController>().First(x => (x.name == "Fullscreen")), parent, false);
-            baseSetting.name = "BSMLBoolSetting";
+            baseSetting.name = "BSMLIncDecSetting";
 
             GameObject gameObject = baseSetting.gameObject;
             MonoBehaviour.Destroy(baseSetting);
@@ -23,6 +23,7 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
             boolSetting.text = gameObject.transform.GetChild(1).GetComponentsInChildren<TextMeshProUGUI>().First();
             boolSetting.decButton = gameObject.transform.GetChild(1).GetComponentsInChildren<Button>().First();
             boolSetting.incButton = gameObject.transform.GetChild(1).GetComponentsInChildren<Button>().Last();
+            (gameObject.transform.GetChild(1) as RectTransform).sizeDelta = new Vector2(43, 0);
 
             TextMeshProUGUI text = gameObject.GetComponentInChildren<TextMeshProUGUI>();
             text.text = "Default Text";

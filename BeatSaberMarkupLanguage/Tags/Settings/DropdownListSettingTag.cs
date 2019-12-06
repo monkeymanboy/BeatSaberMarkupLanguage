@@ -12,7 +12,7 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
 {
     public class DropdownListSettingTag : BSMLTag
     {
-        public override string[] Aliases => new[] { "dropdown-list-setting" };
+        public override string[] Aliases => new[] { "temp-disabled-dropdown-list-setting" };
 
         private LabelAndValueDropdownWithTableView safePrefab;
         public override void Setup()
@@ -40,7 +40,7 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
             DropDownListSetting dropDownListSetting = dropdown.gameObject.AddComponent<DropDownListSetting>();
             dropDownListSetting.tableView = dropdown.GetPrivateField<TableView>("_tableView");
             dropDownListSetting.dropdown = dropdown;
-            dropdown.GetPrivateField<TableView>("_tableView").dataSource = dropDownListSetting;
+            dropDownListSetting.tableView.dataSource = dropDownListSetting;
 
             return dropdown.gameObject;
         }

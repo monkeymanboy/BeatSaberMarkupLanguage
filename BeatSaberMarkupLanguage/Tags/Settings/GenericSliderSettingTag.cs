@@ -1,6 +1,8 @@
 ﻿using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.Components.Settings;
+using HMUI;
 using Polyglot;
+using System;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -18,16 +20,18 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
             GameObject gameObject = baseSetting.gameObject;
 
             T sliderSetting = gameObject.AddComponent<T>();
-            sliderSetting.slider = GameObject.Instantiate(Resources.FindObjectsOfTypeAll<HMUI.TimeSlider>().First(s => s.name != "BSMLSlider"), gameObject.transform.Find("Value"), false);
+            Transform valuePick = gameObject.transform.Find("ValuePicker");
+            sliderSetting.slider = GameObject.Instantiate(Resources.FindObjectsOfTypeAll<HMUI.TimeSlider>().First(s => s.name != "BSMLSlider"), valuePick, false);
             sliderSetting.slider.name = "BSMLSlider";
             sliderSetting.slider.GetComponentInChildren<TextMeshProUGUI>().enableWordWrapping = false;
-            (sliderSetting.slider.transform as RectTransform).sizeDelta = new Vector2(44, 7);
-            (sliderSetting.slider.transform as RectTransform).anchorMin = new Vector2(0, 0.5f);
+            (sliderSetting.slider.transform as RectTransform).anchorMin = new Vector2(-0.2f, 0.4f);
+            (sliderSetting.slider.transform as RectTransform).anchorMax = new Vector2(1, 1.2f);
+            (sliderSetting.slider.transform as RectTransform).sizeDelta = new Vector2(0, 0);
 
             MonoBehaviour.Destroy(baseSetting);
-            GameObject.Destroy(gameObject.transform.GetChild(1).GetComponentsInChildren<TextMeshProUGUI>().First().gameObject);
-            GameObject.Destroy(gameObject.transform.GetChild(1).GetComponentsInChildren<Button>().First().gameObject);
-            GameObject.Destroy(gameObject.transform.GetChild(1).GetComponentsInChildren<Button>().Last().gameObject);
+            GameObject.Destroy(valuePick.GetComponentsInChildren<TextMeshProUGUI>().First().transform.parent.gameObject);
+            GameObject.Destroy(valuePick.GetComponentsInChildren<Button>().First().gameObject);
+            GameObject.Destroy(valuePick.GetComponentsInChildren<Button>().Last().gameObject);
 
             TextMeshProUGUI text = gameObject.GetComponentInChildren<TextMeshProUGUI>();
             text.text = "Default Text";

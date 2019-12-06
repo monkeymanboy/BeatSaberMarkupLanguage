@@ -1,11 +1,11 @@
 ﻿using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Settings.UI.ViewControllers;
 using BS_Utils.Utilities;
+using HMUI;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
-using VRUI;
 using static BeatSaberMarkupLanguage.Components.CustomListTableData;
 
 namespace BeatSaberMarkupLanguage.Settings
@@ -13,11 +13,11 @@ namespace BeatSaberMarkupLanguage.Settings
     internal class ModSettingsFlowCoordinator : FlowCoordinator
     {
         protected SettingsMenuListViewController settingsMenuListViewController;
-        protected VRUINavigationController navigationController;
+        protected NavigationController navigationController;
 
-        protected VRUIViewController activeController;
+        protected ViewController activeController;
 
-        private Stack<VRUIViewController> submenuStack = new Stack<VRUIViewController>();
+        private Stack<ViewController> submenuStack = new Stack<ViewController>();
         private bool isPresenting;
         public bool isAnimating;
 
@@ -26,25 +26,25 @@ namespace BeatSaberMarkupLanguage.Settings
             if (firstActivation)
             {
                 title = "Mod Settings";
-                navigationController = BeatSaberUI.CreateViewController<VRUINavigationController>();
+                navigationController = BeatSaberUI.CreateViewController<NavigationController>();
                 BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), "BeatSaberMarkupLanguage.Views.settings-buttons.bsml"), navigationController.gameObject, this);
 
                 settingsMenuListViewController = BeatSaberUI.CreateViewController<SettingsMenuListViewController>();
                 settingsMenuListViewController.clickedMenu += OpenMenu;
                 SetViewControllerToNavigationConctroller(navigationController, settingsMenuListViewController);
                 ProvideInitialViewControllers(navigationController);
-                
+
                 foreach (CustomCellInfo cellInfo in BSMLSettings.instance.settingsMenus)
                     (cellInfo as SettingsMenu).parserParams.AddEvent("back", Back);
             }
         }
 
-        public void OpenMenu(VRUIViewController viewController)
+        public void OpenMenu(ViewController viewController)
         {
             OpenMenu(viewController, false, false);
         }
 
-        public void OpenMenu(VRUIViewController viewController, bool isSubmenu, bool isBack)
+        public void OpenMenu(ViewController viewController, bool isSubmenu, bool isBack)
         {
             if (isPresenting) return;
             if (!isBack)
@@ -79,7 +79,7 @@ namespace BeatSaberMarkupLanguage.Settings
         private void Ok()
         {
             Apply();
-            Resources.FindObjectsOfTypeAll<MenuTransitionsHelperSO>().First().RestartGame(skipHealthWarning: true);
+            Resources.FindObjectsOfTypeAll<MenuTransitionsHelper>().First().RestartGame();
         }
 
         [UIAction("apply-click")]

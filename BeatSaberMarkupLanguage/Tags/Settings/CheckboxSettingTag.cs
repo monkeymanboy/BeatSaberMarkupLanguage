@@ -1,5 +1,6 @@
 ﻿using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.Components.Settings;
+using HMUI;
 using Polyglot;
 using System.Linq;
 using TMPro;

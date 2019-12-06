@@ -19,7 +19,7 @@ namespace BeatSaberMarkupLanguage.Components
                 _verticalScrollIndicator.normalizedPageHeight = _viewport.rect.height / _contentHeight;
             }
             ComputeScrollFocusPosY();
-            _verticalScrollIndicator.RefreshHandle();
+            //_verticalScrollIndicator.RefreshHandle();
             RectTransform handle = _verticalScrollIndicator.GetPrivateField<RectTransform>("_handle");
             handle.sizeDelta = new Vector2(handle.sizeDelta.x, Math.Abs(handle.sizeDelta.y));
         }

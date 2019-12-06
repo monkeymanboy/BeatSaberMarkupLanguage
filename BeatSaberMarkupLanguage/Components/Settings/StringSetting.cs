@@ -2,6 +2,8 @@
 using BeatSaberMarkupLanguage.Settings;
 using BeatSaberMarkupLanguage.ViewControllers;
 using BS_Utils.Utilities;
+using System;
+using System.Collections;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -20,10 +22,17 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         public TextMeshProUGUI text;
         public Button editButton;
 
+        public RectTransform boundingBox;
+
         public string Text
         {
-            set => text.text = value;
             get => text.text;
+            set => text.text = value;
+        }
+
+        void Update()//TODO: Remove need for this to be called in Update
+        {
+            boundingBox.sizeDelta = new Vector2(text.textBounds.size.x + 7, 0);
         }
 
         public void Setup()

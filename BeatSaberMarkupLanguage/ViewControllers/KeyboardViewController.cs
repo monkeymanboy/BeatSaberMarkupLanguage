@@ -1,15 +1,16 @@
 ﻿using BS_Utils.Utilities;
+using HMUI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using VRUI;
+using Image = UnityEngine.UI.Image;
 
 namespace BeatSaberMarkupLanguage.ViewControllers
 {
-    public class KeyboardViewController : VRUIViewController
+    public class KeyboardViewController : ViewController
     {
         private KEYBOARD keyboard;
 

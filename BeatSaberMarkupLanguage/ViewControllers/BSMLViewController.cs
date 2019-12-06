@@ -1,11 +1,11 @@
 ﻿using BeatSaberMarkupLanguage.Notify;
+using HMUI;
 using System;
 using System.Runtime.CompilerServices;
-using VRUI;
 
 namespace BeatSaberMarkupLanguage.ViewControllers
 {
-    public abstract class BSMLViewController : VRUIViewController, INotifiableHost
+    public abstract class BSMLViewController : ViewController, INotifiableHost
     {
         public abstract string Content { get; }
 

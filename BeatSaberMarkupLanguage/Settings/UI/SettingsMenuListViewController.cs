@@ -4,7 +4,6 @@ using BeatSaberMarkupLanguage.ViewControllers;
 using HMUI;
 using System;
 using UnityEngine;
-using VRUI;
 
 namespace BeatSaberMarkupLanguage.Settings.UI.ViewControllers
 {
@@ -15,7 +14,7 @@ namespace BeatSaberMarkupLanguage.Settings.UI.ViewControllers
         [UIComponent("list")]
         public CustomListTableData list;
 
-        public Action<VRUIViewController> clickedMenu;
+        public Action<ViewController> clickedMenu;
 
         protected override void DidActivate(bool firstActivation, ActivationType type)
         {

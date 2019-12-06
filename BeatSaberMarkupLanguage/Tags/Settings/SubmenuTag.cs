@@ -1,10 +1,10 @@
 ﻿using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.Components.Settings;
 using BeatSaberMarkupLanguage.Settings;
+using HMUI;
 using System.Linq;
 using TMPro;
 using UnityEngine;
-using VRUI;
 
 namespace BeatSaberMarkupLanguage.Tags.Settings
 {
@@ -25,7 +25,7 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
             clickableText.color = Color.white;
             clickableText.rectTransform.sizeDelta = new Vector2(90, 8);
 
-            VRUIViewController submenuController = BeatSaberUI.CreateViewController<VRUIViewController>();
+            ViewController submenuController = BeatSaberUI.CreateViewController<ViewController>();
             BSMLSettings.SetupViewControllerTransform(submenuController);
 
             clickableText.OnClickEvent += delegate
