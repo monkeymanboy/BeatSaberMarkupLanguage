@@ -2,7 +2,6 @@
 using BeatSaberMarkupLanguage.Parser;
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 using static BeatSaberMarkupLanguage.BSMLParser;
 
 namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
@@ -27,9 +26,6 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
         public override void HandleType(ComponentTypeWithData componentType, BSMLParserParams parserParams)
         {
             IncrementSetting incrementSetting = componentType.component as IncrementSetting;
-
-            //if (componentType.data.TryGetValue("text", out string text))
-            //    incrementSetting.LabelText = text;
 
             if (componentType.data.TryGetValue("applyOnChange", out string applyOnChange))
                 incrementSetting.updateOnChange = Parse.Bool(applyOnChange);
