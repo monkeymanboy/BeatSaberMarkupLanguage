@@ -10,7 +10,7 @@ namespace BeatSaberMarkupLanguage.Tags
         public override GameObject CreateObject(Transform parent)
         {
             GameObject gameObject = base.CreateObject(parent);
-            gameObject.name = "BSMLTag";
+            gameObject.name = "BSMLTab";
             gameObject.AddComponent<Tab>();
             return gameObject;
         }
