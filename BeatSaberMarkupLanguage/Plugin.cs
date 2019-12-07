@@ -20,7 +20,7 @@ namespace BeatSaberMarkupLanguage
         }
         public void MenuLoadFresh()
         {
-            BSMLSettings.instance.AddSettingsMenu("Test", "BeatSaberMarkupLanguage.Views.settings-test.bsml", SettingsTest.instance);
+            //BSMLSettings.instance.AddSettingsMenu("Test", "BeatSaberMarkupLanguage.Views.settings-test.bsml", SettingsTest.instance);
             //Resources.FindObjectsOfTypeAll<GameScenesManager>().FirstOrDefault().StartCoroutine(PresentTest());
             BSMLSettings.instance.StartCoroutine(BSMLSettings.instance.AddButtonToMainScreen());
             MenuButtons.MenuButtons.instance.Setup();
@@ -30,7 +30,7 @@ namespace BeatSaberMarkupLanguage
 
         public void OnActiveSceneChanged(Scene prevScene, Scene nextScene)
         {
-            if (nextScene.name == "MenuViewControllers")
+            if (nextScene.name == "MenuViewControllers" && prevScene.name == "EmptyTransition")
                 BSMLParser.instance.MenuSceneLoaded();
             if (prevScene.name == "PCInit" && nextScene.name == "EmptyTransition")
                 GameObject.Destroy(BSMLSettings.instance.gameObject); // For if the game is restarted
