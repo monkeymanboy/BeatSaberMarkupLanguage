@@ -11,7 +11,6 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
     {
         public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
         {
-            { "text", new[] { "text" } },
             { "onChange", new[] { "on-change"} },
             { "value", new[] { "value"} },
             { "setEvent", new[] { "set-event"} },
