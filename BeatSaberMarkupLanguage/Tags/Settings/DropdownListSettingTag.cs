@@ -4,6 +4,7 @@ using BS_Utils.Utilities;
 using HMUI;
 using System;
 using System.Linq;
+using System.Reflection;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,7 +13,7 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
 {
     public class DropdownListSettingTag : BSMLTag
     {
-        public override string[] Aliases => new[] { "temp-disabled-dropdown-list-setting" };
+        public override string[] Aliases => new[] { "dropdown-list-setting" };
 
         private LabelAndValueDropdownWithTableView safePrefab;
         public override void Setup()
@@ -38,7 +39,11 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
             dropdown.SetValueText("Default Text");
 
             DropDownListSetting dropDownListSetting = dropdown.gameObject.AddComponent<DropDownListSetting>();
-            dropDownListSetting.tableView = dropdown.GetPrivateField<TableView>("_tableView");
+            //dropDownListSetting.tableView = dropdown.GetPrivateField<TableView>("_tableView");
+            //temp
+            FieldInfo fieldInfo = typeof(DropdownWithTableView).GetField("_tableView", BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
+            dropDownListSetting.tableView = fieldInfo.GetValue(dropdown) as TableView;
+            //
             dropDownListSetting.dropdown = dropdown;
             dropDownListSetting.tableView.dataSource = dropDownListSetting;
 

@@ -1,6 +1,7 @@
 ﻿using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.Components.Settings;
 using Polyglot;
+using System;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -23,7 +24,8 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
             boolSetting.text = gameObject.transform.GetChild(1).GetComponentsInChildren<TextMeshProUGUI>().First();
             boolSetting.decButton = gameObject.transform.GetChild(1).GetComponentsInChildren<Button>().First();
             boolSetting.incButton = gameObject.transform.GetChild(1).GetComponentsInChildren<Button>().Last();
-            (gameObject.transform.GetChild(1) as RectTransform).sizeDelta = new Vector2(43, 0);
+            (gameObject.transform.GetChild(1) as RectTransform).sizeDelta = new Vector2(40, 0);
+            boolSetting.text.overflowMode = TextOverflowModes.Ellipsis;
 
             TextMeshProUGUI text = gameObject.GetComponentInChildren<TextMeshProUGUI>();
             text.text = "Default Text";

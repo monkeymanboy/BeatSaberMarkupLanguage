@@ -4,6 +4,6 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
 {
     public class ListSettingTag : IncDecSettingTag<ListSetting>
     {
-        public override string[] Aliases => new[] { "list-setting", "dropdown-list-setting" };
+        public override string[] Aliases => new[] { "list-setting" };
     }
 }

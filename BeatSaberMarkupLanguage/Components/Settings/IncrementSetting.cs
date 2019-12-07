@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BeatSaberMarkupLanguage.Parser;
+using System;
 
 namespace BeatSaberMarkupLanguage.Components.Settings
 {
@@ -6,6 +7,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
     {
         private float currentValue;
 
+        public BSMLAction formatter;
         public bool isInt;
         public float minValue = float.MinValue;
         public float maxValue = float.MaxValue;
@@ -92,7 +94,15 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 
             EnableDec = currentValue > minValue;
             EnableInc = currentValue < maxValue;
-            Text = currentValue.ToString();
+            Text = TextForValue(currentValue);
+        }
+
+        protected string TextForValue(float value)
+        {
+            if (isInt)
+                return formatter == null ? (ConvertToInt(value)).ToString() : (formatter.Invoke(ConvertToInt(value)) as string);
+            else
+                return formatter == null ? value.ToString("N2") : (formatter.Invoke(value) as string);
         }
 
         private int ConvertToInt(float value)

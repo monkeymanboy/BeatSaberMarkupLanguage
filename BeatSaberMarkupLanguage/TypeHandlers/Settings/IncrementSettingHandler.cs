@@ -20,11 +20,15 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
             { "minValue", new[] { "min" } },
             { "maxValue", new[] { "max" } },
             { "isInt", new[] { "integer-only" } },
+            { "formatter", new[] { "formatter" } }
         };
 
         public override void HandleType(ComponentTypeWithData componentType, BSMLParserParams parserParams)
         {
             IncrementSetting incrementSetting = componentType.component as IncrementSetting;
+
+            if (componentType.data.TryGetValue("formatter", out string formatter))
+                incrementSetting.formatter = parserParams.actions[formatter];
 
             if (componentType.data.TryGetValue("applyOnChange", out string applyOnChange))
                 incrementSetting.updateOnChange = Parse.Bool(applyOnChange);
