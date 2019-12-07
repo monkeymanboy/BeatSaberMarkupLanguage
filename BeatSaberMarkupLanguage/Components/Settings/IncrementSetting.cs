@@ -35,9 +35,9 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 
             if (isInt)
             {
-                minValue = ConvertToInt(minValue, int.MinValue);
-                maxValue = ConvertToInt(maxValue, int.MaxValue);
-                increments = ConvertToInt(increments, 1);
+                minValue = ConvertToInt(minValue);
+                maxValue = ConvertToInt(maxValue);
+                increments = ConvertToInt(increments);
             }
         }
 
@@ -95,23 +95,16 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             Text = currentValue.ToString();
         }
 
-        private int ConvertToInt(object value, int defaultValue = default)
+        private int ConvertToInt(float value)
         {
             int result;
 
-            try
-            {
+            if (value < int.MinValue)
+                result = int.MinValue;
+            else if (value > int.MaxValue)
+                result = int.MaxValue;
+            else
                 result = Convert.ToInt32(value);
-            }
-            catch (OverflowException)
-            {
-                // Value is not within the limits of an Integer
-                result = defaultValue;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
 
             return result;
         }
