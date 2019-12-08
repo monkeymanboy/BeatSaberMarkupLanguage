@@ -28,8 +28,6 @@ namespace BeatSaberMarkupLanguage
         private XmlDocument doc = new XmlDocument();
         private XmlReaderSettings readerSettings = new XmlReaderSettings();
         
-        private bool initializedTags = false;
-
         public void Awake()
         {
             readerSettings.IgnoreComments = true;
@@ -45,11 +43,13 @@ namespace BeatSaberMarkupLanguage
 
         public void MenuSceneLoaded()
         {
-            if (initializedTags) return;
-            initializedTags = true;
             foreach (BSMLTag tag in tags.Values)
             {
-                tag.Setup();
+                if (!tag.isInitialized)
+                {
+                    tag.Setup();
+                    tag.isInitialized = true;
+                }
             }
         }
 
