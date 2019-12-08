@@ -12,14 +12,16 @@ namespace BeatSaberMarkupLanguage.Components
         {
             { "round-rect-panel", "RoundRectPanel" },
             { "panel-bottom", "PanelBottom" },
-            { "panel-top", "PanelTop" }
+            { "panel-top", "PanelTop" },
+            { "round-rect-panel-shadow", "RoundRectPanelShadow"}
         };
 
         private static Dictionary<string, string> ObjectNames => new Dictionary<string, string>()
         {
             { "round-rect-panel", "MinScoreInfo" },
             { "panel-bottom", "BG" },
-            { "panel-top", "HeaderPanel" }
+            { "panel-top", "HeaderPanel" },
+            { "round-rect-panel-shadow", "Shadow"}
         };
 
         public Image background;

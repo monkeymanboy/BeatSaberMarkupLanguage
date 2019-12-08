@@ -135,6 +135,7 @@
     <Compile Include="Tags\ImageTag.cs" />
     <Compile Include="Tags\LeaderboardTag.cs" />
     <Compile Include="Tags\ListTag.cs" />
+    <Compile Include="Tags\ModalTag.cs" />
     <Compile Include="Tags\PageButtonTag.cs" />
     <Compile Include="Tags\ScrollableSettingsContainerTag.cs" />
     <Compile Include="Tags\SettingsContainerTag.cs" />
@@ -165,6 +166,7 @@
     <Compile Include="TypeHandlers\LayoutElementHandler.cs" />
     <Compile Include="TypeHandlers\LayoutGroupHandler.cs" />
     <Compile Include="TypeHandlers\LeaderboardHandler.cs" />
+    <Compile Include="TypeHandlers\ModalViewHandler.cs" />
     <Compile Include="TypeHandlers\PageButtonHandler.cs" />
     <Compile Include="TypeHandlers\RectTransformHandler.cs" />
     <Compile Include="TypeHandlers\Settings\CheckboxSettingHandler.cs" />
