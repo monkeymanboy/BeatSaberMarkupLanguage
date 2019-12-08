@@ -16,7 +16,8 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
         {
             { "showEvent", new[]{ "show-event" } },
             { "hideEvent", new[]{ "hide-event" } },
-            { "clickOffCloses", new[]{ "click-off-closes", "clickerino-offerino-closerino" } }
+            { "clickOffCloses", new[]{ "click-off-closes", "clickerino-offerino-closerino" } },
+            { "moveToCenter", new[]{ "move-to-center" } }
         };
 
         public override void HandleType(ComponentTypeWithData componentType, BSMLParserParams parserParams)
@@ -24,11 +25,14 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             try
             {
                 ModalView modalView = componentType.component as ModalView;
+                bool moveToCenter = true;
+                if (componentType.data.TryGetValue("moveToCenter", out string moveToCenterString))
+                    moveToCenter = bool.Parse(moveToCenterString);
                 if (componentType.data.TryGetValue("showEvent", out string showEvent))
                 {
                     parserParams.AddEvent(showEvent, delegate
                     {
-                        modalView.Show(true, true);
+                        modalView.Show(true, moveToCenter);
                     });
                 }
                 if (componentType.data.TryGetValue("hideEvent", out string hideEvent))

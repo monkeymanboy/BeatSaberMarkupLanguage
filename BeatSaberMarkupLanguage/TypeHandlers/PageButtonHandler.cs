@@ -35,19 +35,19 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             {
                 case PageButtonDirection.Up:
                     isHorizontal = true;
-                    buttonTransform.localRotation = Quaternion.Euler(0, 0, 0);
+                    buttonTransform.localRotation = Quaternion.Euler(0, 0, -180);
                     break;
                 case PageButtonDirection.Down:
                     isHorizontal = true;
-                    buttonTransform.localRotation = Quaternion.Euler(0, 0, -180);
+                    buttonTransform.localRotation = Quaternion.Euler(0, 0, 0);
                     break;
                 case PageButtonDirection.Left:
                     isHorizontal = false;
-                    buttonTransform.localRotation = Quaternion.Euler(0, 0, 90);
+                    buttonTransform.localRotation = Quaternion.Euler(0, 0, -90);
                     break;
                 case PageButtonDirection.Right:
                     isHorizontal = false;
-                    buttonTransform.localRotation = Quaternion.Euler(0, 0, -90);
+                    buttonTransform.localRotation = Quaternion.Euler(0, 0, 90);
                     break;
             }
             if(layoutElement.preferredHeight == -1) //Establish default dimensions if they weren't changed

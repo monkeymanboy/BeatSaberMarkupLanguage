@@ -8,27 +8,38 @@ namespace BeatSaberMarkupLanguage.MenuButtons
 {
     public class MenuButton : INotifiableHost
     {
-        //If you're wondering why I need another set of properties it's because attributes aren't inherited
-        [UIValue("text")]
-        public string _Text => Text;
-        [UIValue("hover-hint")]
-        public string _HoverHint => HoverHint;
-        [UIValue("interactable")]
-        public bool _Interactable => Interactable;
-
-        public virtual string Text { get; protected set; }
-        public virtual string HoverHint { get; protected set; }
         public virtual Action OnClick { get; protected set; }
+        private string _text;
+        [UIValue("text")]
+        public virtual string Text {
+            get => _text;
+            set
+            {
+                _text = value;
+                NotifyPropertyChanged();
+            }
+        }
+        private string _hoverHint;
+        [UIValue("hover-hint")]
+        public virtual string HoverHint {
+            get => _hoverHint;
+            set
+            {
+                _hoverHint = value;
+                NotifyPropertyChanged();
+            }
+        }
         private bool _interactable;
+        [UIValue("interactable")]
         public virtual bool Interactable {
             get => _interactable;
             set {
                 _interactable = value;
-                NotifyPropertyChanged("_Interactable");
+                NotifyPropertyChanged();
             }
         }
         [UIAction("button-click")]
-        public void _OnClick()
+        public void ButtonClicked()
         {
             OnClick?.Invoke();
         }

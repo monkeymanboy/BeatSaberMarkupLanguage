@@ -44,7 +44,6 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
         {
             if (componentType.component is T obj)
             {
-
                 NotifyUpdater updater = null;
                 if (parserParams.host is INotifiableHost notifyHost && (componentType.propertyMap?.Count ?? 0) > 0)
                 {
@@ -65,8 +64,6 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                             updater?.AddAction(prop.propertyInfo.Name, val => action.Invoke(obj, val.ToString()));
                         }
                     }
-                    else
-                        Logger.log?.Warn($"Tag {pair.Key} not supported (or manually handled) for {componentType.component.GetType().Name}.{typeof(T).Name} ({componentType.component.name}) with {componentType.typeHandler.GetType().Name}");
                 }
             }
         }
