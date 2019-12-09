@@ -52,7 +52,13 @@ namespace BeatSaberMarkupLanguage.ViewControllers
         [UIAction("cell click")]
         private void CellClick(TableView tableView, TestListObject testObj)
         {
-            Logger.log.Debug("Clicked - " + testObj.title);
+            Logger.log.Info("Clicked - " + testObj.title);
+        }
+
+        [UIAction("keyboard-enter")]
+        private void KeyboardEnter(string value)
+        {
+            Logger.log.Info("Keyboard typed: " + value);
         }
     }
     public class TestListObject
@@ -70,7 +76,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
         [UIAction("button-click")]
         void ClickedButton()
         {
-            Logger.log.Debug("Button - " + title);
+            Logger.log.Info("Button - " + title);
         }
     }
 }

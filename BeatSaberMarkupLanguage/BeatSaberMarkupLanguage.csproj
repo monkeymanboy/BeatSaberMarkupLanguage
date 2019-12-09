@@ -83,6 +83,7 @@
     <Compile Include="Components\ClickableText.cs" />
     <Compile Include="Components\CustomCellListTableData.cs" />
     <Compile Include="Components\ExternalComponents.cs" />
+    <Compile Include="Components\ModalKeyboard.cs" />
     <Compile Include="Components\NotifiableSingleton.cs" />
     <Compile Include="Components\NotifyUpdater.cs" />
     <Compile Include="Components\ScrollViewContent.cs" />
@@ -98,6 +99,7 @@
     <Compile Include="Components\Settings\StringSetting.cs" />
     <Compile Include="Components\Tab.cs" />
     <Compile Include="Components\TabSelector.cs" />
+    <Compile Include="Components\TextPageScrollViewRefresher.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Macros\AsHostMacro.cs" />
     <Compile Include="Macros\BSMLMacro.cs" />
@@ -126,7 +128,6 @@
     <Compile Include="Tags\BackgroundTag.cs" />
     <Compile Include="Tags\BottomButtonPanelTag.cs" />
     <Compile Include="Tags\BSMLTag.cs" />
-    <Compile Include="Tags\BackButtonTag.cs" />
     <Compile Include="Tags\ButtonTag.cs" />
     <Compile Include="Tags\ClickableTextTag.cs" />
     <Compile Include="Tags\CustomListTag.cs" />
@@ -135,6 +136,7 @@
     <Compile Include="Tags\ImageTag.cs" />
     <Compile Include="Tags\LeaderboardTag.cs" />
     <Compile Include="Tags\ListTag.cs" />
+    <Compile Include="Tags\ModalKeyboardTag.cs" />
     <Compile Include="Tags\ModalTag.cs" />
     <Compile Include="Tags\PageButtonTag.cs" />
     <Compile Include="Tags\ScrollableSettingsContainerTag.cs" />
@@ -166,6 +168,7 @@
     <Compile Include="TypeHandlers\LayoutElementHandler.cs" />
     <Compile Include="TypeHandlers\LayoutGroupHandler.cs" />
     <Compile Include="TypeHandlers\LeaderboardHandler.cs" />
+    <Compile Include="TypeHandlers\ModalKeyboardHandler.cs" />
     <Compile Include="TypeHandlers\ModalViewHandler.cs" />
     <Compile Include="TypeHandlers\PageButtonHandler.cs" />
     <Compile Include="TypeHandlers\RectTransformHandler.cs" />
@@ -185,7 +188,6 @@
     <Compile Include="Utilities.cs" />
     <Compile Include="ViewControllers\BSMLResourceViewController.cs" />
     <Compile Include="ViewControllers\BSMLViewController.cs" />
-    <Compile Include="ViewControllers\KeyboardViewController.cs" />
     <Compile Include="ViewControllers\TestViewController.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,6 +1,4 @@
-﻿using BS_Utils.Utilities;
-using HMUI;
-using System;
+﻿using HMUI;
 using System.Linq;
 using System.Reflection;
 using TMPro;
@@ -133,14 +131,5 @@ namespace BeatSaberMarkupLanguage
                 _button.GetComponentsInChildren<Image>()[0].sprite = _background;
         }
         #endregion
-
-        public static DismissableNavigationController CreateDismissableNavigationController()
-        {
-            DismissableNavigationController navigationController = CreateViewController<DismissableNavigationController>();
-            Button backButton = GameObject.Instantiate(Resources.FindObjectsOfTypeAll<Button>().First(x => x.name == "BackArrowButton"), navigationController.transform);
-            backButton.name = "BSMLBackButton";
-            navigationController.SetPrivateField("_backButton", backButton);
-            return navigationController;
-        }
     }
 }

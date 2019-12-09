@@ -1,10 +1,4 @@
 ﻿using BeatSaberMarkupLanguage.Parser;
-using BeatSaberMarkupLanguage.Settings;
-using BeatSaberMarkupLanguage.ViewControllers;
-using BS_Utils.Utilities;
-using System;
-using System.Collections;
-using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,8 +7,6 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 {
     public class StringSetting : MonoBehaviour
     {
-        private static KeyboardViewController keyboardViewController;
-
         public BSMLAction onChange;
         public BSMLValue associatedValue;
         public bool updateOnChange = false;
@@ -23,6 +15,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         public Button editButton;
 
         public RectTransform boundingBox;
+        public ModalKeyboard modalKeyboard;
 
         public string Text
         {
@@ -37,37 +30,26 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 
         public void Setup()
         {
+            modalKeyboard.clearOnOpen = false;
             ReceiveValue();
         }
 
         protected virtual void OnEnable()
         {
             editButton.onClick.AddListener(EditButtonPressed);
+            modalKeyboard.keyboard.EnterPressed += EnterPressed;
         }
 
         protected void OnDisable()
         {
             editButton.onClick.RemoveListener(EditButtonPressed);
+            modalKeyboard.keyboard.EnterPressed -= EnterPressed;
         }
 
         public void EditButtonPressed()
         {
-            ModSettingsFlowCoordinator settingsFlowCoordinator = Resources.FindObjectsOfTypeAll<ModSettingsFlowCoordinator>().FirstOrDefault();
-            if (settingsFlowCoordinator)
-            {
-                if (keyboardViewController == null)
-                    keyboardViewController = BeatSaberUI.CreateViewController<KeyboardViewController>();
-
-                keyboardViewController.startingText = Text;
-                keyboardViewController.enterPressed = null;
-                keyboardViewController.enterPressed += delegate (string text)
-                {
-                    EnterPressed(text);
-                    settingsFlowCoordinator.InvokeMethod("DismissViewController", new object[] { keyboardViewController, null, false });
-                };
-
-                settingsFlowCoordinator.InvokeMethod("PresentViewController", new object[] { keyboardViewController, null, false });
-            }
+            modalKeyboard.modalView.Show(true, true);
+            modalKeyboard.SetText(Text);
         }
 
         public void EnterPressed(string text)

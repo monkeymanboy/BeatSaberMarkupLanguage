@@ -2,9 +2,6 @@
 using HMUI;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
-using UnityEngine.UI;
 using static BeatSaberMarkupLanguage.BSMLParser;
 
 namespace BeatSaberMarkupLanguage.TypeHandlers
@@ -25,9 +22,11 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             try
             {
                 ModalView modalView = componentType.component as ModalView;
+
                 bool moveToCenter = true;
                 if (componentType.data.TryGetValue("moveToCenter", out string moveToCenterString))
                     moveToCenter = bool.Parse(moveToCenterString);
+
                 if (componentType.data.TryGetValue("showEvent", out string showEvent))
                 {
                     parserParams.AddEvent(showEvent, delegate
@@ -35,6 +34,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                         modalView.Show(true, moveToCenter);
                     });
                 }
+
                 if (componentType.data.TryGetValue("hideEvent", out string hideEvent))
                 {
                     parserParams.AddEvent(hideEvent, delegate
@@ -42,6 +42,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                         modalView.Hide(true);
                     });
                 }
+
                 if (componentType.data.TryGetValue("clickOffCloses", out string clickOffCloses) && Parse.Bool(clickOffCloses))
                 {
                     modalView._blockerClickedEvent += delegate

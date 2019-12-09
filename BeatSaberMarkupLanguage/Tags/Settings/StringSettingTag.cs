@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.Tags.Settings
 {
-    public class StringSettingTag : BSMLTag
+    public class StringSettingTag : ModalKeyboardTag
     {
         public override string[] Aliases => new[] { "string-setting" };
 
@@ -46,6 +46,8 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
             stringSetting.editButton.interactable = true;
 
             (stringSetting.editButton.transform as RectTransform).anchorMin = new Vector2(0, 0);
+
+            stringSetting.modalKeyboard = base.CreateObject(gameObject.transform).GetComponent<ModalKeyboard>();
 
             gameObject.SetActive(true);
             return gameObject;

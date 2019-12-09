@@ -1,4 +1,5 @@
-﻿using BS_Utils.Utilities;
+﻿using BeatSaberMarkupLanguage.Components;
+using BS_Utils.Utilities;
 using System.Linq;
 using UnityEngine;
 
@@ -13,6 +14,7 @@ namespace BeatSaberMarkupLanguage.Tags
             TextPageScrollView scrollView = MonoBehaviour.Instantiate(Resources.FindObjectsOfTypeAll<ReleaseInfoViewController>().First().GetPrivateField<TextPageScrollView>("_textPageScrollView"), parent);
             scrollView.name = "BSMLTextPageScrollView";
             scrollView.enabled = true;
+            scrollView.gameObject.AddComponent<TextPageScrollViewRefresher>().scrollView = scrollView;
             return scrollView.gameObject;
         }
     }

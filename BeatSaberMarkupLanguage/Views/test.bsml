@@ -16,6 +16,9 @@
               </vertical>
             </modal>
           </page-button>
+          <page-button click-event='open-keyboard' direction='Down' glow-color='green'>
+            <modal-keyboard show-event='open-keyboard' click-off-closes='true' clear-on-open='true' on-enter='keyboard-enter'></modal-keyboard>
+          </page-button>
         </vertical>
       </horizontal>
     </vertical>
