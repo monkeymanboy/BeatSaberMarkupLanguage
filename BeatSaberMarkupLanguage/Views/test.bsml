@@ -1,4 +1,5 @@
 <bg>
+  <macro.define id='button-text' value='Macro defined button text'></macro.define>
   <tab-selector tab-tag='new-tab'></tab-selector>
   <tab tags='new-tab' tab-name='~header'>
     <vertical>
@@ -6,7 +7,7 @@
         <text text='~header' color='red' align='Center' font-size='10'></text>
       </horizontal>
       <horizontal bg='round-rect-panel' pad='6' spacing='10'>
-        <button id='test-external' on-click='click' glow-color='green' text='Test Button'></button>
+        <button id='test-external' on-click='click' glow-color='green' text='~button-text'></button>
         <vertical spacing='6'>
           <page-button click-event='open-modal' direction='Up' glow-color='red'>
             <modal show-event='open-modal' hide-event='close-modal' size-delta-x='40' size-delta-y='30' move-to-center='false'>

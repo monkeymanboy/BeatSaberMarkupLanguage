@@ -103,6 +103,7 @@
     <Compile Include="Logger.cs" />
     <Compile Include="Macros\AsHostMacro.cs" />
     <Compile Include="Macros\BSMLMacro.cs" />
+    <Compile Include="Macros\DefineMacro.cs" />
     <Compile Include="Macros\ForEachMacro.cs" />
     <Compile Include="Macros\IfMacro.cs" />
     <Compile Include="MenuButtons\MenuButton.cs" />
@@ -117,6 +118,7 @@
     <Compile Include="Parser\BSMLFieldValue.cs" />
     <Compile Include="Parser\BSMLParserParams.cs" />
     <Compile Include="Parser\BSMLPropertyValue.cs" />
+    <Compile Include="Parser\BSMLStringValue.cs" />
     <Compile Include="Parser\BSMLValue.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
