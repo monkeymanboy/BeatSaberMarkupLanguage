@@ -1,5 +1,7 @@
 ﻿using BeatSaberMarkupLanguage.Attributes;
+using BeatSaberMarkupLanguage.Parser;
 using BS_Utils.Utilities;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -20,6 +22,9 @@ namespace BeatSaberMarkupLanguage.MenuButtons
         [UIValue("any-buttons")]
         public bool AnyButtons => buttons.Count > 0;
 
+        [UIParams]
+        private BSMLParserParams parserParams;
+
         internal void Setup()
         {
             releaseInfoViewController = Resources.FindObjectsOfTypeAll<ReleaseInfoViewController>().First();
@@ -35,6 +40,16 @@ namespace BeatSaberMarkupLanguage.MenuButtons
         private void PostParse()
         {
             releaseInfoViewController.GetPrivateField<TextPageScrollView>("_textPageScrollView").transform.SetParent(releaseNoteTab, false);
+            if (AnyButtons && !Plugin.config.GetBool("New", "seenMenuButton", false)) 
+            {
+                StartCoroutine(ShowNew());
+                Plugin.config.SetBool("New", "seenMenuButton", true);
+            }
+        }
+        IEnumerator ShowNew()
+        {
+            yield return new WaitForSeconds(1);
+            parserParams.EmitEvent("show-new");
         }
     }
 }

@@ -2,7 +2,6 @@
 using BeatSaberMarkupLanguage.ViewControllers;
 using BS_Utils.Utilities;
 using IPA;
-using System;
 using System.Collections;
 using System.Linq;
 using UnityEngine;
@@ -13,15 +12,17 @@ namespace BeatSaberMarkupLanguage
 {
     public class Plugin : IBeatSaberPlugin
     {
+        public static Config config;
         public void Init(IPALogger logger)
         {
             Logger.log = logger;
             BSEvents.menuSceneLoadedFresh += MenuLoadFresh;
+            config = new Config("BSML");
         }
         public void MenuLoadFresh()
         {
             //BSMLSettings.instance.AddSettingsMenu("Test", "BeatSaberMarkupLanguage.Views.settings-test.bsml", SettingsTest.instance);
-            Resources.FindObjectsOfTypeAll<GameScenesManager>().FirstOrDefault().StartCoroutine(PresentTest());
+            //Resources.FindObjectsOfTypeAll<GameScenesManager>().FirstOrDefault().StartCoroutine(PresentTest());
             BSMLSettings.instance.StartCoroutine(BSMLSettings.instance.AddButtonToMainScreen());
             MenuButtons.MenuButtons.instance.Setup();
         }

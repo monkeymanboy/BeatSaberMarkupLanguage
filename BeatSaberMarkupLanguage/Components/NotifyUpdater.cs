@@ -39,10 +39,6 @@ namespace BeatSaberMarkupLanguage.Components
                 val = prop.GetValue(sender).ToString();
                 action?.Invoke(prop.GetValue(sender));
             }
-            else
-            {
-                Logger.log?.Warn($"{gameObject.name}: No Action defined for {e.PropertyName}");
-            }
         }
 
         private Dictionary<string, Action<object>> _actionDict;
