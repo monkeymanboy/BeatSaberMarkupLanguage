@@ -22,7 +22,10 @@ namespace BeatSaberMarkupLanguage.Macros
                 throw new Exception("define macro must have an id");
             if (!data.TryGetValue("value", out string value))
                 throw new Exception("define macro must have a value");
-            parserParams.values.Add(name, new BSMLStringValue(value));
+            if (parserParams.values.TryGetValue(name, out BSMLValue existingValue))
+                existingValue.SetValue(value);
+            else
+                parserParams.values.Add(name, new BSMLStringValue(value));
         }
     }
 }

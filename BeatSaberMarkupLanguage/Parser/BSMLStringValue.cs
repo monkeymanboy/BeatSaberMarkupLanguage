@@ -16,7 +16,6 @@
 
         public override void SetValue(object value)
         {
-            Logger.log.Warn("You should not be using a macro defined value in a way that SetValue is called");
             this.value = value.ToString();
         }
     }

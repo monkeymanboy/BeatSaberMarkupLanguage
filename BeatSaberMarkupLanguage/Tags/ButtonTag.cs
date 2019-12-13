@@ -19,6 +19,15 @@ namespace BeatSaberMarkupLanguage.Tags
             if (localizer != null)
                 GameObject.Destroy(localizer);
             button.gameObject.AddComponent<ExternalComponents>().components.Add(button.GetComponentInChildren<TextMeshProUGUI>());
+
+            Image glowImage = button.gameObject.GetComponentsInChildren<Image>(true).Where(x => x.gameObject.name == "Glow").FirstOrDefault();
+            if(glowImage != null)
+            {
+                Glowable glowable = button.gameObject.AddComponent<Glowable>();
+                glowable.image = glowImage;
+                glowable.SetGlow("none");
+            }
+
             return button.gameObject;
         }
     }

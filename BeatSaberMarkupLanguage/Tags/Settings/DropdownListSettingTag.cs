@@ -18,7 +18,7 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
         private LabelAndValueDropdownWithTableView safePrefab;
         public override void Setup()
         {
-            safePrefab = MonoBehaviour.Instantiate(Resources.FindObjectsOfTypeAll<LabelAndValueDropdownWithTableView>().First(x => x.name == "NormalLevels"), null, false);
+            safePrefab = MonoBehaviour.Instantiate(Resources.FindObjectsOfTypeAll<LabelAndValueDropdownWithTableView>().First(x => x.name == "NormalLevels"), BSMLParser.instance.transform, false);
             safePrefab.gameObject.SetActive(false);
             safePrefab.name = "BSMLDropDownListPrefab";
         }

@@ -40,6 +40,9 @@ namespace BeatSaberMarkupLanguage.Tags
             glow.sizeDelta = new Vector2(0, 0);
             glow.anchoredPosition = new Vector2(0, 0);
 
+            Glowable glowable = button.gameObject.AddComponent<Glowable>();
+            glowable.image = button.gameObject.GetComponentsInChildren<Image>(true).Where(x => x.gameObject.name == "Glow").FirstOrDefault();
+            glowable.SetGlow("none");
 
             button.gameObject.SetActive(true);
             return button.gameObject;

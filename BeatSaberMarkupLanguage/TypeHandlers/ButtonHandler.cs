@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using TMPro;
-using UnityEngine;
 using UnityEngine.UI;
 using static BeatSaberMarkupLanguage.BSMLParser;
 
@@ -14,7 +12,6 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
     {
         public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
         {
-            { "glowColor", new[]{ "glow-color" } },
             { "onClick", new[]{ "on-click" } },
             { "clickEvent", new[]{ "click-event", "event-click"} },
             { "interactable", new[]{ "interactable" } }
@@ -22,7 +19,6 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 
         public override Dictionary<string, Action<Button, string>> Setters => new Dictionary<string, Action<Button, string>>()
         {
-            {"glowColor", new Action<Button, string>(SetGlow) },
             {"interactable", new Action<Button, string>(SetInteractable) }
         };
 
@@ -60,24 +56,6 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             {
                 Logger.log?.Error(ex);
             }
-        }
-
-        public static void SetGlow(Button button, string glowColor)
-        {
-            Image glowImage = button.gameObject.GetComponentsInChildren<Image>(true).Where(x => x.gameObject.name == "Glow").FirstOrDefault();
-            if (glowImage == null)
-                return;
-            if (glowColor != "none")
-            {
-                ColorUtility.TryParseHtmlString(glowColor, out Color color);
-                glowImage.color = color;
-                glowImage.gameObject.SetActive(true);
-            }
-            else
-            {
-                glowImage.gameObject.SetActive(false);
-            }
-
         }
 
         public static void SetInteractable(Button button, string flag)
