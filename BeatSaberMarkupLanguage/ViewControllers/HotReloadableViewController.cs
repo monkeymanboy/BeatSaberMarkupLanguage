@@ -16,11 +16,22 @@ namespace BeatSaberMarkupLanguage.ViewControllers
         #region FileSystemWatcher
         internal class WatcherGroup
         {
+            internal FileSystemWatcher Watcher { get; private set; }
+
+            internal string ContentDirectory { get; private set; }
+            
+            internal bool IsReloading { get; private set; }
+
+            private readonly WaitForSeconds HotReloadDelay = new WaitForSeconds(.5f);
+
+            private readonly Dictionary<int, WeakReference<HotReloadableViewController>> BoundControllers = new Dictionary<int, WeakReference<HotReloadableViewController>>();
+
             internal WatcherGroup(string directory)
             {
                 ContentDirectory = directory;
                 CreateWatcher();
             }
+
             private void CreateWatcher()
             {
                 if (Watcher != null) return;
@@ -34,6 +45,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
                 };
                 Watcher.Changed += Watcher_Changed;
             }
+
             private void DestroyWatcher()
             {
 #if HRVC_DEBUG
@@ -69,8 +81,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
                     DestroyWatcher();
                 }
             }
-            WaitForSeconds HotReloadDelay = new WaitForSeconds(.5f);
-            internal bool IsReloading { get; private set; }
+
             private IEnumerator<WaitForSeconds> HotReloadCoroutine()
             {
                 if (IsReloading) yield break;
@@ -98,9 +109,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
                 }
                 IsReloading = false;
             }
-            internal FileSystemWatcher Watcher { get; private set; }
-            internal string ContentDirectory { get; private set; }
-            Dictionary<int, WeakReference<HotReloadableViewController>> BoundControllers = new Dictionary<int, WeakReference<HotReloadableViewController>>();
+            
             internal bool BindController(HotReloadableViewController controller)
             {
                 if (BoundControllers.ContainsKey(controller.GetInstanceID()))
@@ -192,7 +201,6 @@ namespace BeatSaberMarkupLanguage.ViewControllers
             return successful;
         }
 
-
         #endregion
 
         public static void RefreshViewController(HotReloadableViewController viewController, bool forceReload = false)
@@ -270,16 +278,6 @@ namespace BeatSaberMarkupLanguage.ViewControllers
 
         public bool ContentChanged { get; protected set; }
 
-        public string EscapeXml(string source)
-        {
-            return source.Replace("\"", "&quot;")
-                .Replace("\"", "&quot;")
-                .Replace("&", "&amp;")
-                .Replace("'", "&apos;")
-                .Replace("<", "&lt;")
-                .Replace(">", "&gt;");
-        }
-
         protected override void DidActivate(bool firstActivation, ActivationType type)
         {
             if (ContentChanged && !firstActivation)
@@ -326,7 +324,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
             {
                 Logger.log.Error($"Error parsing BSML: {ex.Message}");
                 Logger.log.Debug(ex);
-                BSMLParser.instance.Parse(string.Format(FallbackContent, EscapeXml(ex.Message)), gameObject, this);
+                BSMLParser.instance.Parse(string.Format(FallbackContent, Utilities.EscapeXml(ex.Message)), gameObject, this);
             }
         }
 
