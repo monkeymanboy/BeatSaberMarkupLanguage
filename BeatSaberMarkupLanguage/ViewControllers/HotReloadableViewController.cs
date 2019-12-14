@@ -158,7 +158,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
             }
         }
 
-        private static Dictionary<string, WatcherGroup> WatcherDictionary = new Dictionary<string, WatcherGroup>();
+        private static readonly Dictionary<string, WatcherGroup> WatcherDictionary = new Dictionary<string, WatcherGroup>();
         public static bool RegisterViewController(HotReloadableViewController controller)
         {
             string contentFile = controller.ContentFilePath;
