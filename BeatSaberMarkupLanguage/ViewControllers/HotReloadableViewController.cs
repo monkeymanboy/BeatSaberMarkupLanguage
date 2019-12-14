@@ -43,7 +43,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
                 {
                     NotifyFilter = NotifyFilters.LastWrite
                 };
-                Watcher.Changed += Watcher_Changed;
+                Watcher.Changed += OnFileWasChanged;
             }
 
             private void DestroyWatcher()
@@ -55,7 +55,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
                 Watcher = null;
             }
 
-            private void Watcher_Changed(object sender, FileSystemEventArgs e)
+            private void OnFileWasChanged(object sender, FileSystemEventArgs e)
             {
                 foreach (KeyValuePair<int, WeakReference<HotReloadableViewController>> pair in BoundControllers.ToArray())
                 {
@@ -67,7 +67,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
                         UnbindController(pair.Key);
                         continue;
                     }
-                    if (e.FullPath == Path.GetFullPath(controller.ResourceFilePath))
+                    if (e.FullPath == Path.GetFullPath(controller.ContentFilePath))
                     {
                         controller.MarkDirty();
                         HMMainThreadDispatcher.instance.Enqueue(HotReloadCoroutine());
@@ -161,7 +161,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
         private static Dictionary<string, WatcherGroup> WatcherDictionary = new Dictionary<string, WatcherGroup>();
         public static bool RegisterViewController(HotReloadableViewController controller)
         {
-            string contentFile = controller.ResourceFilePath;
+            string contentFile = controller.ContentFilePath;
             if (string.IsNullOrEmpty(contentFile)) return false;
             string contentDirectory = Path.GetDirectoryName(contentFile);
             if (!Directory.Exists(contentDirectory)) return false;
@@ -176,9 +176,9 @@ namespace BeatSaberMarkupLanguage.ViewControllers
             return true;
         }
 
-        public static bool UnRegisterViewController(HotReloadableViewController controller)
+        public static bool UnregisterViewController(HotReloadableViewController controller)
         {
-            string contentFile = controller.ResourceFilePath;
+            string contentFile = controller.ContentFilePath;
             if (string.IsNullOrEmpty(contentFile))
             {
 #if HRVC_DEBUG
@@ -236,7 +236,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
         }
 
         public abstract string ResourceName { get; }
-        public abstract string ResourceFilePath { get; }
+        public abstract string ContentFilePath { get; }
 
         public virtual string FallbackContent => @"<vertical child-control-height='false' child-control-width='true' child-align='UpperCenter' pref-width='110' pad-left='3' pad-right='3'>
                                                       <horizontal bg='panel-top' pad-left='10' pad-right='10' horizontal-fit='PreferredSize' vertical-fit='PreferredSize'>
@@ -252,22 +252,22 @@ namespace BeatSaberMarkupLanguage.ViewControllers
             {
                 if (string.IsNullOrEmpty(_content))
                 {
-                    if (!string.IsNullOrEmpty(ResourceFilePath) && File.Exists(ResourceFilePath))
+                    if (!string.IsNullOrEmpty(ContentFilePath) && File.Exists(ContentFilePath))
                     {
                         try
                         {
-                            _content = File.ReadAllText(ResourceFilePath);
+                            _content = File.ReadAllText(ContentFilePath);
                         }
                         catch(Exception ex)
                         {
-                            Logger.log?.Warn($"Unable to read file {ResourceFilePath} for {name}: {ex.Message}");
+                            Logger.log?.Warn($"Unable to read file {ContentFilePath} for {name}: {ex.Message}");
                             Logger.log?.Debug(ex);
                         }
                     }
                     if (string.IsNullOrEmpty(_content) && !string.IsNullOrEmpty(ResourceName))
                     {
 #if HRVC_DEBUG
-                        Logger.log.Warn($"No content from file {ResourceFilePath}, using resource {ResourceName}");
+                        Logger.log.Warn($"No content from file {ContentFilePath}, using resource {ResourceName}");
 #endif
                         _content = Utilities.GetResourceContent(Assembly.GetAssembly(this.GetType()), ResourceName);
                     }
@@ -305,7 +305,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
 #if HRVC_DEBUG
             Logger.log.Warn($"DidDeactive: {GetInstanceID()}:{name}");
 #endif
-            if (!UnRegisterViewController(this))
+            if (!UnregisterViewController(this))
             {
 #if HRVC_DEBUG
                 Logger.log.Warn($"Failed to Unregister {GetInstanceID()}:{name}");
