@@ -62,6 +62,9 @@
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.ImageConversionModule">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.ImageConversionModule.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.TextRenderingModule">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
     </Reference>
@@ -80,6 +83,8 @@
     <Compile Include="Attributes\UIValue.cs" />
     <Compile Include="BeatSaberUI.cs" />
     <Compile Include="Components\BSMLScrollView.cs" />
+    <Compile Include="Components\ButtonArtworkImage.cs" />
+    <Compile Include="Components\ButtonIconImage.cs" />
     <Compile Include="Components\ClickableText.cs" />
     <Compile Include="Components\CustomCellListTableData.cs" />
     <Compile Include="Components\ExternalComponents.cs" />
@@ -98,6 +103,7 @@
     <Compile Include="Components\Settings\ListSliderSetting.cs" />
     <Compile Include="Components\Settings\SliderSetting.cs" />
     <Compile Include="Components\Settings\StringSetting.cs" />
+    <Compile Include="Components\Strokable.cs" />
     <Compile Include="Components\Tab.cs" />
     <Compile Include="Components\TabSelector.cs" />
     <Compile Include="Components\TextPageScrollViewRefresher.cs" />
@@ -129,6 +135,7 @@
     <Compile Include="Settings\SettingsMenu.cs" />
     <Compile Include="Settings\UI\SettingsMenuListViewController.cs" />
     <Compile Include="Tags\BackgroundTag.cs" />
+    <Compile Include="Tags\BigButtonTag.cs" />
     <Compile Include="Tags\BottomButtonPanelTag.cs" />
     <Compile Include="Tags\BSMLTag.cs" />
     <Compile Include="Tags\ButtonTag.cs" />
@@ -136,6 +143,7 @@
     <Compile Include="Tags\CustomListTag.cs" />
     <Compile Include="Tags\GridLayoutTag.cs" />
     <Compile Include="Tags\HorizontalLayoutTag.cs" />
+    <Compile Include="Tags\ButtonWithIconTag.cs" />
     <Compile Include="Tags\ImageTag.cs" />
     <Compile Include="Tags\LeaderboardTag.cs" />
     <Compile Include="Tags\ListTag.cs" />
@@ -155,13 +163,16 @@
     <Compile Include="Tags\Settings\SliderSettingTag.cs" />
     <Compile Include="Tags\Settings\StringSettingTag.cs" />
     <Compile Include="Tags\Settings\SubmenuTag.cs" />
+    <Compile Include="Tags\StackLayoutTag.cs" />
     <Compile Include="Tags\TabSelectorTag.cs" />
     <Compile Include="Tags\TabTag.cs" />
     <Compile Include="Tags\TextPageScrollViewTag.cs" />
     <Compile Include="Tags\TextTag.cs" />
     <Compile Include="Tags\VerticalLayoutTag.cs" />
     <Compile Include="TypeHandlers\BackgroundableHandler.cs" />
+    <Compile Include="TypeHandlers\ButtonArtworkHandler.cs" />
     <Compile Include="TypeHandlers\ButtonHandler.cs" />
+    <Compile Include="TypeHandlers\ButtonIconHandler.cs" />
     <Compile Include="TypeHandlers\ClickableTextHandler.cs" />
     <Compile Include="TypeHandlers\ContentSizeFitterHandler.cs" />
     <Compile Include="TypeHandlers\CustomCellListTableDataHandler.cs" />
@@ -169,6 +180,7 @@
     <Compile Include="TypeHandlers\GlowableHandler.cs" />
     <Compile Include="TypeHandlers\GridLayoutGroupHandler.cs" />
     <Compile Include="TypeHandlers\HorizontalOrVerticalLayoutGroupHandler.cs" />
+    <Compile Include="TypeHandlers\ImageHandler.cs" />
     <Compile Include="TypeHandlers\LayoutElementHandler.cs" />
     <Compile Include="TypeHandlers\LayoutGroupHandler.cs" />
     <Compile Include="TypeHandlers\LeaderboardHandler.cs" />
@@ -184,6 +196,7 @@
     <Compile Include="TypeHandlers\Settings\ListSettingHandler.cs" />
     <Compile Include="TypeHandlers\Settings\SliderSettingHandler.cs" />
     <Compile Include="TypeHandlers\Settings\StringSettingHandler.cs" />
+    <Compile Include="TypeHandlers\StrokableHandler.cs" />
     <Compile Include="TypeHandlers\TabHandler.cs" />
     <Compile Include="TypeHandlers\TabSelectorHandler.cs" />
     <Compile Include="TypeHandlers\TextMeshProUGUIHandler.cs" />

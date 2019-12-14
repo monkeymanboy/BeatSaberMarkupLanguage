@@ -6,19 +6,17 @@ using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.Tags
 {
-    public class ButtonTag : BSMLTag
+    public class ButtonWithIconTag : BSMLTag
     {
-        public override string[] Aliases => new[] { "button" };
+        public override string[] Aliases => new[] { "button-with-icon", "icon-button" };
 
         public override GameObject CreateObject(Transform parent)
         {
-            Button button = MonoBehaviour.Instantiate(Resources.FindObjectsOfTypeAll<Button>().Last(x => (x.name == (parent.GetComponent<StartMiddleEndButtonsGroup>() == null ? "PlayButton" : "CreditsButton"))), parent, false);
+            Button button = MonoBehaviour.Instantiate(Resources.FindObjectsOfTypeAll<Button>().Last(x => (x.name == "PracticeButton" && x.transform.parent.name == "PlayButtons")), parent, false);
             button.name = "BSMLButton";
             button.interactable = true;
-            Polyglot.LocalizedTextMeshProUGUI localizer = button.GetComponentInChildren<Polyglot.LocalizedTextMeshProUGUI>();
-            if (localizer != null)
-                GameObject.Destroy(localizer);
-            button.gameObject.AddComponent<ExternalComponents>().components.Add(button.GetComponentInChildren<TextMeshProUGUI>());
+
+            button.gameObject.AddComponent<ExternalComponents>().components.Add(button.GetComponentsInChildren<HorizontalLayoutGroup>().First(x => x.name == "Content"));
 
             Image glowImage = button.gameObject.GetComponentsInChildren<Image>(true).Where(x => x.gameObject.name == "Glow").FirstOrDefault();
             if (glowImage != null)
@@ -36,7 +34,15 @@ namespace BeatSaberMarkupLanguage.Tags
                 strokable.SetType("big");
             }
 
-            return button.gameObject;
+            Image iconImage = button.gameObject.GetComponentsInChildren<Image>(true).Where(x => x.gameObject.name == "Icon").FirstOrDefault();
+            if (iconImage != null)
+            {
+                ButtonIconImage btnIcon = button.gameObject.AddComponent<ButtonIconImage>();
+                btnIcon.image = iconImage;
+                btnIcon.SetIcon("BeatSaberMarkupLanguage.Resources.icon.png");
+            }
+
+            return button.gameObject; 
         }
     }
 }
