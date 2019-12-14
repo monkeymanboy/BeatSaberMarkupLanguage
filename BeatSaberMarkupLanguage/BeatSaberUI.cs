@@ -1,21 +1,32 @@
-﻿using BS_Utils.Utilities;
+﻿using HMUI;
 using System.Linq;
+using System.Reflection;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using VRUI;
+using Image = UnityEngine.UI.Image;
 
 namespace BeatSaberMarkupLanguage
 {
     //This class is stuff yoinked from CustomUI to remove the need for a dependency on it
     public static class BeatSaberUI
     {
+        private static FlowCoordinator mainFlowCoordinator;
+        public static FlowCoordinator MainFlowCoordinator
+        {
+            get
+            {
+                if (mainFlowCoordinator == null)
+                    mainFlowCoordinator = Resources.FindObjectsOfTypeAll<MainFlowCoordinator>().First();
+                return mainFlowCoordinator;
+            }
+        }
         /// <summary>
-        /// Creates a VRUIViewController of type T, and marks it to not be destroyed.
+        /// Creates a ViewController of type T, and marks it to not be destroyed.
         /// </summary>
-        /// <typeparam name="T">The variation of VRUIViewController you want to create.</typeparam>
-        /// <returns>The newly created VRUIViewController of type T.</returns>
-        public static T CreateViewController<T>() where T : VRUIViewController
+        /// <typeparam name="T">The variation of ViewController you want to create.</typeparam>
+        /// <returns>The newly created ViewController of type T.</returns>
+        public static T CreateViewController<T>() where T : ViewController
         {
             T vc = new GameObject("BSMLViewController").AddComponent<T>();
             MonoBehaviour.DontDestroyOnLoad(vc.gameObject);
@@ -25,6 +36,22 @@ namespace BeatSaberMarkupLanguage
             vc.rectTransform.sizeDelta = new Vector2(0f, 0f);
             vc.rectTransform.anchoredPosition = new Vector2(0f, 0f);
             return vc;
+        }
+
+        /// <summary>
+        /// Creates a FlowCoordinator of type T, and marks it to not be destroyed.
+        /// </summary>
+        /// <typeparam name="T">The variation of FlowCoordinator you want to create.</typeparam>
+        /// <returns>The newly created FlowCoordinator of type T.</returns>
+        public static T CreateFlowCoordinator<T>() where T : FlowCoordinator
+        {
+            T flow = new GameObject("BSMLFlowCoordinator").AddComponent<T>();
+            //flow.SetPrivateField("_baseInputModule", MainFlowCoordinator.GetPrivateField<BaseInputModule>("_baseInputModule"));
+            //temp
+            FieldInfo fieldInfo = typeof(FlowCoordinator).GetField("_baseInputModule", BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
+            fieldInfo.SetValue(flow, fieldInfo.GetValue(MainFlowCoordinator));
+            //
+            return flow;
         }
 
         /// <summary>
@@ -104,14 +131,5 @@ namespace BeatSaberMarkupLanguage
                 _button.GetComponentsInChildren<Image>()[0].sprite = _background;
         }
         #endregion
-
-        public static DismissableNavigationController CreateDismissableNavigationController()
-        {
-            DismissableNavigationController navigationController = CreateViewController<DismissableNavigationController>();
-            Button backButton = GameObject.Instantiate(Resources.FindObjectsOfTypeAll<Button>().First(x => x.name == "BackArrowButton"), navigationController.transform);
-            backButton.name = "BSMLBackButton";
-            navigationController.SetPrivateField("_backButton", backButton);
-            return navigationController;
-        }
     }
 }

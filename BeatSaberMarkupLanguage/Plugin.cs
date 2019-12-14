@@ -12,23 +12,27 @@ namespace BeatSaberMarkupLanguage
 {
     public class Plugin : IBeatSaberPlugin
     {
+        public static Config config;
         public void Init(IPALogger logger)
         {
             Logger.log = logger;
+            BSEvents.menuSceneLoadedFresh += MenuLoadFresh;
+            config = new Config("BSML");
+        }
+        public void MenuLoadFresh()
+        {
+            //BSMLSettings.instance.AddSettingsMenu("Test", "BeatSaberMarkupLanguage.Views.settings-test.bsml", SettingsTest.instance);
+            //Resources.FindObjectsOfTypeAll<GameScenesManager>().FirstOrDefault().StartCoroutine(PresentTest());
+            BSMLSettings.instance.StartCoroutine(BSMLSettings.instance.AddButtonToMainScreen());
+            MenuButtons.MenuButtons.instance.Setup();
         }
 
-        public void OnSceneLoaded(Scene scene, LoadSceneMode sceneMode)
-        {
-            if (scene.name == "MenuCore")
-            {
-                //BSMLSettings.instance.AddSettingsMenu("Test", "BeatSaberMarkupLanguage.Views.settings-test.bsml", SettingsTest.instance);
-                //Resources.FindObjectsOfTypeAll<GameScenesManager>().FirstOrDefault().StartCoroutine(PresentTest());
-                BSMLSettings.instance.StartCoroutine(BSMLSettings.instance.AddButtonToMainScreen());
-            }
-        }
+        public void OnSceneLoaded(Scene scene, LoadSceneMode sceneMode) { }
 
         public void OnActiveSceneChanged(Scene prevScene, Scene nextScene)
         {
+            if (nextScene.name == "MenuViewControllers" && prevScene.name == "EmptyTransition")
+                BSMLParser.instance.MenuSceneLoaded();
             if (prevScene.name == "PCInit" && nextScene.name == "EmptyTransition")
                 GameObject.Destroy(BSMLSettings.instance.gameObject); // For if the game is restarted
         }

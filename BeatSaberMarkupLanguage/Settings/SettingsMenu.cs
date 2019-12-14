@@ -1,15 +1,15 @@
 ﻿using BeatSaberMarkupLanguage.Parser;
-using VRUI;
+using HMUI;
 using static BeatSaberMarkupLanguage.Components.CustomListTableData;
 
 namespace BeatSaberMarkupLanguage.Settings
 {
     public class SettingsMenu : CustomCellInfo
     {
-        public VRUIViewController viewController;
+        public ViewController viewController;
         public BSMLParserParams parserParams;
 
-        public SettingsMenu(string name, VRUIViewController viewController, BSMLParserParams parserParams) : base(name)
+        public SettingsMenu(string name, ViewController viewController, BSMLParserParams parserParams) : base(name)
         {
             this.viewController = viewController;
             this.parserParams = parserParams;

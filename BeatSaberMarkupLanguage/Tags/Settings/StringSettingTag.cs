@@ -1,4 +1,5 @@
-﻿using BeatSaberMarkupLanguage.Components.Settings;
+﻿using BeatSaberMarkupLanguage.Components;
+using BeatSaberMarkupLanguage.Components.Settings;
 using Polyglot;
 using System.Linq;
 using TMPro;
@@ -7,7 +8,7 @@ using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.Tags.Settings
 {
-    public class StringSettingTag : BSMLTag
+    public class StringSettingTag : ModalKeyboardTag
     {
         public override string[] Aliases => new[] { "string-setting" };
 
@@ -21,23 +22,32 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
 
             MonoBehaviour.Destroy(baseSetting);
             StringSetting stringSetting = gameObject.AddComponent<StringSetting>();
-            GameObject.Destroy(gameObject.transform.GetChild(1).GetComponentsInChildren<Button>().First().gameObject);
-            stringSetting.text = gameObject.transform.GetChild(1).GetComponentsInChildren<TextMeshProUGUI>().First();
-            stringSetting.label = gameObject.GetComponentInChildren<TextMeshProUGUI>();
-            stringSetting.editButton = gameObject.transform.GetChild(1).GetComponentsInChildren<Button>().Last();
-
-            MonoBehaviour.Destroy(stringSetting.label.GetComponent<LocalizedTextMeshProUGUI>());
+            Transform valuePick = gameObject.transform.Find("ValuePicker");
+            Button decButton = valuePick.GetComponentsInChildren<Button>().First();
+            decButton.enabled = false;
+            GameObject.Destroy(decButton.transform.Find("Arrow").gameObject);
+            stringSetting.text = valuePick.GetComponentsInChildren<TextMeshProUGUI>().First();
+            stringSetting.editButton = valuePick.GetComponentsInChildren<Button>().Last();
+            stringSetting.boundingBox = valuePick as RectTransform;
+            
+            TextMeshProUGUI text = gameObject.GetComponentInChildren<TextMeshProUGUI>();
+            text.text = "Default Text";
+            gameObject.AddComponent<ExternalComponents>().components.Add(text);
+            MonoBehaviour.Destroy(text.GetComponent<LocalizedTextMeshProUGUI>());
+            
             gameObject.GetComponent<LayoutElement>().preferredWidth = 90;
             stringSetting.text.alignment = TextAlignmentOptions.MidlineRight;
             stringSetting.text.enableWordWrapping = false;
-            stringSetting.LabelText = "Default Text";
-            stringSetting.Text = "Default Text";
 
             Image icon = stringSetting.editButton.transform.Find("Arrow").GetComponent<Image>();
             icon.name = "EditIcon";
             icon.sprite = Utilities.EditIcon;
             icon.rectTransform.sizeDelta = new Vector2(4, 4);
             stringSetting.editButton.interactable = true;
+
+            (stringSetting.editButton.transform as RectTransform).anchorMin = new Vector2(0, 0);
+
+            stringSetting.modalKeyboard = base.CreateObject(gameObject.transform).GetComponent<ModalKeyboard>();
 
             gameObject.SetActive(true);
             return gameObject;

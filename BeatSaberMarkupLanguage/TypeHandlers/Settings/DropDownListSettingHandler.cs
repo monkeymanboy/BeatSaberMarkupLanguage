@@ -3,6 +3,7 @@ using BeatSaberMarkupLanguage.Parser;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using static BeatSaberMarkupLanguage.BSMLParser;
 
 namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
 {
@@ -11,7 +12,6 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
     {
         public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
         {
-            { "text", new[]{ "text" } },
             { "onChange", new[]{ "on-change"} },
             { "value", new[]{ "value"} },
             { "setEvent", new[]{ "set-event"} },
@@ -21,20 +21,17 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
             { "formatter", new[] { "formatter" } }
         };
 
-        public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)
+        public override void HandleType(ComponentTypeWithData componentType, BSMLParserParams parserParams)
         {
-            DropDownListSetting listSetting = obj as DropDownListSetting;
+            DropDownListSetting listSetting = componentType.component as DropDownListSetting;
 
-            if (data.TryGetValue("text", out string text))
-                listSetting.dropdown.SetLabelText(text);
-
-            if (data.TryGetValue("applyOnChange", out string applyOnChange))
+            if (componentType.data.TryGetValue("applyOnChange", out string applyOnChange))
                 listSetting.updateOnChange = Parse.Bool(applyOnChange);
 
-            if (data.TryGetValue("formatter", out string formatter))
+            if (componentType.data.TryGetValue("formatter", out string formatter))
                 listSetting.formatter = parserParams.actions[formatter];
 
-            if (data.TryGetValue("onChange", out string onChange))
+            if (componentType.data.TryGetValue("onChange", out string onChange))
             {
                 if (!parserParams.actions.TryGetValue(onChange, out BSMLAction onChangeAction))
                     throw new Exception("on-change action '" + onChange + "' not found");
@@ -42,7 +39,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
                 listSetting.onChange = onChangeAction;
             }
 
-            if (data.TryGetValue("value", out string value))
+            if (componentType.data.TryGetValue("value", out string value))
             {
                 if (!parserParams.values.TryGetValue(value, out BSMLValue associatedValue))
                     throw new Exception("value '" + value + "' not found");
@@ -50,7 +47,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
                 listSetting.associatedValue = associatedValue;
             }
 
-            if (data.TryGetValue("options", out string options))
+            if (componentType.data.TryGetValue("options", out string options))
             {
                 if (!parserParams.values.TryGetValue(options, out BSMLValue values))
                     throw new Exception("options '" + options + "' not found");
@@ -62,8 +59,8 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
                 throw new Exception("list must have associated options");
             }
 
-            parserParams.AddEvent(data.TryGetValue("setEvent", out string setEvent) ? setEvent : "apply", listSetting.ApplyValue);
-            parserParams.AddEvent(data.TryGetValue("getEvent", out string getEvent) ? getEvent : "cancel", listSetting.ReceiveValue);
+            parserParams.AddEvent(componentType.data.TryGetValue("setEvent", out string setEvent) ? setEvent : "apply", listSetting.ApplyValue);
+            parserParams.AddEvent(componentType.data.TryGetValue("getEvent", out string getEvent) ? getEvent : "cancel", listSetting.ReceiveValue);
 
             listSetting.Setup();
             listSetting.dropdown.ReloadData();

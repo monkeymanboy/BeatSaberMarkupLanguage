@@ -1,5 +1,6 @@
-﻿using BeatSaberMarkupLanguage.Parser;
-using BS_Utils.Utilities;
+﻿using BS_Utils.Utilities;
+using HMUI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -7,7 +8,7 @@ using UnityEngine;
 namespace BeatSaberMarkupLanguage.TypeHandlers
 {
     [ComponentHandler(typeof(RectTransform))]
-    public class RectTransformHandler : TypeHandler
+    public class RectTransformHandler : TypeHandler<RectTransform>
     {
         public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
         {
@@ -22,20 +23,24 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "hoverHint", new[]{ "hover-hint" } }
         };
 
-        public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)
+        public override Dictionary<string, Action<RectTransform, string>> Setters => new Dictionary<string, Action<RectTransform, string>>()
         {
-            RectTransform rectTransform = obj as RectTransform;
-            rectTransform.anchorMin = new Vector2(data.TryGetValue("anchorMinX", out string anchorMinX) ? Parse.Float(anchorMinX) : rectTransform.anchorMin.x, data.TryGetValue("anchorMinY", out string anchorMinY) ? Parse.Float(anchorMinY) : rectTransform.anchorMin.y);
-            rectTransform.anchorMax = new Vector2(data.TryGetValue("anchorMaxX", out string anchorMaxX) ? Parse.Float(anchorMaxX) : rectTransform.anchorMax.x, data.TryGetValue("anchorMaxY", out string anchorMaxY) ? Parse.Float(anchorMaxY) : rectTransform.anchorMax.y);
-            rectTransform.anchoredPosition = new Vector2(data.TryGetValue("anchorPosX", out string anchorPosX) ? Parse.Float(anchorPosX) : rectTransform.anchoredPosition.x, data.TryGetValue("anchorPosY", out string anchorPosY) ? Parse.Float(anchorPosY) : rectTransform.anchoredPosition.y);
-            rectTransform.sizeDelta = new Vector2(data.TryGetValue("sizeDeltaX", out string sizeDeltaX) ? Parse.Float(sizeDeltaX) : rectTransform.sizeDelta.x, data.TryGetValue("sizeDeltaY", out string sizeDeltaY) ? Parse.Float(sizeDeltaY) : rectTransform.sizeDelta.y);
+            {"anchorMinX", new Action<RectTransform, string>((component, value) => component.anchorMin = new Vector2(Parse.Float(value), component.anchorMin.y)) },
+            {"anchorMinY", new Action<RectTransform, string>((component, value) => component.anchorMin = new Vector2(component.anchorMin.x, Parse.Float(value))) },
+            {"anchorMaxX", new Action<RectTransform, string>((component, value) => component.anchorMax = new Vector2(Parse.Float(value), component.anchorMax.y)) },
+            {"anchorMaxY", new Action<RectTransform, string>((component, value) => component.anchorMax = new Vector2(component.anchorMax.x, Parse.Float(value))) },
+            {"anchorPosX", new Action<RectTransform, string>((component, value) => component.anchoredPosition = new Vector2(Parse.Float(value), component.anchoredPosition.y)) },
+            {"anchorPosY", new Action<RectTransform, string>((component, value) => component.anchoredPosition = new Vector2(component.anchoredPosition.x, Parse.Float(value))) },
+            {"sizeDeltaX", new Action<RectTransform, string>((component, value) => component.sizeDelta = new Vector2(Parse.Float(value), component.sizeDelta.y)) },
+            {"sizeDeltaY", new Action<RectTransform, string>((component, value) => component.sizeDelta = new Vector2(component.sizeDelta.x, Parse.Float(value))) },
+            {"hoverHint", new Action<RectTransform, string>(AddHoverHint) }
+        };
 
-            if (data.TryGetValue("hoverHint", out string hoverHint))
-            {
-                HoverHint hover = obj.gameObject.AddComponent<HoverHint>();
-                hover.text = hoverHint;
-                hover.SetPrivateField("_hoverHintController", Resources.FindObjectsOfTypeAll<HoverHintController>().First());
-            }
+        private void AddHoverHint(RectTransform rectTransform, string text)
+        {
+            HoverHint hover = rectTransform.gameObject.AddComponent<HoverHint>();
+            hover.text = text;
+            hover.SetPrivateField("_hoverHintController", Resources.FindObjectsOfTypeAll<HoverHintController>().First());
         }
     }
 }

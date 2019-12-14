@@ -67,9 +67,10 @@ namespace BeatSaberMarkupLanguage.Components
                 foreach (UnityEngine.UI.Image i in tableCell.GetPrivateField<UnityEngine.UI.Image[]>("_beatmapCharacteristicImages"))
                     i.enabled = false;
             }
+            tableCell.transform.Find("FavoritesIcon").gameObject.SetActive(false);
 
-            tableCell.SetPrivateField("_beatmapCharacteristicAlphas", new float[0]);
             tableCell.SetPrivateField("_beatmapCharacteristicImages", new UnityEngine.UI.Image[0]);
+            tableCell.SetPrivateField("_bought", true);
             tableCell.reuseIdentifier = reuseIdentifier;
             return tableCell;
         }

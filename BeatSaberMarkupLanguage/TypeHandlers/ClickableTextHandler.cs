@@ -2,7 +2,7 @@
 using BeatSaberMarkupLanguage.Parser;
 using System;
 using System.Collections.Generic;
-using UnityEngine;
+using static BeatSaberMarkupLanguage.BSMLParser;
 
 namespace BeatSaberMarkupLanguage.TypeHandlers
 {
@@ -12,13 +12,13 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
         public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
         {
             { "onClick", new[]{"on-click"} },
-            { "clickEvent", new[]{"click-event"} }
+            { "clickEvent", new[]{"click-event", "event-click"} }
         };
 
-        public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)
+        public override void HandleType(ComponentTypeWithData componentType, BSMLParserParams parserParams)
         {
-            ClickableText clickableText = obj as ClickableText;
-            if (data.TryGetValue("onClick", out string onClick))
+            ClickableText clickableText = componentType.component as ClickableText;
+            if (componentType.data.TryGetValue("onClick", out string onClick))
             {
                 clickableText.OnClickEvent += delegate
                 {
@@ -29,7 +29,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 };
             }
 
-            if (data.TryGetValue("clickEvent", out string clickEvent))
+            if (componentType.data.TryGetValue("clickEvent", out string clickEvent))
             {
                 clickableText.OnClickEvent += delegate
                 {

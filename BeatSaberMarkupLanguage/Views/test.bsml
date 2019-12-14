@@ -1,27 +1,45 @@
 <bg>
-  <vertical>
-    <horizontal bg='panel-top' pad-left='10' pad-right='10' horizontal-fit='PreferredSize'>
-      <text id ='sometext' text='~header' align='Center' font-size='10'></text>
-    </horizontal>
-    <horizontal bg='round-rect-panel' pad='8'>
-      <custom-list visible-cells='3' id='list' contents='contents' select-cell='cell click'>
-        <horizontal>
-          <text text='~title'></text>
-          <text tags='selected' text='SELECTED'></text>
-          <text tags='hovered' text='HOVERED'></text>
-          <text tags='un-selected-un-hovered' text='NORMAL'></text>
-          <button text='button' on-click='button-click'></button>
-        </horizontal>
-      </custom-list>
-    </horizontal>
-    <horizontal bg='round-rect-panel' pad='6' spacing='10'>
-      <button on-click='click' glow-color='green' text='Test Button'></button>
-      <vertical spacing='6'>
-        <page-button click-event='list#PageUp' direction='Up' glow-color='red'></page-button>
-        <page-button click-event='list#PageDown' direction='Down'></page-button>
-      </vertical>
-    </horizontal>
-  </vertical>
+  <macro.define id='button-text' value='Macro defined button text'></macro.define>
+  <tab-selector tab-tag='new-tab'></tab-selector>
+  <tab tags='new-tab' tab-name='~header'>
+    <vertical>
+      <horizontal bg='panel-top' pad-left='10' pad-right='10' horizontal-fit='PreferredSize'>
+        <text text='~header' color='red' align='Center' font-size='10'></text>
+      </horizontal>
+      <horizontal bg='round-rect-panel' pad='6' spacing='10'>
+        <button id='test-external' on-click='click' glow-color='green' text='~button-text'></button>
+        <vertical spacing='6'>
+          <page-button click-event='open-modal' direction='Up' glow-color='red'>
+            <modal show-event='open-modal' hide-event='close-modal' size-delta-x='40' size-delta-y='30' move-to-center='false'>
+              <vertical horizontal-fit='PreferredSize' vertical-fit='PreferredSize'>
+                <text text='Modal works yee haw'></text>
+                <button text='yee' click-event='close-modal'></button>
+              </vertical>
+            </modal>
+          </page-button>
+          <page-button click-event='open-keyboard' direction='Down' glow-color='green'>
+            <modal-keyboard show-event='open-keyboard' click-off-closes='true' clear-on-open='true' on-enter='keyboard-enter'></modal-keyboard>
+          </page-button>
+        </vertical>
+      </horizontal>
+    </vertical>
+  </tab>
+  <tab tags='new-tab' tab-name='Buttons'>
+    <vertical>
+      <horizontal bg='round-rect-panel' pad='8'>
+        <page-button click-event='list#PageUp' direction='Left' glow-color='red'></page-button>
+        <macro.for-each hosts='contents'>
+          <macro.if value='should-glow'>
+            <button text='~title' on-click='button-click' glow-color='red'></button>
+          </macro.if>
+          <macro.if value='!should-glow'>
+            <button text='~title' on-click='button-click'></button>
+          </macro.if>
+        </macro.for-each>
+        <page-button click-event='list#PageDown' direction='Right'></page-button>
+      </horizontal>
+    </vertical>
+  </tab>
   <!--
   <bottom-button-panel>
     <button on-click='click' text='Yee Haw'></button>

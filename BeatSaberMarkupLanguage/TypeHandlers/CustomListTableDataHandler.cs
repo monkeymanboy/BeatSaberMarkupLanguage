@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using static BeatSaberMarkupLanguage.BSMLParser;
 using static BeatSaberMarkupLanguage.Components.CustomListTableData;
 using static HMUI.TableView;
 
@@ -27,33 +28,33 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "listDirection", new[] { "list-direction" } }
         };
 
-        public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)
+        public override void HandleType(ComponentTypeWithData componentType, BSMLParserParams parserParams)
         {
-            CustomListTableData tableData = obj as CustomListTableData;
-            if (data.TryGetValue("selectCell", out string selectCell))
+            CustomListTableData tableData = componentType.component as CustomListTableData;
+            if (componentType.data.TryGetValue("selectCell", out string selectCell))
             {
                 tableData.tableView.didSelectCellWithIdxEvent += delegate (TableView table, int index)
                 {
                     if (!parserParams.actions.TryGetValue(selectCell, out BSMLAction action))
-                        throw new Exception("select-cell action '" + data["onClick"] + "' not found");
+                        throw new Exception("select-cell action '" + componentType.data["onClick"] + "' not found");
 
                     action.Invoke(table, index);
                 };
             }
 
-            if (data.TryGetValue("listDirection", out string listDirection))
+            if (componentType.data.TryGetValue("listDirection", out string listDirection))
                 tableData.tableView.SetPrivateField("_tableType", (TableType)Enum.Parse(typeof(TableType), listDirection));
 
-            if (data.TryGetValue("listStyle", out string listStyle))
+            if (componentType.data.TryGetValue("listStyle", out string listStyle))
                 tableData.Style = (ListStyle)Enum.Parse(typeof(ListStyle), listStyle);
 
-            if (data.TryGetValue("cellSize", out string cellSize))
+            if (componentType.data.TryGetValue("cellSize", out string cellSize))
                 tableData.cellSize = Parse.Float(cellSize);
 
-            if (data.TryGetValue("expandCell", out string expandCell))
+            if (componentType.data.TryGetValue("expandCell", out string expandCell))
                 tableData.expandCell = Parse.Bool(expandCell);
 
-            if (data.TryGetValue("data", out string value))
+            if (componentType.data.TryGetValue("data", out string value))
             {
                 if (!parserParams.values.TryGetValue(value, out BSMLValue contents))
                     throw new Exception("value '" + value + "' not found");
@@ -64,20 +65,20 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             switch (tableData.tableView.tableType)
             {
                 case TableType.Vertical:
-                    (obj.gameObject.transform as RectTransform).sizeDelta = new Vector2(data.TryGetValue("listWidth", out string vListWidth) ? Parse.Float(vListWidth) : 60, tableData.cellSize * (data.TryGetValue("visibleCells", out string vVisibleCells) ? Parse.Float(vVisibleCells) : 7));
+                    (componentType.component.gameObject.transform as RectTransform).sizeDelta = new Vector2(componentType.data.TryGetValue("listWidth", out string vListWidth) ? Parse.Float(vListWidth) : 60, tableData.cellSize * (componentType.data.TryGetValue("visibleCells", out string vVisibleCells) ? Parse.Float(vVisibleCells) : 7));
                     tableData.tableView.contentTransform.anchorMin = new Vector2(0, 1);
                     break;
                 case TableType.Horizontal:
-                    (obj.gameObject.transform as RectTransform).sizeDelta = new Vector2(tableData.cellSize * (data.TryGetValue("visibleCells", out string hVisibleCells) ? Parse.Float(hVisibleCells) : 4), data.TryGetValue("listHeight", out string hListHeight) ? Parse.Float(hListHeight) : 40);
+                    (componentType.component.gameObject.transform as RectTransform).sizeDelta = new Vector2(tableData.cellSize * (componentType.data.TryGetValue("visibleCells", out string hVisibleCells) ? Parse.Float(hVisibleCells) : 4), componentType.data.TryGetValue("listHeight", out string hListHeight) ? Parse.Float(hListHeight) : 40);
                     tableData.tableView.contentTransform.anchorMin = new Vector2(0.5f, 0);
                     break;
             }
 
-            obj.gameObject.GetComponent<LayoutElement>().preferredHeight = (obj.gameObject.transform as RectTransform).sizeDelta.y;
-            obj.gameObject.GetComponent<LayoutElement>().preferredWidth = (obj.gameObject.transform as RectTransform).sizeDelta.x;
+            componentType.component.gameObject.GetComponent<LayoutElement>().preferredHeight = (componentType.component.gameObject.transform as RectTransform).sizeDelta.y;
+            componentType.component.gameObject.GetComponent<LayoutElement>().preferredWidth = (componentType.component.gameObject.transform as RectTransform).sizeDelta.x;
             tableData.tableView.gameObject.SetActive(true);
 
-            if (data.TryGetValue("id", out string id))
+            if (componentType.data.TryGetValue("id", out string id))
             {
                 TableViewScroller scroller = tableData.tableView.GetPrivateField<TableViewScroller>("_scroller");
                 parserParams.AddEvent(id + "#PageUp", scroller.PageScrollUp);

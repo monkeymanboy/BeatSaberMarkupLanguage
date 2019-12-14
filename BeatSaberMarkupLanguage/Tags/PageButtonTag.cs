@@ -11,15 +11,14 @@ namespace BeatSaberMarkupLanguage.Tags
 
         public override GameObject CreateObject(Transform parent)
         {
-            Button button = MonoBehaviour.Instantiate(Resources.FindObjectsOfTypeAll<Button>().Last(x => (x.name == "PageUpButton")), parent, false);
+            Button button = MonoBehaviour.Instantiate(Resources.FindObjectsOfTypeAll<Button>().Last(x => (x.name == "PageDownButton")), parent, false);
             button.gameObject.SetActive(false);
             button.name = "BSMLPageButton";
             button.interactable = true;
             button.gameObject.AddComponent<PageButton>();
-
             LayoutElement layoutElement = button.gameObject.AddComponent<LayoutElement>();
-            layoutElement.preferredWidth = 40;
-            layoutElement.preferredHeight = 6;
+            layoutElement.preferredWidth = -1;
+            layoutElement.preferredHeight = -1;
             layoutElement.flexibleHeight = 0;
             layoutElement.flexibleWidth = 0;
 
@@ -28,12 +27,22 @@ namespace BeatSaberMarkupLanguage.Tags
             sizeFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
             RectTransform buttonTransform = button.transform.GetChild(0) as RectTransform;
+            buttonTransform.anchorMin = new Vector2(0, 0);
+            buttonTransform.anchorMax = new Vector2(1, 1);
+            buttonTransform.sizeDelta = new Vector2(0, 0);
+
+            (button.transform as RectTransform).pivot = new Vector2(.5f, .5f);
             RectTransform glow = MonoBehaviour.Instantiate(Resources.FindObjectsOfTypeAll<GameObject>().Last(x => (x.name == "GlowContainer")), button.transform).transform as RectTransform;
-            glow.localPosition = buttonTransform.localPosition;
-            glow.anchoredPosition = buttonTransform.anchoredPosition;
-            glow.anchorMin = buttonTransform.anchorMin;
-            glow.anchorMax = buttonTransform.anchorMax;
-            glow.sizeDelta = buttonTransform.sizeDelta;
+            glow.gameObject.name = "BSMLPageButtonGlowContainer";
+            glow.SetParent(buttonTransform);
+            glow.anchorMin = new Vector2(0, 0);
+            glow.anchorMax = new Vector2(1, 1);
+            glow.sizeDelta = new Vector2(0, 0);
+            glow.anchoredPosition = new Vector2(0, 0);
+
+            Glowable glowable = button.gameObject.AddComponent<Glowable>();
+            glowable.image = button.gameObject.GetComponentsInChildren<Image>(true).Where(x => x.gameObject.name == "Glow").FirstOrDefault();
+            glowable.SetGlow("none");
 
             button.gameObject.SetActive(true);
             return button.gameObject;

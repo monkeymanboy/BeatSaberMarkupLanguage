@@ -1,4 +1,5 @@
 ﻿using BS_Utils.Utilities;
+using HMUI;
 using Polyglot;
 using System;
 using System.Collections;
@@ -7,7 +8,6 @@ using System.Linq;
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
-using VRUI;
 using static BeatSaberMarkupLanguage.Components.CustomListTableData;
 
 namespace BeatSaberMarkupLanguage.Settings
@@ -45,12 +45,12 @@ namespace BeatSaberMarkupLanguage.Settings
 
             if (settingsMenus.Count == 0)
             {
-                VRUIViewController aboutController = BeatSaberUI.CreateViewController<VRUIViewController>();
+                ViewController aboutController = BeatSaberUI.CreateViewController<ViewController>();
                 SetupViewControllerTransform(aboutController);
                 settingsMenus.Add(new SettingsMenu("About", aboutController, BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), "BeatSaberMarkupLanguage.Views.settings-about.bsml"), aboutController.gameObject, this)));
             }
 
-            VRUIViewController viewController = BeatSaberUI.CreateViewController<VRUIViewController>();
+            ViewController viewController = BeatSaberUI.CreateViewController<ViewController>();
             SetupViewControllerTransform(viewController);
             settingsMenus.Add(new SettingsMenu(name, viewController, BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetCallingAssembly(), resource), viewController.gameObject, host)));
             button?.gameObject.SetActive(true);
@@ -81,15 +81,15 @@ namespace BeatSaberMarkupLanguage.Settings
         private void PresentSettings()
         {
             if (flowCoordinator == null)
-                flowCoordinator = new GameObject().AddComponent<ModSettingsFlowCoordinator>();
+                flowCoordinator = BeatSaberUI.CreateFlowCoordinator<ModSettingsFlowCoordinator>();
             flowCoordinator.isAnimating = true;
-            Resources.FindObjectsOfTypeAll<MainFlowCoordinator>().First().InvokeMethod("PresentFlowCoordinator", new object[] {flowCoordinator, new Action(delegate{
+            BeatSaberUI.MainFlowCoordinator.InvokeMethod("PresentFlowCoordinator", new object[] {flowCoordinator, new Action(delegate{
                 flowCoordinator.ShowInitial();
                 flowCoordinator.isAnimating = false;
             }), false, false });
         }
 
-        public static void SetupViewControllerTransform(VRUIViewController viewController)
+        public static void SetupViewControllerTransform(ViewController viewController)
         {
             viewController.rectTransform.sizeDelta = new Vector2(110, 0);
             viewController.rectTransform.anchorMin = new Vector2(0.5f, 0);

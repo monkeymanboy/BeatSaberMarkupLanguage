@@ -1,38 +1,43 @@
-﻿using BS_Utils.Utilities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using BeatSaberMarkupLanguage.Parser;
+using BS_Utils.Utilities;
+using HMUI;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using VRUI;
+using Image = UnityEngine.UI.Image;
 
-namespace BeatSaberMarkupLanguage.ViewControllers
+namespace BeatSaberMarkupLanguage.Components
 {
-    public class KeyboardViewController : VRUIViewController
+    public class ModalKeyboard : MonoBehaviour
     {
-        private KEYBOARD keyboard;
+        public ModalView modalView;
+        public KEYBOARD keyboard;
 
-        public Action<string> enterPressed;
-        public string startingText;
+        public BSMLValue associatedValue;
+        public BSMLAction onEnter;
+        public bool clearOnOpen;
 
-        protected override void DidActivate(bool firstActivation, ActivationType activationType)
+        void OnEnable()
         {
-            base.DidActivate(firstActivation, activationType);
+            if (associatedValue != null)
+                SetText(associatedValue.GetValue() as string);
+            if (clearOnOpen)
+                SetText("");
+        }
 
-            if (firstActivation && activationType == ActivationType.AddedToHierarchy)
-            {
-                RectTransform keyboardRect = new GameObject("Keyboard").AddComponent<RectTransform>();
-                keyboardRect.gameObject.transform.SetParent(rectTransform);
-                keyboardRect.position = rectTransform.position;
-                keyboardRect.localScale = rectTransform.localScale;
-                keyboard = new KEYBOARD(keyboardRect, KEYBOARD.QWERTY);
-                keyboard.EnterPressed += delegate (string value) { enterPressed?.Invoke(value); };
-                keyboardRect.localScale *= 1.6f;
-                keyboardRect.anchoredPosition = new Vector2(6, -10);
-            }
+        public void OnEnter(string value)
+        {
+            associatedValue?.SetValue(value);
+            onEnter?.Invoke(value);
+            modalView.Hide(true);
+        }
 
-            keyboard.KeyboardText.text = startingText;
+        public void SetText(string text)
+        {
+            keyboard.KeyboardText.text = text;
             keyboard.DrawCursor();
         }
     }
@@ -367,7 +372,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
             SetButtonType();
 
             // BUG: Make this an input field maybe
-            KeyboardText = BeatSaberUI.CreateText(container, "", new Vector2(0, 23f));
+            KeyboardText = BeatSaberUI.CreateText(container, "", new Vector2(0, 15f));
             KeyboardText.fontSize = 6f;
             KeyboardText.color = Color.white;
             KeyboardText.alignment = TextAlignmentOptions.Center;
@@ -377,7 +382,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
 
             KeyboardCursor = BeatSaberUI.CreateText(container, "|", new Vector2(0, 0));
             KeyboardCursor.fontSize = 6f;
-            KeyboardCursor.color = Color.cyan;
+            KeyboardCursor.color = new Color(0.60f, 0.80f, 1);
             KeyboardCursor.alignment = TextAlignmentOptions.Left;
             KeyboardCursor.enableWordWrapping = false;
             KeyboardCursor.enabled = this.EnableInputField;
@@ -458,7 +463,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
                 return;
 
             Vector2 v = KeyboardText.GetPreferredValues(KeyboardText.text + "|");
-            v.y = 23f; // BUG: This needs to be derived from the text position
+            v.y = 15f; // BUG: This needs to be derived from the text position
                        // BUG: I do not know why that 30f is here, It makes things work, but I can't understand WHY! Me stupid.
             v.x = v.x / 2 + 30f - 0.5f; // BUG: The .5 gets rid of the trailing |, but technically, we need to calculate its width and store it
             (KeyboardCursor.transform as RectTransform).anchoredPosition = v;

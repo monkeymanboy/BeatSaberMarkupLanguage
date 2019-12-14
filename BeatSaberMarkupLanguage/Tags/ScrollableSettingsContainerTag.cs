@@ -14,7 +14,7 @@ namespace BeatSaberMarkupLanguage.Tags
 
         public override GameObject CreateObject(Transform parent)
         {
-            TextPageScrollView textScrollView = MonoBehaviour.Instantiate(Resources.FindObjectsOfTypeAll<TextPageScrollView>().First(x => x.transform.parent.gameObject.name == "ReleaseInfoViewController"), parent);
+            TextPageScrollView textScrollView = MonoBehaviour.Instantiate(Resources.FindObjectsOfTypeAll<ReleaseInfoViewController>().First().GetPrivateField<TextPageScrollView>("_textPageScrollView"), parent);
             textScrollView.name = "BSMLScrollableSettingsContainer";
             Button pageUpButton = textScrollView.GetPrivateField<Button>("_pageUpButton");
             Button pageDownButton = textScrollView.GetPrivateField<Button>("_pageDownButton");

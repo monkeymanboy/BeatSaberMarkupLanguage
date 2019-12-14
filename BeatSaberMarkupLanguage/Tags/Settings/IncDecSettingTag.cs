@@ -1,5 +1,7 @@
-﻿using BeatSaberMarkupLanguage.Components.Settings;
+﻿using BeatSaberMarkupLanguage.Components;
+using BeatSaberMarkupLanguage.Components.Settings;
 using Polyglot;
+using System;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -12,7 +14,7 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
         public override GameObject CreateObject(Transform parent)
         {
             BoolSettingsController baseSetting = MonoBehaviour.Instantiate(Resources.FindObjectsOfTypeAll<BoolSettingsController>().First(x => (x.name == "Fullscreen")), parent, false);
-            baseSetting.name = "BSMLBoolSetting";
+            baseSetting.name = "BSMLIncDecSetting";
 
             GameObject gameObject = baseSetting.gameObject;
             MonoBehaviour.Destroy(baseSetting);
@@ -22,11 +24,15 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
             boolSetting.text = gameObject.transform.GetChild(1).GetComponentsInChildren<TextMeshProUGUI>().First();
             boolSetting.decButton = gameObject.transform.GetChild(1).GetComponentsInChildren<Button>().First();
             boolSetting.incButton = gameObject.transform.GetChild(1).GetComponentsInChildren<Button>().Last();
-            boolSetting.label = gameObject.GetComponentInChildren<TextMeshProUGUI>();
+            (gameObject.transform.GetChild(1) as RectTransform).sizeDelta = new Vector2(40, 0);
+            boolSetting.text.overflowMode = TextOverflowModes.Ellipsis;
 
-            MonoBehaviour.Destroy(boolSetting.label.GetComponent<LocalizedTextMeshProUGUI>());
+            TextMeshProUGUI text = gameObject.GetComponentInChildren<TextMeshProUGUI>();
+            text.text = "Default Text";
+            gameObject.AddComponent<ExternalComponents>().components.Add(text);
+            MonoBehaviour.Destroy(text.GetComponent<LocalizedTextMeshProUGUI>());
+
             gameObject.GetComponent<LayoutElement>().preferredWidth = 90;
-            boolSetting.LabelText = "Default Text";
 
             gameObject.SetActive(true);
             return gameObject;
