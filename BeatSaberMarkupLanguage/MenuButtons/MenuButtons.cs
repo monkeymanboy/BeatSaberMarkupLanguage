@@ -31,11 +31,36 @@ namespace BeatSaberMarkupLanguage.MenuButtons
             BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), "BeatSaberMarkupLanguage.Views.main-left-screen.bsml"), releaseInfoViewController.gameObject, this);
         }
 
+        internal void Refresh()
+        {
+            var a = releaseInfoViewController.GetComponentsInChildren<RectTransform>();
+            foreach (var w in a)
+                if (w.gameObject.name.Contains("BSML"))
+                    Destroy(w.gameObject);
+            Setup();
+        }
+
         public void RegisterButton(MenuButton menuButton)
         {
-            buttons.Add(menuButton);
+            if (buttons.Where(x => x == menuButton).Count() == 0)
+                buttons.Add(menuButton);
+            if (AnyButtons && UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "MenuViewControllers")
+                Refresh();
+
+            
         }
-        
+
+        public void UnregisterButton(MenuButton menuButton)
+        {
+            if (buttons.Where(x => x == menuButton).Count() == 1)
+            {
+                menuButton.Destroy();
+                buttons.Remove(menuButton);
+            }
+            if (!AnyButtons && UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "MenuViewControllers")
+                Refresh();
+        }
+
         [UIAction("#post-parse")]
         private void PostParse()
         {
