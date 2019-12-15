@@ -13,14 +13,17 @@ namespace BeatSaberMarkupLanguage.MenuButtons
     {
         private ReleaseInfoViewController releaseInfoViewController;
 
-        [UIComponent("release-notes-parent")]
-        private Transform releaseNoteTab;
-
+        [UIValue("release-notes")]
+        private Transform releaseNotesScrollView;
+        
         [UIValue("buttons")]
         private List<object> buttons = new List<object>();
 
         [UIValue("any-buttons")]
         public bool AnyButtons => buttons.Count > 0;
+
+        [UIObject("root-object")]
+        private GameObject rootObject;
 
         [UIParams]
         private BSMLParserParams parserParams;
@@ -28,53 +31,49 @@ namespace BeatSaberMarkupLanguage.MenuButtons
         internal void Setup()
         {
             releaseInfoViewController = Resources.FindObjectsOfTypeAll<ReleaseInfoViewController>().First();
+            releaseNotesScrollView = releaseInfoViewController.GetPrivateField<TextPageScrollView>("_textPageScrollView").transform;
             BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), "BeatSaberMarkupLanguage.Views.main-left-screen.bsml"), releaseInfoViewController.gameObject, this);
         }
 
         internal void Refresh()
         {
-            var a = releaseInfoViewController.GetComponentsInChildren<RectTransform>();
-            foreach (var w in a)
-                if (w.gameObject.name.Contains("BSML"))
-                    Destroy(w.gameObject);
-            Setup();
+            if(rootObject != null)
+            {
+                releaseNotesScrollView.transform.SetParent(null, false);
+                GameObject.Destroy(rootObject);
+                StopAllCoroutines();
+                Setup();
+            }
         }
 
         public void RegisterButton(MenuButton menuButton)
         {
-            if (buttons.Where(x => x == menuButton).Count() == 0)
+            if (!buttons.Any(x => x == menuButton))
                 buttons.Add(menuButton);
-            if (AnyButtons && UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "MenuViewControllers")
-                Refresh();
+            Refresh();
 
             
         }
 
         public void UnregisterButton(MenuButton menuButton)
         {
-            if (buttons.Where(x => x == menuButton).Count() == 1)
-            {
-                menuButton.Destroy();
-                buttons.Remove(menuButton);
-            }
-            if (!AnyButtons && UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "MenuViewControllers")
-                Refresh();
+            buttons.Remove(menuButton);
+            Refresh();
         }
 
         [UIAction("#post-parse")]
         private void PostParse()
         {
-            releaseInfoViewController.GetPrivateField<TextPageScrollView>("_textPageScrollView").transform.SetParent(releaseNoteTab, false);
             if (AnyButtons && !Plugin.config.GetBool("New", "seenMenuButton", false)) 
             {
                 StartCoroutine(ShowNew());
-                Plugin.config.SetBool("New", "seenMenuButton", true);
             }
         }
         IEnumerator ShowNew()
         {
             yield return new WaitForSeconds(1);
             parserParams.EmitEvent("show-new");
+            Plugin.config.SetBool("New", "seenMenuButton", true);
         }
     }
 }

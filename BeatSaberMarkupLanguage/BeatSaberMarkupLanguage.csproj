@@ -107,6 +107,7 @@
     <Compile Include="Macros\DefineMacro.cs" />
     <Compile Include="Macros\ForEachMacro.cs" />
     <Compile Include="Macros\IfMacro.cs" />
+    <Compile Include="Macros\ReparentMacro.cs" />
     <Compile Include="MenuButtons\MenuButton.cs" />
     <Compile Include="MenuButtons\MenuButtons.cs" />
     <Compile Include="Notify\INotifiableHost.cs" />

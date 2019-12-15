@@ -1,11 +1,13 @@
-<bg>
+<bg id='root-object'>
   <tab-selector tab-tag='new-tab' anchor-pos-y='2'></tab-selector>
-  <tab id='release-notes-parent' tags='new-tab' tab-name='Release Notes' anchor-max-y='0.9'></tab>
+  <tab tags='new-tab' tab-name='Release Notes' anchor-max-y='0.9'>
+    <macro.reparent transform='release-notes'></macro.reparent>
+  </tab>
   <macro.if value='any-buttons'>
     <tab tags='new-tab' tab-name='Mods' anchor-max-y='0.85' size-delta-x='1' anchor-pos-x='3'>
       <grid cell-size-y='9' cell-size-x='36'>
         <macro.for-each items='buttons'>
-          <button id='button' pref-width='36' pref-height='8.8' text='~text' hover-hint='~hover-hint' interactable='~interactable' on-click='button-click'></button>
+          <button pref-width='36' pref-height='8.8' text='~text' hover-hint='~hover-hint' interactable='~interactable' on-click='button-click'></button>
         </macro.for-each>
       </grid>
     </tab>
