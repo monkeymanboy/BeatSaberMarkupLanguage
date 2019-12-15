@@ -18,6 +18,7 @@ namespace BeatSaberMarkupLanguage
             Logger.log = logger;
             BSEvents.menuSceneLoadedFresh += MenuLoadFresh;
             config = new Config("BSML");
+            //ModifierButtons.ModButtons.instance.RegisterButton(new ModifierButtons.ModButton("test", "test", null));
         }
         public void MenuLoadFresh()
         {
@@ -25,6 +26,8 @@ namespace BeatSaberMarkupLanguage
             //Resources.FindObjectsOfTypeAll<GameScenesManager>().FirstOrDefault().StartCoroutine(PresentTest());
             BSMLSettings.instance.StartCoroutine(BSMLSettings.instance.AddButtonToMainScreen());
             MenuButtons.MenuButtons.instance.Setup();
+            //SharedCoroutineStarter.instance.StartCoroutine(ModifierButtons.ModButtons.instance.Setup());
+
         }
 
         public void OnSceneLoaded(Scene scene, LoadSceneMode sceneMode) { }
@@ -40,7 +43,8 @@ namespace BeatSaberMarkupLanguage
         public void OnApplicationStart() { }
         public void OnApplicationQuit() { }
         public void OnSceneUnloaded(Scene scene) { }
-        public void OnUpdate() { }
+        public void OnUpdate() { 
+        }
         public void OnFixedUpdate() { }
 
         //It's just for testing so don't yell at me
