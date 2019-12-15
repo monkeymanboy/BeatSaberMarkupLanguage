@@ -1,8 +1,10 @@
 ﻿using BeatSaberMarkupLanguage.Components;
+using HMUI;
 using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Image = UnityEngine.UI.Image;
 
 namespace BeatSaberMarkupLanguage.Tags
 {
@@ -16,6 +18,8 @@ namespace BeatSaberMarkupLanguage.Tags
             button.name = "BSMLButton";
             button.interactable = true;
 
+            Object.Destroy(button.GetComponent<HoverHint>());
+            Object.Destroy(button.GetComponent<LocalizedHoverHint>());
             button.gameObject.AddComponent<ExternalComponents>().components.Add(button.GetComponentsInChildren<HorizontalLayoutGroup>().First(x => x.name == "Content"));
 
             Image glowImage = button.gameObject.GetComponentsInChildren<Image>(true).Where(x => x.gameObject.name == "Glow").FirstOrDefault();
