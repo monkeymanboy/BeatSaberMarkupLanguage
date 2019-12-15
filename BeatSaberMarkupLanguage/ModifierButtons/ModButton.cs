@@ -1,19 +1,18 @@
+/*
 using System;
 using System.Runtime.CompilerServices;
 using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Notify;
-using UnityEngine;
 using UnityEngine.UI;
 
-namespace BeatSaberMarkupLanguage.MenuButtons
+namespace BeatSaberMarkupLanguage.ModifierButtons
 {
-    public class MenuButton : INotifiableHost
+    public class ModButton : INotifiableHost
     {
+        protected internal bool isActive = false;
+
         public virtual Action OnClick { get; protected set; }
         private string _text;
-
-        [UIObject("button")]
-        private GameObject buttonObject;
         [UIValue("text")]
         public virtual string Text {
             get => _text;
@@ -48,8 +47,8 @@ namespace BeatSaberMarkupLanguage.MenuButtons
             OnClick?.Invoke();
         }
         
-        protected MenuButton() { }
-        public MenuButton(string text, string hoverHint, Action onClick, bool interactable = true)
+        protected ModButton() { }
+        public ModButton(string text, string hoverHint, Action onClick, bool interactable = true)
         {
             Text = text;
             HoverHint = hoverHint ?? string.Empty;
@@ -57,7 +56,7 @@ namespace BeatSaberMarkupLanguage.MenuButtons
             Interactable = interactable;
         }
 
-        public MenuButton(string text, Action onClick)
+        public ModButton(string text, Action onClick)
         : this(text, string.Empty, onClick)
         { }
 
@@ -74,10 +73,6 @@ namespace BeatSaberMarkupLanguage.MenuButtons
                 Logger.log?.Error(ex);
             }
         }
-
-        public void Destroy()
-        {
-            UnityEngine.Object.Destroy(buttonObject);
-        }
     }
 }
+*/

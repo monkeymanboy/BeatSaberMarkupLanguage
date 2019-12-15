@@ -1,0 +1,28 @@
+<bg>
+  <bg id="tab-parent">
+    <tab-selector tab-tag='new-tab' anchor-pos-y='2'></tab-selector>
+    <tab id='release-notes-parent' tags='new-tab' tab-name='Vanilla' anchor-max-y='0.9'></tab>
+    <tab id='release-notes-parent' tags='new-tab' tab-name='Mods' anchor-max-y='0.9'></tab>
+  </bg>
+  <button id="button-parent" text="?" on-click="clicked-q"></button>
+  
+  <grid cell-size-y='9' cell-size-x='36' id='grid-parent'>
+    <macro.for-each items='buttons'>
+      <button id='button' pref-width='36' pref-height='8.8' text='~text' hover-hint='~hover-hint' interactable='~interactable' on-click='button-click'></button>
+    </macro.for-each>
+  </grid>
+  <!--Temporary, don't know when but remove at some point-->
+  <modal show-event='show-new' size-delta-x='100' size-delta-y='30' click-off-closes='true'>
+    <vertical size-delta-y='2' pad-bottom='3'>
+      <horizontal bg='panel-top' pad-left='10' pad-right='10' horizontal-fit='PreferredSize'>
+        <text text='NEW' align='Center' font-size='8'></text>
+      </horizontal>
+      <horizontal bg='round-rect-panel' pad='4'>
+        <text text='You can now find mod buttons on this window using the tab at the top'></text>
+      </horizontal>
+      <button text='duh' event-click='show-new2'>
+        
+      </button>
+    </vertical>
+  </modal>
+</bg>
