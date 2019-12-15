@@ -189,9 +189,11 @@
     <Compile Include="TypeHandlers\TextMeshProUGUIHandler.cs" />
     <Compile Include="TypeHandlers\TextPageScrollViewHandler.cs" />
     <Compile Include="TypeHandlers\TypeHandler.cs" />
+    <Compile Include="Extensions\UIExtensions.cs" />
     <Compile Include="Utilities.cs" />
     <Compile Include="ViewControllers\BSMLResourceViewController.cs" />
     <Compile Include="ViewControllers\BSMLViewController.cs" />
+    <Compile Include="ViewControllers\HotReloadableViewController.cs" />
     <Compile Include="ViewControllers\TestViewController.cs" />
   </ItemGroup>
   <ItemGroup>

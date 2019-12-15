@@ -81,6 +81,16 @@ namespace BeatSaberMarkupLanguage
 
         //end of yoink
 
+        public static string EscapeXml(string source)
+        {
+            return source.Replace("\"", "&quot;")
+                .Replace("\"", "&quot;")
+                .Replace("&", "&amp;")
+                .Replace("'", "&apos;")
+                .Replace("<", "&lt;")
+                .Replace(">", "&gt;");
+        }
+
         public static class ImageResources
         {
             private static Material noGlowMat;
