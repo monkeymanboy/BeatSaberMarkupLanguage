@@ -1,9 +1,11 @@
 ﻿using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.Tags;
+using HMUI;
 using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Image = UnityEngine.UI.Image;
 
 namespace BeatSaberMultiplayer.UI.UIElements
 {
@@ -37,7 +39,6 @@ namespace BeatSaberMultiplayer.UI.UIElements
             {
                 ButtonIconImage btnIcon = button.gameObject.AddComponent<ButtonIconImage>();
                 btnIcon.image = iconImage;
-                btnIcon.SetIcon("BeatSaberMarkupLanguage.Resources.icon.png");
             }
 
             Image artworkImage = button.gameObject.GetComponentsInChildren<Image>(true).Where(x => x.gameObject.name == "BGArtwork").FirstOrDefault();

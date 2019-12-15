@@ -39,7 +39,6 @@ namespace BeatSaberMarkupLanguage.Tags
             {
                 ButtonIconImage btnIcon = button.gameObject.AddComponent<ButtonIconImage>();
                 btnIcon.image = iconImage;
-                btnIcon.SetIcon("BeatSaberMarkupLanguage.Resources.icon.png");
             }
 
             return button.gameObject; 
