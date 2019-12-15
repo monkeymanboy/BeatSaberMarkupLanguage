@@ -63,7 +63,8 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 textMesh.gameObject.SetActive(false);
                 MonoBehaviour.Destroy(textMesh.font);
                 // TODO: Setting the font doesn't apply colors to the new font, but this doesn't work
-                //var color = textMesh.color;
+                //
+                color = textMesh.color;
                 //var faceColor = textMesh.faceColor;
                 //var outlineColor = textMesh.outlineColor;
                 //var outlineWidth = textMesh.outlineWidth;

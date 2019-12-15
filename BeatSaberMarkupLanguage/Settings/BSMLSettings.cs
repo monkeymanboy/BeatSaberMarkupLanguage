@@ -83,10 +83,10 @@ namespace BeatSaberMarkupLanguage.Settings
             if (flowCoordinator == null)
                 flowCoordinator = BeatSaberUI.CreateFlowCoordinator<ModSettingsFlowCoordinator>();
             flowCoordinator.isAnimating = true;
-            BeatSaberUI.MainFlowCoordinator.InvokeMethod("PresentFlowCoordinator", new object[] {flowCoordinator, new Action(delegate{
+            BeatSaberUI.MainFlowCoordinator.PresentFlowCoordinator(flowCoordinator, new Action(delegate{
                 flowCoordinator.ShowInitial();
                 flowCoordinator.isAnimating = false;
-            }), false, false });
+            }));
         }
 
         public static void SetupViewControllerTransform(ViewController viewController)
