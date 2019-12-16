@@ -1,21 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
-using BeatSaberMarkupLanguage.Parser;
+﻿using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.Components.Settings
 {
-    public class CheckboxSetting : MonoBehaviour
+    public class CheckboxSetting : GenericSetting
     {
-        public BSMLAction onChange;
-        public BSMLValue associatedValue;
-        public bool updateOnChange = false;
-        
         public Toggle checkbox;
 
         public bool EnableCheckbox
@@ -28,7 +16,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             set => checkbox.isOn = value;
         }
 
-        protected virtual void OnEnable()
+        protected void OnEnable()
         {
             checkbox.onValueChanged.AddListener(CheckboxToggled);
         }
@@ -38,7 +26,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             checkbox.onValueChanged.RemoveListener(CheckboxToggled);
         }
 
-        public void Setup()
+        public override void Setup()
         {
             ReceiveValue();
         }
@@ -49,13 +37,13 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             if (updateOnChange) ApplyValue();
         }
 
-        public void ApplyValue()
+        public override void ApplyValue()
         {  //Mainly I do this so that it doesnt trigger after initially grabbing the value.
             if (checkbox.isOn != (bool)associatedValue?.GetValue())
                 associatedValue.SetValue(checkbox.isOn);
         }
 
-        public void ReceiveValue()
+        public override void ReceiveValue()
         {
             CheckboxValue = (bool)associatedValue?.GetValue();
         }

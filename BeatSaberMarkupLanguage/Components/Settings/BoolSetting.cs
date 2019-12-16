@@ -16,7 +16,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             }
         }
 
-        public void Setup()
+        public override void Setup()
         {
             ReceiveValue();
         }
@@ -40,13 +40,13 @@ namespace BeatSaberMarkupLanguage.Components.Settings
                 ApplyValue();
         }
 
-        public void ApplyValue()
+        public override void ApplyValue()
         {
             if (associatedValue != null)
                 associatedValue.SetValue(Value);
         }
 
-        public void ReceiveValue()
+        public override void ReceiveValue()
         {
             if (associatedValue != null)
                 Value = (bool)associatedValue.GetValue();

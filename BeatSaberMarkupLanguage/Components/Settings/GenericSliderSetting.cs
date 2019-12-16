@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.Components.Settings
 {
-    public abstract class GenericSliderSetting : MonoBehaviour
+    public abstract class GenericSliderSetting : GenericSetting
     {
         public RangeValuesTextSlider slider;
         protected TextMeshProUGUI text;

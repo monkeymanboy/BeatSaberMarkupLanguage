@@ -6,8 +6,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
     public class IncrementSetting : IncDecSetting
     {
         private float currentValue;
-
-        public BSMLAction formatter;
+        
         public bool isInt;
         public float minValue = float.MinValue;
         public float maxValue = float.MaxValue;
@@ -31,7 +30,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             }
         }
 
-        public void Setup()
+        public override void Setup()
         {
             ReceiveValue();
 
@@ -63,7 +62,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
                 ApplyValue();
         }
 
-        public void ApplyValue()
+        public override void ApplyValue()
         {
             if (associatedValue != null)
             {
@@ -74,7 +73,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             }
         }
 
-        public void ReceiveValue()
+        public override void ReceiveValue()
         {
             if (associatedValue != null)
                 Value = isInt ? Convert.ToInt32(associatedValue.GetValue()) : Convert.ToSingle(associatedValue.GetValue());
