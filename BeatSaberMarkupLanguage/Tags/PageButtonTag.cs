@@ -44,6 +44,9 @@ namespace BeatSaberMarkupLanguage.Tags
             glowable.image = button.gameObject.GetComponentsInChildren<Image>(true).Where(x => x.gameObject.name == "Glow").FirstOrDefault();
             glowable.SetGlow("none");
 
+            ButtonIconImage btnIcon = button.gameObject.AddComponent<ButtonIconImage>();
+            btnIcon.image = button.gameObject.GetComponentsInChildren<Image>(true).Where(x => x.gameObject.name == "Arrow").FirstOrDefault();
+
             button.gameObject.SetActive(true);
             return button.gameObject;
         }
