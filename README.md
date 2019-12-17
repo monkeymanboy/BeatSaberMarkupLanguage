@@ -6,7 +6,6 @@ More info on the [wiki](https://github.com/monkeymanboy/BeatSaberMarkupLanguage/
 ## For developers
 
 ### TODO
-- Revamp wiki
 - Add custom tabs on left free play screen
 - Add gameplay modifiers
 - Fix custom fonts

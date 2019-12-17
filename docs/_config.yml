@@ -1,0 +1,20 @@
+page_gen-dirs: true # uncomment, if you prefer to generate named folders
+remote_theme: pmarsceill/just-the-docs
+title: BSML Docs
+description: Documentation for Beat Saber library BeatSaberMarkupLanguage
+logo: "/assets/images/logo.png"
+search_enabled: true
+heading_anchors: true
+footer_content: "Copyright &copy; 2019 David L. Distributed by an <a href=\"https://github.com/monkeymanboy/BeatSaberMarkupLanguage/blob/master/LICENSE\">MIT license.</a>"
+aux_links:
+  "GitHub":
+    - "//github.com/monkeymanboy/BeatSaberMarkupLanguage"
+page_gen:
+  - data: 'TypeHandlers'
+    template: 'TypeHandler'
+    name: 'type'
+    dir: 'TypeHandlers'
+  - data: 'Tags'
+    template: 'Tag'
+    name: 'type'
+    dir: 'Tags'

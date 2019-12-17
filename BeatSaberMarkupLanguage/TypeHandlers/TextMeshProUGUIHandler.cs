@@ -14,14 +14,14 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             //{ "font", new[]{ "font" } },
             { "text", new[]{"text"} },
             { "fontSize", new[]{"font-size"} },
-            { "color", new[]{ "color" } },
+            { "color", new[]{ "font-color", "color" } },
             { "faceColor", new[]{ "face-color" } },
             { "outlineColor", new[]{ "outline-color" } }, // Outline not supported for Teko fonts
             { "outlineWidth", new[]{ "outline-width" } },
             { "richText", new[]{ "rich-text" } }, // Enabled by default
-            { "alignment", new[]{"align"} },
-            { "overflowMode", new[]{"overflow-mode"} },
-            { "bold", new[]{"bold"} },
+            { "alignment", new[]{ "font-align","align" } },
+            { "overflowMode", new[]{ "overflow-mode" } },
+            { "bold", new[]{ "bold" } },
             { "italics", new[]{ "italics" } },
             { "underlined", new[]{ "underlined" } },
             { "strikethrough", new[]{ "strikethrough" } }
