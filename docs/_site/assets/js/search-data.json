@@ -1,0 +1,400 @@
+{
+  
+  "0": {
+    "title": "Attributes",
+    "content": "Attributes are how you are going to get elements from your templates to actually interact with your code. . All attributes in BSML look like the following . [AttributeName(&quot;id&quot;)] . depending on the attribute, they can be placed on fields, methods, and properties. .",
+    "url": "http://localhost:4000/Attributes/Attributes.html",
+    "relUrl": "/Attributes/Attributes.html"
+  }
+  ,"1": {
+    "title": "Getting Started",
+    "content": "Creating a BSMLResourceViewController . A BSMLResourceViewController is simply a view controller that will load a BSML template from an embedded resource in your project, it’s the simplest and most common way to make use of the library. . public class ExampleViewController : BSMLResourceViewController { public override string ResourceName =&gt; &quot;Path.To.Resource.example.bsml&quot;; } . Making your template . Create a file such as example.bsml and add it somewhere in your project. To stay organized I recommend making a Views folder for all your BSML templates. Make sure to add it as an embedded resource so that it is included when you compile your plugin. Once you’ve done this if you’re using a BSMLResourceViewController make sure to point it to your resource it should look something like Namespace.Views.example.bsml. . Adding content to your template . When creating your templates you must only have one root node. Let’s make a template with a header, some text, and a button. . &lt;vertical child-control-height=&#39;false&#39;&gt; &lt;horizontal bg=&#39;panel-top&#39; pad-left=&#39;10&#39; pad-right=&#39;10&#39; horizontal-fit=&#39;PreferredSize&#39;&gt; &lt;text text=&#39;Example&#39; align=&#39;Center&#39; font-size=&#39;10&#39;&gt;&lt;/text&gt; &lt;/horizontal&gt; &lt;horizontal bg=&#39;round-rect-panel&#39; pad=&#39;8&#39;&gt; &lt;text text=&#39;Looks at this fancy text.&#39;&gt;&lt;/text&gt; &lt;/horizontal&gt; &lt;button text=&#39;Test Button&#39;&gt;&lt;/button&gt; &lt;/vertical&gt; . The following will look like this in game .",
+    "url": "http://localhost:4000/Getting%20Started/Getting%20Started.html",
+    "relUrl": "/Getting%20Started/Getting%20Started.html"
+  }
+  ,"2": {
+    "title": "Handled Components",
+    "content": "",
+    "url": "http://localhost:4000/Handled%20Components.html",
+    "relUrl": "/Handled%20Components.html"
+  }
+  ,"3": {
+    "title": "Interacting with your elements",
+    "content": "Accessing components in code . Say we want to change that text we made earlier in code, well to do that we’re gonna need a reference to it. First, we’re gonna need to give that text an id, let’s give it the id some-text . &lt;vertical child-control-height=&#39;false&#39;&gt; &lt;horizontal bg=&#39;panel-top&#39; pad-left=&#39;10&#39; pad-right=&#39;10&#39; horizontal-fit=&#39;PreferredSize&#39;&gt; &lt;text text=&#39;Example&#39; align=&#39;Center&#39; font-size=&#39;10&#39;&gt;&lt;/text&gt; &lt;/horizontal&gt; &lt;horizontal bg=&#39;round-rect-panel&#39; pad=&#39;8&#39;&gt; &lt;text id=&#39;some-text&#39; text=&#39;Looks at this fancy text.&#39;&gt;&lt;/text&gt; &lt;/horizontal&gt; &lt;button text=&#39;Test Button&#39;&gt;&lt;/button&gt; &lt;/vertical&gt; . Now to access the TextMeshProUGUI component of this text element we can just tag it with the UIComponent attribute . public class ExampleViewController : BSMLResourceViewController { public override string ResourceName =&gt; &quot;Namespace.Views.example.bsml&quot;; [UIComponent(&quot;some-text&quot;)] private TextMeshProUGUI text; } . Triggering methods with templates . Now we have our text but how do we make clicking the button change it? Well, we can add an on-click event to it to trigger a method with the UIAction attribute. Let’s make it trigger the press method . &lt;vertical child-control-height=&#39;false&#39;&gt; &lt;horizontal bg=&#39;panel-top&#39; pad-left=&#39;10&#39; pad-right=&#39;10&#39; horizontal-fit=&#39;PreferredSize&#39;&gt; &lt;text text=&#39;Example&#39; align=&#39;Center&#39; font-size=&#39;10&#39;&gt;&lt;/text&gt; &lt;/horizontal&gt; &lt;horizontal bg=&#39;round-rect-panel&#39; pad=&#39;8&#39;&gt; &lt;text id=&#39;some-text&#39; text=&#39;Looks at this fancy text.&#39;&gt;&lt;/text&gt; &lt;/horizontal&gt; &lt;button on-click=&#39;press&#39; text=&#39;Test Button&#39;&gt;&lt;/button&gt; &lt;/vertical&gt; . and now we can add the UIAction attribute to our method that changes the text . public class ExampleViewController : BSMLResourceViewController { public override string ResourceName =&gt; &quot;Namespace.Views.example.bsml&quot;; [UIComponent(&quot;some-text&quot;)] private TextMeshProUGUI text; [UIAction(&quot;press&quot;)] private void ButtonPress() { text.text = &quot;Hey look, the text changed&quot;; } } . Now if we go in game and click the button our text will change. .",
+    "url": "http://localhost:4000/Getting%20Started/Interacting%20with%20your%20elements.html",
+    "relUrl": "/Getting%20Started/Interacting%20with%20your%20elements.html"
+  }
+  ,"4": {
+    "title": "Tags",
+    "content": "",
+    "url": "http://localhost:4000/Tags.html",
+    "relUrl": "/Tags.html"
+  }
+  ,"5": {
+    "title": "UIAction",
+    "content": "About . The UIAction attribute can only be applied to methods. The parameters of the method you are applying it to depends on what you are actually using that action for. . You can also make a UIAction respond to events by making it’s id a # followed by the event you want it to respond to. Events will never have any parameters. . Example Usage . A button can take in a UIAction for it’s on-click . &lt;button text=&#39;Button&#39; on-click=&#39;click&#39;&gt;&lt;/button&gt; . [UIAction(&quot;click&quot;)] private void ButtonClicked() { Console.WriteLine(&quot;Button was clicked!&quot;); } . This example will print Button was clicked to the console whenever the button is clicked. .",
+    "url": "http://localhost:4000/Attributes/UIAction.html",
+    "relUrl": "/Attributes/UIAction.html"
+  }
+  ,"6": {
+    "title": "UIComponent",
+    "content": "About . The UIComponent attribute can only be applied to fields. The type of the field that it is applied to must be one of the components on the object with the corresponding id. . Example Usage . &lt;text id=&#39;whatever&#39;&gt;&lt;/text&gt; . [UIComponent(&quot;whatever&quot;)] private TextMeshProUGUI textComponent; . This example will initialize textComponent with the text tag’s TextMeshProUGUI component. .",
+    "url": "http://localhost:4000/Attributes/UIComponent.html",
+    "relUrl": "/Attributes/UIComponent.html"
+  }
+  ,"7": {
+    "title": "UIObject",
+    "content": "About . The UIObject attribute can only be applied to fields. The type of the field must be GameObject. This tag is used in the same way as UIComponent but instead will give you the GameObject. . Example Usage . &lt;text id=&#39;whatever&#39;&gt;&lt;/text&gt; . [UIComponent(&quot;whatever&quot;)] private GameObject textObj; . This example will initialize textObj with the text tag’s GameObject component. .",
+    "url": "http://localhost:4000/Attributes/UIObject.html",
+    "relUrl": "/Attributes/UIObject.html"
+  }
+  ,"8": {
+    "title": "UIParams",
+    "content": "About . The UIParams attribute can only be applied to a field of type BSMLParserParams. . Receiving this object can be useful to emit ui events or actions through your own code. . Example Usage . [UIParams] BSMLParserParams parserParams; .",
+    "url": "http://localhost:4000/Attributes/UIParams.html",
+    "relUrl": "/Attributes/UIParams.html"
+  }
+  ,"9": {
+    "title": "UIValue",
+    "content": "About . The UIValue attribute can be applied to both fields and properties. . Besides being able to supply tag parameters that accept UIValue’s you can also use them for any tag parameter by prefixing the id with a ~ on the actual tag property. This will place the corresponding UIValue’s ToString respresentation into the tag parameter. . Example Usage . All settings tags make use of UIValue so let’s look at a bool-setting . &lt;bool-setting text=&#39;Bool Setting&#39; value=&#39;bool-value&#39; apply-on-change=&#39;true&#39;&gt;&lt;/bool-setting&gt; . [UIValue(&quot;bool-value&quot;)] private bool boolVal = true; . In this example the bool-setting will start as ON and as soon as it get’s switched to OFF boolVal will be set to false . Using ~ . Say we have for example a text component but we want it’s text to be some string we have in code. Well then we can make use of the ~ prefix. . &lt;text text=&#39;~some-text&#39;&gt;&lt;/text&gt; . [UIValue(&quot;some-text&quot;)] private string someText = &quot;Text will come from here!&quot;; . In this example the text’s text will become Text will come from here! .",
+    "url": "http://localhost:4000/Attributes/UIValue.html",
+    "relUrl": "/Attributes/UIValue.html"
+  }
+  ,"10": {
+    "title": "Home",
+    "content": "Welcome to the BSML Docs! . If you’re new to BSML take a look at Getting Started .",
+    "url": "http://localhost:4000/",
+    "relUrl": "/"
+  }
+  ,"11": {
+    "title": "Backgroundable",
+    "content": "{{page.type}} . {% for property in page.properties %} . {{property.aliases[0]}} . {{property.type}} . {{property.description}} {% if property.aliases.size &gt; 1 %} . Aliases: . {% for alias in property.aliases %} . {{alias}} | . {% endfor %} {% endif %} {% endfor %} .",
+    "url": "http://localhost:4000/TypeHandlers/backgroundable/",
+    "relUrl": "/TypeHandlers/backgroundable/"
+  }
+  ,"12": {
+    "title": "Button",
+    "content": "{{page.type}} . {% for property in page.properties %} . {{property.aliases[0]}} . {{property.type}} . {{property.description}} {% if property.aliases.size &gt; 1 %} . Aliases: . {% for alias in property.aliases %} . {{alias}} | . {% endfor %} {% endif %} {% endfor %} .",
+    "url": "http://localhost:4000/TypeHandlers/button/",
+    "relUrl": "/TypeHandlers/button/"
+  }
+  ,"13": {
+    "title": "ClickableText",
+    "content": "{{page.type}} . {% for property in page.properties %} . {{property.aliases[0]}} . {{property.type}} . {{property.description}} {% if property.aliases.size &gt; 1 %} . Aliases: . {% for alias in property.aliases %} . {{alias}} | . {% endfor %} {% endif %} {% endfor %} .",
+    "url": "http://localhost:4000/TypeHandlers/clickabletext/",
+    "relUrl": "/TypeHandlers/clickabletext/"
+  }
+  ,"14": {
+    "title": "ContentSizeFitter",
+    "content": "{{page.type}} . {% for property in page.properties %} . {{property.aliases[0]}} . {{property.type}} . {{property.description}} {% if property.aliases.size &gt; 1 %} . Aliases: . {% for alias in property.aliases %} . {{alias}} | . {% endfor %} {% endif %} {% endfor %} .",
+    "url": "http://localhost:4000/TypeHandlers/contentsizefitter/",
+    "relUrl": "/TypeHandlers/contentsizefitter/"
+  }
+  ,"15": {
+    "title": "CustomCellListTableData",
+    "content": "{{page.type}} . {% for property in page.properties %} . {{property.aliases[0]}} . {{property.type}} . {{property.description}} {% if property.aliases.size &gt; 1 %} . Aliases: . {% for alias in property.aliases %} . {{alias}} | . {% endfor %} {% endif %} {% endfor %} .",
+    "url": "http://localhost:4000/TypeHandlers/customcelllisttabledata/",
+    "relUrl": "/TypeHandlers/customcelllisttabledata/"
+  }
+  ,"16": {
+    "title": "CustomListTableData",
+    "content": "{{page.type}} . {% for property in page.properties %} . {{property.aliases[0]}} . {{property.type}} . {{property.description}} {% if property.aliases.size &gt; 1 %} . Aliases: . {% for alias in property.aliases %} . {{alias}} | . {% endfor %} {% endif %} {% endfor %} .",
+    "url": "http://localhost:4000/TypeHandlers/customlisttabledata/",
+    "relUrl": "/TypeHandlers/customlisttabledata/"
+  }
+  ,"17": {
+    "title": "Glowable",
+    "content": "{{page.type}} . {% for property in page.properties %} . {{property.aliases[0]}} . {{property.type}} . {{property.description}} {% if property.aliases.size &gt; 1 %} . Aliases: . {% for alias in property.aliases %} . {{alias}} | . {% endfor %} {% endif %} {% endfor %} .",
+    "url": "http://localhost:4000/TypeHandlers/glowable/",
+    "relUrl": "/TypeHandlers/glowable/"
+  }
+  ,"18": {
+    "title": "GridLayoutGroup",
+    "content": "{{page.type}} . {% for property in page.properties %} . {{property.aliases[0]}} . {{property.type}} . {{property.description}} {% if property.aliases.size &gt; 1 %} . Aliases: . {% for alias in property.aliases %} . {{alias}} | . {% endfor %} {% endif %} {% endfor %} .",
+    "url": "http://localhost:4000/TypeHandlers/gridlayoutgroup/",
+    "relUrl": "/TypeHandlers/gridlayoutgroup/"
+  }
+  ,"19": {
+    "title": "HorizontalOrVerticalLayoutGroup",
+    "content": "{{page.type}} . {% for property in page.properties %} . {{property.aliases[0]}} . {{property.type}} . {{property.description}} {% if property.aliases.size &gt; 1 %} . Aliases: . {% for alias in property.aliases %} . {{alias}} | . {% endfor %} {% endif %} {% endfor %} .",
+    "url": "http://localhost:4000/TypeHandlers/horizontalorverticallayoutgroup/",
+    "relUrl": "/TypeHandlers/horizontalorverticallayoutgroup/"
+  }
+  ,"20": {
+    "title": "LayoutElement",
+    "content": "{{page.type}} . {% for property in page.properties %} . {{property.aliases[0]}} . {{property.type}} . {{property.description}} {% if property.aliases.size &gt; 1 %} . Aliases: . {% for alias in property.aliases %} . {{alias}} | . {% endfor %} {% endif %} {% endfor %} .",
+    "url": "http://localhost:4000/TypeHandlers/layoutelement/",
+    "relUrl": "/TypeHandlers/layoutelement/"
+  }
+  ,"21": {
+    "title": "LayoutGroup",
+    "content": "{{page.type}} . {% for property in page.properties %} . {{property.aliases[0]}} . {{property.type}} . {{property.description}} {% if property.aliases.size &gt; 1 %} . Aliases: . {% for alias in property.aliases %} . {{alias}} | . {% endfor %} {% endif %} {% endfor %} .",
+    "url": "http://localhost:4000/TypeHandlers/layoutgroup/",
+    "relUrl": "/TypeHandlers/layoutgroup/"
+  }
+  ,"22": {
+    "title": "LeaderboardTableView",
+    "content": "{{page.type}} . {% for property in page.properties %} . {{property.aliases[0]}} . {{property.type}} . {{property.description}} {% if property.aliases.size &gt; 1 %} . Aliases: . {% for alias in property.aliases %} . {{alias}} | . {% endfor %} {% endif %} {% endfor %} .",
+    "url": "http://localhost:4000/TypeHandlers/leaderboardtableview/",
+    "relUrl": "/TypeHandlers/leaderboardtableview/"
+  }
+  ,"23": {
+    "title": "ModalKeyboard",
+    "content": "{{page.type}} . {% for property in page.properties %} . {{property.aliases[0]}} . {{property.type}} . {{property.description}} {% if property.aliases.size &gt; 1 %} . Aliases: . {% for alias in property.aliases %} . {{alias}} | . {% endfor %} {% endif %} {% endfor %} .",
+    "url": "http://localhost:4000/TypeHandlers/modalkeyboard/",
+    "relUrl": "/TypeHandlers/modalkeyboard/"
+  }
+  ,"24": {
+    "title": "ModalView",
+    "content": "{{page.type}} . {% for property in page.properties %} . {{property.aliases[0]}} . {{property.type}} . {{property.description}} {% if property.aliases.size &gt; 1 %} . Aliases: . {% for alias in property.aliases %} . {{alias}} | . {% endfor %} {% endif %} {% endfor %} .",
+    "url": "http://localhost:4000/TypeHandlers/modalview/",
+    "relUrl": "/TypeHandlers/modalview/"
+  }
+  ,"25": {
+    "title": "PageButton",
+    "content": "{{page.type}} . {% for property in page.properties %} . {{property.aliases[0]}} . {{property.type}} . {{property.description}} {% if property.aliases.size &gt; 1 %} . Aliases: . {% for alias in property.aliases %} . {{alias}} | . {% endfor %} {% endif %} {% endfor %} .",
+    "url": "http://localhost:4000/TypeHandlers/pagebutton/",
+    "relUrl": "/TypeHandlers/pagebutton/"
+  }
+  ,"26": {
+    "title": "RectTransform",
+    "content": "{{page.type}} . {% for property in page.properties %} . {{property.aliases[0]}} . {{property.type}} . {{property.description}} {% if property.aliases.size &gt; 1 %} . Aliases: . {% for alias in property.aliases %} . {{alias}} | . {% endfor %} {% endif %} {% endfor %} .",
+    "url": "http://localhost:4000/TypeHandlers/recttransform/",
+    "relUrl": "/TypeHandlers/recttransform/"
+  }
+  ,"27": {
+    "title": "Tab",
+    "content": "{{page.type}} . {% for property in page.properties %} . {{property.aliases[0]}} . {{property.type}} . {{property.description}} {% if property.aliases.size &gt; 1 %} . Aliases: . {% for alias in property.aliases %} . {{alias}} | . {% endfor %} {% endif %} {% endfor %} .",
+    "url": "http://localhost:4000/TypeHandlers/tab/",
+    "relUrl": "/TypeHandlers/tab/"
+  }
+  ,"28": {
+    "title": "TabSelector",
+    "content": "{{page.type}} . {% for property in page.properties %} . {{property.aliases[0]}} . {{property.type}} . {{property.description}} {% if property.aliases.size &gt; 1 %} . Aliases: . {% for alias in property.aliases %} . {{alias}} | . {% endfor %} {% endif %} {% endfor %} .",
+    "url": "http://localhost:4000/TypeHandlers/tabselector/",
+    "relUrl": "/TypeHandlers/tabselector/"
+  }
+  ,"29": {
+    "title": "TextMeshProUGUI",
+    "content": "{{page.type}} . {% for property in page.properties %} . {{property.aliases[0]}} . {{property.type}} . {{property.description}} {% if property.aliases.size &gt; 1 %} . Aliases: . {% for alias in property.aliases %} . {{alias}} | . {% endfor %} {% endif %} {% endfor %} .",
+    "url": "http://localhost:4000/TypeHandlers/textmeshprougui/",
+    "relUrl": "/TypeHandlers/textmeshprougui/"
+  }
+  ,"30": {
+    "title": "TextPageScrollView",
+    "content": "{{page.type}} . {% for property in page.properties %} . {{property.aliases[0]}} . {{property.type}} . {{property.description}} {% if property.aliases.size &gt; 1 %} . Aliases: . {% for alias in property.aliases %} . {{alias}} | . {% endfor %} {% endif %} {% endfor %} .",
+    "url": "http://localhost:4000/TypeHandlers/textpagescrollview/",
+    "relUrl": "/TypeHandlers/textpagescrollview/"
+  }
+  ,"31": {
+    "title": "DropDownListSetting",
+    "content": "{{page.type}} . {% for property in page.properties %} . {{property.aliases[0]}} . {{property.type}} . {{property.description}} {% if property.aliases.size &gt; 1 %} . Aliases: . {% for alias in property.aliases %} . {{alias}} | . {% endfor %} {% endif %} {% endfor %} .",
+    "url": "http://localhost:4000/TypeHandlers/dropdownlistsetting/",
+    "relUrl": "/TypeHandlers/dropdownlistsetting/"
+  }
+  ,"32": {
+    "title": "GenericSetting",
+    "content": "{{page.type}} . {% for property in page.properties %} . {{property.aliases[0]}} . {{property.type}} . {{property.description}} {% if property.aliases.size &gt; 1 %} . Aliases: . {% for alias in property.aliases %} . {{alias}} | . {% endfor %} {% endif %} {% endfor %} .",
+    "url": "http://localhost:4000/TypeHandlers/genericsetting/",
+    "relUrl": "/TypeHandlers/genericsetting/"
+  }
+  ,"33": {
+    "title": "IncrementSetting",
+    "content": "{{page.type}} . {% for property in page.properties %} . {{property.aliases[0]}} . {{property.type}} . {{property.description}} {% if property.aliases.size &gt; 1 %} . Aliases: . {% for alias in property.aliases %} . {{alias}} | . {% endfor %} {% endif %} {% endfor %} .",
+    "url": "http://localhost:4000/TypeHandlers/incrementsetting/",
+    "relUrl": "/TypeHandlers/incrementsetting/"
+  }
+  ,"34": {
+    "title": "ListSliderSetting",
+    "content": "{{page.type}} . {% for property in page.properties %} . {{property.aliases[0]}} . {{property.type}} . {{property.description}} {% if property.aliases.size &gt; 1 %} . Aliases: . {% for alias in property.aliases %} . {{alias}} | . {% endfor %} {% endif %} {% endfor %} .",
+    "url": "http://localhost:4000/TypeHandlers/listslidersetting/",
+    "relUrl": "/TypeHandlers/listslidersetting/"
+  }
+  ,"35": {
+    "title": "ListSetting",
+    "content": "{{page.type}} . {% for property in page.properties %} . {{property.aliases[0]}} . {{property.type}} . {{property.description}} {% if property.aliases.size &gt; 1 %} . Aliases: . {% for alias in property.aliases %} . {{alias}} | . {% endfor %} {% endif %} {% endfor %} .",
+    "url": "http://localhost:4000/TypeHandlers/listsetting/",
+    "relUrl": "/TypeHandlers/listsetting/"
+  }
+  ,"36": {
+    "title": "SliderSetting",
+    "content": "{{page.type}} . {% for property in page.properties %} . {{property.aliases[0]}} . {{property.type}} . {{property.description}} {% if property.aliases.size &gt; 1 %} . Aliases: . {% for alias in property.aliases %} . {{alias}} | . {% endfor %} {% endif %} {% endfor %} .",
+    "url": "http://localhost:4000/TypeHandlers/slidersetting/",
+    "relUrl": "/TypeHandlers/slidersetting/"
+  }
+  ,"37": {
+    "title": "BackgroundTag",
+    "content": "{{page.type}} . Components and Properties . {% for component in page.components %} {% assign typehandler = site.data.TypeHandlers | where: “type”, component | first %} . {{typehandler.type}} . {% for property in typehandler.properties %} . {{property.aliases[0]}} . {{property.type}} . {{property.description}} {% if property.aliases.size &gt; 1 %} . Aliases: . {% for alias in property.aliases %} . {{alias}} | . {% endfor %} {% endif %} {% endfor %} {% endfor %} .",
+    "url": "http://localhost:4000/Tags/backgroundtag/",
+    "relUrl": "/Tags/backgroundtag/"
+  }
+  ,"38": {
+    "title": "BottomButtonPanelTag",
+    "content": "{{page.type}} . Components and Properties . {% for component in page.components %} {% assign typehandler = site.data.TypeHandlers | where: “type”, component | first %} . {{typehandler.type}} . {% for property in typehandler.properties %} . {{property.aliases[0]}} . {{property.type}} . {{property.description}} {% if property.aliases.size &gt; 1 %} . Aliases: . {% for alias in property.aliases %} . {{alias}} | . {% endfor %} {% endif %} {% endfor %} {% endfor %} .",
+    "url": "http://localhost:4000/Tags/bottombuttonpaneltag/",
+    "relUrl": "/Tags/bottombuttonpaneltag/"
+  }
+  ,"39": {
+    "title": "ButtonTag",
+    "content": "{{page.type}} . Components and Properties . {% for component in page.components %} {% assign typehandler = site.data.TypeHandlers | where: “type”, component | first %} . {{typehandler.type}} . {% for property in typehandler.properties %} . {{property.aliases[0]}} . {{property.type}} . {{property.description}} {% if property.aliases.size &gt; 1 %} . Aliases: . {% for alias in property.aliases %} . {{alias}} | . {% endfor %} {% endif %} {% endfor %} {% endfor %} .",
+    "url": "http://localhost:4000/Tags/buttontag/",
+    "relUrl": "/Tags/buttontag/"
+  }
+  ,"40": {
+    "title": "ClickableTextTag",
+    "content": "{{page.type}} . Components and Properties . {% for component in page.components %} {% assign typehandler = site.data.TypeHandlers | where: “type”, component | first %} . {{typehandler.type}} . {% for property in typehandler.properties %} . {{property.aliases[0]}} . {{property.type}} . {{property.description}} {% if property.aliases.size &gt; 1 %} . Aliases: . {% for alias in property.aliases %} . {{alias}} | . {% endfor %} {% endif %} {% endfor %} {% endfor %} .",
+    "url": "http://localhost:4000/Tags/clickabletexttag/",
+    "relUrl": "/Tags/clickabletexttag/"
+  }
+  ,"41": {
+    "title": "CustomListTag",
+    "content": "{{page.type}} . Components and Properties . {% for component in page.components %} {% assign typehandler = site.data.TypeHandlers | where: “type”, component | first %} . {{typehandler.type}} . {% for property in typehandler.properties %} . {{property.aliases[0]}} . {{property.type}} . {{property.description}} {% if property.aliases.size &gt; 1 %} . Aliases: . {% for alias in property.aliases %} . {{alias}} | . {% endfor %} {% endif %} {% endfor %} {% endfor %} .",
+    "url": "http://localhost:4000/Tags/customlisttag/",
+    "relUrl": "/Tags/customlisttag/"
+  }
+  ,"42": {
+    "title": "GridLayoutTag",
+    "content": "{{page.type}} . Components and Properties . {% for component in page.components %} {% assign typehandler = site.data.TypeHandlers | where: “type”, component | first %} . {{typehandler.type}} . {% for property in typehandler.properties %} . {{property.aliases[0]}} . {{property.type}} . {{property.description}} {% if property.aliases.size &gt; 1 %} . Aliases: . {% for alias in property.aliases %} . {{alias}} | . {% endfor %} {% endif %} {% endfor %} {% endfor %} .",
+    "url": "http://localhost:4000/Tags/gridlayouttag/",
+    "relUrl": "/Tags/gridlayouttag/"
+  }
+  ,"43": {
+    "title": "HorizontalLayoutTag",
+    "content": "{{page.type}} . Components and Properties . {% for component in page.components %} {% assign typehandler = site.data.TypeHandlers | where: “type”, component | first %} . {{typehandler.type}} . {% for property in typehandler.properties %} . {{property.aliases[0]}} . {{property.type}} . {{property.description}} {% if property.aliases.size &gt; 1 %} . Aliases: . {% for alias in property.aliases %} . {{alias}} | . {% endfor %} {% endif %} {% endfor %} {% endfor %} .",
+    "url": "http://localhost:4000/Tags/horizontallayouttag/",
+    "relUrl": "/Tags/horizontallayouttag/"
+  }
+  ,"44": {
+    "title": "ImageTag",
+    "content": "{{page.type}} . Components and Properties . {% for component in page.components %} {% assign typehandler = site.data.TypeHandlers | where: “type”, component | first %} . {{typehandler.type}} . {% for property in typehandler.properties %} . {{property.aliases[0]}} . {{property.type}} . {{property.description}} {% if property.aliases.size &gt; 1 %} . Aliases: . {% for alias in property.aliases %} . {{alias}} | . {% endfor %} {% endif %} {% endfor %} {% endfor %} .",
+    "url": "http://localhost:4000/Tags/imagetag/",
+    "relUrl": "/Tags/imagetag/"
+  }
+  ,"45": {
+    "title": "LeaderboardTag",
+    "content": "{{page.type}} . Components and Properties . {% for component in page.components %} {% assign typehandler = site.data.TypeHandlers | where: “type”, component | first %} . {{typehandler.type}} . {% for property in typehandler.properties %} . {{property.aliases[0]}} . {{property.type}} . {{property.description}} {% if property.aliases.size &gt; 1 %} . Aliases: . {% for alias in property.aliases %} . {{alias}} | . {% endfor %} {% endif %} {% endfor %} {% endfor %} .",
+    "url": "http://localhost:4000/Tags/leaderboardtag/",
+    "relUrl": "/Tags/leaderboardtag/"
+  }
+  ,"46": {
+    "title": "ListTag",
+    "content": "{{page.type}} . Components and Properties . {% for component in page.components %} {% assign typehandler = site.data.TypeHandlers | where: “type”, component | first %} . {{typehandler.type}} . {% for property in typehandler.properties %} . {{property.aliases[0]}} . {{property.type}} . {{property.description}} {% if property.aliases.size &gt; 1 %} . Aliases: . {% for alias in property.aliases %} . {{alias}} | . {% endfor %} {% endif %} {% endfor %} {% endfor %} .",
+    "url": "http://localhost:4000/Tags/listtag/",
+    "relUrl": "/Tags/listtag/"
+  }
+  ,"47": {
+    "title": "ModalKeyboardTag",
+    "content": "{{page.type}} . Components and Properties . {% for component in page.components %} {% assign typehandler = site.data.TypeHandlers | where: “type”, component | first %} . {{typehandler.type}} . {% for property in typehandler.properties %} . {{property.aliases[0]}} . {{property.type}} . {{property.description}} {% if property.aliases.size &gt; 1 %} . Aliases: . {% for alias in property.aliases %} . {{alias}} | . {% endfor %} {% endif %} {% endfor %} {% endfor %} .",
+    "url": "http://localhost:4000/Tags/modalkeyboardtag/",
+    "relUrl": "/Tags/modalkeyboardtag/"
+  }
+  ,"48": {
+    "title": "ModalTag",
+    "content": "{{page.type}} . Components and Properties . {% for component in page.components %} {% assign typehandler = site.data.TypeHandlers | where: “type”, component | first %} . {{typehandler.type}} . {% for property in typehandler.properties %} . {{property.aliases[0]}} . {{property.type}} . {{property.description}} {% if property.aliases.size &gt; 1 %} . Aliases: . {% for alias in property.aliases %} . {{alias}} | . {% endfor %} {% endif %} {% endfor %} {% endfor %} .",
+    "url": "http://localhost:4000/Tags/modaltag/",
+    "relUrl": "/Tags/modaltag/"
+  }
+  ,"49": {
+    "title": "PageButtonTag",
+    "content": "{{page.type}} . Components and Properties . {% for component in page.components %} {% assign typehandler = site.data.TypeHandlers | where: “type”, component | first %} . {{typehandler.type}} . {% for property in typehandler.properties %} . {{property.aliases[0]}} . {{property.type}} . {{property.description}} {% if property.aliases.size &gt; 1 %} . Aliases: . {% for alias in property.aliases %} . {{alias}} | . {% endfor %} {% endif %} {% endfor %} {% endfor %} .",
+    "url": "http://localhost:4000/Tags/pagebuttontag/",
+    "relUrl": "/Tags/pagebuttontag/"
+  }
+  ,"50": {
+    "title": "ScrollableSettingsContainerTag",
+    "content": "{{page.type}} . Components and Properties . {% for component in page.components %} {% assign typehandler = site.data.TypeHandlers | where: “type”, component | first %} . {{typehandler.type}} . {% for property in typehandler.properties %} . {{property.aliases[0]}} . {{property.type}} . {{property.description}} {% if property.aliases.size &gt; 1 %} . Aliases: . {% for alias in property.aliases %} . {{alias}} | . {% endfor %} {% endif %} {% endfor %} {% endfor %} .",
+    "url": "http://localhost:4000/Tags/scrollablesettingscontainertag/",
+    "relUrl": "/Tags/scrollablesettingscontainertag/"
+  }
+  ,"51": {
+    "title": "SettingsContainerTag",
+    "content": "{{page.type}} . Components and Properties . {% for component in page.components %} {% assign typehandler = site.data.TypeHandlers | where: “type”, component | first %} . {{typehandler.type}} . {% for property in typehandler.properties %} . {{property.aliases[0]}} . {{property.type}} . {{property.description}} {% if property.aliases.size &gt; 1 %} . Aliases: . {% for alias in property.aliases %} . {{alias}} | . {% endfor %} {% endif %} {% endfor %} {% endfor %} .",
+    "url": "http://localhost:4000/Tags/settingscontainertag/",
+    "relUrl": "/Tags/settingscontainertag/"
+  }
+  ,"52": {
+    "title": "TabSelectorTag",
+    "content": "{{page.type}} . Components and Properties . {% for component in page.components %} {% assign typehandler = site.data.TypeHandlers | where: “type”, component | first %} . {{typehandler.type}} . {% for property in typehandler.properties %} . {{property.aliases[0]}} . {{property.type}} . {{property.description}} {% if property.aliases.size &gt; 1 %} . Aliases: . {% for alias in property.aliases %} . {{alias}} | . {% endfor %} {% endif %} {% endfor %} {% endfor %} .",
+    "url": "http://localhost:4000/Tags/tabselectortag/",
+    "relUrl": "/Tags/tabselectortag/"
+  }
+  ,"53": {
+    "title": "TabTag",
+    "content": "{{page.type}} . Components and Properties . {% for component in page.components %} {% assign typehandler = site.data.TypeHandlers | where: “type”, component | first %} . {{typehandler.type}} . {% for property in typehandler.properties %} . {{property.aliases[0]}} . {{property.type}} . {{property.description}} {% if property.aliases.size &gt; 1 %} . Aliases: . {% for alias in property.aliases %} . {{alias}} | . {% endfor %} {% endif %} {% endfor %} {% endfor %} .",
+    "url": "http://localhost:4000/Tags/tabtag/",
+    "relUrl": "/Tags/tabtag/"
+  }
+  ,"54": {
+    "title": "TextPageScrollViewTag",
+    "content": "{{page.type}} . Components and Properties . {% for component in page.components %} {% assign typehandler = site.data.TypeHandlers | where: “type”, component | first %} . {{typehandler.type}} . {% for property in typehandler.properties %} . {{property.aliases[0]}} . {{property.type}} . {{property.description}} {% if property.aliases.size &gt; 1 %} . Aliases: . {% for alias in property.aliases %} . {{alias}} | . {% endfor %} {% endif %} {% endfor %} {% endfor %} .",
+    "url": "http://localhost:4000/Tags/textpagescrollviewtag/",
+    "relUrl": "/Tags/textpagescrollviewtag/"
+  }
+  ,"55": {
+    "title": "TextTag",
+    "content": "{{page.type}} . Components and Properties . {% for component in page.components %} {% assign typehandler = site.data.TypeHandlers | where: “type”, component | first %} . {{typehandler.type}} . {% for property in typehandler.properties %} . {{property.aliases[0]}} . {{property.type}} . {{property.description}} {% if property.aliases.size &gt; 1 %} . Aliases: . {% for alias in property.aliases %} . {{alias}} | . {% endfor %} {% endif %} {% endfor %} {% endfor %} .",
+    "url": "http://localhost:4000/Tags/texttag/",
+    "relUrl": "/Tags/texttag/"
+  }
+  ,"56": {
+    "title": "VerticalLayoutTag",
+    "content": "{{page.type}} . Components and Properties . {% for component in page.components %} {% assign typehandler = site.data.TypeHandlers | where: “type”, component | first %} . {{typehandler.type}} . {% for property in typehandler.properties %} . {{property.aliases[0]}} . {{property.type}} . {{property.description}} {% if property.aliases.size &gt; 1 %} . Aliases: . {% for alias in property.aliases %} . {{alias}} | . {% endfor %} {% endif %} {% endfor %} {% endfor %} .",
+    "url": "http://localhost:4000/Tags/verticallayouttag/",
+    "relUrl": "/Tags/verticallayouttag/"
+  }
+  ,"57": {
+    "title": "BoolSettingTag",
+    "content": "{{page.type}} . Components and Properties . {% for component in page.components %} {% assign typehandler = site.data.TypeHandlers | where: “type”, component | first %} . {{typehandler.type}} . {% for property in typehandler.properties %} . {{property.aliases[0]}} . {{property.type}} . {{property.description}} {% if property.aliases.size &gt; 1 %} . Aliases: . {% for alias in property.aliases %} . {{alias}} | . {% endfor %} {% endif %} {% endfor %} {% endfor %} .",
+    "url": "http://localhost:4000/Tags/boolsettingtag/",
+    "relUrl": "/Tags/boolsettingtag/"
+  }
+  ,"58": {
+    "title": "CheckboxSettingTag",
+    "content": "{{page.type}} . Components and Properties . {% for component in page.components %} {% assign typehandler = site.data.TypeHandlers | where: “type”, component | first %} . {{typehandler.type}} . {% for property in typehandler.properties %} . {{property.aliases[0]}} . {{property.type}} . {{property.description}} {% if property.aliases.size &gt; 1 %} . Aliases: . {% for alias in property.aliases %} . {{alias}} | . {% endfor %} {% endif %} {% endfor %} {% endfor %} .",
+    "url": "http://localhost:4000/Tags/checkboxsettingtag/",
+    "relUrl": "/Tags/checkboxsettingtag/"
+  }
+  ,"59": {
+    "title": "DropdownListSettingTag",
+    "content": "{{page.type}} . Components and Properties . {% for component in page.components %} {% assign typehandler = site.data.TypeHandlers | where: “type”, component | first %} . {{typehandler.type}} . {% for property in typehandler.properties %} . {{property.aliases[0]}} . {{property.type}} . {{property.description}} {% if property.aliases.size &gt; 1 %} . Aliases: . {% for alias in property.aliases %} . {{alias}} | . {% endfor %} {% endif %} {% endfor %} {% endfor %} .",
+    "url": "http://localhost:4000/Tags/dropdownlistsettingtag/",
+    "relUrl": "/Tags/dropdownlistsettingtag/"
+  }
+  ,"60": {
+    "title": "IncrementSettingTag",
+    "content": "{{page.type}} . Components and Properties . {% for component in page.components %} {% assign typehandler = site.data.TypeHandlers | where: “type”, component | first %} . {{typehandler.type}} . {% for property in typehandler.properties %} . {{property.aliases[0]}} . {{property.type}} . {{property.description}} {% if property.aliases.size &gt; 1 %} . Aliases: . {% for alias in property.aliases %} . {{alias}} | . {% endfor %} {% endif %} {% endfor %} {% endfor %} .",
+    "url": "http://localhost:4000/Tags/incrementsettingtag/",
+    "relUrl": "/Tags/incrementsettingtag/"
+  }
+  ,"61": {
+    "title": "ListSettingTag",
+    "content": "{{page.type}} . Components and Properties . {% for component in page.components %} {% assign typehandler = site.data.TypeHandlers | where: “type”, component | first %} . {{typehandler.type}} . {% for property in typehandler.properties %} . {{property.aliases[0]}} . {{property.type}} . {{property.description}} {% if property.aliases.size &gt; 1 %} . Aliases: . {% for alias in property.aliases %} . {{alias}} | . {% endfor %} {% endif %} {% endfor %} {% endfor %} .",
+    "url": "http://localhost:4000/Tags/listsettingtag/",
+    "relUrl": "/Tags/listsettingtag/"
+  }
+  ,"62": {
+    "title": "ListSliderSettingTag",
+    "content": "{{page.type}} . Components and Properties . {% for component in page.components %} {% assign typehandler = site.data.TypeHandlers | where: “type”, component | first %} . {{typehandler.type}} . {% for property in typehandler.properties %} . {{property.aliases[0]}} . {{property.type}} . {{property.description}} {% if property.aliases.size &gt; 1 %} . Aliases: . {% for alias in property.aliases %} . {{alias}} | . {% endfor %} {% endif %} {% endfor %} {% endfor %} .",
+    "url": "http://localhost:4000/Tags/listslidersettingtag/",
+    "relUrl": "/Tags/listslidersettingtag/"
+  }
+  ,"63": {
+    "title": "SliderSettingTag",
+    "content": "{{page.type}} . Components and Properties . {% for component in page.components %} {% assign typehandler = site.data.TypeHandlers | where: “type”, component | first %} . {{typehandler.type}} . {% for property in typehandler.properties %} . {{property.aliases[0]}} . {{property.type}} . {{property.description}} {% if property.aliases.size &gt; 1 %} . Aliases: . {% for alias in property.aliases %} . {{alias}} | . {% endfor %} {% endif %} {% endfor %} {% endfor %} .",
+    "url": "http://localhost:4000/Tags/slidersettingtag/",
+    "relUrl": "/Tags/slidersettingtag/"
+  }
+  ,"64": {
+    "title": "StringSettingTag",
+    "content": "{{page.type}} . Components and Properties . {% for component in page.components %} {% assign typehandler = site.data.TypeHandlers | where: “type”, component | first %} . {{typehandler.type}} . {% for property in typehandler.properties %} . {{property.aliases[0]}} . {{property.type}} . {{property.description}} {% if property.aliases.size &gt; 1 %} . Aliases: . {% for alias in property.aliases %} . {{alias}} | . {% endfor %} {% endif %} {% endfor %} {% endfor %} .",
+    "url": "http://localhost:4000/Tags/stringsettingtag/",
+    "relUrl": "/Tags/stringsettingtag/"
+  }
+  ,"65": {
+    "title": "SubmenuTag",
+    "content": "{{page.type}} . Components and Properties . {% for component in page.components %} {% assign typehandler = site.data.TypeHandlers | where: “type”, component | first %} . {{typehandler.type}} . {% for property in typehandler.properties %} . {{property.aliases[0]}} . {{property.type}} . {{property.description}} {% if property.aliases.size &gt; 1 %} . Aliases: . {% for alias in property.aliases %} . {{alias}} | . {% endfor %} {% endif %} {% endfor %} {% endfor %} .",
+    "url": "http://localhost:4000/Tags/submenutag/",
+    "relUrl": "/Tags/submenutag/"
+  }
+  
+}
