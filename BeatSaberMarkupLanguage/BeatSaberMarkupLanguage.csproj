@@ -206,6 +206,9 @@
     <EmbeddedResource Include="Resources\description.md" />
     <EmbeddedResource Include="Views\main-left-screen.bsml" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\main-menu-screen.bsml" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy "$(TargetPath)" "$(BeatSaberDir)\Plugins"

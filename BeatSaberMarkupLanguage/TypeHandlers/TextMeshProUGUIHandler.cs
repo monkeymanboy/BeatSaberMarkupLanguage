@@ -24,7 +24,8 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "bold", new[]{ "bold" } },
             { "italics", new[]{ "italics" } },
             { "underlined", new[]{ "underlined" } },
-            { "strikethrough", new[]{ "strikethrough" } }
+            { "strikethrough", new[]{ "strikethrough" } },
+            { "allUppercase", new[]{ "all-uppercase" } }
         };
         public override Dictionary<string, Action<TextMeshProUGUI, string>> Setters => new Dictionary<string, Action<TextMeshProUGUI, string>>()
         {
@@ -42,6 +43,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             {"italics", new Action<TextMeshProUGUI,string>((textMesh, value) => textMesh.fontStyle = SetStyle(textMesh.fontStyle, FontStyles.Italic, value))  },
             {"underlined", new Action<TextMeshProUGUI,string>((textMesh, value) => textMesh.fontStyle = SetStyle(textMesh.fontStyle, FontStyles.Underline, value))  },
             {"strikethrough", new Action<TextMeshProUGUI,string>((textMesh, value) => textMesh.fontStyle = SetStyle(textMesh.fontStyle, FontStyles.Strikethrough, value))  },
+            {"allUppercase", new Action<TextMeshProUGUI,string>((textMesh, value) => textMesh.fontStyle = SetStyle(textMesh.fontStyle, FontStyles.UpperCase, value))  },
         };
 
         private static FontStyles SetStyle(FontStyles existing, FontStyles modifyStyle, string flag)

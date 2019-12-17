@@ -1,0 +1,11 @@
+<bg id='root-object'>
+  <bottom-button-panel anchor-pos-y='10.5' size-delta-x='10'>
+    <macro.for-each items='pin-buttons'>
+      <macro.if value='is-pinned'>
+        <macro.as-host host='menu-button'>
+          <button text='~text' hover-hint='~hover-hint' interactable='~interactable' on-click='button-click'></button>
+        </macro.as-host>
+      </macro.if>
+    </macro.for-each>
+  </bottom-button-panel>
+</bg>
