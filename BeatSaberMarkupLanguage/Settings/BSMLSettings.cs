@@ -1,6 +1,4 @@
-﻿using BS_Utils.Utilities;
-using HMUI;
-using Polyglot;
+﻿using Polyglot;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,13 +12,14 @@ namespace BeatSaberMarkupLanguage.Settings
 {
     public class BSMLSettings : MonoBehaviour
     {
+        private bool isInitialized;
         private Button button;
         private static BSMLSettings _instance = null;
 
         private ModSettingsFlowCoordinator flowCoordinator;
 
         public List<CustomCellInfo> settingsMenus = new List<CustomCellInfo>();
-
+        
         public static BSMLSettings instance
         {
             get
@@ -33,30 +32,37 @@ namespace BeatSaberMarkupLanguage.Settings
             private set => _instance = value;
         }
 
+        internal void Setup()
+        {
+            StartCoroutine(AddButtonToMainScreen());
+            foreach (SettingsMenu settingsMenu in settingsMenus)
+            {
+                settingsMenu.Setup();
+            }
+            isInitialized = true;
+        }
+
         private void Awake()
         {
             DontDestroyOnLoad(this.gameObject);
         }
-
+        
         public void AddSettingsMenu(string name, string resource, object host)
         {
             if (settingsMenus.Any(x => x.text == name))
                 return;
 
             if (settingsMenus.Count == 0)
-            {
-                ViewController aboutController = BeatSaberUI.CreateViewController<ViewController>();
-                SetupViewControllerTransform(aboutController);
-                settingsMenus.Add(new SettingsMenu("About", aboutController, BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), "BeatSaberMarkupLanguage.Views.settings-about.bsml"), aboutController.gameObject, this)));
-            }
-
-            ViewController viewController = BeatSaberUI.CreateViewController<ViewController>();
-            SetupViewControllerTransform(viewController);
-            settingsMenus.Add(new SettingsMenu(name, viewController, BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetCallingAssembly(), resource), viewController.gameObject, host)));
+                settingsMenus.Add(new SettingsMenu("About", "BeatSaberMarkupLanguage.Views.settings-about.bsml", this, Assembly.GetExecutingAssembly()));
+            SettingsMenu settingsMenu = new SettingsMenu(name, resource, host, Assembly.GetCallingAssembly());
+            settingsMenus.Add(settingsMenu);
+            if(isInitialized)
+                settingsMenu.Setup();
             button?.gameObject.SetActive(true);
+
         }
 
-        public IEnumerator AddButtonToMainScreen()
+        private IEnumerator AddButtonToMainScreen()
         {
             Transform transform = null;
             while (transform == null)
@@ -68,7 +74,6 @@ namespace BeatSaberMarkupLanguage.Settings
                 catch { }
                 yield return new WaitForFixedUpdate();
             }
-
             button = Instantiate(transform.GetChild(0), transform).GetComponent<Button>();
             button.transform.GetChild(0).GetChild(1).GetComponentInChildren<LocalizedTextMeshProUGUI>().Key = "Mod Settings";
             button.onClick.AddListener(PresentSettings);
@@ -89,11 +94,5 @@ namespace BeatSaberMarkupLanguage.Settings
             }));
         }
 
-        public static void SetupViewControllerTransform(ViewController viewController)
-        {
-            viewController.rectTransform.sizeDelta = new Vector2(110, 0);
-            viewController.rectTransform.anchorMin = new Vector2(0.5f, 0);
-            viewController.rectTransform.anchorMax = new Vector2(0.5f, 1);
-        }
     }
 }

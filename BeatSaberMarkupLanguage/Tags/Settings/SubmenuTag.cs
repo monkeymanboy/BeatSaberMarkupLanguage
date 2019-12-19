@@ -26,7 +26,7 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
             clickableText.rectTransform.sizeDelta = new Vector2(90, 8);
 
             ViewController submenuController = BeatSaberUI.CreateViewController<ViewController>();
-            BSMLSettings.SetupViewControllerTransform(submenuController);
+            SettingsMenu.SetupViewControllerTransform(submenuController);
 
             clickableText.OnClickEvent += delegate
             {
