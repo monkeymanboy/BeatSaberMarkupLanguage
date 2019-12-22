@@ -57,7 +57,10 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         private void EitherPressed()
         {
             UpdateState();
-            onChange?.Invoke(Value);
+            if (isInt)
+                onChange?.Invoke(Convert.ToInt32(Value));
+            else
+                onChange?.Invoke(Value);
             if (updateOnChange)
                 ApplyValue();
         }
