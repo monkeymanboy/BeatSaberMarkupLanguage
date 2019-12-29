@@ -36,7 +36,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 tableData.tableView.didSelectCellWithIdxEvent += delegate (TableView table, int index)
                 {
                     if (!parserParams.actions.TryGetValue(selectCell, out BSMLAction action))
-                        throw new Exception("select-cell action '" + componentType.data["onClick"] + "' not found");
+                        throw new Exception("select-cell action '" + componentType.data["selectCell"] + "' not found");
 
                     action.Invoke(table, (table.dataSource as CustomCellListTableData).data[index]);
                 };

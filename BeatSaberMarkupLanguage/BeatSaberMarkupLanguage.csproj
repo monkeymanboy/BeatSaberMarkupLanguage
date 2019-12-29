@@ -167,6 +167,7 @@
     <Compile Include="Tags\TabSelectorTag.cs" />
     <Compile Include="Tags\TabTag.cs" />
     <Compile Include="Tags\TextPageScrollViewTag.cs" />
+    <Compile Include="Tags\TextSegmentedControlTag.cs" />
     <Compile Include="Tags\TextTag.cs" />
     <Compile Include="Tags\VerticalLayoutTag.cs" />
     <Compile Include="TypeHandlers\BackgroundableHandler.cs" />
@@ -201,6 +202,7 @@
     <Compile Include="TypeHandlers\TabSelectorHandler.cs" />
     <Compile Include="TypeHandlers\TextMeshProUGUIHandler.cs" />
     <Compile Include="TypeHandlers\TextPageScrollViewHandler.cs" />
+    <Compile Include="TypeHandlers\TextSegmentedControlHandler.cs" />
     <Compile Include="TypeHandlers\TypeHandler.cs" />
     <Compile Include="Utilities.cs" />
     <Compile Include="ViewControllers\BSMLResourceViewController.cs" />
