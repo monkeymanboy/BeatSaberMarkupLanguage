@@ -19,8 +19,6 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "data", new[] { "contents", "data" } }
         };
 
-        public List<object> data;
-
         public override void HandleType(ComponentTypeWithData componentType, BSMLParserParams parserParams)
         {
             TextSegmentedControl textControl = componentType.component as TextSegmentedControl;
@@ -29,29 +27,16 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             {
                 if (!parserParams.values.TryGetValue(value, out BSMLValue contents))
                     throw new Exception("value '" + value + "' not found");
-                data = contents.GetValue() as List<object>;
-                textControl.SetTexts(data.Select(x => x.ToString()).ToArray());
+                textControl.SetTexts((contents.GetValue() as List<object>).Select(x => x.ToString()).ToArray());
             }
 
             if (componentType.data.TryGetValue("selectCell", out string selectCell))
             {
-                //If we do not set the data, we will not be able to return the object when the cell is selected, so let's warn the user
-                if (data == null)
-                {
-                    Logger.log.Warn("It is not recommended to use 'select-cell' action without providing data in tag, do it at your own risk!");
-                }
-
-                void CellSelected(SegmentedControl control, int index)
-                {
+                textControl.didSelectCellEvent += (SegmentedControl control, int index) => {
                     if (!parserParams.actions.TryGetValue(selectCell, out BSMLAction action))
                         throw new Exception("select-cell action '" + componentType.data["selectCell"] + "' not found");
-                    action.Invoke(control, data[index]);
-                }
-
-                textControl.didSelectCellEvent -= CellSelected;
-                textControl.didSelectCellEvent += CellSelected;
-                textControl.SelectCellWithNumber(0);
-                CellSelected(textControl, 0);
+                    action.Invoke(control, index);
+                };
             }
 
         }
