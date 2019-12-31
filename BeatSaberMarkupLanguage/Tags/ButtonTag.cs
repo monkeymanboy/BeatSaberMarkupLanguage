@@ -18,7 +18,12 @@ namespace BeatSaberMarkupLanguage.Tags
             Polyglot.LocalizedTextMeshProUGUI localizer = button.GetComponentInChildren<Polyglot.LocalizedTextMeshProUGUI>();
             if (localizer != null)
                 GameObject.Destroy(localizer);
-            button.gameObject.AddComponent<ExternalComponents>().components.Add(button.GetComponentInChildren<TextMeshProUGUI>());
+            ExternalComponents externalComponents = button.gameObject.AddComponent<ExternalComponents>();
+            externalComponents.components.Add(button.GetComponentInChildren<TextMeshProUGUI>());
+
+            HorizontalLayoutGroup horiztonalLayoutGroup = button.GetComponentInChildren<HorizontalLayoutGroup>();
+            if (horiztonalLayoutGroup != null)
+                externalComponents.components.Add(horiztonalLayoutGroup);
 
             Image glowImage = button.gameObject.GetComponentsInChildren<Image>(true).Where(x => x.gameObject.name == "Glow").FirstOrDefault();
             if (glowImage != null)

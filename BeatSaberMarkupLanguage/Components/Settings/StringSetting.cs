@@ -1,16 +1,11 @@
-﻿using BeatSaberMarkupLanguage.Parser;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.Components.Settings
 {
-    public class StringSetting : MonoBehaviour
-    {
-        public BSMLAction onChange;
-        public BSMLValue associatedValue;
-        public bool updateOnChange = false;
-        
+    public class StringSetting : GenericSetting
+    {   
         public TextMeshProUGUI text;
         public Button editButton;
 
@@ -28,7 +23,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             boundingBox.sizeDelta = new Vector2(text.textBounds.size.x + 7, 0);
         }
 
-        public void Setup()
+        public override void Setup()
         {
             modalKeyboard.clearOnOpen = false;
             ReceiveValue();
@@ -60,13 +55,13 @@ namespace BeatSaberMarkupLanguage.Components.Settings
                 ApplyValue();
         }
 
-        public void ApplyValue()
+        public override void ApplyValue()
         {
             if (associatedValue != null)
                 associatedValue.SetValue(Text);
         }
 
-        public void ReceiveValue()
+        public override void ReceiveValue()
         {
             if (associatedValue != null)
                 Text = (string)associatedValue.GetValue();

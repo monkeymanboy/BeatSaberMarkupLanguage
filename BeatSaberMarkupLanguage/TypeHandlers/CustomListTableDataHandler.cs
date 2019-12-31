@@ -25,7 +25,8 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "listHeight", new[] { "list-height" } },
             { "expandCell", new[] { "expand-cell" } },
             { "listStyle", new[] { "list-style" } },
-            { "listDirection", new[] { "list-direction" } }
+            { "listDirection", new[] { "list-direction" } },
+            { "alignCenter", new[] { "align-to-center" } }
         };
 
         public override void HandleType(ComponentTypeWithData componentType, BSMLParserParams parserParams)
@@ -53,6 +54,9 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 
             if (componentType.data.TryGetValue("expandCell", out string expandCell))
                 tableData.expandCell = Parse.Bool(expandCell);
+
+            if (componentType.data.TryGetValue("alignCenter", out string alignCenter))
+                tableData.tableView.SetPrivateField("_alignToCenter", Parse.Bool(alignCenter));
 
             if (componentType.data.TryGetValue("data", out string value))
             {

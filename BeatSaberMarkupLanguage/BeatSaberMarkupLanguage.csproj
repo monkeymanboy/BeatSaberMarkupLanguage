@@ -96,6 +96,7 @@
     <Compile Include="Components\Settings\BoolSetting.cs" />
     <Compile Include="Components\Settings\CheckboxSetting.cs" />
     <Compile Include="Components\Settings\DropDownListSetting.cs" />
+    <Compile Include="Components\Settings\GenericSetting.cs" />
     <Compile Include="Components\Settings\GenericSliderSetting.cs" />
     <Compile Include="Components\Settings\IncDecSetting.cs" />
     <Compile Include="Components\Settings\IncrementSetting.cs" />
@@ -113,6 +114,7 @@
     <Compile Include="Macros\DefineMacro.cs" />
     <Compile Include="Macros\ForEachMacro.cs" />
     <Compile Include="Macros\IfMacro.cs" />
+    <Compile Include="Macros\ReparentMacro.cs" />
     <Compile Include="MenuButtons\MenuButton.cs" />
     <Compile Include="MenuButtons\MenuButtons.cs" />
     <Compile Include="Notify\INotifiableHost.cs" />
@@ -189,14 +191,12 @@
     <Compile Include="TypeHandlers\ModalViewHandler.cs" />
     <Compile Include="TypeHandlers\PageButtonHandler.cs" />
     <Compile Include="TypeHandlers\RectTransformHandler.cs" />
-    <Compile Include="TypeHandlers\Settings\CheckboxSettingHandler.cs" />
     <Compile Include="TypeHandlers\Settings\DropDownListSettingHandler.cs" />
+    <Compile Include="TypeHandlers\Settings\GenericSettingHandler.cs" />
     <Compile Include="TypeHandlers\Settings\IncrementSettingHandler.cs" />
     <Compile Include="TypeHandlers\Settings\ListSliderSettingHandler.cs" />
-    <Compile Include="TypeHandlers\Settings\BoolSettingsHandler.cs" />
     <Compile Include="TypeHandlers\Settings\ListSettingHandler.cs" />
     <Compile Include="TypeHandlers\Settings\SliderSettingHandler.cs" />
-    <Compile Include="TypeHandlers\Settings\StringSettingHandler.cs" />
     <Compile Include="TypeHandlers\StrokableHandler.cs" />
     <Compile Include="TypeHandlers\TabHandler.cs" />
     <Compile Include="TypeHandlers\TabSelectorHandler.cs" />
@@ -207,6 +207,7 @@
     <Compile Include="Utilities.cs" />
     <Compile Include="ViewControllers\BSMLResourceViewController.cs" />
     <Compile Include="ViewControllers\BSMLViewController.cs" />
+    <Compile Include="ViewControllers\HotReloadableViewController.cs" />
     <Compile Include="ViewControllers\TestViewController.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -219,6 +220,9 @@
     <EmbeddedResource Include="Resources\icon.png" />
     <EmbeddedResource Include="Resources\description.md" />
     <EmbeddedResource Include="Views\main-left-screen.bsml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\main-menu-screen.bsml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

@@ -1,5 +1,4 @@
-﻿using BeatSaberMarkupLanguage.Parser;
-using HMUI;
+﻿using HMUI;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -7,22 +6,17 @@ using static HMUI.TableView;
 
 namespace BeatSaberMarkupLanguage.Components.Settings
 {
-    public class DropDownListSetting : MonoBehaviour, IDataSource
+    public class DropDownListSetting : GenericSetting, IDataSource
     {
         private string reuseIdentifier = "BSMLDropdownSetting";
         private EnvironmentTableCell tableCellInstance;
 
         private int index;
-
-        public BSMLAction formatter;
+        
         public List<object> values;
 
         public TableView tableView;
         public LabelAndValueDropdownWithTableView dropdown;
-
-        public BSMLAction onChange;
-        public BSMLValue associatedValue;
-        public bool updateOnChange;
 
         public object Value
         {
@@ -76,10 +70,12 @@ namespace BeatSaberMarkupLanguage.Components.Settings
                 return values.Count();
         }
 
-        public void Setup()
+        public override void Setup()
         {
             dropdown.didSelectCellWithIdxEvent += OnSelectIndex;
             ReceiveValue();
+            dropdown.ReloadData();
+            gameObject.SetActive(true);
         }
 
         private void OnSelectIndex(DropdownWithTableView tableView, int index)
@@ -91,13 +87,13 @@ namespace BeatSaberMarkupLanguage.Components.Settings
                 ApplyValue();
         }
 
-        public void ApplyValue()
+        public override void ApplyValue()
         {
             if (associatedValue != null)
                 associatedValue.SetValue(Value);
         }
 
-        public void ReceiveValue()
+        public override void ReceiveValue()
         {
             if (associatedValue != null)
             {

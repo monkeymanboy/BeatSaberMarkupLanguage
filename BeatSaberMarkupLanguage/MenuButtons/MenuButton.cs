@@ -2,13 +2,13 @@ using System;
 using System.Runtime.CompilerServices;
 using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Notify;
-using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.MenuButtons
 {
     public class MenuButton : INotifiableHost
     {
         public virtual Action OnClick { get; protected set; }
+        
         private string _text;
         [UIValue("text")]
         public virtual string Text {

@@ -1,4 +1,5 @@
 ﻿using HMUI;
+using System;
 using System.Linq;
 using System.Reflection;
 using TMPro;
@@ -8,17 +9,19 @@ using Image = UnityEngine.UI.Image;
 
 namespace BeatSaberMarkupLanguage
 {
-    //This class is stuff yoinked from CustomUI to remove the need for a dependency on it
+    public delegate void PresentFlowCoordinatorDelegate(FlowCoordinator current, FlowCoordinator flowCoordinator, Action finishedCallback = null, bool immediately = false, bool replaceTopViewController = false);
+    public delegate void DismissFlowCoordinatorDelegate(FlowCoordinator current, FlowCoordinator flowCoordinator, Action finishedCallback = null, bool immediately = false);
+
     public static class BeatSaberUI
     {
-        private static FlowCoordinator mainFlowCoordinator;
-        public static FlowCoordinator MainFlowCoordinator
+        private static MainFlowCoordinator _mainFlowCoordinator;
+        public static MainFlowCoordinator MainFlowCoordinator
         {
             get
             {
-                if (mainFlowCoordinator == null)
-                    mainFlowCoordinator = Resources.FindObjectsOfTypeAll<MainFlowCoordinator>().First();
-                return mainFlowCoordinator;
+                if (_mainFlowCoordinator == null)
+                    _mainFlowCoordinator = Resources.FindObjectsOfTypeAll<MainFlowCoordinator>().First();
+                return _mainFlowCoordinator;
             }
         }
         /// <summary>
@@ -130,6 +133,46 @@ namespace BeatSaberMarkupLanguage
             if (_button.GetComponentsInChildren<Image>().Count() > 0)
                 _button.GetComponentsInChildren<Image>()[0].sprite = _background;
         }
+        #endregion
+
+        #region FlowCoordinator Extensions
+        public static void PresentFlowCoordinator(this FlowCoordinator current, FlowCoordinator flowCoordinator, Action finishedCallback = null, bool immediately = false, bool replaceTopViewController = false)
+        {
+            PresentFlowCoordinatorDelegate(current, flowCoordinator, finishedCallback, immediately, replaceTopViewController);
+        }
+        public static void DismissFlowCoordinator(this FlowCoordinator current, FlowCoordinator flowCoordinator, Action finishedCallback = null, bool immediately = false)
+        {
+            DismissFlowCoordinatorDelegate(current, flowCoordinator, finishedCallback, immediately);
+        }
+
+        #region Delegate Creation
+        private static PresentFlowCoordinatorDelegate _presentFlowCoordinatorDelegate;
+        private static PresentFlowCoordinatorDelegate PresentFlowCoordinatorDelegate
+        {
+            get
+            {
+                if (_presentFlowCoordinatorDelegate == null)
+                {
+                    MethodInfo presentMethod = typeof(FlowCoordinator).GetMethod("PresentFlowCoordinator", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                    _presentFlowCoordinatorDelegate = (PresentFlowCoordinatorDelegate)Delegate.CreateDelegate(typeof(PresentFlowCoordinatorDelegate), presentMethod);
+                }
+                return _presentFlowCoordinatorDelegate;
+            }
+        }
+        private static DismissFlowCoordinatorDelegate _dismissFlowCoordinatorDelegate;
+        private static DismissFlowCoordinatorDelegate DismissFlowCoordinatorDelegate
+        {
+            get
+            {
+                if (_dismissFlowCoordinatorDelegate == null)
+                {
+                    MethodInfo dismissMethod = typeof(FlowCoordinator).GetMethod("DismissFlowCoordinator", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                    _dismissFlowCoordinatorDelegate = (DismissFlowCoordinatorDelegate)Delegate.CreateDelegate(typeof(DismissFlowCoordinatorDelegate), dismissMethod);
+                }
+                return _dismissFlowCoordinatorDelegate;
+            }
+        }
+        #endregion
         #endregion
     }
 }
