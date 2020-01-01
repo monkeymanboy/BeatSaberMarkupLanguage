@@ -1,4 +1,5 @@
 ﻿using BeatSaberMarkupLanguage.Notify;
+using BeatSaberMarkupLanguage.Parser;
 using HMUI;
 using System;
 using System.Runtime.CompilerServices;
@@ -11,10 +12,12 @@ namespace BeatSaberMarkupLanguage.ViewControllers
 
         public Action<bool, ActivationType> didActivate;
 
+        protected BSMLParserParams parserParams;
+
         protected override void DidActivate(bool firstActivation, ActivationType type)
         {
             if (firstActivation)
-                BSMLParser.instance.Parse(Content, gameObject, this);
+                parserParams = BSMLParser.instance.Parse(Content, gameObject, this);
 
             didActivate?.Invoke(firstActivation, type);
         }
