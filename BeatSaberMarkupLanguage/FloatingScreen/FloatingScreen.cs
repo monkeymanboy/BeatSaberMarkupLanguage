@@ -44,9 +44,6 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
             screen.transform.localScale = new Vector3(0.02f, 0.02f, 0.02f);
             (screen.transform as RectTransform).sizeDelta = screenSize;
 
-            screen.transform.position = position;
-            screen.transform.rotation = rotation;
-
             if (createHandle)
             {
                 var vrPointers = Resources.FindObjectsOfTypeAll<VRPointer>();
@@ -69,6 +66,9 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
                     Logger.log.Warn("Failed to get VRPointer!");
                 }
             }
+
+            screen.transform.position = position;
+            screen.transform.rotation = rotation;
 
             return screen;
         }
