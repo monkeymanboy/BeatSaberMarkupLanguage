@@ -163,6 +163,7 @@
     <Compile Include="Tags\ImageTag.cs" />
     <Compile Include="Tags\LeaderboardTag.cs" />
     <Compile Include="Tags\ListTag.cs" />
+    <Compile Include="Tags\LoadingIndicatorTag.cs" />
     <Compile Include="Tags\ModalKeyboardTag.cs" />
     <Compile Include="Tags\ModalTag.cs" />
     <Compile Include="Tags\PageButtonTag.cs" />
