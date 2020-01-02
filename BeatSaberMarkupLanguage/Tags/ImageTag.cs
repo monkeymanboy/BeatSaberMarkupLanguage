@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using BeatSaberMarkupLanguage.Components;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.Tags
@@ -11,11 +12,8 @@ namespace BeatSaberMarkupLanguage.Tags
         {
             GameObject gameObject = new GameObject("BSMLImage");
 
-            RawImage image = gameObject.AddComponent<RawImage>();
-            image.material = Utilities.ImageResources.NoGlowMat;
-            image.rectTransform.sizeDelta = new Vector2(20f, 20f);
-            image.rectTransform.SetParent(parent, false);
-            image.texture = Utilities.ImageResources.BlankSprite.texture;
+            ImageController image = gameObject.AddComponent<ImageController>();
+            image.transform.SetParent(parent, false);
 
             gameObject.AddComponent<LayoutElement>();
             return gameObject;

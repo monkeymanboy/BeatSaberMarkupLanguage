@@ -101,6 +101,7 @@
     <Compile Include="Components\CustomCellListTableData.cs" />
     <Compile Include="Components\ExternalComponents.cs" />
     <Compile Include="Components\Glowable.cs" />
+    <Compile Include="Components\ImageController.cs" />
     <Compile Include="Components\ModalKeyboard.cs" />
     <Compile Include="Components\NotifiableSingleton.cs" />
     <Compile Include="Components\NotifyUpdater.cs" />
@@ -160,6 +161,7 @@
     <Compile Include="Tags\GridLayoutTag.cs" />
     <Compile Include="Tags\HorizontalLayoutTag.cs" />
     <Compile Include="Tags\ButtonWithIconTag.cs" />
+    <Compile Include="Tags\IconSegmentedControlTag.cs" />
     <Compile Include="Tags\ImageTag.cs" />
     <Compile Include="Tags\LeaderboardTag.cs" />
     <Compile Include="Tags\ListTag.cs" />
@@ -198,6 +200,7 @@
     <Compile Include="TypeHandlers\GlowableHandler.cs" />
     <Compile Include="TypeHandlers\GridLayoutGroupHandler.cs" />
     <Compile Include="TypeHandlers\HorizontalOrVerticalLayoutGroupHandler.cs" />
+    <Compile Include="TypeHandlers\IconSegmentedControlHandler.cs" />
     <Compile Include="TypeHandlers\ImageHandler.cs" />
     <Compile Include="TypeHandlers\LayoutElementHandler.cs" />
     <Compile Include="TypeHandlers\LayoutGroupHandler.cs" />
