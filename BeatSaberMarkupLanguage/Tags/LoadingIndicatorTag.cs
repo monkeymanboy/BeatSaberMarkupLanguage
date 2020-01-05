@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.Tags
 {
@@ -15,6 +16,8 @@ namespace BeatSaberMarkupLanguage.Tags
         {
             GameObject loadingIndicator = GameObject.Instantiate(Resources.FindObjectsOfTypeAll<GameObject>().Where(x => x.name == "LoadingIndicator").First(), parent, false);
             loadingIndicator.name = "BSMLLoadingIndicator";
+
+            loadingIndicator.AddComponent<LayoutElement>();
 
             return loadingIndicator;
         }
