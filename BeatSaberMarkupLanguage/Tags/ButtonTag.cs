@@ -3,6 +3,7 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static BeatSaberMarkupLanguage.Components.Strokable;
 
 namespace BeatSaberMarkupLanguage.Tags
 {
@@ -38,7 +39,7 @@ namespace BeatSaberMarkupLanguage.Tags
             {
                 Strokable strokable = button.gameObject.AddComponent<Strokable>();
                 strokable.image = strokeImage;
-                strokable.SetType("big");
+                strokable.SetType(StrokeType.Regular);
             }
 
             return button.gameObject;

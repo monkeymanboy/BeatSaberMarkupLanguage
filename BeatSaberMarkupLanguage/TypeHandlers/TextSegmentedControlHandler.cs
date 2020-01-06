@@ -1,11 +1,8 @@
 ﻿using BeatSaberMarkupLanguage.Parser;
-using BeatSaberMarkupLanguage.Tags;
 using HMUI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static BeatSaberMarkupLanguage.BSMLParser;
 
 namespace BeatSaberMarkupLanguage.TypeHandlers

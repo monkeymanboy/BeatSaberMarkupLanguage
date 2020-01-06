@@ -1,13 +1,13 @@
 ﻿using BeatSaberMarkupLanguage.Components;
-using BeatSaberMarkupLanguage.Tags;
 using HMUI;
 using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static BeatSaberMarkupLanguage.Components.Strokable;
 using Image = UnityEngine.UI.Image;
 
-namespace BeatSaberMultiplayer.UI.UIElements
+namespace BeatSaberMarkupLanguage.Tags
 {
     public class BigButtonTag : BSMLTag
     {
@@ -31,7 +31,7 @@ namespace BeatSaberMultiplayer.UI.UIElements
             {
                 Strokable strokable = button.gameObject.AddComponent<Strokable>();
                 strokable.image = strokeImage;
-                strokable.SetType("big");
+                strokable.SetType(StrokeType.Regular);
             }
 
             Image iconImage = button.gameObject.GetComponentsInChildren<Image>(true).Where(x => x.gameObject.name == "Icon").FirstOrDefault();

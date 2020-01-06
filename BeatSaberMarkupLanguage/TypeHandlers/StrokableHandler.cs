@@ -1,6 +1,7 @@
 ﻿using BeatSaberMarkupLanguage.Components;
 using System;
 using System.Collections.Generic;
+using static BeatSaberMarkupLanguage.Components.Strokable;
 
 namespace BeatSaberMarkupLanguage.TypeHandlers
 {
@@ -26,7 +27,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 
         public static void SetType(Strokable strokable, string strokeType)
         {
-            strokable.SetType(strokeType);
+            strokable.SetType((StrokeType)Enum.Parse(typeof(StrokeType), strokeType));
         }
 
     }

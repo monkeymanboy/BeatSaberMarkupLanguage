@@ -1,17 +1,10 @@
-﻿using BeatSaberMarkupLanguage;
-using BeatSaberMarkupLanguage.Components;
-using BeatSaberMarkupLanguage.Parser;
-using BeatSaberMarkupLanguage.TypeHandlers;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
-using static BeatSaberMarkupLanguage.BSMLParser;
 
-namespace BeatSaberMultiplayer.UI.UIElements
+namespace BeatSaberMarkupLanguage.TypeHandlers
 {
     [ComponentHandler(typeof(RawImage))]
     class RawImageHandler : TypeHandler<RawImage>
@@ -23,27 +16,22 @@ namespace BeatSaberMultiplayer.UI.UIElements
 
         public override Dictionary<string, Action<RawImage, string>> Setters => new Dictionary<string, Action<RawImage, string>>()
         {
-            { "image", (image, imagePath) => {  SetImage(image, imagePath); } }
+            { "image", new Action<RawImage, string>(SetImage) }
         };
-
-        public override void HandleType(ComponentTypeWithData obj, BSMLParserParams parserParams)
-        {
-            RawImage image = obj.component as RawImage;
-            if (image != null)
-            {
-                if (obj.data.TryGetValue("image", out string imagePath))
-                {
-                    SetImage(image, imagePath);
-                }
-            }
-        }
 
         public void SetImage(RawImage image, string imagePath)
         {
             if (imagePath.StartsWith("#"))
             {
-                var imgName = imagePath.Substring(1);
-                image.texture = Resources.FindObjectsOfTypeAll<Texture>().First(x => x.name == imgName);
+                string imgName = imagePath.Substring(1);
+                try
+                {
+                    image.texture = Resources.FindObjectsOfTypeAll<Texture>().First(x => x.name == imgName);
+                }
+                catch
+                {
+                    Logger.log.Error($"Could not find Texture with image name {imgName}");
+                }
             }
             else
             {

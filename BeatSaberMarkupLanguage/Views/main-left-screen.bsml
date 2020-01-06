@@ -23,7 +23,7 @@
               <text text='~text' font-align='Left' font-size='4' overflow-mode='Ellipsis'></text>
             </vertical>
           </macro.as-host>
-          <button text='~pin-button-text' pad='0' on-click='pin-button-click' all-uppercase='false' pref-width='7' pref-height='7'></button>
+          <button text='~pin-button-text' pad='0' on-click='pin-button-click' all-uppercase='false' pref-width='7' pref-height='7' stroke-type='Clean' stroke-color='~pin-button-stroke-color'></button>
         </horizontal>
       </custom-list>
       <page-button click-event='pin-list#PageDown' direction='Down' pref-width='30' pref-height='5'></page-button>

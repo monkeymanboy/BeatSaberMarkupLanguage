@@ -16,7 +16,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 
         public override Dictionary<string, Action<ButtonArtworkImage, string>> Setters => new Dictionary<string, Action<ButtonArtworkImage, string>>()
         {
-            { "artwork", (images, artPath) => { images.SetArtwork(artPath); } }
+            { "artwork", new Action<ButtonArtworkImage, string>((images, artPath) => images.SetArtwork(artPath)) }
         };
 
     }

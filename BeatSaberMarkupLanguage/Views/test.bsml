@@ -8,7 +8,6 @@
       </horizontal>
       <horizontal bg='round-rect-panel' pad='6' spacing='10'>
         <button id='test-external' on-click='click' glow-color='green' text='~button-text'></button>
-        <button text='X' pad='0'></button>
         <vertical spacing='6'>
           <page-button click-event='open-modal' direction='Up' glow-color='red'>
             <modal show-event='open-modal' hide-event='close-modal' size-delta-x='40' size-delta-y='30' move-to-center='false'>
@@ -40,6 +39,13 @@
         <page-button click-event='list#PageDown' direction='Right'></page-button>
       </horizontal>
     </vertical>
+  </tab>
+  <tab tags='new-tab' tab-name='List'>
+    <list id='list' list-style='Box' list-direction='Horizontal' visible-cells='2'></list>
+    <horizontal>
+      <page-button click-event='list#PageUp' direction='Left'></page-button>
+      <page-button click-event='list#PageDown' direction='Right'></page-button>
+    </horizontal>
   </tab>
   <!--
   <bottom-button-panel>

@@ -161,6 +161,18 @@ namespace BeatSaberMarkupLanguage.MenuButtons
                 NotifyPropertyChanged();
             }
         }
+
+        private string pinButtonStrokeColor;
+        [UIValue("pin-button-stroke-color")]
+        public string PinButtonStrokeColor
+        {
+            get => pinButtonStrokeColor;
+            set
+            {
+                pinButtonStrokeColor = value;
+                NotifyPropertyChanged();
+            }
+        }
         [UIValue("is-pinned")]
         public bool IsPinned => MenuPins.instance.IsPinned(menuButton.Text);
 
@@ -184,6 +196,7 @@ namespace BeatSaberMarkupLanguage.MenuButtons
         private void UpdatePinButtonText()
         {
             PinButtonText = IsPinned ? "x" : "+";
+            PinButtonStrokeColor = IsPinned ? "#34eb55" : "white";
         }
         
         public event PropertyChangedEventHandler PropertyChanged;

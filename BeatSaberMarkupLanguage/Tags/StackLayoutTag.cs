@@ -1,10 +1,9 @@
 ﻿using BeatSaberMarkupLanguage.Components;
-using BeatSaberMarkupLanguage.Tags;
 using HMUI;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace BeatSaberMultiplayer.UI.UIElements
+namespace BeatSaberMarkupLanguage.Tags
 {
     public class StackLayoutTag : BSMLTag
     {
@@ -16,9 +15,7 @@ namespace BeatSaberMultiplayer.UI.UIElements
             gameObject.name = "BSMLStackLayoutGroup";
             gameObject.transform.SetParent(parent, false);
             gameObject.AddComponent<StackLayoutGroup>();
-
-            ContentSizeFitter contentSizeFitter = gameObject.AddComponent<ContentSizeFitter>();
-            contentSizeFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+            gameObject.AddComponent<ContentSizeFitter>();
             gameObject.AddComponent<Backgroundable>();
 
             RectTransform rectTransform = gameObject.transform as RectTransform;

@@ -4,6 +4,7 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static BeatSaberMarkupLanguage.Components.Strokable;
 using Image = UnityEngine.UI.Image;
 
 namespace BeatSaberMarkupLanguage.Tags
@@ -15,7 +16,7 @@ namespace BeatSaberMarkupLanguage.Tags
         public override GameObject CreateObject(Transform parent)
         {
             Button button = MonoBehaviour.Instantiate(Resources.FindObjectsOfTypeAll<Button>().Last(x => (x.name == "PracticeButton" && x.transform.parent.name == "PlayButtons")), parent, false);
-            button.name = "BSMLButton";
+            button.name = "BSMLIconButton";
             button.interactable = true;
 
             Object.Destroy(button.GetComponent<HoverHint>());
@@ -35,7 +36,7 @@ namespace BeatSaberMarkupLanguage.Tags
             {
                 Strokable strokable = button.gameObject.AddComponent<Strokable>();
                 strokable.image = strokeImage;
-                strokable.SetType("big");
+                strokable.SetType(StrokeType.Regular);
             }
 
             Image iconImage = button.gameObject.GetComponentsInChildren<Image>(true).Where(x => x.gameObject.name == "Icon").FirstOrDefault();

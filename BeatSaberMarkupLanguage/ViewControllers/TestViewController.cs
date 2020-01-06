@@ -4,6 +4,7 @@ using BeatSaberMarkupLanguage.Notify;
 using HMUI;
 using System.Collections.Generic;
 using TMPro;
+using static BeatSaberMarkupLanguage.Components.CustomListTableData;
 
 namespace BeatSaberMarkupLanguage.ViewControllers
 {
@@ -27,7 +28,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
         public TextMeshProUGUI buttonText;
 
         [UIComponent("list")]
-        public CustomCellListTableData tableData;
+        public CustomListTableData tableData;
 
         [UIValue("contents")]
         public List<object> contents
@@ -59,6 +60,17 @@ namespace BeatSaberMarkupLanguage.ViewControllers
         private void KeyboardEnter(string value)
         {
             Logger.log.Info("Keyboard typed: " + value);
+        }
+
+        [UIAction("#post-parse")]
+        private void PostParse()
+        {
+            List<CustomCellInfo> test = new List<CustomCellInfo>();
+            for (int i = 0; i < 10; i++)
+                test.Add(new CustomCellInfo("test" + i, "yee haw"));
+
+            tableData.data = test;
+            tableData.tableView.ReloadData();
         }
     }
     public class TestListObject

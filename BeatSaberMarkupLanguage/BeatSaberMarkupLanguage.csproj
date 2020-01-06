@@ -95,6 +95,7 @@
     <Compile Include="Attributes\UIValue.cs" />
     <Compile Include="BeatSaberUI.cs" />
     <Compile Include="Components\BSMLScrollView.cs" />
+    <Compile Include="Components\BSMLTableView.cs" />
     <Compile Include="Components\ButtonArtworkImage.cs" />
     <Compile Include="Components\ButtonIconImage.cs" />
     <Compile Include="Components\ClickableText.cs" />

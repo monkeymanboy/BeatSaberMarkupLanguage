@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,21 +8,20 @@ namespace BeatSaberMarkupLanguage.Components
     {
         public Image image;
 
-        public void SetType(string strokeType)
+        public void SetType(StrokeType strokeType)
         {
             if (image == null)
                 return;
-
             switch (strokeType)
             {
-                case "none":
+                case StrokeType.None:
                     image.enabled = false;
                     break;
-                case "small":
+                case StrokeType.Clean:
                     image.enabled = true;
                     image.sprite = Resources.FindObjectsOfTypeAll<Sprite>().Last(x => x.name == "RoundRectSmallStroke");
                     break;
-                case "big":
+                case StrokeType.Regular:
                     image.enabled = true;
                     image.sprite = Resources.FindObjectsOfTypeAll<Sprite>().Last(x => x.name == "RoundRectBigStroke");
                     break;
@@ -37,18 +32,15 @@ namespace BeatSaberMarkupLanguage.Components
         {
             if (image == null)
                 return;
+            if (!ColorUtility.TryParseHtmlString(strokeColor, out Color color))
+                Logger.log.Warn($"Invalid color: {strokeColor}");
+            image.color = color;
+            image.enabled = true;
+        }
 
-            if (strokeColor != "none")
-            {
-                if (!ColorUtility.TryParseHtmlString(strokeColor, out Color color))
-                    Logger.log.Warn($"Invalid color: {strokeColor}");
-                image.color = color;
-                image.enabled = true;
-            }
-            else
-            {
-                image.enabled = false;
-            }
+        public enum StrokeType
+        {
+            None, Clean, Regular
         }
     }
 }

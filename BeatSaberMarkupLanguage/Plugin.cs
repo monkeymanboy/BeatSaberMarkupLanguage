@@ -45,18 +45,7 @@ namespace BeatSaberMarkupLanguage
         private IEnumerator PresentTest()
         {
             yield return new WaitForSeconds(1);
-            
             TestViewController testViewController = BeatSaberUI.CreateViewController<TestViewController>();
-            /*testViewController.didActivate += delegate
-            {
-                List<CustomCellInfo> test = new List<CustomCellInfo>();
-                for (int i = 0; i < 10; i++)
-                    test.Add(new CustomCellInfo("test" + i, "yee haw"));
-
-                testViewController.tableData.data = test;
-                testViewController.tableData.tableView.ReloadData();
-            };*/
-
             Resources.FindObjectsOfTypeAll<MainFlowCoordinator>().First().InvokeMethod("PresentViewController", new object[] { testViewController, null, false });
         }
     }
