@@ -121,5 +121,66 @@ namespace BeatSaberMarkupLanguage
                 }
             }
         }
+
+        public static Texture2D FindTextureInAssembly(string path)
+        {
+            try
+            {
+                Assembly asm = Assembly.Load(path.Substring(0, path.IndexOf('.')));
+                if (asm.GetManifestResourceNames().Contains(path))
+                    return LoadTextureRaw(GetResource(asm, path));
+            }
+            catch (Exception ex)
+            {
+                Logger.log?.Error("Unable to find sprite in assembly! Exception: " + ex);
+            }
+            return null;
+        }
+
+        public static Sprite FindSpriteInAssembly(string path)
+        {
+            try
+            {
+                Assembly asm = Assembly.Load(path.Substring(0, path.IndexOf('.')));
+                if (asm.GetManifestResourceNames().Contains(path))
+                    return LoadSpriteRaw(GetResource(asm, path));
+            }
+            catch (Exception ex)
+            {
+                Logger.log?.Error("Unable to find sprite in assembly! Exception: " + ex);
+            }
+            return null;
+        }
+
+        public static Texture2D LoadTextureRaw(byte[] file)
+        {
+            if (file.Count() > 0)
+            {
+                Texture2D Tex2D = new Texture2D(2, 2);
+                if (Tex2D.LoadImage(file))
+                    return Tex2D;
+            }
+            return null;
+        }
+
+        public static Sprite LoadSpriteRaw(byte[] image, float PixelsPerUnit = 100.0f)
+        {
+            return LoadSpriteFromTexture(LoadTextureRaw(image), PixelsPerUnit);
+        }
+
+        public static Sprite LoadSpriteFromTexture(Texture2D SpriteTexture, float PixelsPerUnit = 100.0f)
+        {
+            if (SpriteTexture)
+                return Sprite.Create(SpriteTexture, new Rect(0, 0, SpriteTexture.width, SpriteTexture.height), new Vector2(0, 0), PixelsPerUnit);
+            return null;
+        }
+
+        public static byte[] GetResource(Assembly asm, string ResourceName)
+        {
+            System.IO.Stream stream = asm.GetManifestResourceStream(ResourceName);
+            byte[] data = new byte[stream.Length];
+            stream.Read(data, 0, (int)stream.Length);
+            return data;
+        }
     }
 }
