@@ -22,7 +22,8 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "sizeDeltaY", new[]{ "size-delta-y" } },
             { "pivotX", new[]{ "pivot-x" } },
             { "pivotY", new[]{ "pivot-y" } },
-            { "hoverHint", new[]{ "hover-hint" } }
+            { "hoverHint", new[]{ "hover-hint" } },
+            { "active", new[]{ "active" } }
         };
 
         public override Dictionary<string, Action<RectTransform, string>> Setters => new Dictionary<string, Action<RectTransform, string>>()
@@ -37,7 +38,8 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             {"sizeDeltaY", new Action<RectTransform, string>((component, value) => component.sizeDelta = new Vector2(component.sizeDelta.x, Parse.Float(value))) },
             {"pivotX", new Action<RectTransform, string>((component, value) => component.pivot = new Vector2(Parse.Float(value), component.pivot.y)) },
             {"pivotY", new Action<RectTransform, string>((component, value) => component.pivot = new Vector2(component.pivot.x, Parse.Float(value))) },
-            {"hoverHint", new Action<RectTransform, string>(AddHoverHint) }
+            {"hoverHint", new Action<RectTransform, string>(AddHoverHint) },
+            {"active", new Action<RectTransform, string>((component, value) => component.gameObject.SetActive(Parse.Bool(value))) }
         };
 
         private void AddHoverHint(RectTransform rectTransform, string text)
