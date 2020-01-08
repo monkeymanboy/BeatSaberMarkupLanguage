@@ -18,7 +18,7 @@
     <DebugType>portable</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
@@ -62,11 +62,26 @@
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.ImageConversionModule">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.ImageConversionModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.PhysicsModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.TextRenderingModule">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UIModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.UIModule.dll</HintPath>
+    </Reference>
+    <Reference Include="VRUI, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\VRUI.dll</HintPath>
     </Reference>
     <Reference Include="Zenject">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\Zenject.dll</HintPath>
@@ -80,6 +95,9 @@
     <Compile Include="Attributes\UIValue.cs" />
     <Compile Include="BeatSaberUI.cs" />
     <Compile Include="Components\BSMLScrollView.cs" />
+    <Compile Include="Components\BSMLTableView.cs" />
+    <Compile Include="Components\ButtonArtworkImage.cs" />
+    <Compile Include="Components\ButtonIconImage.cs" />
     <Compile Include="Components\ClickableText.cs" />
     <Compile Include="Components\CustomCellListTableData.cs" />
     <Compile Include="Components\ExternalComponents.cs" />
@@ -91,6 +109,7 @@
     <Compile Include="Components\Settings\BoolSetting.cs" />
     <Compile Include="Components\Settings\CheckboxSetting.cs" />
     <Compile Include="Components\Settings\DropDownListSetting.cs" />
+    <Compile Include="Components\Settings\GenericSetting.cs" />
     <Compile Include="Components\Settings\GenericSliderSetting.cs" />
     <Compile Include="Components\Settings\IncDecSetting.cs" />
     <Compile Include="Components\Settings\IncrementSetting.cs" />
@@ -98,15 +117,19 @@
     <Compile Include="Components\Settings\ListSliderSetting.cs" />
     <Compile Include="Components\Settings\SliderSetting.cs" />
     <Compile Include="Components\Settings\StringSetting.cs" />
+    <Compile Include="Components\Strokable.cs" />
     <Compile Include="Components\Tab.cs" />
     <Compile Include="Components\TabSelector.cs" />
     <Compile Include="Components\TextPageScrollViewRefresher.cs" />
+    <Compile Include="FloatingScreen\FloatingScreen.cs" />
+    <Compile Include="FloatingScreen\FloatingScreenMoverPointer.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Macros\AsHostMacro.cs" />
     <Compile Include="Macros\BSMLMacro.cs" />
     <Compile Include="Macros\DefineMacro.cs" />
     <Compile Include="Macros\ForEachMacro.cs" />
     <Compile Include="Macros\IfMacro.cs" />
+    <Compile Include="Macros\ReparentMacro.cs" />
     <Compile Include="MenuButtons\MenuButton.cs" />
     <Compile Include="MenuButtons\MenuButtons.cs" />
     <Compile Include="Notify\INotifiableHost.cs" />
@@ -129,6 +152,7 @@
     <Compile Include="Settings\SettingsMenu.cs" />
     <Compile Include="Settings\UI\SettingsMenuListViewController.cs" />
     <Compile Include="Tags\BackgroundTag.cs" />
+    <Compile Include="Tags\BigButtonTag.cs" />
     <Compile Include="Tags\BottomButtonPanelTag.cs" />
     <Compile Include="Tags\BSMLTag.cs" />
     <Compile Include="Tags\ButtonTag.cs" />
@@ -136,9 +160,13 @@
     <Compile Include="Tags\CustomListTag.cs" />
     <Compile Include="Tags\GridLayoutTag.cs" />
     <Compile Include="Tags\HorizontalLayoutTag.cs" />
+    <Compile Include="Tags\ButtonWithIconTag.cs" />
+    <Compile Include="Tags\IconSegmentedControlTag.cs" />
     <Compile Include="Tags\ImageTag.cs" />
+    <Compile Include="Tags\RawImageTag.cs" />
     <Compile Include="Tags\LeaderboardTag.cs" />
     <Compile Include="Tags\ListTag.cs" />
+    <Compile Include="Tags\LoadingIndicatorTag.cs" />
     <Compile Include="Tags\ModalKeyboardTag.cs" />
     <Compile Include="Tags\ModalTag.cs" />
     <Compile Include="Tags\PageButtonTag.cs" />
@@ -155,13 +183,17 @@
     <Compile Include="Tags\Settings\SliderSettingTag.cs" />
     <Compile Include="Tags\Settings\StringSettingTag.cs" />
     <Compile Include="Tags\Settings\SubmenuTag.cs" />
+    <Compile Include="Tags\StackLayoutTag.cs" />
     <Compile Include="Tags\TabSelectorTag.cs" />
     <Compile Include="Tags\TabTag.cs" />
     <Compile Include="Tags\TextPageScrollViewTag.cs" />
+    <Compile Include="Tags\TextSegmentedControlTag.cs" />
     <Compile Include="Tags\TextTag.cs" />
     <Compile Include="Tags\VerticalLayoutTag.cs" />
     <Compile Include="TypeHandlers\BackgroundableHandler.cs" />
+    <Compile Include="TypeHandlers\ButtonArtworkHandler.cs" />
     <Compile Include="TypeHandlers\ButtonHandler.cs" />
+    <Compile Include="TypeHandlers\ButtonIconHandler.cs" />
     <Compile Include="TypeHandlers\ClickableTextHandler.cs" />
     <Compile Include="TypeHandlers\ContentSizeFitterHandler.cs" />
     <Compile Include="TypeHandlers\CustomCellListTableDataHandler.cs" />
@@ -169,6 +201,9 @@
     <Compile Include="TypeHandlers\GlowableHandler.cs" />
     <Compile Include="TypeHandlers\GridLayoutGroupHandler.cs" />
     <Compile Include="TypeHandlers\HorizontalOrVerticalLayoutGroupHandler.cs" />
+    <Compile Include="TypeHandlers\IconSegmentedControlHandler.cs" />
+    <Compile Include="TypeHandlers\ImageHandler.cs" />
+    <Compile Include="TypeHandlers\RawImageHandler.cs" />
     <Compile Include="TypeHandlers\LayoutElementHandler.cs" />
     <Compile Include="TypeHandlers\LayoutGroupHandler.cs" />
     <Compile Include="TypeHandlers\LeaderboardHandler.cs" />
@@ -176,22 +211,23 @@
     <Compile Include="TypeHandlers\ModalViewHandler.cs" />
     <Compile Include="TypeHandlers\PageButtonHandler.cs" />
     <Compile Include="TypeHandlers\RectTransformHandler.cs" />
-    <Compile Include="TypeHandlers\Settings\CheckboxSettingHandler.cs" />
     <Compile Include="TypeHandlers\Settings\DropDownListSettingHandler.cs" />
+    <Compile Include="TypeHandlers\Settings\GenericSettingHandler.cs" />
     <Compile Include="TypeHandlers\Settings\IncrementSettingHandler.cs" />
     <Compile Include="TypeHandlers\Settings\ListSliderSettingHandler.cs" />
-    <Compile Include="TypeHandlers\Settings\BoolSettingsHandler.cs" />
     <Compile Include="TypeHandlers\Settings\ListSettingHandler.cs" />
     <Compile Include="TypeHandlers\Settings\SliderSettingHandler.cs" />
-    <Compile Include="TypeHandlers\Settings\StringSettingHandler.cs" />
+    <Compile Include="TypeHandlers\StrokableHandler.cs" />
     <Compile Include="TypeHandlers\TabHandler.cs" />
     <Compile Include="TypeHandlers\TabSelectorHandler.cs" />
     <Compile Include="TypeHandlers\TextMeshProUGUIHandler.cs" />
     <Compile Include="TypeHandlers\TextPageScrollViewHandler.cs" />
+    <Compile Include="TypeHandlers\TextSegmentedControlHandler.cs" />
     <Compile Include="TypeHandlers\TypeHandler.cs" />
     <Compile Include="Utilities.cs" />
     <Compile Include="ViewControllers\BSMLResourceViewController.cs" />
     <Compile Include="ViewControllers\BSMLViewController.cs" />
+    <Compile Include="ViewControllers\HotReloadableViewController.cs" />
     <Compile Include="ViewControllers\TestViewController.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -204,6 +240,9 @@
     <EmbeddedResource Include="Resources\icon.png" />
     <EmbeddedResource Include="Resources\description.md" />
     <EmbeddedResource Include="Views\main-left-screen.bsml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\main-menu-screen.bsml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

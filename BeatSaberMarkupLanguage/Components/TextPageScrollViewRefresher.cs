@@ -9,7 +9,7 @@ namespace BeatSaberMarkupLanguage.Components
         public TextPageScrollView scrollView;
         void OnEnable()
         {
-            scrollView.SetText(scrollView.GetPrivateField<TextMeshProUGUI>("_text").text);
+            scrollView?.SetText(scrollView.GetPrivateField<TextMeshProUGUI>("_text").text);
         }
     }
 }

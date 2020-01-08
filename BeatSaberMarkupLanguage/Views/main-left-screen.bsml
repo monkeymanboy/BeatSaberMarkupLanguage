@@ -1,17 +1,36 @@
-<bg>
+<bg id='root-object'>
   <tab-selector tab-tag='new-tab' anchor-pos-y='2'></tab-selector>
-  <tab id='release-notes-parent' tags='new-tab' tab-name='Release Notes' anchor-max-y='0.9'></tab>
+  <tab tags='new-tab' tab-name='Release Notes' anchor-max-y='0.9'>
+    <macro.reparent transform='release-notes'></macro.reparent>
+  </tab>
   <macro.if value='any-buttons'>
     <tab tags='new-tab' tab-name='Mods' anchor-max-y='0.85' size-delta-x='1' anchor-pos-x='3'>
       <grid cell-size-y='9' cell-size-x='36'>
         <macro.for-each items='buttons'>
-          <button id='button' pref-width='36' pref-height='8.8' text='~text' hover-hint='~hover-hint' interactable='~interactable' on-click='button-click'></button>
+          <button id='menu-button' pref-width='36' pref-height='8.8' text='~text' hover-hint='~hover-hint' interactable='~interactable' on-click='button-click' pad='0'></button>
         </macro.for-each>
       </grid>
+      <button text='Pin Mods' click-event='show-pins' anchor-pos-y='2' anchor-min-x='0.7' anchor-max-x='1' anchor-min-y='0' anchor-max-y='0'></button>
     </tab>
   </macro.if>
+  <modal show-event='show-pins' hide-event='close-modals' size-delta-x='35' size-delta-y='65' click-off-closes='true'>
+    <vertical>
+      <page-button click-event='pin-list#PageUp' direction='Up' pref-width='30' pref-height='5'></page-button>
+      <custom-list id='pin-list' contents='pin-buttons' clickable-cells='false' list-width='30' visible-cells='5' cell-size='9'>
+        <horizontal vertical-fit='Unconstrained' child-expand-width='false'>
+          <macro.as-host host='menu-button'>
+            <vertical pref-width='20'>
+              <text text='~text' font-align='Left' font-size='4' overflow-mode='Ellipsis'></text>
+            </vertical>
+          </macro.as-host>
+          <button text='~pin-button-text' pad='0' on-click='pin-button-click' all-uppercase='false' pref-width='7' pref-height='7' stroke-type='Clean' stroke-color='~pin-button-stroke-color'></button>
+        </horizontal>
+      </custom-list>
+      <page-button click-event='pin-list#PageDown' direction='Down' pref-width='30' pref-height='5'></page-button>
+    </vertical>
+  </modal>
   <!--Temporary, don't know when but remove at some point-->
-  <modal show-event='show-new' size-delta-x='100' size-delta-y='30' click-off-closes='true'>
+  <modal show-event='show-new' hide-event='close-modals' size-delta-x='100' size-delta-y='30' click-off-closes='true'>
     <vertical size-delta-y='2' pad-bottom='3'>
       <horizontal bg='panel-top' pad-left='10' pad-right='10' horizontal-fit='PreferredSize'>
         <text text='NEW' align='Center' font-size='8'></text>

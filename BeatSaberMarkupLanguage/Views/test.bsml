@@ -40,6 +40,13 @@
       </horizontal>
     </vertical>
   </tab>
+  <tab tags='new-tab' tab-name='List'>
+    <list id='list' list-style='Box' list-direction='Horizontal' visible-cells='2'></list>
+    <horizontal>
+      <page-button click-event='list#PageUp' direction='Left'></page-button>
+      <page-button click-event='list#PageDown' direction='Right'></page-button>
+    </horizontal>
+  </tab>
   <!--
   <bottom-button-panel>
     <button on-click='click' text='Yee Haw'></button>

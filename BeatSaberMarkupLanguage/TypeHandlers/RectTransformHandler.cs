@@ -20,6 +20,8 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "anchorPosY", new[]{ "anchor-pos-y" } },
             { "sizeDeltaX", new[]{ "size-delta-x" } },
             { "sizeDeltaY", new[]{ "size-delta-y" } },
+            { "pivotX", new[]{ "pivot-x" } },
+            { "pivotY", new[]{ "pivot-y" } },
             { "hoverHint", new[]{ "hover-hint" } }
         };
 
@@ -33,6 +35,8 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             {"anchorPosY", new Action<RectTransform, string>((component, value) => component.anchoredPosition = new Vector2(component.anchoredPosition.x, Parse.Float(value))) },
             {"sizeDeltaX", new Action<RectTransform, string>((component, value) => component.sizeDelta = new Vector2(Parse.Float(value), component.sizeDelta.y)) },
             {"sizeDeltaY", new Action<RectTransform, string>((component, value) => component.sizeDelta = new Vector2(component.sizeDelta.x, Parse.Float(value))) },
+            {"pivotX", new Action<RectTransform, string>((component, value) => component.pivot = new Vector2(Parse.Float(value), component.pivot.y)) },
+            {"pivotY", new Action<RectTransform, string>((component, value) => component.pivot = new Vector2(component.pivot.x, Parse.Float(value))) },
             {"hoverHint", new Action<RectTransform, string>(AddHoverHint) }
         };
 

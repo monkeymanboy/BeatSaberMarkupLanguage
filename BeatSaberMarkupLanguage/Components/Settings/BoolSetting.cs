@@ -16,7 +16,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             }
         }
 
-        public void Setup()
+        public override void Setup()
         {
             ReceiveValue();
         }
@@ -40,13 +40,13 @@ namespace BeatSaberMarkupLanguage.Components.Settings
                 ApplyValue();
         }
 
-        public void ApplyValue()
+        public override void ApplyValue()
         {
             if (associatedValue != null)
                 associatedValue.SetValue(Value);
         }
 
-        public void ReceiveValue()
+        public override void ReceiveValue()
         {
             if (associatedValue != null)
                 Value = (bool)associatedValue.GetValue();
@@ -56,7 +56,10 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         {
             EnableDec = currentValue;
             EnableInc = !currentValue;
-            Text = currentValue ? Localization.Get("SETTINGS_ON") : Localization.Get("SETTINGS_OFF");
+            if (formatter != null)
+                Text = formatter.Invoke(currentValue) as string;
+            else
+                Text = currentValue ? Localization.Get("SETTINGS_ON") : Localization.Get("SETTINGS_OFF");
         }
     }
 }

@@ -51,6 +51,27 @@ namespace BeatSaberMarkupLanguage
                     tag.isInitialized = true;
                 }
             }
+
+#if false//don't worry about this, it's for the docs
+            string contents = "";
+            foreach (BSMLTag tag in Utilities.GetListOfType<BSMLTag>())
+            {
+                tag.Setup();
+                contents += $"- type: {tag.GetType().Name}\n";
+                contents += $"  aliases:\n";
+                foreach (string alias in tag.Aliases)
+                    contents += $"  - {alias}\n";
+                contents += $"  components:\n";
+                GameObject currentNode = tag.CreateObject(transform);
+                foreach (TypeHandler typeHandler in typeHandlers)
+                {
+                    Type type = (typeHandler.GetType().GetCustomAttributes(typeof(ComponentHandler), true).FirstOrDefault() as ComponentHandler).type;
+                    if (GetExternalComponent(currentNode, type) != null)
+                        contents += $"  - {type.Name}\n";
+                }
+            }
+            File.WriteAllText(Path.Combine(Environment.CurrentDirectory, "Tags.yml"), contents);
+#endif
         }
 
         public void RegisterTag(BSMLTag tag)
@@ -132,6 +153,14 @@ namespace BeatSaberMarkupLanguage
 
             if (!tags.TryGetValue(node.Name, out BSMLTag currentTag))
                 throw new Exception("Tag type '" + node.Name + "' not found");
+
+            //TEMPORARY
+            if (node.Name == "image")
+            {
+                for (int i = 0; i < 100; i++)
+                    Logger.log.Critical("do not use image tag for raw images please switch to raw-image");
+            }
+            //
 
             GameObject currentNode = currentTag.CreateObject(parent.transform);
 

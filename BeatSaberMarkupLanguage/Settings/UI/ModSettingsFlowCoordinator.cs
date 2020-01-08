@@ -92,7 +92,7 @@ namespace BeatSaberMarkupLanguage.Settings
         private void Cancel()
         {
             if (isPresenting || isAnimating) return;
-            Resources.FindObjectsOfTypeAll<MainFlowCoordinator>().First().InvokeMethod("DismissFlowCoordinator", new object[] { this, null, false });
+            BeatSaberUI.MainFlowCoordinator.DismissFlowCoordinator(this);
             EmitEventToAll("cancel");
         }
 

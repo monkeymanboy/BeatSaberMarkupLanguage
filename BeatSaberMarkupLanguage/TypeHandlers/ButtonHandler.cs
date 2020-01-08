@@ -1,7 +1,6 @@
 ﻿using BeatSaberMarkupLanguage.Parser;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine.UI;
 using static BeatSaberMarkupLanguage.BSMLParser;
 
@@ -27,10 +26,6 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             try
             {
                 Button button = componentType.component as Button;
-
-                Image glowImage = button.gameObject.GetComponentsInChildren<Image>().FirstOrDefault(x => x.gameObject.name == "Glow");
-                if (glowImage != null)
-                    glowImage.gameObject.SetActive(false);
 
                 if (componentType.data.TryGetValue("onClick", out string onClick))
                 {

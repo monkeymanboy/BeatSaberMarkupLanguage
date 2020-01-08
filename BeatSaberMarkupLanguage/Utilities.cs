@@ -81,6 +81,16 @@ namespace BeatSaberMarkupLanguage
 
         //end of yoink
 
+        public static string EscapeXml(string source)
+        {
+            return source.Replace("\"", "&quot;")
+                .Replace("\"", "&quot;")
+                .Replace("&", "&amp;")
+                .Replace("'", "&apos;")
+                .Replace("<", "&lt;")
+                .Replace(">", "&gt;");
+        }
+
         public static class ImageResources
         {
             private static Material noGlowMat;
@@ -110,6 +120,85 @@ namespace BeatSaberMarkupLanguage
                     return _blankSprite;
                 }
             }
+        }
+
+        public static Texture2D FindTextureInAssembly(string path)
+        {
+            try
+            {
+                AssemblyFromPath(path, out Assembly asm, out string newPath);
+                if (asm.GetManifestResourceNames().Contains(newPath))
+                    return LoadTextureRaw(GetResource(asm, newPath));
+            }
+            catch (Exception ex)
+            {
+                Logger.log?.Error("Unable to find sprite in assembly! Exception: " + ex);
+            }
+            return null;
+        }
+
+        public static Sprite FindSpriteInAssembly(string path)
+        {
+            try
+            {
+                AssemblyFromPath(path, out Assembly asm, out string newPath);
+                if (asm.GetManifestResourceNames().Contains(newPath))
+                    return LoadSpriteRaw(GetResource(asm, newPath));
+            }
+            catch (Exception ex)
+            {
+                Logger.log?.Error("Unable to find sprite in assembly! Exception: " + ex);
+            }
+            return null;
+        }
+
+        public static void AssemblyFromPath(string inputPath, out Assembly assembly, out string path)
+        {
+            string[] parameters = inputPath.Split(':');
+            switch (parameters.Length)
+            {
+                case 1:
+                    path = parameters[0];
+                    assembly = Assembly.Load(path.Substring(0, path.IndexOf('.')));
+                    break;
+                case 2:
+                    path = parameters[1];
+                    assembly = Assembly.Load(parameters[0]);
+                    break;
+                default:
+                    throw new Exception($"Could not process resource path {inputPath}");
+            }
+        }
+
+        public static Texture2D LoadTextureRaw(byte[] file)
+        {
+            if (file.Count() > 0)
+            {
+                Texture2D Tex2D = new Texture2D(2, 2);
+                if (Tex2D.LoadImage(file))
+                    return Tex2D;
+            }
+            return null;
+        }
+
+        public static Sprite LoadSpriteRaw(byte[] image, float PixelsPerUnit = 100.0f)
+        {
+            return LoadSpriteFromTexture(LoadTextureRaw(image), PixelsPerUnit);
+        }
+
+        public static Sprite LoadSpriteFromTexture(Texture2D SpriteTexture, float PixelsPerUnit = 100.0f)
+        {
+            if (SpriteTexture)
+                return Sprite.Create(SpriteTexture, new Rect(0, 0, SpriteTexture.width, SpriteTexture.height), new Vector2(0, 0), PixelsPerUnit);
+            return null;
+        }
+
+        public static byte[] GetResource(Assembly asm, string ResourceName)
+        {
+            System.IO.Stream stream = asm.GetManifestResourceStream(ResourceName);
+            byte[] data = new byte[stream.Length];
+            stream.Read(data, 0, (int)stream.Length);
+            return data;
         }
     }
 }

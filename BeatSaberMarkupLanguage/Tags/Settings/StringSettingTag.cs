@@ -25,6 +25,7 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
             Transform valuePick = gameObject.transform.Find("ValuePicker");
             Button decButton = valuePick.GetComponentsInChildren<Button>().First();
             decButton.enabled = false;
+            decButton.interactable = true;
             GameObject.Destroy(decButton.transform.Find("Arrow").gameObject);
             stringSetting.text = valuePick.GetComponentsInChildren<TextMeshProUGUI>().First();
             stringSetting.editButton = valuePick.GetComponentsInChildren<Button>().Last();

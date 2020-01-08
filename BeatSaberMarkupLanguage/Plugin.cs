@@ -18,16 +18,13 @@ namespace BeatSaberMarkupLanguage
             Logger.log = logger;
             BSEvents.menuSceneLoadedFresh += MenuLoadFresh;
             config = new Config("BSML");
-            //ModifierButtons.ModButtons.instance.RegisterButton(new ModifierButtons.ModButton("test", "test", null));
         }
         public void MenuLoadFresh()
         {
             //BSMLSettings.instance.AddSettingsMenu("Test", "BeatSaberMarkupLanguage.Views.settings-test.bsml", SettingsTest.instance);
             //Resources.FindObjectsOfTypeAll<GameScenesManager>().FirstOrDefault().StartCoroutine(PresentTest());
-            BSMLSettings.instance.StartCoroutine(BSMLSettings.instance.AddButtonToMainScreen());
+            BSMLSettings.instance.Setup();
             MenuButtons.MenuButtons.instance.Setup();
-            //SharedCoroutineStarter.instance.StartCoroutine(ModifierButtons.ModButtons.instance.Setup());
-
         }
 
         public void OnSceneLoaded(Scene scene, LoadSceneMode sceneMode) { }
@@ -36,33 +33,19 @@ namespace BeatSaberMarkupLanguage
         {
             if (nextScene.name == "MenuViewControllers" && prevScene.name == "EmptyTransition")
                 BSMLParser.instance.MenuSceneLoaded();
-            if (prevScene.name == "PCInit" && nextScene.name == "EmptyTransition")
-                GameObject.Destroy(BSMLSettings.instance.gameObject); // For if the game is restarted
         }
 
         public void OnApplicationStart() { }
         public void OnApplicationQuit() { }
         public void OnSceneUnloaded(Scene scene) { }
-        public void OnUpdate() { 
-        }
+        public void OnUpdate() { }
         public void OnFixedUpdate() { }
 
         //It's just for testing so don't yell at me
         private IEnumerator PresentTest()
         {
             yield return new WaitForSeconds(1);
-            
             TestViewController testViewController = BeatSaberUI.CreateViewController<TestViewController>();
-            /*testViewController.didActivate += delegate
-            {
-                List<CustomCellInfo> test = new List<CustomCellInfo>();
-                for (int i = 0; i < 10; i++)
-                    test.Add(new CustomCellInfo("test" + i, "yee haw"));
-
-                testViewController.tableData.data = test;
-                testViewController.tableData.tableView.ReloadData();
-            };*/
-
             Resources.FindObjectsOfTypeAll<MainFlowCoordinator>().First().InvokeMethod("PresentViewController", new object[] { testViewController, null, false });
         }
     }

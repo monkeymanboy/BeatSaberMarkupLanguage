@@ -2,18 +2,14 @@ using System;
 using System.Runtime.CompilerServices;
 using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Notify;
-using UnityEngine;
-using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.MenuButtons
 {
     public class MenuButton : INotifiableHost
     {
         public virtual Action OnClick { get; protected set; }
+        
         private string _text;
-
-        [UIObject("button")]
-        private GameObject buttonObject;
         [UIValue("text")]
         public virtual string Text {
             get => _text;
@@ -73,11 +69,6 @@ namespace BeatSaberMarkupLanguage.MenuButtons
                 Logger.log?.Error($"Error Invoking PropertyChanged: {ex.Message}");
                 Logger.log?.Error(ex);
             }
-        }
-
-        public void Destroy()
-        {
-            UnityEngine.Object.Destroy(buttonObject);
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using BeatSaberMarkupLanguage.Parser;
-using HMUI;
+﻿using HMUI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,10 +10,6 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 {
     public class ListSliderSetting : GenericSliderSetting
     {
-        public BSMLAction formatter;
-        public BSMLAction onChange;
-        public BSMLValue associatedValue;
-        public bool updateOnChange = false;
         public List<object> values;
 
         public object Value
@@ -27,7 +22,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             }
         }
 
-        public void Setup()
+        public override void Setup()
         {
             slider.minValue = 0;
             slider.maxValue = values.Count() - 1;
@@ -60,13 +55,13 @@ namespace BeatSaberMarkupLanguage.Components.Settings
                 ApplyValue();
         }
 
-        public void ApplyValue()
+        public override void ApplyValue()
         {
             if (associatedValue != null)
                 associatedValue.SetValue(Value);
         }
 
-        public void ReceiveValue()
+        public override void ReceiveValue()
         {
             if (associatedValue != null)
                 Value = associatedValue.GetValue();

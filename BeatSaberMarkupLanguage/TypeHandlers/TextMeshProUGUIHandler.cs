@@ -14,17 +14,19 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             //{ "font", new[]{ "font" } },
             { "text", new[]{"text"} },
             { "fontSize", new[]{"font-size"} },
-            { "color", new[]{ "color" } },
+            { "color", new[]{ "font-color", "color" } },
             { "faceColor", new[]{ "face-color" } },
             { "outlineColor", new[]{ "outline-color" } }, // Outline not supported for Teko fonts
             { "outlineWidth", new[]{ "outline-width" } },
             { "richText", new[]{ "rich-text" } }, // Enabled by default
-            { "alignment", new[]{"align"} },
-            { "overflowMode", new[]{"overflow-mode"} },
-            { "bold", new[]{"bold"} },
+            { "alignment", new[]{ "font-align","align" } },
+            { "overflowMode", new[]{ "overflow-mode" } },
+            { "wordWrapping", new[]{ "word-wrapping" } },
+            { "bold", new[]{ "bold" } },
             { "italics", new[]{ "italics" } },
             { "underlined", new[]{ "underlined" } },
-            { "strikethrough", new[]{ "strikethrough" } }
+            { "strikethrough", new[]{ "strikethrough" } },
+            { "allUppercase", new[]{ "all-uppercase" } }
         };
         public override Dictionary<string, Action<TextMeshProUGUI, string>> Setters => new Dictionary<string, Action<TextMeshProUGUI, string>>()
         {
@@ -38,10 +40,12 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             {"richText", new Action<TextMeshProUGUI, string>((textMesh, value) => textMesh.richText = Parse.Bool(value)) },
             {"alignment", new Action<TextMeshProUGUI,string>((textMesh, value) => textMesh.alignment = (TextAlignmentOptions)Enum.Parse(typeof(TextAlignmentOptions), value)) },
             {"overflowMode", new Action<TextMeshProUGUI,string>((textMesh, value) => textMesh.overflowMode = (TextOverflowModes)Enum.Parse(typeof(TextOverflowModes), value)) },
+            {"wordWrapping", new Action<TextMeshProUGUI,string>((textMesh, value) => textMesh.enableWordWrapping = Parse.Bool(value)) },
             {"bold", new Action<TextMeshProUGUI, string>((textMesh, value) => textMesh.fontStyle = SetStyle(textMesh.fontStyle, FontStyles.Bold, value)) },
             {"italics", new Action<TextMeshProUGUI,string>((textMesh, value) => textMesh.fontStyle = SetStyle(textMesh.fontStyle, FontStyles.Italic, value))  },
             {"underlined", new Action<TextMeshProUGUI,string>((textMesh, value) => textMesh.fontStyle = SetStyle(textMesh.fontStyle, FontStyles.Underline, value))  },
             {"strikethrough", new Action<TextMeshProUGUI,string>((textMesh, value) => textMesh.fontStyle = SetStyle(textMesh.fontStyle, FontStyles.Strikethrough, value))  },
+            {"allUppercase", new Action<TextMeshProUGUI,string>((textMesh, value) => textMesh.fontStyle = SetStyle(textMesh.fontStyle, FontStyles.UpperCase, value))  },
         };
 
         private static FontStyles SetStyle(FontStyles existing, FontStyles modifyStyle, string flag)
@@ -63,7 +67,8 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 textMesh.gameObject.SetActive(false);
                 MonoBehaviour.Destroy(textMesh.font);
                 // TODO: Setting the font doesn't apply colors to the new font, but this doesn't work
-                //var color = textMesh.color;
+                //
+                color = textMesh.color;
                 //var faceColor = textMesh.faceColor;
                 //var outlineColor = textMesh.outlineColor;
                 //var outlineWidth = textMesh.outlineWidth;
