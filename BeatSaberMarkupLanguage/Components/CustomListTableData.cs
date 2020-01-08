@@ -122,8 +122,7 @@ namespace BeatSaberMarkupLanguage.Components
                 case ListStyle.Box:
                     LevelPackTableCell cell = GetLevelPackTableCell();
                     cell.showNewRibbon = false;
-                    cell.GetPrivateField<TextMeshProUGUI>("_packNameText").text = data[idx].text;
-                    cell.GetPrivateField<TextMeshProUGUI>("_infoText").text = data[idx].subtext;
+                    cell.GetPrivateField<TextMeshProUGUI>("_infoText").text = $"{data[idx].text}\n{data[idx].subtext}";
                     UnityEngine.UI.Image packCoverImage = cell.GetPrivateField<UnityEngine.UI.Image>("_coverImage");
 
                     Texture2D tex = data[idx].icon == null ? Texture2D.blackTexture : data[idx].icon;

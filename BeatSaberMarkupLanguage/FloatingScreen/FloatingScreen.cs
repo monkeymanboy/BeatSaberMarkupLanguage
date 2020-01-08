@@ -41,10 +41,10 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
 
             if (createHandle)
             {
-                var vrPointers = Resources.FindObjectsOfTypeAll<VRPointer>();
+                VRPointer[] vrPointers = Resources.FindObjectsOfTypeAll<VRPointer>();
                 if (vrPointers.Count() != 0)
                 {
-                    var pointer = vrPointers.First();
+                    VRPointer pointer = vrPointers.First();
                     if (screen.screenMover) Destroy(screen.screenMover);
                     screen.screenMover = pointer.gameObject.AddComponent<FloatingScreenMoverPointer>();
 

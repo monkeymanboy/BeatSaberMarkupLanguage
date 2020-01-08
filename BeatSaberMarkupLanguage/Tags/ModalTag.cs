@@ -47,7 +47,7 @@ namespace BeatSaberMarkupLanguage.Tags
             Backgroundable backgroundable = child.gameObject.AddComponent<Backgroundable>();
             backgroundable.ApplyBackground("round-rect-panel");
             backgroundable.background.color = new Color(0.706f, 0.706f, 0.706f, 1);
-            backgroundable.background.material = Resources.FindObjectsOfTypeAll<UnityEngine.UI.Image>().First(x => x.material?.name=="UIFogBG").material;
+            backgroundable.background.material = Resources.FindObjectsOfTypeAll<Material>().First(x => x.name == "UIFogBG");
 
             ExternalComponents externalComponents = child.AddComponent<ExternalComponents>();
             externalComponents.components.Add(modalView);

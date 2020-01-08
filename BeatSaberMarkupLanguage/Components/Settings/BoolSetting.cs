@@ -56,7 +56,10 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         {
             EnableDec = currentValue;
             EnableInc = !currentValue;
-            Text = currentValue ? Localization.Get("SETTINGS_ON") : Localization.Get("SETTINGS_OFF");
+            if (formatter != null)
+                Text = formatter.Invoke(currentValue) as string;
+            else
+                Text = currentValue ? Localization.Get("SETTINGS_ON") : Localization.Get("SETTINGS_OFF");
         }
     }
 }

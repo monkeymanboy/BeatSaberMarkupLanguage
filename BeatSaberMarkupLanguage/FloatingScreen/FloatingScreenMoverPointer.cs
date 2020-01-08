@@ -33,7 +33,7 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
                 if (_vrPointer.vrController.triggerValue > 0.9f || Input.GetMouseButton(0))
                 {
                     if (_grabbingController != null) return;
-                    if (Physics.Raycast(_vrPointer.vrController.position, _vrPointer.vrController.forward, out var hit, MaxLaserDistance))
+                    if (Physics.Raycast(_vrPointer.vrController.position, _vrPointer.vrController.forward, out RaycastHit hit, MaxLaserDistance))
                     {
                         if (hit.transform != _screenHandle) return;
                         _grabbingController = _vrPointer.vrController;

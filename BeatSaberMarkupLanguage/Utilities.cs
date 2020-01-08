@@ -126,9 +126,9 @@ namespace BeatSaberMarkupLanguage
         {
             try
             {
-                Assembly asm = Assembly.Load(path.Substring(0, path.IndexOf('.')));
-                if (asm.GetManifestResourceNames().Contains(path))
-                    return LoadTextureRaw(GetResource(asm, path));
+                AssemblyFromPath(path, out Assembly asm, out string newPath);
+                if (asm.GetManifestResourceNames().Contains(newPath))
+                    return LoadTextureRaw(GetResource(asm, newPath));
             }
             catch (Exception ex)
             {
@@ -141,15 +141,33 @@ namespace BeatSaberMarkupLanguage
         {
             try
             {
-                Assembly asm = Assembly.Load(path.Substring(0, path.IndexOf('.')));
-                if (asm.GetManifestResourceNames().Contains(path))
-                    return LoadSpriteRaw(GetResource(asm, path));
+                AssemblyFromPath(path, out Assembly asm, out string newPath);
+                if (asm.GetManifestResourceNames().Contains(newPath))
+                    return LoadSpriteRaw(GetResource(asm, newPath));
             }
             catch (Exception ex)
             {
                 Logger.log?.Error("Unable to find sprite in assembly! Exception: " + ex);
             }
             return null;
+        }
+
+        public static void AssemblyFromPath(string inputPath, out Assembly assembly, out string path)
+        {
+            string[] parameters = inputPath.Split(':');
+            switch (parameters.Length)
+            {
+                case 1:
+                    path = parameters[0];
+                    assembly = Assembly.Load(path.Substring(0, path.IndexOf('.')));
+                    break;
+                case 2:
+                    path = parameters[1];
+                    assembly = Assembly.Load(parameters[0]);
+                    break;
+                default:
+                    throw new Exception($"Could not process resource path {inputPath}");
+            }
         }
 
         public static Texture2D LoadTextureRaw(byte[] file)
