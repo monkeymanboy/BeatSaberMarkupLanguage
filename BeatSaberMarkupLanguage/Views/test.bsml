@@ -1,4 +1,4 @@
-<bg>
+<bg xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
   <macro.define id='button-text' value='Macro defined button text'></macro.define>
   <tab-selector tab-tag='new-tab'></tab-selector>
   <tab tags='new-tab' tab-name='~header'>
