@@ -15,7 +15,7 @@ namespace BeatSaberMarkupLanguage.Tags
             TextSegmentedControl prefab = Resources.FindObjectsOfTypeAll<TextSegmentedControl>().First(x => x.name == "BeatmapDifficultySegmentedControl");
             TextSegmentedControl textSegmentedControl = MonoBehaviour.Instantiate(prefab, parent, false);
             textSegmentedControl.name = "BSMLTextSegmentedControl";
-            textSegmentedControl.SetPrivateField("_container", prefab.GetPrivateField<DiContainer>("_container"));
+            textSegmentedControl.SetPrivateField("_container", Resources.FindObjectsOfTypeAll<TextSegmentedControl>().First(x => x.GetPrivateField<DiContainer>("_container") != null).GetPrivateField<DiContainer>("_container"));
             (textSegmentedControl.transform as RectTransform).anchoredPosition = new Vector2(0, 0);
             foreach (Transform transform in textSegmentedControl.transform)
             {
