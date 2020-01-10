@@ -12,10 +12,10 @@ namespace BeatSaberMarkupLanguage.Tags
 
         public override GameObject CreateObject(Transform parent)
         {
-            IconSegmentedControl prefab = Resources.FindObjectsOfTypeAll<IconSegmentedControl>().First(x => x.name == "BeatmapCharacteristicSegmentedControl");
+            IconSegmentedControl prefab = Resources.FindObjectsOfTypeAll<IconSegmentedControl>().First(x => x.name == "BeatmapCharacteristicSegmentedControl" && x.GetPrivateField<DiContainer>("_container") != null);
             IconSegmentedControl iconSegmentedControl = MonoBehaviour.Instantiate(prefab, parent, false);
             iconSegmentedControl.name = "BSMLIconSegmentedControl";
-            iconSegmentedControl.SetPrivateField("_container", Resources.FindObjectsOfTypeAll<IconSegmentedControl>().First(x => x.GetPrivateField<DiContainer>("_container") != null).GetPrivateField<DiContainer>("_container"));
+            iconSegmentedControl.SetPrivateField("_container", prefab.GetPrivateField<DiContainer>("_container"));
             (iconSegmentedControl.transform as RectTransform).anchoredPosition = new Vector2(0, 0);
             foreach (Transform transform in iconSegmentedControl.transform)
             {
