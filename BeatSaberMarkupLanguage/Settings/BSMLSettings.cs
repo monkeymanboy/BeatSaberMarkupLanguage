@@ -34,6 +34,7 @@ namespace BeatSaberMarkupLanguage.Settings
 
         internal void Setup()
         {
+            StopAllCoroutines();
             StartCoroutine(AddButtonToMainScreen());
             foreach (SettingsMenu settingsMenu in settingsMenus)
             {

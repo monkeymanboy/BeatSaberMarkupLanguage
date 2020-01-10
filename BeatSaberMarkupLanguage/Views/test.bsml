@@ -3,7 +3,7 @@
   <tab-selector tab-tag='new-tab'></tab-selector>
   <tab tags='new-tab' tab-name='~header'>
     <vertical>
-      <horizontal bg='panel-top' pad-left='10' pad-right='10' horizontal-fit='PreferredSize'>
+      <horizontal pad-left='10' pad-right='10' horizontal-fit='PreferredSize'>
         <text text='~header' color='red' align='Center' font-size='10'></text>
       </horizontal>
       <horizontal bg='round-rect-panel' pad='6' spacing='10'>
