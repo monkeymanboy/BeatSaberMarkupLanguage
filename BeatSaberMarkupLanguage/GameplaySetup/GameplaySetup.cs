@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.GameplaySetup
 {
-    class GameplaySetup : PersistentSingleton<GameplaySetup>
+    public class GameplaySetup : PersistentSingleton<GameplaySetup>
     {
         private GameplaySetupViewController gameplaySetupViewController;
 
