@@ -123,6 +123,9 @@
     <Compile Include="Components\TextPageScrollViewRefresher.cs" />
     <Compile Include="FloatingScreen\FloatingScreen.cs" />
     <Compile Include="FloatingScreen\FloatingScreenMoverPointer.cs" />
+    <Compile Include="GameplaySetupTest.cs" />
+    <Compile Include="GameplaySetup\GameplaySetup.cs" />
+    <Compile Include="GameplaySetup\GameplaySetupMenu.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Macros\AsHostMacro.cs" />
     <Compile Include="Macros\BSMLMacro.cs" />
@@ -163,6 +166,8 @@
     <Compile Include="Tags\ButtonWithIconTag.cs" />
     <Compile Include="Tags\IconSegmentedControlTag.cs" />
     <Compile Include="Tags\ImageTag.cs" />
+    <Compile Include="Tags\ModifierContainerTag.cs" />
+    <Compile Include="Tags\ModifierTag.cs" />
     <Compile Include="Tags\RawImageTag.cs" />
     <Compile Include="Tags\LeaderboardTag.cs" />
     <Compile Include="Tags\ListTag.cs" />
@@ -243,6 +248,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Views\main-menu-screen.bsml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\gameplay-setup.bsml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\gameplay-setup-test.bsml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

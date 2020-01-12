@@ -13,6 +13,7 @@ namespace BeatSaberMarkupLanguage.Macros
         public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
         {
             { "hosts", new[]{"hosts","items"} },
+            { "passTags", new[]{"pass-back-tags"}}
         };
         
         public override void Execute(XmlNode node, GameObject parent, Dictionary<string, string> data, BSMLParserParams parserParams)
@@ -21,10 +22,14 @@ namespace BeatSaberMarkupLanguage.Macros
             {
                 if (!parserParams.values.TryGetValue(hosts, out BSMLValue values))
                     throw new Exception("host list '" + hosts + "' not found");
-
+                bool passTags = false;
+                if (data.TryGetValue("passTags", out string passTagsString))
+                    passTags = Parse.Bool(passTagsString);
                 foreach(object host in values.GetValue() as List<object>)
                 {
-                    BSMLParser.instance.Parse(node, parent, host);
+                    BSMLParserParams nodeParams = BSMLParser.instance.Parse(node, parent, host);
+                    if (passTags)
+                        nodeParams.PassTaggedObjects(parserParams);
                 }
             }
         }
