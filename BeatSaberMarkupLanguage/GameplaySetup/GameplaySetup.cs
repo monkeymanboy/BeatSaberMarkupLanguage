@@ -10,17 +10,9 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
     public class GameplaySetup : PersistentSingleton<GameplaySetup>
     {
         private GameplaySetupViewController gameplaySetupViewController;
-
-        [UIValue("vanilla-selector")]
-        private Transform vanillaSelector;
-        [UIValue("player-settings")]
-        private Transform playerSettings;
-        [UIValue("gameplay-modifiers")]
-        private Transform gameplayModifiers;
-        [UIValue("environment-override")]
-        private Transform environmentOverride;
-        [UIValue("color-override")]
-        private Transform colorOverride;
+        
+        [UIValue("vanilla-items")]
+        private List<Transform> vanillaItems = new List<Transform>();
 
         [UIValue("mod-menus")]
         private List<object> menus = new List<object>();
@@ -30,11 +22,11 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
             if (menus.Count == 0) return;
             gameplaySetupViewController = Resources.FindObjectsOfTypeAll<GameplaySetupViewController>().First();
             gameplaySetupViewController.transform.Find("HeaderPanel").GetComponentInChildren<TextMeshProUGUI>().fontSize = 4;
-            vanillaSelector = gameplaySetupViewController.transform.Find("SegmentedControl");
-            playerSettings = gameplaySetupViewController.transform.Find("PlayerSettings");
-            gameplayModifiers = gameplaySetupViewController.transform.Find("GameplayModifiers");
-            environmentOverride = gameplaySetupViewController.transform.Find("EnvironmentOverrideSettings");
-            colorOverride = gameplaySetupViewController.transform.Find("ColorsOverrideSettings");
+            foreach(Transform transform in gameplaySetupViewController.transform)
+            {
+                if (transform.name != "HeaderPanel")
+                    vanillaItems.Add(transform);
+            }
             (gameplaySetupViewController.transform.Find("HeaderPanel") as RectTransform).sizeDelta = new Vector2(90, 6);
             BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), "BeatSaberMarkupLanguage.Views.gameplay-setup.bsml"), gameplaySetupViewController.gameObject, this);
         }
