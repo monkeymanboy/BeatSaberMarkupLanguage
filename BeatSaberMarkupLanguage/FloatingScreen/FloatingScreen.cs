@@ -13,9 +13,55 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
         public FloatingScreenMoverPointer screenMover;
         public GameObject handle;
 
+        private Vector2 _screenSize;
+        public Vector2 ScreenSize
+        {
+            get => _screenSize;
+            set
+            {
+                _screenSize = value;
+                (transform as RectTransform).sizeDelta = _screenSize;
+                if (handle != null)
+                {
+                    handle.transform.localPosition = new Vector3(-_screenSize.x / 2f, 0f, 0f);
+                    handle.transform.localScale = new Vector3(_screenSize.x / 15f, _screenSize.y * 0.8f, _screenSize.x / 15f);
+                }
+            }
+        }
+
+        private Vector3 _screenPosition;
+        public Vector3 ScreenPosition
+        {
+            get => _screenPosition;
+            set
+            {
+                _screenPosition = value;
+                (transform as RectTransform).position = _screenPosition;
+            }
+        }
+
+        private bool _showHandle = false;
+        public bool ShowHandle
+        {
+            get => _showHandle;
+            set
+            {
+                _showHandle = value;
+                if(_showHandle && handle == null)
+                {
+                    CreateHandle(this, _screenSize);
+                }
+                else if(!_showHandle && handle != null)
+                {
+                    Destroy(handle);
+                }
+            }
+        }
+
         public static FloatingScreen CreateFloatingScreen(Vector2 screenSize, bool createHandle, Vector3 position, Quaternion rotation)
         {
             FloatingScreen screen = new GameObject("BSMLFloatingScreen", typeof(FloatingScreen), typeof(CanvasScaler), typeof(RectMask2D), typeof(Image), typeof(VRGraphicRaycaster), typeof(SetMainCameraToCanvas)).GetComponent<FloatingScreen>();
+            screen.ScreenSize = screenSize;
 
             Canvas canvas = screen.GetComponent<Canvas>();
             canvas.additionalShaderChannels = AdditionalCanvasShaderChannels.TexCoord1 | AdditionalCanvasShaderChannels.TexCoord2;
@@ -39,33 +85,35 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
             screen.transform.localScale = new Vector3(0.02f, 0.02f, 0.02f);
             (screen.transform as RectTransform).sizeDelta = screenSize;
 
-            if (createHandle)
-            {
-                VRPointer[] vrPointers = Resources.FindObjectsOfTypeAll<VRPointer>();
-                if (vrPointers.Count() != 0)
-                {
-                    VRPointer pointer = vrPointers.First();
-                    if (screen.screenMover) Destroy(screen.screenMover);
-                    screen.screenMover = pointer.gameObject.AddComponent<FloatingScreenMoverPointer>();
-
-                    screen.handle = GameObject.CreatePrimitive(PrimitiveType.Cube);
-
-                    screen.handle.transform.SetParent(screen.transform);
-                    screen.handle.transform.localPosition = new Vector3(-screenSize.x / 2f, 0f, 0f);
-                    screen.handle.transform.localScale = new Vector3(screenSize.x / 15f, screenSize.y * 0.8f, screenSize.x / 15f);
-
-                    screen.screenMover.Init(screen);
-                }
-                else
-                {
-                    Logger.log.Warn("Failed to get VRPointer!");
-                }
-            }
+            screen.ShowHandle = createHandle;
 
             screen.transform.position = position;
             screen.transform.rotation = rotation;
 
             return screen;
+        }
+
+        public static void CreateHandle(FloatingScreen screen, Vector2 screenSize)
+        {
+            VRPointer[] vrPointers = Resources.FindObjectsOfTypeAll<VRPointer>();
+            if (vrPointers.Count() != 0)
+            {
+                VRPointer pointer = vrPointers.First();
+                if (screen.screenMover) Destroy(screen.screenMover);
+                screen.screenMover = pointer.gameObject.AddComponent<FloatingScreenMoverPointer>();
+
+                screen.handle = GameObject.CreatePrimitive(PrimitiveType.Cube);
+
+                screen.handle.transform.SetParent(screen.transform);
+                screen.handle.transform.localPosition = new Vector3(-screenSize.x / 2f, 0f, 0f);
+                screen.handle.transform.localScale = new Vector3(screenSize.x / 15f, screenSize.y * 0.8f, screenSize.x / 15f);
+
+                screen.screenMover.Init(screen);
+            }
+            else
+            {
+                Logger.log.Warn("Failed to get VRPointer!");
+            }
         }
 
     }
