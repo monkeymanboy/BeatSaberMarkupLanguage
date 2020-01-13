@@ -40,6 +40,17 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
             }
         }
 
+        private Quaternion _screenRotation;
+        public Quaternion ScreenRotation
+        {
+            get => _screenRotation;
+            set
+            {
+                _screenRotation = value;
+                (transform as RectTransform).rotation = _screenRotation;
+            }
+        }
+
         private bool _showHandle = false;
         public bool ShowHandle
         {

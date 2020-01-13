@@ -19,8 +19,8 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
         protected Vector3 _realPos;
         protected Quaternion _realRot;
 
-        public Action<Vector3> OnGrab;
-        public Action<Vector3> OnRelease;
+        public Action<Vector3, Quaternion> OnGrab;
+        public Action<Vector3, Quaternion> OnRelease;
 
         public virtual void Init(FloatingScreen floatingScreen)
         {
@@ -43,13 +43,13 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
                         _grabbingController = _vrPointer.vrController;
                         _grabPos = _vrPointer.vrController.transform.InverseTransformPoint(_floatingScreen.transform.position);
                         _grabRot = Quaternion.Inverse(_vrPointer.vrController.transform.rotation) * _floatingScreen.transform.rotation;
-                        OnGrab?.Invoke(_floatingScreen.transform.position);
+                        OnGrab?.Invoke(_floatingScreen.transform.position, _floatingScreen.transform.rotation);
                     }
                 }
 
             if (_grabbingController == null || _grabbingController.triggerValue > 0.9f) return;
             _grabbingController = null;
-            OnRelease?.Invoke(_floatingScreen.transform.position);
+            OnRelease?.Invoke(_floatingScreen.transform.position, _floatingScreen.transform.rotation);
         }
 
         protected virtual void LateUpdate()
