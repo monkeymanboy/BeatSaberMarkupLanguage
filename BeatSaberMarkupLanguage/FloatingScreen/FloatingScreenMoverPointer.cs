@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using VRUIControls;
 
 namespace BeatSaberMarkupLanguage.FloatingScreen
@@ -17,6 +18,9 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
         protected Quaternion _grabRot;
         protected Vector3 _realPos;
         protected Quaternion _realRot;
+
+        public Action OnGrab;
+        public Action OnRelease;
 
         public virtual void Init(FloatingScreen floatingScreen)
         {
@@ -39,11 +43,13 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
                         _grabbingController = _vrPointer.vrController;
                         _grabPos = _vrPointer.vrController.transform.InverseTransformPoint(_floatingScreen.transform.position);
                         _grabRot = Quaternion.Inverse(_vrPointer.vrController.transform.rotation) * _floatingScreen.transform.rotation;
+                        OnGrab?.Invoke();
                     }
                 }
 
-            if (_grabbingController == null || !(_grabbingController.triggerValue <= 0.9f)) return;
+            if (_grabbingController == null || _grabbingController?.triggerValue > 0.9f) return;
             _grabbingController = null;
+            OnRelease?.Invoke();
         }
 
         protected virtual void LateUpdate()
