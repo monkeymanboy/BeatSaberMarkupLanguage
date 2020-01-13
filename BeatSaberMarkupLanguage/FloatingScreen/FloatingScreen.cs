@@ -50,7 +50,7 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
                 if(_showHandle)
                 {
                     if (handle == null)
-                        CreateHandle(this, _screenSize);
+                        CreateHandle();
                     else
                         handle.SetActive(true);
                 }
@@ -94,22 +94,22 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
             return screen;
         }
 
-        public static void CreateHandle(FloatingScreen screen, Vector2 screenSize)
+        private void CreateHandle()
         {
             VRPointer[] vrPointers = Resources.FindObjectsOfTypeAll<VRPointer>();
             if (vrPointers.Count() != 0)
             {
                 VRPointer pointer = vrPointers.First();
-                if (screen.screenMover) Destroy(screen.screenMover);
-                screen.screenMover = pointer.gameObject.AddComponent<FloatingScreenMoverPointer>();
+                if (screenMover) Destroy(screenMover);
+                screenMover = pointer.gameObject.AddComponent<FloatingScreenMoverPointer>();
 
-                screen.handle = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                handle = GameObject.CreatePrimitive(PrimitiveType.Cube);
 
-                screen.handle.transform.SetParent(screen.transform);
-                screen.handle.transform.localPosition = new Vector3(-screenSize.x / 2f, 0f, 0f);
-                screen.handle.transform.localScale = new Vector3(screenSize.x / 15f, screenSize.y * 0.8f, screenSize.x / 15f);
+                handle.transform.SetParent(transform);
+                handle.transform.localPosition = new Vector3(-ScreenSize.x / 2f, 0f, 0f);
+                handle.transform.localScale = new Vector3(ScreenSize.x / 15f, ScreenSize.y * 0.8f, ScreenSize.x / 15f);
 
-                screen.screenMover.Init(screen);
+                screenMover.Init(this);
             }
             else
             {
