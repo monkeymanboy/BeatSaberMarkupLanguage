@@ -47,7 +47,7 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
                     }
                 }
 
-            if (_grabbingController == null || _grabbingController?.triggerValue > 0.9f) return;
+            if (_grabbingController == null || _grabbingController.triggerValue > 0.9f) return;
             _grabbingController = null;
             OnRelease?.Invoke(_floatingScreen.transform.position);
         }
