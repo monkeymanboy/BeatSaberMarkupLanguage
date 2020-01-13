@@ -47,13 +47,16 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
             set
             {
                 _showHandle = value;
-                if(_showHandle && handle == null)
+                if(_showHandle)
                 {
-                    CreateHandle(this, _screenSize);
+                    if (handle == null)
+                        CreateHandle(this, _screenSize);
+                    else
+                        handle.SetActive(true);
                 }
                 else if(!_showHandle && handle != null)
                 {
-                    Destroy(handle);
+                    handle.SetActive(false);
                 }
             }
         }
@@ -61,8 +64,7 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
         public static FloatingScreen CreateFloatingScreen(Vector2 screenSize, bool createHandle, Vector3 position, Quaternion rotation)
         {
             FloatingScreen screen = new GameObject("BSMLFloatingScreen", typeof(FloatingScreen), typeof(CanvasScaler), typeof(RectMask2D), typeof(Image), typeof(VRGraphicRaycaster), typeof(SetMainCameraToCanvas)).GetComponent<FloatingScreen>();
-            screen.ScreenSize = screenSize;
-
+            
             Canvas canvas = screen.GetComponent<Canvas>();
             canvas.additionalShaderChannels = AdditionalCanvasShaderChannels.TexCoord1 | AdditionalCanvasShaderChannels.TexCoord2;
             canvas.sortingOrder = 4;
@@ -82,9 +84,8 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
             setCamera.SetPrivateField("_canvas", canvas);
             setCamera.SetPrivateField("_mainCamera", Resources.FindObjectsOfTypeAll<MainCamera>().FirstOrDefault());
 
+            screen.ScreenSize = screenSize;
             screen.transform.localScale = new Vector3(0.02f, 0.02f, 0.02f);
-            (screen.transform as RectTransform).sizeDelta = screenSize;
-
             screen.ShowHandle = createHandle;
 
             screen.transform.position = position;
