@@ -1,9 +1,12 @@
 ﻿using BeatSaberMarkupLanguage.Settings;
 using BeatSaberMarkupLanguage.ViewControllers;
 using BS_Utils.Utilities;
+using Harmony;
 using IPA;
+using System;
 using System.Collections;
 using System.Linq;
+using System.Reflection;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using IPALogger = IPA.Logging.Logger;
@@ -15,6 +18,16 @@ namespace BeatSaberMarkupLanguage
         public static Config config;
         public void Init(IPALogger logger)
         {
+            try
+            {
+                HarmonyInstance harmony = HarmonyInstance.Create("com.monkeymanboy.BeatSaberMarkupLanguage");
+                harmony.PatchAll(Assembly.GetExecutingAssembly());
+            }
+            catch (Exception e)
+            {
+                Logger.log.Error(e.Message);
+            }
+
             Logger.log = logger;
             BSEvents.menuSceneLoadedFresh += MenuLoadFresh;
             config = new Config("BSML");

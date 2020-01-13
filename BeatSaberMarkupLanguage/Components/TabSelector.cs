@@ -31,6 +31,9 @@ namespace BeatSaberMarkupLanguage.Components
         private Button leftButton;
         private Button rightButton;
 
+        private int lastClickedPage;
+        private int lastClickedIndex;
+
         public void Setup()
         {
             tabs.Clear();
@@ -52,6 +55,8 @@ namespace BeatSaberMarkupLanguage.Components
         }
         private void TabSelected(SegmentedControl segmentedControl, int index)
         {
+            lastClickedPage = currentPage;
+            lastClickedIndex = index;
             if (PageCount != -1) index += PageCount * currentPage;
             for(int i = 0; i < tabs.Count; i++)
             {
@@ -75,6 +80,7 @@ namespace BeatSaberMarkupLanguage.Components
                     leftButton.interactable = currentPage > 0;
                 if(rightButton != null)
                     rightButton.interactable = currentPage < (tabs.Count - 1) / pageCount;
+                textSegmentedControl.SelectCellWithNumber(lastClickedPage == currentPage? lastClickedIndex : -1);
             }
         }
         private void PageLeft()

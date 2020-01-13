@@ -86,6 +86,9 @@
     <Reference Include="Zenject">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\Zenject.dll</HintPath>
     </Reference>
+    <Reference Include="Harmony">
+      <HintPath>$(BeatSaberDir)\Libs\0Harmony.1.2.0.1.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\UIAction.cs" />
@@ -126,6 +129,7 @@
     <Compile Include="GameplaySetupTest.cs" />
     <Compile Include="GameplaySetup\GameplaySetup.cs" />
     <Compile Include="GameplaySetup\GameplaySetupMenu.cs" />
+    <Compile Include="Harmony Patches\SegmentedControlCellSelectionStateDidChange.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Macros\AsHostMacro.cs" />
     <Compile Include="Macros\BSMLMacro.cs" />
