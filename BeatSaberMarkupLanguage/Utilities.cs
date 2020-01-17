@@ -132,7 +132,7 @@ namespace BeatSaberMarkupLanguage
             }
             catch (Exception ex)
             {
-                Logger.log?.Error("Unable to find sprite in assembly! Exception: " + ex);
+                Logger.log?.Error("Unable to find texture in assembly! (You must prefix path with 'assembly name:' if the assembly and root namespace don't have the same name) Exception: " + ex);
             }
             return null;
         }
@@ -147,7 +147,7 @@ namespace BeatSaberMarkupLanguage
             }
             catch (Exception ex)
             {
-                Logger.log?.Error("Unable to find sprite in assembly! Exception: " + ex);
+                Logger.log?.Error("Unable to find sprite in assembly! (You must prefix path with 'assembly name:' if the assembly and root namespace don't have the same name) Exception: " + ex);
             }
             return null;
         }

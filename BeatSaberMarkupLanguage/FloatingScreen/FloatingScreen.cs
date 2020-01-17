@@ -12,42 +12,32 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
     {
         public FloatingScreenMoverPointer screenMover;
         public GameObject handle;
-
-        private Vector2 _screenSize;
+        
         public Vector2 ScreenSize
         {
-            get => _screenSize;
+            get => (transform as RectTransform).sizeDelta;
             set
             {
-                _screenSize = value;
-                (transform as RectTransform).sizeDelta = _screenSize;
-                if (handle != null)
-                {
-                    handle.transform.localPosition = new Vector3(-_screenSize.x / 2f, 0f, 0f);
-                    handle.transform.localScale = new Vector3(_screenSize.x / 15f, _screenSize.y * 0.8f, _screenSize.x / 15f);
-                }
+                (transform as RectTransform).sizeDelta = value;
+                UpdateHandle();
             }
         }
-
-        private Vector3 _screenPosition;
+        
         public Vector3 ScreenPosition
         {
-            get => _screenPosition;
+            get => transform.position;
             set
             {
-                _screenPosition = value;
-                (transform as RectTransform).position = _screenPosition;
+                (transform as RectTransform).position = value;
             }
         }
-
-        private Quaternion _screenRotation;
+        
         public Quaternion ScreenRotation
         {
-            get => _screenRotation;
+            get => (transform as RectTransform).rotation;
             set
             {
-                _screenRotation = value;
-                (transform as RectTransform).rotation = _screenRotation;
+                (transform as RectTransform).rotation = value;
             }
         }
 
@@ -71,6 +61,17 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
                 }
             }
         }
+        private Side _handleSide = Side.Left;
+        public Side HandleSide
+        {
+            get => _handleSide;
+            set
+            {
+                _handleSide = value;
+                UpdateHandle();
+            }
+        }
+
 
         public static FloatingScreen CreateFloatingScreen(Vector2 screenSize, bool createHandle, Vector3 position, Quaternion rotation)
         {
@@ -117,8 +118,7 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
                 handle = GameObject.CreatePrimitive(PrimitiveType.Cube);
 
                 handle.transform.SetParent(transform);
-                handle.transform.localPosition = new Vector3(-ScreenSize.x / 2f, 0f, 0f);
-                handle.transform.localScale = new Vector3(ScreenSize.x / 15f, ScreenSize.y * 0.8f, ScreenSize.x / 15f);
+                UpdateHandle();
 
                 screenMover.Init(this);
             }
@@ -128,5 +128,33 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
             }
         }
 
+        public void UpdateHandle()
+        {
+            if (handle == null) return;
+            switch (HandleSide)
+            {
+                case Side.Left:
+                    handle.transform.localPosition = new Vector3(-ScreenSize.x / 2f, 0f, 0f);
+                    handle.transform.localScale = new Vector3(ScreenSize.x / 15f, ScreenSize.y * 0.8f, ScreenSize.x / 15f);
+                    break;
+                case Side.Right:
+                    handle.transform.localPosition = new Vector3(ScreenSize.x / 2f, 0f, 0f);
+                    handle.transform.localScale = new Vector3(ScreenSize.x / 15f, ScreenSize.y * 0.8f, ScreenSize.x / 15f);
+                    break;
+                case Side.Top:
+                    handle.transform.localPosition = new Vector3(0f, ScreenSize.y / 2f, 0f);
+                    handle.transform.localScale = new Vector3(ScreenSize.x * 0.8f, ScreenSize.y / 15f, ScreenSize.y / 15f);
+                    break;
+                case Side.Bottom:
+                    handle.transform.localPosition = new Vector3(0f, -ScreenSize.y / 2f, 0f);
+                    handle.transform.localScale = new Vector3(ScreenSize.x * 0.8f, ScreenSize.y / 15f, ScreenSize.y / 15f);
+                    break;
+            }
+        }
+
+        public enum Side
+        {
+            Left, Right, Bottom, Top
+        }
     }
 }
