@@ -94,7 +94,7 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
 
             SetMainCameraToCanvas setCamera = screen.GetComponent<SetMainCameraToCanvas>();
             setCamera.SetPrivateField("_canvas", canvas);
-            setCamera.SetPrivateField("_mainCamera", Resources.FindObjectsOfTypeAll<MainCamera>().FirstOrDefault());
+            setCamera.SetPrivateField("_mainCamera", Resources.FindObjectsOfTypeAll<MainCamera>().First(camera => camera.camera.stereoTargetEye != StereoTargetEyeMask.None));
 
             screen.ScreenSize = screenSize;
             screen.transform.localScale = new Vector3(0.02f, 0.02f, 0.02f);
