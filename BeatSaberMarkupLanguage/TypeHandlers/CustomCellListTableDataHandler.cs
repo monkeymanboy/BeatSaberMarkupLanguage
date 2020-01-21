@@ -4,6 +4,7 @@ using BS_Utils.Utilities;
 using HMUI;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
 using static BeatSaberMarkupLanguage.BSMLParser;
@@ -43,7 +44,15 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             }
 
             if (componentType.data.TryGetValue("listDirection", out string listDirection))
+            {
+                //temp
+                FieldInfo fieldInfo = typeof(TableView).GetField("_tableType", BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
+                fieldInfo.SetValue(tableData.tableView, (TableType)Enum.Parse(typeof(TableType), listDirection));
+                //
+                /*                 
                 tableData.tableView.SetPrivateField("_tableType", (TableType)Enum.Parse(typeof(TableType), listDirection));
+                */
+            }
 
             if (componentType.data.TryGetValue("cellSize", out string cellSize))
                 tableData.cellSize = Parse.Float(cellSize);
@@ -70,7 +79,6 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                     break;
                 case TableType.Horizontal:
                     (componentType.component.gameObject.transform as RectTransform).sizeDelta = new Vector2(tableData.cellSize * (componentType.data.TryGetValue("visibleCells", out string hVisibleCells) ? Parse.Float(hVisibleCells) : 4), componentType.data.TryGetValue("listHeight", out string hListHeight) ? Parse.Float(hListHeight) : 40);
-                    tableData.tableView.contentTransform.anchorMin = new Vector2(0.5f, 0);
                     break;
             }
 
@@ -80,7 +88,13 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 
             if (componentType.data.TryGetValue("id", out string id))
             {
+                //temp
+                FieldInfo fieldInfo = typeof(TableView).GetField("_scroller", BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
+                TableViewScroller scroller = fieldInfo.GetValue(tableData.tableView) as TableViewScroller;
+                //
+                /*
                 TableViewScroller scroller = tableData.tableView.GetPrivateField<TableViewScroller>("_scroller");
+                */
                 parserParams.AddEvent(id + "#PageUp", scroller.PageScrollUp);
                 parserParams.AddEvent(id + "#PageDown", scroller.PageScrollDown);
             }

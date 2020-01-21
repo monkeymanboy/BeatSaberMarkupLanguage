@@ -13,7 +13,7 @@ namespace BeatSaberMarkupLanguage.Tags
 
         public override GameObject CreateObject(Transform parent)
         {
-            TextSegmentedControl prefab = Resources.FindObjectsOfTypeAll<TextSegmentedControl>().First(x => x.transform.parent.name == "PlayerStatisticsViewController");
+            TextSegmentedControl prefab = Resources.FindObjectsOfTypeAll<TextSegmentedControl>().First(x => x.transform.parent.name == "PlayerStatisticsViewController" && x.GetPrivateField<DiContainer>("_container") != null);
             TextSegmentedControl textSegmentedControl = MonoBehaviour.Instantiate(prefab, parent, false);
             textSegmentedControl.name = "BSMLTabSelector";
             textSegmentedControl.SetPrivateField("_container", prefab.GetPrivateField<DiContainer>("_container"));

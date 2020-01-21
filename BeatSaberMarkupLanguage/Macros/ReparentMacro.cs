@@ -13,6 +13,7 @@ namespace BeatSaberMarkupLanguage.Macros
         public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
         {
             { "transform", new[]{"transform"} },
+            { "transforms", new[]{"transforms"} }
         };
 
         public override void Execute(XmlNode node, GameObject parent, Dictionary<string, string> data, BSMLParserParams parserParams)
@@ -22,6 +23,13 @@ namespace BeatSaberMarkupLanguage.Macros
                 if (!parserParams.values.TryGetValue(transformId, out BSMLValue value))
                     throw new Exception("transform '" + transformId + "' not found");
                 (value.GetValue() as Transform).SetParent(parent.transform, false);
+            }
+            if (data.TryGetValue("transforms", out string transformsId))
+            {
+                if (!parserParams.values.TryGetValue(transformsId, out BSMLValue value))
+                    throw new Exception("transform list '" + transformsId + "' not found");
+                foreach(Transform transform in value.GetValue() as List<Transform>)
+                    transform.SetParent(parent.transform, false);
             }
         }
     }

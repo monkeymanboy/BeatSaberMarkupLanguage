@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using UnityEngine;
 
@@ -50,6 +51,21 @@ namespace BeatSaberMarkupLanguage.Parser
                 return list;
             else
                 return new List<GameObject>();
+        }
+
+        private void AddObjectsToTag(string tag, List<GameObject> gameObjects)
+        {
+            if (objectsWithTag.TryGetValue(tag, out List<GameObject> list))
+                list.AddRange(gameObjects);
+            else
+                objectsWithTag.Add(tag, gameObjects);
+        }
+        public void PassTaggedObjects(BSMLParserParams parserParams)
+        {
+            foreach(KeyValuePair<string, List<GameObject>> pair in objectsWithTag)
+            {
+                parserParams.AddObjectsToTag(pair.Key, pair.Value);
+            }
         }
     }
 }

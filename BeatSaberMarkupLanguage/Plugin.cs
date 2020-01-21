@@ -1,9 +1,12 @@
 ﻿using BeatSaberMarkupLanguage.Settings;
 using BeatSaberMarkupLanguage.ViewControllers;
 using BS_Utils.Utilities;
+using Harmony;
 using IPA;
+using System;
 using System.Collections;
 using System.Linq;
+using System.Reflection;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using IPALogger = IPA.Logging.Logger;
@@ -15,16 +18,28 @@ namespace BeatSaberMarkupLanguage
         public static Config config;
         public void Init(IPALogger logger)
         {
+            try
+            {
+                HarmonyInstance harmony = HarmonyInstance.Create("com.monkeymanboy.BeatSaberMarkupLanguage");
+                harmony.PatchAll(Assembly.GetExecutingAssembly());
+            }
+            catch (Exception e)
+            {
+                Logger.log.Error(e.Message);
+            }
+
             Logger.log = logger;
             BSEvents.menuSceneLoadedFresh += MenuLoadFresh;
             config = new Config("BSML");
         }
         public void MenuLoadFresh()
         {
+            //GameplaySetup.GameplaySetup.instance.AddTab("Test", "BeatSaberMarkupLanguage.Views.gameplay-setup-test.bsml", GameplaySetupTest.instance);
             //BSMLSettings.instance.AddSettingsMenu("Test", "BeatSaberMarkupLanguage.Views.settings-test.bsml", SettingsTest.instance);
             //Resources.FindObjectsOfTypeAll<GameScenesManager>().FirstOrDefault().StartCoroutine(PresentTest());
             BSMLSettings.instance.Setup();
             MenuButtons.MenuButtons.instance.Setup();
+            GameplaySetup.GameplaySetup.instance.Setup();
         }
 
         public void OnSceneLoaded(Scene scene, LoadSceneMode sceneMode) { }

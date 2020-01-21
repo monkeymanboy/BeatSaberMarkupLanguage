@@ -12,7 +12,7 @@ namespace BeatSaberMarkupLanguage.Tags
 
         public override GameObject CreateObject(Transform parent)
         {
-            TextSegmentedControl prefab = Resources.FindObjectsOfTypeAll<TextSegmentedControl>().First(x => x.name == "BeatmapDifficultySegmentedControl");
+            TextSegmentedControl prefab = Resources.FindObjectsOfTypeAll<TextSegmentedControl>().First(x => x.name == "BeatmapDifficultySegmentedControl" && x.GetPrivateField<DiContainer>("_container") != null);
             TextSegmentedControl textSegmentedControl = MonoBehaviour.Instantiate(prefab, parent, false);
             textSegmentedControl.name = "BSMLTextSegmentedControl";
             textSegmentedControl.SetPrivateField("_container", prefab.GetPrivateField<DiContainer>("_container"));
