@@ -18,6 +18,7 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
         protected Quaternion _grabRot;
         protected Vector3 _realPos;
         protected Quaternion _realRot;
+        protected bool _isFpfc;
 
         public Action<Vector3, Quaternion> OnGrab;
         public Action<Vector3, Quaternion> OnRelease;
@@ -29,6 +30,7 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
             _realPos = floatingScreen.transform.position;
             _realRot = floatingScreen.transform.rotation;
             _vrPointer = GetComponent<VRPointer>();
+            _isFpfc = Environment.CommandLine.Contains("fpfc");
         }
 
         protected virtual void Update()
@@ -47,7 +49,8 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
                     }
                 }
 
-            if (_grabbingController == null || _grabbingController.triggerValue > 0.9f) return;
+            if (_grabbingController == null || !_isFpfc && _grabbingController.triggerValue > 0.9f ||
+                _isFpfc && Input.GetMouseButton(0)) return;
             _grabbingController = null;
             OnRelease?.Invoke(_floatingScreen.transform.position, _floatingScreen.transform.rotation);
         }
