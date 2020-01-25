@@ -112,7 +112,10 @@ namespace BeatSaberMarkupLanguage.Components
                 case ListStyle.List:
                     LevelListTableCell tableCell = GetTableCell();
                     if (expandCell)
+                    {
                         tableCell.GetPrivateField<TextMeshProUGUI>("_songNameText").rectTransform.anchorMax = new Vector3(2, 1, 0);
+                        tableCell.GetPrivateField<TextMeshProUGUI>("_authorText").rectTransform.anchorMax = new Vector3(2, 1, 0);
+                    }
 
                     tableCell.GetPrivateField<TextMeshProUGUI>("_songNameText").text = data[idx].text;
                     tableCell.GetPrivateField<TextMeshProUGUI>("_authorText").text = data[idx].subtext;
