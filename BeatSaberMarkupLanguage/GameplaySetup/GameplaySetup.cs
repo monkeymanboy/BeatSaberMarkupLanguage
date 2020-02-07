@@ -22,6 +22,7 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
             if (menus.Count == 0) return;
             gameplaySetupViewController = Resources.FindObjectsOfTypeAll<GameplaySetupViewController>().First();
             gameplaySetupViewController.transform.Find("HeaderPanel").GetComponentInChildren<TextMeshProUGUI>().fontSize = 4;
+            vanillaItems.Clear();
             foreach(Transform transform in gameplaySetupViewController.transform)
             {
                 if (transform.name != "HeaderPanel")
