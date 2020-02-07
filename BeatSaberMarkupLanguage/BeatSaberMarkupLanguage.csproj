@@ -179,6 +179,7 @@
     <Compile Include="Tags\ModalKeyboardTag.cs" />
     <Compile Include="Tags\ModalTag.cs" />
     <Compile Include="Tags\PageButtonTag.cs" />
+    <Compile Include="Tags\HSVPanelTag.cs" />
     <Compile Include="Tags\RGBPanelTag.cs" />
     <Compile Include="Tags\ScrollableSettingsContainerTag.cs" />
     <Compile Include="Tags\SettingsContainerTag.cs" />
@@ -221,6 +222,7 @@
     <Compile Include="TypeHandlers\ModalViewHandler.cs" />
     <Compile Include="TypeHandlers\PageButtonHandler.cs" />
     <Compile Include="TypeHandlers\RectTransformHandler.cs" />
+    <Compile Include="TypeHandlers\HSVPanelHandler.cs" />
     <Compile Include="TypeHandlers\RGBPanelHandler.cs" />
     <Compile Include="TypeHandlers\Settings\DropDownListSettingHandler.cs" />
     <Compile Include="TypeHandlers\Settings\GenericSettingHandler.cs" />

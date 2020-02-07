@@ -3,16 +3,16 @@ using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.Tags
 {
-    public class RGBPanelTag : BSMLTag
+    public class HSVPanelTag : BSMLTag
     {
-        public override string[] Aliases => new[] { "rgb-sliders" };
+        public override string[] Aliases => new[] { "hsv-wheel" };
 
         public override GameObject CreateObject(Transform parent)
         {
-            RGBPanelController controller = Object.Instantiate(Resources.FindObjectsOfTypeAll<RGBPanelController>().Last(x => x.name == "RGBColorPicker"), parent, false);
+            HSVPanelController controller = Object.Instantiate(Resources.FindObjectsOfTypeAll<HSVPanelController>().Last(x => x.name == "HSVColorPicker"), parent, false);
             if (controller == null)
                 return null;
-            controller.name = "BSMLRGBPanel";
+            controller.name = "BSMLHSVPanel";
             controller.gameObject.transform.localPosition = Vector2.zero;
             (controller.gameObject.transform as RectTransform).anchoredPosition = Vector2.zero;
             return controller.gameObject;
