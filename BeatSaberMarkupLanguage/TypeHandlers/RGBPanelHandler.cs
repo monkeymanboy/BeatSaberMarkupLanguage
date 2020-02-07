@@ -1,5 +1,4 @@
 ﻿using BeatSaberMarkupLanguage.Parser;
-using BeatSaberMarkupLanguage.Tags;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,8 +14,6 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "onChange", new[]{ "on-change" } },
         };
 
-
-
         public override void HandleType(BSMLParser.ComponentTypeWithData componentType, BSMLParserParams parserParams)
         {
             try
@@ -26,8 +23,6 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 {
                     ColorUtility.TryParseHtmlString(colorStr, out Color color);
                     rgbPanel.color = color;
-                    rgbPanel.RefreshSlidersColors();
-                    rgbPanel.RefreshSlidersValues();
                 }
                 if (componentType.data.TryGetValue("onChange", out string onChange))
                 {
