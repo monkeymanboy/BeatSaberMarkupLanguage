@@ -211,6 +211,29 @@ namespace BeatSaberMarkupLanguage
 
         public class GifUtilities
         {
+            private static AssetBundle _assets = null;
+            private static AssetBundle Assets
+            {
+                get
+                {
+                    if (!_assets)
+                        _assets = AssetBundle.LoadFromMemory(GetResource(Assembly.GetExecutingAssembly(), "BeatSaberMarkupLanguage.Resources.Assets"));
+                    return _assets;
+                }
+            }
+
+            private static Material _cropMaterial = null;
+            public static Material CropMaterial
+            {
+                get
+                {
+                    if (!_cropMaterial)
+                        _cropMaterial = new Material(Assets.LoadAsset<Shader>("Crop"));
+                    return _cropMaterial;
+                }
+            }
+
+
             public class GifInfo
             {
                 public List<FrameInfo> frames = new List<FrameInfo>();
