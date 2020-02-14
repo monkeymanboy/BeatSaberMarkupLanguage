@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace BeatSaberMarkupLanguage.Animations.Chunks
+namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
 {
     /// <summary>
     /// Other PNG chunks.

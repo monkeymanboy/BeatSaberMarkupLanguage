@@ -3,7 +3,7 @@ using System.IO;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System;
-using BeatSaberMarkupLanguage.Animations.Chunks;
+using BeatSaberMarkupLanguage.Animations.APNG.Chunks;
 
 namespace BeatSaberMarkupLanguage.Animations
 {

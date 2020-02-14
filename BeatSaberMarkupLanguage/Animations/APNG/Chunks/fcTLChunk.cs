@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System;
 
-namespace BeatSaberMarkupLanguage.Animations.Chunks
+namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
 {
     /// <summary>
     /// Enumeration of dispose operations.

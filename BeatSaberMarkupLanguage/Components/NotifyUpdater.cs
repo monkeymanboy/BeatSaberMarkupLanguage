@@ -14,8 +14,6 @@ namespace BeatSaberMarkupLanguage.Components
             get { return _notifyHost; }
             set
             {
-                if (_notifyHost == value)
-                    return;
                 if (_notifyHost != null)
                 {
                     _notifyHost.PropertyChanged -= NotifyHost_PropertyChanged;

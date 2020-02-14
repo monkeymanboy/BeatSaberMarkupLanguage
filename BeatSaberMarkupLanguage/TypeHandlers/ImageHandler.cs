@@ -1,4 +1,4 @@
-﻿using BeatSaberMarkupLanguage.Components;
+﻿using BeatSaberMarkupLanguage.Animations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +26,10 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 
         public void SetImage(Image image, string imagePath)
         {
+            AnimationStateUpdater oldStateUpdater = image.GetComponent<AnimationStateUpdater>();
+            if(oldStateUpdater != null)
+                MonoBehaviour.Destroy(oldStateUpdater);
+
             if (imagePath.StartsWith("#"))
             {
                 string imgName = imagePath.Substring(1);
@@ -38,62 +42,31 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                     Logger.log.Error($"Could not find Texture with image name {imgName}");
                 }
             }
-            else if (imagePath.EndsWith(".gif"))
+            else if (imagePath.EndsWith(".gif") || imagePath.EndsWith(".apng"))
             {
-                try
+                AnimationStateUpdater stateUpdater = image.gameObject.AddComponent<AnimationStateUpdater>();
+                stateUpdater.image = image;
+
+                if (AnimationController.instance.IsRegistered(imagePath))
+                {
+                    stateUpdater.controllerData = AnimationController.instance.GetAnimationControllerData(imagePath);
+                }
+                else
                 {
                     Utilities.AssemblyFromPath(imagePath, out Assembly asm, out string newPath);
-                    byte[] gifE = Utilities.GetResource(asm, newPath);
+                    byte[] data = Utilities.GetResource(asm, newPath);
 
-                    SharedCoroutineStarter.instance.StartCoroutine(Animations.GIF.AnimationDecoder.Process(gifE, (Texture2D tex, Rect[] uvs, float[] delays, bool consistent, int width, int height) =>
+                    AnimationLoader.Process(imagePath.EndsWith(".gif") ? AnimationType.GIF : AnimationType.APNG, data, (Texture2D tex, Rect[] uvs, float[] delays, int width, int height) =>
                     {
-                        var t = Animations.AnimationController.Instance.Register(tex, uvs, delays);
-                        image.sprite = t.sprite;
-                        image.material = t.animMaterial;
-
-                        //The ol' switcheroo!
-                        image.preserveAspect = !image.preserveAspect;
-
-                        t.IncRefs();
-                    }));
-                }
-                catch
-                {
-                    Logger.log.Error($"Could not find GIF with name {imagePath} in resources!");
-                }
-            }
-            else if ((imagePath.StartsWith("@") && imagePath.EndsWith(".png")) || imagePath.EndsWith(".apng"))
-            {
-                try
-                {
-                    string imgName = imagePath;
-                    if (imagePath.StartsWith("@"))
-                        imgName = imagePath.Substring(1);
-                    Utilities.AssemblyFromPath(imgName, out Assembly asm, out string newPath);
-                    byte[] apngE = Utilities.GetResource(asm, newPath);
-
-                    
-                    SharedCoroutineStarter.instance.StartCoroutine(Animations.APNGUnityDecoder.Process(Animations.APNG.FromStream(new System.IO.MemoryStream(apngE)), (Texture2D tex, Rect[] uvs, float[] delays, int width, int height) =>
-                    {
-                        //oh god this wont work
-                        var t = Animations.AnimationController.Instance.Register(tex, uvs, delays);
-                        image.sprite = t.sprite;
-                        image.material = t.animMaterial;
-
-                        //The ol' switcheroo!
-                        image.preserveAspect = !image.preserveAspect;
-
-                        t.IncRefs();
-                    }));
-                }
-                catch
-                {
-                    Logger.log.Error($"Could not find APNG with name {imagePath} in resources!");
+                        AnimationControllerData controllerData = AnimationController.instance.Register(imagePath, tex, uvs, delays);
+                        stateUpdater.controllerData = controllerData;
+                    });
                 }
             }
             else
             {
                 image.sprite = Utilities.FindSpriteInAssembly(imagePath);
+                image.sprite.texture.wrapMode = TextureWrapMode.Clamp;
             }
         }
     }

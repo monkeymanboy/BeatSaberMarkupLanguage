@@ -2,6 +2,7 @@
 using BeatSaberMarkupLanguage.Parser;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace BeatSaberMarkupLanguage
 {
@@ -24,6 +25,9 @@ namespace BeatSaberMarkupLanguage
 
         [UIValue("string-value")]
         private string testString = "Shazam";
+
+        [UIValue("color-value")]
+        private Color testColor = Color.yellow;
 
         [UIAction("#apply")]
         public void OnApply()

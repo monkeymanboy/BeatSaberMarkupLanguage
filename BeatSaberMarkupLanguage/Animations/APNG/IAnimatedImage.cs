@@ -1,5 +1,4 @@
-﻿using BeatSaberMarkupLanguage.Animations.Chunks;
-using System;
+﻿using BeatSaberMarkupLanguage.Animations.APNG.Chunks;
 using System.Drawing;
 
 namespace BeatSaberMarkupLanguage.Animations
