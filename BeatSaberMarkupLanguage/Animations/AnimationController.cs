@@ -31,10 +31,5 @@ namespace BeatSaberMarkupLanguage.Animations
                 if (animation.IsPlaying == true)
                     animation.CheckFrame(now);
         }
-
-        public void UnregisterAll()
-        {
-            registeredAnimations.Clear();
-        }
     }
 }
