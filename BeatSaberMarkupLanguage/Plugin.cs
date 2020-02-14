@@ -27,7 +27,7 @@ namespace BeatSaberMarkupLanguage
             {
                 Logger.log.Error(e.Message);
             }
-
+            
             Logger.log = logger;
             BSEvents.menuSceneLoadedFresh += MenuLoadFresh;
             config = new Config("BSML");

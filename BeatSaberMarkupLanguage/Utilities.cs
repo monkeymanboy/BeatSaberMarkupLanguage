@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage
 {
@@ -17,7 +16,7 @@ namespace BeatSaberMarkupLanguage
             get
             {
                 if (!_editIcon)
-                    _editIcon = Resources.FindObjectsOfTypeAll<Image>().First(x => x.sprite?.name == "EditIcon").sprite;
+                    _editIcon = Resources.FindObjectsOfTypeAll<UnityEngine.UI.Image>().First(x => x.sprite?.name == "EditIcon").sprite;
 
                 return _editIcon;
             }
@@ -195,7 +194,7 @@ namespace BeatSaberMarkupLanguage
 
         public static byte[] GetResource(Assembly asm, string ResourceName)
         {
-            System.IO.Stream stream = asm.GetManifestResourceStream(ResourceName);
+            Stream stream = asm.GetManifestResourceStream(ResourceName);
             byte[] data = new byte[stream.Length];
             stream.Read(data, 0, (int)stream.Length);
             return data;

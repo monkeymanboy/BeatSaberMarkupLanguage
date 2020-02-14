@@ -43,10 +43,7 @@ namespace BeatSaberMarkupLanguage.Settings
             isInitialized = true;
         }
 
-        private void Awake()
-        {
-            DontDestroyOnLoad(this.gameObject);
-        }
+        private void Awake() => DontDestroyOnLoad(this.gameObject);
         
         public void AddSettingsMenu(string name, string resource, object host)
         {
@@ -60,7 +57,13 @@ namespace BeatSaberMarkupLanguage.Settings
             if(isInitialized)
                 settingsMenu.Setup();
             button?.gameObject.SetActive(true);
+        }
 
+        public void RemoveSettingsMenu(object host)
+        {
+            IEnumerable<CustomCellInfo> menu = settingsMenus.Where(x => (x as SettingsMenu).host == host);
+            if (menu.Count() > 0)
+                settingsMenus.Remove(menu.FirstOrDefault());
         }
 
         private IEnumerator AddButtonToMainScreen()

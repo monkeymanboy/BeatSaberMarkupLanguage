@@ -65,7 +65,17 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 tableData.expandCell = Parse.Bool(expandCell);
 
             if (componentType.data.TryGetValue("alignCenter", out string alignCenter))
-                tableData.tableView.SetPrivateField("_alignToCenter", Parse.Bool(alignCenter));
+            {
+
+                //temp
+                FieldInfo fieldInfo = typeof(TableView).GetField("_alignToCenter", BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
+                fieldInfo.SetValue(tableData.tableView, Parse.Bool(alignCenter));
+                //
+                /*
+                 * tableData.tableView.SetPrivateField("_alignToCenter", Parse.Bool(alignCenter));
+                */
+            }
+
 
             if (componentType.data.TryGetValue("data", out string value))
             {
