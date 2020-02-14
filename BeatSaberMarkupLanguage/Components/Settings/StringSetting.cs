@@ -12,10 +12,16 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         public RectTransform boundingBox;
         public ModalKeyboard modalKeyboard;
 
+        private string currentValue;
+
         public string Text
         {
-            get => text.text;
-            set => text.text = value;
+            get => currentValue;
+            set
+            {
+                currentValue = value;
+                text.text = formatter == null ? value : formatter.Invoke(value) as string;
+            }
         }
 
         void Update()//TODO: Remove need for this to be called in Update
