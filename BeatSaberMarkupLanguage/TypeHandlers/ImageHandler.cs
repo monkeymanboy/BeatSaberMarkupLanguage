@@ -27,7 +27,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
         public void SetImage(Image image, string imagePath)
         {
             AnimationStateUpdater oldStateUpdater = image.GetComponent<AnimationStateUpdater>();
-            if(oldStateUpdater != null)
+            if (oldStateUpdater != null)
                 MonoBehaviour.Destroy(oldStateUpdater);
 
             if (imagePath.StartsWith("#"))
@@ -53,20 +53,22 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 }
                 else
                 {
-                    Utilities.AssemblyFromPath(imagePath, out Assembly asm, out string newPath);
-                    byte[] data = Utilities.GetResource(asm, newPath);
-
-                    AnimationLoader.Process(imagePath.EndsWith(".gif") ? AnimationType.GIF : AnimationType.APNG, data, (Texture2D tex, Rect[] uvs, float[] delays, int width, int height) =>
-                    {
-                        AnimationControllerData controllerData = AnimationController.instance.Register(imagePath, tex, uvs, delays);
-                        stateUpdater.controllerData = controllerData;
+                    Utilities.GetData(imagePath, (byte[] data) => {
+                        AnimationLoader.Process(imagePath.EndsWith(".gif") ? AnimationType.GIF : AnimationType.APNG, data, (Texture2D tex, Rect[] uvs, float[] delays, int width, int height) =>
+                        {
+                            AnimationControllerData controllerData = AnimationController.instance.Register(imagePath, tex, uvs, delays);
+                            stateUpdater.controllerData = controllerData;
+                        });
                     });
                 }
             }
             else
             {
-                image.sprite = Utilities.FindSpriteInAssembly(imagePath);
-                image.sprite.texture.wrapMode = TextureWrapMode.Clamp;
+                Utilities.GetData(imagePath, (byte[] data) =>
+                {
+                    image.sprite = Utilities.LoadSpriteRaw(data);
+                    image.sprite.texture.wrapMode = TextureWrapMode.Clamp;
+                });
             }
         }
     }

@@ -35,7 +35,10 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             }
             else
             {
-                image.texture = Utilities.FindTextureInAssembly(imagePath);
+                Utilities.GetData(imagePath, (byte[] data) =>
+                {
+                    image.texture = Utilities.LoadTextureRaw(data);
+                });
             }
 
         }

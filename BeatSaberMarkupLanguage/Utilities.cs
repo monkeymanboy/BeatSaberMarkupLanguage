@@ -199,5 +199,30 @@ namespace BeatSaberMarkupLanguage
             stream.Read(data, 0, (int)stream.Length);
             return data;
         }
+
+        /// <summary>
+        /// Get data from either a resource path or a file path
+        /// </summary>
+        /// <param name="location">Resource path or file path. May need to prefix resource paths with 'AssemblyName:'</param>
+        /// <param name="callback">Received data</param>
+        public static void GetData(string location, Action<byte[]> callback)
+        {
+            try
+            {
+                if (File.Exists(location))
+                {
+                    callback?.Invoke(File.ReadAllBytes(location));
+                }
+                else
+                {
+                    AssemblyFromPath(location, out Assembly asm, out string newPath);
+                    callback?.Invoke(GetResource(asm, newPath));
+                }
+            }
+            catch
+            {
+                Logger.log.Error($"Error getting data from '{location}' either invalid path or file does not exist");
+            }
+        }
     }
 }

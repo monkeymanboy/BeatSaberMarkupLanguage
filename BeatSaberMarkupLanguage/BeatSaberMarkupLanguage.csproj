@@ -287,6 +287,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Views\gameplay-setup-test.bsml" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\testmonkey.gif" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy "$(TargetPath)" "$(BeatSaberDir)\Plugins"
