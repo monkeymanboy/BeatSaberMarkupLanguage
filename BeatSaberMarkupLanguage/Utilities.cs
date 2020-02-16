@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace BeatSaberMarkupLanguage
 {
@@ -201,15 +203,19 @@ namespace BeatSaberMarkupLanguage
         }
 
         /// <summary>
-        /// Get data from either a resource path or a file path
+        /// Get data from either a resource path, a file path, or a url
         /// </summary>
-        /// <param name="location">Resource path or file path. May need to prefix resource paths with 'AssemblyName:'</param>
+        /// <param name="location">Resource path, file path, or url. May need to prefix resource paths with 'AssemblyName:'</param>
         /// <param name="callback">Received data</param>
         public static void GetData(string location, Action<byte[]> callback)
         {
             try
             {
-                if (File.Exists(location))
+                if (location.StartsWith("http://") || location.StartsWith("https://"))
+                {
+                    SharedCoroutineStarter.instance.StartCoroutine(GetWebDataCoroutine(location, callback));
+                }
+                else if (File.Exists(location))
                 {
                     callback?.Invoke(File.ReadAllBytes(location));
                 }
@@ -222,6 +228,21 @@ namespace BeatSaberMarkupLanguage
             catch
             {
                 Logger.log.Error($"Error getting data from '{location}' either invalid path or file does not exist");
+            }
+        }
+
+        private static IEnumerator GetWebDataCoroutine(string url, Action<byte[]> callback)
+        {
+            UnityWebRequest www = UnityWebRequest.Get(url);
+            yield return www.SendWebRequest();
+
+            if (www.isNetworkError || www.isHttpError)
+            {
+                Logger.log.Debug($"Error getting data from {url}, Message:{www.error}");
+            }
+            else
+            {
+                callback?.Invoke(www.downloadHandler.data);
             }
         }
     }

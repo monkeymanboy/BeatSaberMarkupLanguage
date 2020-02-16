@@ -11,11 +11,7 @@ namespace BeatSaberMarkupLanguage.Components
         {
             if (image == null)
                 return;
-
-            Utilities.GetData(path, (byte[] data) =>
-            {
-                image.sprite = Utilities.LoadSpriteRaw(data);
-            });
+            image.SetImage(path);
         }
     }
 }

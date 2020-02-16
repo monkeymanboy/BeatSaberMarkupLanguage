@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.Animations
@@ -7,6 +8,7 @@ namespace BeatSaberMarkupLanguage.Animations
     public class AnimationController : PersistentSingleton<AnimationController>
     {
         private Dictionary<string, AnimationControllerData> registeredAnimations = new Dictionary<string, AnimationControllerData>();
+        public AnimationControllerData loadingAnimation;
         
         public AnimationControllerData Register(string identifier, Texture2D tex, Rect[] uvs, float[] delays)
         {
@@ -23,6 +25,14 @@ namespace BeatSaberMarkupLanguage.Animations
         }
         public bool IsRegistered(string identifier) => registeredAnimations.ContainsKey(identifier);
         public AnimationControllerData GetAnimationControllerData(string identifier) => registeredAnimations[identifier];
+        public void InitializeLoadingAnimation()
+        {
+            AnimationLoader.Process(AnimationType.APNG, Utilities.GetResource(Assembly.GetExecutingAssembly(), "BeatSaberMarkupLanguage.Resources.loading.apng"), (Texture2D tex, Rect[] uvs, float[] delays, int width, int height) =>
+            {
+                loadingAnimation = new AnimationControllerData(tex, uvs, delays);
+                registeredAnimations.Add("LOADING_ANIMATION", loadingAnimation);
+            });
+        }
 
         public void Update()
         {

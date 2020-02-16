@@ -1,4 +1,5 @@
-﻿using BeatSaberMarkupLanguage.Settings;
+﻿using BeatSaberMarkupLanguage.Animations;
+using BeatSaberMarkupLanguage.Settings;
 using BeatSaberMarkupLanguage.ViewControllers;
 using BS_Utils.Utilities;
 using Harmony;
@@ -27,7 +28,7 @@ namespace BeatSaberMarkupLanguage
             {
                 Logger.log.Error(e.Message);
             }
-            
+            AnimationController.instance.InitializeLoadingAnimation();
             Logger.log = logger;
             BSEvents.menuSceneLoadedFresh += MenuLoadFresh;
             config = new Config("BSML");

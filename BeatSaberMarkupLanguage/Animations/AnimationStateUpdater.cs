@@ -11,8 +11,12 @@ namespace BeatSaberMarkupLanguage.Animations
             get => _controllerData;
             set
             {
+                if(_controllerData != null)
+                {
+                    OnDisable();
+                }
                 _controllerData = value;
-                if (enabled)
+                if (isActiveAndEnabled)
                 {
                     OnEnable();
                 }

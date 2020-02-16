@@ -15,11 +15,7 @@ namespace BeatSaberMarkupLanguage.Components
                 image = GetComponentsInChildren<Image>().FirstOrDefault(x => x.name == "BGArtwork");
             if (image == null)
                 throw new Exception("Unable to find BG artwork image!");
-
-            Utilities.GetData(path, (byte[] data) =>
-            {
-                image.sprite = Utilities.LoadSpriteRaw(data);
-            });
+            image.SetImage(path);
         }
     }
 }
