@@ -61,7 +61,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                         action.Invoke(obj, pair.Value);
                         if (componentType.propertyMap != null && componentType.propertyMap.TryGetValue(pair.Key, out BSMLPropertyValue prop))
                         {
-                            updater?.AddAction(prop.propertyInfo.Name, val => action.Invoke(obj, val.ToString()));
+                            updater?.AddAction(prop.propertyInfo.Name, val => action.Invoke(obj, val.InvariantToString()));
                         }
                     }
                 }

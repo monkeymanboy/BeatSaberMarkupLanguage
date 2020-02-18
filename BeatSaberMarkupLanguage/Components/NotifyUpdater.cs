@@ -30,13 +30,9 @@ namespace BeatSaberMarkupLanguage.Components
         private void NotifyHost_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             PropertyInfo prop = sender.GetType().GetProperty(e.PropertyName);
-            string val = string.Empty;
             Action<object> action = null;
             if (ActionDict?.TryGetValue(e.PropertyName, out action) ?? false)
-            {
-                val = prop.GetValue(sender).ToString();
                 action?.Invoke(prop.GetValue(sender));
-            }
         }
 
         private Dictionary<string, Action<object>> _actionDict;
