@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Xml;
+using System.Globalization;
 using UnityEngine;
 
 namespace BeatSaberMarkupLanguage
@@ -262,7 +263,7 @@ namespace BeatSaberMarkupLanguage
                             string valueID = value.Substring(1);
                             if (!parserParams.values.TryGetValue(valueID, out BSMLValue uiValue))
                                 throw new Exception("No UIValue exists with the id '" + valueID + "'");
-                            parameters.Add(propertyAliases.Key, uiValue.GetValue()?.ToString());
+                            parameters.Add(propertyAliases.Key, uiValue.GetValue()?.InvariantToString());
                             if (isNotifyHost && uiValue is BSMLPropertyValue propVal)
                                 if (propVal != null)
                                     propertyMap.Add(propertyAliases.Key, propVal);

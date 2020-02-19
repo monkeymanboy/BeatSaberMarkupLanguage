@@ -1,56 +1,56 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.Animations
 {
     public class AnimationControllerData
     {
         public Sprite sprite;
+
         public int uvIndex = 0;
         public DateTime lastSwitch = DateTime.UtcNow;
         public Rect[] uvs;
         public float[] delays;
-        public int RefCtr { get; private set; } = 0;
+        public Sprite[] sprites;
         public bool IsPlaying { get; set; } = true;
         public Material animMaterial;
 
-        public void IncRefs()
-        {
-            lock (this)
-            {
-                if (RefCtr == 0)
-                {
-                    uvIndex = 0;
-                    lastSwitch = DateTime.UtcNow;
-                }
-                RefCtr++;
-            }
-        }
-        public void DecRefs()
-        {
-            lock (this)
-            {
-                RefCtr--;
-                if (RefCtr < 0)
-                    RefCtr = 0;
-            }
-        }
-
+        public List<Image> activeImages = new List<Image>();
+        
         public AnimationControllerData(Texture2D tex, Rect[] uvs, float[] delays)
         {
-            if (animMaterial == null)
-            {
-                animMaterial = UnityEngine.Object.Instantiate(Utilities.GifUtilities.CropMaterial);
-                animMaterial.SetVector("_CropFactors", new Vector4(uvs[0].x, uvs[0].y, uvs[0].width, uvs[0].height));
-            }
-            animMaterial.mainTexture = tex;
+            sprites = new Sprite[uvs.Length];
+            for(int i = 0; i < uvs.Length; i++)
+                sprites[i] = Sprite.Create(tex, new Rect(uvs[i].x * tex.width, uvs[i].y * tex.height, uvs[i].width * tex.width, uvs[i].height * tex.height), new Vector2(0, 0), 100f);
+
             sprite = Utilities.LoadSpriteFromTexture(tex);
             this.uvs = uvs;
             this.delays = delays;
+        }
+
+        internal void CheckFrame(DateTime now)
+        {
+            if (activeImages.Count == 0)
+                return;
+            TimeSpan difference = now - lastSwitch;
+            if (difference.Milliseconds < delays[uvIndex])
+                return;
+
+            lastSwitch = now;
+            do
+            {
+                uvIndex++;
+                if (uvIndex >= uvs.Length)
+                    uvIndex = 0;
+            }
+            while (delays[uvIndex] == 0);
+
+            foreach (Image image in activeImages)
+            {
+                image.sprite = sprites[uvIndex];
+            }
         }
     }
 }

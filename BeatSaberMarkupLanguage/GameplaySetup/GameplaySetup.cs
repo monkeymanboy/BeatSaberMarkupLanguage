@@ -39,10 +39,12 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
             menus.Add(new GameplaySetupMenu(name, resource, host, Assembly.GetCallingAssembly()));
         }
 
+        /// <summary>Warning, for now it will not be removed until fresh menu scene reload</summary>
         public void RemoveTab(string name)
         {
-            if (menus.Any(x => (x as GameplaySetupMenu).name == name))
-                menus.Remove(menus.Where(x => (x as GameplaySetupMenu).name == name).First());
+            IEnumerable<object> menu = menus.Where(x => (x as GameplaySetupMenu).name == name);
+            if (menu.Count() > 0)
+                menus.Remove(menu.FirstOrDefault());
         }
     }
 }

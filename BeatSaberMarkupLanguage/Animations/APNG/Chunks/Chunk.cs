@@ -2,7 +2,7 @@
 using System.IO;
 using System.Text;
 
-namespace BeatSaberMarkupLanguage.Animations.Chunks
+namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
 {
     /// <summary>
     /// Base PNG Chunk object.

@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace BeatSaberMarkupLanguage.Animations.Chunks
+namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
 {
     /// <summary>
     /// IEND chunk representing the end of the PNG

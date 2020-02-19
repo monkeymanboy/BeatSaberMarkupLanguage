@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.Components
@@ -13,8 +11,7 @@ namespace BeatSaberMarkupLanguage.Components
         {
             if (image == null)
                 return;
-
-            image.sprite = Utilities.FindSpriteInAssembly(path);
+            image.SetImage(path);
         }
     }
 }

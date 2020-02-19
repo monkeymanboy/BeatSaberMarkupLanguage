@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace BeatSaberMarkupLanguage.Animations.Chunks
+namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
 {
     /// <summary>
     /// Animated PNG FDAT Chunk

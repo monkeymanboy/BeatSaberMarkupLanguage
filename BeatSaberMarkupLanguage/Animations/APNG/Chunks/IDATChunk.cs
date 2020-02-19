@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace BeatSaberMarkupLanguage.Animations.Chunks
+namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
 {
     /// <summary>
     /// Standard IDAT PNG image data chunk.
