@@ -196,6 +196,20 @@ namespace BeatSaberMarkupLanguage
             }
         }
 
+        /// <summary>
+        /// Sets an image mask.
+        /// </summary>
+        /// <param name="image">Image component to set the image to</param>
+        public static void SetImageMask(this Image image, string useMask)
+        {
+            bool mask = bool.TryParse(useMask, out bool doMask);
+            if (!mask || !doMask)
+                return;
+            image.gameObject.AddComponent<Mask>();
+            var tex = image.sprite.texture;
+            tex.mipMapBias = -5;
+        }
+
         #region FlowCoordinator Extensions
         public static void PresentFlowCoordinator(this FlowCoordinator current, FlowCoordinator flowCoordinator, Action finishedCallback = null, bool immediately = false, bool replaceTopViewController = false)
         {
