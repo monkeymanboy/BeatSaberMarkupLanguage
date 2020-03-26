@@ -6,7 +6,7 @@ namespace BeatSaberMarkupLanguage.Tags
 {
     public class RawImageTag : BSMLTag
     {
-        public override string[] Aliases => new[] { "image", "raw-image" };
+        public override string[] Aliases => new[] { "raw-image" };
 
         public override GameObject CreateObject(Transform parent)
         {

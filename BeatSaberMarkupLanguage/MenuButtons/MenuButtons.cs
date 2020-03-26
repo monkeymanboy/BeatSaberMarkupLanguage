@@ -1,7 +1,8 @@
 ﻿using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Notify;
 using BeatSaberMarkupLanguage.Parser;
-using BS_Utils.Utilities;
+using HMUI;
+using IPA.Utilities;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -40,7 +41,7 @@ namespace BeatSaberMarkupLanguage.MenuButtons
             releaseInfoViewController = Resources.FindObjectsOfTypeAll<ReleaseInfoViewController>().First();
             releaseInfoViewController.didDeactivateEvent -= OnDeactivate;
             releaseInfoViewController.didDeactivateEvent += OnDeactivate;
-            releaseNotesScrollView = releaseInfoViewController.GetPrivateField<TextPageScrollView>("_textPageScrollView").transform;
+            releaseNotesScrollView = releaseInfoViewController.GetField<TextPageScrollView, ReleaseInfoViewController>("_textPageScrollView").transform;
             BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), "BeatSaberMarkupLanguage.Views.main-left-screen.bsml"), releaseInfoViewController.gameObject, this);
             if (MenuPins.instance.rootObject == null)
                 MenuPins.instance.Setup();

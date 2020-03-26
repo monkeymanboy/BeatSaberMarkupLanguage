@@ -3,7 +3,7 @@ using BeatSaberMarkupLanguage.Parser;
 using HMUI;
 using System;
 using UnityEngine;
-using Image = UnityEngine.UI.Image;
+using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.Components
 {

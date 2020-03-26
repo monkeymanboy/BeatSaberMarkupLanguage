@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using BeatSaberMarkupLanguage.Parser;
-using BS_Utils.Utilities;
 using HMUI;
+using IPA.Utilities;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Image = UnityEngine.UI.Image;
 
 namespace BeatSaberMarkupLanguage.Components
 {
@@ -559,7 +558,7 @@ namespace BeatSaberMarkupLanguage.Components
 
                 HoverHint _MyHintText = mybutton.gameObject.AddComponent<HoverHint>();
                 _MyHintText.text = value;
-                _MyHintText.SetPrivateField("_hoverHintController", Resources.FindObjectsOfTypeAll<HoverHintController>().First());
+                _MyHintText.SetField("_hoverHintController", Resources.FindObjectsOfTypeAll<HoverHintController>().First());
             }
         }
     }

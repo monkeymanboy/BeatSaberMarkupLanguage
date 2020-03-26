@@ -1,5 +1,5 @@
-﻿using BS_Utils.Utilities;
-using HMUI;
+﻿using HMUI;
+using IPA.Utilities;
 using System.Linq;
 using UnityEngine;
 using Zenject;
@@ -12,10 +12,10 @@ namespace BeatSaberMarkupLanguage.Tags
 
         public override GameObject CreateObject(Transform parent)
         {
-            IconSegmentedControl prefab = Resources.FindObjectsOfTypeAll<IconSegmentedControl>().First(x => x.name == "BeatmapCharacteristicSegmentedControl" && x.GetPrivateField<DiContainer>("_container") != null);
+            IconSegmentedControl prefab = Resources.FindObjectsOfTypeAll<IconSegmentedControl>().First(x => x.name == "BeatmapCharacteristicSegmentedControl" && x.GetField<DiContainer, IconSegmentedControl>("_container") != null);
             IconSegmentedControl iconSegmentedControl = MonoBehaviour.Instantiate(prefab, parent, false);
             iconSegmentedControl.name = "BSMLIconSegmentedControl";
-            iconSegmentedControl.SetPrivateField("_container", prefab.GetPrivateField<DiContainer>("_container"));
+            iconSegmentedControl.SetField("_container", prefab.GetField<DiContainer, IconSegmentedControl>("_container"));
             (iconSegmentedControl.transform as RectTransform).anchoredPosition = new Vector2(0, 0);
             foreach (Transform transform in iconSegmentedControl.transform)
             {

@@ -1,10 +1,9 @@
 ﻿using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.Parser;
-using BS_Utils.Utilities;
 using HMUI;
+using IPA.Utilities;
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
 using static BeatSaberMarkupLanguage.BSMLParser;
@@ -45,15 +44,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             }
 
             if (componentType.data.TryGetValue("listDirection", out string listDirection))
-            {
-                //temp
-                FieldInfo fieldInfo = typeof(TableView).GetField("_tableType", BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
-                fieldInfo.SetValue(tableData.tableView, (TableType)Enum.Parse(typeof(TableType), listDirection));
-                //
-                /*                 
-                tableData.tableView.SetPrivateField("_tableType", (TableType)Enum.Parse(typeof(TableType), listDirection));
-                */
-            }
+                tableData.tableView.SetField<TableView, TableType>("_tableType", (TableType)Enum.Parse(typeof(TableType), listDirection));
 
             if (componentType.data.TryGetValue("listStyle", out string listStyle))
                 tableData.Style = (ListStyle)Enum.Parse(typeof(ListStyle), listStyle);
@@ -65,16 +56,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 tableData.expandCell = Parse.Bool(expandCell);
 
             if (componentType.data.TryGetValue("alignCenter", out string alignCenter))
-            {
-
-                //temp
-                FieldInfo fieldInfo = typeof(TableView).GetField("_alignToCenter", BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
-                fieldInfo.SetValue(tableData.tableView, Parse.Bool(alignCenter));
-                //
-                /*
-                 * tableData.tableView.SetPrivateField("_alignToCenter", Parse.Bool(alignCenter));
-                */
-            }
+                tableData.tableView.SetField<TableView, bool>("_alignToCenter", Parse.Bool(alignCenter));
 
 
             if (componentType.data.TryGetValue("data", out string value))
@@ -102,13 +84,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 
             if (componentType.data.TryGetValue("id", out string id))
             {
-                //temp
-                FieldInfo fieldInfo = typeof(TableView).GetField("_scroller", BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
-                TableViewScroller scroller = fieldInfo.GetValue(tableData.tableView) as TableViewScroller;
-                //
-                /*
-                TableViewScroller scroller = tableData.tableView.GetPrivateField<TableViewScroller>("_scroller");
-                */
+                TableViewScroller scroller = tableData.tableView.GetField<TableViewScroller, TableView>("_scroller");
                 parserParams.AddEvent(id + "#PageUp", scroller.PageScrollUp);
                 parserParams.AddEvent(id + "#PageDown", scroller.PageScrollDown);
             }

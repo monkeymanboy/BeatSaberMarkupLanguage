@@ -11,7 +11,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Xml;
-using System.Globalization;
 using UnityEngine;
 
 namespace BeatSaberMarkupLanguage
@@ -154,14 +153,6 @@ namespace BeatSaberMarkupLanguage
 
             if (!tags.TryGetValue(node.Name, out BSMLTag currentTag))
                 throw new Exception("Tag type '" + node.Name + "' not found");
-
-            //TEMPORARY
-            if (node.Name == "image")
-            {
-                for (int i = 0; i < 100; i++)
-                    Logger.log.Critical("do not use image tag for raw images please switch to raw-image");
-            }
-            //
 
             GameObject currentNode = currentTag.CreateObject(parent.transform);
 

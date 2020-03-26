@@ -1,5 +1,5 @@
-﻿using BS_Utils.Utilities;
-using HMUI;
+﻿using HMUI;
+using IPA.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,7 +46,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
         {
             HoverHint hover = rectTransform.gameObject.AddComponent<HoverHint>();
             hover.text = text;
-            hover.SetPrivateField("_hoverHintController", Resources.FindObjectsOfTypeAll<HoverHintController>().First());
+            hover.SetField("_hoverHintController", Resources.FindObjectsOfTypeAll<HoverHintController>().First());
         }
     }
 }

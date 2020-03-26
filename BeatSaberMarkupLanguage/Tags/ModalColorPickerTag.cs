@@ -2,7 +2,7 @@
 using HMUI;
 using System.Linq;
 using UnityEngine;
-using Image = UnityEngine.UI.Image;
+using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.Tags
 {

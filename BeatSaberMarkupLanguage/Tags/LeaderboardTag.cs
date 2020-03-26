@@ -1,4 +1,4 @@
-﻿using BS_Utils.Utilities;
+﻿using IPA.Utilities;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -13,7 +13,7 @@ namespace BeatSaberMarkupLanguage.Tags
         {
             LeaderboardTableView table = MonoBehaviour.Instantiate(Resources.FindObjectsOfTypeAll<LeaderboardTableView>().First(x => x.name == "LeaderboardTableView"), parent, false);
             table.name = "BSMLLeaderboard";
-            table.GetPrivateField<LeaderboardTableCell>("_cellPrefab").GetPrivateField<TextMeshProUGUI>("_scoreText").enableWordWrapping = false;
+            table.GetField<LeaderboardTableCell, LeaderboardTableView>("_cellPrefab").GetField<TextMeshProUGUI, LeaderboardTableCell>("_scoreText").enableWordWrapping = false;
             foreach (Transform child in table.transform.GetChild(0).GetChild(0)) //This is to ensure if a leaderboard with scores already on it gets cloned that old scores are cleared off
                 GameObject.Destroy(child.gameObject);
 

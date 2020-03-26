@@ -1,12 +1,12 @@
 ﻿using BeatSaberMarkupLanguage.Animations;
 using HMUI;
+using IPA.Utilities;
 using System;
 using System.Linq;
 using System.Reflection;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Image = UnityEngine.UI.Image;
 
 namespace BeatSaberMarkupLanguage
 {
@@ -25,6 +25,7 @@ namespace BeatSaberMarkupLanguage
                 return _mainFlowCoordinator;
             }
         }
+
         /// <summary>
         /// Creates a ViewController of type T, and marks it to not be destroyed.
         /// </summary>
@@ -50,11 +51,7 @@ namespace BeatSaberMarkupLanguage
         public static T CreateFlowCoordinator<T>() where T : FlowCoordinator
         {
             T flow = new GameObject("BSMLFlowCoordinator").AddComponent<T>();
-            //flow.SetPrivateField("_baseInputModule", MainFlowCoordinator.GetPrivateField<BaseInputModule>("_baseInputModule"));
-            //temp
-            FieldInfo fieldInfo = typeof(FlowCoordinator).GetField("_baseInputModule", BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
-            fieldInfo.SetValue(flow, fieldInfo.GetValue(MainFlowCoordinator));
-            //
+            flow.SetField<FlowCoordinator, BaseInputModule>("_baseInputModule", MainFlowCoordinator.GetField<BaseInputModule, FlowCoordinator>("_baseInputModule"));
             return flow;
         }
 

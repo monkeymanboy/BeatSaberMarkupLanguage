@@ -5,7 +5,6 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Image = UnityEngine.UI.Image;
 
 namespace BeatSaberMarkupLanguage.Tags
 {

@@ -1,4 +1,5 @@
-﻿using BS_Utils.Utilities;
+﻿using HMUI;
+using IPA.Utilities;
 using TMPro;
 using UnityEngine;
 
@@ -9,7 +10,7 @@ namespace BeatSaberMarkupLanguage.Components
         public TextPageScrollView scrollView;
         void OnEnable()
         {
-            scrollView?.SetText(scrollView.GetPrivateField<TextMeshProUGUI>("_text").text);
+            scrollView?.SetText(scrollView.GetField<TextMeshProUGUI, TextPageScrollView>("_text").text);
         }
     }
 }

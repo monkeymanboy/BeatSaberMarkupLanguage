@@ -1,10 +1,10 @@
 ﻿using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.Parser;
 using HMUI;
+using IPA.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using UnityEngine;
 using static BeatSaberMarkupLanguage.BSMLParser;
 
@@ -43,10 +43,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 
         private void SetSeparator(TabSelector tabSelector, string hasSeparator)
         {
-            //temp
-            FieldInfo fieldInfo = typeof(SegmentedControl).GetField("_separatorPrefab", BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
-            fieldInfo.SetValue(tabSelector.textSegmentedControl, Parse.Bool(hasSeparator) ? fieldInfo.GetValue(Resources.FindObjectsOfTypeAll<TextSegmentedControl>().First(x => fieldInfo.GetValue(x) != null)) : null);
-            //
+            tabSelector.textSegmentedControl.SetField<SegmentedControl, Transform>("_separatorPrefab", Parse.Bool(hasSeparator) ? (Resources.FindObjectsOfTypeAll<TextSegmentedControl>().First(x => x.GetField<Transform, SegmentedControl > ("_separatorPrefab") != null).GetField<Transform, SegmentedControl>("_separatorPrefab")) : null);
         }
     }
 }
