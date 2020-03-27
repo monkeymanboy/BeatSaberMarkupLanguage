@@ -14,12 +14,12 @@ namespace BeatSaberMarkupLanguage.Components
             get { return _notifyHost; }
             set
             {
-                if (_notifyHost != null)
+                if ((object)_notifyHost != null)
                 {
                     _notifyHost.PropertyChanged -= NotifyHost_PropertyChanged;
                 }
                 _notifyHost = value;
-                if (_notifyHost != null)
+                if ((object)_notifyHost != null)
                 {
                     _notifyHost.PropertyChanged -= NotifyHost_PropertyChanged;
                     _notifyHost.PropertyChanged += NotifyHost_PropertyChanged;
@@ -29,28 +29,22 @@ namespace BeatSaberMarkupLanguage.Components
 
         private void NotifyHost_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
+            if (this == null) //OnDestroy is not called for disabled objects so this will make sure it is called if it gets called while destroyed
+            {
+                OnDestroy();
+                return;
+            }
             PropertyInfo prop = sender.GetType().GetProperty(e.PropertyName);
             Action<object> action = null;
-            if (ActionDict?.TryGetValue(e.PropertyName, out action) ?? false)
+            Logger.log.Info(gameObject.name);
+            if (ActionDict.TryGetValue(e.PropertyName, out action))
                 action?.Invoke(prop.GetValue(sender));
         }
-
-        private Dictionary<string, Action<object>> _actionDict;
-        private Dictionary<string, Action<object>> ActionDict
-        {
-            get { return _actionDict; }
-            set
-            {
-                if (_actionDict == value)
-                    return;
-                _actionDict = value;
-            }
-        }
+        
+        private Dictionary<string, Action<object>> ActionDict{ get; set; } = new Dictionary<string, Action<object>>();
 
         public bool AddAction(string propertyName, Action<object> action)
         {
-            if (ActionDict == null)
-                ActionDict = new Dictionary<string, Action<object>>();
             ActionDict.Add(propertyName, action);
             return true;
         }
@@ -65,7 +59,7 @@ namespace BeatSaberMarkupLanguage.Components
         void OnDestroy()
         {
             Logger.log?.Debug($"NotifyUpdater destroyed.");
-            _actionDict?.Clear();
+            ActionDict.Clear();
             NotifyHost = null;
         }
     }
