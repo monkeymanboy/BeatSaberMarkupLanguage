@@ -36,7 +36,6 @@ namespace BeatSaberMarkupLanguage.Components
             }
             PropertyInfo prop = sender.GetType().GetProperty(e.PropertyName);
             Action<object> action = null;
-            Logger.log.Info(gameObject.name);
             if (ActionDict.TryGetValue(e.PropertyName, out action))
                 action?.Invoke(prop.GetValue(sender));
         }
