@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -28,6 +30,7 @@ namespace BeatSaberMarkupLanguage.Animations
 
             int index = 0;
             int firstDelayValue = -1;
+
             for (int i = 0; i < frameCount; i++)
             {
                 gifImage.SelectActiveFrame(dimension, i);
@@ -54,6 +57,8 @@ namespace BeatSaberMarkupLanguage.Animations
                 currentFrame.delay = delayPropertyValue * 10;
                 animationInfo.frames.Add(currentFrame);
                 index += 4;
+
+                Thread.Sleep(0);
             }
         }
     }

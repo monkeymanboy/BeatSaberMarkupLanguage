@@ -8,6 +8,7 @@ namespace BeatSaberMarkupLanguage.Animations
         public List<FrameInfo> frames = new List<FrameInfo>();
         public int frameCount = 0;
         public bool initialized = false;
+        public bool isAllZeroDelay = true;
     }
     public struct FrameInfo
     {
