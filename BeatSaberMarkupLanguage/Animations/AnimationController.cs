@@ -9,7 +9,7 @@ namespace BeatSaberMarkupLanguage.Animations
     public class AnimationController : PersistentSingleton<AnimationController>
     {
         private Dictionary<string, AnimationControllerData> registeredAnimations = new Dictionary<string, AnimationControllerData>();
-        public IReadOnlyDictionary<string, AnimationControllerData> RegisteredAnimations;
+        public ReadOnlyDictionary<string, AnimationControllerData> RegisteredAnimations;
         public AnimationControllerData loadingAnimation;
 
         private void Awake()
