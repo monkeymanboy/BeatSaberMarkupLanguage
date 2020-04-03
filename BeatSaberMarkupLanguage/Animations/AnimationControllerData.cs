@@ -34,10 +34,6 @@ namespace BeatSaberMarkupLanguage.Animations
                     _isDelayConsistent = false;
             }
 
-            if(_isDelayConsistent)
-            {
-                Logger.log.Warn("All delays are zero!");
-            }
             sprite = Utilities.LoadSpriteFromTexture(tex);
             this.uvs = uvs;
             this.delays = delays;
