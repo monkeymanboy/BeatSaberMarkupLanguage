@@ -1,6 +1,5 @@
 ﻿using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Settings.UI.ViewControllers;
-using BS_Utils.Utilities;
 using HMUI;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,7 +30,7 @@ namespace BeatSaberMarkupLanguage.Settings
 
                 settingsMenuListViewController = BeatSaberUI.CreateViewController<SettingsMenuListViewController>();
                 settingsMenuListViewController.clickedMenu += OpenMenu;
-                SetViewControllerToNavigationConctroller(navigationController, settingsMenuListViewController);
+                SetViewControllerToNavigationController(navigationController, settingsMenuListViewController);
                 ProvideInitialViewControllers(navigationController);
 
                 foreach (CustomCellInfo cellInfo in BSMLSettings.instance.settingsMenus)

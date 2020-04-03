@@ -1,4 +1,5 @@
-﻿using BS_Utils.Utilities;
+﻿using HMUI;
+using IPA.Utilities;
 using System;
 using UnityEngine;
 
@@ -20,7 +21,7 @@ namespace BeatSaberMarkupLanguage.Components
             }
             ComputeScrollFocusPosY();
             //_verticalScrollIndicator.RefreshHandle();
-            RectTransform handle = _verticalScrollIndicator.GetPrivateField<RectTransform>("_handle");
+            RectTransform handle = _verticalScrollIndicator.GetField<RectTransform, VerticalScrollIndicator>("_handle");
             handle.sizeDelta = new Vector2(handle.sizeDelta.x, Math.Abs(handle.sizeDelta.y));
         }
     }

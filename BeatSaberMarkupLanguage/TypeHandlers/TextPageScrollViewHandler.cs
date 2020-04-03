@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HMUI;
+using System;
 using System.Collections.Generic;
 
 namespace BeatSaberMarkupLanguage.TypeHandlers

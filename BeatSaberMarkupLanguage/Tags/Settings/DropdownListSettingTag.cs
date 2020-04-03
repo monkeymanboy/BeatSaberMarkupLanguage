@@ -1,10 +1,8 @@
 ﻿using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.Components.Settings;
-using BS_Utils.Utilities;
 using HMUI;
-using System;
+using IPA.Utilities;
 using System.Linq;
-using System.Reflection;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -28,7 +26,7 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
             LabelAndValueDropdownWithTableView dropdown = MonoBehaviour.Instantiate(safePrefab, parent, false);
             dropdown.gameObject.SetActive(false);
             dropdown.name = "BSMLDropDownList";
-            TextMeshProUGUI text = dropdown.GetPrivateField<TextMeshProUGUI>("_labelText");
+            TextMeshProUGUI text = dropdown.GetField<TextMeshProUGUI, LabelAndValueDropdownWithTableView>("_labelText");
             text.fontSize = 5;
             dropdown.gameObject.AddComponent<ExternalComponents>().components.Add(text);
 
@@ -39,11 +37,8 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
             dropdown.SetValueText("Default Text");
 
             DropDownListSetting dropDownListSetting = dropdown.gameObject.AddComponent<DropDownListSetting>();
-            //dropDownListSetting.tableView = dropdown.GetPrivateField<TableView>("_tableView");
-            //temp
-            FieldInfo fieldInfo = typeof(DropdownWithTableView).GetField("_tableView", BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
-            dropDownListSetting.tableView = fieldInfo.GetValue(dropdown) as TableView;
-            //
+            
+            dropDownListSetting.tableView = dropdown.GetField<TableView, DropdownWithTableView>("_tableView");
             dropDownListSetting.dropdown = dropdown;
             dropDownListSetting.tableView.dataSource = dropDownListSetting;
 

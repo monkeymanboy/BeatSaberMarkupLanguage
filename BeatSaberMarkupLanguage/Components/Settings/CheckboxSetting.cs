@@ -39,13 +39,14 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 
         public override void ApplyValue()
         {  //Mainly I do this so that it doesnt trigger after initially grabbing the value.
-            if (checkbox.isOn != (bool)associatedValue?.GetValue())
+            if (associatedValue != null && checkbox.isOn != (bool)associatedValue.GetValue())
                 associatedValue.SetValue(checkbox.isOn);
         }
 
         public override void ReceiveValue()
         {
-            CheckboxValue = (bool)associatedValue?.GetValue();
+            if (associatedValue != null)
+                CheckboxValue = (bool)associatedValue.GetValue();
         }
     }
 }

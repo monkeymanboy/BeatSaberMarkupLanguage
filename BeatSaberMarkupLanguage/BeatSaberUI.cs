@@ -1,11 +1,12 @@
-﻿using HMUI;
+﻿using BeatSaberMarkupLanguage.Animations;
+using HMUI;
+using IPA.Utilities;
 using System;
 using System.Linq;
 using System.Reflection;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Image = UnityEngine.UI.Image;
 
 namespace BeatSaberMarkupLanguage
 {
@@ -24,6 +25,7 @@ namespace BeatSaberMarkupLanguage
                 return _mainFlowCoordinator;
             }
         }
+
         /// <summary>
         /// Creates a ViewController of type T, and marks it to not be destroyed.
         /// </summary>
@@ -49,11 +51,7 @@ namespace BeatSaberMarkupLanguage
         public static T CreateFlowCoordinator<T>() where T : FlowCoordinator
         {
             T flow = new GameObject("BSMLFlowCoordinator").AddComponent<T>();
-            //flow.SetPrivateField("_baseInputModule", MainFlowCoordinator.GetPrivateField<BaseInputModule>("_baseInputModule"));
-            //temp
-            FieldInfo fieldInfo = typeof(FlowCoordinator).GetField("_baseInputModule", BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
-            fieldInfo.SetValue(flow, fieldInfo.GetValue(MainFlowCoordinator));
-            //
+            flow.SetField<FlowCoordinator, BaseInputModule>("_baseInputModule", MainFlowCoordinator.GetField<BaseInputModule, FlowCoordinator>("_baseInputModule"));
             return flow;
         }
 
@@ -134,6 +132,66 @@ namespace BeatSaberMarkupLanguage
                 _button.GetComponentsInChildren<Image>()[0].sprite = _background;
         }
         #endregion
+        
+        /// <summary>
+        /// Sets an image or gif/apng from a resource path
+        /// </summary>
+        /// <param name="image">Image component to set the image to</param>
+        /// <param name="location">Resource path, file path, or url of image. Can prefix with # to find and use a base game sprite. May need to prefix resource paths with 'AssemblyName:'</param>
+        public static void SetImage(this Image image, string location)
+        {
+            AnimationStateUpdater oldStateUpdater = image.GetComponent<AnimationStateUpdater>();
+            if (oldStateUpdater != null)
+                MonoBehaviour.DestroyImmediate(oldStateUpdater);
+
+            if (location.StartsWith("#"))
+            {
+                string imgName = location.Substring(1);
+                try
+                {
+                    image.sprite = Resources.FindObjectsOfTypeAll<Sprite>().First(x => x.name == imgName);
+                }
+                catch
+                {
+                    Logger.log.Error($"Could not find Texture with image name {imgName}");
+                }
+            }
+            else if (location.EndsWith(".gif") || location.EndsWith(".apng"))
+            {
+                AnimationStateUpdater stateUpdater = image.gameObject.AddComponent<AnimationStateUpdater>();
+                stateUpdater.image = image;
+                stateUpdater.controllerData = AnimationController.instance.loadingAnimation;
+
+                if (AnimationController.instance.IsRegistered(location))
+                {
+                    stateUpdater.controllerData = AnimationController.instance.GetAnimationControllerData(location);
+                }
+                else
+                {
+                    Utilities.GetData(location, (byte[] data) => {
+                        AnimationLoader.Process(location.EndsWith(".gif") ? AnimationType.GIF : AnimationType.APNG, data, (Texture2D tex, Rect[] uvs, float[] delays, int width, int height) =>
+                        {
+                            AnimationControllerData controllerData = AnimationController.instance.Register(location, tex, uvs, delays);
+                            stateUpdater.controllerData = controllerData;
+                        });
+                    });
+                }
+            }
+            else
+            {
+                AnimationStateUpdater stateUpdater = image.gameObject.AddComponent<AnimationStateUpdater>();
+                stateUpdater.image = image;
+                stateUpdater.controllerData = AnimationController.instance.loadingAnimation;
+
+                Utilities.GetData(location, (byte[] data) =>
+                {
+                    if (stateUpdater != null)
+                        GameObject.DestroyImmediate(stateUpdater);
+                    image.sprite = Utilities.LoadSpriteRaw(data);
+                    image.sprite.texture.wrapMode = TextureWrapMode.Clamp;
+                });
+            }
+        }
 
         #region FlowCoordinator Extensions
         public static void PresentFlowCoordinator(this FlowCoordinator current, FlowCoordinator flowCoordinator, Action finishedCallback = null, bool immediately = false, bool replaceTopViewController = false)

@@ -1,6 +1,6 @@
 ﻿using BeatSaberMarkupLanguage.Components;
-using BS_Utils.Utilities;
 using HMUI;
+using IPA.Utilities;
 using System.Linq;
 using UnityEngine;
 using Zenject;
@@ -13,10 +13,10 @@ namespace BeatSaberMarkupLanguage.Tags
 
         public override GameObject CreateObject(Transform parent)
         {
-            TextSegmentedControl prefab = Resources.FindObjectsOfTypeAll<TextSegmentedControl>().First(x => x.transform.parent.name == "PlayerStatisticsViewController" && x.GetPrivateField<DiContainer>("_container") != null);
+            TextSegmentedControl prefab = Resources.FindObjectsOfTypeAll<TextSegmentedControl>().First(x => x.transform.parent.name == "PlayerStatisticsViewController" && x.GetField<DiContainer, TextSegmentedControl>("_container") != null);
             TextSegmentedControl textSegmentedControl = MonoBehaviour.Instantiate(prefab, parent, false);
             textSegmentedControl.name = "BSMLTabSelector";
-            textSegmentedControl.SetPrivateField("_container", prefab.GetPrivateField<DiContainer>("_container"));
+            textSegmentedControl.SetField("_container", prefab.GetField<DiContainer, TextSegmentedControl>("_container"));
             (textSegmentedControl.transform as RectTransform).anchoredPosition = new Vector2(0, 0);
             foreach(Transform transform in textSegmentedControl.transform)
             {

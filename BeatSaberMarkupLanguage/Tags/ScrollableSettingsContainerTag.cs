@@ -1,6 +1,6 @@
 ﻿using BeatSaberMarkupLanguage.Components;
-using BS_Utils.Utilities;
 using HMUI;
+using IPA.Utilities;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -14,22 +14,22 @@ namespace BeatSaberMarkupLanguage.Tags
 
         public override GameObject CreateObject(Transform parent)
         {
-            TextPageScrollView textScrollView = MonoBehaviour.Instantiate(Resources.FindObjectsOfTypeAll<ReleaseInfoViewController>().First().GetPrivateField<TextPageScrollView>("_textPageScrollView"), parent);
+            TextPageScrollView textScrollView = MonoBehaviour.Instantiate(Resources.FindObjectsOfTypeAll<ReleaseInfoViewController>().First().GetField<TextPageScrollView, ReleaseInfoViewController>("_textPageScrollView"), parent);
             textScrollView.name = "BSMLScrollableSettingsContainer";
-            Button pageUpButton = textScrollView.GetPrivateField<Button>("_pageUpButton");
-            Button pageDownButton = textScrollView.GetPrivateField<Button>("_pageDownButton");
-            VerticalScrollIndicator verticalScrollIndicator = textScrollView.GetPrivateField<VerticalScrollIndicator>("_verticalScrollIndicator");
-            RectTransform viewport = textScrollView.GetPrivateField<RectTransform>("_viewport");
-            GameObject.Destroy(textScrollView.GetPrivateField<TextMeshProUGUI>("_text").gameObject);
+            Button pageUpButton = textScrollView.GetField<Button, TextPageScrollView>("_pageUpButton");
+            Button pageDownButton = textScrollView.GetField<Button, TextPageScrollView>("_pageDownButton");
+            VerticalScrollIndicator verticalScrollIndicator = textScrollView.GetField<VerticalScrollIndicator, TextPageScrollView>("_verticalScrollIndicator");
+            RectTransform viewport = textScrollView.GetField<RectTransform, TextPageScrollView>("_viewport");
+            GameObject.Destroy(textScrollView.GetField<TextMeshProUGUI, TextPageScrollView>("_text").gameObject);
             GameObject gameObject = textScrollView.gameObject;
             MonoBehaviour.Destroy(textScrollView);
             gameObject.SetActive(false);
 
             BSMLScrollView scrollView = gameObject.AddComponent<BSMLScrollView>();
-            scrollView.SetPrivateField("_pageUpButton", pageUpButton);
-            scrollView.SetPrivateField("_pageDownButton", pageDownButton);
-            scrollView.SetPrivateField("_verticalScrollIndicator", verticalScrollIndicator);
-            scrollView.SetPrivateField("_viewport", viewport);
+            scrollView.SetField<ScrollView, Button>("_pageUpButton", pageUpButton);
+            scrollView.SetField<ScrollView, Button>("_pageDownButton", pageDownButton);
+            scrollView.SetField<ScrollView, VerticalScrollIndicator>("_verticalScrollIndicator", verticalScrollIndicator);
+            scrollView.SetField<ScrollView, RectTransform>("_viewport", viewport);
 
             RectTransform scrollTransform = scrollView.transform as RectTransform;
             scrollTransform.anchoredPosition = new Vector2(2, 6);
@@ -69,7 +69,7 @@ namespace BeatSaberMarkupLanguage.Tags
 
             (child.transform as RectTransform).sizeDelta = new Vector2(0, -1);
 
-            scrollView.SetPrivateField("_contentRectTransform", parentObj.transform as RectTransform);
+            scrollView.SetField<ScrollView, RectTransform>("_contentRectTransform", parentObj.transform as RectTransform);
             gameObject.SetActive(true);
             return child;
         }

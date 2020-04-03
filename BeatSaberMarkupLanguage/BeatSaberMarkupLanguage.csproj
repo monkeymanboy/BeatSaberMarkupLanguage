@@ -45,13 +45,14 @@
     <Reference Include="IPA.Loader">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\IPA.Loader.dll</HintPath>
     </Reference>
-    <Reference Include="MainAssembly">
-      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\MainAssembly.dll</HintPath>
+    <Reference Include="Main">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\Main.dll</HintPath>
     </Reference>
-    <Reference Include="Polyglot.Scripts">
-      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\Polyglot.Scripts.dll</HintPath>
+    <Reference Include="Polyglot">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\Polyglot.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="Unity.TextMeshPro">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\Unity.TextMeshPro.dll</HintPath>
@@ -64,6 +65,9 @@
     </Reference>
     <Reference Include="UnityEngine.ImageConversionModule">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.ImageConversionModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.InputLegacyModule">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.PhysicsModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -79,6 +83,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.UIModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.UnityWebRequestModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestWWWModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.UnityWebRequestWWWModule.dll</HintPath>
+    </Reference>
     <Reference Include="VRUI, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\VRUI.dll</HintPath>
@@ -87,10 +99,32 @@
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\Zenject.dll</HintPath>
     </Reference>
     <Reference Include="Harmony">
-      <HintPath>$(BeatSaberDir)\Libs\0Harmony.1.2.0.1.dll</HintPath>
+      <HintPath>$(BeatSaberDir)\Libs\0Harmony.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Animations\AnimationLoader.cs" />
+    <Compile Include="Animations\AnimationStateUpdater.cs" />
+    <Compile Include="Animations\AnimationController.cs" />
+    <Compile Include="Animations\AnimationControllerData.cs" />
+    <Compile Include="Animations\APNG\APNGUnityDecoder.cs" />
+    <Compile Include="Animations\APNG\APNG.cs" />
+    <Compile Include="Animations\APNG\CrcHelper.cs" />
+    <Compile Include="Animations\APNG\Frame.cs" />
+    <Compile Include="Animations\APNG\Helper.cs" />
+    <Compile Include="Animations\APNG\IAnimatedImage.cs" />
+    <Compile Include="Animations\APNG\StreamExtensions.cs" />
+    <Compile Include="Animations\APNG\Chunks\acTLChunk.cs" />
+    <Compile Include="Animations\APNG\Chunks\Chunk.cs" />
+    <Compile Include="Animations\APNG\Chunks\fcTLChunk.cs" />
+    <Compile Include="Animations\APNG\Chunks\fdATChunk.cs" />
+    <Compile Include="Animations\APNG\Chunks\IDATChunk.cs" />
+    <Compile Include="Animations\APNG\Chunks\IENDChunk.cs" />
+    <Compile Include="Animations\APNG\Chunks\IHDRChunk.cs" />
+    <Compile Include="Animations\APNG\Chunks\OtherChunk.cs" />
+    <Compile Include="Animations\GIF\GIFUnityDecoder.cs" />
+    <Compile Include="Animations\AnimationInfo.cs" />
+    <Compile Include="Animations\LockBitmap.cs" />
     <Compile Include="Attributes\UIAction.cs" />
     <Compile Include="Attributes\UIComponent.cs" />
     <Compile Include="Attributes\UIObject.cs" />
@@ -105,12 +139,14 @@
     <Compile Include="Components\CustomCellListTableData.cs" />
     <Compile Include="Components\ExternalComponents.cs" />
     <Compile Include="Components\Glowable.cs" />
+    <Compile Include="Components\ModalColorPicker.cs" />
     <Compile Include="Components\ModalKeyboard.cs" />
     <Compile Include="Components\NotifiableSingleton.cs" />
     <Compile Include="Components\NotifyUpdater.cs" />
     <Compile Include="Components\ScrollViewContent.cs" />
     <Compile Include="Components\Settings\BoolSetting.cs" />
     <Compile Include="Components\Settings\CheckboxSetting.cs" />
+    <Compile Include="Components\Settings\ColorSetting.cs" />
     <Compile Include="Components\Settings\DropDownListSetting.cs" />
     <Compile Include="Components\Settings\GenericSetting.cs" />
     <Compile Include="Components\Settings\GenericSliderSetting.cs" />
@@ -170,6 +206,7 @@
     <Compile Include="Tags\ButtonWithIconTag.cs" />
     <Compile Include="Tags\IconSegmentedControlTag.cs" />
     <Compile Include="Tags\ImageTag.cs" />
+    <Compile Include="Tags\ModalColorPickerTag.cs" />
     <Compile Include="Tags\ModifierContainerTag.cs" />
     <Compile Include="Tags\ModifierTag.cs" />
     <Compile Include="Tags\RawImageTag.cs" />
@@ -183,6 +220,7 @@
     <Compile Include="Tags\SettingsContainerTag.cs" />
     <Compile Include="Tags\Settings\BoolSettingTag.cs" />
     <Compile Include="Tags\Settings\CheckboxSettingTag.cs" />
+    <Compile Include="Tags\Settings\ColorSettingTag.cs" />
     <Compile Include="Tags\Settings\DropdownListSettingTag.cs" />
     <Compile Include="Tags\Settings\GenericSliderSettingTag.cs" />
     <Compile Include="Tags\Settings\IncDecSettingTag.cs" />
@@ -212,6 +250,7 @@
     <Compile Include="TypeHandlers\HorizontalOrVerticalLayoutGroupHandler.cs" />
     <Compile Include="TypeHandlers\IconSegmentedControlHandler.cs" />
     <Compile Include="TypeHandlers\ImageHandler.cs" />
+    <Compile Include="TypeHandlers\ModalColorPickerHandler.cs" />
     <Compile Include="TypeHandlers\RawImageHandler.cs" />
     <Compile Include="TypeHandlers\LayoutElementHandler.cs" />
     <Compile Include="TypeHandlers\LayoutGroupHandler.cs" />
@@ -248,7 +287,9 @@
     <EmbeddedResource Include="Views\settings-test.bsml" />
     <EmbeddedResource Include="Resources\icon.png" />
     <EmbeddedResource Include="Resources\description.md" />
-    <EmbeddedResource Include="Views\main-left-screen.bsml" />
+    <EmbeddedResource Include="Views\main-left-screen.bsml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Views\main-menu-screen.bsml" />
@@ -258,6 +299,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Views\gameplay-setup-test.bsml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\loading.apng" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

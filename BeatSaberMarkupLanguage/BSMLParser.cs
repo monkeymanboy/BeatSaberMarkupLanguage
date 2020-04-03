@@ -154,14 +154,6 @@ namespace BeatSaberMarkupLanguage
             if (!tags.TryGetValue(node.Name, out BSMLTag currentTag))
                 throw new Exception("Tag type '" + node.Name + "' not found");
 
-            //TEMPORARY
-            if (node.Name == "image")
-            {
-                for (int i = 0; i < 100; i++)
-                    Logger.log.Critical("do not use image tag for raw images please switch to raw-image");
-            }
-            //
-
             GameObject currentNode = currentTag.CreateObject(parent.transform);
 
             List<ComponentTypeWithData> componentTypes = new List<ComponentTypeWithData>();
@@ -262,7 +254,7 @@ namespace BeatSaberMarkupLanguage
                             string valueID = value.Substring(1);
                             if (!parserParams.values.TryGetValue(valueID, out BSMLValue uiValue))
                                 throw new Exception("No UIValue exists with the id '" + valueID + "'");
-                            parameters.Add(propertyAliases.Key, uiValue.GetValue()?.ToString());
+                            parameters.Add(propertyAliases.Key, uiValue.GetValue()?.InvariantToString());
                             if (isNotifyHost && uiValue is BSMLPropertyValue propVal)
                                 if (propVal != null)
                                     propertyMap.Add(propertyAliases.Key, propVal);

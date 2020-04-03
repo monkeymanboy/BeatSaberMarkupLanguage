@@ -1,10 +1,11 @@
-﻿using BS_Utils.Utilities;
-using HMUI;
+﻿using HMUI;
+using IPA.Utilities;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using LevelPackTableCell = AnnotatedBeatmapLevelCollectionTableCell;//This got renamed at a point, but old name is more clear so I'm using that
 
 namespace BeatSaberMarkupLanguage.Components
 {
@@ -64,13 +65,13 @@ namespace BeatSaberMarkupLanguage.Components
 
             if (!beatmapCharacteristicImages)
             {
-                foreach (UnityEngine.UI.Image i in tableCell.GetPrivateField<UnityEngine.UI.Image[]>("_beatmapCharacteristicImages"))
+                foreach (Image i in tableCell.GetField<Image[], LevelListTableCell>("_beatmapCharacteristicImages"))
                     i.enabled = false;
             }
             tableCell.transform.Find("FavoritesIcon").gameObject.SetActive(false);
 
-            tableCell.SetPrivateField("_beatmapCharacteristicImages", new UnityEngine.UI.Image[0]);
-            tableCell.SetPrivateField("_bought", true);
+            tableCell.SetField("_beatmapCharacteristicImages", new Image[0]);
+            tableCell.SetField("_bought", true);
             tableCell.reuseIdentifier = reuseIdentifier;
             return tableCell;
         }
@@ -81,7 +82,7 @@ namespace BeatSaberMarkupLanguage.Components
             if (!tableCell)
             {
                 if (levelPackTableCellInstance == null)
-                    levelPackTableCellInstance = Resources.FindObjectsOfTypeAll<LevelPackTableCell>().First(x => x.name == "LevelPackTableCell");
+                    levelPackTableCellInstance = Resources.FindObjectsOfTypeAll<LevelPackTableCell>().First(x => x.name == "AnnotatedBeatmapLevelCollectionTableCell");
 
                 tableCell = Instantiate(levelPackTableCellInstance);
             }
@@ -113,20 +114,20 @@ namespace BeatSaberMarkupLanguage.Components
                     LevelListTableCell tableCell = GetTableCell();
                     if (expandCell)
                     {
-                        tableCell.GetPrivateField<TextMeshProUGUI>("_songNameText").rectTransform.anchorMax = new Vector3(2, 1, 0);
-                        tableCell.GetPrivateField<TextMeshProUGUI>("_authorText").rectTransform.anchorMax = new Vector3(2, 1, 0);
+                        tableCell.GetField<TextMeshProUGUI, LevelListTableCell>("_songNameText").rectTransform.anchorMax = new Vector3(2, 1, 0);
+                        tableCell.GetField<TextMeshProUGUI, LevelListTableCell>("_authorText").rectTransform.anchorMax = new Vector3(2, 1, 0);
                     }
 
-                    tableCell.GetPrivateField<TextMeshProUGUI>("_songNameText").text = data[idx].text;
-                    tableCell.GetPrivateField<TextMeshProUGUI>("_authorText").text = data[idx].subtext;
-                    tableCell.GetPrivateField<RawImage>("_coverRawImage").texture = data[idx].icon == null ? Texture2D.blackTexture : data[idx].icon;
+                    tableCell.GetField<TextMeshProUGUI, LevelListTableCell>("_songNameText").text = data[idx].text;
+                    tableCell.GetField<TextMeshProUGUI, LevelListTableCell>("_authorText").text = data[idx].subtext;
+                    tableCell.GetField<RawImage, LevelListTableCell>("_coverRawImage").texture = data[idx].icon == null ? Texture2D.blackTexture : data[idx].icon;
 
                     return tableCell;
                 case ListStyle.Box:
                     LevelPackTableCell cell = GetLevelPackTableCell();
                     cell.showNewRibbon = false;
-                    cell.GetPrivateField<TextMeshProUGUI>("_infoText").text = $"{data[idx].text}\n{data[idx].subtext}";
-                    UnityEngine.UI.Image packCoverImage = cell.GetPrivateField<UnityEngine.UI.Image>("_coverImage");
+                    cell.GetField<TextMeshProUGUI, LevelPackTableCell>("_infoText").text = $"{data[idx].text}\n{data[idx].subtext}";
+                    Image packCoverImage = cell.GetField<Image, LevelPackTableCell>("_coverImage");
 
                     Texture2D tex = data[idx].icon == null ? Texture2D.blackTexture : data[idx].icon;
                     packCoverImage.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.one * 0.5f, 100, 1);

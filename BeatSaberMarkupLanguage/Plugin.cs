@@ -1,7 +1,8 @@
-﻿using BeatSaberMarkupLanguage.Settings;
+﻿using BeatSaberMarkupLanguage.Animations;
+using BeatSaberMarkupLanguage.Settings;
 using BeatSaberMarkupLanguage.ViewControllers;
 using BS_Utils.Utilities;
-using Harmony;
+using HarmonyLib;
 using IPA;
 using System;
 using System.Collections;
@@ -13,22 +14,25 @@ using IPALogger = IPA.Logging.Logger;
 
 namespace BeatSaberMarkupLanguage
 {
-    public class Plugin : IBeatSaberPlugin
+    [Plugin(RuntimeOptions.SingleStartInit)]
+    public class Plugin
     {
         public static Config config;
+        [Init]
         public void Init(IPALogger logger)
         {
+            Logger.log = logger;
             try
             {
-                HarmonyInstance harmony = HarmonyInstance.Create("com.monkeymanboy.BeatSaberMarkupLanguage");
+                Harmony harmony = new Harmony("com.monkeymanboy.BeatSaberMarkupLanguage");
                 harmony.PatchAll(Assembly.GetExecutingAssembly());
             }
             catch (Exception e)
             {
                 Logger.log.Error(e.Message);
             }
-
-            Logger.log = logger;
+            AnimationController.instance.InitializeLoadingAnimation();
+            SceneManager.activeSceneChanged += OnActiveSceneChanged;
             BSEvents.menuSceneLoadedFresh += MenuLoadFresh;
             config = new Config("BSML");
         }
@@ -42,19 +46,11 @@ namespace BeatSaberMarkupLanguage
             GameplaySetup.GameplaySetup.instance.Setup();
         }
 
-        public void OnSceneLoaded(Scene scene, LoadSceneMode sceneMode) { }
-
         public void OnActiveSceneChanged(Scene prevScene, Scene nextScene)
         {
-            if (nextScene.name == "MenuViewControllers" && prevScene.name == "EmptyTransition")
+            if (nextScene.name.Contains("Menu") && prevScene.name == "EmptyTransition")
                 BSMLParser.instance.MenuSceneLoaded();
         }
-
-        public void OnApplicationStart() { }
-        public void OnApplicationQuit() { }
-        public void OnSceneUnloaded(Scene scene) { }
-        public void OnUpdate() { }
-        public void OnFixedUpdate() { }
 
         //It's just for testing so don't yell at me
         private IEnumerator PresentTest()

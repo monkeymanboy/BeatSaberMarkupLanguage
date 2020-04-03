@@ -1,7 +1,6 @@
 ﻿using BeatSaberMarkupLanguage.Components;
-using BS_Utils.Utilities;
 using HMUI;
-using System.Reflection;
+using IPA.Utilities;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -29,16 +28,8 @@ namespace BeatSaberMarkupLanguage.Tags
             gameObject.AddComponent<RectMask2D>();
             tableView.transform.SetParent(container, false);
 
-            //temp
-            FieldInfo fieldInfo = typeof(TableView).GetField("_preallocatedCells", BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
-            fieldInfo.SetValue(tableView, new TableView.CellsGroup[0]);
-            fieldInfo = typeof(TableView).GetField("_isInitialized", BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
-            fieldInfo.SetValue(tableView, false);
-            //
-            /*
-            tableView.SetPrivateField("_preallocatedCells", new TableView.CellsGroup[0]);
-            tableView.SetPrivateField("_isInitialized", false);
-            */
+            tableView.SetField<TableView, TableView.CellsGroup[]>("_preallocatedCells", new TableView.CellsGroup[0]);
+            tableView.SetField<TableView, bool>("_isInitialized", false);
 
             RectTransform viewport = new GameObject("Viewport").AddComponent<RectTransform>();
             viewport.SetParent(gameObject.GetComponent<RectTransform>(), false);

@@ -40,5 +40,18 @@ namespace BeatSaberMarkupLanguage
                 throw new Exception("Could not parse int: " + s);
             }
         }
+
+        /// <summary>
+        /// Culture Invariant ToString for BSML values
+        /// </summary>
+        public static string InvariantToString(this object obj)
+        {
+            if (obj is float floatValue)
+                return floatValue.ToString(CultureInfo.InvariantCulture);
+            else if (obj is double doubleValue)
+                return doubleValue.ToString(CultureInfo.InvariantCulture);
+            else
+                return obj.ToString();
+        }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using BeatSaberMarkupLanguage.Components;
-using BS_Utils.Utilities;
 using HMUI;
+using IPA.Utilities;
 using System.Linq;
 using UnityEngine;
 
@@ -24,8 +24,8 @@ namespace BeatSaberMarkupLanguage.Tags
 
             ModalView modalView = gameObject.AddComponent<ModalView>();
             ModalView yoinkFromView = Resources.FindObjectsOfTypeAll<ModalView>().First(x => x.name == "TableView");
-            modalView.SetPrivateField("_presentPanelAnimations", yoinkFromView.GetPrivateField<PanelAnimationSO>("_presentPanelAnimations"));
-            modalView.SetPrivateField("_dismissPanelAnimation", yoinkFromView.GetPrivateField<PanelAnimationSO>("_dismissPanelAnimation"));
+            modalView.SetField("_presentPanelAnimations", yoinkFromView.GetField<PanelAnimationSO, ModalView>("_presentPanelAnimations"));
+            modalView.SetField("_dismissPanelAnimation", yoinkFromView.GetField<PanelAnimationSO, ModalView>("_dismissPanelAnimation"));
 
             GameObject child = new GameObject();
             child.transform.SetParent(rectTransform, false);

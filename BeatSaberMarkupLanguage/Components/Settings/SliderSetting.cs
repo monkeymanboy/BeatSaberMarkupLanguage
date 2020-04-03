@@ -15,7 +15,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         public override void Setup()
         {
             text = slider.GetComponentInChildren<TextMeshProUGUI>();
-            slider.numberOfSteps = (int)((slider.maxValue - slider.minValue) / increments) + 1;
+            slider.numberOfSteps = (int)Math.Round((slider.maxValue - slider.minValue) / increments) + 1;
             ReceiveValue();
             slider.valueDidChangeEvent += OnChange;
             StartCoroutine(SetInitialText());

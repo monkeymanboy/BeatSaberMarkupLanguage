@@ -1,9 +1,8 @@
-﻿using BS_Utils.Utilities;
+﻿using IPA.Utilities;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using VRUIControls;
-using Image = UnityEngine.UI.Image;
 using Screen = HMUI.Screen;
 
 namespace BeatSaberMarkupLanguage.FloatingScreen
@@ -93,8 +92,8 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
             background.preserveAspect = true;
 
             SetMainCameraToCanvas setCamera = screen.GetComponent<SetMainCameraToCanvas>();
-            setCamera.SetPrivateField("_canvas", canvas);
-            setCamera.SetPrivateField("_mainCamera", Resources.FindObjectsOfTypeAll<MainCamera>().FirstOrDefault(camera => camera.camera?.stereoTargetEye != StereoTargetEyeMask.None) ?? Resources.FindObjectsOfTypeAll<MainCamera>().FirstOrDefault());
+            setCamera.SetField("_canvas", canvas);
+            setCamera.SetField("_mainCamera", Resources.FindObjectsOfTypeAll<MainCamera>().FirstOrDefault(camera => camera.camera?.stereoTargetEye != StereoTargetEyeMask.None) ?? Resources.FindObjectsOfTypeAll<MainCamera>().FirstOrDefault());
 
             screen.ScreenSize = screenSize;
             screen.transform.localScale = new Vector3(0.02f, 0.02f, 0.02f);

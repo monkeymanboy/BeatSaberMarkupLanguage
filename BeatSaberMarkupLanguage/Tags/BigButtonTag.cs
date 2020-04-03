@@ -5,7 +5,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using static BeatSaberMarkupLanguage.Components.Strokable;
-using Image = UnityEngine.UI.Image;
 
 namespace BeatSaberMarkupLanguage.Tags
 {
