@@ -162,9 +162,9 @@ namespace BeatSaberMarkupLanguage
                 stateUpdater.image = image;
                 stateUpdater.controllerData = AnimationController.instance.loadingAnimation;
 
-                if (AnimationController.instance.IsRegistered(location))
+                if (AnimationController.instance.RegisteredAnimations.TryGetValue(location, out var animControllerData))
                 {
-                    stateUpdater.controllerData = AnimationController.instance.GetAnimationControllerData(location);
+                    stateUpdater.controllerData = animControllerData;
                 }
                 else
                 {
