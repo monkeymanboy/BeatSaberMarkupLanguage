@@ -20,8 +20,8 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 
         public override Dictionary<string, Action<ClickableText, string>> Setters => new Dictionary<string, Action<ClickableText, string>>()
         {
-            { "highlightColor", new Action<ClickableText, string>((image, color) => image.highlightColor = GetColor(color)) },
-            { "defaultColor", new Action<ClickableText, string>((image, color) => image.defaultColor = GetColor(color)) }
+            { "highlightColor", new Action<ClickableText, string>((text, color) => text.highlightColor = GetColor(color)) },
+            { "defaultColor", new Action<ClickableText, string>((text, color) => text.defaultColor = GetColor(color)) }
 
         };
 
