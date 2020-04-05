@@ -7,8 +7,8 @@ using static BeatSaberMarkupLanguage.BSMLParser;
 
 namespace BeatSaberMarkupLanguage.TypeHandlers
 {
-    [ComponentHandler(typeof(ClickableText))]
-    public class ClickableTextHandler : TypeHandler<ClickableText>
+    [ComponentHandler(typeof(ClickableImage))]
+    public class ClickableImageHandler : TypeHandler<ClickableImage>
     {
         public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
         {
@@ -18,19 +18,18 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "defaultColor", new[]{ "default-color" } }
         };
 
-        public override Dictionary<string, Action<ClickableText, string>> Setters => new Dictionary<string, Action<ClickableText, string>>()
+        public override Dictionary<string, Action<ClickableImage, string>> Setters => new Dictionary<string, Action<ClickableImage, string>>()
         {
-            { "highlightColor", new Action<ClickableText, string>((text, color) => text.highlightColor = GetColor(color)) },
-            { "defaultColor", new Action<ClickableText, string>((text, color) => text.defaultColor = GetColor(color)) }
-
+            { "highlightColor", new Action<ClickableImage, string>((image, color) => image.highlightColor = GetColor(color)) },
+            { "defaultColor", new Action<ClickableImage, string>((image, color) => image.defaultColor = GetColor(color)) }
         };
 
         public override void HandleType(ComponentTypeWithData componentType, BSMLParserParams parserParams)
         {
-            ClickableText clickableText = componentType.component as ClickableText;
+            ClickableImage clickableImage = componentType.component as ClickableImage;
             if (componentType.data.TryGetValue("onClick", out string onClick))
             {
-                clickableText.OnClickEvent += delegate
+                clickableImage.OnClickEvent += delegate
                 {
                     if (!parserParams.actions.TryGetValue(onClick, out BSMLAction onClickAction))
                         throw new Exception("on-click action '" + onClick + "' not found");
@@ -41,7 +40,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 
             if (componentType.data.TryGetValue("clickEvent", out string clickEvent))
             {
-                clickableText.OnClickEvent += delegate
+                clickableImage.OnClickEvent += delegate
                 {
                     parserParams.EmitEvent(clickEvent);
                 };
@@ -49,13 +48,13 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 
             if (componentType.data.TryGetValue("defaultColor", out var defaultColor))
             {
-                clickableText.defaultColor = GetColor(defaultColor);
-                clickableText.color = clickableText.defaultColor;
+                clickableImage.defaultColor = GetColor(defaultColor);
+                clickableImage.color = clickableImage.defaultColor;
             }
 
             if (componentType.data.TryGetValue("highlightColor", out var highlightColor))
             {
-                clickableText.highlightColor = GetColor(highlightColor);
+                clickableImage.highlightColor = GetColor(highlightColor);
             }
         }
 
