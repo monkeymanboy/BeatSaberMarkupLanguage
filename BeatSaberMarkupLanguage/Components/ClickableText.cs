@@ -5,29 +5,62 @@ using UnityEngine.EventSystems;
 
 namespace BeatSaberMarkupLanguage.Components
 {
-    // Yoinked from CustomUI, it do be like that sometimes
     public class ClickableText : TextMeshProUGUI, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler, IEventSystemHandler
     {
-        public Color highlightColor = new Color(0.60f, 0.80f, 1);
-        public Color defaultColor = Color.white;
+        private Color _highlightColor = new Color(0.60f, 0.80f, 1);
+        public Color HighlightColor
+        {
+            get => _highlightColor;
+            set
+            {
+                _highlightColor = value;
+                UpdateHighlight();
+            }
+        }
+        private Color _defaultColor = Color.white;
+        public Color DefaultColor
+        {
+            get => _defaultColor;
+            set
+            {
+                _defaultColor = value;
+                UpdateHighlight();
+            }
+        }
         public Action<PointerEventData> OnClickEvent, PointerEnterEvent, PointerExitEvent;
+
+        private bool _isHighlighted = false;
+        private bool IsHighlighted
+        {
+            get => _isHighlighted;
+            set
+            {
+                _isHighlighted = value;
+                UpdateHighlight();
+            }
+        }
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            color = defaultColor;
+            IsHighlighted = false;
             OnClickEvent?.Invoke(eventData);
         }
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            color = highlightColor;
+            IsHighlighted = true;
             PointerEnterEvent?.Invoke(eventData);
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            color = defaultColor;
+            IsHighlighted = false;
             PointerExitEvent?.Invoke(eventData);
+        }
+
+        private void UpdateHighlight()
+        {
+            color = IsHighlighted ? HighlightColor : DefaultColor;
         }
     }
 }
