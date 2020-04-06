@@ -73,7 +73,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
 
         string WatcherGroup.IHotReloadableController.Name => name;
 
-        public BSMLAutomaticViewController() : base()
+        protected BSMLAutomaticViewController() : base()
         {
             var hotReloadAttr = GetType().GetCustomAttribute<HotReloadAttribute>();
             if (hotReloadAttr == null) ContentFilePath = null;
@@ -163,11 +163,6 @@ namespace BeatSaberMarkupLanguage.ViewControllers
                     Logger.log?.Error(ex);
                 }
             }
-        }
-
-        int WatcherGroup.IHotReloadableController.GetInstanceID()
-        {
-            throw new NotImplementedException();
         }
     }
 }
