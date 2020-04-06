@@ -135,6 +135,7 @@
     <Compile Include="Components\BSMLTableView.cs" />
     <Compile Include="Components\ButtonArtworkImage.cs" />
     <Compile Include="Components\ButtonIconImage.cs" />
+    <Compile Include="Components\ClickableImage.cs" />
     <Compile Include="Components\ClickableText.cs" />
     <Compile Include="Components\CustomCellListTableData.cs" />
     <Compile Include="Components\ExternalComponents.cs" />
@@ -199,6 +200,7 @@
     <Compile Include="Tags\BottomButtonPanelTag.cs" />
     <Compile Include="Tags\BSMLTag.cs" />
     <Compile Include="Tags\ButtonTag.cs" />
+    <Compile Include="Tags\ClickableImageTag.cs" />
     <Compile Include="Tags\ClickableTextTag.cs" />
     <Compile Include="Tags\CustomListTag.cs" />
     <Compile Include="Tags\GridLayoutTag.cs" />
@@ -241,6 +243,7 @@
     <Compile Include="TypeHandlers\ButtonArtworkHandler.cs" />
     <Compile Include="TypeHandlers\ButtonHandler.cs" />
     <Compile Include="TypeHandlers\ButtonIconHandler.cs" />
+    <Compile Include="TypeHandlers\ClickableImageHandler.cs" />
     <Compile Include="TypeHandlers\ClickableTextHandler.cs" />
     <Compile Include="TypeHandlers\ContentSizeFitterHandler.cs" />
     <Compile Include="TypeHandlers\CustomCellListTableDataHandler.cs" />

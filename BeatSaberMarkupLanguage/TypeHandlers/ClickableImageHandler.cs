@@ -20,12 +20,13 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 
         public override Dictionary<string, Action<ClickableImage, string>> Setters => new Dictionary<string, Action<ClickableImage, string>>()
         {
-            { "highlightColor", new Action<ClickableImage, string>((image, color) => image.highlightColor = GetColor(color)) },
-            { "defaultColor", new Action<ClickableImage, string>((image, color) => image.defaultColor = GetColor(color)) }
+            { "highlightColor", new Action<ClickableImage, string>((image, color) => image.HighlightColor = GetColor(color)) },
+            { "defaultColor", new Action<ClickableImage, string>((image, color) => image.DefaultColor = GetColor(color)) }
         };
 
         public override void HandleType(ComponentTypeWithData componentType, BSMLParserParams parserParams)
         {
+            base.HandleType(componentType, parserParams);
             ClickableImage clickableImage = componentType.component as ClickableImage;
             if (componentType.data.TryGetValue("onClick", out string onClick))
             {
@@ -44,17 +45,6 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 {
                     parserParams.EmitEvent(clickEvent);
                 };
-            }
-
-            if (componentType.data.TryGetValue("defaultColor", out var defaultColor))
-            {
-                clickableImage.defaultColor = GetColor(defaultColor);
-                clickableImage.color = clickableImage.defaultColor;
-            }
-
-            if (componentType.data.TryGetValue("highlightColor", out var highlightColor))
-            {
-                clickableImage.highlightColor = GetColor(highlightColor);
             }
         }
 
