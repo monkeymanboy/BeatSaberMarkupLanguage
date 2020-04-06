@@ -57,9 +57,12 @@ namespace BeatSaberMarkupLanguage.ViewControllers
                     }
                     if (string.IsNullOrEmpty(_content) && !string.IsNullOrEmpty(_resourceName))
                     {
+                        if (ContentFilePath != null)
+                        {
 #if HRVC_DEBUG
-                        Logger.log.Warn($"No content from file {ContentFilePath}, using resource {_resourceName}");
+                            Logger.log.Warn($"No content from file {ContentFilePath}, using resource {_resourceName}");
 #endif
+                        }
                         _content = Utilities.GetResourceContent(GetType().Assembly, _resourceName);
                     }
                 }
@@ -82,22 +85,28 @@ namespace BeatSaberMarkupLanguage.ViewControllers
 
         protected override void DidActivate(bool firstActivation, ActivationType type)
         {
-            if (string.IsNullOrEmpty(ContentFilePath)) return;
-
-            if (ContentChanged && !firstActivation)
+            if (!string.IsNullOrEmpty(ContentFilePath))
             {
-                ContentChanged = false;
+
+                if (ContentChanged && !firstActivation)
+                {
+                    ContentChanged = false;
+                    ParseWithFallback();
+                }
+                else if (firstActivation)
+                    ParseWithFallback();
+                bool registered = WatcherGroup.RegisterViewController(this);
+#if HRVC_DEBUG
+                if (registered)
+                    Logger.log.Info($"Registered {this.name}");
+                else
+                    Logger.log.Error($"Failed to register {this.name}");
+#endif
+            }
+            else
+            {
                 ParseWithFallback();
             }
-            else if (firstActivation)
-                ParseWithFallback();
-            bool registered = WatcherGroup.RegisterViewController(this);
-#if HRVC_DEBUG
-            if (registered)
-                Logger.log.Info($"Registered {this.name}");
-            else
-                Logger.log.Error($"Failed to register {this.name}");
-#endif
 
             didActivate?.Invoke(firstActivation, type);
         }
@@ -105,17 +114,19 @@ namespace BeatSaberMarkupLanguage.ViewControllers
 
         protected override void DidDeactivate(DeactivationType deactivationType)
         {
-            if (string.IsNullOrEmpty(ContentFilePath)) return;
-
-            _content = null;
-#if HRVC_DEBUG
-            Logger.log.Warn($"DidDeactive: {GetInstanceID()}:{name}");
-#endif
-            if (!WatcherGroup.UnregisterViewController(this))
+            if (!string.IsNullOrEmpty(ContentFilePath))
             {
+
+                _content = null;
 #if HRVC_DEBUG
-                Logger.log.Warn($"Failed to Unregister {GetInstanceID()}:{name}");
+                Logger.log.Warn($"DidDeactive: {GetInstanceID()}:{name}");
 #endif
+                if (!WatcherGroup.UnregisterViewController(this))
+                {
+#if HRVC_DEBUG
+                    Logger.log.Warn($"Failed to Unregister {GetInstanceID()}:{name}");
+#endif
+                }
             }
             base.DidDeactivate(deactivationType);
         }
