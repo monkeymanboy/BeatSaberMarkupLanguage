@@ -26,7 +26,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
             (viewController as WatcherGroup.IHotReloadableController).Refresh(forceReload);
         }
 
-        void WatcherGroup.IHotReloadableController.Refresh(bool forceReload = false)
+        void WatcherGroup.IHotReloadableController.Refresh(bool forceReload)
         {
             if (!isActiveAndEnabled)
             {
@@ -58,7 +58,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
                                                       <horizontal bg='panel-top' pad-left='10' pad-right='10' horizontal-fit='PreferredSize' vertical-fit='PreferredSize'>
                                                         <text text='Invalid BSML' font-size='10'/>
                                                       </horizontal>
-                                                      <text text ='{0}' font-size='5'/>
+                                                      <text text='{0}' font-size='5'/>
                                                     </vertical>";
 
         private string _content;
