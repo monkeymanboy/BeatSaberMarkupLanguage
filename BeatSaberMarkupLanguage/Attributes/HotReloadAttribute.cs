@@ -14,7 +14,7 @@ namespace BeatSaberMarkupLanguage.Attributes
     public sealed class HotReloadAttribute : Attribute
     {
         public string GivenPath { get; }
-        public string[][] Aliases { get; set; }
+        public string[] Aliases { get; set; }
 
         private string _path = null;
         public string Path
@@ -23,15 +23,16 @@ namespace BeatSaberMarkupLanguage.Attributes
             {
                 if (_path == null)
                 {
-                    foreach (var alias in Aliases)
+                    for (int i = 0; i < Aliases.Length; i += 2)
                     {
-                        if (alias.Length < 2) continue;
-                        if (GivenPath.StartsWith(alias[0]))
+                        if (i + 1 >= Aliases.Length) break;
+                        if (GivenPath.StartsWith(Aliases[i]))
                         {
-                            _path = alias[1] + GivenPath.Substring(alias[0].Length);
+                            _path = Aliases[i + 1] + GivenPath.Substring(Aliases[i].Length);
                             break;
                         }
                     }
+                    if (_path == null) _path = GivenPath;
                 }
                 return _path;
             }
