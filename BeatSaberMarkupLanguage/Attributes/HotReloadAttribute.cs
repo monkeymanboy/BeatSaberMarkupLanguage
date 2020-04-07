@@ -14,7 +14,11 @@ namespace BeatSaberMarkupLanguage.Attributes
     public sealed class HotReloadAttribute : Attribute
     {
         public string GivenPath { get; }
-        public string[] Aliases { get; set; }
+        /// <summary>
+        /// There should always be an even number of elements, where the first is the thing to map from, 
+        /// and the second of each pair is the target.
+        /// </summary>
+        public string[] PathMap { get; set; }
 
         private string _path = null;
         public string Path
@@ -23,12 +27,12 @@ namespace BeatSaberMarkupLanguage.Attributes
             {
                 if (_path == null)
                 {
-                    for (int i = 0; i < Aliases.Length; i += 2)
+                    for (int i = 0; i < PathMap.Length; i += 2)
                     {
-                        if (i + 1 >= Aliases.Length) break;
-                        if (GivenPath.StartsWith(Aliases[i]))
+                        if (i + 1 >= PathMap.Length) break;
+                        if (GivenPath.StartsWith(PathMap[i]))
                         {
-                            _path = Aliases[i + 1] + GivenPath.Substring(Aliases[i].Length);
+                            _path = PathMap[i + 1] + GivenPath.Substring(PathMap[i].Length);
                             break;
                         }
                     }
