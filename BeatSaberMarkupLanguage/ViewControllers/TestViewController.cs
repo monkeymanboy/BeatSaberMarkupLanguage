@@ -8,10 +8,9 @@ using static BeatSaberMarkupLanguage.Components.CustomListTableData;
 
 namespace BeatSaberMarkupLanguage.ViewControllers
 {
-    public class TestViewController : BSMLResourceViewController, INotifiableHost
+    [ViewDefinition("BeatSaberMarkupLanguage.Views.test.bsml")]
+    public class TestViewController : BSMLAutomaticViewController, INotifiableHost
     {
-        public override string ResourceName => "BeatSaberMarkupLanguage.Views.test.bsml";
-
         [UIValue("header")]
         public string HeaderText
         {

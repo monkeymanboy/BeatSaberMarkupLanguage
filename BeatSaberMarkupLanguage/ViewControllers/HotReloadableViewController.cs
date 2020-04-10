@@ -11,6 +11,7 @@ using HMUI;
 
 namespace BeatSaberMarkupLanguage.ViewControllers
 {
+    [Obsolete("It is now recommended that you use BSMLAutomaticViewController and it's associated attributes", false)]
     public abstract class HotReloadableViewController : BSMLViewController, WatcherGroup.IHotReloadableController
     {
 
