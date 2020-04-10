@@ -27,13 +27,16 @@ namespace BeatSaberMarkupLanguage.Attributes
             {
                 if (_path == null)
                 {
-                    for (int i = 0; i < PathMap.Length; i += 2)
+                    if (PathMap != null)
                     {
-                        if (i + 1 >= PathMap.Length) break;
-                        if (GivenPath.StartsWith(PathMap[i]))
+                        for (int i = 0; i < PathMap.Length; i += 2)
                         {
-                            _path = PathMap[i + 1] + GivenPath.Substring(PathMap[i].Length);
-                            break;
+                            if (i + 1 >= PathMap.Length) break;
+                            if (GivenPath.StartsWith(PathMap[i]))
+                            {
+                                _path = PathMap[i + 1] + GivenPath.Substring(PathMap[i].Length);
+                                break;
+                            }
                         }
                     }
                     if (_path == null) _path = GivenPath;
