@@ -18,16 +18,18 @@ namespace BeatSaberMarkupLanguage.ViewControllers
     {
         private static string GetDefaultResourceName(Type type)
         {
-            var ns = type.Namespace;
-            var name = type.Name;
+            string ns = type.Namespace;
+            string name = type.Name;
             return (ns.Length > 0 ? ns + "." : "") + name + ".bsml";
         }
-        public virtual string FallbackContent => @"<vertical child-control-height='false' child-control-width='true' child-align='UpperCenter' pref-width='110' pad-left='3' pad-right='3'>
-                                                      <horizontal bg='panel-top' pad-left='10' pad-right='10' horizontal-fit='PreferredSize' vertical-fit='PreferredSize'>
-                                                        <text text='Invalid BSML' font-size='10'/>
-                                                      </horizontal>
-                                                      <text text='{0}' font-size='5'/>
-                                                    </vertical>";
+        public virtual string FallbackContent => @"<bg>
+                                                     <vertical child-control-height='false' child-control-width='true' child-align='UpperCenter' pref-width='110' pad-left='3' pad-right='3'>
+                                                       <horizontal bg='panel-top' pad-left='10' pad-right='10' horizontal-fit='PreferredSize' vertical-fit='PreferredSize'>
+                                                         <text text='Invalid BSML' font-size='10'/>
+                                                       </horizontal>
+                                                     </vertical>
+                                                     <text-page text='{0}' anchor-min-x='0.1' anchor-max-x='0.9' anchor-max-y='0.8'/>
+                                                   </bg>";
 
         private string _resourceName;
         private string _content;
@@ -37,7 +39,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
             {
                 if (_resourceName == null)
                 {
-                    var viewDef = GetType().GetCustomAttribute<ViewDefinitionAttribute>();
+                    ViewDefinitionAttribute viewDef = GetType().GetCustomAttribute<ViewDefinitionAttribute>();
                     if (viewDef != null) _resourceName = viewDef.Definition;
                     else _resourceName = GetDefaultResourceName(GetType());
                 }
@@ -78,7 +80,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
 
         protected BSMLAutomaticViewController() : base()
         {
-            var hotReloadAttr = GetType().GetCustomAttribute<HotReloadAttribute>();
+            HotReloadAttribute hotReloadAttr = GetType().GetCustomAttribute<HotReloadAttribute>();
             if (hotReloadAttr == null) ContentFilePath = null;
             else ContentFilePath = Path.ChangeExtension(hotReloadAttr.Path, ".bsml");
         }
@@ -141,7 +143,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
             {
                 Logger.log.Error($"Error parsing BSML: {ex.Message}");
                 Logger.log.Debug(ex);
-                BSMLParser.instance.Parse(string.Format(FallbackContent, Utilities.EscapeXml(ex.Message)), gameObject, this);
+                BSMLParser.instance.Parse(string.Format(FallbackContent, Utilities.EscapeXml(ex.Message)), gameObject, null);
             }
         }
 

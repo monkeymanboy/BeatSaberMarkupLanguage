@@ -7,10 +7,9 @@ using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.Settings.UI.ViewControllers
 {
-    internal class SettingsMenuListViewController : BSMLResourceViewController
+    [ViewDefinition("BeatSaberMarkupLanguage.Views.settings-list.bsml")]
+    internal class SettingsMenuListViewController : BSMLAutomaticViewController
     {
-        public override string ResourceName => "BeatSaberMarkupLanguage.Views.settings-list.bsml";
-
         [UIComponent("list")]
         public CustomListTableData list;
 
