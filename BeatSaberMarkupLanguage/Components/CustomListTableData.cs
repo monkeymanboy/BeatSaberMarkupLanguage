@@ -140,6 +140,7 @@ namespace BeatSaberMarkupLanguage.Components
                         foreach (var (sprite, img) in characSprites.Zip(characImages, (s, img) => (s, img)))
                         {
                             img.enabled = true;
+                            img.rectTransform.sizeDelta = new Vector2(2.625f, 4.5f);
                             img.rectTransform.anchoredPosition = new Vector2(xPos, 0);
                             xPos -= img.rectTransform.sizeDelta.x + .5f;
                             img.sprite = sprite;
