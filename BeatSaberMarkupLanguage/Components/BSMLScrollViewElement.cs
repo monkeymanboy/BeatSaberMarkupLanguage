@@ -40,6 +40,24 @@ namespace BeatSaberMarkupLanguage.Components
             set => _verticalScrollIndicator = value;
         }
 
+        private bool maskOverflow = true;
+        public bool MaskOverflow 
+        {
+            get => maskOverflow;
+            set 
+            {
+                maskOverflow = value;
+                UpdateViewportMask();
+            } 
+        }
+
+        private void UpdateViewportMask()
+        {
+            var img = Viewport.GetComponent<Image>();
+            if (img != null)
+                img.enabled = MaskOverflow;
+        }
+
         public override void Awake()
         {
             _buttonBinder = new ButtonBinder();
@@ -75,7 +93,67 @@ namespace BeatSaberMarkupLanguage.Components
             if (PageUpButton != null)
                 PageUpButton.interactable = _dstPosY > 0f;
             if (PageDownButton != null)
-                PageDownButton.interactable = _dstPosY < _contentHeight - _viewport.rect.height;
+                PageDownButton.interactable = _dstPosY < _contentHeight - (_viewport?.rect.height ?? 0);
+        }
+        public override void ScrollDown(bool animated)
+        {
+            float dstPosY = this._contentHeight - this._viewport.rect.height;
+            this.ScrollAt(dstPosY, animated);
+        }
+
+        public override void ScrollToWorldPosition(Vector3 worldPosition, float pageRelativePosition, bool animated)
+        {
+            float num = this.WorldPositionToScrollViewPosition(worldPosition).y;
+            num -= pageRelativePosition * this._scrollPageHeight;
+            this.ScrollAt(num, animated);
+        }
+
+        public override void ScrollToWorldPositionIfOutsideArea(Vector3 worldPosition, float pageRelativePosition, float relativeBoundaryStart, float relativeBoundaryEnd, bool animated)
+        {
+            float num = this.WorldPositionToScrollViewPosition(worldPosition).y;
+            float num2 = this._dstPosY + relativeBoundaryStart * this._scrollPageHeight;
+            float num3 = this._dstPosY + relativeBoundaryEnd * this._scrollPageHeight;
+            if (num > num2 && num < num3)
+            {
+                return;
+            }
+            num -= pageRelativePosition * this._scrollPageHeight;
+            this.ScrollAt(num, animated);
+        }
+
+        public override void ScrollAt(float dstPosY, bool animated)
+        {
+            this.SetDstPosY(dstPosY);
+            if (!animated)
+            {
+                this._contentRectTransform.anchoredPosition = new Vector2(0f, this._dstPosY);
+            }
+            this.RefreshButtonsInteractibility();
+            base.enabled = true;
+        }
+
+        public override void PageUpButtonPressed()
+        {
+            float threshold = this._dstPosY + this._scrollItemRelativeThresholdPosition * this._scrollPageHeight;
+            float num = (from posy in this._scrollFocusPosYs
+                         where posy < threshold
+                         select posy).DefaultIfEmpty(this._dstPosY).Max();
+            num -= this._pageStepRelativePosition * this._scrollPageHeight;
+            this.SetDstPosY(num);
+            this.RefreshButtonsInteractibility();
+            base.enabled = true;
+        }
+
+        public override void PageDownButtonPressed()
+        {
+            float threshold = this._dstPosY + (1f - this._scrollItemRelativeThresholdPosition) * this._scrollPageHeight;
+            float num = (from posy in this._scrollFocusPosYs
+                         where posy > threshold
+                         select posy).DefaultIfEmpty(this._dstPosY + this._scrollPageHeight).Min();
+            num -= (1f - this._pageStepRelativePosition) * this._scrollPageHeight;
+            this.SetDstPosY(num);
+            this.RefreshButtonsInteractibility();
+            base.enabled = true;
         }
     }
 }
