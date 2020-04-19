@@ -134,6 +134,8 @@
     <Compile Include="Attributes\ViewDefinitionAttribute.cs" />
     <Compile Include="BeatSaberUI.cs" />
     <Compile Include="Components\BSMLScrollView.cs" />
+    <Compile Include="Components\BSMLScrollViewElement.cs" />
+    <Compile Include="Components\BSMLScrollViewContent.cs" />
     <Compile Include="Components\BSMLTableView.cs" />
     <Compile Include="Components\ButtonArtworkImage.cs" />
     <Compile Include="Components\ButtonIconImage.cs" />
@@ -221,6 +223,7 @@
     <Compile Include="Tags\ModalTag.cs" />
     <Compile Include="Tags\PageButtonTag.cs" />
     <Compile Include="Tags\ScrollableSettingsContainerTag.cs" />
+    <Compile Include="Tags\ScrollViewTag.cs" />
     <Compile Include="Tags\SettingsContainerTag.cs" />
     <Compile Include="Tags\Settings\BoolSettingTag.cs" />
     <Compile Include="Tags\Settings\CheckboxSettingTag.cs" />
@@ -264,6 +267,7 @@
     <Compile Include="TypeHandlers\ModalViewHandler.cs" />
     <Compile Include="TypeHandlers\PageButtonHandler.cs" />
     <Compile Include="TypeHandlers\RectTransformHandler.cs" />
+    <Compile Include="TypeHandlers\ScrollViewHandler.cs" />
     <Compile Include="TypeHandlers\Settings\DropDownListSettingHandler.cs" />
     <Compile Include="TypeHandlers\Settings\GenericSettingHandler.cs" />
     <Compile Include="TypeHandlers\Settings\IncrementSettingHandler.cs" />

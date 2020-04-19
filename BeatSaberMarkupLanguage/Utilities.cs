@@ -97,6 +97,7 @@ namespace BeatSaberMarkupLanguage
         {
             private static Material noGlowMat;
             private static Sprite _blankSprite = null;
+            private static Sprite _whitePixel = null;
 
             public static Material NoGlowMat
             {
@@ -120,6 +121,17 @@ namespace BeatSaberMarkupLanguage
                         _blankSprite = Sprite.Create(Texture2D.blackTexture, new Rect(), Vector2.zero);
 
                     return _blankSprite;
+                }
+            }
+
+            public static Sprite WhitePixel
+            {
+                get
+                {
+                    if (!_whitePixel)
+                        _whitePixel = Resources.FindObjectsOfTypeAll<Image>().First(i => i.sprite?.name == "WhitePixel").sprite;
+
+                    return _whitePixel;
                 }
             }
         }
