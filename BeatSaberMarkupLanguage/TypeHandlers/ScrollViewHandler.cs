@@ -17,6 +17,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
         public override Dictionary<string, string[]> Props { get; } = new Dictionary<string, string[]>
         {
             { "id", new[]{ "id" } },
+            { "maskOverflow", new[] { "mask-overflow" } }
         };
 
         public override void HandleType(BSMLParser.ComponentTypeWithData componentType, BSMLParserParams parserParams)
@@ -37,6 +38,11 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                     .Select(o => o.GetComponent<Button>())
                     .FirstOrDefault(b => b != null);
             }
+
+            if (componentType.data.TryGetValue("maskOverflow", out string value))
+            {
+                scrollView.MaskOverflow = bool.TryParse(value, out bool bval) ? bval : true;
+            }
         }
 
         public override void HandleTypeAfterChildren(BSMLParser.ComponentTypeWithData componentType, BSMLParserParams parserParams)
@@ -51,6 +57,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 
             scrollView.Setup();
             scrollView.RefreshButtonsInteractibility();
+            scrollView.ScrollAt(0, false);
         }
     }
 }
