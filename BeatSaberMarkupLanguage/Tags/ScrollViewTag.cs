@@ -19,6 +19,12 @@ namespace BeatSaberMarkupLanguage.Tags
             go.SetActive(false);
 
             RectTransform transform = go.AddComponent<RectTransform>();
+            transform.SetParent(parent, false);
+            transform.localPosition = Vector2.zero;
+            transform.anchorMin = Vector2.zero;
+            transform.anchorMax = Vector2.one;
+            transform.anchoredPosition = Vector2.zero;
+            transform.sizeDelta = Vector2.zero;
 
             GameObject vpgo = new GameObject("Viewport");
             RectTransform viewport = vpgo.AddComponent<RectTransform>();
@@ -44,9 +50,10 @@ namespace BeatSaberMarkupLanguage.Tags
             content.anchorMax = new Vector2(1f, 1f);
             content.anchoredPosition = Vector2.zero;
 
-            var contentLayout = contentgo.AddComponent<VerticalLayoutGroup>();
-            var contentFitter = contentgo.AddComponent<ContentSizeFitter>();
-            contentFitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
+            VerticalLayoutGroup contentLayout = contentgo.AddComponent<VerticalLayoutGroup>();
+            ContentSizeFitter contentFitter = contentgo.AddComponent<ContentSizeFitter>();
+            LayoutElement layoutElement = contentgo.AddComponent<LayoutElement>();
+            contentFitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
             contentFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
             contentLayout.childControlHeight = true;
             contentLayout.childControlWidth = false;
@@ -54,6 +61,7 @@ namespace BeatSaberMarkupLanguage.Tags
             contentLayout.childForceExpandWidth = true;
             contentLayout.childAlignment = TextAnchor.UpperCenter;
             contentLayout.spacing = 0f;
+            layoutElement.preferredWidth = -1;
 
             BSMLScrollViewElement scrollView = go.AddComponent<BSMLScrollViewElement>();
             scrollView.ContentRect = content;
