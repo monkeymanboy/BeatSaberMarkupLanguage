@@ -107,7 +107,8 @@ namespace BeatSaberMarkupLanguage.ViewControllers
             }
             else
             {
-                ParseWithFallback();
+                if(firstActivation)
+                    ParseWithFallback();
             }
 
             didActivate?.Invoke(firstActivation, type);
