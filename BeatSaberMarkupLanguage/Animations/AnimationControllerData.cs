@@ -43,11 +43,11 @@ namespace BeatSaberMarkupLanguage.Animations
         {
             if (activeImages.Count == 0)
                 return;
-            TimeSpan difference = now - lastSwitch;
-            if (difference.Milliseconds < delays[uvIndex])
+            double differenceMs = (now - lastSwitch).TotalMilliseconds;
+            if (differenceMs < delays[uvIndex])
                 return;
 
-            if (_isDelayConsistent && delays[uvIndex] <= 10 && difference.Milliseconds < 100)
+            if (_isDelayConsistent && delays[uvIndex] <= 10 && differenceMs < 100)
             {
                 // Bump animations with consistently 10ms or lower frame timings to 100ms
                 return;
