@@ -50,17 +50,11 @@ namespace BeatSaberMarkupLanguage.Tags
             content.anchorMax = new Vector2(1f, 1f);
             content.anchoredPosition = Vector2.zero;
 
-            VerticalLayoutGroup contentLayout = contentgo.AddComponent<VerticalLayoutGroup>();
             ContentSizeFitter contentFitter = contentgo.AddComponent<ContentSizeFitter>();
             LayoutElement layoutElement = contentgo.AddComponent<LayoutElement>();
             contentFitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
             contentFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
-            contentLayout.childControlHeight = true;
-            contentLayout.childControlWidth = false;
-            contentLayout.childForceExpandHeight = false;
-            contentLayout.childForceExpandWidth = true;
-            contentLayout.childAlignment = TextAnchor.UpperCenter;
-            contentLayout.spacing = 0f;
+            layoutElement.minWidth = -1;
             layoutElement.preferredWidth = -1;
 
             BSMLScrollViewElement scrollView = go.AddComponent<BSMLScrollViewElement>();

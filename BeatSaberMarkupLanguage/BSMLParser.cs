@@ -150,9 +150,8 @@ namespace BeatSaberMarkupLanguage
 
         public void HandleNode(XmlNode node, GameObject parent, BSMLParserParams parserParams, out IEnumerable<ComponentTypeWithData> componentInfo)
         {
-            componentInfo = Enumerable.Empty<ComponentTypeWithData>();
             if (node.Name.StartsWith(MACRO_PREFIX))
-                HandleMacroNode(node, parent, parserParams);
+                HandleMacroNode(node, parent, parserParams, out componentInfo);
             else
                 HandleTagNode(node, parent, parserParams, out componentInfo);
         }
@@ -205,7 +204,10 @@ namespace BeatSaberMarkupLanguage
             IEnumerable<ComponentTypeWithData> childrenComponents = Enumerable.Empty<ComponentTypeWithData>();
             if (currentTag.AddChildren)
                 foreach (XmlNode childNode in node.ChildNodes)
-                    HandleNode(childNode, currentNode, parserParams, out childrenComponents);
+                {
+                    HandleNode(childNode, currentNode, parserParams, out IEnumerable<ComponentTypeWithData> children);
+                    childrenComponents = childrenComponents.Concat(children);
+                }
 
             foreach (ComponentTypeWithData componentType in componentTypes)
             {
@@ -234,13 +236,13 @@ namespace BeatSaberMarkupLanguage
             return component;
         }
 
-        private void HandleMacroNode(XmlNode node, GameObject parent, BSMLParserParams parserParams)
+        private void HandleMacroNode(XmlNode node, GameObject parent, BSMLParserParams parserParams, out IEnumerable<ComponentTypeWithData> components)
         {
             if (!macros.TryGetValue(node.Name, out BSMLMacro currentMacro))
                 throw new Exception("Macro type '" + node.Name + "' not found");
 
             Dictionary<string, string> properties = GetParameters(node, currentMacro.CachedProps, parserParams, out _);
-            currentMacro.Execute(node, parent, properties, parserParams);
+            currentMacro.Execute(node, parent, properties, parserParams, out components);
         }
 
         private Dictionary<string, string> GetParameters(XmlNode node, Dictionary<string, string[]> properties, BSMLParserParams parserParams, out Dictionary<string, BSMLPropertyValue> propertyMap)

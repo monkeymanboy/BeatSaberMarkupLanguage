@@ -1,6 +1,7 @@
 ﻿using BeatSaberMarkupLanguage.Parser;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml;
 using UnityEngine;
 
@@ -15,8 +16,9 @@ namespace BeatSaberMarkupLanguage.Macros
             { "value", new[]{"bool","value"} },
         };
 
-        public override void Execute(XmlNode node, GameObject parent, Dictionary<string, string> data, BSMLParserParams parserParams)
+        public override void Execute(XmlNode node, GameObject parent, Dictionary<string, string> data, BSMLParserParams parserParams, out IEnumerable<BSMLParser.ComponentTypeWithData> components)
         {
+            components = Enumerable.Empty<BSMLParser.ComponentTypeWithData>();
             if (data.TryGetValue("value", out string valueId))
             {
                 bool notOperator = false;
@@ -33,7 +35,8 @@ namespace BeatSaberMarkupLanguage.Macros
                 {
                     foreach (XmlNode childNode in node.ChildNodes)
                     {
-                        BSMLParser.instance.HandleNode(childNode, parent, parserParams);
+                        BSMLParser.instance.HandleNode(childNode, parent, parserParams, out IEnumerable<BSMLParser.ComponentTypeWithData> children);
+                        components = components.Concat(children);
                     }
                 }
             }

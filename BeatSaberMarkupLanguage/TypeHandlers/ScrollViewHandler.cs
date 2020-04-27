@@ -29,14 +29,6 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             {
                 parserParams.AddEvent(id + "#PageUp", scrollView.PageUpButtonPressed);
                 parserParams.AddEvent(id + "#PageDown", scrollView.PageDownButtonPressed);
-
-                scrollView.PageUpButton = parserParams.GetObjectsWithTag("PageUpFor:" + id)
-                    .Select(o => o.GetComponent<Button>())
-                    .FirstOrDefault(b => b != null);
-
-                scrollView.PageDownButton = parserParams.GetObjectsWithTag("PageDownFor:" + id)
-                    .Select(o => o.GetComponent<Button>())
-                    .FirstOrDefault(b => b != null);
             }
 
             if (componentType.data.TryGetValue("maskOverflow", out string value))
@@ -53,6 +45,26 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             foreach (GameObject go in parserParams.GetObjectsWithTag("ScrollFocus"))
             {
                 go.AddComponent<ItemForFocussedScrolling>();
+            }
+        }
+
+        public override void HandleTypeAfterParse(BSMLParser.ComponentTypeWithData componentType, BSMLParserParams parserParams)
+        {
+            BSMLScrollViewContent content = componentType.component as BSMLScrollViewContent;
+            BSMLScrollViewElement scrollView = content.ScrollView;
+
+            Logger.log.Debug("Handling scroll view after parse");
+
+            if (componentType.data.TryGetValue("id", out string id))
+            {
+                Logger.log.Debug($"Looking for buttons tagged for {id}");
+                scrollView.PageUpButton = parserParams.GetObjectsWithTag("PageUpFor:" + id)
+                    .Select(o => o.GetComponent<Button>())
+                    .FirstOrDefault(b => b != null);
+
+                scrollView.PageDownButton = parserParams.GetObjectsWithTag("PageDownFor:" + id)
+                    .Select(o => o.GetComponent<Button>())
+                    .FirstOrDefault(b => b != null);
             }
 
             scrollView.Setup();
