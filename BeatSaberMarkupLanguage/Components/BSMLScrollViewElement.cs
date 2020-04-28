@@ -9,6 +9,7 @@ using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.Components
 {
+    // at this point this is a pseudo-reimplementation
     public class BSMLScrollViewElement : ScrollView
     {
         public Button PageUpButton
@@ -40,6 +41,18 @@ namespace BeatSaberMarkupLanguage.Components
             set => _verticalScrollIndicator = value;
         }
 
+        private bool alignBottom = false;
+        public bool AlignBottom
+        {
+            get => alignBottom;
+            set
+            {
+                alignBottom = value;
+                ScrollAt(_dstPosY, true);
+            }
+        }
+
+
         private bool maskOverflow = true;
         public bool MaskOverflow 
         {
@@ -58,28 +71,34 @@ namespace BeatSaberMarkupLanguage.Components
                 img.enabled = MaskOverflow;
         }
 
-        public override void Awake()
+        public new void Awake()
         {
             _buttonBinder = new ButtonBinder();
 
             Setup();
             RefreshButtonsInteractibility();
-            enabled = false;
+            runScrollAnim = false;
         }
 
-        public override void Setup()
+        public new void Setup() => RefreshContent();
+
+        public void RefreshBindings()
         {
             _buttonBinder.ClearBindings();
             if (PageUpButton != null)
                 _buttonBinder.AddBinding(PageUpButton, PageUpButtonPressed);
             if (PageDownButton != null)
                 _buttonBinder.AddBinding(PageDownButton, PageDownButtonPressed);
+        }
 
+        public void RefreshContent()
+        {
             _contentHeight = _contentRectTransform.rect.height;
             _scrollPageHeight = _viewport.rect.height;
             bool active = _contentHeight > _viewport.rect.height;
             PageUpButton?.gameObject?.SetActive(active);
             PageDownButton?.gameObject?.SetActive(active);
+            RefreshBindings(); // TODO: somehow fix these bindings??? it doesn't seem to be reacting to the button presses
             if (_verticalScrollIndicator != null)
             {
                 _verticalScrollIndicator.gameObject.SetActive(active);
@@ -88,27 +107,71 @@ namespace BeatSaberMarkupLanguage.Components
             ComputeScrollFocusPosY();
         }
 
-        public override void RefreshButtonsInteractibility()
+        public void ContentSizeUpdated()
+        {
+            RefreshContent();
+            RefreshButtonsInteractibility();
+            ScrollAt(0f, false);
+        }
+
+        private bool runScrollAnim = false;
+        public new void Update()
+        {
+            if (_contentHeight != _contentRectTransform.rect.height && _contentRectTransform.rect.height > 0f)
+                ContentSizeUpdated();
+
+            if (runScrollAnim)
+            {
+                float num = Mathf.Lerp(this._contentRectTransform.anchoredPosition.y, this._dstPosY, Time.deltaTime * this._smooth);
+                if (Mathf.Abs(num - this._dstPosY) < 0.01f)
+                {
+                    num = this._dstPosY;
+                    runScrollAnim = false;
+                }
+                this._contentRectTransform.anchoredPosition = new Vector2(0f, num);
+                this.UpdateVerticalScrollIndicator(this._contentRectTransform.anchoredPosition.y);
+            }
+        }
+
+        public new void RefreshButtonsInteractibility()
         {
             if (PageUpButton != null)
                 PageUpButton.interactable = _dstPosY > 0f;
             if (PageDownButton != null)
                 PageDownButton.interactable = _dstPosY < _contentHeight - (_viewport?.rect.height ?? 0);
         }
-        public override void ScrollDown(bool animated)
+
+        public new void ComputeScrollFocusPosY()
+        {
+            ItemForFocussedScrolling[] componentsInChildren = base.GetComponentsInChildren<ItemForFocussedScrolling>(true);
+            this._scrollFocusPosYs = (from item in componentsInChildren
+                                      select this.WorldPositionToScrollViewPosition(item.transform.position).y into i
+                                      orderby i
+                                      select i).ToArray<float>();
+        }
+
+        public new void UpdateVerticalScrollIndicator(float posY)
+        {
+            if (this._verticalScrollIndicator != null)
+            {
+                this._verticalScrollIndicator.progress = posY / (this._contentHeight - this._viewport.rect.height);
+            }
+        }
+
+        public new void ScrollDown(bool animated)
         {
             float dstPosY = this._contentHeight - this._viewport.rect.height;
             this.ScrollAt(dstPosY, animated);
         }
 
-        public override void ScrollToWorldPosition(Vector3 worldPosition, float pageRelativePosition, bool animated)
+        public new void ScrollToWorldPosition(Vector3 worldPosition, float pageRelativePosition, bool animated)
         {
             float num = this.WorldPositionToScrollViewPosition(worldPosition).y;
             num -= pageRelativePosition * this._scrollPageHeight;
             this.ScrollAt(num, animated);
         }
 
-        public override void ScrollToWorldPositionIfOutsideArea(Vector3 worldPosition, float pageRelativePosition, float relativeBoundaryStart, float relativeBoundaryEnd, bool animated)
+        public new void ScrollToWorldPositionIfOutsideArea(Vector3 worldPosition, float pageRelativePosition, float relativeBoundaryStart, float relativeBoundaryEnd, bool animated)
         {
             float num = this.WorldPositionToScrollViewPosition(worldPosition).y;
             float num2 = this._dstPosY + relativeBoundaryStart * this._scrollPageHeight;
@@ -121,7 +184,7 @@ namespace BeatSaberMarkupLanguage.Components
             this.ScrollAt(num, animated);
         }
 
-        public override void ScrollAt(float dstPosY, bool animated)
+        public new void ScrollAt(float dstPosY, bool animated)
         {
             this.SetDstPosY(dstPosY);
             if (!animated)
@@ -129,10 +192,10 @@ namespace BeatSaberMarkupLanguage.Components
                 this._contentRectTransform.anchoredPosition = new Vector2(0f, this._dstPosY);
             }
             this.RefreshButtonsInteractibility();
-            base.enabled = true;
+            runScrollAnim = true;
         }
 
-        public override void PageUpButtonPressed()
+        public new void PageUpButtonPressed()
         {
             float threshold = this._dstPosY + this._scrollItemRelativeThresholdPosition * this._scrollPageHeight;
             float num = (from posy in this._scrollFocusPosYs
@@ -141,10 +204,10 @@ namespace BeatSaberMarkupLanguage.Components
             num -= this._pageStepRelativePosition * this._scrollPageHeight;
             this.SetDstPosY(num);
             this.RefreshButtonsInteractibility();
-            base.enabled = true;
+            runScrollAnim = true;
         }
 
-        public override void PageDownButtonPressed()
+        public new void PageDownButtonPressed()
         {
             float threshold = this._dstPosY + (1f - this._scrollItemRelativeThresholdPosition) * this._scrollPageHeight;
             float num = (from posy in this._scrollFocusPosYs
@@ -153,7 +216,14 @@ namespace BeatSaberMarkupLanguage.Components
             num -= (1f - this._pageStepRelativePosition) * this._scrollPageHeight;
             this.SetDstPosY(num);
             this.RefreshButtonsInteractibility();
-            base.enabled = true;
+            runScrollAnim = true;
+        }
+
+        public new void SetDstPosY(float value)
+        {
+            float maxPosition = _contentHeight - _viewport.rect.height;
+            if (maxPosition < 0 && !AlignBottom) maxPosition = 0f;
+            this._dstPosY = Mathf.Min(maxPosition, Mathf.Max(0f, value));
         }
     }
 }
