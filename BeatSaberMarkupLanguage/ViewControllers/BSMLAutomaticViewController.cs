@@ -19,7 +19,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
         private static string GetDefaultResourceName(Type type)
         {
             string ns = type.Namespace;
-            string name = type.Name;// DependentUpon
+            string name = type.Name;
             string resourceNoExtension = (ns.Length > 0 ? ns + "." : "") + name;
             //First we check with no extension in case DependentUpon is being used on the embedded resource
             return type.Assembly.GetManifestResourceNames().Contains(resourceNoExtension) ? resourceNoExtension : $"{resourceNoExtension}.bsml";
