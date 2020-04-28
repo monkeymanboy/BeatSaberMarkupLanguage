@@ -21,6 +21,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "visibleCells", new[]{ "visible-cells"} },
             { "cellSize", new[]{ "cell-size"} },
             { "id", new[]{ "id" } },
+            { "data", new[] { "data", "content" } },
             { "listWidth", new[] { "list-width" } },
             { "listHeight", new[] { "list-height" } },
             { "expandCell", new[] { "expand-cell" } },

@@ -70,7 +70,7 @@ namespace BeatSaberMarkupLanguage.Components
             }
             tableCell.transform.Find("FavoritesIcon").gameObject.SetActive(false);
 
-            tableCell.SetField("_beatmapCharacteristicImages", new Image[0]);
+            //tableCell.SetField("_beatmapCharacteristicImages", new Image[0]);
             tableCell.SetField("_bought", true);
             tableCell.reuseIdentifier = reuseIdentifier;
             return tableCell;
@@ -111,16 +111,44 @@ namespace BeatSaberMarkupLanguage.Components
             switch (listStyle)
             {
                 case ListStyle.List:
-                    LevelListTableCell tableCell = GetTableCell();
+                    LevelListTableCell tableCell = GetTableCell(false); // explicitly specify false to ensure all of the characteristic images
+                                                                        // start disabled
+
+                    var nameText = tableCell.GetField<TextMeshProUGUI, LevelListTableCell>("_songNameText");
+                    var authorText = tableCell.GetField<TextMeshProUGUI, LevelListTableCell>("_authorText");
                     if (expandCell)
                     {
-                        tableCell.GetField<TextMeshProUGUI, LevelListTableCell>("_songNameText").rectTransform.anchorMax = new Vector3(2, 1, 0);
-                        tableCell.GetField<TextMeshProUGUI, LevelListTableCell>("_authorText").rectTransform.anchorMax = new Vector3(2, 1, 0);
+                        nameText.rectTransform.anchorMax = new Vector3(2, 1, 0);
+                        authorText.rectTransform.anchorMax = new Vector3(2, 1, 0);
                     }
 
-                    tableCell.GetField<TextMeshProUGUI, LevelListTableCell>("_songNameText").text = data[idx].text;
-                    tableCell.GetField<TextMeshProUGUI, LevelListTableCell>("_authorText").text = data[idx].subtext;
+                    nameText.text = data[idx].text;
+                    authorText.text = data[idx].subtext;
                     tableCell.GetField<RawImage, LevelListTableCell>("_coverRawImage").texture = data[idx].icon == null ? Texture2D.blackTexture : data[idx].icon;
+
+                    float xPos = -1f;
+                    var characImages = tableCell.GetField<Image[], LevelListTableCell>("_beatmapCharacteristicImages");
+                    var characSprites = data[idx].characteristicSprites;
+                    if (characSprites != null)
+                    {
+                        var characSpriteArr = characSprites.ToArray();
+                        if (characSpriteArr.Length > characImages.Length)
+                        {
+                            Logger.log.Warn($"List cell specifies {characSpriteArr.Length} characteristic sprites, where only {characImages.Length} are supported");
+                        }
+
+                        foreach (var (sprite, img) in characSprites.Zip(characImages, (s, img) => (s, img)))
+                        {
+                            img.enabled = true;
+                            img.rectTransform.sizeDelta = new Vector2(2.625f, 4.5f);
+                            img.rectTransform.anchoredPosition = new Vector2(xPos, 0);
+                            xPos -= img.rectTransform.sizeDelta.x + .5f;
+                            img.sprite = sprite;
+                        }
+                    }
+
+                    nameText.rectTransform.offsetMax = new Vector2(xPos, nameText.rectTransform.offsetMax.y);
+                    authorText.rectTransform.offsetMax = new Vector2(xPos, authorText.rectTransform.offsetMax.y);
 
                     return tableCell;
                 case ListStyle.Box:
@@ -159,12 +187,17 @@ namespace BeatSaberMarkupLanguage.Components
             public string text;
             public string subtext;
             public Texture2D icon;
+            public IEnumerable<Sprite> characteristicSprites;
 
-            public CustomCellInfo(string text, string subtext = null, Texture2D icon = null)
+            // this exists to maintain binary compatability
+            public CustomCellInfo(string text, string subtext, Texture2D icon) : this(text, subtext, icon, null) { }
+            public CustomCellInfo(string text, string subtext = null, Texture2D icon = null, 
+                IEnumerable<Sprite> characteristicSprites = null)
             {
                 this.text = text;
                 this.subtext = subtext;
                 this.icon = icon;
+                this.characteristicSprites = characteristicSprites;
             }
         };
     }
