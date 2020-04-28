@@ -114,8 +114,8 @@ namespace BeatSaberMarkupLanguage.Components
                     LevelListTableCell tableCell = GetTableCell(false); // explicitly specify false to ensure all of the characteristic images
                                                                         // start disabled
 
-                    var nameText = tableCell.GetField<TextMeshProUGUI, LevelListTableCell>("_songNameText");
-                    var authorText = tableCell.GetField<TextMeshProUGUI, LevelListTableCell>("_authorText");
+                    TextMeshProUGUI nameText = tableCell.GetField<TextMeshProUGUI, LevelListTableCell>("_songNameText");
+                    TextMeshProUGUI authorText = tableCell.GetField<TextMeshProUGUI, LevelListTableCell>("_authorText");
                     if (expandCell)
                     {
                         nameText.rectTransform.anchorMax = new Vector3(2, 1, 0);
@@ -127,8 +127,8 @@ namespace BeatSaberMarkupLanguage.Components
                     tableCell.GetField<RawImage, LevelListTableCell>("_coverRawImage").texture = data[idx].icon == null ? Texture2D.blackTexture : data[idx].icon;
 
                     float xPos = -1f;
-                    var characImages = tableCell.GetField<Image[], LevelListTableCell>("_beatmapCharacteristicImages");
-                    var characSprites = data[idx].characteristicSprites;
+                    Image[] characImages = tableCell.GetField<Image[], LevelListTableCell>("_beatmapCharacteristicImages");
+                    IEnumerable<Sprite> characSprites = data[idx].characteristicSprites;
                     if (characSprites != null)
                     {
                         var characSpriteArr = characSprites.ToArray();
