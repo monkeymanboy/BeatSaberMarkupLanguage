@@ -7,8 +7,20 @@ namespace BeatSaberMarkupLanguage.Components
 {
     public class BSMLScrollView : ScrollView
     {
+        private bool reserveButtonSpace = false;
+        public bool ReserveButtonSpace
+        {
+            get => reserveButtonSpace;
+            set
+            {
+                reserveButtonSpace = value;
+                _viewport.sizeDelta = new Vector2(-13, reserveButtonSpace ? -20 : -8);
+            }
+        }
+
         public override void Setup()
         {
+            if (_contentRectTransform == null) return;
             _contentHeight = (_contentRectTransform.GetChild(0).transform as RectTransform).rect.height;
             _scrollPageHeight = _viewport.rect.height;
             bool active = _contentHeight > _viewport.rect.height;

@@ -1,6 +1,29 @@
 <bg xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
   <macro.define id='button-text' value='Macro defined button text'></macro.define>
   <tab-selector tab-tag='new-tab'></tab-selector>
+  <tab tags='new-tab' tab-name='ScrollView test'>
+    <vertical vertical-fit='PreferredSize' pref-height='60' pref-width='80'>
+      <text text='ScrollView test' />
+      <scroll-view spacing='0' pref-height='50'>
+        <horizontal>
+          <text text='Testing the old scrollview'/>
+        </horizontal>
+        <img preserve-aspect='true' src='https://raw.githubusercontent.com/monkeymanboy/BeatSaberMarkupLanguage/master/BeatSaberMarkupLanguage/Resources/icon.png'/>
+        <horizontal>
+          <text text='Hey look an image ^'/>
+        </horizontal>
+        <horizontal>
+          <text text='yee'/>
+        </horizontal>
+        <horizontal>
+          <text text='and also'/>
+        </horizontal>
+        <horizontal>
+          <text text='haw'/>
+        </horizontal>
+      </scroll-view>
+    </vertical>
+  </tab>
   <tab tags='new-tab' tab-name='~header'>
     <vertical>
       <horizontal pad-left='10' pad-right='10' horizontal-fit='PreferredSize'>

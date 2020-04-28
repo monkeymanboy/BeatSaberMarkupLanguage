@@ -221,6 +221,7 @@
     <Compile Include="Tags\ModalTag.cs" />
     <Compile Include="Tags\PageButtonTag.cs" />
     <Compile Include="Tags\ScrollableSettingsContainerTag.cs" />
+    <Compile Include="Tags\ScrollViewTag.cs" />
     <Compile Include="Tags\SettingsContainerTag.cs" />
     <Compile Include="Tags\Settings\BoolSettingTag.cs" />
     <Compile Include="Tags\Settings\CheckboxSettingTag.cs" />
@@ -242,6 +243,7 @@
     <Compile Include="Tags\TextTag.cs" />
     <Compile Include="Tags\VerticalLayoutTag.cs" />
     <Compile Include="TypeHandlers\BackgroundableHandler.cs" />
+    <Compile Include="TypeHandlers\BSMLScrollViewHandler.cs" />
     <Compile Include="TypeHandlers\ButtonArtworkHandler.cs" />
     <Compile Include="TypeHandlers\ButtonHandler.cs" />
     <Compile Include="TypeHandlers\ButtonIconHandler.cs" />
