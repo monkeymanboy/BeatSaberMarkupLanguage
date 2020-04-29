@@ -36,7 +36,7 @@ namespace BeatSaberMarkupLanguage.Tags
             RectTransform transform = gameObject.GetComponent<RectTransform>();
             transform.SetParent(parent, false);
 
-            Object.Destroy(gameObject.GetComponent<VerticalScrollIndicator>());
+            Object.DestroyImmediate(gameObject.GetComponent<VerticalScrollIndicator>());
             BSMLScrollIndicator indicator = gameObject.AddComponent<BSMLScrollIndicator>();
             indicator.Handle = transform.GetChild(0).GetComponent<RectTransform>();
 

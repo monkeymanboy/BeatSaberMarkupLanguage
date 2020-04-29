@@ -45,9 +45,6 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 
         public override void HandleTypeAfterChildren(BSMLParser.ComponentTypeWithData componentType, BSMLParserParams parserParams)
         {
-            BSMLScrollViewContent content = componentType.component as BSMLScrollViewContent;
-            BSMLScrollViewElement scrollView = content.ScrollView;
-
             foreach (GameObject go in parserParams.GetObjectsWithTag("ScrollFocus"))
             {
                 go.AddComponent<ItemForFocussedScrolling>();
@@ -59,11 +56,8 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             BSMLScrollViewContent content = componentType.component as BSMLScrollViewContent;
             BSMLScrollViewElement scrollView = content.ScrollView;
 
-            Logger.log.Debug("Handling scroll view after parse");
-
             if (componentType.data.TryGetValue("id", out string id))
             {
-                Logger.log.Debug($"Looking for buttons tagged for {id}");
                 scrollView.PageUpButton = parserParams.GetObjectsWithTag("PageUpFor:" + id)
                     .Select(o => o.GetComponent<Button>())
                     .FirstOrDefault(b => b != null);
@@ -71,6 +65,10 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 scrollView.PageDownButton = parserParams.GetObjectsWithTag("PageDownFor:" + id)
                     .Select(o => o.GetComponent<Button>())
                     .FirstOrDefault(b => b != null);
+
+                scrollView.ScrollIndicator = parserParams.GetObjectsWithTag("IndicatorFor:" + id)
+                    .Select(o => o.GetComponent<VerticalScrollIndicator>() ?? o.GetComponent<BSMLScrollIndicator>())
+                    .FirstOrDefault(i => i != null);
             }
 
             scrollView.Setup();

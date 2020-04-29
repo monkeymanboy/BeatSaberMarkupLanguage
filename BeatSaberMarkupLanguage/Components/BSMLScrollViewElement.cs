@@ -98,7 +98,7 @@ namespace BeatSaberMarkupLanguage.Components
             bool active = _contentHeight > _viewport.rect.height;
             PageUpButton?.gameObject?.SetActive(active);
             PageDownButton?.gameObject?.SetActive(active);
-            RefreshBindings(); // TODO: somehow fix these bindings??? it doesn't seem to be reacting to the button presses
+            RefreshBindings();
             if (_verticalScrollIndicator != null)
             {
                 _verticalScrollIndicator.gameObject.SetActive(active);
