@@ -37,7 +37,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 scrollView.MaskOverflow = bool.TryParse(value, out bool bval) ? bval : true;
             }
 
-            if (componentType.data.TryGetValue("align-bottom", out value))
+            if (componentType.data.TryGetValue("alignBottom", out value))
             {
                 scrollView.AlignBottom = bool.TryParse(value, out bool bval) ? bval : false;
             }
