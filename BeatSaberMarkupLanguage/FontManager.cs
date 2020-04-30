@@ -206,6 +206,18 @@ namespace BeatSaberMarkupLanguage
         /// <returns><see langword="true"/> if the font was found, <see langword="false"/> otherwise</returns>
         public static bool TryGetFontByFamily(string family, out Font font, string subfamily = null, bool fallbackIfNoSubfamily = false)
         {
+            if (TryGetFontInfoByFamily(family, out var info, subfamily, fallbackIfNoSubfamily))
+            {
+                font = GetFontFromCacheOrLoad(info);
+                return true;
+            }
+
+            font = null;
+            return false;
+        }
+
+        private static bool TryGetFontInfoByFamily(string family, out FontInfo info, string subfamily = null, bool fallbackIfNoSubfamily = false)
+        {
             ThrowIfNotInitialized();
 
             if (subfamily == null) fallbackIfNoSubfamily = true;
@@ -215,12 +227,11 @@ namespace BeatSaberMarkupLanguage
             {
                 if (fontInfoLookup.TryGetValue(family, out var fonts))
                 {
-                    var info = fonts.FirstOrDefault(p => p?.Info.Subfamily == subfamily);
+                    info = fonts.FirstOrDefault(p => p?.Info.Subfamily == subfamily);
                     if (info == null)
                     {
                         if (!fallbackIfNoSubfamily)
                         {
-                            font = null;
                             return false;
                         }
                         else
@@ -229,12 +240,11 @@ namespace BeatSaberMarkupLanguage
                         }
                     }
 
-                    font = GetFontFromCacheOrLoad(info);
                     return true;
                 }
                 else
                 {
-                    font = null;
+                    info = null;
                     return false;
                 }
             }
@@ -248,20 +258,25 @@ namespace BeatSaberMarkupLanguage
         /// <returns><see langword="true"/> if the font was found, <see langword="false"/> otherwise</returns>
         public static bool TryGetFontByFullName(string fullName, out Font font)
         {
+            if (TryGetFontInfoByFullName(fullName, out var info))
+            {
+                font = GetFontFromCacheOrLoad(info);
+                return true;
+            }
+            else
+            {
+                font = null;
+                return false;
+            }
+        }
+
+        private static bool TryGetFontInfoByFullName(string fullname, out FontInfo info)
+        {
             ThrowIfNotInitialized();
 
             lock (fontInfoLookup)
             {
-                if (fontInfoLookupFullName.TryGetValue(fullName, out var info))
-                {
-                    font = GetFontFromCacheOrLoad(info);
-                    return true;
-                }
-                else
-                {
-                    font = null;
-                    return false;
-                }
+                return fontInfoLookupFullName.TryGetValue(fullname, out info);
             }
         }
 
@@ -303,6 +318,76 @@ namespace BeatSaberMarkupLanguage
             }
 
             return Enumerable.Empty<string>();
+        }
+
+        /// <summary>
+        /// Attempts to get a <see cref="TMP_FontAsset"/> with the given family name, and optionally subfamily.
+        /// </summary>
+        /// <param name="family">the name of the font family to look for</param>
+        /// <param name="font">the font with that family name, if any</param>
+        /// <param name="subfamily">the font subfamily name</param>
+        /// <param name="fallbackIfNoSubfamily">whether or not to fallback to the first font with the given family name
+        /// if the given subfamily name was not found</param>
+        /// <param name="setupOsFallbacks">whether or not to set up the fallbacks specified by the OS</param>
+        /// <returns><see langword="true"/> if the font was found, <see langword="false"/> otherwise</returns>
+        public static bool TryGetTMPFontByFamily(string family, out TMP_FontAsset font, string subfamily = null, bool fallbackIfNoSubfamily = false, bool setupOsFallbacks = true)
+        {
+            if (!TryGetFontInfoByFamily(family, out var info, subfamily, fallbackIfNoSubfamily))
+            {
+                font = null;
+                return false;
+            }
+            font = GetOrSetupTMPFontFor(info, setupOsFallbacks);
+            return true;
+        }
+
+        /// <summary>
+        /// Attempts to get a <see cref="TMP_FontAsset"/> by its font's full name.
+        /// </summary>
+        /// <param name="fullname">the full name of the font to look for</param>
+        /// <param name="font">the font identified by <paramref name="fullName"/>, if any</param>
+        /// <param name="setupOsFallbacks">whether or not to set up the fallbacks specified by the OS</param>
+        /// <returns><see langword="true"/> if the font was found, <see langword="false"/> otherwise</returns>
+        public static bool TryGetTMPFontByFullName(string fullname, out TMP_FontAsset font, bool setupOsFallbacks = true)
+        {
+            if (!TryGetFontInfoByFullName(fullname, out var info))
+            {
+                font = null;
+                return false;
+            }
+            font = GetOrSetupTMPFontFor(info, setupOsFallbacks);
+            return true;
+        }
+
+        private static TMP_FontAsset GetOrSetupTMPFontFor(FontInfo info, bool setupOsFallbacks)
+        {
+            // don't lock on this because this is mutually recursive with TryGetTMPFontByFullName
+            var font = GetFontFromCacheOrLoad(info);
+            if (!tmpFontCache.TryGetValue((font, setupOsFallbacks), out var tmpFont))
+            {
+                tmpFont = BeatSaberUI.CreateTMPFont(font);
+
+                if (setupOsFallbacks)
+                {
+                    Logger.log.Debug($"Reading fallbacks for '{info.Info.FullName}'");
+                    var fallbacks = GetOSFontFallbackList(info.Info.FullName);
+                    foreach (var fallback in fallbacks)
+                    {
+                        Logger.log.Debug($"Reading fallback '{fallback}'");
+                        if (TryGetTMPFontByFullName(fallback, out var fallbackFont, false))
+                        {
+                            tmpFont.fallbackFontAssetTable.Add(fallbackFont);
+                        }
+                        else
+                        {
+                            Logger.log.Debug($"-> Not found");
+                        }
+                    }
+                }
+
+                tmpFontCache.Add((font, setupOsFallbacks), tmpFont);
+            }
+            return tmpFont;
         }
     }
 }

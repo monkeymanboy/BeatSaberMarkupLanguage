@@ -96,6 +96,10 @@ namespace BeatSaberMarkupLanguage
         /// <summary>
         /// Creates a <see cref="TMP_FontAsset"/> from a Unity <see cref="Font"/>.
         /// </summary>
+        /// <remarks>
+        /// The <see cref="TMP_FontAsset"/> returned is not usable for UI text. Use <see cref="CreateFixedUIFontClone(TMP_FontAsset)"/>
+        /// to get a usable font.
+        /// </remarks>
         /// <param name="font">the Unity font to use</param>
         /// <returns>the new <see cref="TMP_FontAsset"/></returns>
         public static TMP_FontAsset CreateTMPFont(Font font)
