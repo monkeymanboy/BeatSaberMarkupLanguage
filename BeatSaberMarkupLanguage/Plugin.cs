@@ -4,6 +4,7 @@ using BeatSaberMarkupLanguage.ViewControllers;
 using BS_Utils.Utilities;
 using HarmonyLib;
 using IPA;
+using IPA.Utilities.Async;
 using System;
 using System.Collections;
 using System.Linq;
@@ -36,6 +37,17 @@ namespace BeatSaberMarkupLanguage
             BSEvents.menuSceneLoadedFresh += MenuLoadFresh;
             config = new Config("BSML");
         }
+
+        [OnStart]
+        public void OnStart()
+        {
+            FontManager.AsyncLoadSystemFonts()
+                .ContinueWith(async _ =>
+                {
+                    // TODO: set up fallbacks for the default font
+                }, UnityMainThreadTaskScheduler.Default);
+        }
+
         public void MenuLoadFresh()
         {
             //GameplaySetup.GameplaySetup.instance.AddTab("Test", "BeatSaberMarkupLanguage.Views.gameplay-setup-test.bsml", GameplaySetupTest.instance);
