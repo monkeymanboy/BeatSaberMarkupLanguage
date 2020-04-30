@@ -9,6 +9,7 @@ using System;
 using System.Collections;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -54,10 +55,24 @@ namespace BeatSaberMarkupLanguage
                         }
                     }
 
-                    // FontManager doesn't give fixed fonts
-                    fallback = BeatSaberUI.CreateFixedUIFontClone(fallback);
-                    BeatSaberUI.MainTextFont.fallbackFontAssetTable.Add(fallback);
-                }, UnityMainThreadTaskScheduler.Default);
+                    IEnumerator SetupFont()
+                    {
+                        yield return new WaitUntil(() => BeatSaberUI.MainTextFont != null);
+                        Logger.log.Debug("Setting up default font fallbacks");
+                        // FontManager doesn't give fixed fonts
+                        fallback = BeatSaberUI.CreateFixedUIFontClone(fallback);
+                        BeatSaberUI.MainTextFont.fallbackFontAssetTable.Add(fallback);
+                    }
+
+                    Logger.log.Debug("Waiting for default font presence");
+                    if (fallback != null)
+                        SharedCoroutineStarter.instance.StartCoroutine(SetupFont());
+                }, UnityMainThreadTaskScheduler.Default)
+                .ContinueWith(t =>
+                {
+                    Logger.log.Error("Errored while setting up fallback fonts:");
+                    Logger.log.Error(t.Exception);
+                }, TaskContinuationOptions.NotOnRanToCompletion);
         }
 
         public void MenuLoadFresh()

@@ -61,7 +61,7 @@ namespace BeatSaberMarkupLanguage
         /// Gets the main font used by the game for UI text.
         /// </summary>
         public static TMP_FontAsset MainTextFont
-            => mainTextFont ??= Resources.FindObjectsOfTypeAll<TMP_FontAsset>().First(t => t.name == "Teko-Medium SDF No Glow");
+            => mainTextFont ??= Resources.FindObjectsOfTypeAll<TMP_FontAsset>().FirstOrDefault(t => t.name == "Teko-Medium SDF No Glow");
 
         /// <summary>
         /// Creates a clone of the given font, with its material fixed to be a no-glow material suitable for use on UI elements.

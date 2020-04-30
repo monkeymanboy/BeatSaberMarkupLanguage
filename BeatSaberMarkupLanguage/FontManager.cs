@@ -61,7 +61,7 @@ namespace BeatSaberMarkupLanguage
                 return Task.CompletedTask;
             }, TaskContinuationOptions.ExecuteSynchronously | TaskContinuationOptions.OnlyOnRanToCompletion).Unwrap();
             task.ContinueWith(t => Logger.log.Error($"Font loading errored: {t.Exception}"), TaskContinuationOptions.ExecuteSynchronously | TaskContinuationOptions.NotOnRanToCompletion);
-            return task;
+            return SystemFontLoadTask;
         }
 
         internal static Task Destroy()
@@ -376,6 +376,8 @@ namespace BeatSaberMarkupLanguage
                         Logger.log.Debug($"Reading fallback '{fallback}'");
                         if (TryGetTMPFontByFullName(fallback, out var fallbackFont, false))
                         {
+                            if (tmpFont.fallbackFontAssetTable == null)
+                                tmpFont.fallbackFontAssetTable = new List<TMP_FontAsset>();
                             tmpFont.fallbackFontAssetTable.Add(fallbackFont);
                         }
                         else
