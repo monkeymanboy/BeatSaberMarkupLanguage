@@ -7,13 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using TMPro;
 using UnityEngine;
 
 namespace BeatSaberMarkupLanguage
 {
     public static class FontManager
     {
-        private struct FontInfo
+        private class FontInfo
         {
             public string Path;
             public OpenTypeFont Info;
@@ -26,8 +27,12 @@ namespace BeatSaberMarkupLanguage
 
         // family -> list of fonts in family
         private static Dictionary<string, List<FontInfo>> fontInfoLookup;
+        // full name -> font info
+        private static Dictionary<string, FontInfo> fontInfoLookupFullName;
         // path -> loaded font object
         private static readonly Dictionary<string, Font> loadedFontsCache = new Dictionary<string, Font>();
+        // (unity font, has system fallback set) -> tmp font
+        private static readonly Dictionary<(Font font, bool hasFallbacks), TMP_FontAsset> tmpFontCache = new Dictionary<(Font font, bool hasFallbacks), TMP_FontAsset>();
 
         public static Task SystemFontLoadTask { get; private set; }
 
@@ -39,9 +44,10 @@ namespace BeatSaberMarkupLanguage
             SystemFontLoadTask = task.ContinueWith(t =>
             {
                 Logger.log.Debug("Font loading complete");
-                Interlocked.CompareExchange(ref fontInfoLookup, t.Result, null);
+                Interlocked.CompareExchange(ref fontInfoLookupFullName, t.Result.fulls, null);
+                Interlocked.CompareExchange(ref fontInfoLookup, t.Result.families, null);
                 return Task.CompletedTask;
-            }, TaskContinuationOptions.ExecuteSynchronously | TaskContinuationOptions.OnlyOnRanToCompletion);
+            }, TaskContinuationOptions.ExecuteSynchronously | TaskContinuationOptions.OnlyOnRanToCompletion).Unwrap();
             task.ContinueWith(t => Logger.log.Error($"Font loading errored: {t.Exception}"), TaskContinuationOptions.ExecuteSynchronously | TaskContinuationOptions.NotOnRanToCompletion);
             return task;
         }
@@ -49,30 +55,34 @@ namespace BeatSaberMarkupLanguage
         public static Task Destroy()
         {
             fontInfoLookup = null;
-            return UnityMainThreadTaskScheduler.Factory.StartNew(() => DestroyDict(loadedFontsCache)).Unwrap()
-                .ContinueWith(_ => loadedFontsCache.Clear());
+            fontInfoLookupFullName = null;
+            return UnityMainThreadTaskScheduler.Factory.StartNew(() => DestroyObjects(loadedFontsCache.Select(p => p.Value))).Unwrap()
+                .ContinueWith(_ => loadedFontsCache.Clear())
+                .ContinueWith(_ => DestroyObjects(tmpFontCache.Select(p => p.Value)), UnityMainThreadTaskScheduler.Default).Unwrap()
+                .ContinueWith(_ => tmpFontCache.Clear());
         }
 
-        private static async Task DestroyDict(IReadOnlyDictionary<string, Font> dict)
+        private static async Task DestroyObjects(IEnumerable<UnityEngine.Object> objects)
         {
-            foreach (var pair in dict)
+            foreach (var obj in objects)
             {
-                Font.Destroy(pair.Value);
+                UnityEngine.Object.Destroy(obj);
                 await Task.Yield(); // yield back to the scheduler to allow more things to happen
             }
         }
 
-        private static async Task<Dictionary<string, List<FontInfo>>> LoadSystemFonts()
+        private static async Task<(Dictionary<string, List<FontInfo>> families, Dictionary<string, FontInfo> fulls)> LoadSystemFonts()
         {
             var paths = Font.GetPathsToOSFonts();
 
-            var fonts = new Dictionary<string, List<FontInfo>>(paths.Length, StringComparer.InvariantCultureIgnoreCase);
+            var families = new Dictionary<string, List<FontInfo>>(paths.Length, StringComparer.InvariantCultureIgnoreCase);
+            var fullNames = new Dictionary<string, FontInfo>(paths.Length, StringComparer.InvariantCultureIgnoreCase);
 
             foreach (var path in paths)
             {
                 try
                 {
-                    AddFontFileToCache(fonts, path);
+                    AddFontFileToCache(families, fullNames, path);
                 }
                 catch (Exception e)
                 {
@@ -82,18 +92,30 @@ namespace BeatSaberMarkupLanguage
                 await Task.Yield();
             }
 
-            return fonts;
+            return (families, fullNames);
         }
 
-        private static IEnumerable<OpenTypeFont> AddFontFileToCache(Dictionary<string, List<FontInfo>> cache, string path)
+        private static IEnumerable<FontInfo> AddFontFileToCache(Dictionary<string, List<FontInfo>> cache, Dictionary<string, FontInfo> fullCache, string path)
         {
-            void AddFont(OpenTypeFont font)
+            FontInfo AddFont(OpenTypeFont font)
             {
 #if DEBUG
                 Logger.log.Debug($"'{path}' = '{font.Family}' '{font.Subfamily}' ({font.FullName})");
 #endif
+                var fontInfo = new FontInfo(path, font);
+
                 var list = GetListForFamily(cache, font.Family);
-                list.Add(new FontInfo(path, font));
+                list.Add(fontInfo);
+                var name = font.FullName;
+                if (fullCache.ContainsKey(name))
+                {
+                    Logger.log.Warn($"Duplcicate font with full name '{name}' at {path}");
+                }
+                else
+                {
+                    fullCache.Add(name, fontInfo);
+                }
+                return fontInfo;
             }
 
             using var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read);
@@ -101,20 +123,18 @@ namespace BeatSaberMarkupLanguage
             if (reader is OpenTypeCollectionReader colReader)
             {
                 var collection = new OpenTypeCollection(colReader, lazyLoad: false);
-                foreach (var font in collection)
-                    AddFont(font);
-                return collection;
+                return collection.Select(AddFont).ToList();
             }
             else if (reader is OpenTypeFontReader fontReader)
             {
                 var font = new OpenTypeFont(fontReader, lazyLoad: false);
-                AddFont(font);
-                return Utilities.SingleEnumerable(font);
+                ;
+                return Utilities.SingleEnumerable(AddFont(font));
             }
             else
             {
                 Logger.log.Warn($"Font file '{path}' is not an OpenType file");
-                return Enumerable.Empty<OpenTypeFont>();
+                return Enumerable.Empty<FontInfo>();
             }
         }
 
@@ -131,10 +151,10 @@ namespace BeatSaberMarkupLanguage
 
             lock (fontInfoLookup)
             {
-                var set = AddFontFileToCache(fontInfoLookup, path);
+                var set = AddFontFileToCache(fontInfoLookup, fontInfoLookupFullName, path);
                 if (!set.Any())
                     throw new ArgumentException("File is not an OpenType font or collection", nameof(path));
-                return GetFontFromCacheOrLoad(new FontInfo(path, set.First()));
+                return GetFontFromCacheOrLoad(set.First());
             }
         }
 
@@ -145,7 +165,7 @@ namespace BeatSaberMarkupLanguage
             if (!IsInitialized) throw new InvalidOperationException("FontManager not initialized");
         }
 
-        public static bool TryGetFont(string family, out Font font, string subfamily = null, bool fallbackIfNoSubfamily = false)
+        public static bool TryGetFontByFamily(string family, out Font font, string subfamily = null, bool fallbackIfNoSubfamily = false)
         {
             ThrowIfNotInitialized();
 
@@ -156,7 +176,7 @@ namespace BeatSaberMarkupLanguage
             {
                 if (fontInfoLookup.TryGetValue(family, out var fonts))
                 {
-                    var info = fonts.AsNullable().FirstOrDefault(p => p?.Info.Subfamily == subfamily);
+                    var info = fonts.FirstOrDefault(p => p?.Info.Subfamily == subfamily);
                     if (info == null)
                     {
                         if (!fallbackIfNoSubfamily)
@@ -170,7 +190,26 @@ namespace BeatSaberMarkupLanguage
                         }
                     }
 
-                    font = GetFontFromCacheOrLoad(info.Value);
+                    font = GetFontFromCacheOrLoad(info);
+                    return true;
+                }
+                else
+                {
+                    font = null;
+                    return false;
+                }
+            }
+        }
+
+        public static bool TryGetFontByFullName(string fullName, out Font font)
+        {
+            ThrowIfNotInitialized();
+
+            lock (fontInfoLookup)
+            {
+                if (fontInfoLookupFullName.TryGetValue(fullName, out var info))
+                {
+                    font = GetFontFromCacheOrLoad(info);
                     return true;
                 }
                 else
