@@ -11,6 +11,7 @@
     <AssemblyName>BSML</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <LangVersion>8.0</LangVersion>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -168,6 +169,7 @@
     <Compile Include="Components\TextPageScrollViewRefresher.cs" />
     <Compile Include="FloatingScreen\FloatingScreen.cs" />
     <Compile Include="FloatingScreen\FloatingScreenMoverPointer.cs" />
+    <Compile Include="FontManager.cs" />
     <Compile Include="GameplaySetupTest.cs" />
     <Compile Include="GameplaySetup\GameplaySetup.cs" />
     <Compile Include="GameplaySetup\GameplaySetupMenu.cs" />
@@ -182,6 +184,17 @@
     <Compile Include="MenuButtons\MenuButton.cs" />
     <Compile Include="MenuButtons\MenuButtons.cs" />
     <Compile Include="Notify\INotifiableHost.cs" />
+    <Compile Include="OpenType\CollectionHeader.cs" />
+    <Compile Include="OpenType\NumericHelpers.cs" />
+    <Compile Include="OpenType\OffsetTable.cs" />
+    <Compile Include="OpenType\OpenTypeCollection.cs" />
+    <Compile Include="OpenType\OpenTypeCollectionReader.cs" />
+    <Compile Include="OpenType\OpenTypeFont.cs" />
+    <Compile Include="OpenType\OpenTypeFontReader.cs" />
+    <Compile Include="OpenType\OpenTypeReader.cs" />
+    <Compile Include="OpenType\OpenTypeTable.cs" />
+    <Compile Include="OpenType\OpenTypeTag.cs" />
+    <Compile Include="OpenType\TableRecord.cs" />
     <Compile Include="Parse.cs" />
     <Compile Include="Parser\BSMLAction.cs" />
     <Compile Include="BSMLParser.cs" />

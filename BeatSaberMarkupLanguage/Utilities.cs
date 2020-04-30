@@ -215,6 +215,14 @@ namespace BeatSaberMarkupLanguage
             return data;
         }
 
+        public static IEnumerable<T> SingleEnumerable<T>(this T item) 
+            => Enumerable.Empty<T>().Append(item);
+
+        public static IEnumerable<T?> AsNullable<T>(this IEnumerable<T> seq) where T : struct
+            => seq.Select(v => new T?(v));
+
+        public static T? AsNullable<T>(this T item) where T : struct => item;
+
         /// <summary>
         /// Get data from either a resource path, a file path, or a url
         /// </summary>
