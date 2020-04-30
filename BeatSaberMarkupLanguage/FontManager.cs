@@ -1,5 +1,6 @@
 ﻿using BeatSaberMarkupLanguage.OpenType;
 using IPA.Utilities.Async;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -34,8 +35,19 @@ namespace BeatSaberMarkupLanguage
         // (unity font, has system fallback set) -> tmp font
         private static readonly Dictionary<(Font font, bool hasFallbacks), TMP_FontAsset> tmpFontCache = new Dictionary<(Font font, bool hasFallbacks), TMP_FontAsset>();
 
+        /// <summary>
+        /// The <see cref="Task"/> associated with an ongoing call to <see cref="AsyncLoadSystemFonts"/>.
+        /// </summary>
         public static Task SystemFontLoadTask { get; private set; }
 
+        /// <summary>
+        /// Asynchronously loads all of the installed system fonts into <see cref="FontManager"/>.
+        /// </summary>
+        /// <remarks>
+        /// Only one of this may be running at a time. If this has already been called, this will simply return the existing task.
+        /// If <see cref="FontManager"/> has been initialized, this completes immediately.
+        /// </remarks>
+        /// <returns>a task representing the async operation</returns>
         public static Task AsyncLoadSystemFonts()
         {
             if (IsInitialized) return Task.CompletedTask;
@@ -52,7 +64,7 @@ namespace BeatSaberMarkupLanguage
             return task;
         }
 
-        public static Task Destroy()
+        internal static Task Destroy()
         {
             fontInfoLookup = null;
             fontInfoLookupFullName = null;
@@ -128,7 +140,6 @@ namespace BeatSaberMarkupLanguage
             else if (reader is OpenTypeFontReader fontReader)
             {
                 var font = new OpenTypeFont(fontReader, lazyLoad: false);
-                ;
                 return Utilities.SingleEnumerable(AddFont(font));
             }
             else
@@ -145,7 +156,15 @@ namespace BeatSaberMarkupLanguage
             return list;
         }
 
-        public static Font AddFileToCache(string path)
+        /// <summary>
+        /// Adds a specified OpenType file to the font manager for lookup by name.
+        /// </summary>
+        /// <param name="path">the path to add to the manager</param>
+        /// <returns>the <see cref="Font"/> the file contained</returns>
+        /// <exception cref="ArgumentException">if the file pointed to by <paramref name="path"/> is not an OpenType file -or- 
+        /// <paramref name="path"/> is not a valid file path</exception>
+        /// <exception cref="FileNotFoundException">if the file does not exist</exception>
+        public static Font AddFontFile(string path)
         {
             ThrowIfNotInitialized();
 
@@ -158,6 +177,13 @@ namespace BeatSaberMarkupLanguage
             }
         }
 
+        /// <summary>
+        /// Gets whether or not <see cref="FontManager"/> is initialized.
+        /// </summary>
+        /// <remarks>
+        /// You can <see langword="await"/> <see cref="AsyncLoadSystemFonts"/>, or <see cref="SystemFontLoadTask"/> if it is non-null.
+        /// When they complete, <see cref="FontManager"/> will be initialized.
+        /// </remarks>
         public static bool IsInitialized => fontInfoLookup != null;
 
         private static void ThrowIfNotInitialized()
@@ -165,6 +191,19 @@ namespace BeatSaberMarkupLanguage
             if (!IsInitialized) throw new InvalidOperationException("FontManager not initialized");
         }
 
+        /// <summary>
+        /// Attemts to get a font given a family name, and optionally a subfamily name.
+        /// </summary>
+        /// <remarks>
+        /// When <paramref name="subfamily"/> is <see langword="null"/>, <paramref name="fallbackIfNoSubfamily"/> is ignored,
+        /// and always treated as if it were <see langword="true"/>.
+        /// </remarks>
+        /// <param name="family">the name of the font family to look for</param>
+        /// <param name="font">the font with that family name, if any</param>
+        /// <param name="subfamily">the font subfamily name</param>
+        /// <param name="fallbackIfNoSubfamily">whether or not to fallback to the first font with the given family name
+        /// if the given subfamily name was not found</param>
+        /// <returns><see langword="true"/> if the font was found, <see langword="false"/> otherwise</returns>
         public static bool TryGetFontByFamily(string family, out Font font, string subfamily = null, bool fallbackIfNoSubfamily = false)
         {
             ThrowIfNotInitialized();
@@ -201,6 +240,12 @@ namespace BeatSaberMarkupLanguage
             }
         }
 
+        /// <summary>
+        /// Attempts to get a font by its full name.
+        /// </summary>
+        /// <param name="fullName">the full name of the font to look for</param>
+        /// <param name="font">the font identified by <paramref name="fullName"/>, if any</param>
+        /// <returns><see langword="true"/> if the font was found, <see langword="false"/> otherwise</returns>
         public static bool TryGetFontByFullName(string fullName, out Font font)
         {
             ThrowIfNotInitialized();
@@ -232,6 +277,32 @@ namespace BeatSaberMarkupLanguage
                 }
                 return font;
             }
+        }
+
+
+        /// <summary>
+        /// Gets the font fallback list provided by the OS for a given font name, if there is any.
+        /// </summary>
+        /// <remarks>
+        /// If the OS specifies no fallbacks, then the result of this function will be empty.
+        /// </remarks>
+        /// <param name="fullname">the full name of the font to look up the fallbacks for</param>
+        /// <returns>a list of fallbacks defined by the OS</returns>
+        public static IEnumerable<string> GetOSFontFallbackList(string fullname)
+        {
+            using var syslinkKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\FontLink\SystemLink");
+            if (syslinkKey == null) return Enumerable.Empty<string>();
+
+            var keyVal = syslinkKey.GetValue(fullname);
+            if (keyVal is string[] names)
+            {
+                // the format in this is '<filename>,<font full name>[,<some other stuff>]'
+                return names.Select(s => s.Split(','))
+                            .Select(a => a.Length > 1 ? a[1] : null)
+                            .Where(s => s != null);
+            }
+
+            return Enumerable.Empty<string>();
         }
     }
 }
