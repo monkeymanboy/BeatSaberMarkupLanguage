@@ -4,7 +4,16 @@
   <tab tags='new-tab' tab-name='~header'>
     <vertical>
       <horizontal pad-left='10' pad-right='10' horizontal-fit='PreferredSize'>
-        <text text='~header' color='red' align='Center' font-size='10'></text>
+        <vertical>
+          <text text='~header' color='red' align='Center' font-size='4'></text>
+          <text text='🎀 ここに変な手紙を入れましょう 🎀' />
+          <text text='בוא נקבל כמה אותיות מוזרות כאן' />
+          <text text='🎀 讓我們在這裡得到一些奇怪的信 🎀' />
+          <text text='la oss få noen rare brev her inne' />
+          <text text='여기에 이상한 글자를 줍시다' />
+          <text text='ας πάρουμε μερικά περίεργα γράμματα εδώ' />
+          <text text='давайте получим несколько странных писем здесь' />
+        </vertical>
       </horizontal>
       <horizontal bg='round-rect-panel' pad='6' spacing='10'>
         <button id='test-external' on-click='click' glow-color='green' text='~button-text'></button>
@@ -13,6 +22,7 @@
             <modal show-event='open-modal' hide-event='close-modal' size-delta-x='40' size-delta-y='30' move-to-center='false'>
               <vertical horizontal-fit='PreferredSize' vertical-fit='PreferredSize'>
                 <text text='Modal works yee haw'></text>
+                <text text='lèts gét sóme wierd letters ñ ╥ Ê' />
                 <button text='yee' click-event='close-modal'></button>
               </vertical>
             </modal>
