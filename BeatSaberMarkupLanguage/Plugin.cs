@@ -9,6 +9,7 @@ using System;
 using System.Collections;
 using System.Linq;
 using System.Reflection;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using IPALogger = IPA.Logging.Logger;
@@ -42,9 +43,20 @@ namespace BeatSaberMarkupLanguage
         public void OnStart()
         {
             FontManager.AsyncLoadSystemFonts()
-                .ContinueWith(async _ =>
+                .ContinueWith(_ =>
                 {
-                    // TODO: set up fallbacks for the default font
+                    if (!FontManager.TryGetTMPFontByFullName("Segoe UI", out TMP_FontAsset fallback))
+                    {
+                        if (!FontManager.TryGetTMPFontByFamily("Arial", out fallback))
+                        {
+                            Logger.log.Warn("Could not find fonts for either Segoe UI or Arial to set up fallbacks");
+                            return;
+                        }
+                    }
+
+                    // FontManager doesn't give fixed fonts
+                    fallback = BeatSaberUI.CreateFixedUIFontClone(fallback);
+                    BeatSaberUI.MainTextFont.fallbackFontAssetTable.Add(fallback);
                 }, UnityMainThreadTaskScheduler.Default);
         }
 
