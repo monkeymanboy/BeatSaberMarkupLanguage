@@ -102,10 +102,10 @@ namespace BeatSaberMarkupLanguage
         /// </remarks>
         /// <param name="font">the Unity font to use</param>
         /// <returns>the new <see cref="TMP_FontAsset"/></returns>
-        public static TMP_FontAsset CreateTMPFont(Font font)
+        public static TMP_FontAsset CreateTMPFont(Font font, string nameOverride = null)
         {
             var tmpFont = TMP_FontAsset.CreateFontAsset(font);
-            tmpFont.SetName(font.name);
+            tmpFont.SetName(nameOverride ?? font.name);
             return tmpFont;
         }
 

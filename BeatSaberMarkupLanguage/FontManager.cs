@@ -365,7 +365,7 @@ namespace BeatSaberMarkupLanguage
             var font = GetFontFromCacheOrLoad(info);
             if (!tmpFontCache.TryGetValue((font, setupOsFallbacks), out var tmpFont))
             {
-                tmpFont = BeatSaberUI.CreateTMPFont(font);
+                tmpFont = BeatSaberUI.CreateTMPFont(font, info.Info.FullName);
 
                 if (setupOsFallbacks)
                 {
