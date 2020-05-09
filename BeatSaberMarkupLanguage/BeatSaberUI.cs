@@ -7,6 +7,7 @@ using System.Reflection;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Object = UnityEngine.Object;
 
 namespace BeatSaberMarkupLanguage
 {
@@ -70,14 +71,10 @@ namespace BeatSaberMarkupLanguage
         /// <returns>the fixed clone</returns>
         public static TMP_FontAsset CreateFixedUIFontClone(TMP_FontAsset font)
         {
-            var matCopy = GameObject.Instantiate(MainTextFont.material);
-            matCopy.mainTexture = font.material.mainTexture;
-            matCopy.mainTextureOffset = font.material.mainTextureOffset;
-            matCopy.mainTextureScale = font.material.mainTextureScale;
-            var copy = GameObject.Instantiate(font);
-            copy.material = matCopy;
-            copy.SetName(font.name);
-            return copy;
+            var noglowShader = MainTextFont.material.shader;
+            var newFont = Object.Instantiate(font);
+            newFont.material.shader = noglowShader;
+            return newFont;
         }
 
         /// <summary>

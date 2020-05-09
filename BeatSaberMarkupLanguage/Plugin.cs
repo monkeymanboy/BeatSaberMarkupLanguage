@@ -60,7 +60,7 @@ namespace BeatSaberMarkupLanguage
                         yield return new WaitUntil(() => BeatSaberUI.MainTextFont != null);
                         Logger.log.Debug("Setting up default font fallbacks");
                         // FontManager doesn't give fixed fonts
-                        fallback = BeatSaberUI.CreateFixedUIFontClone(fallback);
+                        //fallback = BeatSaberUI.CreateFixedUIFontClone(fallback);
                         BeatSaberUI.MainTextFont.fallbackFontAssetTable.Add(fallback);
                     }
 
