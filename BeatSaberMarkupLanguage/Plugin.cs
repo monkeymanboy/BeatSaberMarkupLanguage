@@ -80,7 +80,6 @@ namespace BeatSaberMarkupLanguage
             //GameplaySetup.GameplaySetup.instance.AddTab("Test", "BeatSaberMarkupLanguage.Views.gameplay-setup-test.bsml", GameplaySetupTest.instance);
             //BSMLSettings.instance.AddSettingsMenu("Test", "BeatSaberMarkupLanguage.Views.settings-test.bsml", SettingsTest.instance);
             //Resources.FindObjectsOfTypeAll<GameScenesManager>().FirstOrDefault().StartCoroutine(PresentTest());
-            BSMLParser.instance.MenuSceneLoaded();
             BSMLSettings.instance.Setup();
             MenuButtons.MenuButtons.instance.Setup();
             GameplaySetup.GameplaySetup.instance.Setup();
@@ -88,6 +87,8 @@ namespace BeatSaberMarkupLanguage
 
         public void OnActiveSceneChanged(Scene prevScene, Scene nextScene)
         {
+            if (nextScene.name.Contains("Menu") && prevScene.name == "EmptyTransition")
+                BSMLParser.instance.MenuSceneLoaded();
         }
 
         //It's just for testing so don't yell at me
