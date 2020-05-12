@@ -1,4 +1,4 @@
-﻿using BeatSaberMarkupLanguage.Components;
+using BeatSaberMarkupLanguage.Components;
 using HMUI;
 using IPA.Utilities;
 using System.Linq;

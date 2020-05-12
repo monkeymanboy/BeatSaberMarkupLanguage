@@ -10,7 +10,7 @@ namespace BeatSaberMarkupLanguage.Tags
 {
     public class ScrollableSettingsContainerTag : ScrollViewTag
     {
-        public override string[] Aliases => new[] { "scrollable-settings-container" };
+        public override string[] Aliases => new[] { "settings-scroll-view", "scrollable-settings-container" };
 
         public override GameObject CreateObject(Transform parent)
         {

@@ -97,6 +97,7 @@ namespace BeatSaberMarkupLanguage
         {
             private static Material noGlowMat;
             private static Sprite _blankSprite = null;
+            private static Sprite _whitePixel = null;
 
             public static Material NoGlowMat
             {
@@ -120,6 +121,17 @@ namespace BeatSaberMarkupLanguage
                         _blankSprite = Sprite.Create(Texture2D.blackTexture, new Rect(), Vector2.zero);
 
                     return _blankSprite;
+                }
+            }
+
+            public static Sprite WhitePixel
+            {
+                get
+                {
+                    if (!_whitePixel)
+                        _whitePixel = Resources.FindObjectsOfTypeAll<Image>().First(i => i.sprite?.name == "WhitePixel").sprite;
+
+                    return _whitePixel;
                 }
             }
         }
@@ -202,6 +214,14 @@ namespace BeatSaberMarkupLanguage
             stream.Read(data, 0, (int)stream.Length);
             return data;
         }
+
+        public static IEnumerable<T> SingleEnumerable<T>(this T item) 
+            => Enumerable.Empty<T>().Append(item);
+
+        public static IEnumerable<T?> AsNullable<T>(this IEnumerable<T> seq) where T : struct
+            => seq.Select(v => new T?(v));
+
+        public static T? AsNullable<T>(this T item) where T : struct => item;
 
         /// <summary>
         /// Get data from either a resource path, a file path, or a url

@@ -11,6 +11,7 @@
     <AssemblyName>BSML</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <LangVersion>8.0</LangVersion>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -133,7 +134,9 @@
     <Compile Include="Attributes\UIValue.cs" />
     <Compile Include="Attributes\ViewDefinitionAttribute.cs" />
     <Compile Include="BeatSaberUI.cs" />
+    <Compile Include="Components\BSMLScrollIndicator.cs" />
     <Compile Include="Components\BSMLScrollView.cs" />
+    <Compile Include="Components\BSMLScrollableContainer.cs" />
     <Compile Include="Components\BSMLTableView.cs" />
     <Compile Include="Components\ButtonArtworkImage.cs" />
     <Compile Include="Components\ButtonIconImage.cs" />
@@ -165,6 +168,7 @@
     <Compile Include="Components\TextPageScrollViewRefresher.cs" />
     <Compile Include="FloatingScreen\FloatingScreen.cs" />
     <Compile Include="FloatingScreen\FloatingScreenMoverPointer.cs" />
+    <Compile Include="FontManager.cs" />
     <Compile Include="GameplaySetupTest.cs" />
     <Compile Include="GameplaySetup\GameplaySetup.cs" />
     <Compile Include="GameplaySetup\GameplaySetupMenu.cs" />
@@ -179,6 +183,17 @@
     <Compile Include="MenuButtons\MenuButton.cs" />
     <Compile Include="MenuButtons\MenuButtons.cs" />
     <Compile Include="Notify\INotifiableHost.cs" />
+    <Compile Include="OpenType\CollectionHeader.cs" />
+    <Compile Include="OpenType\NumericHelpers.cs" />
+    <Compile Include="OpenType\OffsetTable.cs" />
+    <Compile Include="OpenType\OpenTypeCollection.cs" />
+    <Compile Include="OpenType\OpenTypeCollectionReader.cs" />
+    <Compile Include="OpenType\OpenTypeFont.cs" />
+    <Compile Include="OpenType\OpenTypeFontReader.cs" />
+    <Compile Include="OpenType\OpenTypeReader.cs" />
+    <Compile Include="OpenType\OpenTypeTable.cs" />
+    <Compile Include="OpenType\OpenTypeTag.cs" />
+    <Compile Include="OpenType\TableRecord.cs" />
     <Compile Include="Parse.cs" />
     <Compile Include="Parser\BSMLAction.cs" />
     <Compile Include="BSMLParser.cs" />
@@ -220,7 +235,9 @@
     <Compile Include="Tags\ModalKeyboardTag.cs" />
     <Compile Include="Tags\ModalTag.cs" />
     <Compile Include="Tags\PageButtonTag.cs" />
+    <Compile Include="Tags\ScrollableContainerTag.cs" />
     <Compile Include="Tags\ScrollableSettingsContainerTag.cs" />
+    <Compile Include="Tags\ScrollIndicatorTag.cs" />
     <Compile Include="Tags\ScrollViewTag.cs" />
     <Compile Include="Tags\SettingsContainerTag.cs" />
     <Compile Include="Tags\Settings\BoolSettingTag.cs" />
@@ -266,6 +283,8 @@
     <Compile Include="TypeHandlers\ModalViewHandler.cs" />
     <Compile Include="TypeHandlers\PageButtonHandler.cs" />
     <Compile Include="TypeHandlers\RectTransformHandler.cs" />
+    <Compile Include="TypeHandlers\ScrollIndicatorHandler.cs" />
+    <Compile Include="TypeHandlers\ScrollableContainerHandler.cs" />
     <Compile Include="TypeHandlers\Settings\DropDownListSettingHandler.cs" />
     <Compile Include="TypeHandlers\Settings\GenericSettingHandler.cs" />
     <Compile Include="TypeHandlers\Settings\IncrementSettingHandler.cs" />

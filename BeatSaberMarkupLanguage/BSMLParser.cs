@@ -130,25 +130,32 @@ namespace BeatSaberMarkupLanguage
                 }
             }
 
+            IEnumerable<ComponentTypeWithData> componentInfo = Enumerable.Empty<ComponentTypeWithData>();
             foreach (XmlNode node in parentNode.ChildNodes)
-                HandleNode(node, parent, parserParams);
+            {
+                HandleNode(node, parent, parserParams, out IEnumerable<ComponentTypeWithData> components);
+                componentInfo = componentInfo.Concat(components);
+            }
 
             foreach (KeyValuePair<string, BSMLAction> action in parserParams.actions.Where(x => x.Key.StartsWith(SUBSCRIVE_EVENT_ACTION_PREFIX)))
                 parserParams.AddEvent(action.Key.Substring(1), delegate { action.Value.Invoke(); });
+
+            foreach (ComponentTypeWithData component in componentInfo)
+                component.typeHandler.HandleTypeAfterParse(component, parserParams);
 
             parserParams.EmitEvent("post-parse");
 
             return parserParams;
         }
 
-        public void HandleNode(XmlNode node, GameObject parent, BSMLParserParams parserParams)
+        public void HandleNode(XmlNode node, GameObject parent, BSMLParserParams parserParams, out IEnumerable<ComponentTypeWithData> componentInfo)
         {
             if (node.Name.StartsWith(MACRO_PREFIX))
-                HandleMacroNode(node, parent, parserParams);
+                HandleMacroNode(node, parent, parserParams, out componentInfo);
             else
-                HandleTagNode(node, parent, parserParams);
+                HandleTagNode(node, parent, parserParams, out componentInfo);
         }
-        private void HandleTagNode(XmlNode node, GameObject parent, BSMLParserParams parserParams)
+        private void HandleTagNode(XmlNode node, GameObject parent, BSMLParserParams parserParams, out IEnumerable<ComponentTypeWithData> componentInfo)
         {
 
             if (!tags.TryGetValue(node.Name, out BSMLTag currentTag))
@@ -194,14 +201,20 @@ namespace BeatSaberMarkupLanguage
             if (node.Attributes["tags"] != null)
                 parserParams.AddObjectTags(currentNode, node.Attributes["tags"].Value.Split(','));
 
+            IEnumerable<ComponentTypeWithData> childrenComponents = Enumerable.Empty<ComponentTypeWithData>();
             if (currentTag.AddChildren)
                 foreach (XmlNode childNode in node.ChildNodes)
-                    HandleNode(childNode, currentNode, parserParams);
+                {
+                    HandleNode(childNode, currentNode, parserParams, out IEnumerable<ComponentTypeWithData> children);
+                    childrenComponents = childrenComponents.Concat(children);
+                }
 
             foreach (ComponentTypeWithData componentType in componentTypes)
             {
                 componentType.typeHandler.HandleTypeAfterChildren(componentType, parserParams);
             }
+
+            componentInfo = componentTypes.Concat(childrenComponents);
         }
 
         private Component GetExternalComponent(GameObject gameObject, Type type)
@@ -223,13 +236,13 @@ namespace BeatSaberMarkupLanguage
             return component;
         }
 
-        private void HandleMacroNode(XmlNode node, GameObject parent, BSMLParserParams parserParams)
+        private void HandleMacroNode(XmlNode node, GameObject parent, BSMLParserParams parserParams, out IEnumerable<ComponentTypeWithData> components)
         {
             if (!macros.TryGetValue(node.Name, out BSMLMacro currentMacro))
                 throw new Exception("Macro type '" + node.Name + "' not found");
 
             Dictionary<string, string> properties = GetParameters(node, currentMacro.CachedProps, parserParams, out _);
-            currentMacro.Execute(node, parent, properties, parserParams);
+            currentMacro.Execute(node, parent, properties, parserParams, out components);
         }
 
         private Dictionary<string, string> GetParameters(XmlNode node, Dictionary<string, string[]> properties, BSMLParserParams parserParams, out Dictionary<string, BSMLPropertyValue> propertyMap)
