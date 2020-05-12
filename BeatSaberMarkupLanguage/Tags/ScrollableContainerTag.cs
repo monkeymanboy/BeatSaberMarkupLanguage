@@ -63,6 +63,8 @@ namespace BeatSaberMarkupLanguage.Tags
             scrollView.ContentRect = content;
             scrollView.Viewport = viewport;
 
+            contentgo.AddComponent<ExternalComponents>().components.Add(scrollView);
+
             go.SetActive(true);
             return contentgo;
         }
