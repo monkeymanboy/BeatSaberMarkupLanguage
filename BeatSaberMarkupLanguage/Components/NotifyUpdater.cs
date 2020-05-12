@@ -34,7 +34,7 @@ namespace BeatSaberMarkupLanguage.Components
                 OnDestroy();
                 return;
             }
-            PropertyInfo prop = sender.GetType().GetProperty(e.PropertyName);
+            PropertyInfo prop = sender.GetType().GetProperty(e.PropertyName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
             Action<object> action = null;
             if (ActionDict.TryGetValue(e.PropertyName, out action))
                 action?.Invoke(prop.GetValue(sender));

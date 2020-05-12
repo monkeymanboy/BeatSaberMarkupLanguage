@@ -19,6 +19,6 @@ namespace BeatSaberMarkupLanguage.Macros
             }
         }
         public abstract Dictionary<string, string[]> Props { get; }
-        public abstract void Execute(XmlNode node, GameObject parent, Dictionary<string, string> data, BSMLParserParams parserParams);
+        public abstract void Execute(XmlNode node, GameObject parent, Dictionary<string, string> data, BSMLParserParams parserParams, out IEnumerable<BSMLParser.ComponentTypeWithData> childComponentTypes);
     }
 }

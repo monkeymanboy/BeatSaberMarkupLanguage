@@ -22,6 +22,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
         public abstract Dictionary<string, string[]> Props { get; }
         public abstract void HandleType(ComponentTypeWithData componentType, BSMLParserParams parserParams);
         public virtual void HandleTypeAfterChildren(ComponentTypeWithData componentType, BSMLParserParams parserParams) { }
+        public virtual void HandleTypeAfterParse(ComponentTypeWithData componentType, BSMLParserParams parserParams) { }
     }
 
     public abstract class TypeHandler<T> : TypeHandler

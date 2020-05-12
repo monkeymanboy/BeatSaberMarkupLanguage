@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 
@@ -11,7 +12,6 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 
         public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
         {
-            //{ "font", new[]{ "font" } },
             { "text", new[]{"text"} },
             { "fontSize", new[]{"font-size"} },
             { "color", new[]{ "font-color", "color" } },
@@ -30,7 +30,6 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
         };
         public override Dictionary<string, Action<TextMeshProUGUI, string>> Setters => new Dictionary<string, Action<TextMeshProUGUI, string>>()
         {
-            //{"font", new Action<TextMeshProUGUI,string>(SetFont) },
             {"text", new Action<TextMeshProUGUI,string>((textMesh, value) => textMesh.text = value) },
             {"fontSize", new Action<TextMeshProUGUI,string>((textMesh, value) => textMesh.fontSize = Parse.Float(value)) },
             {"color", new Action<TextMeshProUGUI, string>((textMesh, value) => textMesh.color = GetColor(value)) },
@@ -55,41 +54,6 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             else
                 return existing &= ~modifyStyle;
         }
-        /* TODO: Fix fonts
-         * Also add table of safe font names
-         * 
-        private static void SetFont(TextMeshProUGUI textMesh, string fontName)
-        {
-            TMP_FontAsset fontAsset = Resources.FindObjectsOfTypeAll<TMP_FontAsset>().Where(t =>
-                string.Equals(t.name, fontName, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
-            if (fontAsset != null)
-            {
-                textMesh.gameObject.SetActive(false);
-                MonoBehaviour.Destroy(textMesh.font);
-                // TODO: Setting the font doesn't apply colors to the new font, but this doesn't work
-                //
-                color = textMesh.color;
-                //var faceColor = textMesh.faceColor;
-                //var outlineColor = textMesh.outlineColor;
-                //var outlineWidth = textMesh.outlineWidth;
-                //textMesh.color = Color.white;
-                //textMesh.faceColor = Color.white;
-                //textMesh.outlineColor = Color.white;
-                //textMesh.outlineWidth = 0;
-                textMesh.font = MonoBehaviour.Instantiate(fontAsset);
-                //textMesh.ForceMeshUpdate();
-                //textMesh.color = color;
-                //textMesh.faceColor = faceColor;
-                //textMesh.outlineColor = outlineColor;
-                //textMesh.outlineWidth = outlineWidth;
-                textMesh.gameObject.SetActive(true);
-            }
-            else
-            {
-                var fontList = Resources.FindObjectsOfTypeAll<TMP_FontAsset>();
-                Logger.log?.Warn($"Font {fontName} not found. Available fonts: {string.Join(", ", fontList?.Where(f => !f.name.Contains("(Clone)")).Select(f => f.name))}");
-            }
-        }*/
 
         private static Color GetColor(string colorStr)
         {

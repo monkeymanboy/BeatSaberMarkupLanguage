@@ -7,6 +7,7 @@ using System.Reflection;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Object = UnityEngine.Object;
 
 namespace BeatSaberMarkupLanguage
 {
@@ -55,6 +56,56 @@ namespace BeatSaberMarkupLanguage
             return flow;
         }
 
+
+        private static TMP_FontAsset mainTextFont = null;
+        /// <summary>
+        /// Gets the main font used by the game for UI text.
+        /// </summary>
+        public static TMP_FontAsset MainTextFont
+            => mainTextFont ??= Resources.FindObjectsOfTypeAll<TMP_FontAsset>().FirstOrDefault(t => t.name == "Teko-Medium SDF No Glow");
+
+        /// <summary>
+        /// Creates a clone of the given font, with its material fixed to be a no-glow material suitable for use on UI elements.
+        /// </summary>
+        /// <param name="font">the font to clone and fix</param>
+        /// <returns>the fixed clone</returns>
+        public static TMP_FontAsset CreateFixedUIFontClone(TMP_FontAsset font)
+        {
+            var noglowShader = MainTextFont.material.shader;
+            var newFont = Object.Instantiate(font);
+            newFont.material.shader = noglowShader;
+            return newFont;
+        }
+
+        /// <summary>
+        /// Sets the <c>name</c> of the font, recalculating its hash code as necessary.
+        /// </summary>
+        /// <param name="font">the font to modify</param>
+        /// <param name="name">the name to assign</param>
+        /// <returns>the <paramref name="name"/> provided</returns>
+        public static string SetName(this TMP_FontAsset font, string name)
+        {
+            font.name = name;
+            font.hashCode = TMP_TextUtilities.GetSimpleHashCode(font.name);
+            return name;
+        }
+
+        /// <summary>
+        /// Creates a <see cref="TMP_FontAsset"/> from a Unity <see cref="Font"/>.
+        /// </summary>
+        /// <remarks>
+        /// The <see cref="TMP_FontAsset"/> returned is not usable for UI text. Use <see cref="CreateFixedUIFontClone(TMP_FontAsset)"/>
+        /// to get a usable font.
+        /// </remarks>
+        /// <param name="font">the Unity font to use</param>
+        /// <returns>the new <see cref="TMP_FontAsset"/></returns>
+        public static TMP_FontAsset CreateTMPFont(Font font, string nameOverride = null)
+        {
+            var tmpFont = TMP_FontAsset.CreateFontAsset(font);
+            tmpFont.SetName(nameOverride ?? font.name);
+            return tmpFont;
+        }
+
         /// <summary>
         /// Creates a TextMeshProUGUI component.
         /// </summary>
@@ -81,7 +132,7 @@ namespace BeatSaberMarkupLanguage
             gameObj.SetActive(false);
 
             TextMeshProUGUI textMesh = gameObj.AddComponent<TextMeshProUGUI>();
-            textMesh.font = GameObject.Instantiate(Resources.FindObjectsOfTypeAll<TMP_FontAsset>().First(t => t.name == "Teko-Medium SDF No Glow"));
+            textMesh.font = MainTextFont;
             textMesh.rectTransform.SetParent(parent, false);
             textMesh.text = text;
             textMesh.fontSize = 4;

@@ -4,10 +4,13 @@ using BeatSaberMarkupLanguage.ViewControllers;
 using BS_Utils.Utilities;
 using HarmonyLib;
 using IPA;
+using IPA.Utilities.Async;
 using System;
 using System.Collections;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using IPALogger = IPA.Logging.Logger;
@@ -36,6 +39,42 @@ namespace BeatSaberMarkupLanguage
             BSEvents.menuSceneLoadedFresh += MenuLoadFresh;
             config = new Config("BSML");
         }
+
+        [OnStart]
+        public void OnStart()
+        {
+            FontManager.AsyncLoadSystemFonts()
+                .ContinueWith(_ =>
+                {
+                    if (!FontManager.TryGetTMPFontByFullName("Segoe UI", out TMP_FontAsset fallback))
+                    {
+                        if (!FontManager.TryGetTMPFontByFamily("Arial", out fallback))
+                        {
+                            Logger.log.Warn("Could not find fonts for either Segoe UI or Arial to set up fallbacks");
+                            return;
+                        }
+                    }
+
+                    IEnumerator SetupFont()
+                    {
+                        yield return new WaitUntil(() => BeatSaberUI.MainTextFont != null);
+                        Logger.log.Debug("Setting up default font fallbacks");
+                        // FontManager doesn't give fixed fonts
+                        //fallback = BeatSaberUI.CreateFixedUIFontClone(fallback);
+                        BeatSaberUI.MainTextFont.fallbackFontAssetTable.Add(fallback);
+                    }
+
+                    Logger.log.Debug("Waiting for default font presence");
+                    if (fallback != null)
+                        SharedCoroutineStarter.instance.StartCoroutine(SetupFont());
+                }, UnityMainThreadTaskScheduler.Default)
+                .ContinueWith(t =>
+                {
+                    Logger.log.Error("Errored while setting up fallback fonts:");
+                    Logger.log.Error(t.Exception);
+                }, TaskContinuationOptions.NotOnRanToCompletion);
+        }
+
         public void MenuLoadFresh()
         {
             //GameplaySetup.GameplaySetup.instance.AddTab("Test", "BeatSaberMarkupLanguage.Views.gameplay-setup-test.bsml", GameplaySetupTest.instance);
