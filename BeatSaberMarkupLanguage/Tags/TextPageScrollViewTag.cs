@@ -1,4 +1,7 @@
-﻿using System.Linq;
+﻿using BeatSaberMarkupLanguage.Components;
+using HMUI;
+using IPA.Utilities;
+using System.Linq;
 using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.Tags
@@ -9,9 +12,10 @@ namespace BeatSaberMarkupLanguage.Tags
 
         public override GameObject CreateObject(Transform parent)
         {
-            TextPageScrollView scrollView = MonoBehaviour.Instantiate(Resources.FindObjectsOfTypeAll<TextPageScrollView>().First(x => x.transform.parent.gameObject.name == "ReleaseInfoViewController"), parent);
+            TextPageScrollView scrollView = MonoBehaviour.Instantiate(Resources.FindObjectsOfTypeAll<ReleaseInfoViewController>().First().GetField<TextPageScrollView, ReleaseInfoViewController>("_textPageScrollView"), parent);
             scrollView.name = "BSMLTextPageScrollView";
             scrollView.enabled = true;
+            scrollView.gameObject.AddComponent<TextPageScrollViewRefresher>().scrollView = scrollView;
             return scrollView.gameObject;
         }
     }

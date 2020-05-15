@@ -1,6 +1,7 @@
-﻿using BeatSaberMarkupLanguage.Components.Settings;
-using BS_Utils.Utilities;
+﻿using BeatSaberMarkupLanguage.Components;
+using BeatSaberMarkupLanguage.Components.Settings;
 using HMUI;
+using IPA.Utilities;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -12,12 +13,22 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
     {
         public override string[] Aliases => new[] { "dropdown-list-setting" };
 
+        private LabelAndValueDropdownWithTableView safePrefab;
+        public override void Setup()
+        {
+            safePrefab = MonoBehaviour.Instantiate(Resources.FindObjectsOfTypeAll<LabelAndValueDropdownWithTableView>().First(x => x.name == "NormalLevels"), BSMLParser.instance.transform, false);
+            safePrefab.gameObject.SetActive(false);
+            safePrefab.name = "BSMLDropDownListPrefab";
+        }
+
         public override GameObject CreateObject(Transform parent)
         {
-            LabelAndValueDropdownWithTableView dropdown = MonoBehaviour.Instantiate(Resources.FindObjectsOfTypeAll<LabelAndValueDropdownWithTableView>().First(x => x.name == "NormalLevels"), parent, false);
+            LabelAndValueDropdownWithTableView dropdown = MonoBehaviour.Instantiate(safePrefab, parent, false);
             dropdown.gameObject.SetActive(false);
             dropdown.name = "BSMLDropDownList";
-            dropdown.GetPrivateField<TextMeshProUGUI>("_labelText").fontSize = 5;
+            TextMeshProUGUI text = dropdown.GetField<TextMeshProUGUI, LabelAndValueDropdownWithTableView>("_labelText");
+            text.fontSize = 5;
+            dropdown.gameObject.AddComponent<ExternalComponents>().components.Add(text);
 
             LayoutElement layoutElement = dropdown.gameObject.AddComponent<LayoutElement>();
             layoutElement.preferredHeight = 8;
@@ -26,9 +37,10 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
             dropdown.SetValueText("Default Text");
 
             DropDownListSetting dropDownListSetting = dropdown.gameObject.AddComponent<DropDownListSetting>();
-            dropDownListSetting.tableView = dropdown.GetPrivateField<TableView>("_tableView");
+            
+            dropDownListSetting.tableView = dropdown.GetField<TableView, DropdownWithTableView>("_tableView");
             dropDownListSetting.dropdown = dropdown;
-            dropdown.GetPrivateField<TableView>("_tableView").dataSource = dropDownListSetting;
+            dropDownListSetting.tableView.dataSource = dropDownListSetting;
 
             return dropdown.gameObject;
         }

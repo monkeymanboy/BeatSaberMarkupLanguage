@@ -4,18 +4,16 @@ using BeatSaberMarkupLanguage.ViewControllers;
 using HMUI;
 using System;
 using UnityEngine;
-using VRUI;
 
 namespace BeatSaberMarkupLanguage.Settings.UI.ViewControllers
 {
-    internal class SettingsMenuListViewController : BSMLResourceViewController
+    [ViewDefinition("BeatSaberMarkupLanguage.Views.settings-list.bsml")]
+    internal class SettingsMenuListViewController : BSMLAutomaticViewController
     {
-        public override string ResourceName => "BeatSaberMarkupLanguage.Views.settings-list.bsml";
-
         [UIComponent("list")]
         public CustomListTableData list;
 
-        public Action<VRUIViewController> clickedMenu;
+        public Action<ViewController> clickedMenu;
 
         protected override void DidActivate(bool firstActivation, ActivationType type)
         {
@@ -25,9 +23,9 @@ namespace BeatSaberMarkupLanguage.Settings.UI.ViewControllers
                 rectTransform.sizeDelta = new Vector2(35, 0);
                 rectTransform.anchorMin = new Vector2(0.5f, 0);
                 rectTransform.anchorMax = new Vector2(0.5f, 1);
-                list.data = BSMLSettings.instance.settingsMenus;
-                list.tableView.ReloadData();
             }
+            list.data = BSMLSettings.instance.settingsMenus;
+            list.tableView?.ReloadData();
         }
 
         [UIAction("settings-click")]

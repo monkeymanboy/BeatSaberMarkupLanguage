@@ -1,67 +1,62 @@
 ﻿using BeatSaberMarkupLanguage.Parser;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using TMPro;
-using UnityEngine;
 using UnityEngine.UI;
+using static BeatSaberMarkupLanguage.BSMLParser;
 
 namespace BeatSaberMarkupLanguage.TypeHandlers
 {
     [ComponentHandler(typeof(Button))]
-    public class ButtonHandler : TypeHandler
+    public class ButtonHandler : TypeHandler<Button>
     {
         public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
         {
-            { "text", new[]{"text"} },
-            { "glowColor", new[]{"glow-color"} },
-            { "onClick", new[]{"on-click"} },
-            { "clickEvent", new[]{"click-event"} }
+            { "onClick", new[]{ "on-click" } },
+            { "clickEvent", new[]{ "click-event", "event-click"} },
+            { "interactable", new[]{ "interactable" } }
         };
 
-        public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)
+        public override Dictionary<string, Action<Button, string>> Setters => new Dictionary<string, Action<Button, string>>()
         {
-            Button button = obj as Button;
-            Polyglot.LocalizedTextMeshProUGUI localizer = obj.GetComponentInChildren<Polyglot.LocalizedTextMeshProUGUI>();
-            if (localizer != null)
-                GameObject.Destroy(localizer);
+            {"interactable", new Action<Button, string>(SetInteractable) }
+        };
 
-            TextMeshProUGUI label = obj.GetComponentInChildren<TextMeshProUGUI>();
-            if (label != null && data.TryGetValue("text", out string text))
-                label.text = text;
-
-            Image glowImage = obj.gameObject.GetComponentsInChildren<Image>().FirstOrDefault(x => x.gameObject.name == "Glow");
-            if (glowImage != null)
+        public override void HandleType(ComponentTypeWithData componentType, BSMLParserParams parserParams)
+        {
+            try
             {
-                if (data.TryGetValue("glowColor", out string glowColor) && glowColor != "none")
+                Button button = componentType.component as Button;
+
+                if (componentType.data.TryGetValue("onClick", out string onClick))
                 {
-                    ColorUtility.TryParseHtmlString(glowColor, out Color color);
-                    glowImage.color = color;
+                    button.onClick.AddListener(delegate
+                    {
+                        if (!parserParams.actions.TryGetValue(onClick, out BSMLAction onClickAction))
+                            throw new Exception("on-click action '" + onClick + "' not found");
+
+                        onClickAction.Invoke();
+                    });
                 }
-                else
+
+                if (componentType.data.TryGetValue("clickEvent", out string clickEvent))
                 {
-                    glowImage.gameObject.SetActive(false);
+                    button.onClick.AddListener(delegate
+                    {
+                        parserParams.EmitEvent(clickEvent);
+                    });
                 }
+                base.HandleType(componentType, parserParams);
             }
-
-            if (data.TryGetValue("onClick", out string onClick))
+            catch (Exception ex)
             {
-                button.onClick.AddListener(delegate
-                {
-                    if (!parserParams.actions.TryGetValue(onClick, out BSMLAction onClickAction))
-                        throw new Exception("on-click action '" + onClick + "' not found");
-
-                    onClickAction.Invoke();
-                });
-            }
-
-            if (data.TryGetValue("clickEvent", out string clickEvent))
-            {
-                button.onClick.AddListener(delegate
-                {
-                    parserParams.EmitEvent(clickEvent);
-                });
+                Logger.log?.Error(ex);
             }
         }
+
+        public static void SetInteractable(Button button, string flag)
+        {
+            button.interactable = Parse.Bool(flag);
+        }
+
     }
 }

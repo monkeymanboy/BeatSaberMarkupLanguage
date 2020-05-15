@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using BeatSaberMarkupLanguage.Components;
+using System.Linq;
 using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.Tags
@@ -20,7 +21,7 @@ namespace BeatSaberMarkupLanguage.Tags
             group.name = "BSMLBottomPanelButtons";
             foreach (Transform transform in group.transform)
                 GameObject.Destroy(transform.gameObject);
-
+            group.gameObject.AddComponent<ExternalComponents>().components.Add(container);
             return group.gameObject;
         }
     }

@@ -1,27 +1,85 @@
-<bg>
-  <vertical>
-    <horizontal bg='panel-top' pad-left='10' pad-right='10' horizontal-fit='PreferredSize'>
-      <text id ='sometext' text='~header' align='Center' font-size='10'></text>
-    </horizontal>
-    <horizontal bg='round-rect-panel' pad='8'>
-      <custom-list visible-cells='3' id='list' contents='contents' select-cell='cell click'>
+<bg xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
+  <macro.define id='button-text' value='Macro defined button text'></macro.define>
+  <tab-selector tab-tag='new-tab'></tab-selector>
+  <tab tags='new-tab' tab-name='ScrollView test'>
+    <vertical vertical-fit='PreferredSize' pref-height='60' pref-width='80'>
+      <text text='ScrollView test' />
+      <scroll-view spacing='0' pref-height='50'>
         <horizontal>
-          <text text='~title'></text>
-          <text tags='selected' text='SELECTED'></text>
-          <text tags='hovered' text='HOVERED'></text>
-          <text tags='un-selected-un-hovered' text='NORMAL'></text>
-          <button text='button' on-click='button-click'></button>
+          <text text='Testing the old scrollview'/>
         </horizontal>
-      </custom-list>
+        <img preserve-aspect='true' src='https://raw.githubusercontent.com/monkeymanboy/BeatSaberMarkupLanguage/master/BeatSaberMarkupLanguage/Resources/icon.png'/>
+        <horizontal>
+          <text text='Hey look an image ^'/>
+        </horizontal>
+        <horizontal>
+          <text text='yee'/>
+        </horizontal>
+        <horizontal>
+          <text text='and also'/>
+        </horizontal>
+        <horizontal>
+          <text text='haw'/>
+        </horizontal>
+      </scroll-view>
+    </vertical>
+  </tab>
+  <tab tags='new-tab' tab-name='~header'>
+    <vertical>
+      <horizontal pad-left='10' pad-right='10' horizontal-fit='PreferredSize'>
+        <vertical>
+          <text text='~header' color='red' align='Center' font-size='4' />
+          <text text='🎀 ここに変な手紙を入れましょう 🎀' />
+          <text text='בוא נקבל כמה אותיות מוזרות כאן' />
+          <text text='🎀 讓我們在這裡得到一些奇怪的信 🎀' />
+          <text text='la oss få noen rare brev her inne' />
+          <text text='여기에 이상한 글자를 줍시다' />
+          <text text='ας πάρουμε μερικά περίεργα γράμματα εδώ' />
+          <text text='давайте получим несколько странных писем здесь' />
+        </vertical>
+      </horizontal>
+      <horizontal bg='round-rect-panel' pad='6' spacing='10'>
+        <button id='test-external' on-click='click' glow-color='green' text='~button-text'></button>
+        <vertical spacing='6'>
+          <page-button click-event='open-modal' direction='Up' glow-color='red'>
+            <modal show-event='open-modal' hide-event='close-modal' size-delta-x='40' size-delta-y='30' move-to-center='false'>
+              <vertical horizontal-fit='PreferredSize' vertical-fit='PreferredSize'>
+                <text text='Modal works yee haw'></text>
+                <text text='lèts gét sóme wierd letters ñ ╥ Ê' />
+                <button text='yee' click-event='close-modal'></button>
+              </vertical>
+            </modal>
+          </page-button>
+          <page-button click-event='open-keyboard' direction='Down' glow-color='green'>
+            <modal-keyboard show-event='open-keyboard' click-off-closes='true' clear-on-open='true' on-enter='keyboard-enter'></modal-keyboard>
+          </page-button>
+        </vertical>
+      </horizontal>
+    </vertical>
+  </tab>
+  <tab tags='new-tab' tab-name='Buttons'>
+    <vertical>
+      <horizontal bg='round-rect-panel' pad='8'>
+        <page-button click-event='list#PageUp' direction='Left' glow-color='red'></page-button>
+        <macro.for-each hosts='contents'>
+          <macro.if value='should-glow'>
+            <button text='~title' on-click='button-click' glow-color='red'></button>
+          </macro.if>
+          <macro.if value='!should-glow'>
+            <button text='~title' on-click='button-click'></button>
+          </macro.if>
+        </macro.for-each>
+        <page-button click-event='list#PageDown' direction='Right'></page-button>
+      </horizontal>
+    </vertical>
+  </tab>
+  <tab tags='new-tab' tab-name='List'>
+    <list id='list' list-style='Box' list-direction='Horizontal' visible-cells='2'></list>
+    <horizontal>
+      <page-button click-event='list#PageUp' direction='Left'></page-button>
+      <page-button click-event='list#PageDown' direction='Right'></page-button>
     </horizontal>
-    <horizontal bg='round-rect-panel' pad='6' spacing='10'>
-      <button on-click='click' glow-color='green' text='Test Button'></button>
-      <vertical spacing='6'>
-        <page-button click-event='list#PageUp' direction='Up' glow-color='red'></page-button>
-        <page-button click-event='list#PageDown' direction='Down'></page-button>
-      </vertical>
-    </horizontal>
-  </vertical>
+  </tab>
   <!--
   <bottom-button-panel>
     <button on-click='click' text='Yee Haw'></button>

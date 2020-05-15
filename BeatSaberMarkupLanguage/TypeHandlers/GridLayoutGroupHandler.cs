@@ -1,4 +1,4 @@
-﻿using BeatSaberMarkupLanguage.Parser;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,7 +6,7 @@ using UnityEngine.UI;
 namespace BeatSaberMarkupLanguage.TypeHandlers
 {
     [ComponentHandler(typeof(GridLayoutGroup))]
-    public class GridLayoutGroupHandler : TypeHandler
+    public class GridLayoutGroupHandler : TypeHandler<GridLayoutGroup>
     {
         public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
         {
@@ -16,11 +16,12 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "spacingY", new[]{ "spacing-y"} }
         };
 
-        public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)
+        public override Dictionary<string, Action<GridLayoutGroup, string>> Setters => new Dictionary<string, Action<GridLayoutGroup, string>>()
         {
-            GridLayoutGroup gridLayout = obj as GridLayoutGroup;
-            gridLayout.cellSize = new Vector2(data.TryGetValue("cellSizeX", out string cellSizeX) ? Parse.Float(cellSizeX) : gridLayout.cellSize.x, data.TryGetValue("cellSizeY", out string cellSizeY) ? Parse.Float(cellSizeY) : gridLayout.cellSize.y);
-            gridLayout.spacing = new Vector2(data.TryGetValue("spacingX", out string spacingX) ? Parse.Float(spacingX) : gridLayout.spacing.x, data.TryGetValue("spacingY", out string spacingY) ? Parse.Float(spacingY) : gridLayout.spacing.y);
-        }
+            {"cellSizeX", new Action<GridLayoutGroup, string>((component, value) => component.cellSize = new Vector2(Parse.Float(value), component.cellSize.y)) },
+            {"cellSizeY", new Action<GridLayoutGroup, string>((component, value) => component.cellSize = new Vector2(component.cellSize.x, Parse.Float(value))) },
+            {"spacingX", new Action<GridLayoutGroup, string>((component, value) => component.spacing = new Vector2(Parse.Float(value), component.spacing.y)) },
+            {"spacingY", new Action<GridLayoutGroup, string>((component, value) => component.spacing = new Vector2(component.spacing.x, Parse.Float(value))) }
+        };
     }
 }

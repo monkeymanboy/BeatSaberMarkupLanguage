@@ -1,0 +1,16 @@
+﻿<bg xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
+  <tab-selector tab-tag='new-tab' anchor-pos-y='-6' size-delta-y='6' size-delta-x='-30' child-expand-width='true' has-separator='false'/>
+  <tab tags='new-tab' tab-name='Vanilla'>
+    <macro.reparent transforms='vanilla-items'/>
+  </tab>
+  <tab tags='new-tab' tab-name='Mods'>
+    <horizontal child-expand-width='false' pref-height='7' anchor-pos-y='24.5' size-delta-x='-16'>
+      <page-button direction='Left' pref-width='7' pref-height='7' tags='left-button'/>
+      <tab-selector tab-tag='mod-tab' child-expand-width='true' has-separator='false' page-count='3' left-button-tag='left-button' right-button-tag='right-button'/>
+      <page-button direction='Right' pref-width='7' pref-height='7' tags='right-button'/>
+    </horizontal>
+    <macro.for-each items='mod-menus' pass-back-tags='true'>
+      <tab tags='mod-tab' tab-name='~tab-name' id='root-tab' anchor-max-y='0.75'/>
+    </macro.for-each>
+  </tab>
+</bg>

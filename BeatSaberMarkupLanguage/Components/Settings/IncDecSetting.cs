@@ -1,17 +1,10 @@
-﻿using BeatSaberMarkupLanguage.Parser;
-using TMPro;
-using UnityEngine;
+﻿using TMPro;
 using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.Components.Settings
 {
-    public abstract class IncDecSetting : MonoBehaviour
-    {
-        public BSMLAction onChange;
-        public BSMLValue associatedValue;
-        public bool updateOnChange = false;
-
-        public TextMeshProUGUI label;
+    public abstract class IncDecSetting : GenericSetting
+    {        
         public TextMeshProUGUI text;
         public Button decButton;
         public Button incButton;
@@ -29,11 +22,6 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         public string Text
         {
             set => text.text = value;
-        }
-
-        public string LabelText
-        {
-            set => label.text = value;
         }
 
         protected virtual void OnEnable()

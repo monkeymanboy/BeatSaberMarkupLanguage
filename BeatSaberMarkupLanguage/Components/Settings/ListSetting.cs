@@ -6,8 +6,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
     public class ListSetting : IncDecSetting
     {
         private int index;
-
-        public BSMLAction formatter;
+        
         public List<object> values;
 
         public object Value
@@ -27,7 +26,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             }
         }
 
-        public void Setup()
+        public override void Setup()
         {
             ReceiveValue();
         }
@@ -52,13 +51,13 @@ namespace BeatSaberMarkupLanguage.Components.Settings
                 ApplyValue();
         }
 
-        public void ApplyValue()
+        public override void ApplyValue()
         {
             if (associatedValue != null)
                 associatedValue.SetValue(Value);
         }
 
-        public void ReceiveValue()
+        public override void ReceiveValue()
         {
             if (associatedValue != null)
                 Value = associatedValue.GetValue();

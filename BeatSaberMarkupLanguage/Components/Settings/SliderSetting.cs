@@ -9,17 +9,13 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 {
     public class SliderSetting : GenericSliderSetting
     {
-        public BSMLAction formatter;
-        public BSMLAction onChange;
-        public BSMLValue associatedValue;
-        public bool updateOnChange = false;
         public bool isInt = false;
         public float increments;
 
-        public void Setup()
+        public override void Setup()
         {
             text = slider.GetComponentInChildren<TextMeshProUGUI>();
-            slider.numberOfSteps = (int)((slider.maxValue - slider.minValue) / increments) + 1;
+            slider.numberOfSteps = (int)Math.Round((slider.maxValue - slider.minValue) / increments) + 1;
             ReceiveValue();
             slider.valueDidChangeEvent += OnChange;
             StartCoroutine(SetInitialText());
@@ -51,7 +47,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
                 ApplyValue();
         }
 
-        public void ApplyValue()
+        public override void ApplyValue()
         {
             if (associatedValue != null)
             {
@@ -62,7 +58,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             }
         }
 
-        public void ReceiveValue()
+        public override void ReceiveValue()
         {
             if (associatedValue != null)
                 slider.value = isInt ? (int)associatedValue.GetValue() : (float)associatedValue.GetValue();

@@ -1,21 +1,38 @@
-﻿using BS_Utils.Utilities;
+﻿using BeatSaberMarkupLanguage.Animations;
+using HMUI;
+using IPA.Utilities;
+using System;
 using System.Linq;
+using System.Reflection;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using VRUI;
+using Object = UnityEngine.Object;
 
 namespace BeatSaberMarkupLanguage
 {
-    //This class is stuff yoinked from CustomUI to remove the need for a dependency on it
+    public delegate void PresentFlowCoordinatorDelegate(FlowCoordinator current, FlowCoordinator flowCoordinator, Action finishedCallback = null, bool immediately = false, bool replaceTopViewController = false);
+    public delegate void DismissFlowCoordinatorDelegate(FlowCoordinator current, FlowCoordinator flowCoordinator, Action finishedCallback = null, bool immediately = false);
+
     public static class BeatSaberUI
     {
+        private static MainFlowCoordinator _mainFlowCoordinator;
+        public static MainFlowCoordinator MainFlowCoordinator
+        {
+            get
+            {
+                if (_mainFlowCoordinator == null)
+                    _mainFlowCoordinator = Resources.FindObjectsOfTypeAll<MainFlowCoordinator>().First();
+                return _mainFlowCoordinator;
+            }
+        }
+
         /// <summary>
-        /// Creates a VRUIViewController of type T, and marks it to not be destroyed.
+        /// Creates a ViewController of type T, and marks it to not be destroyed.
         /// </summary>
-        /// <typeparam name="T">The variation of VRUIViewController you want to create.</typeparam>
-        /// <returns>The newly created VRUIViewController of type T.</returns>
-        public static T CreateViewController<T>() where T : VRUIViewController
+        /// <typeparam name="T">The variation of ViewController you want to create.</typeparam>
+        /// <returns>The newly created ViewController of type T.</returns>
+        public static T CreateViewController<T>() where T : ViewController
         {
             T vc = new GameObject("BSMLViewController").AddComponent<T>();
             MonoBehaviour.DontDestroyOnLoad(vc.gameObject);
@@ -25,6 +42,68 @@ namespace BeatSaberMarkupLanguage
             vc.rectTransform.sizeDelta = new Vector2(0f, 0f);
             vc.rectTransform.anchoredPosition = new Vector2(0f, 0f);
             return vc;
+        }
+
+        /// <summary>
+        /// Creates a FlowCoordinator of type T, and marks it to not be destroyed.
+        /// </summary>
+        /// <typeparam name="T">The variation of FlowCoordinator you want to create.</typeparam>
+        /// <returns>The newly created FlowCoordinator of type T.</returns>
+        public static T CreateFlowCoordinator<T>() where T : FlowCoordinator
+        {
+            T flow = new GameObject("BSMLFlowCoordinator").AddComponent<T>();
+            flow.SetField<FlowCoordinator, BaseInputModule>("_baseInputModule", MainFlowCoordinator.GetField<BaseInputModule, FlowCoordinator>("_baseInputModule"));
+            return flow;
+        }
+
+
+        private static TMP_FontAsset mainTextFont = null;
+        /// <summary>
+        /// Gets the main font used by the game for UI text.
+        /// </summary>
+        public static TMP_FontAsset MainTextFont
+            => mainTextFont ??= Resources.FindObjectsOfTypeAll<TMP_FontAsset>().FirstOrDefault(t => t.name == "Teko-Medium SDF No Glow");
+
+        /// <summary>
+        /// Creates a clone of the given font, with its material fixed to be a no-glow material suitable for use on UI elements.
+        /// </summary>
+        /// <param name="font">the font to clone and fix</param>
+        /// <returns>the fixed clone</returns>
+        public static TMP_FontAsset CreateFixedUIFontClone(TMP_FontAsset font)
+        {
+            var noglowShader = MainTextFont.material.shader;
+            var newFont = Object.Instantiate(font);
+            newFont.material.shader = noglowShader;
+            return newFont;
+        }
+
+        /// <summary>
+        /// Sets the <c>name</c> of the font, recalculating its hash code as necessary.
+        /// </summary>
+        /// <param name="font">the font to modify</param>
+        /// <param name="name">the name to assign</param>
+        /// <returns>the <paramref name="name"/> provided</returns>
+        public static string SetName(this TMP_FontAsset font, string name)
+        {
+            font.name = name;
+            font.hashCode = TMP_TextUtilities.GetSimpleHashCode(font.name);
+            return name;
+        }
+
+        /// <summary>
+        /// Creates a <see cref="TMP_FontAsset"/> from a Unity <see cref="Font"/>.
+        /// </summary>
+        /// <remarks>
+        /// The <see cref="TMP_FontAsset"/> returned is not usable for UI text. Use <see cref="CreateFixedUIFontClone(TMP_FontAsset)"/>
+        /// to get a usable font.
+        /// </remarks>
+        /// <param name="font">the Unity font to use</param>
+        /// <returns>the new <see cref="TMP_FontAsset"/></returns>
+        public static TMP_FontAsset CreateTMPFont(Font font, string nameOverride = null)
+        {
+            var tmpFont = TMP_FontAsset.CreateFontAsset(font);
+            tmpFont.SetName(nameOverride ?? font.name);
+            return tmpFont;
         }
 
         /// <summary>
@@ -53,7 +132,7 @@ namespace BeatSaberMarkupLanguage
             gameObj.SetActive(false);
 
             TextMeshProUGUI textMesh = gameObj.AddComponent<TextMeshProUGUI>();
-            textMesh.font = GameObject.Instantiate(Resources.FindObjectsOfTypeAll<TMP_FontAsset>().First(t => t.name == "Teko-Medium SDF No Glow"));
+            textMesh.font = MainTextFont;
             textMesh.rectTransform.SetParent(parent, false);
             textMesh.text = text;
             textMesh.fontSize = 4;
@@ -104,14 +183,105 @@ namespace BeatSaberMarkupLanguage
                 _button.GetComponentsInChildren<Image>()[0].sprite = _background;
         }
         #endregion
-
-        public static DismissableNavigationController CreateDismissableNavigationController()
+        
+        /// <summary>
+        /// Sets an image or gif/apng from a resource path
+        /// </summary>
+        /// <param name="image">Image component to set the image to</param>
+        /// <param name="location">Resource path, file path, or url of image. Can prefix with # to find and use a base game sprite. May need to prefix resource paths with 'AssemblyName:'</param>
+        public static void SetImage(this Image image, string location)
         {
-            DismissableNavigationController navigationController = CreateViewController<DismissableNavigationController>();
-            Button backButton = GameObject.Instantiate(Resources.FindObjectsOfTypeAll<Button>().First(x => x.name == "BackArrowButton"), navigationController.transform);
-            backButton.name = "BSMLBackButton";
-            navigationController.SetPrivateField("_backButton", backButton);
-            return navigationController;
+            AnimationStateUpdater oldStateUpdater = image.GetComponent<AnimationStateUpdater>();
+            if (oldStateUpdater != null)
+                MonoBehaviour.DestroyImmediate(oldStateUpdater);
+
+            if (location.StartsWith("#"))
+            {
+                string imgName = location.Substring(1);
+                try
+                {
+                    image.sprite = Resources.FindObjectsOfTypeAll<Sprite>().First(x => x.name == imgName);
+                }
+                catch
+                {
+                    Logger.log.Error($"Could not find Texture with image name {imgName}");
+                }
+            }
+            else if (location.EndsWith(".gif") || location.EndsWith(".apng"))
+            {
+                AnimationStateUpdater stateUpdater = image.gameObject.AddComponent<AnimationStateUpdater>();
+                stateUpdater.image = image;
+                stateUpdater.controllerData = AnimationController.instance.loadingAnimation;
+
+                if (AnimationController.instance.RegisteredAnimations.TryGetValue(location, out AnimationControllerData animControllerData))
+                {
+                    stateUpdater.controllerData = animControllerData;
+                }
+                else
+                {
+                    Utilities.GetData(location, (byte[] data) => {
+                        AnimationLoader.Process(location.EndsWith(".gif") ? AnimationType.GIF : AnimationType.APNG, data, (Texture2D tex, Rect[] uvs, float[] delays, int width, int height) =>
+                        {
+                            AnimationControllerData controllerData = AnimationController.instance.Register(location, tex, uvs, delays);
+                            stateUpdater.controllerData = controllerData;
+                        });
+                    });
+                }
+            }
+            else
+            {
+                AnimationStateUpdater stateUpdater = image.gameObject.AddComponent<AnimationStateUpdater>();
+                stateUpdater.image = image;
+                stateUpdater.controllerData = AnimationController.instance.loadingAnimation;
+
+                Utilities.GetData(location, (byte[] data) =>
+                {
+                    if (stateUpdater != null)
+                        GameObject.DestroyImmediate(stateUpdater);
+                    image.sprite = Utilities.LoadSpriteRaw(data);
+                    image.sprite.texture.wrapMode = TextureWrapMode.Clamp;
+                });
+            }
         }
+
+        #region FlowCoordinator Extensions
+        public static void PresentFlowCoordinator(this FlowCoordinator current, FlowCoordinator flowCoordinator, Action finishedCallback = null, bool immediately = false, bool replaceTopViewController = false)
+        {
+            PresentFlowCoordinatorDelegate(current, flowCoordinator, finishedCallback, immediately, replaceTopViewController);
+        }
+        public static void DismissFlowCoordinator(this FlowCoordinator current, FlowCoordinator flowCoordinator, Action finishedCallback = null, bool immediately = false)
+        {
+            DismissFlowCoordinatorDelegate(current, flowCoordinator, finishedCallback, immediately);
+        }
+
+        #region Delegate Creation
+        private static PresentFlowCoordinatorDelegate _presentFlowCoordinatorDelegate;
+        private static PresentFlowCoordinatorDelegate PresentFlowCoordinatorDelegate
+        {
+            get
+            {
+                if (_presentFlowCoordinatorDelegate == null)
+                {
+                    MethodInfo presentMethod = typeof(FlowCoordinator).GetMethod("PresentFlowCoordinator", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                    _presentFlowCoordinatorDelegate = (PresentFlowCoordinatorDelegate)Delegate.CreateDelegate(typeof(PresentFlowCoordinatorDelegate), presentMethod);
+                }
+                return _presentFlowCoordinatorDelegate;
+            }
+        }
+        private static DismissFlowCoordinatorDelegate _dismissFlowCoordinatorDelegate;
+        private static DismissFlowCoordinatorDelegate DismissFlowCoordinatorDelegate
+        {
+            get
+            {
+                if (_dismissFlowCoordinatorDelegate == null)
+                {
+                    MethodInfo dismissMethod = typeof(FlowCoordinator).GetMethod("DismissFlowCoordinator", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                    _dismissFlowCoordinatorDelegate = (DismissFlowCoordinatorDelegate)Delegate.CreateDelegate(typeof(DismissFlowCoordinatorDelegate), dismissMethod);
+                }
+                return _dismissFlowCoordinatorDelegate;
+            }
+        }
+        #endregion
+        #endregion
     }
 }

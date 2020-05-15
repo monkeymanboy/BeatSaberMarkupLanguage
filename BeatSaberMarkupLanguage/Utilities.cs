@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage
@@ -81,10 +83,21 @@ namespace BeatSaberMarkupLanguage
 
         //end of yoink
 
+        public static string EscapeXml(string source)
+        {
+            return source.Replace("\"", "&quot;")
+                .Replace("\"", "&quot;")
+                .Replace("&", "&amp;")
+                .Replace("'", "&apos;")
+                .Replace("<", "&lt;")
+                .Replace(">", "&gt;");
+        }
+
         public static class ImageResources
         {
             private static Material noGlowMat;
             private static Sprite _blankSprite = null;
+            private static Sprite _whitePixel = null;
 
             public static Material NoGlowMat
             {
@@ -109,6 +122,148 @@ namespace BeatSaberMarkupLanguage
 
                     return _blankSprite;
                 }
+            }
+
+            public static Sprite WhitePixel
+            {
+                get
+                {
+                    if (!_whitePixel)
+                        _whitePixel = Resources.FindObjectsOfTypeAll<Image>().First(i => i.sprite?.name == "WhitePixel").sprite;
+
+                    return _whitePixel;
+                }
+            }
+        }
+
+        public static Texture2D FindTextureInAssembly(string path)
+        {
+            try
+            {
+                AssemblyFromPath(path, out Assembly asm, out string newPath);
+                if (asm.GetManifestResourceNames().Contains(newPath))
+                    return LoadTextureRaw(GetResource(asm, newPath));
+            }
+            catch (Exception ex)
+            {
+                Logger.log?.Error("Unable to find texture in assembly! (You must prefix path with 'assembly name:' if the assembly and root namespace don't have the same name) Exception: " + ex);
+            }
+            return null;
+        }
+
+        public static Sprite FindSpriteInAssembly(string path)
+        {
+            try
+            {
+                AssemblyFromPath(path, out Assembly asm, out string newPath);
+                if (asm.GetManifestResourceNames().Contains(newPath))
+                    return LoadSpriteRaw(GetResource(asm, newPath));
+            }
+            catch (Exception ex)
+            {
+                Logger.log?.Error("Unable to find sprite in assembly! (You must prefix path with 'assembly name:' if the assembly and root namespace don't have the same name) Exception: " + ex);
+            }
+            return null;
+        }
+
+        public static void AssemblyFromPath(string inputPath, out Assembly assembly, out string path)
+        {
+            string[] parameters = inputPath.Split(':');
+            switch (parameters.Length)
+            {
+                case 1:
+                    path = parameters[0];
+                    assembly = Assembly.Load(path.Substring(0, path.IndexOf('.')));
+                    break;
+                case 2:
+                    path = parameters[1];
+                    assembly = Assembly.Load(parameters[0]);
+                    break;
+                default:
+                    throw new Exception($"Could not process resource path {inputPath}");
+            }
+        }
+
+        public static Texture2D LoadTextureRaw(byte[] file)
+        {
+            if (file.Count() > 0)
+            {
+                Texture2D Tex2D = new Texture2D(2, 2);
+                if (Tex2D.LoadImage(file))
+                    return Tex2D;
+            }
+            return null;
+        }
+
+        public static Sprite LoadSpriteRaw(byte[] image, float PixelsPerUnit = 100.0f)
+        {
+            return LoadSpriteFromTexture(LoadTextureRaw(image), PixelsPerUnit);
+        }
+
+        public static Sprite LoadSpriteFromTexture(Texture2D SpriteTexture, float PixelsPerUnit = 100.0f)
+        {
+            if (SpriteTexture)
+                return Sprite.Create(SpriteTexture, new Rect(0, 0, SpriteTexture.width, SpriteTexture.height), new Vector2(0, 0), PixelsPerUnit);
+            return null;
+        }
+
+        public static byte[] GetResource(Assembly asm, string ResourceName)
+        {
+            Stream stream = asm.GetManifestResourceStream(ResourceName);
+            byte[] data = new byte[stream.Length];
+            stream.Read(data, 0, (int)stream.Length);
+            return data;
+        }
+
+        public static IEnumerable<T> SingleEnumerable<T>(this T item) 
+            => Enumerable.Empty<T>().Append(item);
+
+        public static IEnumerable<T?> AsNullable<T>(this IEnumerable<T> seq) where T : struct
+            => seq.Select(v => new T?(v));
+
+        public static T? AsNullable<T>(this T item) where T : struct => item;
+
+        /// <summary>
+        /// Get data from either a resource path, a file path, or a url
+        /// </summary>
+        /// <param name="location">Resource path, file path, or url. May need to prefix resource paths with 'AssemblyName:'</param>
+        /// <param name="callback">Received data</param>
+        public static void GetData(string location, Action<byte[]> callback)
+        {
+            try
+            {
+                if (location.StartsWith("http://") || location.StartsWith("https://"))
+                {
+                    SharedCoroutineStarter.instance.StartCoroutine(GetWebDataCoroutine(location, callback));
+                }
+                else if (File.Exists(location))
+                {
+                    callback?.Invoke(File.ReadAllBytes(location));
+                }
+                else
+                {
+                    AssemblyFromPath(location, out Assembly asm, out string newPath);
+                    callback?.Invoke(GetResource(asm, newPath));
+                }
+            }
+            catch
+            {
+                Logger.log.Error($"Error getting data from '{location}' either invalid path or file does not exist");
+            }
+        }
+
+        private static IEnumerator GetWebDataCoroutine(string url, Action<byte[]> callback)
+        {
+            UnityWebRequest www = UnityWebRequest.Get(url);
+            yield return www.SendWebRequest();
+
+            if (www.isNetworkError || www.isHttpError)
+            {
+                Logger.log.Debug($"Error getting data from {url}, Message:{www.error}");
+            }
+            else
+            {
+                callback?.Invoke(www.downloadHandler.data);
             }
         }
     }

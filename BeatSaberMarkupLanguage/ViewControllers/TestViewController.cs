@@ -1,23 +1,33 @@
 ﻿using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components;
+using BeatSaberMarkupLanguage.Notify;
 using HMUI;
 using System.Collections.Generic;
 using TMPro;
+using static BeatSaberMarkupLanguage.Components.CustomListTableData;
 
 namespace BeatSaberMarkupLanguage.ViewControllers
 {
-    public class TestViewController : BSMLResourceViewController
+    [ViewDefinition("BeatSaberMarkupLanguage.Views.test.bsml")]
+    public class TestViewController : BSMLAutomaticViewController, INotifiableHost
     {
-        public override string ResourceName => "BeatSaberMarkupLanguage.Views.test.bsml";
-
         [UIValue("header")]
+        public string HeaderText
+        {
+            get => headerText;
+            set
+            {
+                headerText = value;
+                NotifyPropertyChanged();
+            }
+        }
         public string headerText = "Header comes from code!";
 
-        [UIComponent("sometext")]
-        public TextMeshProUGUI text;
+        [UIComponent("test-external")]
+        public TextMeshProUGUI buttonText;
 
         [UIComponent("list")]
-        public CustomCellListTableData tableData;
+        public CustomListTableData tableData;
 
         [UIValue("contents")]
         public List<object> contents
@@ -25,12 +35,9 @@ namespace BeatSaberMarkupLanguage.ViewControllers
             get
             {
                 List<object> list = new List<object>();
-                list.Add(new TestListObject("first"));
-                list.Add(new TestListObject("second"));
-                list.Add(new TestListObject("third"));
-                list.Add(new TestListObject("fourth"));
-                list.Add(new TestListObject("fifth"));
-                list.Add(new TestListObject("sixth"));
+                list.Add(new TestListObject("first", false));
+                list.Add(new TestListObject("second", true));
+                list.Add(new TestListObject("third", true));
                 return list;
             }
         }
@@ -38,28 +45,49 @@ namespace BeatSaberMarkupLanguage.ViewControllers
         [UIAction("click")]
         private void ButtonPress()
         {
-            text.text = "It works!";
+            HeaderText = "It works!";
+            buttonText.text = "Clicked";
         }
 
         [UIAction("cell click")]
         private void CellClick(TableView tableView, TestListObject testObj)
         {
-            Logger.log.Debug("Clicked - " + testObj.title);
+            Logger.log.Info("Clicked - " + testObj.title);
+        }
+
+        [UIAction("keyboard-enter")]
+        private void KeyboardEnter(string value)
+        {
+            Logger.log.Info("Keyboard typed: " + value);
+        }
+
+        [UIAction("#post-parse")]
+        private void PostParse()
+        {
+            List<CustomCellInfo> test = new List<CustomCellInfo>();
+            for (int i = 0; i < 10; i++)
+                test.Add(new CustomCellInfo("test" + i, "yee haw"));
+
+            tableData.data = test;
+            tableData.tableView.ReloadData();
         }
     }
     public class TestListObject
     {
         [UIValue("title")]
         public string title;
-        public TestListObject(string title)
+        [UIValue("should-glow")]
+        public bool shouldGlow;
+        public TestListObject(string title, bool shouldGlow)
         {
             this.title = title;
+            this.shouldGlow = shouldGlow;
         }
 
         [UIAction("button-click")]
         void ClickedButton()
         {
-            Logger.log.Debug("Button - " + title);
+            Logger.log.Info("Button - " + title);
         }
     }
 }

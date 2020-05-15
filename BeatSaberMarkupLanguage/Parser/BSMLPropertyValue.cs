@@ -1,11 +1,12 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 
 namespace BeatSaberMarkupLanguage.Parser
 {
     public class BSMLPropertyValue : BSMLValue
     {
         private object host;
-        private PropertyInfo propertyInfo;
+        internal PropertyInfo propertyInfo;
 
         public BSMLPropertyValue(object host, PropertyInfo propertyInfo)
         {
@@ -15,12 +16,12 @@ namespace BeatSaberMarkupLanguage.Parser
 
         public override object GetValue()
         {
-            return propertyInfo.GetGetMethod(false).Invoke(host, new object[] { });
+            return propertyInfo.GetGetMethod(true).Invoke(host, Array.Empty<object>());
         }
 
         public override void SetValue(object value)
         {
-            propertyInfo.GetSetMethod(false).Invoke(host, new object[] { value });
+            propertyInfo.GetSetMethod(true).Invoke(host, new object[] { value });
         }
     }
 }

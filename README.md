@@ -1,7 +1,7 @@
 # Beat Saber Markup Language
 An easy way to set up your UI in Beat Saber without manually creating new objects and parenting them.
 
-More info on the [wiki](https://github.com/monkeymanboy/BeatSaberMarkupLanguage/wiki).
+More info on the [docs](https://monkeymanboy.github.io/BSML-Docs/).
 
 ## For developers
 

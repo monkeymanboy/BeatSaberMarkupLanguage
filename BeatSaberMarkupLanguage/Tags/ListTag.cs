@@ -1,6 +1,6 @@
 ﻿using BeatSaberMarkupLanguage.Components;
-using BS_Utils.Utilities;
 using HMUI;
+using IPA.Utilities;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -20,18 +20,17 @@ namespace BeatSaberMarkupLanguage.Tags
             gameObject.name = "BSMLList";
             gameObject.SetActive(false);
 
-            TableView tableView = gameObject.AddComponent<TableView>();
+            TableView tableView = gameObject.AddComponent<BSMLTableView>();
             CustomListTableData tableData = container.gameObject.AddComponent<CustomListTableData>();
             tableData.tableView = tableView;
-
-            gameObject.AddComponent<RectMask2D>();
             tableView.transform.SetParent(container, false);
-
-            tableView.SetPrivateField("_preallocatedCells", new TableView.CellsGroup[0]);
-            tableView.SetPrivateField("_isInitialized", false);
+            
+            tableView.SetField<TableView, TableView.CellsGroup[]>("_preallocatedCells", new TableView.CellsGroup[0]);
+            tableView.SetField<TableView, bool>("_isInitialized", false);
 
             RectTransform viewport = new GameObject("Viewport").AddComponent<RectTransform>();
             viewport.SetParent(gameObject.GetComponent<RectTransform>(), false);
+            viewport.gameObject.AddComponent<RectMask2D>();
             gameObject.GetComponent<ScrollRect>().viewport = viewport;
 
             (viewport.transform as RectTransform).anchorMin = new Vector2(0f, 0f);

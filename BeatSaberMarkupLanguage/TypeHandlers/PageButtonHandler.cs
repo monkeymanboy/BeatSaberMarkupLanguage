@@ -2,13 +2,14 @@
 using BeatSaberMarkupLanguage.Parser;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.TypeHandlers
 {
     [ComponentHandler(typeof(PageButton))]
-    public class PageButtonHandler : TypeHandler
+    public class PageButtonHandler : TypeHandler<PageButton>
     {
         public enum PageButtonDirection
         {
@@ -17,36 +18,45 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 
         public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
         {
-            { "direction", new[]{"dir", "direction"} },
-            { "buttonWidth", new[]{ "button-width" } }
+            { "direction", new[]{"dir", "direction"} }
         };
 
-        public override void HandleType(Component obj, Dictionary<string, string> data, BSMLParserParams parserParams)
+        public override Dictionary<string, Action<PageButton, string>> Setters => new Dictionary<string, Action<PageButton, string>>()
         {
-            if (data.TryGetValue("direction", out string direction))
-            {
-                switch (Enum.Parse(typeof(PageButtonDirection), direction))
-                {
-                    case PageButtonDirection.Up:
-                        obj.transform.localRotation = Quaternion.Euler(0, 0, -180);
-                        break;
-                    case PageButtonDirection.Down:
-                        obj.transform.localRotation = Quaternion.Euler(0, 0, 0);
-                        break;
-                    case PageButtonDirection.Left:
-                        obj.transform.localRotation = Quaternion.Euler(0, 0, -90);
-                        break;
-                    case PageButtonDirection.Right:
-                        obj.transform.localRotation = Quaternion.Euler(0, 0, 90);
-                        break;
-                }
-            }
+            {"direction", new Action<PageButton, string>(SetButtonDirection) }
+        };
 
-            if (data.TryGetValue("buttonWidth", out string buttonWidth))
+        public static void SetButtonDirection(PageButton button, string value)
+        {
+            LayoutElement layoutElement = button.gameObject.GetComponent<LayoutElement>();
+            RectTransform buttonTransform = button.transform.Find("Arrow") as RectTransform;
+            bool isHorizontal = false;
+            switch (Enum.Parse(typeof(PageButtonDirection), value))
             {
-                LayoutElement layoutElement = obj.gameObject.GetComponent<LayoutElement>();
-                layoutElement.preferredWidth = Parse.Float(buttonWidth);
-                (obj.transform.GetChild(0).transform as RectTransform).sizeDelta = new Vector2(layoutElement.preferredWidth, layoutElement.preferredHeight);
+                case PageButtonDirection.Up:
+                    isHorizontal = true;
+                    buttonTransform.localRotation = Quaternion.Euler(0, 0, -180);
+                    break;
+                case PageButtonDirection.Down:
+                    isHorizontal = true;
+                    buttonTransform.localRotation = Quaternion.Euler(0, 0, 0);
+                    break;
+                case PageButtonDirection.Left:
+                    isHorizontal = false;
+                    buttonTransform.localRotation = Quaternion.Euler(0, 0, -90);
+                    break;
+                case PageButtonDirection.Right:
+                    isHorizontal = false;
+                    buttonTransform.localRotation = Quaternion.Euler(0, 0, 90);
+                    break;
+            }
+            if(layoutElement.preferredHeight == -1) //Establish default dimensions if they weren't changed
+            {
+                layoutElement.preferredHeight = isHorizontal?6:40;
+            }
+            if (layoutElement.preferredWidth == -1)
+            {
+                layoutElement.preferredWidth = isHorizontal ? 40 : 6;
             }
         }
     }
