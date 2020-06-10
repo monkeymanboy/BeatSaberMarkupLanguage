@@ -27,7 +27,7 @@ namespace BeatSaberMarkupLanguage.Macros
             if (parserParams.values.TryGetValue(name, out BSMLValue existingValue))
                 existingValue.SetValue(value);
             else
-                parserParams.values.Add(name, new BSMLStringValue(value));
+                parserParams.values.Add(name, new BSMLStringValue(value, name));
         }
     }
 }

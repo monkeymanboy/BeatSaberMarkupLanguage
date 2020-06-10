@@ -27,7 +27,7 @@ namespace BeatSaberMarkupLanguage
 
         private XmlDocument doc = new XmlDocument();
         private XmlReaderSettings readerSettings = new XmlReaderSettings();
-        
+
         public void Awake()
         {
             readerSettings.IgnoreComments = true;
@@ -100,13 +100,44 @@ namespace BeatSaberMarkupLanguage
         {
             BSMLParserParams parserParams = new BSMLParserParams();
             parserParams.host = host;
+            PropertyAccessOption propertyAccessOptions = PropertyAccessOption.Auto;
+            MethodAccessOption methodAccessOptions = MethodAccessOption.Auto;
+            HostOptionsAttribute hostOptions = host?.GetType().GetCustomAttribute<HostOptionsAttribute>();
+            if (hostOptions != null)
+            {
+                propertyAccessOptions = hostOptions.PropertyAccessOption;
+                methodAccessOptions = hostOptions.MethodAccessOption;
+            }
             if (host != null)
             {
                 foreach (MethodInfo methodInfo in host.GetType().GetMethods(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic))
                 {
                     UIAction uiaction = methodInfo.GetCustomAttributes(typeof(UIAction), true).FirstOrDefault() as UIAction;
+                    string methodName = methodInfo.Name;
+                    string uiActionName = null;
                     if (uiaction != null)
-                        parserParams.actions.Add(uiaction.id, new BSMLAction(host, methodInfo));
+                    {
+                        uiActionName = uiaction.id;
+                        if (parserParams.actions.TryGetValue(uiActionName, out BSMLAction existing))
+                        {
+                            if(existing.FromUIAction)
+                                throw new InvalidOperationException($"UIAction '{uiActionName}' is already used by member '{existing.MemberName}'.");
+                            existing.methodInfo = methodInfo;
+                            existing.FromUIAction = true;
+                        }
+                        else
+                            parserParams.actions.Add(uiActionName, new BSMLAction(host, methodInfo, true));
+                        if (methodAccessOptions == MethodAccessOption.AllowBoth && methodName != uiActionName)
+                        {
+                            if (!parserParams.actions.ContainsKey(methodName))
+                                parserParams.actions.Add(methodName, new BSMLAction(host, methodInfo, false));
+                        }
+                    }
+                    else if (methodAccessOptions != MethodAccessOption.OptIn)
+                    {
+                        if (!parserParams.actions.ContainsKey(methodName))
+                            parserParams.actions.Add(methodName, new BSMLAction(host, methodInfo));
+                    }
                 }
 
                 foreach (FieldInfo fieldInfo in host.GetType().GetFields(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic))
@@ -123,9 +154,33 @@ namespace BeatSaberMarkupLanguage
                 foreach (PropertyInfo propertyInfo in host.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic))
                 {
                     UIValue uivalue = propertyInfo.GetCustomAttributes(typeof(UIValue), true).FirstOrDefault() as UIValue;
+                    string propName = propertyInfo.Name;
+                    string uiValueName = null;
                     if (uivalue != null)
                     {
-                        parserParams.values.Add(uivalue.id, new BSMLPropertyValue(host, propertyInfo));
+                        uiValueName = uivalue.id;
+                        if (parserParams.values.TryGetValue(uiValueName, out BSMLValue existing))
+                        {
+                            if(existing.FromUIValue)
+                                throw new InvalidOperationException($"UIValue '{uiValueName}' is already used by member '{existing.MemberName}'.");
+                            if (existing is BSMLPropertyValue existingProp)
+                            {
+                                existingProp.propertyInfo = propertyInfo;
+                                existingProp.FromUIValue = true;
+                            }  
+                        }
+                        else
+                            parserParams.values.Add(uiValueName, new BSMLPropertyValue(host, propertyInfo));
+                        if (propertyAccessOptions == PropertyAccessOption.AllowBoth && propName != uiValueName)
+                        {
+                            if (!parserParams.values.ContainsKey(propName))
+                                parserParams.values.Add(propName, new BSMLPropertyValue(host, propertyInfo, false));
+                        }
+                    }
+                    else if (propertyAccessOptions != PropertyAccessOption.OptIn)
+                    {
+                        if (!parserParams.values.ContainsKey(propName))
+                            parserParams.values.Add(propName, new BSMLPropertyValue(host, propertyInfo, false));
                     }
                 }
             }
