@@ -144,6 +144,7 @@
     <Compile Include="Components\ClickableText.cs" />
     <Compile Include="Components\CustomCellListTableData.cs" />
     <Compile Include="Components\ExternalComponents.cs" />
+    <Compile Include="Components\FormattableText.cs" />
     <Compile Include="Components\Glowable.cs" />
     <Compile Include="Components\ModalColorPicker.cs" />
     <Compile Include="Components\ModalKeyboard.cs" />
@@ -269,6 +270,7 @@
     <Compile Include="TypeHandlers\ContentSizeFitterHandler.cs" />
     <Compile Include="TypeHandlers\CustomCellListTableDataHandler.cs" />
     <Compile Include="TypeHandlers\CustomListTableDataHandler.cs" />
+    <Compile Include="TypeHandlers\FormattableTextHandler.cs" />
     <Compile Include="TypeHandlers\GlowableHandler.cs" />
     <Compile Include="TypeHandlers\GridLayoutGroupHandler.cs" />
     <Compile Include="TypeHandlers\HorizontalOrVerticalLayoutGroupHandler.cs" />
