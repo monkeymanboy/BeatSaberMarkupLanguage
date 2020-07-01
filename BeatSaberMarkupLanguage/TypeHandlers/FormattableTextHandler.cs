@@ -59,11 +59,12 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 }
                 else if (dataStr != null)
                 {
-                    Logger.log?.Warn($"'{dataStr}' does not exist in host {parserParams.host?.GetType().Name}");
+                    formattableText.Data = dataStr;
                 }
 
                 //-----data-formatter-----
-                if (formatterValue != null)
+                if (formatterValue != null || (componentType.data.TryGetValue("data-formatter", out string formatterStr)
+                    && parserParams.values.TryGetValue(formatterStr, out formatterValue)))
                 {
                     formattableText.SetFormatter(formatterValue.GetValue());
                     if (formatterValue is BSMLPropertyValue formatterProp)
