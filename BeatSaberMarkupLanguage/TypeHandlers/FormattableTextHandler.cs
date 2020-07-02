@@ -63,8 +63,9 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 }
 
                 //-----data-formatter-----
-                if (formatterValue != null || (componentType.data.TryGetValue("data-formatter", out string formatterStr)
-                    && parserParams.values.TryGetValue(formatterStr, out formatterValue)))
+                if (formatterValue != null 
+                    || (componentType.data.TryGetValue("data-formatter", out string formatterStr)
+                        && (parserParams?.values?.TryGetValue(formatterStr, out formatterValue) ?? false)))
                 {
                     formattableText.SetFormatter(formatterValue.GetValue());
                     if (formatterValue is BSMLPropertyValue formatterProp)
