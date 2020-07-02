@@ -27,7 +27,7 @@ namespace BeatSaberMarkupLanguage
 
         private XmlDocument doc = new XmlDocument();
         private XmlReaderSettings readerSettings = new XmlReaderSettings();
-        
+
         public void Awake()
         {
             readerSettings.IgnoreComments = true;
@@ -171,8 +171,8 @@ namespace BeatSaberMarkupLanguage
                 if (component != null)
                 {
                     ComponentTypeWithData componentType = new ComponentTypeWithData();
-                    componentType.data = GetParameters(node, typeHandler.CachedProps, parserParams, out Dictionary<string, BSMLPropertyValue> propertyMap);
-                    componentType.propertyMap = propertyMap;
+                    componentType.data = GetParameters(node, typeHandler.CachedProps, parserParams, out Dictionary<string, BSMLValue> valueMap);
+                    componentType.valueMap = valueMap;
                     componentType.typeHandler = typeHandler;
                     componentType.component = component;
                     componentTypes.Add(componentType);
@@ -245,13 +245,11 @@ namespace BeatSaberMarkupLanguage
             currentMacro.Execute(node, parent, properties, parserParams, out components);
         }
 
-        private Dictionary<string, string> GetParameters(XmlNode node, Dictionary<string, string[]> properties, BSMLParserParams parserParams, out Dictionary<string, BSMLPropertyValue> propertyMap)
+        private Dictionary<string, string> GetParameters(XmlNode node, Dictionary<string, string[]> properties, BSMLParserParams parserParams, out Dictionary<string, BSMLValue> valueMap)
         {
             Dictionary<string, string> parameters = new Dictionary<string, string>();
             bool isNotifyHost = parserParams.host == null ? false : typeof(INotifiableHost).IsAssignableFrom(parserParams.host.GetType());
-            propertyMap = null;
-            if (isNotifyHost)
-                propertyMap = new Dictionary<string, BSMLPropertyValue>();
+            valueMap = new Dictionary<string, BSMLValue>();
             foreach (KeyValuePair<string, string[]> propertyAliases in properties)
             {
                 List<string> aliasList = new List<string>(propertyAliases.Value);
@@ -265,14 +263,10 @@ namespace BeatSaberMarkupLanguage
                         if (value.StartsWith(RETRIEVE_VALUE_PREFIX))
                         {
                             string valueID = value.Substring(1);
-                            if (!parserParams.values.TryGetValue(valueID, out BSMLValue uiValue))
+                            if (!parserParams.values.TryGetValue(valueID, out BSMLValue uiValue) && uiValue != null)
                                 throw new Exception("No UIValue exists with the id '" + valueID + "'");
                             parameters.Add(propertyAliases.Key, uiValue.GetValue()?.InvariantToString());
-                            if (isNotifyHost && uiValue is BSMLPropertyValue propVal)
-                                if (propVal != null)
-                                    propertyMap.Add(propertyAliases.Key, propVal);
-                                else
-                                    Logger.log?.Warn($"PropertyValue is null for {propertyAliases.Key}");
+                            valueMap.Add(propertyAliases.Key, uiValue);
                         }
                         else
                         {
@@ -295,7 +289,7 @@ namespace BeatSaberMarkupLanguage
             public TypeHandler typeHandler;
             public Component component;
             public Dictionary<string, string> data;
-            public Dictionary<string, BSMLPropertyValue> propertyMap;
+            public Dictionary<string, BSMLValue> valueMap;
         }
     }
 }

@@ -37,61 +37,50 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 BSMLValue dataValue = null;
                 BSMLValue formatterValue = null;
 
-                if (componentType.propertyMap != null)
+                if (componentType.valueMap != null)
                 {
-                    dataValue = componentType.propertyMap.TryGetValue("data", out BSMLPropertyValue existingProp) 
-                        ? existingProp : null;
-                    formatterValue = componentType.propertyMap.TryGetValue("data-formatter", out existingProp) 
-                        ? existingProp : null;
+                    dataValue = componentType.valueMap.TryGetValue("data", out BSMLValue existingValue)
+                        ? existingValue : null;
+                    formatterValue = componentType.valueMap.TryGetValue("data-formatter", out existingValue)
+                        ? existingValue : null;
                 }
 
                 //-----data-----
-                if (dataValue != null || (componentType.data.TryGetValue("data", out string dataStr)
-                    && parserParams.values.TryGetValue(dataStr, out dataValue)))
+                if (dataValue != null)
                 {
                     formattableText.Data = dataValue.GetValue();
                     if (dataValue is BSMLPropertyValue dataProp)
                     {
                         if (updater == null)
-                            updater = CreateNotifyUpdater(componentType, parserParams);
+                            updater = GetOrCreateNotifyUpdater(componentType, parserParams);
                         updater.AddAction(dataProp.propertyInfo.Name, val => formattableText.Data = val);
                     }
                 }
-                else if (dataStr != null)
+                else if (componentType.data.TryGetValue("data", out string dataStr))
                 {
-                    formattableText.Data = dataStr;
+                    if (parserParams.values.TryGetValue(dataStr, out dataValue))
+                        formattableText.Data = dataValue.GetValue();
+                    else
+                        formattableText.Data = dataStr;
                 }
 
                 //-----data-formatter-----
-                if (formatterValue != null 
-                    || (componentType.data.TryGetValue("data-formatter", out string formatterStr)
-                        && (parserParams?.values?.TryGetValue(formatterStr, out formatterValue) ?? false)))
+                if (formatterValue != null)
                 {
                     formattableText.SetFormatter(formatterValue.GetValue());
                     if (formatterValue is BSMLPropertyValue formatterProp)
                     {
                         if (updater == null)
-                            updater = CreateNotifyUpdater(componentType, parserParams);
+                            updater = GetOrCreateNotifyUpdater(componentType, parserParams);
                         updater.AddAction(formatterProp.propertyInfo.Name, val => formattableText.SetFormatter(val));
                     }
                 }
-            }
-
-        }
-
-        internal static NotifyUpdater CreateNotifyUpdater(BSMLParser.ComponentTypeWithData componentType, BSMLParserParams parserParams)
-        {
-            NotifyUpdater updater = null;
-            if (parserParams.host is INotifiableHost notifyHost && componentType.propertyMap != null)
-            {
-                updater = componentType.component.gameObject.GetComponent<NotifyUpdater>();
-                if (updater == null)
+                else if (componentType.data.TryGetValue("data-formatter", out string formatterStr))
                 {
-                    updater = componentType.component.gameObject.AddComponent<NotifyUpdater>();
-                    updater.NotifyHost = notifyHost;
+                    throw new InvalidOperationException($"'data-formatter' value of '{formatterStr}' is invalid in {parserParams.host?.GetType().FullName}. UIValue name must be prefixed with '{BSMLParser.RETRIEVE_VALUE_PREFIX}'.");
                 }
             }
-            return updater;
+
         }
     }
 }
