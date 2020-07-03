@@ -146,6 +146,7 @@
     <Compile Include="Components\ExternalComponents.cs" />
     <Compile Include="Components\FormattableText.cs" />
     <Compile Include="Components\Glowable.cs" />
+    <Compile Include="Components\IInteractable.cs" />
     <Compile Include="Components\ModalColorPicker.cs" />
     <Compile Include="Components\ModalKeyboard.cs" />
     <Compile Include="Components\NotifiableSingleton.cs" />
@@ -155,6 +156,7 @@
     <Compile Include="Components\Settings\CheckboxSetting.cs" />
     <Compile Include="Components\Settings\ColorSetting.cs" />
     <Compile Include="Components\Settings\DropDownListSetting.cs" />
+    <Compile Include="Components\Settings\GenericInteractableSetting.cs" />
     <Compile Include="Components\Settings\GenericSetting.cs" />
     <Compile Include="Components\Settings\GenericSliderSetting.cs" />
     <Compile Include="Components\Settings\IncDecSetting.cs" />
@@ -263,6 +265,9 @@
     <Compile Include="TypeHandlers\BackgroundableHandler.cs" />
     <Compile Include="TypeHandlers\BSMLScrollViewHandler.cs" />
     <Compile Include="TypeHandlers\ButtonArtworkHandler.cs" />
+    <Compile Include="TypeHandlers\GenericInteractableSettingHandler.cs" />
+    <Compile Include="TypeHandlers\InteractableHandler.cs" />
+    <Compile Include="TypeHandlers\SelectableHandler.cs" />
     <Compile Include="TypeHandlers\ButtonHandler.cs" />
     <Compile Include="TypeHandlers\ButtonIconHandler.cs" />
     <Compile Include="TypeHandlers\ClickableImageHandler.cs" />

@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.Components.Settings
 {
-    public class StringSetting : GenericSetting
+    public class StringSetting : GenericInteractableSetting
     {   
         public TextMeshProUGUI text;
         public Button editButton;
@@ -13,6 +13,16 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         public ModalKeyboard modalKeyboard;
 
         private string currentValue;
+
+        public override bool interactable
+        {
+            get => editButton?.interactable ?? false;
+            set
+            {
+                if (editButton != null)
+                    editButton.interactable = value;
+            }
+        }
 
         public string Text
         {

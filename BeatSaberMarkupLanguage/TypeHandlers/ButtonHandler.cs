@@ -12,14 +12,10 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
         public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
         {
             { "onClick", new[]{ "on-click" } },
-            { "clickEvent", new[]{ "click-event", "event-click"} },
-            { "interactable", new[]{ "interactable" } }
+            { "clickEvent", new[]{ "click-event", "event-click"} }
         };
 
-        public override Dictionary<string, Action<Button, string>> Setters => new Dictionary<string, Action<Button, string>>()
-        {
-            {"interactable", new Action<Button, string>(SetInteractable) }
-        };
+        public override Dictionary<string, Action<Button, string>> Setters => new Dictionary<string, Action<Button, string>>();
 
         public override void HandleType(ComponentTypeWithData componentType, BSMLParserParams parserParams)
         {

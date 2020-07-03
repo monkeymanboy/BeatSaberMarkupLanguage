@@ -39,6 +39,15 @@ namespace BeatSaberMarkupLanguage
                 RegisterMacro(macro);
 
             typeHandlers = Utilities.GetListOfType<TypeHandler>();
+            foreach (TypeHandler typeHandler in typeHandlers.ToArray())
+            {
+                Type type = (typeHandler.GetType().GetCustomAttributes(typeof(ComponentHandler), true).FirstOrDefault() as ComponentHandler)?.type;
+                if (type == null)
+                {
+                    Logger.log.Warn($"TypeHandler {typeHandler.GetType().FullName} does not have the [ComponentHandler] attribute and will be ignored.");
+                    typeHandlers.Remove(typeHandler);
+                }
+            }
         }
 
         public void MenuSceneLoaded()
@@ -166,7 +175,9 @@ namespace BeatSaberMarkupLanguage
             List<ComponentTypeWithData> componentTypes = new List<ComponentTypeWithData>();
             foreach (TypeHandler typeHandler in typeHandlers)
             {
-                Type type = (typeHandler.GetType().GetCustomAttributes(typeof(ComponentHandler), true).FirstOrDefault() as ComponentHandler).type;
+                Type type = (typeHandler.GetType().GetCustomAttributes(typeof(ComponentHandler), true).FirstOrDefault() as ComponentHandler)?.type;
+                if(type == null)
+                    continue;
                 Component component = GetExternalComponent(currentNode, type);
                 if (component != null)
                 {
