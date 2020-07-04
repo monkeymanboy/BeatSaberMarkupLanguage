@@ -176,7 +176,7 @@ namespace BeatSaberMarkupLanguage
             foreach (TypeHandler typeHandler in typeHandlers)
             {
                 Type type = (typeHandler.GetType().GetCustomAttributes(typeof(ComponentHandler), true).FirstOrDefault() as ComponentHandler)?.type;
-                if(type == null)
+                if (type == null)
                     continue;
                 Component component = GetExternalComponent(currentNode, type);
                 if (component != null)
@@ -273,11 +273,19 @@ namespace BeatSaberMarkupLanguage
                         string value = node.Attributes[alias].Value;
                         if (value.StartsWith(RETRIEVE_VALUE_PREFIX))
                         {
-                            string valueID = value.Substring(1);
-                            if (!parserParams.values.TryGetValue(valueID, out BSMLValue uiValue) && uiValue != null)
-                                throw new Exception("No UIValue exists with the id '" + valueID + "'");
-                            parameters.Add(propertyAliases.Key, uiValue.GetValue()?.InvariantToString());
-                            valueMap.Add(propertyAliases.Key, uiValue);
+                            try
+                            {
+                                string valueID = value.Substring(1);
+                                if (!parserParams.values.TryGetValue(valueID, out BSMLValue uiValue) || uiValue == null)
+                                    throw new Exception("No UIValue exists with the id '" + valueID + "'");
+                                parameters.Add(propertyAliases.Key, uiValue.GetValue()?.InvariantToString());
+                                valueMap.Add(propertyAliases.Key, uiValue);
+                            }
+                            catch (Exception)
+                            {
+                                Logger.log?.Error($"Error parsing '{propertyAliases.Key}'='{value}' in {parserParams.host?.GetType().FullName}");
+                                throw;
+                            }
                         }
                         else
                         {
