@@ -146,7 +146,6 @@
     <Compile Include="Components\ExternalComponents.cs" />
     <Compile Include="Components\FormattableText.cs" />
     <Compile Include="Components\Glowable.cs" />
-    <Compile Include="Components\IInteractable.cs" />
     <Compile Include="Components\ModalColorPicker.cs" />
     <Compile Include="Components\ModalKeyboard.cs" />
     <Compile Include="Components\NotifiableSingleton.cs" />
