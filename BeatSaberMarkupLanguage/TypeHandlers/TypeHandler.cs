@@ -70,6 +70,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
         }
     }
 
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
     public class ComponentHandler : Attribute
     {
         public Type type;

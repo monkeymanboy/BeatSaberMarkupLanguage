@@ -35,11 +35,19 @@ namespace BeatSaberMarkupLanguage.Components
                 return;
             }
             PropertyInfo prop = sender.GetType().GetProperty(e.PropertyName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-            Action<object> action = null;
+            Action<object> action;
             if (ActionDict.TryGetValue(e.PropertyName, out action))
-                action?.Invoke(prop.GetValue(sender));
+            {
+                if (action != null)
+                {
+                    action.Invoke(prop.GetValue(sender));
+                    ComponentChanged?.Invoke(this, null);
+                }
+            }
         }
-        
+
+        public event EventHandler ComponentChanged;
+
         private Dictionary<string, Action<object>> ActionDict{ get; set; } = new Dictionary<string, Action<object>>();
 
         public bool AddAction(string propertyName, Action<object> action)

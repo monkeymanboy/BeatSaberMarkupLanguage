@@ -165,6 +165,7 @@
     <Compile Include="Components\Strokable.cs" />
     <Compile Include="Components\Tab.cs" />
     <Compile Include="Components\TabSelector.cs" />
+    <Compile Include="Components\TextMeshProProxy.cs" />
     <Compile Include="Components\TextPageScrollViewRefresher.cs" />
     <Compile Include="FloatingScreen\FloatingScreen.cs" />
     <Compile Include="FloatingScreen\FloatingScreenMoverPointer.cs" />
@@ -294,6 +295,7 @@
     <Compile Include="TypeHandlers\StrokableHandler.cs" />
     <Compile Include="TypeHandlers\TabHandler.cs" />
     <Compile Include="TypeHandlers\TabSelectorHandler.cs" />
+    <Compile Include="TypeHandlers\TextMeshProProxyHandler.cs" />
     <Compile Include="TypeHandlers\TextMeshProUGUIHandler.cs" />
     <Compile Include="TypeHandlers\TextPageScrollViewHandler.cs" />
     <Compile Include="TypeHandlers\TextSegmentedControlHandler.cs" />
