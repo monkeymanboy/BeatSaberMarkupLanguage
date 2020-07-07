@@ -100,11 +100,13 @@ namespace BeatSaberMarkupLanguage
         {
             BSMLParserParams parserParams = new BSMLParserParams();
             parserParams.host = host;
+            FieldAccessOption fieldAccessOptions = FieldAccessOption.Auto;
             PropertyAccessOption propertyAccessOptions = PropertyAccessOption.Auto;
             MethodAccessOption methodAccessOptions = MethodAccessOption.Auto;
             HostOptionsAttribute hostOptions = host?.GetType().GetCustomAttribute<HostOptionsAttribute>();
             if (hostOptions != null)
             {
+                fieldAccessOptions = hostOptions.FieldAccessOption;
                 propertyAccessOptions = hostOptions.PropertyAccessOption;
                 methodAccessOptions = hostOptions.MethodAccessOption;
             }
@@ -143,8 +145,34 @@ namespace BeatSaberMarkupLanguage
                 foreach (FieldInfo fieldInfo in host.GetType().GetFields(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic))
                 {
                     UIValue uivalue = fieldInfo.GetCustomAttributes(typeof(UIValue), true).FirstOrDefault() as UIValue;
+                    string fieldName = fieldInfo.Name;
+                    string uiValueName = null;
                     if (uivalue != null)
-                        parserParams.values.Add(uivalue.id, new BSMLFieldValue(host, fieldInfo));
+                    {
+                        uiValueName = uivalue.id;
+                        if (parserParams.values.TryGetValue(uiValueName, out BSMLValue existing))
+                        {
+                            if (existing.FromUIValue)
+                                throw new InvalidOperationException($"UIValue '{uiValueName}' is already used by member '{existing.MemberName}'.");
+                            if (existing is BSMLFieldValue existingField)
+                            {
+                                existingField.fieldInfo = fieldInfo;
+                                existingField.FromUIValue = true;
+                            }
+                        }
+                        else
+                            parserParams.values.Add(uiValueName, new BSMLFieldValue(host, fieldInfo));
+                        if (fieldAccessOptions == FieldAccessOption.AllowBoth && fieldName != uiValueName)
+                        {
+                            if (!parserParams.values.ContainsKey(fieldName))
+                                parserParams.values.Add(fieldName, new BSMLFieldValue(host, fieldInfo, false));
+                        }
+                    }
+                    else if (fieldAccessOptions != FieldAccessOption.OptIn)
+                    {
+                        if (!parserParams.values.ContainsKey(fieldName))
+                            parserParams.values.Add(fieldName, new BSMLFieldValue(host, fieldInfo, false));
+                    }
 
                     UIParams uiParams = fieldInfo.GetCustomAttributes(typeof(UIParams), true).FirstOrDefault() as UIParams;
                     if (uiParams != null)
