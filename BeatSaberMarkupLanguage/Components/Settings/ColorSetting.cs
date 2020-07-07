@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.Components.Settings
 {
-    public class ColorSetting : GenericSetting
+    public class ColorSetting : GenericInteractableSetting
     {
         public Button editButton;
         public ModalColorPicker modalColorPicker;
@@ -16,8 +16,18 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             set
             {
                 _currentColor = value;
-                if(colorImage != null)
+                if (colorImage != null)
                     colorImage.color = _currentColor;
+            }
+        }
+
+        public override bool interactable
+        {
+            get => editButton?.interactable ?? false;
+            set
+            {
+                if (editButton != null)
+                    editButton.interactable = value;
             }
         }
 

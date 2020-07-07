@@ -46,27 +46,36 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             if (componentType.component is T obj)
             {
                 NotifyUpdater updater = null;
-                if (parserParams.host is INotifiableHost notifyHost && (componentType.propertyMap?.Count ?? 0) > 0)
-                {
-                    updater = componentType.component.gameObject.GetComponent<NotifyUpdater>();
-                    if (updater == null)
-                    {
-                        updater = componentType.component.gameObject.AddComponent<NotifyUpdater>();
-                        updater.NotifyHost = notifyHost;
-                    }
-                }
                 foreach (KeyValuePair<string, string> pair in componentType.data)
                 {
                     if (CachedSetters.TryGetValue(pair.Key, out Action<T, string> action))
                     {
                         action.Invoke(obj, pair.Value);
-                        if (componentType.propertyMap != null && componentType.propertyMap.TryGetValue(pair.Key, out BSMLPropertyValue prop))
+                        if (componentType.valueMap != null 
+                            && componentType.valueMap.TryGetValue(pair.Key, out BSMLValue value)
+                            && value is BSMLPropertyValue prop)
                         {
+                            if (updater == null)
+                                updater = GetOrCreateNotifyUpdater(componentType, parserParams);
                             updater?.AddAction(prop.propertyInfo.Name, val => action.Invoke(obj, val.InvariantToString()));
                         }
                     }
                 }
             }
+        }
+        internal static NotifyUpdater GetOrCreateNotifyUpdater(BSMLParser.ComponentTypeWithData componentType, BSMLParserParams parserParams)
+        {
+            NotifyUpdater updater = null;
+            if (parserParams.host is INotifiableHost notifyHost && componentType.valueMap != null)
+            {
+                updater = componentType.component.gameObject.GetComponent<NotifyUpdater>();
+                if (updater == null)
+                {
+                    updater = componentType.component.gameObject.AddComponent<NotifyUpdater>();
+                    updater.NotifyHost = notifyHost;
+                }
+            }
+            return updater;
         }
     }
 

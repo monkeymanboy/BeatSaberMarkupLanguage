@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using BeatSaberMarkupLanguage.Components;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -13,7 +14,7 @@ namespace BeatSaberMarkupLanguage.Tags
             GameObject gameObj = new GameObject("BSMLText");
             gameObj.transform.SetParent(parent, false);
 
-            TextMeshProUGUI textMesh = gameObj.AddComponent<TextMeshProUGUI>();
+            FormattableText textMesh = gameObj.AddComponent<FormattableText>();
             textMesh.font = MonoBehaviour.Instantiate(Resources.FindObjectsOfTypeAll<TMP_FontAsset>().First(t => t.name == "Teko-Medium SDF No Glow"));
             textMesh.fontSize = 4;
             textMesh.color = Color.white;
