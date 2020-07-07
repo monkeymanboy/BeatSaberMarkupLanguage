@@ -126,6 +126,7 @@
     <Compile Include="Animations\GIF\GIFUnityDecoder.cs" />
     <Compile Include="Animations\AnimationInfo.cs" />
     <Compile Include="Animations\LockBitmap.cs" />
+    <Compile Include="Attributes\HostOptionsAttribute.cs" />
     <Compile Include="Attributes\HotReloadAttribute.cs" />
     <Compile Include="Attributes\UIAction.cs" />
     <Compile Include="Attributes\UIComponent.cs" />
