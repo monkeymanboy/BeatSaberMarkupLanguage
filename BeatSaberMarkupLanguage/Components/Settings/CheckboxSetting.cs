@@ -3,17 +3,11 @@ using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.Components.Settings
 {
-    public class CheckboxSetting : GenericInteractableSetting
+    public class CheckboxSetting : GenericSetting
     {
         public Toggle checkbox;
 
-        public override bool interactable
-        {
-            get => checkbox?.interactable ?? false;
-            set => checkbox.interactable = false;
-        }
-
-        [Obsolete("Use CheckboxSetting.interactable instead.")]
+        [Obsolete("Use Selectable.interactable instead.")]
         public bool EnableCheckbox
         {
             set => checkbox.interactable = value;

@@ -78,7 +78,7 @@ namespace BeatSaberMarkupLanguage
         public void MenuLoadFresh(ScenesTransitionSetupDataSO _)
         {
             //GameplaySetup.GameplaySetup.instance.AddTab("Test", "BeatSaberMarkupLanguage.Views.gameplay-setup-test.bsml", GameplaySetupTest.instance);
-            //BSMLSettings.instance.AddSettingsMenu("Test", "BeatSaberMarkupLanguage.Views.settings-test.bsml", SettingsTest.instance);
+            BSMLSettings.instance.AddSettingsMenu("Test", "BeatSaberMarkupLanguage.Views.settings-test.bsml", SettingsTest.instance);
             //Resources.FindObjectsOfTypeAll<GameScenesManager>().FirstOrDefault().StartCoroutine(PresentTest());
             BSMLSettings.instance.Setup();
             MenuButtons.MenuButtons.instance.Setup();
