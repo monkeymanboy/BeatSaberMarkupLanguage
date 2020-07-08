@@ -2,6 +2,7 @@
 using HMUI;
 using IPA.Utilities;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.Tags
@@ -15,7 +16,9 @@ namespace BeatSaberMarkupLanguage.Tags
             TextPageScrollView scrollView = MonoBehaviour.Instantiate(Resources.FindObjectsOfTypeAll<ReleaseInfoViewController>().First().GetField<TextPageScrollView, ReleaseInfoViewController>("_textPageScrollView"), parent);
             scrollView.name = "BSMLTextPageScrollView";
             scrollView.enabled = true;
-            scrollView.gameObject.AddComponent<TextPageScrollViewRefresher>().scrollView = scrollView;
+            TextMeshProUGUI textMesh = scrollView.GetField<TextMeshProUGUI, TextPageScrollView>("_text");
+            textMesh.gameObject.AddComponent<TextPageScrollViewRefresher>().scrollView = scrollView;
+            scrollView.gameObject.AddComponent<ExternalComponents>().components.Add(textMesh);
             return scrollView.gameObject;
         }
     }

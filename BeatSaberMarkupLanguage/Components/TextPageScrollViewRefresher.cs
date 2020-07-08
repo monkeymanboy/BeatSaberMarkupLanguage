@@ -12,5 +12,10 @@ namespace BeatSaberMarkupLanguage.Components
         {
             scrollView?.SetText(scrollView.GetField<TextMeshProUGUI, TextPageScrollView>("_text").text);
         }
+
+        void OnRectTransformDimensionsChange()
+        {
+            scrollView?.SetText(scrollView.GetField<TextMeshProUGUI, TextPageScrollView>("_text").text);
+        }
     }
 }

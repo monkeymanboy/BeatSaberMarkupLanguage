@@ -266,7 +266,6 @@
     <Compile Include="TypeHandlers\BSMLScrollViewHandler.cs" />
     <Compile Include="TypeHandlers\ButtonArtworkHandler.cs" />
     <Compile Include="TypeHandlers\GenericInteractableSettingHandler.cs" />
-    <Compile Include="TypeHandlers\InteractableHandler.cs" />
     <Compile Include="TypeHandlers\SelectableHandler.cs" />
     <Compile Include="TypeHandlers\ButtonHandler.cs" />
     <Compile Include="TypeHandlers\ButtonIconHandler.cs" />
