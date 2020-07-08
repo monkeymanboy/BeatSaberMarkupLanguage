@@ -51,22 +51,16 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                     if (CachedSetters.TryGetValue(pair.Key, out Action<T, string> action))
                     {
                         action.Invoke(obj, pair.Value);
-                        if (componentType.valueMap != null 
-                            && componentType.valueMap.TryGetValue(pair.Key, out BSMLValue value)
-                            && value is BSMLPropertyValue prop)
-                        {
-                            if (updater == null)
-                                updater = GetOrCreateNotifyUpdater(componentType, parserParams);
-                            updater?.AddAction(prop.propertyInfo.Name, val => action.Invoke(obj, val.InvariantToString()));
-                        }
+                        if (componentType.valueMap.TryGetValue(pair.Key, out BSMLValue value))
+                            updater = BindValue(componentType, parserParams, value, val => action.Invoke(obj, val.InvariantToString()), updater);
                     }
                 }
             }
         }
-        internal static NotifyUpdater GetOrCreateNotifyUpdater(BSMLParser.ComponentTypeWithData componentType, BSMLParserParams parserParams)
+        protected static NotifyUpdater GetOrCreateNotifyUpdater(BSMLParser.ComponentTypeWithData componentType, BSMLParserParams parserParams)
         {
             NotifyUpdater updater = null;
-            if (parserParams.host is INotifiableHost notifyHost && componentType.valueMap != null)
+            if (parserParams.host is INotifiableHost notifyHost)
             {
                 updater = componentType.component.gameObject.GetComponent<NotifyUpdater>();
                 if (updater == null)
@@ -77,8 +71,19 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             }
             return updater;
         }
-    }
 
+        protected static NotifyUpdater BindValue(BSMLParser.ComponentTypeWithData componentType, BSMLParserParams parserParams, BSMLValue value, Action<object> onChange, NotifyUpdater notifyUpdater = null)
+        {
+            if (value == null) return notifyUpdater;
+            if (value is BSMLPropertyValue prop)
+            {
+                if (notifyUpdater == null)
+                    notifyUpdater = GetOrCreateNotifyUpdater(componentType, parserParams);
+                notifyUpdater?.AddAction(prop.propertyInfo.Name, onChange);
+            }
+            return notifyUpdater;
+        }
+    }
     public class ComponentHandler : Attribute
     {
         public Type type;

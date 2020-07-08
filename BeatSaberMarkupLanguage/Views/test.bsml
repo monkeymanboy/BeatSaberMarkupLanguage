@@ -29,6 +29,7 @@
       <horizontal pad-left='10' pad-right='10' horizontal-fit='PreferredSize'>
         <vertical>
           <text text='~header' color='red' align='Center' font-size='4' />
+          <text data='some-number' data-format='0,0'/>
           <text text='🎀 ここに変な手紙を入れましょう 🎀' />
           <text text='בוא נקבל כמה אותיות מוזרות כאן' />
           <text text='🎀 讓我們在這裡得到一些奇怪的信 🎀' />

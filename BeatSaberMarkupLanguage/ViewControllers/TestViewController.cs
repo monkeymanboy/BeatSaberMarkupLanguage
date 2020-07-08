@@ -23,6 +23,18 @@ namespace BeatSaberMarkupLanguage.ViewControllers
         }
         public string headerText = "Header comes from code!";
 
+        [UIValue("some-number")]
+        public int SomeNumber
+        {
+            get => someNumber;
+            set
+            {
+                someNumber = value;
+                NotifyPropertyChanged();
+            }
+        }
+        public int someNumber = 2342531;
+
         [UIComponent("test-external")]
         public TextMeshProUGUI buttonText;
 
@@ -47,6 +59,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
         {
             HeaderText = "It works!";
             buttonText.text = "Clicked";
+            SomeNumber = 100234234;
         }
 
         [UIAction("cell click")]

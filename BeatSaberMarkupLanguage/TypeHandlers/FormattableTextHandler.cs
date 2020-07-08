@@ -1,14 +1,7 @@
 ﻿using BeatSaberMarkupLanguage.Components;
-using BeatSaberMarkupLanguage.Notify;
 using BeatSaberMarkupLanguage.Parser;
-using IPA.Config.Stores;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using TMPro;
-using UnityEngine;
-using UnityEngine.PlayerLoop;
 
 namespace BeatSaberMarkupLanguage.TypeHandlers
 {
@@ -19,68 +12,40 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
         public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
         {
             { "data", new[]{ "data" } },
-            { "data-format", new[]{ "data-format" } },
-            { "data-formatter", new[]{ "data-formatter" } }
+            { "dataFormat", new[]{ "data-format" } },
+            { "dataFormatter", new[]{ "data-formatter" } }
         };
 
         public override Dictionary<string, Action<FormattableText, string>> Setters { get; } = new Dictionary<string, Action<FormattableText, string>>()
         {
-            {"data-format", new Action<FormattableText,string>((formattableText, value) => formattableText.TextFormat = value) },
+            {"dataFormat", new Action<FormattableText,string>((formattableText, value) => formattableText.TextFormat = value) },
         };
 
         public override void HandleType(BSMLParser.ComponentTypeWithData componentType, BSMLParserParams parserParams)
         {
             base.HandleType(componentType, parserParams);
-            if (componentType.component is FormattableText formattableText)
+            FormattableText formattableText = componentType.component as FormattableText;
+            NotifyUpdater updater = null;
+            if (componentType.data.TryGetValue("data", out string dataStr))
             {
-                NotifyUpdater updater = null;
-                BSMLValue dataValue = null;
-                BSMLValue formatterValue = null;
-
-                if (componentType.valueMap != null)
-                {
-                    dataValue = componentType.valueMap.TryGetValue("data", out BSMLValue existingValue)
-                        ? existingValue : null;
-                    formatterValue = componentType.valueMap.TryGetValue("data-formatter", out existingValue)
-                        ? existingValue : null;
-                }
-
-                //-----data-----
-                if (dataValue != null)
+                if (parserParams.values.TryGetValue(dataStr, out BSMLValue dataValue))
                 {
                     formattableText.Data = dataValue.GetValue();
-                    if (dataValue is BSMLPropertyValue dataProp)
-                    {
-                        if (updater == null)
-                            updater = GetOrCreateNotifyUpdater(componentType, parserParams);
-                        updater.AddAction(dataProp.propertyInfo.Name, val => formattableText.Data = val);
-                    }
+                    BindValue(componentType, parserParams, dataValue, val => formattableText.Data = val, updater);
                 }
-                else if (componentType.data.TryGetValue("data", out string dataStr))
-                {
-                    if (parserParams.values.TryGetValue(dataStr, out dataValue))
-                        formattableText.Data = dataValue.GetValue();
-                    else
-                        formattableText.Data = dataStr;
-                }
-
-                //-----data-formatter-----
-                if (formatterValue != null)
+                else
+                    throw new Exception($"data value '{dataStr}' not found");
+            }
+            if (componentType.data.TryGetValue("dataFormatter", out string formatterStr))
+            {
+                if (parserParams.values.TryGetValue(formatterStr, out BSMLValue formatterValue))
                 {
                     formattableText.SetFormatter(formatterValue.GetValue());
-                    if (formatterValue is BSMLPropertyValue formatterProp)
-                    {
-                        if (updater == null)
-                            updater = GetOrCreateNotifyUpdater(componentType, parserParams);
-                        updater.AddAction(formatterProp.propertyInfo.Name, val => formattableText.SetFormatter(val));
-                    }
+                    updater = BindValue(componentType, parserParams, formatterValue, val => formattableText.SetFormatter(val), updater);
                 }
-                else if (componentType.data.TryGetValue("data-formatter", out string formatterStr))
-                {
-                    throw new InvalidOperationException($"'data-formatter' value of '{formatterStr}' is invalid in {parserParams.host?.GetType().FullName}. UIValue name must be prefixed with '{BSMLParser.RETRIEVE_VALUE_PREFIX}'.");
-                }
+                else
+                    throw new Exception($"data-formatter value '{formatterStr}' not found");
             }
-
         }
     }
 }
