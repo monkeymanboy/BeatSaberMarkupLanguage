@@ -36,7 +36,7 @@ namespace BeatSaberMarkupLanguage
             }
             AnimationController.instance.InitializeLoadingAnimation();
             SceneManager.activeSceneChanged += OnActiveSceneChanged;
-            BSEvents.menuSceneLoadedFresh += MenuLoadFresh;
+            BSEvents.earlyMenuSceneLoadedFresh += MenuLoadFresh;
             config = new Config("BSML");
         }
 
@@ -75,7 +75,7 @@ namespace BeatSaberMarkupLanguage
                 }, TaskContinuationOptions.NotOnRanToCompletion);
         }
 
-        public void MenuLoadFresh()
+        public void MenuLoadFresh(ScenesTransitionSetupDataSO _)
         {
             //GameplaySetup.GameplaySetup.instance.AddTab("Test", "BeatSaberMarkupLanguage.Views.gameplay-setup-test.bsml", GameplaySetupTest.instance);
             //BSMLSettings.instance.AddSettingsMenu("Test", "BeatSaberMarkupLanguage.Views.settings-test.bsml", SettingsTest.instance);
