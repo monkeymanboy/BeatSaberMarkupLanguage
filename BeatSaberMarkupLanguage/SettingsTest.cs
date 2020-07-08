@@ -1,4 +1,5 @@
 ﻿using BeatSaberMarkupLanguage.Attributes;
+using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.Parser;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +7,7 @@ using UnityEngine;
 
 namespace BeatSaberMarkupLanguage
 {
-    public class SettingsTest : PersistentSingleton<SettingsTest>
+    public class SettingsTest : NotifiableSingleton<SettingsTest>
     {
         [UIParams]
         private BSMLParserParams parserParams;
@@ -18,6 +19,15 @@ namespace BeatSaberMarkupLanguage
         private string listChoice = "Something";
 
         [UIValue("bool-test")]
+        private bool BoolTest
+        {
+            get => boolTest;
+            set
+            {
+                boolTest = value;
+                NotifyPropertyChanged();
+            }
+        }
         private bool boolTest = true;
 
         [UIValue("slider-value")]
@@ -42,6 +52,12 @@ namespace BeatSaberMarkupLanguage
         public string Format(int number)
         {
             return number + "x";
+        }
+
+        [UIAction("change-bool")]
+        public void ChangeBool()
+        {
+            BoolTest = !BoolTest;
         }
 
         public void Update()

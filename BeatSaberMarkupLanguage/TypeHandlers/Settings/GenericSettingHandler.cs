@@ -7,7 +7,7 @@ using static BeatSaberMarkupLanguage.BSMLParser;
 namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
 {
     [ComponentHandler(typeof(GenericSetting))]
-    public class GenericSettingHandler : TypeHandler
+    public class GenericSettingHandler : TypeHandler<GenericSetting>
     {
         public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
         {
@@ -16,8 +16,11 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
             { "setEvent", new[] { "set-event"} },
             { "getEvent", new[] { "get-event"} },
             { "applyOnChange", new[] { "apply-on-change" } },
-            { "formatter", new[] { "formatter" } }
+            { "formatter", new[] { "formatter" } },
+            { "bindValue", new[] { "bind-value" } }
         };
+
+        public override Dictionary<string, Action<GenericSetting, string>> Setters => new Dictionary<string, Action<GenericSetting, string>>();
 
         public override void HandleType(ComponentTypeWithData componentType, BSMLParserParams parserParams)
         {
@@ -48,6 +51,8 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
                     throw new Exception("value '" + value + "' not found");
 
                 genericSetting.associatedValue = associatedValue;
+                if (componentType.data.TryGetValue("bindValue", out string bindValue) && Parse.Bool(bindValue))
+                    BindValue(componentType, parserParams, associatedValue, _ => genericSetting.ReceiveValue());
             }
 
             parserParams.AddEvent(componentType.data.TryGetValue("setEvent", out string setEvent) ? setEvent : "apply", genericSetting.ApplyValue);

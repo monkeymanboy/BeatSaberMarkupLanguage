@@ -3,7 +3,8 @@
   <color-setting text='color test' value='color-value'></color-setting>
   <slider-setting text='slider test' min='-10' max='50' increment='1' value='slider-value' integer-only='true' formatter='format'></slider-setting>
   <dropdown-list-setting text='Dropdown Test' value='list-choice' choices='list-options'></dropdown-list-setting>
-  <bool-setting text='bool test' value='bool-test'></bool-setting>
+  <bool-setting text='bool test' value='bool-test' bind-value='true'></bool-setting>
+  <clickable-text text='Test change value' on-click='change-bool'></clickable-text>
   <settings-submenu text='Open Submenu' hover-hint='we got hover hints boi'>
     <settings-container>
       <clickable-text text='Back' click-event='back'></clickable-text>
