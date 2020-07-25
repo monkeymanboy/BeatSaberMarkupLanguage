@@ -20,8 +20,8 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
         protected Quaternion _realRot;
         protected bool _isFpfc;
 
-        public Action<Vector3, Quaternion> OnGrab;
-        public Action<Vector3, Quaternion> OnRelease;
+        internal Action<Vector3, Quaternion> OnGrab;
+        internal Action<Vector3, Quaternion> OnRelease;
 
         public virtual void Init(FloatingScreen floatingScreen)
         {
@@ -53,6 +53,16 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
                 _isFpfc && Input.GetMouseButton(0)) return;
             _grabbingController = null;
             OnRelease?.Invoke(_floatingScreen.transform.position, _floatingScreen.transform.rotation);
+        }
+
+        protected void OnDestroy()
+        {
+            OnGrab = null;
+            OnRelease = null;
+            _vrPointer = null;
+            _floatingScreen = null;
+            _screenHandle = null;
+            _grabbingController = null;
         }
 
         protected virtual void LateUpdate()
