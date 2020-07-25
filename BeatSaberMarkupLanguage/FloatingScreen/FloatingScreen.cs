@@ -110,14 +110,11 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
 
         private void CreateHandle()
         {
-            VRPointer[] vrPointers = Resources.FindObjectsOfTypeAll<VRPointer>();
-            if (vrPointers.Count() != 0)
+            VRPointer pointer = Resources.FindObjectsOfTypeAll<VRPointer>().FirstOrDefault();
+            if (pointer != null)
             {
-                VRPointer pointer = vrPointers.First();
                 if (screenMover) Destroy(screenMover);
                 screenMover = pointer.gameObject.AddComponent<FloatingScreenMoverPointer>();
-                screenMover.OnGrab = OnHandleGrab;
-                screenMover.OnRelease = OnHandleReleased;
                 handle = GameObject.CreatePrimitive(PrimitiveType.Cube);
 
                 handle.transform.SetParent(transform);
@@ -131,13 +128,13 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
             }
         }
 
-        protected void OnHandleGrab(Vector3 position, Quaternion rotation)
+        internal void OnHandleGrab(VRPointer vrPointer)
         {
-            HandleGrabbed?.Invoke(this, new FloatingScreenHandleEventArgs(position, rotation));
+            HandleGrabbed?.Invoke(this, new FloatingScreenHandleEventArgs(vrPointer, transform.position, transform.rotation));
         }
-        protected void OnHandleReleased(Vector3 position, Quaternion rotation)
+        internal void OnHandleReleased(VRPointer vrPointer)
         {
-            HandleReleased?.Invoke(this, new FloatingScreenHandleEventArgs(position, rotation));
+            HandleReleased?.Invoke(this, new FloatingScreenHandleEventArgs(vrPointer, transform.position, transform.rotation));
         }
 
         public void UpdateHandle()
@@ -171,12 +168,14 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
     }
     public struct FloatingScreenHandleEventArgs
     {
-        public FloatingScreenHandleEventArgs(Vector3 position, Quaternion rotation)
+        public FloatingScreenHandleEventArgs(VRPointer vrPointer, Vector3 position, Quaternion rotation)
         {
+            Pointer = vrPointer;
             Position = position;
             Rotation = rotation;
         }
 
+        public readonly VRPointer Pointer;
         public readonly Vector3 Position;
         public readonly Quaternion Rotation;
 
