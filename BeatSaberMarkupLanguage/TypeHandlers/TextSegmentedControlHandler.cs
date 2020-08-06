@@ -1,6 +1,7 @@
 ﻿using BeatSaberMarkupLanguage.Parser;
 using HMUI;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using static BeatSaberMarkupLanguage.BSMLParser;
@@ -24,7 +25,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             {
                 if (!parserParams.values.TryGetValue(value, out BSMLValue contents))
                     throw new Exception("value '" + value + "' not found");
-                textControl.SetTexts((contents.GetValue() as List<object>).Select(x => x.ToString()).ToArray());
+                textControl.SetTexts((contents.GetValue() as IEnumerable).Cast<object>().Select(x => x.ToString()).ToArray());
             }
 
             if (componentType.data.TryGetValue("selectCell", out string selectCell))
