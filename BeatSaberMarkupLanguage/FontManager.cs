@@ -33,7 +33,7 @@ namespace BeatSaberMarkupLanguage
         // path -> loaded font object
         private static readonly Dictionary<string, Font> loadedFontsCache = new Dictionary<string, Font>();
         // (unity font, has system fallback set) -> tmp font
-        private static readonly Dictionary<(Font font, bool hasFallbacks), TMP_FontAsset> tmpFontCache = new Dictionary<(Font font, bool hasFallbacks), TMP_FontAsset>();
+        //private static readonly Dictionary<(Font font, bool hasFallbacks), TMP_FontAsset> tmpFontCache = new Dictionary<(Font font, bool hasFallbacks), TMP_FontAsset>();
 
         /// <summary>
         /// The <see cref="Task"/> associated with an ongoing call to <see cref="AsyncLoadSystemFonts"/>.
@@ -69,9 +69,9 @@ namespace BeatSaberMarkupLanguage
             fontInfoLookup = null;
             fontInfoLookupFullName = null;
             return UnityMainThreadTaskScheduler.Factory.StartNew(() => DestroyObjects(loadedFontsCache.Select(p => p.Value))).Unwrap()
-                .ContinueWith(_ => loadedFontsCache.Clear())
-                .ContinueWith(_ => DestroyObjects(tmpFontCache.Select(p => p.Value)), UnityMainThreadTaskScheduler.Default).Unwrap()
-                .ContinueWith(_ => tmpFontCache.Clear());
+                .ContinueWith(_ => loadedFontsCache.Clear());
+                //.ContinueWith(_ => DestroyObjects(tmpFontCache.Select(p => p.Value)), UnityMainThreadTaskScheduler.Default).Unwrap()
+                //.ContinueWith(_ => tmpFontCache.Clear());
         }
 
         private static async Task DestroyObjects(IEnumerable<UnityEngine.Object> objects)
@@ -363,32 +363,32 @@ namespace BeatSaberMarkupLanguage
         {
             // don't lock on this because this is mutually recursive with TryGetTMPFontByFullName
             var font = GetFontFromCacheOrLoad(info);
-            if (!tmpFontCache.TryGetValue((font, setupOsFallbacks), out var tmpFont))
-            {
-                tmpFont = BeatSaberUI.CreateTMPFont(font, info.Info.FullName);
+            /*if (!tmpFontCache.TryGetValue((font, setupOsFallbacks), out var tmpFont))
+            {*/
+            var tmpFont = BeatSaberUI.CreateTMPFont(font, info.Info.FullName);
 
-                if (setupOsFallbacks)
+            if (setupOsFallbacks)
+            {
+                Logger.log.Debug($"Reading fallbacks for '{info.Info.FullName}'");
+                var fallbacks = GetOSFontFallbackList(info.Info.FullName);
+                foreach (var fallback in fallbacks)
                 {
-                    Logger.log.Debug($"Reading fallbacks for '{info.Info.FullName}'");
-                    var fallbacks = GetOSFontFallbackList(info.Info.FullName);
-                    foreach (var fallback in fallbacks)
+                    Logger.log.Debug($"Reading fallback '{fallback}'");
+                    if (TryGetTMPFontByFullName(fallback, out var fallbackFont, false))
                     {
-                        Logger.log.Debug($"Reading fallback '{fallback}'");
-                        if (TryGetTMPFontByFullName(fallback, out var fallbackFont, false))
-                        {
-                            if (tmpFont.fallbackFontAssetTable == null)
-                                tmpFont.fallbackFontAssetTable = new List<TMP_FontAsset>();
-                            tmpFont.fallbackFontAssetTable.Add(fallbackFont);
-                        }
-                        else
-                        {
-                            Logger.log.Debug($"-> Not found");
-                        }
+                        if (tmpFont.fallbackFontAssetTable == null)
+                            tmpFont.fallbackFontAssetTable = new List<TMP_FontAsset>();
+                        tmpFont.fallbackFontAssetTable.Add(fallbackFont);
+                    }
+                    else
+                    {
+                        Logger.log.Debug($"-> Not found");
                     }
                 }
-
-                tmpFontCache.Add((font, setupOsFallbacks), tmpFont);
             }
+
+                /*tmpFontCache.Add((font, setupOsFallbacks), tmpFont);
+            }*/
             return tmpFont;
         }
     }
