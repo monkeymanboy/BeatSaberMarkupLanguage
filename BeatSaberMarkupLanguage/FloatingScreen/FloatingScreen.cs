@@ -1,4 +1,5 @@
 ﻿using IPA.Utilities;
+using System;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,6 +12,8 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
     {
         public FloatingScreenMoverPointer screenMover;
         public GameObject handle;
+        public event EventHandler<FloatingScreenHandleEventArgs> HandleReleased;
+        public event EventHandler<FloatingScreenHandleEventArgs> HandleGrabbed;
         
         public Vector2 ScreenSize
         {
@@ -107,13 +110,11 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
 
         private void CreateHandle()
         {
-            VRPointer[] vrPointers = Resources.FindObjectsOfTypeAll<VRPointer>();
-            if (vrPointers.Count() != 0)
+            VRPointer pointer = Resources.FindObjectsOfTypeAll<VRPointer>().FirstOrDefault();
+            if (pointer != null)
             {
-                VRPointer pointer = vrPointers.First();
                 if (screenMover) Destroy(screenMover);
                 screenMover = pointer.gameObject.AddComponent<FloatingScreenMoverPointer>();
-
                 handle = GameObject.CreatePrimitive(PrimitiveType.Cube);
 
                 handle.transform.SetParent(transform);
@@ -125,6 +126,15 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
             {
                 Logger.log.Warn("Failed to get VRPointer!");
             }
+        }
+
+        internal void OnHandleGrab(VRPointer vrPointer)
+        {
+            HandleGrabbed?.Invoke(this, new FloatingScreenHandleEventArgs(vrPointer, transform.position, transform.rotation));
+        }
+        internal void OnHandleReleased(VRPointer vrPointer)
+        {
+            HandleReleased?.Invoke(this, new FloatingScreenHandleEventArgs(vrPointer, transform.position, transform.rotation));
         }
 
         public void UpdateHandle()
@@ -154,6 +164,43 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
         public enum Side
         {
             Left, Right, Bottom, Top
+        }
+    }
+    public struct FloatingScreenHandleEventArgs
+    {
+        public FloatingScreenHandleEventArgs(VRPointer vrPointer, Vector3 position, Quaternion rotation)
+        {
+            Pointer = vrPointer;
+            Position = position;
+            Rotation = rotation;
+        }
+
+        public readonly VRPointer Pointer;
+        public readonly Vector3 Position;
+        public readonly Quaternion Rotation;
+
+        public override bool Equals(object obj)
+        {
+            if (obj is FloatingScreenHandleEventArgs posRot)
+            {
+                return Position == posRot.Position && Rotation == posRot.Rotation;
+            }
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return Position.GetHashCode() ^ Rotation.GetHashCode();
+        }
+
+        public static bool operator ==(FloatingScreenHandleEventArgs left, FloatingScreenHandleEventArgs right)
+        {
+            return left.Position == right.Position && left.Rotation == right.Rotation;
+        }
+
+        public static bool operator !=(FloatingScreenHandleEventArgs left, FloatingScreenHandleEventArgs right)
+        {
+            return !(left == right);
         }
     }
 }

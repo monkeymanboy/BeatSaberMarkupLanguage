@@ -20,31 +20,41 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
         protected Quaternion _realRot;
         protected bool _isFpfc;
 
+        [Obsolete("Use FloatingScreen.HandleGrabbed event")]
         public Action<Vector3, Quaternion> OnGrab;
+        [Obsolete("Use FloatingScreen.HandleReleased event")]
         public Action<Vector3, Quaternion> OnRelease;
 
-        public virtual void Init(FloatingScreen floatingScreen)
+        public virtual void Init(FloatingScreen floatingScreen, VRPointer pointer)
         {
             _floatingScreen = floatingScreen;
             _screenHandle = floatingScreen.handle.transform;
             _realPos = floatingScreen.transform.position;
             _realRot = floatingScreen.transform.rotation;
-            _vrPointer = GetComponent<VRPointer>();
+            _vrPointer = pointer;
             _isFpfc = Environment.CommandLine.Contains("fpfc");
+        }
+
+        public virtual void Init(FloatingScreen floatingScreen)
+        {
+            VRPointer vrPointer = GetComponent<VRPointer>();
+            Init(floatingScreen, vrPointer);
         }
 
         protected virtual void Update()
         {
-            if (_vrPointer.vrController != null)
-                if (_vrPointer.vrController.triggerValue > 0.9f || Input.GetMouseButton(0))
+            VRPointer pointer = _vrPointer;
+            if (pointer?.vrController != null)
+                if (pointer.vrController.triggerValue > 0.9f || Input.GetMouseButton(0))
                 {
                     if (_grabbingController != null) return;
-                    if (Physics.Raycast(_vrPointer.vrController.position, _vrPointer.vrController.forward, out RaycastHit hit, MaxLaserDistance))
+                    if (Physics.Raycast(pointer.vrController.position, pointer.vrController.forward, out RaycastHit hit, MaxLaserDistance))
                     {
                         if (hit.transform != _screenHandle) return;
-                        _grabbingController = _vrPointer.vrController;
-                        _grabPos = _vrPointer.vrController.transform.InverseTransformPoint(_floatingScreen.transform.position);
-                        _grabRot = Quaternion.Inverse(_vrPointer.vrController.transform.rotation) * _floatingScreen.transform.rotation;
+                        _grabbingController = pointer.vrController;
+                        _grabPos = pointer.vrController.transform.InverseTransformPoint(_floatingScreen.transform.position);
+                        _grabRot = Quaternion.Inverse(pointer.vrController.transform.rotation) * _floatingScreen.transform.rotation;
+                        _floatingScreen.OnHandleGrab(pointer);
                         OnGrab?.Invoke(_floatingScreen.transform.position, _floatingScreen.transform.rotation);
                     }
                 }
@@ -52,7 +62,18 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
             if (_grabbingController == null || !_isFpfc && _grabbingController.triggerValue > 0.9f ||
                 _isFpfc && Input.GetMouseButton(0)) return;
             _grabbingController = null;
+            _floatingScreen.OnHandleReleased(pointer);
             OnRelease?.Invoke(_floatingScreen.transform.position, _floatingScreen.transform.rotation);
+        }
+
+        protected void OnDestroy()
+        {
+            OnGrab = null;
+            OnRelease = null;
+            _vrPointer = null;
+            _floatingScreen = null;
+            _screenHandle = null;
+            _grabbingController = null;
         }
 
         protected virtual void LateUpdate()
