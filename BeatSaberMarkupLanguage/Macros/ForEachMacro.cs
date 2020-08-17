@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
@@ -27,7 +28,7 @@ namespace BeatSaberMarkupLanguage.Macros
                 bool passTags = false;
                 if (data.TryGetValue("passTags", out string passTagsString))
                     passTags = Parse.Bool(passTagsString);
-                foreach(object host in values.GetValue() as List<object>)
+                foreach(object host in values.GetValue() as IEnumerable)
                 {
                     BSMLParserParams nodeParams = BSMLParser.instance.Parse(node, parent, host);
                     if (passTags)
