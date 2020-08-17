@@ -5,7 +5,7 @@
     "#![BeatSaberMarkupLanguage.Resources.description.md]",
     "An XML based UI system."
   ],
-  "gameVersion": "1.9.0",
+  "gameVersion": "1.11.0",
   "icon": "BeatSaberMarkupLanguage.Resources.icon.png",
   "id": "BeatSaberMarkupLanguage",
   "name": "BeatSaberMarkupLanguage",
