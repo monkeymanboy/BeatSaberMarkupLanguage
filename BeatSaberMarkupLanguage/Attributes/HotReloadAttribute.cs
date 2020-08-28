@@ -19,6 +19,11 @@ namespace BeatSaberMarkupLanguage.Attributes
         /// and the second of each pair is the target.
         /// </summary>
         public string[] PathMap { get; set; }
+        
+        /// <summary>
+        /// Can be used to specify the path to the layout file relative to the path of class in which the attribute is being used.
+        /// </summary>
+        public string RelativePathToLayout { get; set; }
 
         private string _path = null;
         public string Path
@@ -39,7 +44,10 @@ namespace BeatSaberMarkupLanguage.Attributes
                             }
                         }
                     }
-                    if (_path == null) _path = GivenPath;
+
+                    _path ??= RelativePathToLayout != null
+                        ? System.IO.Path.GetFullPath(System.IO.Path.GetDirectoryName(GivenPath) + System.IO.Path.DirectorySeparatorChar + RelativePathToLayout)
+                        : GivenPath;
                 }
                 return _path;
             }
