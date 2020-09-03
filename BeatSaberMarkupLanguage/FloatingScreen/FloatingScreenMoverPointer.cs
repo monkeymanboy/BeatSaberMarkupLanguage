@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using UnityEngine;
 using VRUIControls;
 
@@ -32,7 +33,7 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
             _realPos = floatingScreen.transform.position;
             _realRot = floatingScreen.transform.rotation;
             _vrPointer = pointer;
-            _isFpfc = Environment.CommandLine.Contains("fpfc");
+            _isFpfc = Environment.CommandLine.Split(' ').Contains("fpfc");
         }
 
         public virtual void Init(FloatingScreen floatingScreen)
