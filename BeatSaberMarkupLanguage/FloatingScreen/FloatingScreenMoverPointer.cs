@@ -19,7 +19,7 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
         protected Quaternion _grabRot;
         protected Vector3 _realPos;
         protected Quaternion _realRot;
-        protected bool _isFpfc;
+        protected FirstPersonFlyingController _fpfc;
 
         [Obsolete("Use FloatingScreen.HandleGrabbed event")]
         public Action<Vector3, Quaternion> OnGrab;
@@ -33,7 +33,7 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
             _realPos = floatingScreen.transform.position;
             _realRot = floatingScreen.transform.rotation;
             _vrPointer = pointer;
-            _isFpfc = Environment.CommandLine.Split(' ').Contains("fpfc");
+            _fpfc = Resources.FindObjectsOfTypeAll<FirstPersonFlyingController>().FirstOrDefault();    
         }
 
         public virtual void Init(FloatingScreen floatingScreen)
@@ -41,6 +41,8 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
             VRPointer vrPointer = GetComponent<VRPointer>();
             Init(floatingScreen, vrPointer);
         }
+
+        private bool IsFpfc => _fpfc != null &&_fpfc.enabled;
 
         protected virtual void Update()
         {
@@ -60,8 +62,8 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
                     }
                 }
 
-            if (_grabbingController == null || !_isFpfc && _grabbingController.triggerValue > 0.9f ||
-                _isFpfc && Input.GetMouseButton(0)) return;
+            if (_grabbingController == null || !IsFpfc && _grabbingController.triggerValue > 0.9f ||
+                IsFpfc && Input.GetMouseButton(0)) return;
             _grabbingController = null;
             _floatingScreen.OnHandleReleased(pointer);
             OnRelease?.Invoke(_floatingScreen.transform.position, _floatingScreen.transform.rotation);
