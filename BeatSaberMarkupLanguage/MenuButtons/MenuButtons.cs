@@ -28,7 +28,10 @@ namespace BeatSaberMarkupLanguage.MenuButtons
         internal List<object> pinButtons = new List<object>();
 
         [UIValue("any-buttons")]
-        public bool AnyButtons => buttons.Count > 0;
+        private bool AnyButtons => buttons.Count > 0;
+
+        [UIValue("reserve-scroll-buttons")]
+        private bool ReserveScrollButtons => buttons.Count > 15;
 
         [UIObject("root-object")]
         private GameObject rootObject;
