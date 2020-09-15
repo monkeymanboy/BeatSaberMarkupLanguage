@@ -27,6 +27,8 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
             (sliderSetting.slider.transform as RectTransform).anchorMin = new Vector2(-0.2f, 0.4f);
             (sliderSetting.slider.transform as RectTransform).anchorMax = new Vector2(1, 1.2f);
             (sliderSetting.slider.transform as RectTransform).sizeDelta = new Vector2(0, 0);
+            // This must be attached to RangeValuesTextSlider's GameObject to receive the Unity EventSystem events.
+            sliderSetting.dragHelper = sliderSetting.slider.gameObject.AddComponent<DragHelper>();
 
             MonoBehaviour.Destroy(baseSetting);
             GameObject.Destroy(valuePick.GetComponentsInChildren<TextMeshProUGUI>().First().transform.parent.gameObject);
@@ -37,6 +39,7 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
             text.text = "Default Text";
             gameObject.AddComponent<ExternalComponents>().components.Add(text);
             MonoBehaviour.Destroy(text.GetComponent<LocalizedTextMeshProUGUI>());
+
 
             gameObject.GetComponent<LayoutElement>().preferredWidth = 90;
 

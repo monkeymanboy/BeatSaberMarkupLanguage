@@ -8,36 +8,31 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 {
     public abstract class GenericSliderSetting : GenericInteractableSetting
     {
-        private RangeValuesTextSlider _slider;
-        public RangeValuesTextSlider slider
-        {
-            get
-            {
-                return _slider;
-            }
-            set
-            {
-                if (dragHelper != null)
-                {
-                    dragHelper.DragReleased -= OnDragReleased;
-                    dragHelper.DragStarted -= OnDragStarted;
-                    Destroy(dragHelper);
-                }
-                if(value != null)
-                {
-                    dragHelper = value.gameObject.AddComponent<DragHelper>();
-                    dragHelper.DragReleased += OnDragReleased;
-                    dragHelper.DragStarted += OnDragStarted;
-                }
-                _slider = value;
-            }
-        }
+        public RangeValuesTextSlider slider;
 
         public event EventHandler<PointerEventData> DragStarted;
         public event EventHandler<PointerEventData> DragReleased;
 
         protected TextMeshProUGUI text;
-        protected DragHelper dragHelper;
+        private DragHelper _dragHelper;
+        public DragHelper dragHelper
+        {
+            get => _dragHelper;
+            set
+            {
+                if(_dragHelper != null && _dragHelper != value)
+                {
+                    _dragHelper.DragStarted -= OnDragStarted;
+                    _dragHelper.DragReleased -= OnDragReleased;
+                }
+                if(value != null)
+                {
+                    value.DragStarted -= OnDragStarted;
+                    value.DragReleased -= OnDragReleased;
+                }
+                _dragHelper = value;
+            }
+        }
         public override bool interactable 
         { 
             get => slider?.interactable ?? false;
