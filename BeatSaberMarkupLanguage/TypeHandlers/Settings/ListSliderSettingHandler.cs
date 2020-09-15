@@ -12,12 +12,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
     {
         public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
         {
-            { "options", new[]{ "options", "choices" } },
-            { "updateDuringDrag", Array.Empty<string>() },
-            { "onDragStarted", Array.Empty<string>() },
-            { "dragStartedEvent", Array.Empty<string>() },
-            { "onDragReleased", Array.Empty<string>() },
-            { "dragReleasedEvent", Array.Empty<string>() }
+            { "options", new[]{ "options", "choices" } }
         };
 
         public override void HandleType(ComponentTypeWithData componentType, BSMLParserParams parserParams)

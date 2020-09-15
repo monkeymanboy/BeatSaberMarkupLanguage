@@ -15,12 +15,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
             { "increment", new[] { "increment" } },
             { "minValue", new[] { "min" } },
             { "maxValue", new[] { "max" } },
-            { "isInt", new[] { "integer-only" } },
-            { "updateDuringDrag", Array.Empty<string>() },
-            { "onDragStarted", Array.Empty<string>() },
-            { "dragStartedEvent", Array.Empty<string>() },
-            { "onDragReleased", Array.Empty<string>() },
-            { "dragReleasedEvent", Array.Empty<string>() }
+            { "isInt", new[] { "integer-only" } }
         };
 
         public override void HandleType(ComponentTypeWithData componentType, BSMLParserParams parserParams)
