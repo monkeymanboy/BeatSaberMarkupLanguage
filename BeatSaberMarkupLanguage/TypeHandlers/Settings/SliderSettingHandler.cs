@@ -15,7 +15,11 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
             { "increment", new[] { "increment" } },
             { "minValue", new[] { "min" } },
             { "maxValue", new[] { "max" } },
-            { "isInt", new[] { "integer-only" } }
+            { "isInt", new[] { "integer-only" } },
+            { "onDragStarted", Array.Empty<string>() },
+            { "dragStartedEvent", Array.Empty<string>() },
+            { "onDragReleased", Array.Empty<string>() },
+            { "dragReleasedEvent", Array.Empty<string>() }
         };
 
         public override void HandleType(ComponentTypeWithData componentType, BSMLParserParams parserParams)
@@ -33,6 +37,52 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
 
             if (componentType.data.TryGetValue("maxValue", out string maxValue))
                 sliderSetting.slider.maxValue = Parse.Float(maxValue);
+
+            try
+            {
+                DragHelper dragHelper = sliderSetting.dragHelper;
+                //-----Drag Started-----
+                if (componentType.data.TryGetValue("onDragStarted", out string onDragStarted))
+                {
+                    dragHelper.onDragStarted.AddListener(delegate
+                    {
+                        if (!parserParams.actions.TryGetValue(onDragStarted, out BSMLAction onDragStartedAction))
+                            throw new Exception("onDragStarted '" + onDragStarted + "' not found");
+
+                        onDragStartedAction.Invoke();
+                    });
+                }
+                if (componentType.data.TryGetValue("dragStartedEvent", out string dragStartedEvent))
+                {
+                    dragHelper.onDragStarted.AddListener(delegate
+                    {
+                        parserParams.EmitEvent(dragStartedEvent);
+                    });
+                }
+
+                //-----Drag Released-----
+                if (componentType.data.TryGetValue("onDragReleased", out string onDragReleased))
+                {
+                    dragHelper.onDragReleased.AddListener(delegate
+                    {
+                        if (!parserParams.actions.TryGetValue(onDragReleased, out BSMLAction onDragReleasedAction))
+                            throw new Exception("onDragReleased '" + onDragReleased + "' not found");
+
+                        onDragReleasedAction.Invoke();
+                    });
+                }
+                if (componentType.data.TryGetValue("dragReleasedEvent", out string dragReleasedEvent))
+                {
+                    dragHelper.onDragReleased.AddListener(delegate
+                    {
+                        parserParams.EmitEvent(dragStartedEvent);
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.log?.Error(ex);
+            }
         }
     }
 }
