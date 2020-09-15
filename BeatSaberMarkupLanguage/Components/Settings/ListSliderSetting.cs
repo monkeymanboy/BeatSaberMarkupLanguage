@@ -5,12 +5,14 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace BeatSaberMarkupLanguage.Components.Settings
 {
     public class ListSliderSetting : GenericSliderSetting
     {
         public List<object> values;
+        public bool updateDuringDrag = true;
 
         public object Value
         {
@@ -30,7 +32,8 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             slider.numberOfSteps = values.Count;
             ReceiveValue();
             slider.valueDidChangeEvent += OnChange;
-            StartCoroutine(SetInitialText());
+            if (isActiveAndEnabled)
+                StartCoroutine(SetInitialText());
         }
 
         private void OnEnable()
@@ -47,12 +50,28 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             text.text = TextForValue(Value);
         }
 
-        private void OnChange(TextSlider _, float val)
+        private void RaiseValueChanged(bool emitEvent)
         {
             text.text = TextForValue(Value);
-            onChange?.Invoke(Value);
-            if (updateOnChange)
-                ApplyValue();
+            if (emitEvent)
+            {
+                onChange?.Invoke(Value);
+                if (updateOnChange)
+                    ApplyValue();
+            }
+        }
+
+        private void OnChange(TextSlider _, float val)
+        {
+            bool emitEvent = !IsDragging || updateDuringDrag;
+            RaiseValueChanged(emitEvent);
+        }
+
+        protected override void OnDragReleased(object s, PointerEventData e)
+        {
+            base.OnDragReleased(s, e);
+            // If updateDuringDrag is true, no need to raise the event again.
+            RaiseValueChanged(!updateDuringDrag);
         }
 
         public override void ApplyValue()

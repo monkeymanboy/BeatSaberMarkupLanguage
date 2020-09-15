@@ -13,6 +13,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
         public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
         {
             { "options", new[]{ "options", "choices" } },
+            { "updateDuringDrag", Array.Empty<string>() },
             { "onDragStarted", Array.Empty<string>() },
             { "dragStartedEvent", Array.Empty<string>() },
             { "onDragReleased", Array.Empty<string>() },
@@ -22,6 +23,11 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
         public override void HandleType(ComponentTypeWithData componentType, BSMLParserParams parserParams)
         {
             ListSliderSetting listSetting = componentType.component as ListSliderSetting;
+
+            if (componentType.data.TryGetValue("updateDuringDrag", out string updateDuringDrag))
+                listSetting.updateDuringDrag = Parse.Bool(updateDuringDrag);
+            else
+                listSetting.updateDuringDrag = true;
 
             if (componentType.data.TryGetValue("options", out string options))
             {
