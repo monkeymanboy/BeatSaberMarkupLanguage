@@ -24,11 +24,6 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
         {
             ListSliderSetting listSetting = componentType.component as ListSliderSetting;
 
-            if (componentType.data.TryGetValue("updateDuringDrag", out string updateDuringDrag))
-                listSetting.updateDuringDrag = Parse.Bool(updateDuringDrag);
-            else
-                listSetting.updateDuringDrag = true;
-
             if (componentType.data.TryGetValue("options", out string options))
             {
                 if (!parserParams.values.TryGetValue(options, out BSMLValue values))
@@ -39,46 +34,6 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
             else
             {
                 throw new Exception("list must have associated options");
-            }
-
-            DragHelper dragHelper = listSetting.dragHelper;
-            //-----Drag Started-----
-            if (componentType.data.TryGetValue("onDragStarted", out string onDragStarted))
-            {
-                dragHelper.onDragStarted.AddListener(delegate
-                {
-                    if (!parserParams.actions.TryGetValue(onDragStarted, out BSMLAction onDragStartedAction))
-                        throw new Exception("onDragStarted '" + onDragStarted + "' not found");
-
-                    onDragStartedAction.Invoke();
-                });
-            }
-
-            if (componentType.data.TryGetValue("dragStartedEvent", out string dragStartedEvent))
-            {
-                dragHelper.onDragStarted.AddListener(delegate
-                {
-                    parserParams.EmitEvent(dragStartedEvent);
-                });
-            }
-
-            //-----Drag Released-----
-            if (componentType.data.TryGetValue("onDragReleased", out string onDragReleased))
-            {
-                dragHelper.onDragReleased.AddListener(delegate
-                {
-                    if (!parserParams.actions.TryGetValue(onDragReleased, out BSMLAction onDragReleasedAction))
-                        throw new Exception("onDragReleased '" + onDragReleased + "' not found");
-
-                    onDragReleasedAction.Invoke();
-                });
-            }
-            if (componentType.data.TryGetValue("dragReleasedEvent", out string dragReleasedEvent))
-            {
-                dragHelper.onDragReleased.AddListener(delegate
-                {
-                    parserParams.EmitEvent(dragStartedEvent);
-                });
             }
         }
     }

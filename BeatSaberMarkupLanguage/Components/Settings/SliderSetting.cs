@@ -12,7 +12,6 @@ namespace BeatSaberMarkupLanguage.Components.Settings
     {
         public bool isInt = false;
         public float increments;
-        public bool updateDuringDrag = true;
 
         public override void Setup()
         {
@@ -24,13 +23,8 @@ namespace BeatSaberMarkupLanguage.Components.Settings
                 StartCoroutine(SetInitialText());
         }
 
-        private void OnEnable()
-        {
-            StartCoroutine(SetInitialText());
-        }
-
         // I don't really like this but for some reason I can't get the initial starting text any other quick way and this works perfectly fine
-        private IEnumerator SetInitialText()
+        protected override IEnumerator SetInitialText()
         {
             yield return new WaitForFixedUpdate();
             text.text = TextForValue(slider.value);
@@ -38,7 +32,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             text.text = TextForValue(slider.value);
         }
 
-        private void RaiseValueChanged(bool emitEvent)
+        protected override void RaiseValueChanged(bool emitEvent)
         {
             text.text = TextForValue(slider.value); // Update text no matter what.
             if (emitEvent)
@@ -52,20 +46,6 @@ namespace BeatSaberMarkupLanguage.Components.Settings
                 if (updateOnChange)
                     ApplyValue();
             }
-        }
-
-        private void OnChange(TextSlider _, float val)
-        {
-            // Check IsDragging for safety in case something goes wrong with DragHelper?
-            bool emitEvent = !IsDragging || updateDuringDrag;
-            RaiseValueChanged(emitEvent);
-        }
-
-        protected override void OnDragReleased(object s, PointerEventData e)
-        {
-            base.OnDragReleased(s, e);
-            // If updateDuringDrag is true, no need to raise the event again.
-            RaiseValueChanged(!updateDuringDrag);
         }
 
         public override void ApplyValue()

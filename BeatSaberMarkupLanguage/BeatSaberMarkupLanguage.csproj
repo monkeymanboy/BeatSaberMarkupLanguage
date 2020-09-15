@@ -299,6 +299,7 @@
     <Compile Include="TypeHandlers\Settings\IncrementSettingHandler.cs" />
     <Compile Include="TypeHandlers\Settings\ListSliderSettingHandler.cs" />
     <Compile Include="TypeHandlers\Settings\ListSettingHandler.cs" />
+    <Compile Include="TypeHandlers\Settings\GenericSliderSettingHandler.cs" />
     <Compile Include="TypeHandlers\Settings\SliderSettingHandler.cs" />
     <Compile Include="TypeHandlers\StrokableHandler.cs" />
     <Compile Include="TypeHandlers\TabHandler.cs" />
