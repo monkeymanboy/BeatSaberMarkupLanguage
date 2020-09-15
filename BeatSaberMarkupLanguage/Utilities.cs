@@ -266,5 +266,67 @@ namespace BeatSaberMarkupLanguage
                 callback?.Invoke(www.downloadHandler.data);
             }
         }
+
+        /// <summary>
+        /// Invokes each handler in a Try/Catch block, logging any errors that occur. <paramref name="eventName"/> is used for the error logging.
+        /// </summary>
+        /// <param name="e"></param>
+        /// <param name="sender"></param>
+        /// <param name="eventName"></param>
+        internal static void RaiseEventSafe(this EventHandler e, object sender, string eventName) => RaiseEventSafe(e, sender, EventArgs.Empty, eventName);
+
+        /// <summary>
+        /// Invokes each handler in a Try/Catch block, logging any errors that occur. <paramref name="eventName"/> is used for the error logging.
+        /// </summary>
+        /// <param name="e"></param>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        /// <param name="eventName"></param>
+        internal static void RaiseEventSafe(this EventHandler e, object sender, EventArgs args, string eventName)
+        {
+            if (e == null)
+                return;
+            EventHandler[] handlers = e.GetInvocationList().Select(d => (EventHandler)d).ToArray();
+            args = args ?? EventArgs.Empty;
+            for (int i = 0; i < handlers.Length; i++)
+            {
+                try
+                {
+                    handlers[i].Invoke(sender, args);
+                }
+                catch (Exception ex)
+                {
+                    Logger.log?.Error($"Error in {eventName} handlers '{handlers[i]?.Method.Name}': {ex.Message}");
+                    Logger.log?.Debug(ex);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Invokes each handler in a Try/Catch block, logging any errors that occur. <paramref name="eventName"/> is used for the error logging.
+        /// </summary>
+        /// <typeparam name="TArgs"></typeparam>
+        /// <param name="e"></param>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        /// <param name="eventName"></param>
+        internal static void RaiseEventSafe<TArgs>(this EventHandler<TArgs> e, object sender, TArgs args, string eventName)
+        {
+            if (e == null)
+                return;
+            EventHandler<TArgs>[] handlers = e.GetInvocationList().Select(d => (EventHandler<TArgs>)d).ToArray();
+            for (int i = 0; i < handlers.Length; i++)
+            {
+                try
+                {
+                    handlers[i].Invoke(sender, args);
+                }
+                catch (Exception ex)
+                {
+                    Logger.log?.Error($"Error in {eventName} handlers '{handlers[i]?.Method.Name}': {ex.Message}");
+                    Logger.log?.Debug(ex);
+                }
+            }
+        }
     }
 }
