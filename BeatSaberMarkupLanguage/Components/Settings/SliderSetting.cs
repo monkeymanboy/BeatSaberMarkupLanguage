@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace BeatSaberMarkupLanguage.Components.Settings
 {
@@ -11,6 +12,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
     {
         public bool isInt = false;
         public float increments;
+        public bool updateDuringDrag = true;
 
         public override void Setup()
         {
@@ -18,7 +20,8 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             slider.numberOfSteps = (int)Math.Round((slider.maxValue - slider.minValue) / increments) + 1;
             ReceiveValue();
             slider.valueDidChangeEvent += OnChange;
-            StartCoroutine(SetInitialText());
+            if (isActiveAndEnabled)
+                StartCoroutine(SetInitialText());
         }
 
         private void OnEnable()
@@ -35,16 +38,34 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             text.text = TextForValue(slider.value);
         }
 
+        private void RaiseValueChanged(bool emitEvent)
+        {
+            text.text = TextForValue(slider.value); // Update text no matter what.
+            if (emitEvent)
+            {
+                // Logger.log?.Debug($"RaiseValueChanged ({slider.value}): IsDragging: {IsDragging} | updateDuringDrag: {updateDuringDrag}");
+                if (isInt)
+                    onChange?.Invoke((int)Math.Round(slider.value));
+                else
+                    onChange?.Invoke(slider.value);
+
+                if (updateOnChange)
+                    ApplyValue();
+            }
+        }
+
         private void OnChange(TextSlider _, float val)
         {
-            text.text = TextForValue(slider.value);
-            if (isInt)
-                onChange?.Invoke((int)Math.Round(slider.value));
-            else
-                onChange?.Invoke(slider.value);
+            // Check IsDragging for safety in case something goes wrong with DragHelper?
+            bool emitEvent = !IsDragging || updateDuringDrag;
+            RaiseValueChanged(emitEvent);
+        }
 
-            if (updateOnChange)
-                ApplyValue();
+        protected override void OnDragReleased(object s, PointerEventData e)
+        {
+            base.OnDragReleased(s, e);
+            // If updateDuringDrag is true, no need to raise the event again.
+            RaiseValueChanged(!updateDuringDrag);
         }
 
         public override void ApplyValue()

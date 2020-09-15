@@ -16,6 +16,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
             { "minValue", new[] { "min" } },
             { "maxValue", new[] { "max" } },
             { "isInt", new[] { "integer-only" } },
+            { "updateDuringDrag", Array.Empty<string>() },
             { "onDragStarted", Array.Empty<string>() },
             { "dragStartedEvent", Array.Empty<string>() },
             { "onDragReleased", Array.Empty<string>() },
@@ -37,6 +38,11 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
 
             if (componentType.data.TryGetValue("maxValue", out string maxValue))
                 sliderSetting.slider.maxValue = Parse.Float(maxValue);
+
+            if (componentType.data.TryGetValue("updateDuringDrag", out string updateDuringDrag))
+                sliderSetting.updateDuringDrag = Parse.Bool(updateDuringDrag);
+            else
+                sliderSetting.updateDuringDrag = true;
 
             try
             {
