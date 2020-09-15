@@ -164,6 +164,7 @@
     <Compile Include="Components\Settings\IncrementSetting.cs" />
     <Compile Include="Components\Settings\ListSetting.cs" />
     <Compile Include="Components\Settings\ListSliderSetting.cs" />
+    <Compile Include="Components\Settings\DragHelper.cs" />
     <Compile Include="Components\Settings\SliderSetting.cs" />
     <Compile Include="Components\Settings\StringSetting.cs" />
     <Compile Include="Components\Strokable.cs" />
