@@ -12,6 +12,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 
         public event EventHandler<PointerEventData> DragStarted;
         public event EventHandler<PointerEventData> DragReleased;
+        public bool IsDragging { get; protected set; }
 
         protected TextMeshProUGUI text;
         private DragHelper _dragHelper;
@@ -27,8 +28,8 @@ namespace BeatSaberMarkupLanguage.Components.Settings
                 }
                 if(value != null)
                 {
-                    value.DragStarted -= OnDragStarted;
-                    value.DragReleased -= OnDragReleased;
+                    value.DragStarted += OnDragStarted;
+                    value.DragReleased += OnDragReleased;
                 }
                 _dragHelper = value;
             }
@@ -44,7 +45,15 @@ namespace BeatSaberMarkupLanguage.Components.Settings
                 }
             }
         }
-        private void OnDragStarted(object s, PointerEventData e) => DragStarted?.Invoke(this, e);
-        private void OnDragReleased(object s, PointerEventData e) => DragReleased?.Invoke(this, e);
+        protected virtual void OnDragStarted(object s, PointerEventData e)
+        {
+            IsDragging = true;
+            DragStarted?.Invoke(this, e);
+        }
+        protected virtual void OnDragReleased(object s, PointerEventData e)
+        {
+            IsDragging = false;
+            DragReleased?.Invoke(this, e);
+        }
     }
 }
