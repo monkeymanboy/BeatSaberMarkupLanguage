@@ -1,11 +1,11 @@
-﻿using BeatSaberMarkupLanguage.Notify;
-using System;
+﻿using System;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.Components
 {
-    public class NotifiableSingleton<T> : PersistentSingleton<T>, INotifiableHost where T : MonoBehaviour
+    public class NotifiableSingleton<T> : PersistentSingleton<T>, INotifyPropertyChanged where T : MonoBehaviour
     {
         public event PropertyChangedEventHandler PropertyChanged;
         protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")

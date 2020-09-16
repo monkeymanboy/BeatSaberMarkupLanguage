@@ -1,7 +1,6 @@
 ﻿using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.Macros;
-using BeatSaberMarkupLanguage.Notify;
 using BeatSaberMarkupLanguage.Parser;
 using BeatSaberMarkupLanguage.Tags;
 using BeatSaberMarkupLanguage.TypeHandlers;
@@ -342,7 +341,7 @@ namespace BeatSaberMarkupLanguage
         private Dictionary<string, string> GetParameters(XmlNode node, Dictionary<string, string[]> properties, BSMLParserParams parserParams, out Dictionary<string, BSMLValue> valueMap)
         {
             Dictionary<string, string> parameters = new Dictionary<string, string>();
-            bool isNotifyHost = parserParams.host == null ? false : typeof(INotifiableHost).IsAssignableFrom(parserParams.host.GetType());
+            bool isNotifyHost = parserParams.host == null ? false : typeof(System.ComponentModel.INotifyPropertyChanged).IsAssignableFrom(parserParams.host.GetType());
             valueMap = new Dictionary<string, BSMLValue>();
             foreach (KeyValuePair<string, string[]> propertyAliases in properties)
             {
