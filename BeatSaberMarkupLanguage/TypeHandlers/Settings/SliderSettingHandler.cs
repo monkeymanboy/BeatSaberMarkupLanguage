@@ -32,7 +32,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
                 sliderSetting.slider.minValue = Parse.Float(minValue);
 
             if (componentType.data.TryGetValue("maxValue", out string maxValue))
-                sliderSetting.slider.maxValue = Parse.Float(maxValue);           
+                sliderSetting.slider.maxValue = Parse.Float(maxValue);
         }
     }
 }
