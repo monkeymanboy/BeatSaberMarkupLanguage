@@ -29,7 +29,7 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
             (sliderSetting.slider.transform as RectTransform).sizeDelta = new Vector2(0, 0);
             // This must be attached to RangeValuesTextSlider's GameObject to receive the Unity EventSystem events.
             sliderSetting.dragHelper = sliderSetting.slider.gameObject.AddComponent<DragHelper>();
-
+            sliderSetting.gameObject.AddComponent<ExternalComponents>().components.Add(sliderSetting.dragHelper);
             MonoBehaviour.Destroy(baseSetting);
             GameObject.Destroy(valuePick.GetComponentsInChildren<TextMeshProUGUI>().First().transform.parent.gameObject);
             GameObject.Destroy(valuePick.GetComponentsInChildren<Button>().First().gameObject);
