@@ -20,6 +20,7 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
             GameObject gameObject = baseSetting.gameObject;
 
             T sliderSetting = gameObject.AddComponent<T>();
+            ExternalComponents extComponents = gameObject.AddComponent<ExternalComponents>();
             Transform valuePick = gameObject.transform.Find("ValuePicker");
             sliderSetting.slider = GameObject.Instantiate(Resources.FindObjectsOfTypeAll<HMUI.TimeSlider>().First(s => s.name != "BSMLSlider"), valuePick, false);
             sliderSetting.slider.name = "BSMLSlider";
@@ -29,7 +30,7 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
             (sliderSetting.slider.transform as RectTransform).sizeDelta = new Vector2(0, 0);
             // This must be attached to RangeValuesTextSlider's GameObject to receive the Unity EventSystem events.
             sliderSetting.dragHelper = sliderSetting.slider.gameObject.AddComponent<DragHelper>();
-            sliderSetting.gameObject.AddComponent<ExternalComponents>().components.Add(sliderSetting.dragHelper);
+            extComponents.components.Add(sliderSetting.dragHelper);
             MonoBehaviour.Destroy(baseSetting);
             GameObject.Destroy(valuePick.GetComponentsInChildren<TextMeshProUGUI>().First().transform.parent.gameObject);
             GameObject.Destroy(valuePick.GetComponentsInChildren<Button>().First().gameObject);
@@ -37,7 +38,7 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
 
             TextMeshProUGUI text = gameObject.GetComponentInChildren<TextMeshProUGUI>();
             text.text = "Default Text";
-            gameObject.AddComponent<ExternalComponents>().components.Add(text);
+            extComponents.components.Add(text);
             MonoBehaviour.Destroy(text.GetComponent<LocalizedTextMeshProUGUI>());
 
 
