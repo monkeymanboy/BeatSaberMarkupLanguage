@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace BeatSaberMarkupLanguage.Components.Settings
 {
@@ -30,16 +31,12 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             slider.numberOfSteps = values.Count;
             ReceiveValue();
             slider.valueDidChangeEvent += OnChange;
-            StartCoroutine(SetInitialText());
-        }
-
-        private void OnEnable()
-        {
-            StartCoroutine(SetInitialText());
+            if (isActiveAndEnabled)
+                StartCoroutine(SetInitialText());
         }
 
         // I don't really like this but for some reason I can't get the initial starting text any other quick way and this works perfectly fine
-        private IEnumerator SetInitialText()
+        protected override IEnumerator SetInitialText()
         {
             yield return new WaitForFixedUpdate();
             text.text = TextForValue(Value);
@@ -47,12 +44,15 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             text.text = TextForValue(Value);
         }
 
-        private void OnChange(TextSlider _, float val)
+        protected override void RaiseValueChanged(bool emitEvent)
         {
             text.text = TextForValue(Value);
-            onChange?.Invoke(Value);
-            if (updateOnChange)
-                ApplyValue();
+            if (emitEvent)
+            {
+                onChange?.Invoke(Value);
+                if (updateOnChange)
+                    ApplyValue();
+            }
         }
 
         public override void ApplyValue()

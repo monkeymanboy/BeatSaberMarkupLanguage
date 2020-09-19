@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace BeatSaberMarkupLanguage.Components.Settings
 {
@@ -18,16 +19,12 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             slider.numberOfSteps = (int)Math.Round((slider.maxValue - slider.minValue) / increments) + 1;
             ReceiveValue();
             slider.valueDidChangeEvent += OnChange;
-            StartCoroutine(SetInitialText());
-        }
-
-        private void OnEnable()
-        {
-            StartCoroutine(SetInitialText());
+            if (isActiveAndEnabled)
+                StartCoroutine(SetInitialText());
         }
 
         // I don't really like this but for some reason I can't get the initial starting text any other quick way and this works perfectly fine
-        private IEnumerator SetInitialText()
+        protected override IEnumerator SetInitialText()
         {
             yield return new WaitForFixedUpdate();
             text.text = TextForValue(slider.value);
@@ -35,16 +32,20 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             text.text = TextForValue(slider.value);
         }
 
-        private void OnChange(TextSlider _, float val)
+        protected override void RaiseValueChanged(bool emitEvent)
         {
-            text.text = TextForValue(slider.value);
-            if (isInt)
-                onChange?.Invoke((int)Math.Round(slider.value));
-            else
-                onChange?.Invoke(slider.value);
+            text.text = TextForValue(slider.value); // Update text no matter what.
+            if (emitEvent)
+            {
+                // Logger.log?.Debug($"RaiseValueChanged ({slider.value}): IsDragging: {IsDragging} | updateDuringDrag: {updateDuringDrag}");
+                if (isInt)
+                    onChange?.Invoke((int)Math.Round(slider.value));
+                else
+                    onChange?.Invoke(slider.value);
 
-            if (updateOnChange)
-                ApplyValue();
+                if (updateOnChange)
+                    ApplyValue();
+            }
         }
 
         public override void ApplyValue()

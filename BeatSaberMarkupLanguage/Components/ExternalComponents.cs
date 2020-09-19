@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.Components
 {
+    [DisallowMultipleComponent]
     public class ExternalComponents : MonoBehaviour
     {
         public List<Component> components = new List<Component>(); //Components added to this list will be handled as if they are part of this object while parsing even if they aren't

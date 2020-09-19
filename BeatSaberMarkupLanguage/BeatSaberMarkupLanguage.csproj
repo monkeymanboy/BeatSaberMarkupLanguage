@@ -164,6 +164,7 @@
     <Compile Include="Components\Settings\IncrementSetting.cs" />
     <Compile Include="Components\Settings\ListSetting.cs" />
     <Compile Include="Components\Settings\ListSliderSetting.cs" />
+    <Compile Include="Components\Settings\DragHelper.cs" />
     <Compile Include="Components\Settings\SliderSetting.cs" />
     <Compile Include="Components\Settings\StringSetting.cs" />
     <Compile Include="Components\Strokable.cs" />
@@ -266,6 +267,7 @@
     <Compile Include="TypeHandlers\BackgroundableHandler.cs" />
     <Compile Include="TypeHandlers\BSMLScrollViewHandler.cs" />
     <Compile Include="TypeHandlers\ButtonArtworkHandler.cs" />
+    <Compile Include="TypeHandlers\DragHelperHandler.cs" />
     <Compile Include="TypeHandlers\GenericInteractableSettingHandler.cs" />
     <Compile Include="TypeHandlers\SelectableHandler.cs" />
     <Compile Include="TypeHandlers\ButtonHandler.cs" />
@@ -297,6 +299,7 @@
     <Compile Include="TypeHandlers\Settings\IncrementSettingHandler.cs" />
     <Compile Include="TypeHandlers\Settings\ListSliderSettingHandler.cs" />
     <Compile Include="TypeHandlers\Settings\ListSettingHandler.cs" />
+    <Compile Include="TypeHandlers\Settings\GenericSliderSettingHandler.cs" />
     <Compile Include="TypeHandlers\Settings\SliderSettingHandler.cs" />
     <Compile Include="TypeHandlers\StrokableHandler.cs" />
     <Compile Include="TypeHandlers\TabHandler.cs" />
