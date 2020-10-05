@@ -78,21 +78,6 @@ namespace BeatSaberMarkupLanguage.MenuButtons
             Refresh();
         }
 
-        [UIAction("#post-parse")]
-        private void PostParse()
-        {
-            if (AnyButtons && !Plugin.config.GetBool("New", "seenMenuButton", false))
-            {
-                StartCoroutine(ShowNew());
-            }
-        }
-        IEnumerator ShowNew()
-        {
-            yield return new WaitForSeconds(1);
-            parserParams.EmitEvent("show-new");
-            Plugin.config.SetBool("New", "seenMenuButton", true);
-        }
-
         private void OnDeactivate(DeactivationType deactivationType)
         {
             parserParams.EmitEvent("close-modals");
@@ -112,7 +97,7 @@ namespace BeatSaberMarkupLanguage.MenuButtons
             get
             {
                 if (pins == null)
-                    pins = Plugin.config.GetString("Pins", "Pinned Mods").Split(',').ToList();
+                    pins = Plugin.config.PinnedMods; //.GetString("Pins", "Pinned Mods").Split(',').ToList();
                 return pins;
             }
         }
@@ -146,7 +131,7 @@ namespace BeatSaberMarkupLanguage.MenuButtons
         }
         internal void SavePins()
         {
-            Plugin.config.SetString("Pins", "Pinned Mods", string.Join(",", Pins));
+            Plugin.config.PinnedMods = Pins; //.SetString("Pins", "Pinned Mods", string.Join(",", Pins));
         }
     }
     internal class PinnedMod : INotifiableHost
