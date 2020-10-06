@@ -1,4 +1,6 @@
-﻿using Polyglot;
+﻿using BeatSaberMarkupLanguage.Attributes;
+using BeatSaberMarkupLanguage.Components.Settings;
+using Polyglot;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -19,7 +21,25 @@ namespace BeatSaberMarkupLanguage.Settings
         private ModSettingsFlowCoordinator flowCoordinator;
 
         public List<CustomCellInfo> settingsMenus = new List<CustomCellInfo>();
-        
+
+        [UIComponent("language-dropdown")]
+        protected DropDownListSetting dropdown;
+
+        [UIValue("languages")]
+        public List<object> languageOptions = new List<object>();
+
+        [UIValue("selected-language")]
+        public string SelectedLanguage
+        {
+            get => Plugin.config.SelectedLanguage.ToString();
+            set
+            {
+                Language lng = (Language)Enum.Parse(typeof(Language), value);
+                Plugin.config.SelectedLanguage = lng;
+                Localization.Instance.SelectedLanguage = lng;
+            }
+        }
+
         public static BSMLSettings instance
         {
             get
@@ -40,10 +60,29 @@ namespace BeatSaberMarkupLanguage.Settings
             {
                 settingsMenu.Setup();
             }
+            SetupLanguageList();
             isInitialized = true;
         }
 
         private void Awake() => DontDestroyOnLoad(this.gameObject);
+
+        private void Start()
+        {
+            Localization.Instance.Localize.AddListener(SetupLanguageList);
+        }
+
+        private void SetupLanguageList()
+        {
+            languageOptions.Clear();
+            languageOptions.AddRange(Localization.Instance.SupportedLanguages.Select(x => x.ToString()));
+            dropdown?.tableView.ReloadData();
+            Localization.Instance.SelectedLanguage = Plugin.config.SelectedLanguage;
+        }
+
+        private void OnDestroy()
+        {
+            Localization.Instance.Localize.RemoveListener(SetupLanguageList);
+        }
         
         public void AddSettingsMenu(string name, string resource, object host)
         {
@@ -51,7 +90,10 @@ namespace BeatSaberMarkupLanguage.Settings
                 return;
 
             if (settingsMenus.Count == 0)
+            {
+                SetupLanguageList();
                 settingsMenus.Add(new SettingsMenu("About", "BeatSaberMarkupLanguage.Views.settings-about.bsml", this, Assembly.GetExecutingAssembly()));
+            }
             SettingsMenu settingsMenu = new SettingsMenu(name, resource, host, Assembly.GetCallingAssembly());
             settingsMenus.Add(settingsMenu);
             if(isInitialized)

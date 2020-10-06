@@ -85,6 +85,7 @@ namespace BeatSaberMarkupLanguage
             BSMLSettings.instance.Setup();
             MenuButtons.MenuButtons.instance.Setup();
             GameplaySetup.GameplaySetup.instance.Setup();
+            Polyglot.Localization.Instance.SelectedLanguage = config.SelectedLanguage;
         }
 
         public void OnActiveSceneChanged(Scene prevScene, Scene nextScene)
