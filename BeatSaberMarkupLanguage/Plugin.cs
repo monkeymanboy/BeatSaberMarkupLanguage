@@ -17,6 +17,7 @@ using IPALogger = IPA.Logging.Logger;
 using IPA.Utilities;
 using HMUI;
 using IPA.Config.Stores;
+using System.IO;
 
 namespace BeatSaberMarkupLanguage
 {
@@ -40,7 +41,25 @@ namespace BeatSaberMarkupLanguage
             AnimationController.instance.InitializeLoadingAnimation();
             SceneManager.activeSceneChanged += OnActiveSceneChanged;
             config = conf.Generated<Config>();
+
+            // Old Config Migration
+
+            Task.Run(() =>
+            {
+                var folder = Path.Combine(UnityGame.UserDataPath, "BSML.ini");
+                string[] lines = File.ReadAllLines(folder);
+                string pinnnedModsLine = lines.FirstOrDefault(x => x.StartsWith("Pinned Mods"));
+                var splitLine = pinnnedModsLine.Split('=');
+                if (splitLine.Length > 1)
+                {
+                    var mods = splitLine[1].Split(',');
+                    config.PinnedMods.AddRange(mods.Where(x => !string.IsNullOrWhiteSpace(x) && x != " " && !config.PinnedMods.Contains(x)));
+                }
+                File.Delete(folder);
+            });
         }
+
+
 
         [OnStart]
         public void OnStart()
