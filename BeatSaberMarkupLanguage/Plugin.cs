@@ -1,8 +1,7 @@
-﻿using BeatSaberMarkupLanguage.Animations;
+﻿using HarmonyLib;
+using BeatSaberMarkupLanguage.Animations;
 using BeatSaberMarkupLanguage.Settings;
 using BeatSaberMarkupLanguage.ViewControllers;
-using BS_Utils.Utilities;
-using HarmonyLib;
 using IPA;
 using IPA.Utilities.Async;
 using System;
@@ -12,8 +11,13 @@ using System.Reflection;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using Conf = IPA.Config.Config;
 using UnityEngine.SceneManagement;
 using IPALogger = IPA.Logging.Logger;
+using IPA.Utilities;
+using HMUI;
+using IPA.Config.Stores;
+using System.IO;
 
 namespace BeatSaberMarkupLanguage
 {
@@ -22,7 +26,7 @@ namespace BeatSaberMarkupLanguage
     {
         public static Config config;
         [Init]
-        public void Init(IPALogger logger)
+        public void Init(Conf conf, IPALogger logger)
         {
             Logger.log = logger;
             try
@@ -36,9 +40,29 @@ namespace BeatSaberMarkupLanguage
             }
             AnimationController.instance.InitializeLoadingAnimation();
             SceneManager.activeSceneChanged += OnActiveSceneChanged;
-            BSEvents.earlyMenuSceneLoadedFresh += MenuLoadFresh;
-            config = new Config("BSML");
+            config = conf.Generated<Config>();
+
+
+            // Old Config Migration
+            Task.Run(() =>
+            {
+                var folder = Path.Combine(UnityGame.UserDataPath, "BSML.ini");
+                if (File.Exists(folder))
+                {
+                    string[] lines = File.ReadAllLines(folder);
+                    string pinnnedModsLine = lines.FirstOrDefault(x => x.StartsWith("Pinned Mods")) ?? "";
+                    var splitLine = pinnnedModsLine.Split('=');
+                    if (splitLine.Length > 1)
+                    {
+                        var mods = splitLine[1].Split(',');
+                        config.PinnedMods.AddRange(mods.Where(x => !string.IsNullOrWhiteSpace(x) && x != " " && !config.PinnedMods.Contains(x)));
+                    }
+                    File.Delete(folder);
+                }
+            });
         }
+
+
 
         [OnStart]
         public void OnStart()
@@ -83,12 +107,22 @@ namespace BeatSaberMarkupLanguage
             BSMLSettings.instance.Setup();
             MenuButtons.MenuButtons.instance.Setup();
             GameplaySetup.GameplaySetup.instance.Setup();
+            Polyglot.Localization.Instance.SelectedLanguage = config.SelectedLanguage;
         }
 
         public void OnActiveSceneChanged(Scene prevScene, Scene nextScene)
         {
             if (nextScene.name.Contains("Menu") && prevScene.name == "EmptyTransition")
+            {
                 BSMLParser.instance.MenuSceneLoaded();
+                SharedCoroutineStarter.instance.StartCoroutine(WaitForSetup());
+            }
+        }
+
+        private IEnumerator WaitForSetup()
+        {
+            yield return new WaitForSecondsRealtime(0.025f);
+            MenuLoadFresh(null);
         }
 
         //It's just for testing so don't yell at me
@@ -96,7 +130,7 @@ namespace BeatSaberMarkupLanguage
         {
             yield return new WaitForSeconds(1);
             TestViewController testViewController = BeatSaberUI.CreateViewController<TestViewController>();
-            Resources.FindObjectsOfTypeAll<MainFlowCoordinator>().First().InvokeMethod("PresentViewController", new object[] { testViewController, null, false });
+            Resources.FindObjectsOfTypeAll<MainFlowCoordinator>().First().InvokeMethod<object, FlowCoordinator>("PresentViewController", new object[] { testViewController, null, false });
         }
     }
 }

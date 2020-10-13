@@ -35,9 +35,6 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BS_Utils">
-      <HintPath>$(BeatSaberDir)\Plugins\BS_Utils.dll</HintPath>
-    </Reference>
     <Reference Include="HMLib">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\HMLib.dll</HintPath>
     </Reference>
@@ -170,6 +167,7 @@
     <Compile Include="Components\Tab.cs" />
     <Compile Include="Components\TabSelector.cs" />
     <Compile Include="Components\TextPageScrollViewRefresher.cs" />
+    <Compile Include="Config.cs" />
     <Compile Include="FloatingScreen\FloatingScreen.cs" />
     <Compile Include="FloatingScreen\FloatingScreenMoverPointer.cs" />
     <Compile Include="FontManager.cs" />
