@@ -1,6 +1,6 @@
-﻿using BeatSaberMarkupLanguage.Notify;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Reflection;
 using UnityEngine;
 
@@ -8,8 +8,8 @@ namespace BeatSaberMarkupLanguage.Components
 {
     public class NotifyUpdater : MonoBehaviour
     {
-        private INotifiableHost _notifyHost;
-        public INotifiableHost NotifyHost
+        private INotifyPropertyChanged _notifyHost;
+        public INotifyPropertyChanged NotifyHost
         {
             get { return _notifyHost; }
             set

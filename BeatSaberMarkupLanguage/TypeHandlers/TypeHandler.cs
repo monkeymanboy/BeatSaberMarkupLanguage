@@ -60,7 +60,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
         protected static NotifyUpdater GetOrCreateNotifyUpdater(BSMLParser.ComponentTypeWithData componentType, BSMLParserParams parserParams)
         {
             NotifyUpdater updater = null;
-            if (parserParams.host is INotifiableHost notifyHost)
+            if (parserParams.host is System.ComponentModel.INotifyPropertyChanged notifyHost)
             {
                 updater = componentType.component.gameObject.GetComponent<NotifyUpdater>();
                 if (updater == null)

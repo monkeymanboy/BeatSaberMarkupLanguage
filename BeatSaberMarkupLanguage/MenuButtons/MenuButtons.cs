@@ -1,11 +1,11 @@
 ﻿using BeatSaberMarkupLanguage.Attributes;
-using BeatSaberMarkupLanguage.Notify;
 using BeatSaberMarkupLanguage.Parser;
 using HMUI;
 using IPA.Utilities;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -149,7 +149,7 @@ namespace BeatSaberMarkupLanguage.MenuButtons
             Plugin.config.SetString("Pins", "Pinned Mods", string.Join(",", Pins));
         }
     }
-    internal class PinnedMod : INotifiableHost
+    internal class PinnedMod : INotifyPropertyChanged
     {
         [UIValue("menu-button")]
         public MenuButton menuButton;

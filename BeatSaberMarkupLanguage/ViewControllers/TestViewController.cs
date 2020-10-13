@@ -3,13 +3,14 @@ using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.Notify;
 using HMUI;
 using System.Collections.Generic;
+using System.ComponentModel;
 using TMPro;
 using static BeatSaberMarkupLanguage.Components.CustomListTableData;
 
 namespace BeatSaberMarkupLanguage.ViewControllers
 {
     [ViewDefinition("BeatSaberMarkupLanguage.Views.test.bsml")]
-    public class TestViewController : BSMLAutomaticViewController, INotifiableHost
+    public class TestViewController : BSMLAutomaticViewController, INotifyPropertyChanged
     {
         [UIValue("header")]
         public string HeaderText

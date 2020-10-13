@@ -1,11 +1,11 @@
 using System;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using BeatSaberMarkupLanguage.Attributes;
-using BeatSaberMarkupLanguage.Notify;
 
 namespace BeatSaberMarkupLanguage.MenuButtons
 {
-    public class MenuButton : INotifiableHost
+    public class MenuButton : INotifyPropertyChanged
     {
         public virtual Action OnClick { get; protected set; }
         
