@@ -6,13 +6,16 @@ using System.Linq;
 using System.Reflection;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using VRUIControls;
+using Zenject;
 using Object = UnityEngine.Object;
 
 namespace BeatSaberMarkupLanguage
 {
-    public delegate void PresentFlowCoordinatorDelegate(FlowCoordinator current, FlowCoordinator flowCoordinator, Action finishedCallback = null, bool immediately = false, bool replaceTopViewController = false);
-    public delegate void DismissFlowCoordinatorDelegate(FlowCoordinator current, FlowCoordinator flowCoordinator, Action finishedCallback = null, bool immediately = false);
+    public delegate void PresentFlowCoordinatorDelegate(FlowCoordinator current, FlowCoordinator flowCoordinator, Action finishedCallback = null, ViewController.AnimationDirection animationDirection = ViewController.AnimationDirection.Horizontal, bool immediately = false, bool replaceTopViewController = false);
+    public delegate void DismissFlowCoordinatorDelegate(FlowCoordinator current, FlowCoordinator flowCoordinator, ViewController.AnimationDirection animationDirection = ViewController.AnimationDirection.Horizontal, Action finishedCallback = null, bool immediately = false);
 
     public static class BeatSaberUI
     {
@@ -27,6 +30,29 @@ namespace BeatSaberMarkupLanguage
             }
         }
 
+        private static PhysicsRaycasterWithCache _physicsRaycaster;
+        public static PhysicsRaycasterWithCache PhysicsRaycasterWithCache
+        {
+            get
+            {
+                if(_physicsRaycaster == null)
+                    _physicsRaycaster = Resources.FindObjectsOfTypeAll<MainMenuViewController>().First().GetComponent<VRGraphicRaycaster>().GetField<PhysicsRaycasterWithCache, VRGraphicRaycaster>("_physicsRaycaster");
+                return _physicsRaycaster;
+            }
+        }
+
+        private static DiContainer _diContainer;
+        public static DiContainer DiContainer
+        {
+            get
+            {
+                if (_diContainer == null)
+                    _diContainer = Resources.FindObjectsOfTypeAll<TextSegmentedControl>().FirstOrDefault(x => x.transform.parent.name == "PlayerStatisticsViewController" && x.GetField<DiContainer, TextSegmentedControl>("_container") != null).GetField<DiContainer, TextSegmentedControl>("_container");
+                return _diContainer;
+            }
+        }
+
+
         /// <summary>
         /// Creates a ViewController of type T, and marks it to not be destroyed.
         /// </summary>
@@ -34,13 +60,21 @@ namespace BeatSaberMarkupLanguage
         /// <returns>The newly created ViewController of type T.</returns>
         public static T CreateViewController<T>() where T : ViewController
         {
-            T vc = new GameObject("BSMLViewController").AddComponent<T>();
-            MonoBehaviour.DontDestroyOnLoad(vc.gameObject);
-
+            //todo make this nicer
+            PracticeViewController prefab = GameObject.Instantiate(Resources.FindObjectsOfTypeAll <PracticeViewController>().First());
+            GameObject go = prefab.gameObject;
+            MonoBehaviour.Destroy(prefab);
+            go.name = "BSMLViewController";
+            foreach (Transform transform in prefab.transform)
+                GameObject.Destroy(transform.gameObject);
+            prefab.GetComponent<VRGraphicRaycaster>().SetField("_physicsRaycaster", PhysicsRaycasterWithCache);
+            //Console.WriteLine(prefab.GetComponent<VRGraphicRaycaster>().GetField<PhysicsRaycasterWithCache, VRGraphicRaycaster>("_physicsRaycaster") == null);
+            T vc = go.AddComponent<T>();//new GameObject("BSMLViewController", typeof(VRGraphicRaycaster), typeof(CurvedCanvasSettings), typeof(CanvasGroup), typeof(T)).GetComponent<T>();
+            /*
             vc.rectTransform.anchorMin = new Vector2(0f, 0f);
             vc.rectTransform.anchorMax = new Vector2(1f, 1f);
             vc.rectTransform.sizeDelta = new Vector2(0f, 0f);
-            vc.rectTransform.anchoredPosition = new Vector2(0f, 0f);
+            vc.rectTransform.anchoredPosition = new Vector2(0f, 0f);*/
             return vc;
         }
 
@@ -245,13 +279,13 @@ namespace BeatSaberMarkupLanguage
         }
 
         #region FlowCoordinator Extensions
-        public static void PresentFlowCoordinator(this FlowCoordinator current, FlowCoordinator flowCoordinator, Action finishedCallback = null, bool immediately = false, bool replaceTopViewController = false)
+        public static void PresentFlowCoordinator(this FlowCoordinator current, FlowCoordinator flowCoordinator, Action finishedCallback = null, ViewController.AnimationDirection animationDirection = ViewController.AnimationDirection.Horizontal, bool immediately = false, bool replaceTopViewController = false)
         {
-            PresentFlowCoordinatorDelegate(current, flowCoordinator, finishedCallback, immediately, replaceTopViewController);
+            PresentFlowCoordinatorDelegate(current, flowCoordinator, finishedCallback, animationDirection, immediately, replaceTopViewController);
         }
-        public static void DismissFlowCoordinator(this FlowCoordinator current, FlowCoordinator flowCoordinator, Action finishedCallback = null, bool immediately = false)
+        public static void DismissFlowCoordinator(this FlowCoordinator current, FlowCoordinator flowCoordinator, Action finishedCallback = null, ViewController.AnimationDirection animationDirection = ViewController.AnimationDirection.Horizontal, bool immediately = false)
         {
-            DismissFlowCoordinatorDelegate(current, flowCoordinator, finishedCallback, immediately);
+            DismissFlowCoordinatorDelegate(current, flowCoordinator, animationDirection, finishedCallback, immediately);
         }
 
         #region Delegate Creation

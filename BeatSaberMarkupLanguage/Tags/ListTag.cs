@@ -3,6 +3,7 @@ using HMUI;
 using IPA.Utilities;
 using UnityEngine;
 using UnityEngine.UI;
+using VRUIControls;
 
 namespace BeatSaberMarkupLanguage.Tags
 {
@@ -19,6 +20,9 @@ namespace BeatSaberMarkupLanguage.Tags
             GameObject gameObject = new GameObject();
             gameObject.name = "BSMLList";
             gameObject.SetActive(false);
+
+            gameObject.AddComponent<ScrollRect>();
+            gameObject.AddComponent<Touchable>();
 
             TableView tableView = gameObject.AddComponent<BSMLTableView>();
             CustomListTableData tableData = container.gameObject.AddComponent<CustomListTableData>();
@@ -43,7 +47,8 @@ namespace BeatSaberMarkupLanguage.Tags
             (tableView.transform as RectTransform).sizeDelta = new Vector2(0f, 0f);
             (tableView.transform as RectTransform).anchoredPosition = new Vector3(0f, 0f);
 
-            tableView.dataSource = tableData;
+            tableView.SetDataSource(tableData, false);
+            gameObject.SetActive(true);
             return container.gameObject;
         }
     }

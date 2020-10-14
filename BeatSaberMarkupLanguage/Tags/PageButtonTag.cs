@@ -11,7 +11,7 @@ namespace BeatSaberMarkupLanguage.Tags
 
         public override GameObject CreateObject(Transform parent)
         {
-            Button button = MonoBehaviour.Instantiate(Resources.FindObjectsOfTypeAll<Button>().Last(x => (x.name == "PageDownButton")), parent, false);
+            Button button = MonoBehaviour.Instantiate(Resources.FindObjectsOfTypeAll<Button>().Last(x => (x.name == "UpButton")), parent, false);
             button.gameObject.SetActive(false);
             button.name = "BSMLPageButton";
             button.interactable = true;
@@ -32,7 +32,8 @@ namespace BeatSaberMarkupLanguage.Tags
             buttonTransform.sizeDelta = new Vector2(0, 0);
 
             (button.transform as RectTransform).pivot = new Vector2(.5f, .5f);
-            RectTransform glow = MonoBehaviour.Instantiate(Resources.FindObjectsOfTypeAll<GameObject>().Last(x => (x.name == "GlowContainer")), button.transform).transform as RectTransform;
+            
+            /*RectTransform glow = MonoBehaviour.Instantiate(Resources.FindObjectsOfTypeAll<GameObject>().Last(x => (x.name == "GlowContainer")), button.transform).transform as RectTransform;
             glow.gameObject.name = "BSMLPageButtonGlowContainer";
             glow.SetParent(buttonTransform);
             glow.anchorMin = new Vector2(0, 0);
@@ -42,10 +43,10 @@ namespace BeatSaberMarkupLanguage.Tags
 
             Glowable glowable = button.gameObject.AddComponent<Glowable>();
             glowable.image = button.gameObject.GetComponentsInChildren<Image>(true).Where(x => x.gameObject.name == "Glow").FirstOrDefault();
-            glowable.SetGlow("none");
+            glowable.SetGlow("none");*/
 
             ButtonIconImage btnIcon = button.gameObject.AddComponent<ButtonIconImage>();
-            btnIcon.image = button.gameObject.GetComponentsInChildren<Image>(true).Where(x => x.gameObject.name == "Arrow").FirstOrDefault();
+            btnIcon.image = button.gameObject.GetComponentsInChildren<Image>(true).Where(x => x.gameObject.name == "Icon").FirstOrDefault();
 
             button.gameObject.SetActive(true);
             return button.gameObject;

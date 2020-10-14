@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HMUI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -10,17 +11,17 @@ namespace BeatSaberMarkupLanguage.Components
     {
         private static Dictionary<string, string> Backgrounds => new Dictionary<string, string>()
         {
-            { "round-rect-panel", "RoundRectPanel" },
+            { "round-rect-panel", "RoundRect10" },
             { "panel-bottom", "PanelBottom" },
-            { "panel-top", "PanelTop" },
+            { "panel-top", "RoundRect10" },
             { "round-rect-panel-shadow", "RoundRectPanelShadow"}
         };
 
         private static Dictionary<string, string> ObjectNames => new Dictionary<string, string>()
         {
-            { "round-rect-panel", "MinScoreInfo" },
+            { "round-rect-panel", "KeyboardWrapper" },
             { "panel-bottom", "BG" },
-            { "panel-top", "HeaderPanel" },
+            { "panel-top", "BG" },
             { "round-rect-panel-shadow", "Shadow"}
         };
 
@@ -28,14 +29,27 @@ namespace BeatSaberMarkupLanguage.Components
 
         public void ApplyBackground(string name)
         {
+            /*
+            foreach(Image image in Resources.FindObjectsOfTypeAll<Image>())
+            {
+                Console.WriteLine($"{image.gameObject.name} - {image.sprite?.name}");
+            }
+            */
+
             if (background != null)
                 throw new Exception("Cannot add multiple backgrounds");
 
             if (!Backgrounds.TryGetValue(name, out string backgroundName))
-                throw new Exception("Background type '" + name + "' not found");
+                throw new Exception($"Background type '{name}' not found");
 
-            background = gameObject.AddComponent(Resources.FindObjectsOfTypeAll<Image>().Last(x => x.gameObject.name == ObjectNames[name] && x.sprite?.name == backgroundName));
-            background.enabled = true;
+            try { 
+                background = gameObject.AddComponent(Resources.FindObjectsOfTypeAll<ImageView>().First(x => x.gameObject?.name == ObjectNames[name] && x.sprite?.name == backgroundName));
+                background.enabled = true;
+            }
+            catch
+            {
+                Logger.log.Error($"Error loading background: '{name}'");
+            }
         }
     }
 }

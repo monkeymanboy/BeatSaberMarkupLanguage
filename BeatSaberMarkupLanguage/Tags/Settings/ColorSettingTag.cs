@@ -14,7 +14,7 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
 
         public override GameObject CreateObject(Transform parent)
         {
-            BoolSettingsController baseSetting = MonoBehaviour.Instantiate(Resources.FindObjectsOfTypeAll<BoolSettingsController>().First(x => (x.name == "Fullscreen")), parent, false);
+            FormattedFloatListSettingsValueController baseSetting = MonoBehaviour.Instantiate(Resources.FindObjectsOfTypeAll<FormattedFloatListSettingsValueController>().First(x => (x.name == "VRRenderingScale")), parent, false);
             baseSetting.name = "BSMLColorSetting";
 
             GameObject gameObject = baseSetting.gameObject;
@@ -30,7 +30,7 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
             Button decButton = valuePick.GetComponentsInChildren<Button>().First();
             decButton.enabled = false;
             decButton.interactable = true;
-            GameObject.Destroy(decButton.transform.Find("Arrow").gameObject);
+            GameObject.Destroy(decButton.transform.Find("Icon").gameObject);
             GameObject.Destroy(valuePick.GetComponentsInChildren<TextMeshProUGUI>().First().gameObject);
             colorSetting.editButton = valuePick.GetComponentsInChildren<Button>().Last();
 
@@ -49,7 +49,7 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
             (colorImage.gameObject.transform as RectTransform).anchorMax = new Vector2(0.3f, 0.2f);
             colorSetting.colorImage = colorImage;
 
-            Image icon = colorSetting.editButton.transform.Find("Arrow").GetComponent<Image>();
+            Image icon = colorSetting.editButton.transform.Find("Icon").GetComponent<Image>();
             icon.name = "EditIcon";
             icon.sprite = Utilities.EditIcon;
             icon.rectTransform.sizeDelta = new Vector2(4, 4);

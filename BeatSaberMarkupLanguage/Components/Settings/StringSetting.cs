@@ -36,7 +36,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 
         void Update()//TODO: Remove need for this to be called in Update
         {
-            boundingBox.sizeDelta = new Vector2(text.textBounds.size.x + 7, 0);
+            //boundingBox.sizeDelta = new Vector2(text.textBounds.size.x + 7, 0);
         }
 
         public override void Setup()

@@ -1,4 +1,5 @@
 ﻿using BeatSaberMarkupLanguage.Components;
+using HMUI;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,7 +13,7 @@ namespace BeatSaberMarkupLanguage.Tags
         {
             GameObject gameObject = new GameObject("BSMLImage");
 
-            Image image = gameObject.AddComponent<Image>();
+            Image image = gameObject.AddComponent<ImageView>();
             image.material = Utilities.ImageResources.NoGlowMat;
             image.rectTransform.SetParent(parent, false);
             image.rectTransform.sizeDelta = new Vector2(20f, 20f);

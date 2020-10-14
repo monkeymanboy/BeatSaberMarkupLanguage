@@ -10,16 +10,12 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using UnityEngine;
-using static HMUI.ViewController;
 
 namespace BeatSaberMarkupLanguage.MenuButtons
 {
     public class MenuButtons : PersistentSingleton<MenuButtons>
     {
-        private ReleaseInfoViewController releaseInfoViewController;
-
-        [UIValue("release-notes")]
-        private Transform releaseNotesScrollView;
+        private MenuButtonsViewController menuButtonsViewController;
 
         [UIValue("buttons")]
         private List<object> buttons = new List<object>();
@@ -27,40 +23,29 @@ namespace BeatSaberMarkupLanguage.MenuButtons
         [UIValue("pin-buttons")]
         internal List<object> pinButtons = new List<object>();
 
-        [UIValue("any-buttons")]
-        private bool AnyButtons => buttons.Count > 0;
-
-        [UIValue("reserve-scroll-buttons")]
-        private bool ReserveScrollButtons => buttons.Count > 15;
-
-        [UIObject("root-object")]
-        private GameObject rootObject;
-
         [UIParams]
         private BSMLParserParams parserParams;
 
         internal void Setup()
         {
-            releaseInfoViewController = Resources.FindObjectsOfTypeAll<ReleaseInfoViewController>().First();
-            releaseInfoViewController.didDeactivateEvent -= OnDeactivate;
-            releaseInfoViewController.didDeactivateEvent += OnDeactivate;
-            releaseNotesScrollView = releaseInfoViewController.GetField<TextPageScrollView, ReleaseInfoViewController>("_textPageScrollView").transform;
-            BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), "BeatSaberMarkupLanguage.Views.main-left-screen.bsml"), releaseInfoViewController.gameObject, this);
+            menuButtonsViewController = BeatSaberUI.CreateViewController<MenuButtonsViewController>();
+            menuButtonsViewController.buttons = buttons;
+            StartCoroutine(PresentView());
+            /*
             if (MenuPins.instance.rootObject == null)
                 MenuPins.instance.Setup();
             else
-                MenuPins.instance.Refresh();
+                MenuPins.instance.Refresh();*/
+        }
+        IEnumerator PresentView()
+        {
+            yield return new WaitForSeconds(1);//Forgive me lord for what I must do
+            BeatSaberUI.MainFlowCoordinator.InvokeMethod<object, FlowCoordinator>("SetLeftScreenViewController", menuButtonsViewController, ViewController.AnimationType.None);
         }
 
         internal void Refresh()
         {
-            if (rootObject != null)
-            {
-                releaseNotesScrollView.transform.SetParent(null, false);
-                GameObject.Destroy(rootObject);
-                StopAllCoroutines();
-                Setup();
-            }
+            menuButtonsViewController?.RefreshView();
         }
 
         public void RegisterButton(MenuButton menuButton)
@@ -76,11 +61,6 @@ namespace BeatSaberMarkupLanguage.MenuButtons
             buttons.Remove(menuButton);
             pinButtons.RemoveAll(x => (x as PinnedMod).menuButton == menuButton);
             Refresh();
-        }
-
-        private void OnDeactivate(DeactivationType deactivationType)
-        {
-            parserParams.EmitEvent("close-modals");
         }
     }
     internal class MenuPins : PersistentSingleton<MenuPins>

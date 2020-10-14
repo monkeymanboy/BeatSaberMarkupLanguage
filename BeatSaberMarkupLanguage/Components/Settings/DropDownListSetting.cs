@@ -1,22 +1,18 @@
 ﻿using HMUI;
 using System.Collections.Generic;
+using IPA.Utilities;
 using System.Linq;
-using UnityEngine;
-using static HMUI.TableView;
+using TMPro;
 
 namespace BeatSaberMarkupLanguage.Components.Settings
 {
-    public class DropDownListSetting : GenericSetting, IDataSource
+    public class DropDownListSetting : GenericSetting
     {
-        private string reuseIdentifier = "BSMLDropdownSetting";
-        private EnvironmentTableCell tableCellInstance;
-
         private int index;
         
         public List<object> values;
 
-        public TableView tableView;
-        public LabelAndValueDropdownWithTableView dropdown;
+        public SimpleTextDropdown dropdown;
 
         public object Value
         {
@@ -35,47 +31,17 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             }
         }
 
-        public EnvironmentTableCell GetTableCell()
-        {
-            EnvironmentTableCell tableCell = (EnvironmentTableCell)tableView.DequeueReusableCellForIdentifier(reuseIdentifier);
-            if (!tableCell)
-            {
-                if (tableCellInstance == null)
-                    tableCellInstance = Resources.FindObjectsOfTypeAll<EnvironmentTableCell>().First();
-
-                tableCell = Instantiate(tableCellInstance);
-            }
-
-            tableCell.reuseIdentifier = reuseIdentifier;
-            return tableCell;
-        }
-
-        public TableCell CellForIdx(TableView tableView, int idx)
-        {
-            EnvironmentTableCell environmentTableCell = GetTableCell();
-            environmentTableCell.text = formatter == null ? values[idx].ToString() : (formatter.Invoke(values[idx]) as string);
-            return environmentTableCell;
-        }
-
-        public float CellSize()
-        {
-            return 8;
-        }
-
-        public int NumberOfCells()
-        {
-            if (values == null)
-                return 0;
-            else
-                return values.Count();
-        }
-
         public override void Setup()
         {
             dropdown.didSelectCellWithIdxEvent += OnSelectIndex;
             ReceiveValue();
-            dropdown.ReloadData();
+            UpdateChoices();
             gameObject.SetActive(true);
+        }
+
+        public void UpdateChoices()
+        {
+            dropdown.SetTexts(values.Select(x => formatter == null ? x.ToString() : (formatter.Invoke(x) as string)).ToList());
         }
 
         private void OnSelectIndex(DropdownWithTableView tableView, int index)
@@ -113,7 +79,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 
         private void UpdateState()
         {
-            dropdown.SetValueText(formatter == null ? Value.ToString() : (formatter.Invoke(Value) as string));
+            dropdown.GetField<TextMeshProUGUI, SimpleTextDropdown>("_text").text = formatter == null ? Value.ToString() : (formatter.Invoke(Value) as string);
         }
     }
 }

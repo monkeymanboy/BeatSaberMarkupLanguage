@@ -18,6 +18,7 @@ using IPA.Utilities;
 using HMUI;
 using IPA.Config.Stores;
 using System.IO;
+using Zenject;
 
 namespace BeatSaberMarkupLanguage
 {
@@ -25,6 +26,8 @@ namespace BeatSaberMarkupLanguage
     public class Plugin
     {
         public static Config config;
+
+        private GameScenesManager gameScenesManager;
         [Init]
         public void Init(Conf conf, IPALogger logger)
         {
@@ -99,30 +102,30 @@ namespace BeatSaberMarkupLanguage
                 }, TaskContinuationOptions.NotOnRanToCompletion);
         }
 
-        public void MenuLoadFresh(ScenesTransitionSetupDataSO _)
+        public void MenuLoadFresh(ScenesTransitionSetupDataSO _, DiContainer diContainer)
         {
             //GameplaySetup.GameplaySetup.instance.AddTab("Test", "BeatSaberMarkupLanguage.Views.gameplay-setup-test.bsml", GameplaySetupTest.instance);
             //BSMLSettings.instance.AddSettingsMenu("Test", "BeatSaberMarkupLanguage.Views.settings-test.bsml", SettingsTest.instance);
-            //Resources.FindObjectsOfTypeAll<GameScenesManager>().FirstOrDefault().StartCoroutine(PresentTest());
+            //SharedCoroutineStarter.instance.StartCoroutine(PresentTest());
             BSMLSettings.instance.Setup();
             MenuButtons.MenuButtons.instance.Setup();
             GameplaySetup.GameplaySetup.instance.Setup();
             Polyglot.Localization.Instance.SelectedLanguage = config.SelectedLanguage;
+            gameScenesManager.transitionDidFinishEvent -= MenuLoadFresh;
         }
+
 
         public void OnActiveSceneChanged(Scene prevScene, Scene nextScene)
         {
             if (nextScene.name.Contains("Menu") && prevScene.name == "EmptyTransition")
             {
                 BSMLParser.instance.MenuSceneLoaded();
-                SharedCoroutineStarter.instance.StartCoroutine(WaitForSetup());
+                if (gameScenesManager == null)
+                {
+                    gameScenesManager = Resources.FindObjectsOfTypeAll<GameScenesManager>().FirstOrDefault();
+                }
+                gameScenesManager.transitionDidFinishEvent += MenuLoadFresh;
             }
-        }
-
-        private IEnumerator WaitForSetup()
-        {
-            yield return new WaitForSecondsRealtime(0.025f);
-            MenuLoadFresh(null);
         }
 
         //It's just for testing so don't yell at me
@@ -130,7 +133,7 @@ namespace BeatSaberMarkupLanguage
         {
             yield return new WaitForSeconds(1);
             TestViewController testViewController = BeatSaberUI.CreateViewController<TestViewController>();
-            Resources.FindObjectsOfTypeAll<MainFlowCoordinator>().First().InvokeMethod<object, FlowCoordinator>("PresentViewController", new object[] { testViewController, null, false });
+            Resources.FindObjectsOfTypeAll<MainFlowCoordinator>().First().InvokeMethod<object, FlowCoordinator>("PresentViewController", new object[] { testViewController, null, ViewController.AnimationDirection.Horizontal, false });
         }
     }
 }

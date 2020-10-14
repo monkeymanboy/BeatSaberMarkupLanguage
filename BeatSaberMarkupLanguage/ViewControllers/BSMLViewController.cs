@@ -9,14 +9,14 @@ namespace BeatSaberMarkupLanguage.ViewControllers
     {
         public abstract string Content { get; }
 
-        public Action<bool, ActivationType> didActivate;
+        public Action<bool, bool, bool> didActivate;
 
-        protected override void DidActivate(bool firstActivation, ActivationType type)
+        protected override void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
         {
             if (firstActivation)
                 BSMLParser.instance.Parse(Content, gameObject, this);
 
-            didActivate?.Invoke(firstActivation, type);
+            didActivate?.Invoke(firstActivation, addedToHierarchy, screenSystemEnabling);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

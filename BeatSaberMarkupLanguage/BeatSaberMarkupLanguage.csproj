@@ -151,7 +151,6 @@
     <Compile Include="Components\NotifyUpdater.cs" />
     <Compile Include="Components\ScrollViewContent.cs" />
     <Compile Include="Components\Settings\BoolSetting.cs" />
-    <Compile Include="Components\Settings\CheckboxSetting.cs" />
     <Compile Include="Components\Settings\ColorSetting.cs" />
     <Compile Include="Components\Settings\DropDownListSetting.cs" />
     <Compile Include="Components\Settings\GenericInteractableSetting.cs" />
@@ -184,6 +183,7 @@
     <Compile Include="Macros\ReparentMacro.cs" />
     <Compile Include="MenuButtons\MenuButton.cs" />
     <Compile Include="MenuButtons\MenuButtons.cs" />
+    <Compile Include="MenuButtons\MenuButtonsViewController.cs" />
     <Compile Include="Notify\INotifiableHost.cs" />
     <Compile Include="OpenType\CollectionHeader.cs" />
     <Compile Include="OpenType\NumericHelpers.cs" />
@@ -230,6 +230,7 @@
     <Compile Include="Tags\ModalColorPickerTag.cs" />
     <Compile Include="Tags\ModifierContainerTag.cs" />
     <Compile Include="Tags\ModifierTag.cs" />
+    <Compile Include="Tags\PrimaryButtonTag.cs" />
     <Compile Include="Tags\RawImageTag.cs" />
     <Compile Include="Tags\LeaderboardTag.cs" />
     <Compile Include="Tags\ListTag.cs" />
@@ -241,9 +242,7 @@
     <Compile Include="Tags\ScrollableSettingsContainerTag.cs" />
     <Compile Include="Tags\ScrollIndicatorTag.cs" />
     <Compile Include="Tags\ScrollViewTag.cs" />
-    <Compile Include="Tags\SettingsContainerTag.cs" />
     <Compile Include="Tags\Settings\BoolSettingTag.cs" />
-    <Compile Include="Tags\Settings\CheckboxSettingTag.cs" />
     <Compile Include="Tags\Settings\ColorSettingTag.cs" />
     <Compile Include="Tags\Settings\DropdownListSettingTag.cs" />
     <Compile Include="Tags\Settings\GenericSliderSettingTag.cs" />
@@ -262,7 +261,6 @@
     <Compile Include="Tags\TextTag.cs" />
     <Compile Include="Tags\VerticalLayoutTag.cs" />
     <Compile Include="TypeHandlers\BackgroundableHandler.cs" />
-    <Compile Include="TypeHandlers\BSMLScrollViewHandler.cs" />
     <Compile Include="TypeHandlers\ButtonArtworkHandler.cs" />
     <Compile Include="TypeHandlers\GenericInteractableSettingHandler.cs" />
     <Compile Include="TypeHandlers\SelectableHandler.cs" />

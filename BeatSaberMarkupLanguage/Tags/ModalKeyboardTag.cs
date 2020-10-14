@@ -11,9 +11,8 @@ namespace BeatSaberMarkupLanguage.Tags
         public override GameObject CreateObject(Transform parent)
         {
             GameObject gameObject = base.CreateObject(parent);
-            ExternalComponents externalComponents = gameObject.GetComponent<ExternalComponents>();
 
-            RectTransform windowTransform = externalComponents.Get<RectTransform>();
+            RectTransform windowTransform = gameObject.transform as RectTransform;
             windowTransform.name = "BSMLModalKeyboard";
             windowTransform.sizeDelta = new Vector2(135, 75);
 
@@ -25,7 +24,7 @@ namespace BeatSaberMarkupLanguage.Tags
 
             ModalKeyboard modalKeyboard = gameObject.AddComponent<ModalKeyboard>();
             modalKeyboard.keyboard = keyboard;
-            modalKeyboard.modalView = externalComponents.Get<ModalView>();
+            modalKeyboard.modalView = gameObject.GetComponent<ModalView>();
             keyboard.EnterPressed += delegate (string value) { modalKeyboard.OnEnter(value); };
 
             return gameObject;

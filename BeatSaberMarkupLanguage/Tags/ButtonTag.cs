@@ -3,17 +3,17 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static BeatSaberMarkupLanguage.Components.Strokable;
 
 namespace BeatSaberMarkupLanguage.Tags
 {
     public class ButtonTag : BSMLTag
     {
         public override string[] Aliases => new[] { "button" };
+        public virtual string PrefabButton => "PracticeButton";
 
         public override GameObject CreateObject(Transform parent)
         {
-            Button button = MonoBehaviour.Instantiate(Resources.FindObjectsOfTypeAll<Button>().Last(x => (x.name == (parent.GetComponent<StartMiddleEndButtonsGroup>() == null ? "PlayButton" : "CreditsButton"))), parent, false);
+            Button button = MonoBehaviour.Instantiate(Resources.FindObjectsOfTypeAll<Button>().Last(x => (x.name == PrefabButton)), parent, false);
             button.name = "BSMLButton";
             button.interactable = true;
             Polyglot.LocalizedTextMeshProUGUI localizer = button.GetComponentInChildren<Polyglot.LocalizedTextMeshProUGUI>();
@@ -26,6 +26,7 @@ namespace BeatSaberMarkupLanguage.Tags
             if (horiztonalLayoutGroup != null)
                 externalComponents.components.Add(horiztonalLayoutGroup);
 
+            /*
             Image glowImage = button.gameObject.GetComponentsInChildren<Image>(true).Where(x => x.gameObject.name == "Glow").FirstOrDefault();
             if (glowImage != null)
             {
@@ -40,7 +41,7 @@ namespace BeatSaberMarkupLanguage.Tags
                 Strokable strokable = button.gameObject.AddComponent<Strokable>();
                 strokable.image = strokeImage;
                 strokable.SetType(StrokeType.Regular);
-            }
+            }*/
 
             return button.gameObject;
         }

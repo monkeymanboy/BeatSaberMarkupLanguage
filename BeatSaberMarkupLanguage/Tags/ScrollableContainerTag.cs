@@ -4,6 +4,7 @@ using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.Tags
 {
+    /*
     public class ScrollableContainerTag : BSMLTag
     {
         public override string[] Aliases { get; } = new[] { "scrollable-container" };
@@ -58,7 +59,7 @@ namespace BeatSaberMarkupLanguage.Tags
             layoutElement.preferredWidth = -1;
             layoutElement.flexibleWidth = 0;*/
 
-
+    /*
             BSMLScrollableContainer scrollView = go.AddComponent<BSMLScrollableContainer>();
             scrollView.ContentRect = content;
             scrollView.Viewport = viewport;
@@ -68,5 +69,5 @@ namespace BeatSaberMarkupLanguage.Tags
             go.SetActive(true);
             return contentgo;
         }
-    }
+    }*/
 }

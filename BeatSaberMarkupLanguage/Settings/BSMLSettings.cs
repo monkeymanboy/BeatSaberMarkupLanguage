@@ -1,5 +1,6 @@
 ﻿using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components.Settings;
+using IPA.Utilities;
 using Polyglot;
 using System;
 using System.Collections;
@@ -55,7 +56,8 @@ namespace BeatSaberMarkupLanguage.Settings
         internal void Setup()
         {
             StopAllCoroutines();
-            StartCoroutine(AddButtonToMainScreen());
+            if(button == null)
+                StartCoroutine(AddButtonToMainScreen());
             foreach (SettingsMenu settingsMenu in settingsMenus)
             {
                 settingsMenu.Setup();
@@ -75,7 +77,7 @@ namespace BeatSaberMarkupLanguage.Settings
         {
             languageOptions.Clear();
             languageOptions.AddRange(Localization.Instance.SupportedLanguages.Select(x => x.ToString()));
-            dropdown?.tableView.ReloadData();
+            dropdown?.UpdateChoices();
             Localization.Instance.SelectedLanguage = Plugin.config.SelectedLanguage;
         }
 
@@ -110,20 +112,16 @@ namespace BeatSaberMarkupLanguage.Settings
 
         private IEnumerator AddButtonToMainScreen()
         {
-            Transform transform = null;
-            while (transform == null)
+            OptionsViewController optionsViewController = null;
+            while (optionsViewController == null)
             {
-                try
-                {
-                    transform = GameObject.Find("MainMenuViewController/BottomPanel/Buttons").transform as RectTransform;
-                }
-                catch { }
+                optionsViewController = Resources.FindObjectsOfTypeAll<OptionsViewController>().FirstOrDefault();
                 yield return new WaitForFixedUpdate();
             }
-            button = Instantiate(transform.GetChild(0), transform).GetComponent<Button>();
-            button.transform.GetChild(0).GetChild(1).GetComponentInChildren<LocalizedTextMeshProUGUI>().Key = "Mod Settings";
+            button = Instantiate(optionsViewController.GetField<Button, OptionsViewController>("_settingsButton"), optionsViewController.transform.Find("Wrapper"));
+            button.GetComponentInChildren<LocalizedTextMeshProUGUI>().Key = "Mod Settings";
+            button.onClick.RemoveAllListeners();
             button.onClick.AddListener(PresentSettings);
-            button.transform.SetSiblingIndex(0);
 
             if (settingsMenus.Count == 0)
                 button.gameObject.SetActive(false);

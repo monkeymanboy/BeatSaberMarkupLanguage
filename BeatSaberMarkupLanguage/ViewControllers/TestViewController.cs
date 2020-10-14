@@ -9,9 +9,11 @@ using static BeatSaberMarkupLanguage.Components.CustomListTableData;
 
 namespace BeatSaberMarkupLanguage.ViewControllers
 {
-    [ViewDefinition("BeatSaberMarkupLanguage.Views.test.bsml")]
-    public class TestViewController : BSMLAutomaticViewController, INotifyPropertyChanged
+    //[ViewDefinition("BeatSaberMarkupLanguage.Views.test.bsml")]
+    public class TestViewController : BSMLResourceViewController//BSMLAutomaticViewController
     {
+        public override string ResourceName => "BeatSaberMarkupLanguage.Views.test.bsml";
+
         [UIValue("header")]
         public string HeaderText
         {
@@ -54,6 +56,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
                 return list;
             }
         }
+
 
         [UIAction("click")]
         private void ButtonPress()

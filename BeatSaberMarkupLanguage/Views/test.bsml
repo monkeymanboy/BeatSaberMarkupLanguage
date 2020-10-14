@@ -21,6 +21,24 @@
         <horizontal>
           <text text='haw'/>
         </horizontal>
+        <horizontal>
+          <text text='haw'/>
+        </horizontal>
+        <horizontal>
+          <text text='haw'/>
+        </horizontal>
+        <horizontal>
+          <text text='haw'/>
+        </horizontal>
+        <horizontal>
+          <text text='haw'/>
+        </horizontal>
+        <horizontal>
+          <text text='haw'/>
+        </horizontal>
+        <horizontal>
+          <text text='haw'/>
+        </horizontal>
       </scroll-view>
     </vertical>
   </tab>

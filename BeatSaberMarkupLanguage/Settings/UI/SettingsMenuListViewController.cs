@@ -15,9 +15,9 @@ namespace BeatSaberMarkupLanguage.Settings.UI.ViewControllers
 
         public Action<ViewController> clickedMenu;
 
-        protected override void DidActivate(bool firstActivation, ActivationType type)
+        protected override void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
         {
-            base.DidActivate(firstActivation, type);
+            base.DidActivate(firstActivation, addedToHierarchy, screenSystemEnabling);
             if (firstActivation)
             {
                 rectTransform.sizeDelta = new Vector2(35, 0);

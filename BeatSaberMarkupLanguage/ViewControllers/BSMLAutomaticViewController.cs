@@ -87,7 +87,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
             else ContentFilePath = Path.ChangeExtension(hotReloadAttr.Path, ".bsml");
         }
 
-        protected override void DidActivate(bool firstActivation, ActivationType type)
+        protected override void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
         {
             if (!string.IsNullOrEmpty(ContentFilePath))
             {
@@ -113,11 +113,11 @@ namespace BeatSaberMarkupLanguage.ViewControllers
                     ParseWithFallback();
             }
 
-            didActivate?.Invoke(firstActivation, type);
+            didActivate?.Invoke(firstActivation, addedToHierarchy, screenSystemEnabling);
         }
 
 
-        protected override void DidDeactivate(DeactivationType deactivationType)
+        protected override void DidDeactivate(bool removedFromHierarchy, bool screenSystemDisabling)
         {
             if (!string.IsNullOrEmpty(ContentFilePath))
             {
@@ -133,7 +133,15 @@ namespace BeatSaberMarkupLanguage.ViewControllers
 #endif
                 }
             }
-            base.DidDeactivate(deactivationType);
+            base.DidDeactivate(removedFromHierarchy, screenSystemDisabling);
+        }
+
+        public void RefreshView()
+        {
+                __Deactivate(false, false, false);
+                for (int i = 0; i < transform.childCount; i++)
+                    GameObject.Destroy(transform.GetChild(i).gameObject);
+                __Activate(false, false);
         }
 
         private void ParseWithFallback()
@@ -169,10 +177,10 @@ namespace BeatSaberMarkupLanguage.ViewControllers
             {
                 try
                 {
-                    __Deactivate(ViewController.DeactivationType.NotRemovedFromHierarchy, false);
+                    __Deactivate(false, false, false);
                     for (int i = 0; i < transform.childCount; i++)
                         GameObject.Destroy(transform.GetChild(i).gameObject);
-                    __Activate(ViewController.ActivationType.NotAddedToHierarchy);
+                    __Activate(false, false);
                 }
                 catch (Exception ex)
                 {

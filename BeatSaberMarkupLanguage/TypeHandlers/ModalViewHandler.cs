@@ -46,7 +46,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 
                 if (componentType.data.TryGetValue("clickOffCloses", out string clickOffCloses) && Parse.Bool(clickOffCloses))
                 {
-                    modalView._blockerClickedEvent += delegate
+                    modalView.blockerClickedEvent += delegate
                     {
                         modalView.Hide(true, () => modalView.transform.SetParent(originalParent, true));
                     };

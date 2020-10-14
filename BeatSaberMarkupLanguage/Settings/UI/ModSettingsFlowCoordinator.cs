@@ -1,6 +1,7 @@
 ﻿using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Settings.UI.ViewControllers;
 using HMUI;
+using IPA.Utilities;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -20,11 +21,14 @@ namespace BeatSaberMarkupLanguage.Settings
         private bool isPresenting;
         public bool isAnimating;
 
-        protected override void DidActivate(bool firstActivation, ActivationType activationType)
+        [UIComponent("bottom-buttons")]
+        private Transform bottomButtons;
+
+        protected override void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
         {
             if (firstActivation)
             {
-                title = "Mod Settings";
+                this.SetField<FlowCoordinator, string>("_title", "Mod Settings");
                 navigationController = BeatSaberUI.CreateViewController<NavigationController>();
                 BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), "BeatSaberMarkupLanguage.Views.settings-buttons.bsml"), navigationController.gameObject, this);
 
@@ -60,6 +64,7 @@ namespace BeatSaberMarkupLanguage.Settings
             PushViewControllerToNavigationController(navigationController, viewController, delegate
             {
                 isPresenting = false;
+                bottomButtons?.SetAsLastSibling();
             }, wasActive);
             activeController = viewController;
         }
@@ -77,14 +82,8 @@ namespace BeatSaberMarkupLanguage.Settings
         [UIAction("ok-click")]
         private void Ok()
         {
-            Apply();
-            Resources.FindObjectsOfTypeAll<MenuTransitionsHelper>().First().RestartGame();
-        }
-
-        [UIAction("apply-click")]
-        private void Apply()
-        {
             EmitEventToAll("apply");
+            Resources.FindObjectsOfTypeAll<MenuTransitionsHelper>().First().RestartGame();
         }
 
         [UIAction("cancel-click")]

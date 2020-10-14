@@ -40,10 +40,10 @@ namespace BeatSaberMarkupLanguage.ViewControllers
             {
                 try
                 {
-                    __Deactivate(ViewController.DeactivationType.NotRemovedFromHierarchy, false);
+                    __Deactivate(false, false, false);
                     for (int i = 0; i < transform.childCount; i++)
                         GameObject.Destroy(transform.GetChild(i).gameObject);
-                    __Activate(ViewController.ActivationType.NotAddedToHierarchy);
+                    __Activate(false, false);
                 }
                 catch (Exception ex)
                 {
@@ -97,7 +97,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
 
         string WatcherGroup.IHotReloadableController.Name => name;
 
-        protected override void DidActivate(bool firstActivation, ActivationType type)
+        protected override void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
         {
             if (ContentChanged && !firstActivation)
             {
@@ -114,11 +114,11 @@ namespace BeatSaberMarkupLanguage.ViewControllers
                 Logger.log.Error($"Failed to register {this.name}");
 #endif
             
-            didActivate?.Invoke(firstActivation, type);
+            didActivate?.Invoke(firstActivation, addedToHierarchy, screenSystemEnabling);
         }
 
 
-        protected override void DidDeactivate(DeactivationType deactivationType)
+        protected override void DidDeactivate(bool removedFromHierarchy, bool screenSystemDisabling)
         {
             _content = null;
 #if HRVC_DEBUG
@@ -130,7 +130,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
                 Logger.log.Warn($"Failed to Unregister {GetInstanceID()}:{name}");
 #endif
             }
-            base.DidDeactivate(deactivationType);
+            base.DidDeactivate(removedFromHierarchy, screenSystemDisabling);
         }
 
         private void ParseWithFallback()

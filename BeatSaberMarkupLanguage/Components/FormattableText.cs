@@ -1,9 +1,10 @@
-﻿using System;
+﻿using HMUI;
+using System;
 using TMPro;
 
 namespace BeatSaberMarkupLanguage.Components
 {
-    public class FormattableText : TextMeshProUGUI
+    public class FormattableText : CurvedTextMeshPro
     {
         private string textFormat;
         private ICustomFormatter textFormatter;

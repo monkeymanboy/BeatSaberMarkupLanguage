@@ -111,11 +111,13 @@ namespace BeatSaberMarkupLanguage.Components
             }
         }
 
-        public void SetButtonType(string ButtonName = "KeyboardButton")
+        public void SetButtonType(string ButtonName = "Q")
         {
             BaseButton = Resources.FindObjectsOfTypeAll<Button>().First(x => (x.name == ButtonName));
             if (BaseButton == null)
-                BaseButton = Resources.FindObjectsOfTypeAll<Button>().First(x => (x.name == "KeyboardButton"));
+            {
+                BaseButton = Resources.FindObjectsOfTypeAll<Button>().First(x => (x.name == "Q"));
+            }
         }
 
         public void SetValue(string keylabel, string value)
@@ -498,6 +500,7 @@ namespace BeatSaberMarkupLanguage.Components
 
                 name = text;
                 mybutton = Button.Instantiate(kb.BaseButton, kb.container, false);
+                GameObject.Destroy(mybutton.GetComponent<UIKeyboardKey>());
 
                 (mybutton.transform as RectTransform).anchorMin = new Vector2(0.5f, 0.5f);
                 (mybutton.transform as RectTransform).anchorMax = new Vector2(0.5f, 0.5f);

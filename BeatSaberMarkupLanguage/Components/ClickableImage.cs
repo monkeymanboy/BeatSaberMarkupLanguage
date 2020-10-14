@@ -1,11 +1,11 @@
-﻿using System;
+﻿using HMUI;
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.Components
 {
-    public class ClickableImage : Image, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler, IEventSystemHandler
+    public class ClickableImage : ImageView, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler, IEventSystemHandler
     {
         private Color _highlightColor = new Color(0.60f, 0.80f, 1);
         public Color HighlightColor

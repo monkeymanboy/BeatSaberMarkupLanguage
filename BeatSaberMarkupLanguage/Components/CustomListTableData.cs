@@ -20,7 +20,7 @@ namespace BeatSaberMarkupLanguage.Components
 
         private LevelListTableCell songListTableCellInstance;
         private LevelPackTableCell levelPackTableCellInstance;
-        private MainSettingsTableCell mainSettingsTableCellInstance;
+        private SimpleTextTableCell simpleTextTableCellInstance;
 
         public List<CustomCellInfo> data = new List<CustomCellInfo>();
         public float cellSize = 8.5f;
@@ -91,15 +91,15 @@ namespace BeatSaberMarkupLanguage.Components
             return tableCell;
         }
 
-        public MainSettingsTableCell GetMainSettingsTableCell()
+        public SimpleTextTableCell GetSimpleTextTableCell()
         {
-            MainSettingsTableCell tableCell = (MainSettingsTableCell)tableView.DequeueReusableCellForIdentifier(reuseIdentifier);
+            SimpleTextTableCell tableCell = (SimpleTextTableCell)tableView.DequeueReusableCellForIdentifier(reuseIdentifier);
             if (!tableCell)
             {
-                if (mainSettingsTableCellInstance == null)
-                    mainSettingsTableCellInstance = Resources.FindObjectsOfTypeAll<MainSettingsTableCell>().First(x => x.name == "MainSettingsTableCell");
+                if (simpleTextTableCellInstance == null)
+                    simpleTextTableCellInstance = Resources.FindObjectsOfTypeAll<SimpleTextTableCell>().First(x => x.name == "SimpleTextTableCell");
 
-                tableCell = Instantiate(mainSettingsTableCellInstance);
+                tableCell = Instantiate(simpleTextTableCellInstance);
             }
 
             tableCell.reuseIdentifier = reuseIdentifier;
@@ -163,8 +163,8 @@ namespace BeatSaberMarkupLanguage.Components
 
                     return cell;
                 case ListStyle.Simple:
-                    MainSettingsTableCell simpleCell = GetMainSettingsTableCell();
-                    simpleCell.settingsSubMenuText = data[idx].text;
+                    SimpleTextTableCell simpleCell = GetSimpleTextTableCell();
+                    simpleCell.text = data[idx].text;
 
                     return simpleCell;
             }

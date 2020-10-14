@@ -77,7 +77,7 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
 
         public static FloatingScreen CreateFloatingScreen(Vector2 screenSize, bool createHandle, Vector3 position, Quaternion rotation)
         {
-            FloatingScreen screen = new GameObject("BSMLFloatingScreen", typeof(FloatingScreen), typeof(CanvasScaler), typeof(RectMask2D), typeof(Image), typeof(VRGraphicRaycaster), typeof(SetMainCameraToCanvas)).GetComponent<FloatingScreen>();
+            FloatingScreen screen = new GameObject("BSMLFloatingScreen", typeof(FloatingScreen), typeof(CanvasScaler), typeof(RectMask2D), typeof(Image), typeof(VRGraphicRaycaster)/*, typeof(SetMainCameraToCanvas)*/).GetComponent<FloatingScreen>();
             
             Canvas canvas = screen.GetComponent<Canvas>();
             canvas.additionalShaderChannels = AdditionalCanvasShaderChannels.TexCoord1 | AdditionalCanvasShaderChannels.TexCoord2;
@@ -94,9 +94,11 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
             background.material = Resources.FindObjectsOfTypeAll<Material>().First(x => x.name == "UIFogBG");
             background.preserveAspect = true;
 
+            /*
             SetMainCameraToCanvas setCamera = screen.GetComponent<SetMainCameraToCanvas>();
             setCamera.SetField("_canvas", canvas);
             setCamera.SetField("_mainCamera", Resources.FindObjectsOfTypeAll<MainCamera>().FirstOrDefault(camera => camera.camera?.stereoTargetEye != StereoTargetEyeMask.None) ?? Resources.FindObjectsOfTypeAll<MainCamera>().FirstOrDefault());
+            */
 
             screen.ScreenSize = screenSize;
             screen.transform.localScale = new Vector3(0.02f, 0.02f, 0.02f);

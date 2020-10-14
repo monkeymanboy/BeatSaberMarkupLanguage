@@ -11,7 +11,7 @@ namespace BeatSaberMarkupLanguage.Components
 {
     // at this point this is a pseudo-reimplementation
     public class BSMLScrollableContainer : ScrollView
-    {
+    {/*
         public Button PageUpButton
         {
             get => _pageUpButton;
@@ -224,6 +224,6 @@ namespace BeatSaberMarkupLanguage.Components
             float maxPosition = _contentHeight - _viewport.rect.height;
             if (maxPosition < 0 && !AlignBottom) maxPosition = 0f;
             this._dstPosY = Mathf.Min(maxPosition, Mathf.Max(0f, value));
-        }
+        }*/
     }
 }
