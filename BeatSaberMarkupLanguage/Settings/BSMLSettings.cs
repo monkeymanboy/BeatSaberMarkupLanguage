@@ -70,7 +70,7 @@ namespace BeatSaberMarkupLanguage.Settings
 
         private void Start()
         {
-            Localization.Instance.Localize.AddListener(SetupLanguageList);
+            //Localization.Instance.Localize.AddListener(SetupLanguageList);
         }
 
         private void SetupLanguageList()
@@ -83,7 +83,7 @@ namespace BeatSaberMarkupLanguage.Settings
 
         private void OnDestroy()
         {
-            Localization.Instance.Localize.RemoveListener(SetupLanguageList);
+            //Localization.Instance.Localize.RemoveListener(SetupLanguageList);
         }
         
         public void AddSettingsMenu(string name, string resource, object host)

@@ -2,6 +2,7 @@
 using BeatSaberMarkupLanguage.Components.Settings;
 using HMUI;
 using IPA.Utilities;
+using Polyglot;
 using System;
 using System.Linq;
 using TMPro;
@@ -33,24 +34,11 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
             dropdown.GetComponentInChildren<VRGraphicRaycaster>(true).SetField("_physicsRaycaster", BeatSaberUI.PhysicsRaycasterWithCache);
             dropdown.GetComponentInChildren<ModalView>(true).SetField("_container", BeatSaberUI.DiContainer);
 
-            GameObject.Destroy(gameObject.transform.Find("Label").GetComponent<CurvedTextMeshPro>().gameObject);
-            
-            GameObject labelObj = new GameObject("Label");
-            labelObj.transform.SetParent(gameObject.transform, false);
-
-            CurvedTextMeshPro textMesh = labelObj.AddComponent<CurvedTextMeshPro>();
-            textMesh.font = MonoBehaviour.Instantiate(Resources.FindObjectsOfTypeAll<TMP_FontAsset>().First(t => t.name == "Teko-Medium SDF No Glow"));
-            textMesh.fontSize = 4;
-            textMesh.fontStyle = FontStyles.Italic;
-            textMesh.alignment = TextAlignmentOptions.Left;
-            textMesh.color = Color.white;
-
-            textMesh.rectTransform.anchoredPosition = new Vector2(0, 0);
-            textMesh.rectTransform.anchorMin = new Vector2(0, 0);
-            textMesh.rectTransform.anchorMax = new Vector2(1, 1);
-            textMesh.rectTransform.sizeDelta = new Vector2(0, 0);
             ExternalComponents externalComponents = dropdown.gameObject.AddComponent<ExternalComponents>();
-            externalComponents.components.Add(textMesh);
+
+            GameObject labelObject = gameObject.transform.Find("Label").gameObject;
+            MonoBehaviour.Destroy(labelObject.GetComponent<LocalizedTextMeshProUGUI>());
+            externalComponents.components.Add(gameObject.transform.Find("Label").GetComponent<CurvedTextMeshPro>());
 
             LayoutElement layoutElement = gameObject.AddComponent<LayoutElement>();
             layoutElement.preferredHeight = 8;

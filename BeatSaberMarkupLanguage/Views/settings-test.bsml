@@ -1,14 +1,5 @@
 <scrollable-settings-container>
-  <button text='test'></button>
-  <button text='test'></button>
-  <button text='test'></button>
-  <button text='test'></button>
-  <button text='test'></button>
-  <button text='test'></button>
-  <button text='test'></button>
-  <button text='test'></button>
-  <button text='test'></button>
-  <button text='test'></button>
+  <color-setting text='color test' value='color-value'></color-setting>
   <string-setting text='string test' value='string-value'></string-setting>
   <slider-setting text='slider test' min='-10' max='50' increment='1' value='slider-value' integer-only='true' formatter='format'></slider-setting>
   <dropdown-list-setting text='Dropdown Test' value='list-choice' choices='list-options'></dropdown-list-setting>

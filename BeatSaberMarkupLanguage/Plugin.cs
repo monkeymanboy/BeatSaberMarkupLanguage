@@ -26,6 +26,7 @@ namespace BeatSaberMarkupLanguage
     public class Plugin
     {
         public static Config config;
+        private static bool hasInited = false;
 
         private GameScenesManager gameScenesManager;
         [Init]
@@ -107,6 +108,7 @@ namespace BeatSaberMarkupLanguage
             //GameplaySetup.GameplaySetup.instance.AddTab("Test", "BeatSaberMarkupLanguage.Views.gameplay-setup-test.bsml", GameplaySetupTest.instance);
             //BSMLSettings.instance.AddSettingsMenu("Test", "BeatSaberMarkupLanguage.Views.settings-test.bsml", SettingsTest.instance);
             //SharedCoroutineStarter.instance.StartCoroutine(PresentTest());
+            //MenuButtons.MenuButtons.instance.RegisterButton(new MenuButtons.MenuButton("test", () => MenuButtons.MenuButtons.instance.RegisterButton(new MenuButtons.MenuButton("test2",null))));
             BSMLSettings.instance.Setup();
             MenuButtons.MenuButtons.instance.Setup();
             GameplaySetup.GameplaySetup.instance.Setup();
@@ -114,11 +116,13 @@ namespace BeatSaberMarkupLanguage
             gameScenesManager.transitionDidFinishEvent -= MenuLoadFresh;
         }
 
-
         public void OnActiveSceneChanged(Scene prevScene, Scene nextScene)
         {
-            if (nextScene.name.Contains("Menu") && prevScene.name == "EmptyTransition")
+            if (prevScene.name == "PCInit")
+                hasInited = true;
+            if (hasInited && nextScene.name.Contains("Menu") && prevScene.name == "EmptyTransition")
             {
+                hasInited = false;
                 BSMLParser.instance.MenuSceneLoaded();
                 if (gameScenesManager == null)
                 {

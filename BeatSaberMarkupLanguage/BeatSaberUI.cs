@@ -60,21 +60,14 @@ namespace BeatSaberMarkupLanguage
         /// <returns>The newly created ViewController of type T.</returns>
         public static T CreateViewController<T>() where T : ViewController
         {
-            //todo make this nicer
-            PracticeViewController prefab = GameObject.Instantiate(Resources.FindObjectsOfTypeAll <PracticeViewController>().First());
-            GameObject go = prefab.gameObject;
-            MonoBehaviour.Destroy(prefab);
-            go.name = "BSMLViewController";
-            foreach (Transform transform in prefab.transform)
-                GameObject.Destroy(transform.gameObject);
-            prefab.GetComponent<VRGraphicRaycaster>().SetField("_physicsRaycaster", PhysicsRaycasterWithCache);
-            //Console.WriteLine(prefab.GetComponent<VRGraphicRaycaster>().GetField<PhysicsRaycasterWithCache, VRGraphicRaycaster>("_physicsRaycaster") == null);
-            T vc = go.AddComponent<T>();//new GameObject("BSMLViewController", typeof(VRGraphicRaycaster), typeof(CurvedCanvasSettings), typeof(CanvasGroup), typeof(T)).GetComponent<T>();
-            /*
+            T vc = new GameObject("BSMLViewController", typeof(VRGraphicRaycaster), typeof(CurvedCanvasSettings), typeof(CanvasGroup), typeof(T)).GetComponent<T>();
+            vc.GetComponent<VRGraphicRaycaster>().SetField("_physicsRaycaster", PhysicsRaycasterWithCache);
+            
             vc.rectTransform.anchorMin = new Vector2(0f, 0f);
             vc.rectTransform.anchorMax = new Vector2(1f, 1f);
             vc.rectTransform.sizeDelta = new Vector2(0f, 0f);
-            vc.rectTransform.anchoredPosition = new Vector2(0f, 0f);*/
+            vc.rectTransform.anchoredPosition = new Vector2(0f, 0f);
+            vc.gameObject.SetActive(false);
             return vc;
         }
 

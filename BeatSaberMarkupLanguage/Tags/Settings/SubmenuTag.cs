@@ -21,7 +21,8 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
             clickableText.font = GameObject.Instantiate(Resources.FindObjectsOfTypeAll<TMP_FontAsset>().First(t => t.name == "Teko-Medium SDF No Glow"));
             clickableText.rectTransform.SetParent(parent, false);
             clickableText.text = "Default Text";
-            clickableText.fontSize = 5;
+            clickableText.fontSize = 4;
+            clickableText.fontStyle = FontStyles.Italic;
             clickableText.color = Color.white;
             clickableText.rectTransform.sizeDelta = new Vector2(90, 8);
 

@@ -20,7 +20,9 @@ namespace BeatSaberMarkupLanguage.Tags
             if (localizer != null)
                 GameObject.Destroy(localizer);
             ExternalComponents externalComponents = button.gameObject.AddComponent<ExternalComponents>();
-            externalComponents.components.Add(button.GetComponentInChildren<TextMeshProUGUI>());
+            TextMeshProUGUI textMesh = button.GetComponentInChildren<TextMeshProUGUI>();
+            textMesh.richText = true;
+            externalComponents.components.Add(textMesh);
 
             HorizontalLayoutGroup horiztonalLayoutGroup = button.GetComponentInChildren<HorizontalLayoutGroup>();
             if (horiztonalLayoutGroup != null)

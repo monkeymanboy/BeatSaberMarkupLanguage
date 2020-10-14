@@ -45,8 +45,8 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
             colorImage.name = "BSMLCurrentColor";
             (colorImage.gameObject.transform as RectTransform).anchoredPosition = new Vector2(0, 0);
             (colorImage.gameObject.transform as RectTransform).sizeDelta = new Vector2(5, 5);
-            (colorImage.gameObject.transform as RectTransform).anchorMin = new Vector2(0.3f, 0.2f);
-            (colorImage.gameObject.transform as RectTransform).anchorMax = new Vector2(0.3f, 0.2f);
+            (colorImage.gameObject.transform as RectTransform).anchorMin = new Vector2(0.2f, 0.5f);
+            (colorImage.gameObject.transform as RectTransform).anchorMax = new Vector2(0.2f, 0.5f);
             colorSetting.colorImage = colorImage;
 
             Image icon = colorSetting.editButton.transform.Find("Icon").GetComponent<Image>();

@@ -1,5 +1,6 @@
 ﻿using HMUI;
 using IPA.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -52,7 +53,7 @@ namespace BeatSaberMarkupLanguage.Components
             }
         }
 
-        public LevelListTableCell GetTableCell(bool beatmapCharacteristicImages = false)
+        public LevelListTableCell GetTableCell()
         {
             LevelListTableCell tableCell = (LevelListTableCell)tableView.DequeueReusableCellForIdentifier(reuseIdentifier);
             if (!tableCell)
@@ -61,17 +62,12 @@ namespace BeatSaberMarkupLanguage.Components
                     songListTableCellInstance = Resources.FindObjectsOfTypeAll<LevelListTableCell>().First(x => (x.name == "LevelListTableCell"));
 
                 tableCell = Instantiate(songListTableCellInstance);
-            }
 
-            if (!beatmapCharacteristicImages)
-            {
-                foreach (Image i in tableCell.GetField<Image[], LevelListTableCell>("_beatmapCharacteristicImages"))
-                    i.enabled = false;
             }
-            tableCell.transform.Find("FavoritesIcon").gameObject.SetActive(false);
 
             //tableCell.SetField("_beatmapCharacteristicImages", new Image[0]);
-            tableCell.SetField("_bought", true);
+            tableCell.SetField("_notOwned", false);
+
             tableCell.reuseIdentifier = reuseIdentifier;
             return tableCell;
         }
@@ -111,11 +107,14 @@ namespace BeatSaberMarkupLanguage.Components
             switch (listStyle)
             {
                 case ListStyle.List:
-                    LevelListTableCell tableCell = GetTableCell(false); // explicitly specify false to ensure all of the characteristic images
-                                                                        // start disabled
+                    LevelListTableCell tableCell = GetTableCell();
 
                     TextMeshProUGUI nameText = tableCell.GetField<TextMeshProUGUI, LevelListTableCell>("_songNameText");
-                    TextMeshProUGUI authorText = tableCell.GetField<TextMeshProUGUI, LevelListTableCell>("_authorText");
+                    TextMeshProUGUI authorText = tableCell.GetField<TextMeshProUGUI, LevelListTableCell>("_songAuthorText");
+                    tableCell.GetField<TextMeshProUGUI, LevelListTableCell>("_songBpmText").gameObject.SetActive(false);
+                    tableCell.GetField<TextMeshProUGUI, LevelListTableCell>("_songDurationText").gameObject.SetActive(false);
+                    tableCell.GetField<Image, LevelListTableCell>("_favoritesBadgeImage").gameObject.SetActive(false);
+                    tableCell.transform.Find("BpmIcon").gameObject.SetActive(false);
                     if (expandCell)
                     {
                         nameText.rectTransform.anchorMax = new Vector3(2, 1, 0);
@@ -124,31 +123,7 @@ namespace BeatSaberMarkupLanguage.Components
 
                     nameText.text = data[idx].text;
                     authorText.text = data[idx].subtext;
-                    tableCell.GetField<RawImage, LevelListTableCell>("_coverRawImage").texture = data[idx].icon == null ? Texture2D.blackTexture : data[idx].icon;
-
-                    float xPos = -1f;
-                    Image[] characImages = tableCell.GetField<Image[], LevelListTableCell>("_beatmapCharacteristicImages");
-                    IEnumerable<Sprite> characSprites = data[idx].characteristicSprites;
-                    if (characSprites != null)
-                    {
-                        var characSpriteArr = characSprites.ToArray();
-                        if (characSpriteArr.Length > characImages.Length)
-                        {
-                            Logger.log.Warn($"List cell specifies {characSpriteArr.Length} characteristic sprites, where only {characImages.Length} are supported");
-                        }
-
-                        foreach (var (sprite, img) in characSprites.Zip(characImages, (s, img) => (s, img)))
-                        {
-                            img.enabled = true;
-                            img.rectTransform.sizeDelta = new Vector2(2.625f, 4.5f);
-                            img.rectTransform.anchoredPosition = new Vector2(xPos, 0);
-                            xPos -= img.rectTransform.sizeDelta.x + .5f;
-                            img.sprite = sprite;
-                        }
-                    }
-
-                    nameText.rectTransform.offsetMax = new Vector2(xPos, nameText.rectTransform.offsetMax.y);
-                    authorText.rectTransform.offsetMax = new Vector2(xPos, authorText.rectTransform.offsetMax.y);
+                    tableCell.GetField<Image, LevelListTableCell>("_coverImage").sprite = data[idx].icon == null ? Utilities.LoadSpriteFromTexture(Texture2D.blackTexture) : data[idx].icon;
 
                     return tableCell;
                 case ListStyle.Box:
@@ -157,13 +132,13 @@ namespace BeatSaberMarkupLanguage.Components
                     cell.GetField<TextMeshProUGUI, LevelPackTableCell>("_infoText").text = $"{data[idx].text}\n{data[idx].subtext}";
                     Image packCoverImage = cell.GetField<Image, LevelPackTableCell>("_coverImage");
 
-                    Texture2D tex = data[idx].icon == null ? Texture2D.blackTexture : data[idx].icon;
-                    packCoverImage.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.one * 0.5f, 100, 1);
-                    packCoverImage.mainTexture.wrapMode = TextureWrapMode.Clamp;
+                    packCoverImage.sprite = data[idx].icon == null ? Utilities.LoadSpriteFromTexture(Texture2D.blackTexture) : data[idx].icon;
 
                     return cell;
                 case ListStyle.Simple:
                     SimpleTextTableCell simpleCell = GetSimpleTextTableCell();
+                    simpleCell.GetField<TextMeshProUGUI, SimpleTextTableCell>("_text").richText = true;
+                    simpleCell.GetField<TextMeshProUGUI, SimpleTextTableCell>("_text").enableWordWrapping = true;
                     simpleCell.text = data[idx].text;
 
                     return simpleCell;
@@ -186,18 +161,13 @@ namespace BeatSaberMarkupLanguage.Components
         {
             public string text;
             public string subtext;
-            public Texture2D icon;
-            public IEnumerable<Sprite> characteristicSprites;
+            public Sprite icon;
 
-            // this exists to maintain binary compatability
-            public CustomCellInfo(string text, string subtext, Texture2D icon) : this(text, subtext, icon, null) { }
-            public CustomCellInfo(string text, string subtext = null, Texture2D icon = null, 
-                IEnumerable<Sprite> characteristicSprites = null)
+            public CustomCellInfo(string text, string subtext = null, Sprite icon = null)
             {
                 this.text = text;
                 this.subtext = subtext;
                 this.icon = icon;
-                this.characteristicSprites = characteristicSprites;
             }
         };
     }

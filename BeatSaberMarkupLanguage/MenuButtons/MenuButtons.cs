@@ -30,6 +30,7 @@ namespace BeatSaberMarkupLanguage.MenuButtons
         {
             menuButtonsViewController = BeatSaberUI.CreateViewController<MenuButtonsViewController>();
             menuButtonsViewController.buttons = buttons;
+            StopAllCoroutines();
             StartCoroutine(PresentView());
             /*
             if (MenuPins.instance.rootObject == null)
@@ -39,7 +40,14 @@ namespace BeatSaberMarkupLanguage.MenuButtons
         }
         IEnumerator PresentView()
         {
-            yield return new WaitForSeconds(1);//Forgive me lord for what I must do
+            yield return new WaitForSeconds(0.2f);//Forgive me lord for what I must do
+            yield return new WaitWhile(() => BeatSaberUI.MainFlowCoordinator == null);
+            ShowView(false, false, false);
+            Resources.FindObjectsOfTypeAll<MainMenuViewController>().First().didActivateEvent += ShowView;
+        }
+
+        internal void ShowView(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
+        {
             BeatSaberUI.MainFlowCoordinator.InvokeMethod<object, FlowCoordinator>("SetLeftScreenViewController", menuButtonsViewController, ViewController.AnimationType.None);
         }
 

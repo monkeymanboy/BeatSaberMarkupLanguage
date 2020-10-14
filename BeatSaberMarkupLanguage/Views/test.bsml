@@ -93,7 +93,7 @@
     </vertical>
   </tab>
   <tab tags='new-tab' tab-name='List'>
-    <list id='list' list-style='Box' list-direction='Horizontal' visible-cells='2'></list>
+    <list id='list' visible-cells='5'></list>
     <horizontal>
       <page-button click-event='list#PageUp' direction='Left'></page-button>
       <page-button click-event='list#PageDown' direction='Right'></page-button>

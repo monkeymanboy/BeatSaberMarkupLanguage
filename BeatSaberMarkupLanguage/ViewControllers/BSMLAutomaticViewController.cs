@@ -138,10 +138,9 @@ namespace BeatSaberMarkupLanguage.ViewControllers
 
         public void RefreshView()
         {
-                __Deactivate(false, false, false);
-                for (int i = 0; i < transform.childCount; i++)
-                    GameObject.Destroy(transform.GetChild(i).gameObject);
-                __Activate(false, false);
+            for (int i = 0; i < transform.childCount; i++)
+                GameObject.Destroy(transform.GetChild(i).gameObject);
+            ParseWithFallback();
         }
 
         private void ParseWithFallback()
