@@ -158,7 +158,7 @@ namespace BeatSaberMarkupLanguage
             GameObject gameObj = new GameObject("CustomUIText");
             gameObj.SetActive(false);
 
-            TextMeshProUGUI textMesh = gameObj.AddComponent<TextMeshProUGUI>();
+            CurvedTextMeshPro textMesh = gameObj.AddComponent<CurvedTextMeshPro>();
             textMesh.font = MainTextFont;
             textMesh.rectTransform.SetParent(parent, false);
             textMesh.text = text;
