@@ -32,6 +32,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 
         public override void HandleType(ComponentTypeWithData componentType, BSMLParserParams parserParams)
         {
+            Console.WriteLine(0);
             CustomListTableData tableData = componentType.component as CustomListTableData;
             if (componentType.data.TryGetValue("selectCell", out string selectCell))
             {
@@ -71,21 +72,25 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             switch (tableData.tableView.tableType)
             {
                 case TableType.Vertical:
-                    (componentType.component.gameObject.transform as RectTransform).sizeDelta = new Vector2(componentType.data.TryGetValue("listWidth", out string vListWidth) ? Parse.Float(vListWidth) : 60, tableData.cellSize * (componentType.data.TryGetValue("visibleCells", out string vVisibleCells) ? Parse.Float(vVisibleCells) : 7));
-                    tableData.tableView.contentTransform.anchorMin = new Vector2(0, 1);
+                    Console.WriteLine(1);
+                            (componentType.component.gameObject.transform as RectTransform).sizeDelta = new Vector2(componentType.data.TryGetValue("listWidth", out string vListWidth) ? Parse.Float(vListWidth) : 60, tableData.cellSize * (componentType.data.TryGetValue("visibleCells", out string vVisibleCells) ? Parse.Float(vVisibleCells) : 7));
+                    Console.WriteLine(2);
                     break;
                 case TableType.Horizontal:
                     (componentType.component.gameObject.transform as RectTransform).sizeDelta = new Vector2(tableData.cellSize * (componentType.data.TryGetValue("visibleCells", out string hVisibleCells) ? Parse.Float(hVisibleCells) : 4), componentType.data.TryGetValue("listHeight", out string hListHeight) ? Parse.Float(hListHeight) : 40);
                     break;
             }
-
+            
             componentType.component.gameObject.GetComponent<LayoutElement>().preferredHeight = (componentType.component.gameObject.transform as RectTransform).sizeDelta.y;
             componentType.component.gameObject.GetComponent<LayoutElement>().preferredWidth = (componentType.component.gameObject.transform as RectTransform).sizeDelta.x;
+            
             tableData.tableView.gameObject.SetActive(true);
+            tableData.tableView.LazyInit();
 
             if (componentType.data.TryGetValue("id", out string id))
             {
                 TableViewScroller scroller = tableData.tableView.GetField<TableViewScroller, TableView>("scroller");
+                Console.WriteLine(scroller == null);
                 parserParams.AddEvent(id + "#PageUp", scroller.PageScrollUp);
                 parserParams.AddEvent(id + "#PageDown", scroller.PageScrollDown);
             }

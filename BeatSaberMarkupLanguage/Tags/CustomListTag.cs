@@ -49,7 +49,6 @@ namespace BeatSaberMarkupLanguage.Tags
             (tableView.transform as RectTransform).anchoredPosition = new Vector3(0f, 0f);
 
             tableView.SetDataSource(tableData, true);
-            gameObject.SetActive(true);
             return container.gameObject;
         }
     }
