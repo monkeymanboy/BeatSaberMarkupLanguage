@@ -150,6 +150,7 @@
     <Compile Include="Components\NotifiableSingleton.cs" />
     <Compile Include="Components\NotifyUpdater.cs" />
     <Compile Include="Components\ScrollViewContent.cs" />
+    <Compile Include="Components\Settings\ToggleSetting.cs" />
     <Compile Include="Components\Settings\BoolSetting.cs" />
     <Compile Include="Components\Settings\ColorSetting.cs" />
     <Compile Include="Components\Settings\DropDownListSetting.cs" />
@@ -218,6 +219,7 @@
     <Compile Include="Tags\BigButtonTag.cs" />
     <Compile Include="Tags\BottomButtonPanelTag.cs" />
     <Compile Include="Tags\BSMLTag.cs" />
+    <Compile Include="Tags\Settings\ToggleSettingTag.cs" />
     <Compile Include="Tags\ButtonTag.cs" />
     <Compile Include="Tags\ClickableImageTag.cs" />
     <Compile Include="Tags\ClickableTextTag.cs" />
