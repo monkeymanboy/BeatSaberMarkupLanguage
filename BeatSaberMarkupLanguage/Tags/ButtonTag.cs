@@ -1,4 +1,5 @@
 ﻿using BeatSaberMarkupLanguage.Components;
+using HMUI;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -24,9 +25,9 @@ namespace BeatSaberMarkupLanguage.Tags
             textMesh.richText = true;
             externalComponents.components.Add(textMesh);
 
-            HorizontalLayoutGroup horiztonalLayoutGroup = button.GetComponentInChildren<HorizontalLayoutGroup>();
-            if (horiztonalLayoutGroup != null)
-                externalComponents.components.Add(horiztonalLayoutGroup);
+            StackLayoutGroup stackLayoutGroup = button.GetComponentInChildren<StackLayoutGroup>();
+            if (stackLayoutGroup != null)
+                externalComponents.components.Add(stackLayoutGroup);
 
             /*
             Image glowImage = button.gameObject.GetComponentsInChildren<Image>(true).Where(x => x.gameObject.name == "Glow").FirstOrDefault();

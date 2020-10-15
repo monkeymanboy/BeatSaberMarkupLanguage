@@ -10,7 +10,7 @@ namespace BeatSaberMarkupLanguage.Tags
 {
     public class ToggleSettingTag : BSMLTag
     {
-        public override string[] Aliases => new[] { "toggle-setting" };
+        public override string[] Aliases => new[] { "toggle-setting", "bool-setting", "checkbox-setting", "checkbox" };
         public virtual string PrefabToggleName => "Fullscreen";
 
         public override GameObject CreateObject(Transform parent)

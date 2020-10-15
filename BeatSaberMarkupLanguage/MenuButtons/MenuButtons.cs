@@ -53,24 +53,27 @@ namespace BeatSaberMarkupLanguage.MenuButtons
 
         internal void Refresh()
         {
-            menuButtonsViewController?.RefreshView();
+            if (menuButtonsViewController == null)
+                return;
+            menuButtonsViewController.RefreshView();
         }
 
         public void RegisterButton(MenuButton menuButton)
         {
             if (buttons.Any(x => (x as MenuButton).Text == menuButton.Text)) return;
             buttons.Add(menuButton);
-            pinButtons.Add(new PinnedMod(menuButton));
+            //pinButtons.Add(new PinnedMod(menuButton));
             Refresh();
         }
 
         public void UnregisterButton(MenuButton menuButton)
         {
             buttons.Remove(menuButton);
-            pinButtons.RemoveAll(x => (x as PinnedMod).menuButton == menuButton);
+            //pinButtons.RemoveAll(x => (x as PinnedMod).menuButton == menuButton);
             Refresh();
         }
     }
+    /*
     internal class MenuPins : PersistentSingleton<MenuPins>
     {
         [UIValue("pin-buttons")]
@@ -189,5 +192,5 @@ namespace BeatSaberMarkupLanguage.MenuButtons
                 Logger.log?.Error(ex);
             }
         }
-    }
+    }*/
 }

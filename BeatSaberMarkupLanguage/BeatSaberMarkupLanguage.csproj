@@ -217,7 +217,6 @@
     <Compile Include="Settings\UI\SettingsMenuListViewController.cs" />
     <Compile Include="Tags\BackgroundTag.cs" />
     <Compile Include="Tags\BigButtonTag.cs" />
-    <Compile Include="Tags\BottomButtonPanelTag.cs" />
     <Compile Include="Tags\BSMLTag.cs" />
     <Compile Include="Tags\Settings\ToggleSettingTag.cs" />
     <Compile Include="Tags\ButtonTag.cs" />

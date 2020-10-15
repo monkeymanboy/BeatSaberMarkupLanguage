@@ -13,31 +13,21 @@ namespace BeatSaberMarkupLanguage.Tags
 
         public override GameObject CreateObject(Transform parent)
         {
-            Button button = MonoBehaviour.Instantiate(Resources.FindObjectsOfTypeAll<Button>().Last(x => (x.name == "PracticeButton" && x.transform.parent.name == "PlayButtons")), parent, false);
+            Button button = MonoBehaviour.Instantiate(Resources.FindObjectsOfTypeAll<Button>().Last(x => x.name == "PracticeButton"), parent, false);
             button.name = "BSMLIconButton";
             button.interactable = true;
 
             Object.Destroy(button.GetComponent<HoverHint>());
             GameObject.Destroy(button.GetComponent<LocalizedHoverHint>());
-            button.gameObject.AddComponent<ExternalComponents>().components.Add(button.GetComponentsInChildren<HorizontalLayoutGroup>().First(x => x.name == "Content"));
+            button.gameObject.AddComponent<ExternalComponents>().components.Add(button.GetComponentsInChildren<StackLayoutGroup>().First(x => x.name == "Content"));
 
-            Image glowImage = button.gameObject.GetComponentsInChildren<Image>(true).Where(x => x.gameObject.name == "Glow").FirstOrDefault();
-            if (glowImage != null)
-            {
-                Glowable glowable = button.gameObject.AddComponent<Glowable>();
-                glowable.image = glowImage;
-                glowable.SetGlow("none");
-            }
-
-            Image strokeImage = button.gameObject.GetComponentsInChildren<Image>(true).Where(x => x.gameObject.name == "Stroke").FirstOrDefault();
-            if (strokeImage != null)
-            {
-                Strokable strokable = button.gameObject.AddComponent<Strokable>();
-                strokable.image = strokeImage;
-                strokable.SetType(StrokeType.Regular);
-            }
-
-            Image iconImage = button.gameObject.GetComponentsInChildren<Image>(true).Where(x => x.gameObject.name == "Icon").FirstOrDefault();
+            Transform contentTransform = button.transform.Find("Content");
+            GameObject.Destroy(contentTransform.Find("Text").gameObject);
+            Image iconImage = new GameObject("Icon").AddComponent<ImageView>();
+            iconImage.material = Utilities.ImageResources.NoGlowMat;
+            iconImage.rectTransform.SetParent(contentTransform, false);
+            iconImage.rectTransform.sizeDelta = new Vector2(20f, 20f);
+            iconImage.sprite = Utilities.ImageResources.BlankSprite;
             if (iconImage != null)
             {
                 ButtonIconImage btnIcon = button.gameObject.AddComponent<ButtonIconImage>();

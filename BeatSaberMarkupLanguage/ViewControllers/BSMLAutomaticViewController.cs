@@ -136,13 +136,6 @@ namespace BeatSaberMarkupLanguage.ViewControllers
             base.DidDeactivate(removedFromHierarchy, screenSystemDisabling);
         }
 
-        public void RefreshView()
-        {
-            for (int i = 0; i < transform.childCount; i++)
-                GameObject.Destroy(transform.GetChild(i).gameObject);
-            ParseWithFallback();
-        }
-
         private void ParseWithFallback()
         {
             try

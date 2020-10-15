@@ -26,10 +26,8 @@ namespace BeatSaberMarkupLanguage.Tags
             externalComponents.components.Add(gameObject.GetComponentInChildren<TextMeshProUGUI>());
             externalComponents.components.Add(gameObject.transform.Find("Icon").GetComponent<Image>());
 
-            /*
-            CheckboxSetting checkboxSetting = gameObject.AddComponent<CheckboxSetting>();
-            checkboxSetting.checkbox = gameObject.GetComponent<Toggle>();
-            */
+            ToggleSetting toggleSetting = gameObject.AddComponent<ToggleSetting>();
+            toggleSetting.toggle = gameObject.GetComponent<Toggle>();
 
             return gameObject;
         }

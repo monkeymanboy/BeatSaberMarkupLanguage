@@ -1,7 +1,9 @@
 ﻿using Polyglot;
+using System;
 
 namespace BeatSaberMarkupLanguage.Components.Settings
 {
+    [Obsolete("This has been replaced with ToggleSetting")]
     public class BoolSetting : IncDecSetting
     {
         private bool currentValue;
