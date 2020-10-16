@@ -60,7 +60,7 @@ namespace BeatSaberMarkupLanguage.Components
             } 
         }
 
-        private float contentHeight => _contentRectTransform.rect.height;
+        private float contentHeight;
         private float scrollPageHeight => _viewport.rect.height;
 
         private void UpdateViewportMask()
@@ -91,6 +91,7 @@ namespace BeatSaberMarkupLanguage.Components
         public void RefreshContent()
         {
             SetContentHeight(_contentRectTransform.rect.height);
+            contentHeight = _contentRectTransform.rect.height;
             RefreshBindings();
             ComputeScrollFocusPosY();
         }
