@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.TypeHandlers
 {
-    /*
+    
     [ComponentHandler(typeof(BSMLScrollableContainer))]
     public class ScrollableContainerHandler : TypeHandler
     {
@@ -67,9 +67,9 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                     .FirstOrDefault(i => i != null);
             }
 
-            scrollView.Setup();
-            scrollView.RefreshButtonsInteractibility();
+            scrollView.RefreshContent();
+            scrollView.RefreshButtons();
             //scrollView.ScrollAt(0, false);
         }
-    }*/
+    }
 }

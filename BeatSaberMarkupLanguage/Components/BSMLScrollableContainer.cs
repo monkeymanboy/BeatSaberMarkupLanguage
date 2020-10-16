@@ -1,4 +1,5 @@
 ﻿using HMUI;
+using IPA.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace BeatSaberMarkupLanguage.Components
 {
     // at this point this is a pseudo-reimplementation
     public class BSMLScrollableContainer : ScrollView
-    {/*
+    {
         public Button PageUpButton
         {
             get => _pageUpButton;
@@ -48,7 +49,7 @@ namespace BeatSaberMarkupLanguage.Components
             set
             {
                 alignBottom = value;
-                ScrollAt(_dstPosY, true);
+                ScrollTo(_destinationPosY, true);
             }
         }
 
@@ -64,6 +65,9 @@ namespace BeatSaberMarkupLanguage.Components
             } 
         }
 
+        private float contentHeight => _contentRectTransform.rect.height;
+        private float scrollPageHeight => _viewport.rect.height;
+
         private void UpdateViewportMask()
         {
             var img = Viewport.GetComponent<Image>();
@@ -74,13 +78,11 @@ namespace BeatSaberMarkupLanguage.Components
         public new void Awake()
         {
             _buttonBinder = new ButtonBinder();
-
-            Setup();
-            RefreshButtonsInteractibility();
+            
+            RefreshContent();
+            RefreshButtons();
             runScrollAnim = false;
         }
-
-        public new void Setup() => RefreshContent();
 
         public void RefreshBindings()
         {
@@ -93,137 +95,158 @@ namespace BeatSaberMarkupLanguage.Components
 
         public void RefreshContent()
         {
-            _contentHeight = _contentRectTransform.rect.height;
-            _scrollPageHeight = _viewport.rect.height;
-            bool active = _contentHeight > _viewport.rect.height;
-            PageUpButton?.gameObject?.SetActive(active);
-            PageDownButton?.gameObject?.SetActive(active);
+            SetContentHeight(_contentRectTransform.rect.height);
             RefreshBindings();
-            if (_verticalScrollIndicator != null)
-            {
-                _verticalScrollIndicator.gameObject.SetActive(active);
-                _verticalScrollIndicator.normalizedPageHeight = _viewport.rect.height / _contentHeight;
-            }
             ComputeScrollFocusPosY();
         }
 
         public void ContentSizeUpdated()
         {
             RefreshContent();
-            RefreshButtonsInteractibility();
-            ScrollAt(0f, false);
+            RefreshButtons();
+            ScrollTo(0f, false);
         }
 
         private bool runScrollAnim = false;
         public new void Update()
         {
-            if (_contentHeight != _contentRectTransform.rect.height && _contentRectTransform.rect.height > 0f)
+            if (contentHeight != _contentRectTransform.rect.height && _contentRectTransform.rect.height > 0f)
                 ContentSizeUpdated();
 
             if (runScrollAnim)
             {
-                float num = Mathf.Lerp(this._contentRectTransform.anchoredPosition.y, this._dstPosY, Time.deltaTime * this._smooth);
-                if (Mathf.Abs(num - this._dstPosY) < 0.01f)
+                float num = Mathf.Lerp(_contentRectTransform.anchoredPosition.y, _destinationPosY, Time.deltaTime * _smooth);
+                if (Mathf.Abs(num - _destinationPosY) < 0.01f)
                 {
-                    num = this._dstPosY;
+                    num = _destinationPosY;
                     runScrollAnim = false;
                 }
-                this._contentRectTransform.anchoredPosition = new Vector2(0f, num);
-                this.UpdateVerticalScrollIndicator(this._contentRectTransform.anchoredPosition.y);
+                _contentRectTransform.anchoredPosition = new Vector2(0f, num);
+                UpdateVerticalScrollIndicator(_contentRectTransform.anchoredPosition.y);
             }
         }
 
-        public new void RefreshButtonsInteractibility()
+        public new void RefreshButtons()
         {
             if (PageUpButton != null)
-                PageUpButton.interactable = _dstPosY > 0f;
+                PageUpButton.interactable = _destinationPosY > 0f;
             if (PageDownButton != null)
-                PageDownButton.interactable = _dstPosY < _contentHeight - (_viewport?.rect.height ?? 0);
+                PageDownButton.interactable = _destinationPosY < contentHeight - (_viewport?.rect.height ?? 0);
         }
 
         public new void ComputeScrollFocusPosY()
         {
-            ItemForFocussedScrolling[] componentsInChildren = base.GetComponentsInChildren<ItemForFocussedScrolling>(true);
-            this._scrollFocusPosYs = (from item in componentsInChildren
-                                      select this.WorldPositionToScrollViewPosition(item.transform.position).y into i
+            ItemForFocussedScrolling[] componentsInChildren = GetComponentsInChildren<ItemForFocussedScrolling>(true);
+            _scrollFocusPosYs = (from item in componentsInChildren
+                                      select WorldPositionToScrollViewPosition(item.transform.position).y into i
                                       orderby i
                                       select i).ToArray<float>();
         }
 
         public new void UpdateVerticalScrollIndicator(float posY)
         {
-            if (this._verticalScrollIndicator != null)
+            if (_verticalScrollIndicator != null)
             {
-                this._verticalScrollIndicator.progress = posY / (this._contentHeight - this._viewport.rect.height);
+                _verticalScrollIndicator.progress = posY / (contentHeight - _viewport.rect.height);
             }
         }
 
         public new void ScrollDown(bool animated)
         {
-            float dstPosY = this._contentHeight - this._viewport.rect.height;
-            this.ScrollAt(dstPosY, animated);
+            float dstPosY = contentHeight - _viewport.rect.height;
+            ScrollTo(dstPosY, animated);
         }
 
         public new void ScrollToWorldPosition(Vector3 worldPosition, float pageRelativePosition, bool animated)
         {
-            float num = this.WorldPositionToScrollViewPosition(worldPosition).y;
-            num -= pageRelativePosition * this._scrollPageHeight;
-            this.ScrollAt(num, animated);
+            float num = WorldPositionToScrollViewPosition(worldPosition).y;
+            num -= pageRelativePosition * scrollPageHeight;
+            ScrollTo(num, animated);
         }
 
         public new void ScrollToWorldPositionIfOutsideArea(Vector3 worldPosition, float pageRelativePosition, float relativeBoundaryStart, float relativeBoundaryEnd, bool animated)
         {
-            float num = this.WorldPositionToScrollViewPosition(worldPosition).y;
-            float num2 = this._dstPosY + relativeBoundaryStart * this._scrollPageHeight;
-            float num3 = this._dstPosY + relativeBoundaryEnd * this._scrollPageHeight;
+            float num = WorldPositionToScrollViewPosition(worldPosition).y;
+            float num2 = _destinationPosY + relativeBoundaryStart * scrollPageHeight;
+            float num3 = _destinationPosY + relativeBoundaryEnd * scrollPageHeight;
             if (num > num2 && num < num3)
             {
                 return;
             }
-            num -= pageRelativePosition * this._scrollPageHeight;
-            this.ScrollAt(num, animated);
+            num -= pageRelativePosition * scrollPageHeight;
+            ScrollTo(num, animated);
         }
 
-        public new void ScrollAt(float dstPosY, bool animated)
+        public new void ScrollTo(float dstPosY, bool animated)
         {
-            this.SetDstPosY(dstPosY);
+            SetDestinationPosY(dstPosY);
             if (!animated)
             {
-                this._contentRectTransform.anchoredPosition = new Vector2(0f, this._dstPosY);
+                _contentRectTransform.anchoredPosition = new Vector2(0f, _destinationPosY);
             }
-            this.RefreshButtonsInteractibility();
+            RefreshButtons();
             runScrollAnim = true;
         }
 
         public new void PageUpButtonPressed()
         {
-            float threshold = this._dstPosY + this._scrollItemRelativeThresholdPosition * this._scrollPageHeight;
-            float num = (from posy in this._scrollFocusPosYs
-                         where posy < threshold
-                         select posy).DefaultIfEmpty(this._dstPosY).Max();
-            num -= this._pageStepRelativePosition * this._scrollPageHeight;
-            this.SetDstPosY(num);
-            this.RefreshButtonsInteractibility();
-            runScrollAnim = true;
+            float num = _destinationPosY;
+            switch (_scrollType)
+            {
+                case ScrollType.PageSize:
+                    num -= _pageStepNormalizedSize * scrollPageHeight;
+                    break;
+                case ScrollType.FixedCellSize:
+                    num -= _fixedCellSize * (float)(Mathf.RoundToInt(scrollPageHeight / _fixedCellSize) - 1);
+                    num = (float)Mathf.FloorToInt(num / _fixedCellSize) * _fixedCellSize;
+                    break;
+                case ScrollType.FocusItems:
+                    {
+                        float threshold = _destinationPosY + _scrollItemRelativeThresholdPosition * scrollPageHeight;
+                        num = (from posy in _scrollFocusPosYs
+                               where posy < threshold
+                               select posy).DefaultIfEmpty(_destinationPosY).Max();
+                        num -= _pageStepNormalizedSize * scrollPageHeight;
+                        break;
+                    }
+            }
+            ScrollTo(num, true);
+            RefreshButtons();
+            enabled = true;
         }
 
         public new void PageDownButtonPressed()
         {
-            float threshold = this._dstPosY + (1f - this._scrollItemRelativeThresholdPosition) * this._scrollPageHeight;
-            float num = (from posy in this._scrollFocusPosYs
-                         where posy > threshold
-                         select posy).DefaultIfEmpty(this._dstPosY + this._scrollPageHeight).Min();
-            num -= (1f - this._pageStepRelativePosition) * this._scrollPageHeight;
-            this.SetDstPosY(num);
-            this.RefreshButtonsInteractibility();
-            runScrollAnim = true;
+            float num = _destinationPosY;
+            switch (_scrollType)
+            {
+                case ScrollType.PageSize:
+                    num += _pageStepNormalizedSize * scrollPageHeight;
+                    break;
+                case ScrollType.FixedCellSize:
+                    num += _fixedCellSize * (float)(Mathf.RoundToInt(scrollPageHeight / _fixedCellSize) - 1);
+                    num = (float)Mathf.CeilToInt(num / _fixedCellSize) * _fixedCellSize;
+                    break;
+                case ScrollType.FocusItems:
+                    {
+                        float threshold = _destinationPosY + (1f - _scrollItemRelativeThresholdPosition) * scrollPageHeight;
+                        num = (from posy in _scrollFocusPosYs
+                               where posy > threshold
+                               select posy).DefaultIfEmpty(_destinationPosY + scrollPageHeight).Min();
+                        num -= (1f - _pageStepNormalizedSize) * scrollPageHeight;
+                        break;
+                    }
+            }
+            ScrollTo(num, true);
+            RefreshButtons();
+            enabled = true;
         }
 
-        public new void SetDstPosY(float value)
+        public new void SetDestinationPosY(float value)
         {
-            float maxPosition = _contentHeight - _viewport.rect.height;
+            float maxPosition = contentHeight - _viewport.rect.height;
             if (maxPosition < 0 && !AlignBottom) maxPosition = 0f;
-            this._dstPosY = Mathf.Min(maxPosition, Mathf.Max(0f, value));
-        }*/
+            _destinationPosY = Mathf.Min(maxPosition, Mathf.Max(0f, value));
+        }
     }
 }
