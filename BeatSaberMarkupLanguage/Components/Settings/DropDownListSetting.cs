@@ -27,6 +27,8 @@ namespace BeatSaberMarkupLanguage.Components.Settings
                 if (index < 0)
                     index = 0;
 
+                dropdown.SelectCellWithIdx(index);
+
                 UpdateState();
             }
         }
@@ -64,7 +66,6 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             if (associatedValue != null)
             {
                 Value = associatedValue.GetValue();
-                dropdown.SelectCellWithIdx(index);
             }
         }
 
