@@ -1,10 +1,10 @@
 ﻿using BeatSaberMarkupLanguage.Components;
+using HMUI;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.Tags
 {
-    /*
     public class ScrollableContainerTag : BSMLTag
     {
         public override string[] Aliases { get; } = new[] { "scrollable-container" };
@@ -32,7 +32,7 @@ namespace BeatSaberMarkupLanguage.Tags
             viewport.sizeDelta = Vector2.zero;
 
             Mask vpmask = vpgo.AddComponent<Mask>();
-            Image vpimage = vpgo.AddComponent<Image>(); // a Mask needs an Image to work
+            Image vpimage = vpgo.AddComponent<ImageView>(); // a Mask needs an Image to work
             vpmask.showMaskGraphic = false;
             vpimage.color = Color.white;
             vpimage.sprite = Utilities.ImageResources.WhitePixel;
@@ -59,7 +59,8 @@ namespace BeatSaberMarkupLanguage.Tags
             layoutElement.preferredWidth = -1;
             layoutElement.flexibleWidth = 0;*/
 
-    /*
+            go.AddComponent<Touchable>(); // Required by EventSystemListener
+            go.AddComponent<EventSystemListener>(); // Required by ScrollView
             BSMLScrollableContainer scrollView = go.AddComponent<BSMLScrollableContainer>();
             scrollView.ContentRect = content;
             scrollView.Viewport = viewport;
@@ -69,5 +70,5 @@ namespace BeatSaberMarkupLanguage.Tags
             go.SetActive(true);
             return contentgo;
         }
-    }*/
+    }
 }
