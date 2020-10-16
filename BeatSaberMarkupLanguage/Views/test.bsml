@@ -99,6 +99,7 @@
       <page-button click-event='list#PageUp' direction='Left'></page-button>
       <page-button click-event='list#PageDown' direction='Right'></page-button>
     </horizontal>
+    <button text='?' anchor-pos-x='28' anchor-pos-y='57' pref-width='16' pref-height='8'></button>
   </tab>
   <!--
   <bottom-button-panel>

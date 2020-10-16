@@ -25,7 +25,13 @@ namespace BeatSaberMarkupLanguage.Tags
             textMesh.richText = true;
             externalComponents.components.Add(textMesh);
 
-            StackLayoutGroup stackLayoutGroup = button.GetComponentInChildren<StackLayoutGroup>();
+            GameObject.Destroy(button.transform.Find("Content").GetComponent<LayoutElement>());
+
+            ContentSizeFitter buttonSizeFitter = button.gameObject.AddComponent<ContentSizeFitter>();
+            buttonSizeFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+            buttonSizeFitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
+
+            LayoutGroup stackLayoutGroup = button.GetComponentInChildren<LayoutGroup>();
             if (stackLayoutGroup != null)
                 externalComponents.components.Add(stackLayoutGroup);
 

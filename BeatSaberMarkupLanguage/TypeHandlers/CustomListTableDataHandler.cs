@@ -72,9 +72,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             switch (tableData.tableView.tableType)
             {
                 case TableType.Vertical:
-                    Console.WriteLine(1);
-                            (componentType.component.gameObject.transform as RectTransform).sizeDelta = new Vector2(componentType.data.TryGetValue("listWidth", out string vListWidth) ? Parse.Float(vListWidth) : 60, tableData.cellSize * (componentType.data.TryGetValue("visibleCells", out string vVisibleCells) ? Parse.Float(vVisibleCells) : 7));
-                    Console.WriteLine(2);
+                    (componentType.component.gameObject.transform as RectTransform).sizeDelta = new Vector2(componentType.data.TryGetValue("listWidth", out string vListWidth) ? Parse.Float(vListWidth) : 60, tableData.cellSize * (componentType.data.TryGetValue("visibleCells", out string vVisibleCells) ? Parse.Float(vVisibleCells) : 7));
                     break;
                 case TableType.Horizontal:
                     (componentType.component.gameObject.transform as RectTransform).sizeDelta = new Vector2(tableData.cellSize * (componentType.data.TryGetValue("visibleCells", out string hVisibleCells) ? Parse.Float(hVisibleCells) : 4), componentType.data.TryGetValue("listHeight", out string hListHeight) ? Parse.Float(hListHeight) : 40);
@@ -90,7 +88,6 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             if (componentType.data.TryGetValue("id", out string id))
             {
                 TableViewScroller scroller = tableData.tableView.GetField<TableViewScroller, TableView>("scroller");
-                Console.WriteLine(scroller == null);
                 parserParams.AddEvent(id + "#PageUp", scroller.PageScrollUp);
                 parserParams.AddEvent(id + "#PageDown", scroller.PageScrollDown);
             }

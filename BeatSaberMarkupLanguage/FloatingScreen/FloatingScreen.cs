@@ -1,4 +1,5 @@
-﻿using IPA.Utilities;
+﻿using HMUI;
+using IPA.Utilities;
 using System;
 using System.Linq;
 using UnityEngine;
@@ -77,8 +78,9 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
 
         public static FloatingScreen CreateFloatingScreen(Vector2 screenSize, bool createHandle, Vector3 position, Quaternion rotation)
         {
-            FloatingScreen screen = new GameObject("BSMLFloatingScreen", typeof(FloatingScreen), typeof(CanvasScaler), typeof(RectMask2D), typeof(Image), typeof(VRGraphicRaycaster)/*, typeof(SetMainCameraToCanvas)*/).GetComponent<FloatingScreen>();
-            
+            FloatingScreen screen = new GameObject("BSMLFloatingScreen", typeof(FloatingScreen), typeof(CanvasScaler), typeof(RectMask2D), typeof(VRGraphicRaycaster)).GetComponent<FloatingScreen>();
+            screen.GetComponent<VRGraphicRaycaster>().SetField("_physicsRaycaster", BeatSaberUI.PhysicsRaycasterWithCache);
+
             Canvas canvas = screen.GetComponent<Canvas>();
             canvas.additionalShaderChannels = AdditionalCanvasShaderChannels.TexCoord1 | AdditionalCanvasShaderChannels.TexCoord2;
             canvas.sortingOrder = 4;
@@ -86,13 +88,13 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
             CanvasScaler scaler = screen.GetComponent<CanvasScaler>();
             scaler.dynamicPixelsPerUnit = 3.44f;
             scaler.referencePixelsPerUnit = 10f;
-
-            Image background = screen.GetComponent<Image>();
+            /*
+            ImageView background = screen.GetComponent<ImageView>();
             background.sprite = Resources.FindObjectsOfTypeAll<Sprite>().First(x => x.name == "MainScreenMask");
             background.type = Image.Type.Sliced;
             background.color = new Color(0.7450981f, 0.7450981f, 0.7450981f, 1f);
             background.material = Resources.FindObjectsOfTypeAll<Material>().First(x => x.name == "UIFogBG");
-            background.preserveAspect = true;
+            background.preserveAspect = true;*/
 
             /*
             SetMainCameraToCanvas setCamera = screen.GetComponent<SetMainCameraToCanvas>();

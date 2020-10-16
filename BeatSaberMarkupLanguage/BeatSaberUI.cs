@@ -60,7 +60,7 @@ namespace BeatSaberMarkupLanguage
         /// <returns>The newly created ViewController of type T.</returns>
         public static T CreateViewController<T>() where T : ViewController
         {
-            T vc = new GameObject("BSMLViewController", typeof(VRGraphicRaycaster), typeof(CurvedCanvasSettings), typeof(CanvasGroup), typeof(T)).GetComponent<T>();
+            T vc = new GameObject(typeof(T).Name, typeof(VRGraphicRaycaster), typeof(CurvedCanvasSettings), typeof(CanvasGroup), typeof(T)).GetComponent<T>();
             vc.GetComponent<VRGraphicRaycaster>().SetField("_physicsRaycaster", PhysicsRaycasterWithCache);
             
             vc.rectTransform.anchorMin = new Vector2(0f, 0f);
@@ -78,7 +78,7 @@ namespace BeatSaberMarkupLanguage
         /// <returns>The newly created FlowCoordinator of type T.</returns>
         public static T CreateFlowCoordinator<T>() where T : FlowCoordinator
         {
-            T flow = new GameObject("BSMLFlowCoordinator").AddComponent<T>();
+            T flow = new GameObject(typeof(T).Name).AddComponent<T>();
             flow.SetField<FlowCoordinator, BaseInputModule>("_baseInputModule", MainFlowCoordinator.GetField<BaseInputModule, FlowCoordinator>("_baseInputModule"));
             return flow;
         }

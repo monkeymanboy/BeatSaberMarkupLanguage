@@ -19,7 +19,7 @@ namespace BeatSaberMarkupLanguage.Tags
 
             Object.Destroy(button.GetComponent<HoverHint>());
             GameObject.Destroy(button.GetComponent<LocalizedHoverHint>());
-            button.gameObject.AddComponent<ExternalComponents>().components.Add(button.GetComponentsInChildren<StackLayoutGroup>().First(x => x.name == "Content"));
+            button.gameObject.AddComponent<ExternalComponents>().components.Add(button.GetComponentsInChildren<LayoutGroup>().First(x => x.name == "Content"));
 
             Transform contentTransform = button.transform.Find("Content");
             GameObject.Destroy(contentTransform.Find("Text").gameObject);
@@ -28,6 +28,7 @@ namespace BeatSaberMarkupLanguage.Tags
             iconImage.rectTransform.SetParent(contentTransform, false);
             iconImage.rectTransform.sizeDelta = new Vector2(20f, 20f);
             iconImage.sprite = Utilities.ImageResources.BlankSprite;
+            iconImage.preserveAspect = true;
             if (iconImage != null)
             {
                 ButtonIconImage btnIcon = button.gameObject.AddComponent<ButtonIconImage>();
