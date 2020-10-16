@@ -8,13 +8,23 @@ using Screen = HMUI.Screen;
 
 namespace BeatSaberMarkupLanguage.FloatingScreen
 {
+    public class SetMainCameraToCanvas : MonoBehaviour
+    {
+        public Canvas _canvas;
+        public MainCamera _mainCamera;
+
+        public virtual void Start()
+        {
+            this._canvas.worldCamera = this._mainCamera.camera;
+        }
+    }
     public class FloatingScreen : Screen
     {
         public FloatingScreenMoverPointer screenMover;
         public GameObject handle;
         public event EventHandler<FloatingScreenHandleEventArgs> HandleReleased;
         public event EventHandler<FloatingScreenHandleEventArgs> HandleGrabbed;
-        
+
         public Vector2 ScreenSize
         {
             get => (transform as RectTransform).sizeDelta;
@@ -24,7 +34,7 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
                 UpdateHandle();
             }
         }
-        
+
         public Vector3 ScreenPosition
         {
             get => transform.position;
@@ -33,7 +43,7 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
                 (transform as RectTransform).position = value;
             }
         }
-        
+
         public Quaternion ScreenRotation
         {
             get => (transform as RectTransform).rotation;
@@ -77,8 +87,8 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
 
         public static FloatingScreen CreateFloatingScreen(Vector2 screenSize, bool createHandle, Vector3 position, Quaternion rotation)
         {
-            FloatingScreen screen = new GameObject("BSMLFloatingScreen", typeof(FloatingScreen), typeof(CanvasScaler), typeof(RectMask2D), typeof(Image), typeof(VRGraphicRaycaster)/*, typeof(SetMainCameraToCanvas)*/).GetComponent<FloatingScreen>();
-            
+            FloatingScreen screen = new GameObject("BSMLFloatingScreen", typeof(FloatingScreen), typeof(CanvasScaler), typeof(RectMask2D), typeof(Image), typeof(VRGraphicRaycaster), typeof(SetMainCameraToCanvas)).GetComponent<FloatingScreen>();
+
             Canvas canvas = screen.GetComponent<Canvas>();
             canvas.additionalShaderChannels = AdditionalCanvasShaderChannels.TexCoord1 | AdditionalCanvasShaderChannels.TexCoord2;
             canvas.sortingOrder = 4;
@@ -94,11 +104,9 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
             background.material = Resources.FindObjectsOfTypeAll<Material>().First(x => x.name == "UIFogBG");
             background.preserveAspect = true;
 
-            /*
             SetMainCameraToCanvas setCamera = screen.GetComponent<SetMainCameraToCanvas>();
-            setCamera.SetField("_canvas", canvas);
-            setCamera.SetField("_mainCamera", Resources.FindObjectsOfTypeAll<MainCamera>().FirstOrDefault(camera => camera.camera?.stereoTargetEye != StereoTargetEyeMask.None) ?? Resources.FindObjectsOfTypeAll<MainCamera>().FirstOrDefault());
-            */
+            setCamera._canvas = canvas;
+            setCamera._mainCamera = Resources.FindObjectsOfTypeAll<MainCamera>().FirstOrDefault(camera => camera.camera?.stereoTargetEye != StereoTargetEyeMask.None) ?? Resources.FindObjectsOfTypeAll<MainCamera>().FirstOrDefault();
 
             screen.ScreenSize = screenSize;
             screen.transform.localScale = new Vector3(0.02f, 0.02f, 0.02f);
