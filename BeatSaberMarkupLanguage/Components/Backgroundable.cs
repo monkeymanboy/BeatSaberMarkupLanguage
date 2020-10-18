@@ -14,36 +14,34 @@ namespace BeatSaberMarkupLanguage.Components
             { "round-rect-panel", "RoundRect10" },
             { "panel-bottom", "PanelBottom" },
             { "panel-top", "RoundRect10" },
-            { "round-rect-panel-shadow", "RoundRectPanelShadow"}
+            { "panel-top-gradient", "RoundRect10" },
         };
 
         private static Dictionary<string, string> ObjectNames => new Dictionary<string, string>()
         {
             { "round-rect-panel", "KeyboardWrapper" },
-            { "panel-bottom", "BG" },
             { "panel-top", "BG" },
-            { "round-rect-panel-shadow", "Shadow"}
+            { "panel-top-gradient", "BG" },
+        };
+        private static Dictionary<string, string> ObjectParentNames => new Dictionary<string, string>()
+        {
+            { "round-rect-panel", "Wrapper" },
+            { "panel-top", "PracticeButton" },
+            { "panel-top-gradient", "ActionButton" },
         };
 
         public Image background;
 
         public void ApplyBackground(string name)
         {
-            /*
-            foreach(Image image in Resources.FindObjectsOfTypeAll<Image>())
-            {
-                Console.WriteLine($"{image.gameObject.name} - {image.sprite?.name}");
-            }
-            */
-
             if (background != null)
                 throw new Exception("Cannot add multiple backgrounds");
 
             if (!Backgrounds.TryGetValue(name, out string backgroundName))
                 throw new Exception($"Background type '{name}' not found");
 
-            try { 
-                background = gameObject.AddComponent(Resources.FindObjectsOfTypeAll<ImageView>().First(x => x.gameObject?.name == ObjectNames[name] && x.sprite?.name == backgroundName));
+            try {
+                background = gameObject.AddComponent(Resources.FindObjectsOfTypeAll<ImageView>().First(x => x.gameObject?.name == ObjectNames[name] && x.sprite?.name == backgroundName && x.transform.parent?.name == ObjectParentNames[name]));
                 background.enabled = true;
             }
             catch
