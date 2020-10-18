@@ -1,5 +1,7 @@
 ﻿using BeatSaberMarkupLanguage.Parser;
 using HMUI;
+using IPA.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -80,7 +82,17 @@ namespace BeatSaberMarkupLanguage.Components
                     leftButton.interactable = currentPage > 0;
                 if(rightButton != null)
                     rightButton.interactable = currentPage < (tabs.Count - 1) / pageCount;
-                textSegmentedControl.SelectCellWithNumber(lastClickedPage == currentPage? lastClickedIndex : -1);
+
+                TabSelected(null, 0);
+                //textSegmentedControl.SelectCellWithNumber(lastClickedPage == currentPage? lastClickedIndex : -1);
+                /*
+                int selectCellNumber = lastClickedPage == currentPage ? lastClickedIndex : -1;
+                textSegmentedControl.SetField<SegmentedControl, int>("_selectedCellNumber", selectCellNumber);
+                List<SegmentedControlCell> cells = textSegmentedControl.GetField<List<SegmentedControlCell>, SegmentedControl>("_cells");
+                for (int i = 0; i < textSegmentedControl.NumberOfCells(); i++)
+                {
+                    cells[i].SetSelected(i == selectCellNumber, SelectableCell.TransitionType.Instant, this, ignoreCurrentValue: true);
+                }*/
             }
         }
         private void PageLeft()
