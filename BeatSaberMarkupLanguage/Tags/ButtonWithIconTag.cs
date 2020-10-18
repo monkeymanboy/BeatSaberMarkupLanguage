@@ -35,6 +35,12 @@ namespace BeatSaberMarkupLanguage.Tags
                 btnIcon.image = iconImage;
             }
 
+            GameObject.Destroy(button.transform.Find("Content").GetComponent<LayoutElement>());
+
+            ContentSizeFitter buttonSizeFitter = button.gameObject.AddComponent<ContentSizeFitter>();
+            buttonSizeFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+            buttonSizeFitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
+
             return button.gameObject; 
         }
     }

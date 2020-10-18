@@ -89,7 +89,7 @@
           </macro.if>
         </macro.for-each>
         <page-button click-event='list#PageDown' direction='Right'></page-button>
-        <icon-button icon='#InstaFailIcon'/>
+        <icon-button pref-width='10' pref-height='10' icon='#InstaFailIcon' stroke-type='Clean' pad='1'/>
       </horizontal>
     </vertical>
   </tab>
