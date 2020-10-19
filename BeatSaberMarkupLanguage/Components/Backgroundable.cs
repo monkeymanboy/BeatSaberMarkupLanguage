@@ -12,8 +12,8 @@ namespace BeatSaberMarkupLanguage.Components
         private static Dictionary<string, string> Backgrounds => new Dictionary<string, string>()
         {
             { "round-rect-panel", "RoundRect10" },
-            { "panel-bottom", "PanelBottom" },
             { "panel-top", "RoundRect10" },
+            { "panel-fade-gradient", "RoundRect10Thin" },
             { "panel-top-gradient", "RoundRect10" },
         };
 
@@ -21,12 +21,14 @@ namespace BeatSaberMarkupLanguage.Components
         {
             { "round-rect-panel", "KeyboardWrapper" },
             { "panel-top", "BG" },
+            { "panel-fade-gradient", "Background" },
             { "panel-top-gradient", "BG" },
         };
         private static Dictionary<string, string> ObjectParentNames => new Dictionary<string, string>()
         {
             { "round-rect-panel", "Wrapper" },
             { "panel-top", "PracticeButton" },
+            { "panel-fade-gradient", "LevelListTableCell" },
             { "panel-top-gradient", "ActionButton" },
         };
 
