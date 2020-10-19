@@ -139,7 +139,7 @@ namespace BeatSaberMarkupLanguage
             TestViewController testViewController = BeatSaberUI.CreateViewController<TestViewController>();
             //FloatingScreen.FloatingScreen floatingScreen = FloatingScreen.FloatingScreen.CreateFloatingScreen(new Vector2(400, 200), true, Vector3.zero, Quaternion.identity);
             //floatingScreen.SetRootViewController(testViewController, ViewController.AnimationType.None);
-            Resources.FindObjectsOfTypeAll<MainFlowCoordinator>().First().InvokeMethod<object, FlowCoordinator>("PresentViewController", new object[] { testViewController, null, ViewController.AnimationDirection.Horizontal, false });
+            //Resources.FindObjectsOfTypeAll<MainFlowCoordinator>().First().InvokeMethod<object, FlowCoordinator>("PresentViewController", new object[] { testViewController, null, ViewController.AnimationDirection.Horizontal, false });
         }
     }
 }

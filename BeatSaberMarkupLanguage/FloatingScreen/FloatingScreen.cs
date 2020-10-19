@@ -78,7 +78,7 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
 
         public static FloatingScreen CreateFloatingScreen(Vector2 screenSize, bool createHandle, Vector3 position, Quaternion rotation)
         {
-            FloatingScreen screen = new GameObject("BSMLFloatingScreen", typeof(FloatingScreen), typeof(CanvasScaler), typeof(RectMask2D), typeof(VRGraphicRaycaster)).GetComponent<FloatingScreen>();
+            FloatingScreen screen = new GameObject("BSMLFloatingScreen", typeof(FloatingScreen), typeof(CanvasScaler), typeof(RectMask2D), typeof(VRGraphicRaycaster), typeof(CurvedCanvasSettings)).GetComponent<FloatingScreen>();
             screen.GetComponent<VRGraphicRaycaster>().SetField("_physicsRaycaster", BeatSaberUI.PhysicsRaycasterWithCache);
 
             Canvas canvas = screen.GetComponent<Canvas>();
