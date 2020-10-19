@@ -107,7 +107,7 @@ namespace BeatSaberMarkupLanguage
         {
             //GameplaySetup.GameplaySetup.instance.AddTab("Test", "BeatSaberMarkupLanguage.Views.gameplay-setup-test.bsml", GameplaySetupTest.instance);
             //BSMLSettings.instance.AddSettingsMenu("Test", "BeatSaberMarkupLanguage.Views.settings-test.bsml", SettingsTest.instance);
-            SharedCoroutineStarter.instance.StartCoroutine(PresentTest());
+            //SharedCoroutineStarter.instance.StartCoroutine(PresentTest());
             //MenuButtons.MenuButtons.instance.RegisterButton(new MenuButtons.MenuButton("test", () => MenuButtons.MenuButtons.instance.RegisterButton(new MenuButtons.MenuButton("test2",null))));
             BSMLSettings.instance.Setup();
             MenuButtons.MenuButtons.instance.Setup();
