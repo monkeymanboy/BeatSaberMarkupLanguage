@@ -28,7 +28,6 @@ namespace BeatSaberMarkupLanguage.Tags
             CustomCellListTableData tableData = container.gameObject.AddComponent<CustomCellListTableData>();
             tableData.tableView = tableView;
 
-            gameObject.AddComponent<RectMask2D>();
             tableView.transform.SetParent(container, false);
 
             tableView.SetField<TableView, TableView.CellsGroup[]>("_preallocatedCells", new TableView.CellsGroup[0]);
@@ -37,6 +36,7 @@ namespace BeatSaberMarkupLanguage.Tags
             RectTransform viewport = new GameObject("Viewport").AddComponent<RectTransform>();
             viewport.SetParent(gameObject.GetComponent<RectTransform>(), false);
             gameObject.GetComponent<ScrollRect>().viewport = viewport;
+            viewport.gameObject.AddComponent<RectMask2D>();
 
             (viewport.transform as RectTransform).anchorMin = new Vector2(0f, 0f);
             (viewport.transform as RectTransform).anchorMax = new Vector2(1f, 1f);

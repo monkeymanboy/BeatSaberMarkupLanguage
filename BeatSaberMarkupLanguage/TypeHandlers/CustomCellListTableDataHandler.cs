@@ -25,7 +25,8 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "listDirection", new[] { "list-direction" } },
             { "data", new[] { "contents", "data" } },
             { "cellClickable", new[] { "clickable-cells" } },
-            { "cellTemplate", new[] { "_children" } }
+            { "cellTemplate", new[] { "_children" } },
+            { "alignCenter", new[] { "align-to-center" } }
         };
 
         public override void HandleType(ComponentTypeWithData componentType, BSMLParserParams parserParams)
@@ -53,6 +54,9 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 
             if (componentType.data.TryGetValue("cellClickable", out string cellClickable))
                 tableData.clickableCells = Parse.Bool(cellClickable);
+
+            if (componentType.data.TryGetValue("alignCenter", out string alignCenter))
+                tableData.tableView.SetField<TableView, bool>("_alignToCenter", Parse.Bool(alignCenter));
 
             if (componentType.data.TryGetValue("data", out string value))
             {

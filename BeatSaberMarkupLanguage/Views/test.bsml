@@ -101,10 +101,29 @@
     </horizontal>
     <button text='?' anchor-pos-x='28' anchor-pos-y='57' pref-width='16' pref-height='8'></button>
   </tab>
-  <!--
-  <bottom-button-panel>
-    <button on-click='click' text='Yee Haw'></button>
-    <button on-click='click' text='Cowboy'></button>
-  </bottom-button-panel>
-  -->
+  <tab tags='new-tab' tab-name='custom list'>
+    <vertical bg='round-rect-panel'>
+        <page-button click-event='clist#PageUp' direction='Up' glow-color='red'></page-button>
+        <custom-list id='clist' visible-cells='5' cell-size='10' list-width='30' contents='contents2'>
+          <stack bg='round-rect-panel' vertical-fit='Unconstrained' pad='1'>
+            <horizontal child-expand-width='false' vertical-fit='Unconstrained' pad-left='1' pad-right='1'>
+              <image id='follower-image' pref-width='10' />
+              <vertical horizontal-fit='Unconstrained' pad-left='2' pad-right='2' >
+                <horizontal>
+                  <text text='ahhh' align='MidlineLeft' font-size='4' />
+                  <text text='asdasd' align='MidlineRight' font-size='4' hover-hint='Shows how many songs in the playlist'/>
+                </horizontal>
+              </vertical>
+
+              <icon-button min-width='10' max-width='10' pref-width='10' pref-height='10' />
+            </horizontal>
+          </stack>
+        </custom-list>
+        <page-button click-event='clist#PageDown' direction='Down'></page-button>
+        <icon-button pref-width='10' pref-height='10' icon='#InstaFailIcon' stroke-type='Clean' pad='1'/>
+    </vertical>
+  </tab>
+  <tab tags='new-tab' tab-name='text page'>
+    <text-page text='~lorem-ipsum'/>
+  </tab>
 </bg>
