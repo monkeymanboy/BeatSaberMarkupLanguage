@@ -1,6 +1,8 @@
 ﻿using BeatSaberMarkupLanguage.Components;
 using HMUI;
 using IPA.Utilities;
+using System;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using VRUIControls;
@@ -18,16 +20,19 @@ namespace BeatSaberMarkupLanguage.Tags
             container.SetParent(parent, false);
 
             GameObject gameObject = new GameObject();
+            gameObject.transform.SetParent(container, false);
             gameObject.name = "BSMLList";
             gameObject.SetActive(false);
 
             gameObject.AddComponent<ScrollRect>();
+            gameObject.AddComponent(Resources.FindObjectsOfTypeAll<Canvas>().First(x => x.name == "DropdownTableView"));
+            gameObject.AddComponent<VRGraphicRaycaster>().SetField("_physicsRaycaster", BeatSaberUI.PhysicsRaycasterWithCache);
             gameObject.AddComponent<Touchable>();
+            gameObject.AddComponent<EventSystemListener>();
 
             TableView tableView = gameObject.AddComponent<BSMLTableView>();
             CustomListTableData tableData = container.gameObject.AddComponent<CustomListTableData>();
             tableData.tableView = tableView;
-            tableView.transform.SetParent(container, false);
             
             tableView.SetField<TableView, TableView.CellsGroup[]>("_preallocatedCells", new TableView.CellsGroup[0]);
             tableView.SetField<TableView, bool>("_isInitialized", false);
