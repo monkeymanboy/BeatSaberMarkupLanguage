@@ -107,7 +107,7 @@ namespace BeatSaberMarkupLanguage
         {
             //GameplaySetup.GameplaySetup.instance.AddTab("Test", "BeatSaberMarkupLanguage.Views.gameplay-setup-test.bsml", GameplaySetupTest.instance);
             //BSMLSettings.instance.AddSettingsMenu("Test", "BeatSaberMarkupLanguage.Views.settings-test.bsml", SettingsTest.instance);
-            //SharedCoroutineStarter.instance.StartCoroutine(PresentTest());
+            SharedCoroutineStarter.instance.StartCoroutine(PresentTest());
             //MenuButtons.MenuButtons.instance.RegisterButton(new MenuButtons.MenuButton("test", () => MenuButtons.MenuButtons.instance.RegisterButton(new MenuButtons.MenuButton("test2",null))));
             BSMLSettings.instance.Setup();
             MenuButtons.MenuButtons.instance.Setup();
@@ -137,6 +137,8 @@ namespace BeatSaberMarkupLanguage
         {
             yield return new WaitForSeconds(1);
             TestViewController testViewController = BeatSaberUI.CreateViewController<TestViewController>();
+            //FloatingScreen.FloatingScreen floatingScreen = FloatingScreen.FloatingScreen.CreateFloatingScreen(new Vector2(400, 200), true, Vector3.zero, Quaternion.identity);
+            //floatingScreen.SetRootViewController(testViewController, ViewController.AnimationType.None);
             Resources.FindObjectsOfTypeAll<MainFlowCoordinator>().First().InvokeMethod<object, FlowCoordinator>("PresentViewController", new object[] { testViewController, null, ViewController.AnimationDirection.Horizontal, false });
         }
     }

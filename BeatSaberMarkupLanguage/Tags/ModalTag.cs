@@ -22,9 +22,12 @@ namespace BeatSaberMarkupLanguage.Tags
             modalView.SetField("_container", BeatSaberUI.DiContainer);
             modalView.GetComponent<VRGraphicRaycaster>().SetField("_physicsRaycaster", BeatSaberUI.PhysicsRaycasterWithCache);
 
-            GameObject.Destroy(modalView.GetComponent<TableView>());
-            GameObject.Destroy(modalView.GetComponent<TableViewScroller>());
-            GameObject.Destroy(modalView.GetComponent<ScrollRect>());
+            GameObject.DestroyImmediate(modalView.GetComponent<TableView>());
+            GameObject.DestroyImmediate(modalView.GetComponent<TableViewScroller>());
+            GameObject.DestroyImmediate(modalView.GetComponent<ScrollRect>());
+            GameObject.DestroyImmediate(modalView.GetComponent<EventSystemListener>());
+            GameObject.DestroyImmediate(modalView.GetComponent<Touchable>());
+            modalView.gameObject.AddComponent<CurvedCanvasSettings>();
 
             foreach (RectTransform child in modalView.transform)
             {
