@@ -117,8 +117,8 @@ namespace BeatSaberMarkupLanguage.Components
                     tableCell.transform.Find("BpmIcon").gameObject.SetActive(false);
                     if (expandCell)
                     {
-                        nameText.rectTransform.anchorMax = new Vector3(2, 1, 0);
-                        authorText.rectTransform.anchorMax = new Vector3(2, 1, 0);
+                        nameText.rectTransform.anchorMax = new Vector3(2, 0.5f, 0);
+                        authorText.rectTransform.anchorMax = new Vector3(2, 0.5f, 0);
                     }
 
                     nameText.text = data[idx].text;
