@@ -22,8 +22,7 @@ namespace BeatSaberMarkupLanguage.Tags
             VerticalScrollIndicator verticalScrollIndicator = textScrollView.GetField<VerticalScrollIndicator, ScrollView>("_verticalScrollIndicator");
 
             RectTransform viewport = textScrollView.GetField<RectTransform, ScrollView>("_viewport");
-            GameObject.Destroy(viewport.GetComponent<VRGraphicRaycaster>());
-            GameObject.Destroy(viewport.GetComponent<Canvas>());
+            viewport.gameObject.AddComponent<VRGraphicRaycaster>().SetField("_physicsRaycaster", BeatSaberUI.PhysicsRaycasterWithCache);
 
             GameObject.Destroy(textScrollView.GetField<TextMeshProUGUI, TextPageScrollView>("_text").gameObject);
             GameObject gameObject = textScrollView.gameObject;

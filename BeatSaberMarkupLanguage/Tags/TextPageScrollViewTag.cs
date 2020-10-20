@@ -18,7 +18,7 @@ namespace BeatSaberMarkupLanguage.Tags
             scrollView.name = "BSMLTextPageScrollView";
             scrollView.enabled = true;
             TextMeshProUGUI textMesh = scrollView.GetField<TextMeshProUGUI, TextPageScrollView>("_text");
-            GameObject.Destroy(scrollView.transform.Find("Viewport").GetComponent<Canvas>());
+            
             textMesh.gameObject.AddComponent<TextPageScrollViewRefresher>().scrollView = scrollView;
             scrollView.gameObject.AddComponent<ExternalComponents>().components.Add(textMesh);
             return scrollView.gameObject;

@@ -60,9 +60,12 @@ namespace BeatSaberMarkupLanguage
         /// <returns>The newly created ViewController of type T.</returns>
         public static T CreateViewController<T>() where T : ViewController
         {
-            T vc = new GameObject(typeof(T).Name, typeof(VRGraphicRaycaster), typeof(CurvedCanvasSettings), typeof(CanvasGroup), typeof(T)).GetComponent<T>();
-            vc.GetComponent<VRGraphicRaycaster>().SetField("_physicsRaycaster", PhysicsRaycasterWithCache);
-            
+            GameObject go = new GameObject(typeof(T).Name);
+            go.AddComponent(Resources.FindObjectsOfTypeAll<Canvas>().First(x => x.name == "DropdownTableView"));
+            go.gameObject.AddComponent<VRGraphicRaycaster>().SetField("_physicsRaycaster", PhysicsRaycasterWithCache);
+            go.gameObject.AddComponent<CanvasGroup>();
+            T vc = go.AddComponent<T>();
+
             vc.rectTransform.anchorMin = new Vector2(0f, 0f);
             vc.rectTransform.anchorMax = new Vector2(1f, 1f);
             vc.rectTransform.sizeDelta = new Vector2(0f, 0f);
