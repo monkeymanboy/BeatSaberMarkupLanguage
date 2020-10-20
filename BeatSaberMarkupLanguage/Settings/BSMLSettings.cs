@@ -17,6 +17,8 @@ namespace BeatSaberMarkupLanguage.Settings
     {
         private bool isInitialized;
         private Button button;
+        private Sprite normal;
+        private Sprite hover;
         private static BSMLSettings _instance = null;
 
         private ModSettingsFlowCoordinator flowCoordinator;
@@ -125,6 +127,14 @@ namespace BeatSaberMarkupLanguage.Settings
 
             if (settingsMenus.Count == 0)
                 button.gameObject.SetActive(false);
+
+            normal = Utilities.FindSpriteInAssembly("BSML:BeatSaberMarkupLanguage.Resources.mods_idle.png");
+            normal.texture.wrapMode = TextureWrapMode.Clamp;
+
+            hover = Utilities.FindSpriteInAssembly("BSML:BeatSaberMarkupLanguage.Resources.mods_selected.png");
+            hover.texture.wrapMode = TextureWrapMode.Clamp;
+
+            button.SetButtonStates(normal, hover);
         }
 
         private void PresentSettings()

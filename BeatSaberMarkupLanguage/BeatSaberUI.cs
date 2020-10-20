@@ -212,15 +212,13 @@ namespace BeatSaberMarkupLanguage
         
         public static void SetButtonStates(this Button _button, Sprite _normal, Sprite _hover)
         {
-             ButtonSpriteSwap swap = _button.GetComponent<ButtonSpriteSwap>();
-             if(swap)
-             {
-                 swap.normalSprite = _normal;
-                 swap.hightlightSprite = _hover;
-                 swap.disabledSprite = _normal;
-                 //Unneeded?
-                 swap.pressedSprite = _hover;
-             }
+            ButtonSpriteSwap swap = _button.GetComponent<ButtonSpriteSwap>();
+            
+            swap.SetField("_disabledStateSprite", _normal);
+            swap.SetField("_normalStateSprite", _normal);
+            swap.SetField("_highlightStateSprite", _hover);
+            //Unneeded?
+            swap.SetField("_pressedStateSprite", _hover);
         }
         #endregion
         
