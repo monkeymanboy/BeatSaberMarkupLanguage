@@ -209,6 +209,19 @@ namespace BeatSaberMarkupLanguage
             if (_button.GetComponentsInChildren<Image>().Count() > 0)
                 _button.GetComponentsInChildren<Image>()[0].sprite = _background;
         }
+        
+        public static void SetButtonStates(this Button _button, Sprite _normal, Sprite _hover)
+        {
+             ButtonSpriteSwap swap = _button.GetComponent<ButtonSpriteSwap>();
+             if(swap)
+             {
+                 swap.normalSprite = _normal;
+                 swap.hightlightSprite = _hover;
+                 swap.disabledSprite = _normal;
+                 //Unneeded?
+                 swap.pressedSprite = _hover;
+             }
+        }
         #endregion
         
         /// <summary>
