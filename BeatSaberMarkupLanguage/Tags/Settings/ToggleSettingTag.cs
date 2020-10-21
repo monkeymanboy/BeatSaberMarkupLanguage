@@ -28,6 +28,7 @@ namespace BeatSaberMarkupLanguage.Tags
 
             toggleSetting.toggle = gameObject.GetComponentInChildren<Toggle>();
             toggleSetting.toggle.interactable = true;
+            toggleSetting.toggle.isOn = false;
             toggleSetting.toggle.onValueChanged.RemoveAllListeners();
 
             toggleSetting.text = nameText.GetComponent<TextMeshProUGUI>();
