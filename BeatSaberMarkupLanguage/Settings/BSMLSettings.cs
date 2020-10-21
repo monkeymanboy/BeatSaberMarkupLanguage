@@ -96,7 +96,7 @@ namespace BeatSaberMarkupLanguage.Settings
             if (settingsMenus.Count == 0)
             {
                 SetupLanguageList();
-                settingsMenus.Add(new SettingsMenu("About", "BeatSaberMarkupLanguage.Views.settings-about.bsml", this, Assembly.GetExecutingAssembly()));
+                settingsMenus.Add(new SettingsMenu("BSML", "BeatSaberMarkupLanguage.Views.settings-about.bsml", this, Assembly.GetExecutingAssembly()));
             }
             SettingsMenu settingsMenu = new SettingsMenu(name, resource, host, Assembly.GetCallingAssembly());
             settingsMenus.Add(settingsMenu);
