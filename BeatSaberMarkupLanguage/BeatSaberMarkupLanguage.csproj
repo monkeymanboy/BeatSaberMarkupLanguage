@@ -335,6 +335,10 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\loading.apng" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\mods_idle.png" />
+    <EmbeddedResource Include="Resources\mods_selected.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy "$(TargetPath)" "$(BeatSaberDir)\Plugins"
