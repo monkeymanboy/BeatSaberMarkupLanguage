@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.Tags
 {
-    class LoadingIndicatorTag : BSMLTag
+    public class LoadingIndicatorTag : BSMLTag
     {
         public override string[] Aliases => new string[] {"loading", "loading-indicator"};
 
