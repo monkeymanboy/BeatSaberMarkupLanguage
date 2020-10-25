@@ -502,6 +502,16 @@ namespace BeatSaberMarkupLanguage.Components
                 mybutton = Button.Instantiate(kb.BaseButton, kb.container, false);
                 GameObject.Destroy(mybutton.GetComponent<UIKeyboardKey>());
 
+                Polyglot.LocalizedTextMeshProUGUI localizer = mybutton.GetComponentInChildren<Polyglot.LocalizedTextMeshProUGUI>();
+                if (localizer != null)
+                {
+                    GameObject.Destroy(localizer);
+                }
+                ExternalComponents externalComponents = mybutton.gameObject.AddComponent<ExternalComponents>();
+                TextMeshProUGUI textMesh = mybutton.GetComponentInChildren<TextMeshProUGUI>();
+                textMesh.richText = true;
+                externalComponents.components.Add(textMesh);
+
                 (mybutton.transform as RectTransform).anchorMin = new Vector2(0.5f, 0.5f);
                 (mybutton.transform as RectTransform).anchorMax = new Vector2(0.5f, 0.5f);
 

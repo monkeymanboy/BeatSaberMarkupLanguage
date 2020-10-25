@@ -186,7 +186,7 @@ namespace BeatSaberMarkupLanguage
 
             TextMeshProUGUI tmpUgui = _button.GetComponentInChildren<TextMeshProUGUI>();
             if (tmpUgui != null)
-                tmpUgui.text = _text;
+                tmpUgui.SetText(_text);
         }
 
         public static void SetButtonTextSize(this Button _button, float _fontSize)
