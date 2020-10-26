@@ -76,6 +76,11 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
             }
         }
 
+        public static FloatingScreen CreateFloatingScreen(Vector2 screenSize, bool createHandle, Vector3 position, Quaternion rotation)//for binary compatibility
+        {
+            return CreateFloatingScreen(screenSize, createHandle, position, rotation, 0, false);
+        }
+
         public static FloatingScreen CreateFloatingScreen(Vector2 screenSize, bool createHandle, Vector3 position, Quaternion rotation, float curvatureRadius = 0f, bool hasBackground = false)
         {
             FloatingScreen screen = new GameObject("BSMLFloatingScreen", typeof(FloatingScreen), typeof(CanvasScaler), typeof(VRGraphicRaycaster), typeof(CurvedCanvasSettings)).GetComponent<FloatingScreen>();
@@ -177,6 +182,8 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
                     handle.transform.localScale = new Vector3(ScreenSize.x, ScreenSize.y, ScreenSize.x / 15f);
                     break;
             }
+
+            handle.GetComponent<MeshRenderer>().enabled = HandleSide != Side.Full;
         }
 
         public enum Side
