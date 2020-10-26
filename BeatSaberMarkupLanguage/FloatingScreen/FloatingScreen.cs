@@ -64,6 +64,7 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
                 }
             }
         }
+
         private Side _handleSide = Side.Left;
         public Side HandleSide
         {
@@ -130,7 +131,7 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
                 screenMover = pointer.gameObject.AddComponent<FloatingScreenMoverPointer>();
                 handle = GameObject.CreatePrimitive(PrimitiveType.Cube);
 
-                handle.transform.SetParent(transform);
+                handle.transform.SetParent(transform, false);
                 UpdateHandle();
 
                 screenMover.Init(this);
@@ -171,12 +172,16 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
                     handle.transform.localPosition = new Vector3(0f, -ScreenSize.y / 2f, 0f);
                     handle.transform.localScale = new Vector3(ScreenSize.x * 0.8f, ScreenSize.y / 15f, ScreenSize.y / 15f);
                     break;
+                case Side.Full:
+                    handle.transform.localPosition = Vector3.zero;
+                    handle.transform.localScale = new Vector3(ScreenSize.x, ScreenSize.y, ScreenSize.x / 15f);
+                    break;
             }
         }
 
         public enum Side
         {
-            Left, Right, Bottom, Top
+            Left, Right, Bottom, Top, Full
         }
     }
     public struct FloatingScreenHandleEventArgs
