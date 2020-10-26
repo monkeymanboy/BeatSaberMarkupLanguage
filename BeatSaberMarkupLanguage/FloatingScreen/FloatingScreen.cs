@@ -75,11 +75,13 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
             }
         }
 
-
-        public static FloatingScreen CreateFloatingScreen(Vector2 screenSize, bool createHandle, Vector3 position, Quaternion rotation)
+        public static FloatingScreen CreateFloatingScreen(Vector2 screenSize, bool createHandle, Vector3 position, Quaternion rotation, float curvatureRadius = 0f, bool hasBackground = false)
         {
-            FloatingScreen screen = new GameObject("BSMLFloatingScreen", typeof(FloatingScreen), typeof(CanvasScaler), typeof(RectMask2D), typeof(VRGraphicRaycaster), typeof(CurvedCanvasSettings)).GetComponent<FloatingScreen>();
+            FloatingScreen screen = new GameObject("BSMLFloatingScreen", typeof(FloatingScreen), typeof(CanvasScaler), typeof(VRGraphicRaycaster), typeof(CurvedCanvasSettings)).GetComponent<FloatingScreen>();
             screen.GetComponent<VRGraphicRaycaster>().SetField("_physicsRaycaster", BeatSaberUI.PhysicsRaycasterWithCache);
+
+            CurvedCanvasSettings curvedCanvasSettings = screen.GetComponent<CurvedCanvasSettings>();
+            curvedCanvasSettings.SetRadius(curvatureRadius);
 
             Canvas canvas = screen.GetComponent<Canvas>();
             canvas.additionalShaderChannels = AdditionalCanvasShaderChannels.TexCoord1 | AdditionalCanvasShaderChannels.TexCoord2;
@@ -88,26 +90,33 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
             CanvasScaler scaler = screen.GetComponent<CanvasScaler>();
             scaler.dynamicPixelsPerUnit = 3.44f;
             scaler.referencePixelsPerUnit = 10f;
-            /*
-            ImageView background = screen.GetComponent<ImageView>();
-            background.sprite = Resources.FindObjectsOfTypeAll<Sprite>().First(x => x.name == "MainScreenMask");
-            background.type = Image.Type.Sliced;
-            background.color = new Color(0.7450981f, 0.7450981f, 0.7450981f, 1f);
-            background.material = Resources.FindObjectsOfTypeAll<Material>().First(x => x.name == "UIFogBG");
-            background.preserveAspect = true;*/
+            
+            if (hasBackground)
+            {
+                GameObject backGroundGo = new GameObject("bg", typeof(RectTransform), typeof(ImageView));
+                backGroundGo.transform.SetParent(canvas.transform, false);
+                RectTransform rectTransform = backGroundGo.GetComponent<RectTransform>();
+                rectTransform.sizeDelta = screenSize;
+                rectTransform.anchorMin = Vector2.zero;
+                rectTransform.anchorMax = Vector2.one;
+                rectTransform.offsetMin = Vector2.zero;
+                rectTransform.offsetMax = Vector2.zero;
 
-            /*
-            SetMainCameraToCanvas setCamera = screen.GetComponent<SetMainCameraToCanvas>();
-            setCamera.SetField("_canvas", canvas);
-            setCamera.SetField("_mainCamera", Resources.FindObjectsOfTypeAll<MainCamera>().FirstOrDefault(camera => camera.camera?.stereoTargetEye != StereoTargetEyeMask.None) ?? Resources.FindObjectsOfTypeAll<MainCamera>().FirstOrDefault());
-            */
+                ImageView background = backGroundGo.GetComponent<ImageView>();
+                background.sprite = Resources.FindObjectsOfTypeAll<Sprite>().First(x => x.name == "MainScreenMask");
+                background.type = Image.Type.Sliced;
+                background.color = new Color(0.7450981f, 0.7450981f, 0.7450981f, 1f);
+                background.material = Resources.FindObjectsOfTypeAll<Material>().First(x => x.name == "UIFogBG");
+                background.preserveAspect = true;
+            }
+
+            var screenTransform = screen.transform;
+            screenTransform.position = position;
+            screenTransform.rotation = rotation;
+            screenTransform.localScale = new Vector3(0.02f, 0.02f, 0.02f);
 
             screen.ScreenSize = screenSize;
-            screen.transform.localScale = new Vector3(0.02f, 0.02f, 0.02f);
             screen.ShowHandle = createHandle;
-
-            screen.transform.position = position;
-            screen.transform.rotation = rotation;
 
             return screen;
         }
