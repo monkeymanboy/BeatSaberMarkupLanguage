@@ -6,7 +6,7 @@ using Zenject;
 
 namespace BeatSaberMarkupLanguage.Tags
 {
-    class TextSegmentedControlTag : BSMLTag
+    public class TextSegmentedControlTag : BSMLTag
     {
         public override string[] Aliases => new[] { "text-segments" };
 

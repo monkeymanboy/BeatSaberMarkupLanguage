@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.Tags
 {
-    class TabTag : BackgroundTag
+    public class TabTag : BackgroundTag
     {
         public override string[] Aliases => new[] { "tab" };
 
