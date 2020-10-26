@@ -32,7 +32,6 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 
         public override void HandleType(ComponentTypeWithData componentType, BSMLParserParams parserParams)
         {
-            Console.WriteLine(0);
             CustomListTableData tableData = componentType.component as CustomListTableData;
             if (componentType.data.TryGetValue("selectCell", out string selectCell))
             {
