@@ -180,7 +180,7 @@ namespace BeatSaberMarkupLanguage
         #region Button Extensions
         public static void SetButtonText(this Button _button, string _text)
         {
-            Polyglot.LocalizedTextMeshProUGUI localizer = _button.GetComponentInChildren<Polyglot.LocalizedTextMeshProUGUI>();
+            Polyglot.LocalizedTextMeshProUGUI localizer = _button.GetComponentInChildren<Polyglot.LocalizedTextMeshProUGUI>(true);
             if (localizer != null)
                 GameObject.Destroy(localizer);
 

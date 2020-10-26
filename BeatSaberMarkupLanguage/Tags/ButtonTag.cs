@@ -17,7 +17,7 @@ namespace BeatSaberMarkupLanguage.Tags
             Button button = MonoBehaviour.Instantiate(Resources.FindObjectsOfTypeAll<Button>().Last(x => (x.name == PrefabButton)), parent, false);
             button.name = "BSMLButton";
             button.interactable = true;
-            Polyglot.LocalizedTextMeshProUGUI localizer = button.GetComponentInChildren<Polyglot.LocalizedTextMeshProUGUI>();
+            Polyglot.LocalizedTextMeshProUGUI localizer = button.GetComponentInChildren<Polyglot.LocalizedTextMeshProUGUI>(true);
             if (localizer != null)
                 GameObject.Destroy(localizer);
             ExternalComponents externalComponents = button.gameObject.AddComponent<ExternalComponents>();

@@ -35,7 +35,7 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
             TextMeshProUGUI text = gameObject.GetComponentInChildren<TextMeshProUGUI>();
             text.text = "Default Text";
             gameObject.AddComponent<ExternalComponents>().components.Add(text);
-            MonoBehaviour.Destroy(text.GetComponent<LocalizedTextMeshProUGUI>());
+            MonoBehaviour.Destroy(text.GetComponent<LocalizedTextMeshProUGUI>(true));
 
             gameObject.GetComponent<LayoutElement>().preferredWidth = 90;
 
