@@ -136,7 +136,7 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
                 screenMover = pointer.gameObject.AddComponent<FloatingScreenMoverPointer>();
                 handle = GameObject.CreatePrimitive(PrimitiveType.Cube);
 
-                handle.transform.SetParent(transform, false);
+                handle.transform.SetParent(transform);
                 UpdateHandle();
 
                 screenMover.Init(this);
