@@ -149,6 +149,7 @@
     <Compile Include="Components\ModalKeyboard.cs" />
     <Compile Include="Components\NotifiableSingleton.cs" />
     <Compile Include="Components\NotifyUpdater.cs" />
+    <Compile Include="Components\ScrollingText.cs" />
     <Compile Include="Components\ScrollViewContent.cs" />
     <Compile Include="Components\Settings\ToggleSetting.cs" />
     <Compile Include="Components\Settings\BoolSetting.cs" />
@@ -218,6 +219,7 @@
     <Compile Include="Tags\BackgroundTag.cs" />
     <Compile Include="Tags\BigButtonTag.cs" />
     <Compile Include="Tags\BSMLTag.cs" />
+    <Compile Include="Tags\ScrollingTextTag.cs" />
     <Compile Include="Tags\Settings\ToggleSettingTag.cs" />
     <Compile Include="Tags\ButtonTag.cs" />
     <Compile Include="Tags\ClickableImageTag.cs" />
@@ -265,6 +267,7 @@
     <Compile Include="TypeHandlers\BackgroundableHandler.cs" />
     <Compile Include="TypeHandlers\ButtonArtworkHandler.cs" />
     <Compile Include="TypeHandlers\GenericInteractableSettingHandler.cs" />
+    <Compile Include="TypeHandlers\ScrollingTextHandler.cs" />
     <Compile Include="TypeHandlers\SelectableHandler.cs" />
     <Compile Include="TypeHandlers\ButtonHandler.cs" />
     <Compile Include="TypeHandlers\ButtonIconHandler.cs" />
