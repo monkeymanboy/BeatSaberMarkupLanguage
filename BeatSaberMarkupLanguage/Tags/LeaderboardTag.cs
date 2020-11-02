@@ -16,8 +16,8 @@ namespace BeatSaberMarkupLanguage.Tags
             table.name = "BSMLLeaderboard";
             table.GetField<LeaderboardTableCell, LeaderboardTableView>("_cellPrefab").GetField<TextMeshProUGUI, LeaderboardTableCell>("_scoreText").enableWordWrapping = false;
             table.GetComponent<VRGraphicRaycaster>().SetField("_physicsRaycaster", BeatSaberUI.PhysicsRaycasterWithCache);
-            foreach (Transform child in table.transform.GetChild(0).GetChild(0)) //This is to ensure if a leaderboard with scores already on it gets cloned that old scores are cleared off
-                GameObject.Destroy(child.gameObject);
+            foreach (LeaderboardTableCell tableCell in table.GetComponentsInChildren<LeaderboardTableCell>()) //This is to ensure if a leaderboard with scores already on it gets cloned that old scores are cleared off
+                GameObject.Destroy(tableCell.gameObject);
 
             return table.gameObject;
         }
