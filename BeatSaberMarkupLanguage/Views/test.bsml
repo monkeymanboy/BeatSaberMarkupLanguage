@@ -1,7 +1,7 @@
 <bg xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
   <macro.define id='button-text' value='Macro defined button text'></macro.define>
   <tab-selector tab-tag='new-tab'></tab-selector>
-  <tab tags='new-tab' tab-name='ScrollView test'>
+  <tab tags='new-tab' tab-name='ScrollView'>
     <vertical vertical-fit='PreferredSize' pref-height='60' pref-width='80'>
       <text text='ScrollView test' />
       <scroll-view spacing='0' pref-height='50'>
@@ -125,5 +125,82 @@
   </tab>
   <tab tags='new-tab' tab-name='text page'>
     <text-page text='~lorem-ipsum'/>
+  </tab>
+  <tab tags='new-tab' tab-name='ScrollingText'>
+    <horizontal>
+      <vertical preferred-width="60">
+        <button text="text 1" on-click="text-1-button-clicked" preferred-width="40" preferred-height="9" />
+        <button text="text 2" on-click="text-2-button-clicked" preferred-width="40" preferred-height="9" />
+        <button text="text 3" on-click="text-3-button-clicked" preferred-width="40" preferred-height="9" />
+        <button text="pause duration" on-click="pause-duration-button-clicked" preferred-width="40" preferred-height="9" />
+        <button text="animation" on-click="animation-type-button-clicked" preferred-width="40" preferred-height="9" />
+        <button text="scroll speed" on-click="scroll-speed-button-clicked" preferred-width="40" preferred-height="9" />
+      </vertical>
+      <vertical preferred-width="90">
+        <!-- short text examples -->
+        <scrolling-text text='left text example'
+                        alignment='Left'
+                        font-size='3' />
+        <scrolling-text text='center text example'
+                        alignment='Center'
+                        font-size='3' />
+        <scrolling-text text='right short example'
+                        alignment='Right'
+                        font-size='3' />
+        <scrolling-text text='always scroll short basic example'
+                        font-size='3'
+                        always-scroll='true' />
+        <scrolling-text text='always scroll short fade example'
+                        font-size='3'
+                        always-scroll='true'
+                        animation-type='FadeInOut' />
+        <scrolling-text text='always scroll short reverse example'
+                        font-size='3'
+                        always-scroll='true'
+                        alignment='Right'
+                        animation-type='ForwardAndReverse' />
+        <scrolling-text text='always scroll short continuous example'
+                        font-size='3'
+                        always-scroll='true'
+                        animation-type='Continuous' />
+
+        <!-- longer text speed examples -->
+        <scrolling-text text='this is a much longer example text than the previous example texts that should scroll because it is pretty long. if it doesn&apos;t scroll, then that means that this text is not long enough to activate the scroll animation coroutine. but if this is done correctly, then this long text should always activate the scroll animation coroutine'
+                        font-size='3'
+                        movement-type='BySpeed'
+                        scroll-speed='10'
+                        pause-duration='2'
+                        animation-type='Basic' />
+        <scrolling-text text='this is the second much longer example text than the shorter example texts that should scroll because it is pretty long. if it doesn&apos;t scroll, then that means that this text is not long enough to activate the scroll animation coroutine. but if this is done correctly, then this long text should always activate the scroll animation coroutine. also, this text is especially long to test whether or not the duration and speed scroll modes will have any differences. texts in duration mode should show a difference, whereas texts in speed mode should not'
+                        font-size='3'
+                        movement-type='BySpeed'
+                        scroll-speed='10'
+                        pause-duration='4'
+                        animation-type='FadeInOut' />
+        <scrolling-text text='this is the third much longer example text than the shorter example texts that should scroll because it is pretty long. if it doesn&apos;t scroll, then that means that this text is not long enough to activate the scroll animation coroutine. but if this is done correctly, then this long text should always activate the scroll animation coroutine'
+                        font-size='3'
+                        movement-type='BySpeed'
+                        alignment='Right'
+                        scroll-speed='10'
+                        pause-duration='4'
+                        animation-type='ForwardAndReverse' />
+        <scrolling-text text='this is the fourth much longer example text than the shorter example texts that should scroll because it is pretty long. if it doesn&apos;t scroll, then that means that this text is not long enough to activate the scroll animation coroutine. but if this is done correctly, then this long text should always activate the scroll animation coroutine. also, this text is especially long to test whether or not the duration and speed scroll modes will have any differences. texts in duration mode should show a difference, whereas texts in speed mode should not'
+                        font-size='3'
+                        movement-type='BySpeed'
+                        alignment='Right'
+                        scroll-speed='10'
+                        pause-duration='4'
+                        animation-type='Continuous' />
+
+        <scrolling-text text='~changeable-text'
+                        font-size='3'
+                        movement-type='BySpeed'
+                        alignment='Right'
+                        always-scroll='~always-scroll'
+                        scroll-speed='~scroll-speed'
+                        pause-duration='~pause-duration'
+                        animation-type='~animation-type' />
+      </vertical>
+    </horizontal>
   </tab>
 </bg>

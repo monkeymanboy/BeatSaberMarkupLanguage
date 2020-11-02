@@ -77,6 +77,62 @@ namespace BeatSaberMarkupLanguage.ViewControllers
             }
         }
 
+        private string _changeableText = "this is a changeable text example that should serve as a testing ground for trying to see what happens when you change the text while the scrolling animation is playing";
+        [UIValue("changeable-text")]
+        public string ChangeableText
+        {
+            get => _changeableText;
+            set
+            {
+                _changeableText = value;
+                NotifyPropertyChanged();
+            }
+        }
+        private bool _alwaysScroll = false;
+        [UIValue("always-scroll")]
+        public bool AlwaysScroll
+        {
+            get => _alwaysScroll;
+            set
+            {
+                _alwaysScroll = value;
+                NotifyPropertyChanged();
+            }
+        }
+        private float _pauseDuration = 4f;
+        [UIValue("pause-duration")]
+        public float PauseDuration
+        {
+            get => _pauseDuration;
+            set
+            {
+                _pauseDuration = value;
+                NotifyPropertyChanged();
+            }
+        }
+        private ScrollingText.ScrollAnimationType _animationType = ScrollingText.ScrollAnimationType.ForwardAndReverse;
+        [UIValue("animation-type")]
+        public ScrollingText.ScrollAnimationType AnimationType
+        {
+            get => _animationType;
+            set
+            {
+                _animationType = value;
+                NotifyPropertyChanged();
+            }
+        }
+        private float _scrollSpeed = 15f;
+        [UIValue("scroll-speed")]
+        public float ScrollSpeed
+        {
+            get => _scrollSpeed;
+            set
+            {
+                _scrollSpeed = value;
+                NotifyPropertyChanged();
+            }
+        }
+
 
         [UIAction("click")]
         private void ButtonPress()
@@ -107,6 +163,54 @@ namespace BeatSaberMarkupLanguage.ViewControllers
 
             tableData.data = test;
             tableData.tableView.ReloadData();
+        }
+
+        [UIAction("text-1-button-clicked")]
+        private void ScrollingTextText1ButtonClicked()
+        {
+            AlwaysScroll = false;
+            ChangeableText = "short text example, stop animation";
+        }
+
+        [UIAction("text-2-button-clicked")]
+        private void ScrollingTextText2ButtonClicked()
+        {
+            AlwaysScroll = false;
+            ChangeableText = "this is a long text example that should cause the scrolling animation to play again. if it doesn't start the scrolling animation again, then something is wrong with the code";
+        }
+
+        [UIAction("text-3-button-clicked")]
+        private void ScrollingTextText3ButtonClicked()
+        {
+            AlwaysScroll = true;
+            ChangeableText = "short always scroll text example";
+        }
+
+        [UIAction("pause-duration-button-clicked")]
+        private void ScrollingTextPauseDurationButtonClicked()
+        {
+            if (PauseDuration < 4f)
+                PauseDuration = 4f;
+            else
+                PauseDuration = 1f;
+        }
+
+        [UIAction("animation-type-button-clicked")]
+        private void ScrollingTextAnimationTypeButtonClicked()
+        {
+            if (AnimationType == ScrollingText.ScrollAnimationType.ForwardAndReverse)
+                AnimationType = ScrollingText.ScrollAnimationType.Continuous;
+            else
+                AnimationType = ScrollingText.ScrollAnimationType.ForwardAndReverse;
+        }
+
+        [UIAction("scroll-speed-button-clicked")]
+        private void ScrollingTextScrollSpeedButtonClicked()
+        {
+            if (ScrollSpeed < 15f)
+                ScrollSpeed = 15f;
+            else
+                ScrollSpeed = 5f;
         }
     }
     public class TestListObject
