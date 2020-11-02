@@ -120,6 +120,11 @@ namespace BeatSaberMarkupLanguage.Components
             rt.pivot = new Vector2(0.5f, 0.5f);
             rt.sizeDelta = Vector2.zero;
 
+            // the text object can be hit by the raycast, even when it is masked off
+            // i'm guessing it has something to do with how the text is now curved
+            // in any case, disallow the text to be a raycast target so it doesn't cover other UI elements
+            textComponent.raycastTarget = false;
+
             // allow animation to restart when text has changed
             textComponent.RegisterDirtyLayoutCallback(OnTextComponentDirtyLayout);
         }
