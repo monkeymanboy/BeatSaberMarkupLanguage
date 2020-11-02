@@ -260,6 +260,7 @@
     <Compile Include="Tags\TextPageScrollViewTag.cs" />
     <Compile Include="Tags\TextSegmentedControlTag.cs" />
     <Compile Include="Tags\TextTag.cs" />
+    <Compile Include="Tags\VerticalIconSegmentedControlTag.cs" />
     <Compile Include="Tags\VerticalLayoutTag.cs" />
     <Compile Include="TypeHandlers\BackgroundableHandler.cs" />
     <Compile Include="TypeHandlers\ButtonArtworkHandler.cs" />
