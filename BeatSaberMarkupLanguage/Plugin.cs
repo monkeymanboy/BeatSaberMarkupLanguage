@@ -15,7 +15,6 @@ using Conf = IPA.Config.Config;
 using UnityEngine.SceneManagement;
 using IPALogger = IPA.Logging.Logger;
 using IPA.Utilities;
-using HMUI;
 using IPA.Config.Stores;
 using System.IO;
 using Zenject;
@@ -112,7 +111,6 @@ namespace BeatSaberMarkupLanguage
             BSMLSettings.instance.Setup();
             MenuButtons.MenuButtons.instance.Setup();
             GameplaySetup.GameplaySetup.instance.Setup();
-            Polyglot.Localization.Instance.SelectedLanguage = config.SelectedLanguage;
             gameScenesManager.transitionDidFinishEvent -= MenuLoadFresh;
         }
 
