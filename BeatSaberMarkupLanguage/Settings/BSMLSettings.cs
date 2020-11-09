@@ -102,7 +102,8 @@ namespace BeatSaberMarkupLanguage.Settings
             settingsMenus.Add(settingsMenu);
             if(isInitialized)
                 settingsMenu.Setup();
-            button?.gameObject.SetActive(true);
+            if (button != null)
+                button.gameObject.SetActive(true);
         }
 
         public void RemoveSettingsMenu(object host)
