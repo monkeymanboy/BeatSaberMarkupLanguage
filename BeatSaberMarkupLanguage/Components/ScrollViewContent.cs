@@ -1,5 +1,4 @@
 ﻿using HMUI;
-using IPA.Utilities;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -32,7 +31,7 @@ namespace BeatSaberMarkupLanguage.Components
         }
         private void UpdateScrollView()
         {
-            scrollView.SetContentHeight((transform.GetChild(0) as RectTransform).rect.height - scrollView.GetField<RectTransform, ScrollView>("_viewport").rect.height);
+            scrollView.SetContentHeight((transform.GetChild(0) as RectTransform).rect.height);
             scrollView.RefreshButtons();
         }
     }

@@ -54,7 +54,7 @@ namespace BeatSaberMarkupLanguage.Tags
             verticalLayout.childAlignment = TextAnchor.UpperCenter;
 
             RectTransform rectTransform = parentObj.transform as RectTransform;
-            rectTransform.anchorMin = new Vector2(0, 0);
+            rectTransform.anchorMin = new Vector2(0, 1);
             rectTransform.anchorMax = new Vector2(1, 1);
             rectTransform.sizeDelta = new Vector2(0, 0);
             rectTransform.pivot = new Vector2(0.5f, 1);
