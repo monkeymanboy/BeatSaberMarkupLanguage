@@ -9,13 +9,16 @@ namespace BeatSaberMarkupLanguage.Tags
     {
         public override string[] Aliases => new[] { "text", "label" };
 
+        private TMP_FontAsset font;
         public override GameObject CreateObject(Transform parent)
         {
             GameObject gameObj = new GameObject("BSMLText");
             gameObj.transform.SetParent(parent, false);
 
             FormattableText textMesh = gameObj.AddComponent<FormattableText>();
-            textMesh.font = MonoBehaviour.Instantiate(Resources.FindObjectsOfTypeAll<TMP_FontAsset>().First(t => t.name == "Teko-Medium SDF No Glow"));
+            if (font == null)
+                font = Resources.FindObjectsOfTypeAll<TMP_FontAsset>().First(t => t.name == "Teko-Medium SDF No Glow");
+            textMesh.font = MonoBehaviour.Instantiate(font);
             textMesh.fontSize = 4;
             textMesh.color = Color.white;
 

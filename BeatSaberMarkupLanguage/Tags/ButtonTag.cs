@@ -12,9 +12,12 @@ namespace BeatSaberMarkupLanguage.Tags
         public override string[] Aliases => new[] { "button" };
         public virtual string PrefabButton => "PracticeButton";
 
+        private Button buttonPrefab;
         public override GameObject CreateObject(Transform parent)
         {
-            Button button = MonoBehaviour.Instantiate(Resources.FindObjectsOfTypeAll<Button>().Last(x => (x.name == PrefabButton)), parent, false);
+            if (buttonPrefab == null)
+                buttonPrefab = Resources.FindObjectsOfTypeAll<Button>().Last(x => (x.name == PrefabButton));
+            Button button = MonoBehaviour.Instantiate(buttonPrefab, parent, false);
             button.name = "BSMLButton";
             button.interactable = true;
             Polyglot.LocalizedTextMeshProUGUI localizer = button.GetComponentInChildren<Polyglot.LocalizedTextMeshProUGUI>(true);
