@@ -189,7 +189,7 @@ namespace BeatSaberMarkupLanguage
 
                 foreach (PropertyInfo propertyInfo in host.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic))
                 {
-                    UIValue uivalue = propertyInfo.GetCustomAttributes(typeof(UIValue), true).FirstOrDefault() as UIValue;
+                    UIValue uivalue = Attribute.GetCustomAttributes(propertyInfo, typeof(UIValue), true).FirstOrDefault() as UIValue;
                     string propName = propertyInfo.Name;
                     string uiValueName = null;
                     if (uivalue != null)
