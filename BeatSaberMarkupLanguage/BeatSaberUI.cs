@@ -235,7 +235,7 @@ namespace BeatSaberMarkupLanguage
             AnimationStateUpdater oldStateUpdater = image.GetComponent<AnimationStateUpdater>();
             if (oldStateUpdater != null)
                 MonoBehaviour.DestroyImmediate(oldStateUpdater);
-
+            bool isURL = Uri.TryCreate(location, UriKind.Absolute, out Uri uri);
             if (location.StartsWith("#"))
             {
                 string imgName = location.Substring(1);
@@ -248,7 +248,7 @@ namespace BeatSaberMarkupLanguage
                     Logger.log.Error($"Could not find Texture with image name {imgName}");
                 }
             }
-            else if (location.EndsWith(".gif") || location.EndsWith(".apng"))
+            else if (IsAnimated(location) || (isURL && IsAnimated(uri.LocalPath)))
             {
                 AnimationStateUpdater stateUpdater = image.gameObject.AddComponent<AnimationStateUpdater>();
                 stateUpdater.image = image;
@@ -261,7 +261,7 @@ namespace BeatSaberMarkupLanguage
                 else
                 {
                     Utilities.GetData(location, (byte[] data) => {
-                        AnimationLoader.Process(location.EndsWith(".gif") ? AnimationType.GIF : AnimationType.APNG, data, (Texture2D tex, Rect[] uvs, float[] delays, int width, int height) =>
+                        AnimationLoader.Process((location.EndsWith(".gif") || (isURL && uri.LocalPath.EndsWith(".gif"))) ? AnimationType.GIF : AnimationType.APNG, data, (Texture2D tex, Rect[] uvs, float[] delays, int width, int height) =>
                         {
                             AnimationControllerData controllerData = AnimationController.instance.Register(location, tex, uvs, delays);
                             stateUpdater.controllerData = controllerData;
@@ -283,6 +283,11 @@ namespace BeatSaberMarkupLanguage
                     image.sprite.texture.wrapMode = TextureWrapMode.Clamp;
                 });
             }
+        }
+
+        private static bool IsAnimated(string str)
+        {
+            return str.EndsWith(".gif") || str.EndsWith(".apng");
         }
 
         #region FlowCoordinator Extensions
