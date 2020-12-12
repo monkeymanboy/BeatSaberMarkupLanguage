@@ -81,6 +81,11 @@ namespace BeatSaberMarkupLanguage.Components
 
         public void RefreshBindings()
         {
+            if (_buttonBinder == null)
+            {
+                return;
+            }
+
             _buttonBinder.ClearBindings();
             if (PageUpButton != null)
                 _buttonBinder.AddBinding(PageUpButton, PageUpButtonPressed);
