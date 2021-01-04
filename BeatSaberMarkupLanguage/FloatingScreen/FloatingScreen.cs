@@ -137,6 +137,7 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
                 handle = GameObject.CreatePrimitive(PrimitiveType.Cube);
 
                 handle.transform.SetParent(transform);
+                handle.transform.localRotation = Quaternion.identity;
                 UpdateHandle();
 
                 screenMover.Init(this);
