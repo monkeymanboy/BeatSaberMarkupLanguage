@@ -1,7 +1,5 @@
 ﻿using BeatSaberMarkupLanguage.Parser;
 using HMUI;
-using IPA.Utilities;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -36,6 +34,8 @@ namespace BeatSaberMarkupLanguage.Components
         private int lastClickedPage;
         private int lastClickedIndex;
 
+        private bool shouldRefresh;
+
         public void Setup()
         {
             tabs.Clear();
@@ -60,28 +60,36 @@ namespace BeatSaberMarkupLanguage.Components
             lastClickedPage = currentPage;
             lastClickedIndex = index;
             if (PageCount != -1) index += PageCount * currentPage;
-            for(int i = 0; i < tabs.Count; i++)
+            for (int i = 0; i < tabs.Count; i++)
             {
-                tabs[i].gameObject.SetActive(i == index);
+                tabs[i].gameObject.SetActive(false);
             }
+            tabs.Where(x => x.IsVisible).ElementAt(index).gameObject.SetActive(true);
         }
         public void Refresh()
         {
+            if (!isActiveAndEnabled)
+            {
+                shouldRefresh = true;
+                return;
+            }
+            shouldRefresh = false;
+            List<Tab> visibleTabs = tabs.Where(x => x.IsVisible).ToList();
             if (PageCount == -1)
             {
-                textSegmentedControl.SetTexts(tabs.Select(x => x.TabName).ToArray());
+                textSegmentedControl.SetTexts(visibleTabs.Select(x => x.TabName).ToArray());
             }
             else
             {
                 if (currentPage < 0)
                     currentPage = 0;
-                if(currentPage > (tabs.Count - 1) / pageCount)
-                    currentPage = (tabs.Count - 1) / pageCount;
-                textSegmentedControl.SetTexts(tabs.Select(x => x.TabName).Skip(PageCount * currentPage).Take(PageCount).ToArray());
+                if(currentPage > (visibleTabs.Count - 1) / pageCount)
+                    currentPage = (visibleTabs.Count - 1) / pageCount;
+                textSegmentedControl.SetTexts(visibleTabs.Select(x => x.TabName).Skip(PageCount * currentPage).Take(PageCount).ToArray());
                 if(leftButton != null)
                     leftButton.interactable = currentPage > 0;
                 if(rightButton != null)
-                    rightButton.interactable = currentPage < (tabs.Count - 1) / pageCount;
+                    rightButton.interactable = currentPage < (visibleTabs.Count - 1) / pageCount;
 
                 TabSelected(null, 0);
                 //textSegmentedControl.SelectCellWithNumber(lastClickedPage == currentPage? lastClickedIndex : -1);
@@ -104,6 +112,12 @@ namespace BeatSaberMarkupLanguage.Components
         {
             currentPage++;
             Refresh();
+        }
+
+        void OnEnable()
+        {
+            if (shouldRefresh)
+                Refresh();
         }
     }
 }
