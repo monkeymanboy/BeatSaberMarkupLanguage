@@ -143,9 +143,10 @@ namespace BeatSaberMarkupLanguage
         /// <param name="text">The text to be displayed.</param>
         /// <param name="anchoredPosition">The position the button should be anchored to.</param>
         /// <returns>The newly created TextMeshProUGUI component.</returns>
+        /// <remarks>Proxied to the generic method, but kept for binary compatibility</remarks>
         public static TextMeshProUGUI CreateText(RectTransform parent, string text, Vector2 anchoredPosition)
         {
-            return CreateText(parent, text, anchoredPosition, new Vector2(60f, 10f));
+            return CreateText<CurvedTextMeshPro>(parent, text, anchoredPosition, new Vector2(60f, 10f));
         }
 
         /// <summary>
@@ -156,25 +157,51 @@ namespace BeatSaberMarkupLanguage
         /// <param name="anchoredPosition">The position the text component should be anchored to.</param>
         /// <param name="sizeDelta">The size of the text components RectTransform.</param>
         /// <returns>The newly created TextMeshProUGUI component.</returns>
+        /// <remarks>Proxied to the generic method, but kept for binary compatibility</remarks>
         public static TextMeshProUGUI CreateText(RectTransform parent, string text, Vector2 anchoredPosition, Vector2 sizeDelta)
+        {
+            return CreateText<CurvedTextMeshPro>(parent, text, anchoredPosition, sizeDelta);
+        }
+        
+        /// <summary>
+        /// Creates a TMP_Text (or one of its inheritances) component.
+        /// </summary>
+        /// <param name="parent">The transform to parent the new TMP_Text (or one of its inheritances) component to.</param>
+        /// <param name="text">The text to be displayed.</param>
+        /// <param name="anchoredPosition">The position the button should be anchored to.</param>
+        /// <returns>The newly created TMP_Text (or one of its inheritances) component.</returns>
+        public static T CreateText<T>(RectTransform parent, string text, Vector2 anchoredPosition) where T : TMP_Text
+        {
+            return CreateText<T>(parent, text, anchoredPosition, new Vector2(60f, 10f));
+        }
+        
+        /// <summary>
+        /// Creates a TMP_Text (or one of its inheritances) component.
+        /// </summary>
+        /// <param name="parent">The transform to parent the new TMP_Text (or one of its inheritances) component to.</param>
+        /// <param name="text">The text to be displayed.</param>
+        /// <param name="anchoredPosition">The position the text component should be anchored to.</param>
+        /// <param name="sizeDelta">The size of the text components RectTransform.</param>
+        /// <returns>The newly created TMP_Text (or one of its inheritances) component.</returns>
+        public static T CreateText<T>(RectTransform parent, string text, Vector2 anchoredPosition, Vector2 sizeDelta) where T : TMP_Text
         {
             GameObject gameObj = new GameObject("CustomUIText");
             gameObj.SetActive(false);
 
-            CurvedTextMeshPro textMesh = gameObj.AddComponent<CurvedTextMeshPro>();
-            textMesh.font = MainTextFont;
-            textMesh.rectTransform.SetParent(parent, false);
-            textMesh.text = text;
-            textMesh.fontSize = 4;
-            textMesh.color = Color.white;
+            T textComponent = gameObj.AddComponent<T>();
+            textComponent.font = MainTextFont;
+            textComponent.rectTransform.SetParent(parent, false);
+            textComponent.text = text;
+            textComponent.fontSize = 4;
+            textComponent.color = Color.white;
 
-            textMesh.rectTransform.anchorMin = new Vector2(0.5f, 0.5f);
-            textMesh.rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
-            textMesh.rectTransform.sizeDelta = sizeDelta;
-            textMesh.rectTransform.anchoredPosition = anchoredPosition;
+            textComponent.rectTransform.anchorMin = new Vector2(0.5f, 0.5f);
+            textComponent.rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
+            textComponent.rectTransform.sizeDelta = sizeDelta;
+            textComponent.rectTransform.anchoredPosition = anchoredPosition;
 
             gameObj.SetActive(true);
-            return textMesh;
+            return textComponent;
         }
 
         #region Button Extensions
