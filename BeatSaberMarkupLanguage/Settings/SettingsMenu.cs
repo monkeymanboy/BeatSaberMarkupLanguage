@@ -1,5 +1,6 @@
 ﻿using BeatSaberMarkupLanguage.Parser;
 using HMUI;
+using System;
 using System.Reflection;
 using UnityEngine;
 using static BeatSaberMarkupLanguage.Components.CustomListTableData;
@@ -8,6 +9,7 @@ namespace BeatSaberMarkupLanguage.Settings
 {
     internal class SettingsMenu : CustomCellInfo
     {
+        private const string SETTINGS_ERROR_PATH = "BeatSaberMarkupLanguage.Views.settings-error.bsml";
         public ViewController viewController;
         public BSMLParserParams parserParams;
         
@@ -24,9 +26,18 @@ namespace BeatSaberMarkupLanguage.Settings
 
         public void Setup()
         {
-            viewController = BeatSaberUI.CreateViewController<ViewController>();
-            SetupViewControllerTransform(viewController);
-            parserParams = BSMLParser.instance.Parse(Utilities.GetResourceContent(assembly, resource), viewController.gameObject, host);
+            try
+            {
+                viewController = BeatSaberUI.CreateViewController<ViewController>();
+                SetupViewControllerTransform(viewController);
+                parserParams = BSMLParser.instance.Parse(Utilities.GetResourceContent(assembly, resource), viewController.gameObject, host);
+            }
+            catch (Exception ex)
+            {
+                Logger.log.Error($"Error adding settings menu for {assembly.GetName().Name} ({text}): {ex.Message}");
+                Logger.log.Debug(ex);
+                parserParams = BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), SETTINGS_ERROR_PATH), viewController.gameObject);
+            }
         }
 
         public static void SetupViewControllerTransform(ViewController viewController)
