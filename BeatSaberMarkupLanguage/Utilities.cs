@@ -47,7 +47,7 @@ namespace BeatSaberMarkupLanguage
             }
             catch (Exception ex)
             {
-                throw new BSMLException($"Error loading resource from assembly, {assembly.FullName} ({resource}).", ex);
+                throw new BSMLResourceException(assembly, resource, ex);
             }
         }
 
