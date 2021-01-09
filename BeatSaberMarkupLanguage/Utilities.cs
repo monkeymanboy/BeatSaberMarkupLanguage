@@ -25,14 +25,29 @@ namespace BeatSaberMarkupLanguage
             }
         }
 
+        /// <summary>
+        /// Gets the content of a resource as a string.
+        /// </summary>
+        /// <param name="assembly">Assembly containing the resource</param>
+        /// <param name="resource">Full path to the resource</param>
+        /// <returns></returns>
+        /// <exception cref="BSMLException"></exception>
         public static string GetResourceContent(Assembly assembly, string resource)
         {
-            using (Stream stream = assembly.GetManifestResourceStream(resource))
+            try
             {
-                using (StreamReader reader = new StreamReader(stream))
+                Logger.log.Debug($"Loading resource from assembly, {assembly.FullName} ({resource}).");
+                using (Stream stream = assembly.GetManifestResourceStream(resource))
                 {
-                    return reader.ReadToEnd();
+                    using (StreamReader reader = new StreamReader(stream))
+                    {
+                        return reader.ReadToEnd();
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                throw new BSMLException($"Error loading resource from assembly, {assembly.FullName} ({resource}).", ex);
             }
         }
 
@@ -215,7 +230,7 @@ namespace BeatSaberMarkupLanguage
             return data;
         }
 
-        public static IEnumerable<T> SingleEnumerable<T>(this T item) 
+        public static IEnumerable<T> SingleEnumerable<T>(this T item)
             => Enumerable.Empty<T>().Append(item);
 
         public static IEnumerable<T?> AsNullable<T>(this IEnumerable<T> seq) where T : struct
