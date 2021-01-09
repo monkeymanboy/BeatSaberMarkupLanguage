@@ -36,7 +36,7 @@ namespace BeatSaberMarkupLanguage
         {
             try
             {
-                Logger.log.Debug($"Loading resource from assembly, {assembly.FullName} ({resource}).");
+                //Logger.log.Debug($"Loading resource from assembly, {assembly.FullName} ({resource}).");
                 using (Stream stream = assembly.GetManifestResourceStream(resource))
                 {
                     using (StreamReader reader = new StreamReader(stream))
