@@ -66,14 +66,19 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
 
         public void AddTab(string name, string resource, object host)
         {
-            AddTab(name, resource, host, MenuType.All);
+            AddTab(Assembly.GetCallingAssembly(), name, resource, host, MenuType.All);
         }
 
         public void AddTab(string name, string resource, object host, MenuType menuType)
         {
+            AddTab(Assembly.GetCallingAssembly(), name, resource, host, menuType);
+        }
+
+        private void AddTab(Assembly assembly, string name, string resource, object host, MenuType menuType)
+        {
             if (menus.Any(x => (x as GameplaySetupMenu).name == name))
                 return;
-            menus.Add(new GameplaySetupMenu(name, resource, host, Assembly.GetCallingAssembly(), menuType));
+            menus.Add(new GameplaySetupMenu(name, resource, host, assembly, menuType));
         }
 
         /// <summary>Warning, for now it will not be removed until fresh menu scene reload</summary>
