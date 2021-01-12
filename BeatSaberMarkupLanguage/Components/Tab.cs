@@ -5,6 +5,8 @@ namespace BeatSaberMarkupLanguage.Components
     public class Tab : MonoBehaviour
     {
         private string tabName;
+        private string tabKey;
+
         public string TabName
         {
             get => tabName;
@@ -24,6 +26,17 @@ namespace BeatSaberMarkupLanguage.Components
                 selector?.Refresh();
             }
         }
+
+        public string TabKey
+        {
+            get => tabKey;
+            set
+            {
+                tabKey = value;
+                selector?.Refresh();
+            }
+        }
+
         public TabSelector selector;
     }
 }

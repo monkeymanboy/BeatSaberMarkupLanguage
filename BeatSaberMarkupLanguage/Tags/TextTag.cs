@@ -21,9 +21,12 @@ namespace BeatSaberMarkupLanguage.Tags
             textMesh.font = MonoBehaviour.Instantiate(font);
             textMesh.fontSize = 4;
             textMesh.color = Color.white;
+            textMesh.text = "Default Text";
 
             textMesh.rectTransform.anchorMin = new Vector2(0.5f, 0.5f);
             textMesh.rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
+
+            CreateLocalizableText(gameObj);
 
             return gameObj;
         }

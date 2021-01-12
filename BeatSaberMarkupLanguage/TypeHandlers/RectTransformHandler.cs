@@ -1,5 +1,6 @@
 ﻿using HMUI;
 using IPA.Utilities;
+using Polyglot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +24,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "pivotX", new[]{ "pivot-x" } },
             { "pivotY", new[]{ "pivot-y" } },
             { "hoverHint", new[]{ "hover-hint" } },
+            { "hoverHintKey", new[]{ "hover-hint-key" } },
             { "active", new[]{ "active" } }
         };
 
@@ -39,6 +41,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             {"pivotX", new Action<RectTransform, string>((component, value) => component.pivot = new Vector2(Parse.Float(value), component.pivot.y)) },
             {"pivotY", new Action<RectTransform, string>((component, value) => component.pivot = new Vector2(component.pivot.x, Parse.Float(value))) },
             {"hoverHint", new Action<RectTransform, string>(AddHoverHint) },
+            {"hoverHintKey", new Action<RectTransform, string>(AddHoverHintKey) },
             {"active", new Action<RectTransform, string>((component, value) => component.gameObject.SetActive(Parse.Bool(value))) }
         };
 
@@ -47,6 +50,11 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             HoverHint hover = rectTransform.gameObject.AddComponent<HoverHint>();
             hover.text = text;
             hover.SetField("_hoverHintController", Resources.FindObjectsOfTypeAll<HoverHintController>().First());
+        }
+
+        private void AddHoverHintKey(RectTransform rectTransform, string key)
+        {
+            AddHoverHint(rectTransform, Localization.Get(key));
         }
     }
 }

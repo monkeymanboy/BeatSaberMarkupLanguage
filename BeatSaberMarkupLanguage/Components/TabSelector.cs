@@ -1,5 +1,6 @@
 ﻿using BeatSaberMarkupLanguage.Parser;
 using HMUI;
+using Polyglot;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -77,7 +78,7 @@ namespace BeatSaberMarkupLanguage.Components
             List<Tab> visibleTabs = tabs.Where(x => x.IsVisible).ToList();
             if (PageCount == -1)
             {
-                textSegmentedControl.SetTexts(visibleTabs.Select(x => x.TabName).ToArray());
+                SetSegmentedControlTexts(visibleTabs);
             }
             else
             {
@@ -85,7 +86,7 @@ namespace BeatSaberMarkupLanguage.Components
                     currentPage = 0;
                 if(currentPage > (visibleTabs.Count - 1) / pageCount)
                     currentPage = (visibleTabs.Count - 1) / pageCount;
-                textSegmentedControl.SetTexts(visibleTabs.Select(x => x.TabName).Skip(PageCount * currentPage).Take(PageCount).ToArray());
+                SetSegmentedControlTexts(visibleTabs.Skip(PageCount * currentPage).Take(PageCount).ToList());
                 if(leftButton != null)
                     leftButton.interactable = currentPage > 0;
                 if(rightButton != null)
@@ -102,6 +103,26 @@ namespace BeatSaberMarkupLanguage.Components
                     cells[i].SetSelected(i == selectCellNumber, SelectableCell.TransitionType.Instant, this, ignoreCurrentValue: true);
                 }*/
             }
+        }
+        private void SetSegmentedControlTexts(List<Tab> tabs)
+        {
+            var texts = new string[tabs.Count];
+
+            for (int i = 0; i < tabs.Count; i++)
+            {
+                Tab tab = tabs[i];
+
+                if (!string.IsNullOrEmpty(tab.TabKey))
+                {
+                    texts[i] = Localization.Get(tab.TabKey);
+                }
+                else
+                {
+                    texts[i] = tab.TabName;
+                }
+            }
+
+            textSegmentedControl.SetTexts(texts);
         }
         private void PageLeft()
         {

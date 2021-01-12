@@ -1,6 +1,7 @@
 ﻿using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.Components.Settings;
 using Polyglot;
+using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -22,8 +23,6 @@ namespace BeatSaberMarkupLanguage.Tags
             gameObject.name = "BSMLToggle";
             gameObject.SetActive(false);
 
-            Object.Destroy(nameText.GetComponent<LocalizedTextMeshProUGUI>());
-
             ToggleSetting toggleSetting = gameObject.AddComponent<ToggleSetting>();
 
             toggleSetting.toggle = gameObject.GetComponentInChildren<Toggle>();
@@ -31,12 +30,16 @@ namespace BeatSaberMarkupLanguage.Tags
             toggleSetting.toggle.isOn = false;
             toggleSetting.toggle.onValueChanged.RemoveAllListeners();
 
+            LocalizedTextMeshProUGUI localizedText = ConfigureLocalizedText(nameText);
+
             toggleSetting.text = nameText.GetComponent<TextMeshProUGUI>();
             toggleSetting.text.text = "Default Text";
             toggleSetting.text.richText = true;
             toggleSetting.text.overflowMode = TextOverflowModes.Ellipsis;
 
-            gameObject.AddComponent<ExternalComponents>().components.Add(toggleSetting.text);
+            List<Component> externalComponents = gameObject.AddComponent<ExternalComponents>().components;
+            externalComponents.Add(toggleSetting.text);
+            externalComponents.Add(localizedText);
 
             gameObject.GetComponent<LayoutElement>().preferredWidth = 90;
 
