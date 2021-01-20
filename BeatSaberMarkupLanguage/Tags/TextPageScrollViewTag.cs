@@ -1,10 +1,10 @@
 ﻿using BeatSaberMarkupLanguage.Components;
 using HMUI;
 using IPA.Utilities;
+using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.Tags
 {
@@ -17,10 +17,18 @@ namespace BeatSaberMarkupLanguage.Tags
             TextPageScrollView scrollView = MonoBehaviour.Instantiate(Resources.FindObjectsOfTypeAll<ReleaseInfoViewController>().First().GetField<TextPageScrollView, ReleaseInfoViewController>("_textPageScrollView"), parent);
             scrollView.name = "BSMLTextPageScrollView";
             scrollView.enabled = true;
+
             TextMeshProUGUI textMesh = scrollView.GetField<TextMeshProUGUI, TextPageScrollView>("_text");
-            
+            textMesh.text = "Default Text";
+
+            LocalizableText localizedText = CreateLocalizableText(textMesh.gameObject);
+
             textMesh.gameObject.AddComponent<TextPageScrollViewRefresher>().scrollView = scrollView;
-            scrollView.gameObject.AddComponent<ExternalComponents>().components.Add(textMesh);
+
+            List<Component> components = scrollView.gameObject.AddComponent<ExternalComponents>().components;
+            components.Add(textMesh);
+            components.Add(localizedText);
+
             return scrollView.gameObject;
         }
     }

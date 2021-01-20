@@ -1,6 +1,7 @@
 ﻿using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.Components.Settings;
 using Polyglot;
+using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -32,12 +33,17 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
             stringSetting.text.richText = true;
             stringSetting.editButton = valuePick.GetComponentsInChildren<Button>().Last();
             stringSetting.boundingBox = valuePick as RectTransform;
-            
-            TextMeshProUGUI text = gameObject.GetComponentInChildren<TextMeshProUGUI>();
+
+            GameObject nameText = gameObject.transform.Find("NameText").gameObject;
+            LocalizedTextMeshProUGUI localizedText = ConfigureLocalizedText(nameText);
+
+            TextMeshProUGUI text = nameText.GetComponent<TextMeshProUGUI>();
             text.text = "Default Text";
-            gameObject.AddComponent<ExternalComponents>().components.Add(text);
-            MonoBehaviour.Destroy(text.GetComponent<LocalizedTextMeshProUGUI>());
-            
+
+            List<Component> externalComponents = gameObject.AddComponent<ExternalComponents>().components;
+            externalComponents.Add(text);
+            externalComponents.Add(localizedText);
+
             gameObject.GetComponent<LayoutElement>().preferredWidth = 90;
             stringSetting.text.alignment = TextAlignmentOptions.MidlineRight;
             stringSetting.text.enableWordWrapping = false;

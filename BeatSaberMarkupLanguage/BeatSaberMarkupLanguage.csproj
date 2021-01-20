@@ -53,6 +53,9 @@
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
+    <Reference Include="Polyglot">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\Polyglot.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.TextMeshPro">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\Unity.TextMeshPro.dll</HintPath>
     </Reference>
@@ -145,6 +148,7 @@
     <Compile Include="Components\ExternalComponents.cs" />
     <Compile Include="Components\FormattableText.cs" />
     <Compile Include="Components\Glowable.cs" />
+    <Compile Include="Components\LocalizableText.cs" />
     <Compile Include="Components\ModalColorPicker.cs" />
     <Compile Include="Components\ModalKeyboard.cs" />
     <Compile Include="Components\NotifiableSingleton.cs" />
@@ -299,6 +303,7 @@
     <Compile Include="TypeHandlers\StrokableHandler.cs" />
     <Compile Include="TypeHandlers\TabHandler.cs" />
     <Compile Include="TypeHandlers\TabSelectorHandler.cs" />
+    <Compile Include="TypeHandlers\LocalizedTextMeshProUGUIHandler.cs" />
     <Compile Include="TypeHandlers\TextMeshProUGUIHandler.cs" />
     <Compile Include="TypeHandlers\TextPageScrollViewHandler.cs" />
     <Compile Include="TypeHandlers\TextSegmentedControlHandler.cs" />
@@ -308,11 +313,13 @@
     <Compile Include="ViewControllers\BSMLResourceViewController.cs" />
     <Compile Include="ViewControllers\BSMLViewController.cs" />
     <Compile Include="ViewControllers\HotReloadableViewController.cs" />
+    <Compile Include="ViewControllers\LocalizationTestViewController.cs" />
     <Compile Include="ViewControllers\TestViewController.cs" />
     <Compile Include="ViewControllers\WatcherGroup.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Views\test.bsml" />
+    <EmbeddedResource Include="Views\localization-test.bsml" />
     <EmbeddedResource Include="manifest.json" />
     <EmbeddedResource Include="Views\settings-buttons.bsml" />
     <EmbeddedResource Include="Views\settings-list.bsml" />

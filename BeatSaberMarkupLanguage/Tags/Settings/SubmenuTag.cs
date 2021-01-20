@@ -1,5 +1,4 @@
 ﻿using BeatSaberMarkupLanguage.Components;
-using BeatSaberMarkupLanguage.Components.Settings;
 using BeatSaberMarkupLanguage.Settings;
 using HMUI;
 using System.Linq;
@@ -26,6 +25,8 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
             clickableText.color = Color.white;
             clickableText.rectTransform.sizeDelta = new Vector2(90, 8);
 
+            LocalizableText localizedText = CreateLocalizableText(gameObj);
+
             ViewController submenuController = BeatSaberUI.CreateViewController<ViewController>();
             SettingsMenu.SetupViewControllerTransform(submenuController);
 
@@ -39,6 +40,7 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
             ExternalComponents externalComponents = submenuController.gameObject.AddComponent<ExternalComponents>();
             externalComponents.components.Add(clickableText);
             externalComponents.components.Add(clickableText.rectTransform);
+            externalComponents.components.Add(localizedText);
 
             gameObj.SetActive(true);
             return submenuController.gameObject;

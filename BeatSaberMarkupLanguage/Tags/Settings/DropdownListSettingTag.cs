@@ -3,9 +3,8 @@ using BeatSaberMarkupLanguage.Components.Settings;
 using HMUI;
 using IPA.Utilities;
 using Polyglot;
-using System;
+using System.Collections.Generic;
 using System.Linq;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using VRUIControls;
@@ -34,16 +33,20 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
             dropdown.GetComponentInChildren<VRGraphicRaycaster>(true).SetField("_physicsRaycaster", BeatSaberUI.PhysicsRaycasterWithCache);
             dropdown.GetComponentInChildren<ModalView>(true).SetField("_container", BeatSaberUI.DiContainer);
 
-            ExternalComponents externalComponents = dropdown.gameObject.AddComponent<ExternalComponents>();
-
             GameObject labelObject = gameObject.transform.Find("Label").gameObject;
-            MonoBehaviour.Destroy(labelObject.GetComponent<LocalizedTextMeshProUGUI>());
-            externalComponents.components.Add(gameObject.transform.Find("Label").GetComponent<CurvedTextMeshPro>());
+            LocalizedTextMeshProUGUI localizedText = ConfigureLocalizedText(labelObject);
+
+            CurvedTextMeshPro textMesh = labelObject.GetComponent<CurvedTextMeshPro>();
+            textMesh.text = "Default Text";
 
             LayoutElement layoutElement = gameObject.AddComponent<LayoutElement>();
             layoutElement.preferredHeight = 8;
             layoutElement.preferredWidth = 90;
-            externalComponents.components.Add(layoutElement);
+
+            List<Component> externalComponents = dropdown.gameObject.AddComponent<ExternalComponents>().components;
+            externalComponents.Add(textMesh);
+            externalComponents.Add(localizedText);
+            externalComponents.Add(layoutElement);
 
             DropDownListSetting dropDownListSetting = dropdown.gameObject.AddComponent<DropDownListSetting>();
             

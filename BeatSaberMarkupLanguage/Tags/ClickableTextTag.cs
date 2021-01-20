@@ -23,6 +23,8 @@ namespace BeatSaberMarkupLanguage.Tags
             clickableText.color = Color.white;
             clickableText.rectTransform.sizeDelta = new Vector2(90, 8);
 
+            CreateLocalizableText(gameObject);
+
             gameObject.SetActive(true);
             return gameObject;
         }

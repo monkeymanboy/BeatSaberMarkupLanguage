@@ -1,0 +1,36 @@
+﻿<bg>
+  <tab-selector tab-tag='localization'></tab-selector>
+  <tab tags='localization' tab-name-key='LANGUAGE_EN'>
+    <settings-container>
+      <color-setting/>
+      <dropdown-list-setting options='contents'/>
+      <increment-setting/>
+      <list-setting options='contents'/>
+      <slider-setting/>
+      <string-setting/>
+      <toggle-setting/>
+      <color-setting key='BUTTON_CAMPAIGN'/>
+      <dropdown-list-setting key='BUTTON_SOLO' options='contents'/>
+      <increment-setting key='BUTTON_PARTY'/>
+      <list-setting key='BUTTON_HOW_TO_PLAY' options='contents'/>
+      <slider-setting key='BUTTON_CREDITS'/>
+      <string-setting key='BUTTON_SETTINGS'/>
+      <toggle-setting key='BUTTON_PLAYER_SETTINGS'/>
+    </settings-container>
+  </tab>
+  <tab tags='localization' tab-name-key='LANGUAGE_SC'>
+    <vertical>
+      <button/>
+      <clickable-text/>
+      <modifier/>
+      <text/>
+      <button key='BUTTON_QUIT'/>
+      <clickable-text key='BUTTON_BASICS'/>
+      <modifier key='BUTTON_SCORE_SYSTEM'/>
+      <text key='BUTTON_MENU'/>
+    </vertical>
+  </tab>
+  <tab tags='localization' tab-name-key='HEALTH_AND_SAFETY_WARNING_TITLE'>
+    <text-page key='HEALTH_AND_SAFETY_WARNING_CONTENT'/>
+  </tab>
+</bg>

@@ -18,6 +18,7 @@ using IPA.Utilities;
 using IPA.Config.Stores;
 using System.IO;
 using Zenject;
+using HMUI;
 
 namespace BeatSaberMarkupLanguage
 {
@@ -106,7 +107,8 @@ namespace BeatSaberMarkupLanguage
         {
             //GameplaySetup.GameplaySetup.instance.AddTab("Test", "BeatSaberMarkupLanguage.Views.gameplay-setup-test.bsml", GameplaySetupTest.instance);
             //BSMLSettings.instance.AddSettingsMenu("Test", "BeatSaberMarkupLanguage.Views.settings-test.bsml", SettingsTest.instance);
-            //SharedCoroutineStarter.instance.StartCoroutine(PresentTest());
+            //SharedCoroutineStarter.instance.StartCoroutine(PresentTest<TestViewController>());
+            //SharedCoroutineStarter.instance.StartCoroutine(PresentTest<LocalizationTestViewController>());
             //MenuButtons.MenuButtons.instance.RegisterButton(new MenuButtons.MenuButton("test", () => MenuButtons.MenuButtons.instance.RegisterButton(new MenuButtons.MenuButton("test2",null))));
             BSMLSettings.instance.Setup();
             MenuButtons.MenuButtons.instance.Setup();
@@ -131,13 +133,13 @@ namespace BeatSaberMarkupLanguage
         }
 
         //It's just for testing so don't yell at me
-        private IEnumerator PresentTest()
+        private IEnumerator PresentTest<T>() where T : ViewController
         {
             yield return new WaitForSeconds(1);
-            TestViewController testViewController = BeatSaberUI.CreateViewController<TestViewController>();
-            //FloatingScreen.FloatingScreen floatingScreen = FloatingScreen.FloatingScreen.CreateFloatingScreen(new Vector2(400, 200), true, Vector3.zero, Quaternion.identity);
-            //floatingScreen.SetRootViewController(testViewController, ViewController.AnimationType.None);
-            //Resources.FindObjectsOfTypeAll<MainFlowCoordinator>().First().InvokeMethod<object, FlowCoordinator>("PresentViewController", new object[] { testViewController, null, ViewController.AnimationDirection.Horizontal, false });
+            ViewController testViewController = BeatSaberUI.CreateViewController<T>();
+            FloatingScreen.FloatingScreen floatingScreen = FloatingScreen.FloatingScreen.CreateFloatingScreen(new Vector2(400, 200), true, Vector3.zero, Quaternion.identity);
+            floatingScreen.SetRootViewController(testViewController, ViewController.AnimationType.None);
+            Resources.FindObjectsOfTypeAll<MainFlowCoordinator>().First().InvokeMethod<object, FlowCoordinator>("PresentViewController", new object[] { testViewController, null, ViewController.AnimationDirection.Horizontal, false });
         }
     }
 }

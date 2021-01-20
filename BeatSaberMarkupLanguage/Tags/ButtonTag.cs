@@ -1,5 +1,6 @@
 ﻿using BeatSaberMarkupLanguage.Components;
 using HMUI;
+using Polyglot;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -20,11 +21,15 @@ namespace BeatSaberMarkupLanguage.Tags
             Button button = MonoBehaviour.Instantiate(buttonPrefab, parent, false);
             button.name = "BSMLButton";
             button.interactable = true;
-            Polyglot.LocalizedTextMeshProUGUI localizer = button.GetComponentInChildren<Polyglot.LocalizedTextMeshProUGUI>(true);
-            if (localizer != null)
-                GameObject.Destroy(localizer);
+
             ExternalComponents externalComponents = button.gameObject.AddComponent<ExternalComponents>();
-            TextMeshProUGUI textMesh = button.GetComponentInChildren<TextMeshProUGUI>();
+            GameObject textObject = button.transform.Find("Content/Text").gameObject;
+
+            LocalizedTextMeshProUGUI localizedText = ConfigureLocalizedText(textObject);
+            externalComponents.components.Add(localizedText);
+
+            TextMeshProUGUI textMesh = textObject.GetComponent<TextMeshProUGUI>();
+            textMesh.text = "Default Text";
             textMesh.richText = true;
             externalComponents.components.Add(textMesh);
 

@@ -1,7 +1,7 @@
 ﻿using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.Components.Settings;
 using Polyglot;
-using System;
+using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -28,11 +28,16 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
             (gameObject.transform.GetChild(1) as RectTransform).sizeDelta = new Vector2(40, 0);
             boolSetting.text.overflowMode = TextOverflowModes.Ellipsis;
 
-            TextMeshProUGUI text = gameObject.GetComponentInChildren<TextMeshProUGUI>();
+            GameObject nameText = gameObject.transform.Find("NameText").gameObject;
+            LocalizedTextMeshProUGUI localizedText = ConfigureLocalizedText(nameText);
+
+            TextMeshProUGUI text = nameText.GetComponent<TextMeshProUGUI>();
             text.text = "Default Text";
             text.richText = true;
-            gameObject.AddComponent<ExternalComponents>().components.Add(text);
-            MonoBehaviour.Destroy(text.GetComponent<LocalizedTextMeshProUGUI>());
+
+            List<Component> externalComponents = gameObject.AddComponent<ExternalComponents>().components;
+            externalComponents.Add(text);
+            externalComponents.Add(localizedText);
 
             gameObject.GetComponent<LayoutElement>().preferredWidth = 90;
 
