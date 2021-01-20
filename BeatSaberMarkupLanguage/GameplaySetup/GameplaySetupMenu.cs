@@ -8,6 +8,7 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
 {
     internal class GameplaySetupMenu
     {
+        private const string ERROR_PATH = "BeatSaberMarkupLanguage.Views.gameplay-tab-error.bsml";
         public string resource;
         public object host;
         public Assembly assembly;
@@ -34,7 +35,23 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
         [UIAction("#post-parse")]
         public void Setup()
         {
-            BSMLParser.instance.Parse(Utilities.GetResourceContent(assembly, resource), tabObject, host);
+            try
+            {
+                BSMLParser.instance.Parse(Utilities.GetResourceContent(assembly, resource), tabObject, host);
+            }
+            catch (Exception ex)
+            {
+                if (ex is BSMLResourceException resEx)
+                {
+                    Logger.log.Error($"Cannot find bsml resource '{resEx.ResourcePath}' in '{resEx.Assembly?.GetName().Name ?? "<NULL>"}' for Gameplay Settings tab.");
+                }
+                else
+                {
+                    Logger.log.Error($"Error adding gameplay settings tab for {assembly?.GetName().Name ?? "<NULL>"} ({name}): {ex.Message}");
+                }
+                Logger.log.Debug(ex);
+                BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), ERROR_PATH), tabObject);
+            }
         }
 
         public void SetVisible(bool isVisible)

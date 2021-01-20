@@ -172,6 +172,7 @@
     <Compile Include="Components\TabSelector.cs" />
     <Compile Include="Components\TextPageScrollViewRefresher.cs" />
     <Compile Include="Config.cs" />
+    <Compile Include="Exceptions.cs" />
     <Compile Include="FloatingScreen\FloatingScreen.cs" />
     <Compile Include="FloatingScreen\FloatingScreenMoverPointer.cs" />
     <Compile Include="FontManager.cs" />
@@ -346,6 +347,12 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\mods_idle.png" />
     <EmbeddedResource Include="Resources\mods_selected.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\settings-error.bsml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\gameplay-tab-error.bsml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
