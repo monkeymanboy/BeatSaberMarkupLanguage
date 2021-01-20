@@ -9,13 +9,13 @@
       <slider-setting/>
       <string-setting/>
       <toggle-setting/>
-      <color-setting key='BUTTON_CAMPAIGN'/>
-      <dropdown-list-setting key='BUTTON_SOLO' options='contents'/>
-      <increment-setting key='BUTTON_PARTY'/>
-      <list-setting key='BUTTON_HOW_TO_PLAY' options='contents'/>
-      <slider-setting key='BUTTON_CREDITS'/>
-      <string-setting key='BUTTON_SETTINGS'/>
-      <toggle-setting key='BUTTON_PLAYER_SETTINGS'/>
+      <color-setting text-key='BUTTON_CAMPAIGN'/>
+      <dropdown-list-setting text-key='BUTTON_SOLO' options='contents'/>
+      <increment-setting text-key='BUTTON_PARTY'/>
+      <list-setting text-key='BUTTON_HOW_TO_PLAY' options='contents'/>
+      <slider-setting text-key='BUTTON_CREDITS'/>
+      <string-setting text-key='BUTTON_SETTINGS'/>
+      <toggle-setting text-key='BUTTON_PLAYER_SETTINGS'/>
     </settings-container>
   </tab>
   <tab tags='localization' tab-name-key='LANGUAGE_SC'>
@@ -24,13 +24,13 @@
       <clickable-text/>
       <modifier/>
       <text/>
-      <button key='BUTTON_QUIT'/>
-      <clickable-text key='BUTTON_BASICS'/>
-      <modifier key='BUTTON_SCORE_SYSTEM'/>
-      <text key='BUTTON_MENU'/>
+      <button text-key='BUTTON_QUIT'/>
+      <clickable-text text-key='BUTTON_BASICS'/>
+      <modifier text-key='BUTTON_SCORE_SYSTEM'/>
+      <text text-key='BUTTON_MENU'/>
     </vertical>
   </tab>
   <tab tags='localization' tab-name-key='HEALTH_AND_SAFETY_WARNING_TITLE'>
-    <text-page key='HEALTH_AND_SAFETY_WARNING_CONTENT'/>
+    <text-page text-key='HEALTH_AND_SAFETY_WARNING_CONTENT'/>
   </tab>
 </bg>
