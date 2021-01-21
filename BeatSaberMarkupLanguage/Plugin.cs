@@ -141,5 +141,8 @@ namespace BeatSaberMarkupLanguage
             floatingScreen.SetRootViewController(testViewController, ViewController.AnimationType.None);
             Resources.FindObjectsOfTypeAll<MainFlowCoordinator>().First().InvokeMethod<object, FlowCoordinator>("PresentViewController", new object[] { testViewController, null, ViewController.AnimationDirection.Horizontal, false });
         }
+
+        [OnExit]
+        public void AppeaseAuros() { }
     }
 }
