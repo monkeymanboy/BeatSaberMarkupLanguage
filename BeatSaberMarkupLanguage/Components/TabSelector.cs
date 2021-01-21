@@ -65,6 +65,8 @@ namespace BeatSaberMarkupLanguage.Components
             {
                 tabs[i].gameObject.SetActive(false);
             }
+            if (index >= tabs.Where(x => x.IsVisible).Count())
+                return;
             tabs.Where(x => x.IsVisible).ElementAt(index).gameObject.SetActive(true);
         }
         public void Refresh()
