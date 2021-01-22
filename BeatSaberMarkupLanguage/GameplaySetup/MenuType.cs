@@ -8,6 +8,7 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
         Solo = 1,
         Online = 2,
         Campaign = 4,
-        All = Solo | Online | Campaign
+        Custom = 8,
+        All = Solo | Online | Campaign | Custom
     }
 }

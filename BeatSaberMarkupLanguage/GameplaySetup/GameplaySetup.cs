@@ -52,7 +52,7 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
                     menuType = MenuType.Online;
                     break;
                 default:
-                    throw new System.Exception("Unhandled menu type");
+                    menuType = MenuType.Custom;
                     break;
             }
             foreach (GameplaySetupMenu menu in menus)
