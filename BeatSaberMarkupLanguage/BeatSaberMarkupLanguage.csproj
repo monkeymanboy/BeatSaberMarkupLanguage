@@ -180,6 +180,7 @@
     <Compile Include="GameplaySetup\GameplaySetup.cs" />
     <Compile Include="GameplaySetup\GameplaySetupMenu.cs" />
     <Compile Include="GameplaySetup\MenuType.cs" />
+    <Compile Include="Harmony Patches\HorizontalOrVerticalLayoutGroup_SetChildrenAlongAxis.cs" />
     <Compile Include="Harmony Patches\SegmentedControlCellSelectionStateDidChange.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Macros\AsHostMacro.cs" />
