@@ -31,7 +31,9 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
                 if (transform.name != "HeaderPanel")
                     vanillaItems.Add(transform);
             }
-            (gameplaySetupViewController.transform.Find("TextSegmentedControl") as RectTransform).sizeDelta = new Vector2(0, 6);
+            RectTransform textSegmentedControl = gameplaySetupViewController.transform.Find("TextSegmentedControl") as RectTransform;
+            textSegmentedControl.sizeDelta = new Vector2(0, 6);
+            layoutGroup = textSegmentedControl.GetComponent<LayoutGroup>();
             BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), "BeatSaberMarkupLanguage.Views.gameplay-setup.bsml"), gameplaySetupViewController.gameObject, this);
             
             gameplaySetupViewController.didActivateEvent += GameplaySetupDidActivate;
