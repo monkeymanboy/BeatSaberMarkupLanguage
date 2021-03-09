@@ -13,7 +13,7 @@ namespace BeatSaberMarkupLanguage.Tags
             gameObj.transform.SetParent(parent, false);
 
             FormattableText textMesh = gameObj.AddComponent<FormattableText>();
-            textMesh.font = Object.Instantiate(BeatSaberUI.MainTextFont);
+            textMesh.font = BeatSaberUI.MainTextFont;
             textMesh.fontSharedMaterial = BeatSaberUI.MainUIFontMaterial;
             textMesh.fontSize = 4;
             textMesh.color = Color.white;
