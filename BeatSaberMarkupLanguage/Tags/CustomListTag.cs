@@ -47,7 +47,7 @@ namespace BeatSaberMarkupLanguage.Tags
             RectTransform content = new GameObject("Content").AddComponent<RectTransform>();
             content.SetParent(viewport, false);
 
-            scrollView.SetField("_contentTransform", content);
+            scrollView.SetField("_contentRectTransform", content);
             scrollView.SetField("_viewport", viewport);
 
             (viewport.transform as RectTransform).anchorMin = new Vector2(0f, 0f);

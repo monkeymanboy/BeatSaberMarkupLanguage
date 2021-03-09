@@ -24,6 +24,7 @@ namespace BeatSaberMarkupLanguage.Tags
 
             GameObject.DestroyImmediate(modalView.GetComponent<TableView>());
             GameObject.DestroyImmediate(modalView.GetComponent<ScrollRect>());
+            GameObject.DestroyImmediate(modalView.GetComponent<ScrollView>());
             GameObject.DestroyImmediate(modalView.GetComponent<EventSystemListener>());
             //GameObject.DestroyImmediate(modalView.GetComponent<Touchable>());
             //modalView.gameObject.AddComponent<CurvedCanvasSettings>();

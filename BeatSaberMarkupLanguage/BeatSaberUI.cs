@@ -92,7 +92,26 @@ namespace BeatSaberMarkupLanguage
         /// Gets the main font used by the game for UI text.
         /// </summary>
         public static TMP_FontAsset MainTextFont
-            => mainTextFont ??= Resources.FindObjectsOfTypeAll<TMP_FontAsset>().FirstOrDefault(t => t.name == "Teko-Medium SDF No Glow");
+        {
+            get
+            {
+                if (mainTextFont == null)
+                    mainTextFont = Resources.FindObjectsOfTypeAll<TMP_FontAsset>().FirstOrDefault(t => t.name == "Teko-Medium SDF");
+                return mainTextFont;
+            }
+        }
+
+        private static Material mainUIFontMaterial = null;
+
+        internal static Material MainUIFontMaterial
+        {
+            get
+            {
+                if (mainUIFontMaterial == null)
+                    mainUIFontMaterial = Resources.FindObjectsOfTypeAll<Material>().First(m => m.name == "Teko-Medium SDF Curved Softer");
+                return mainUIFontMaterial;
+            }
+        }
 
         /// <summary>
         /// Creates a clone of the given font, with its material fixed to be a no-glow material suitable for use on UI elements.
@@ -190,6 +209,7 @@ namespace BeatSaberMarkupLanguage
 
             T textComponent = gameObj.AddComponent<T>();
             textComponent.font = MainTextFont;
+            textComponent.fontSharedMaterial = MainUIFontMaterial;
             textComponent.rectTransform.SetParent(parent, false);
             textComponent.text = text;
             textComponent.fontSize = 4;
