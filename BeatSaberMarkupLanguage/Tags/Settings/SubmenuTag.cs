@@ -9,6 +9,8 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
 {
     public class SubmenuTag : BSMLTag
     {
+        private ModSettingsFlowCoordinator flow;
+
         public override string[] Aliases => new[] { "settings-submenu" };
 
         public override GameObject CreateObject(Transform parent)
@@ -17,7 +19,8 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
             gameObj.SetActive(false);
 
             ClickableText clickableText = gameObj.AddComponent<ClickableText>();
-            clickableText.font = GameObject.Instantiate(Resources.FindObjectsOfTypeAll<TMP_FontAsset>().First(t => t.name == "Teko-Medium SDF No Glow"));
+            clickableText.font = BeatSaberUI.MainTextFont;
+            clickableText.fontSharedMaterial = BeatSaberUI.MainUIFontMaterial;
             clickableText.rectTransform.SetParent(parent, false);
             clickableText.text = "Default Text";
             clickableText.fontSize = 4;
@@ -32,9 +35,10 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
 
             clickableText.OnClickEvent += delegate
             {
-                ModSettingsFlowCoordinator settingsFlowCoordinator = Resources.FindObjectsOfTypeAll<ModSettingsFlowCoordinator>().FirstOrDefault();
-                if (settingsFlowCoordinator)
-                    settingsFlowCoordinator.OpenMenu(submenuController, true, false);
+                if (flow == null)
+                    flow = Resources.FindObjectsOfTypeAll<ModSettingsFlowCoordinator>().FirstOrDefault();
+                if (flow)
+                    flow.OpenMenu(submenuController, true, false);
             };
 
             ExternalComponents externalComponents = submenuController.gameObject.AddComponent<ExternalComponents>();

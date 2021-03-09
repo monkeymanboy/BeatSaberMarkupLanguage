@@ -8,20 +8,23 @@ namespace BeatSaberMarkupLanguage.Tags
 {
     public class TextSegmentedControlTag : BSMLTag
     {
+        private TextSegmentedControl segmentControlTemplate;
+
         public override string[] Aliases => new[] { "text-segments" };
 
         public override GameObject CreateObject(Transform parent)
         {
-            TextSegmentedControl prefab = Resources.FindObjectsOfTypeAll<TextSegmentedControl>().First(x => x.name == "BeatmapDifficultySegmentedControl" && x.GetField<DiContainer, TextSegmentedControl>("_container") != null);
-            TextSegmentedControl textSegmentedControl = MonoBehaviour.Instantiate(prefab, parent, false);
+            if (segmentControlTemplate == null)
+                segmentControlTemplate = Resources.FindObjectsOfTypeAll<TextSegmentedControl>().First(x => x.name == "BeatmapDifficultySegmentedControl" && x.GetField<DiContainer, TextSegmentedControl>("_container") != null);
+            TextSegmentedControl textSegmentedControl = Object.Instantiate(segmentControlTemplate, parent, false);
             textSegmentedControl.name = "BSMLTextSegmentedControl";
-            textSegmentedControl.SetField("_container", prefab.GetField<DiContainer, TextSegmentedControl>("_container"));
+            textSegmentedControl.SetField("_container", segmentControlTemplate.GetField<DiContainer, TextSegmentedControl>("_container"));
             (textSegmentedControl.transform as RectTransform).anchoredPosition = new Vector2(0, 0);
             foreach (Transform transform in textSegmentedControl.transform)
             {
-                GameObject.Destroy(transform.gameObject);
+                Object.Destroy(transform.gameObject);
             }
-            MonoBehaviour.Destroy(textSegmentedControl.GetComponent<BeatmapDifficultySegmentedControlController>());
+            Object.Destroy(textSegmentedControl.GetComponent<BeatmapDifficultySegmentedControlController>());
             return textSegmentedControl.gameObject;
         }
     }

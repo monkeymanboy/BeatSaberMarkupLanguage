@@ -11,24 +11,28 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
 {
     public class StringSettingTag : ModalKeyboardTag
     {
+        private FormattedFloatListSettingsValueController valueControllerTemplate;
+
         public override string[] Aliases => new[] { "string-setting" };
 
         public override GameObject CreateObject(Transform parent)
         {
-            FormattedFloatListSettingsValueController baseSetting = MonoBehaviour.Instantiate(Resources.FindObjectsOfTypeAll<FormattedFloatListSettingsValueController>().First(x => (x.name == "VRRenderingScale")), parent, false);
+            if (valueControllerTemplate == null)
+                valueControllerTemplate = Resources.FindObjectsOfTypeAll<FormattedFloatListSettingsValueController>().First(x => x.name == "VRRenderingScale");
+            FormattedFloatListSettingsValueController baseSetting = Object.Instantiate(valueControllerTemplate, parent, false);
             baseSetting.name = "BSMLStringSetting";
 
             GameObject gameObject = baseSetting.gameObject;
             gameObject.SetActive(false);
 
-            MonoBehaviour.Destroy(baseSetting);
+            Object.Destroy(baseSetting);
             StringSetting stringSetting = gameObject.AddComponent<StringSetting>();
             Transform valuePick = gameObject.transform.Find("ValuePicker");
-            MonoBehaviour.Destroy(valuePick.GetComponent<StepValuePicker>());
+            Object.Destroy(valuePick.GetComponent<StepValuePicker>());
             Button decButton = valuePick.GetComponentsInChildren<Button>().First();
             decButton.enabled = false;
             decButton.interactable = true;
-            GameObject.Destroy(decButton.transform.Find("Icon").gameObject);
+            Object.Destroy(decButton.transform.Find("Icon").gameObject);
             stringSetting.text = valuePick.GetComponentsInChildren<TextMeshProUGUI>().First();
             stringSetting.text.richText = true;
             stringSetting.editButton = valuePick.GetComponentsInChildren<Button>().Last();

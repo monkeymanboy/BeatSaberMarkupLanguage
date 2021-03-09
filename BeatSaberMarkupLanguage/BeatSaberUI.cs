@@ -52,6 +52,7 @@ namespace BeatSaberMarkupLanguage
             }
         }
 
+        private static Canvas canvasTemplate;
 
         /// <summary>
         /// Creates a ViewController of type T, and marks it to not be destroyed.
@@ -60,8 +61,11 @@ namespace BeatSaberMarkupLanguage
         /// <returns>The newly created ViewController of type T.</returns>
         public static T CreateViewController<T>() where T : ViewController
         {
+            if (canvasTemplate == null)
+                canvasTemplate = Resources.FindObjectsOfTypeAll<Canvas>().First(x => x.name == "DropdownTableView");
+
             GameObject go = new GameObject(typeof(T).Name);
-            go.AddComponent(Resources.FindObjectsOfTypeAll<Canvas>().First(x => x.name == "DropdownTableView"));
+            go.AddComponent(canvasTemplate);
             go.gameObject.AddComponent<VRGraphicRaycaster>().SetField("_physicsRaycaster", PhysicsRaycasterWithCache);
             go.gameObject.AddComponent<CanvasGroup>();
             T vc = go.AddComponent<T>();
@@ -92,7 +96,26 @@ namespace BeatSaberMarkupLanguage
         /// Gets the main font used by the game for UI text.
         /// </summary>
         public static TMP_FontAsset MainTextFont
-            => mainTextFont ??= Resources.FindObjectsOfTypeAll<TMP_FontAsset>().FirstOrDefault(t => t.name == "Teko-Medium SDF No Glow");
+        {
+            get
+            {
+                if (mainTextFont == null)
+                    mainTextFont = Resources.FindObjectsOfTypeAll<TMP_FontAsset>().FirstOrDefault(t => t.name == "Teko-Medium SDF");
+                return mainTextFont;
+            }
+        }
+
+        private static Material mainUIFontMaterial = null;
+
+        internal static Material MainUIFontMaterial
+        {
+            get
+            {
+                if (mainUIFontMaterial == null)
+                    mainUIFontMaterial = Resources.FindObjectsOfTypeAll<Material>().First(m => m.name == "Teko-Medium SDF Curved Softer");
+                return mainUIFontMaterial;
+            }
+        }
 
         /// <summary>
         /// Creates a clone of the given font, with its material fixed to be a no-glow material suitable for use on UI elements.
@@ -190,6 +213,7 @@ namespace BeatSaberMarkupLanguage
 
             T textComponent = gameObj.AddComponent<T>();
             textComponent.font = MainTextFont;
+            textComponent.fontSharedMaterial = MainUIFontMaterial;
             textComponent.rectTransform.SetParent(parent, false);
             textComponent.text = text;
             textComponent.fontSize = 4;

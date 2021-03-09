@@ -11,19 +11,24 @@ namespace BeatSaberMarkupLanguage.Tags
 {
     public class ModifierTag : BSMLTag
     {
+        private GameplayModifierToggle toggleTemplate;
+
         public override string[] Aliases => new[] { "modifier" };
 
         public override GameObject CreateObject(Transform parent)
         {
-            GameplayModifierToggle baseModifier = MonoBehaviour.Instantiate(Resources.FindObjectsOfTypeAll<GameplayModifierToggle>().First(x => (x.name == "InstaFail")), parent, false);
+            if (toggleTemplate == null)
+                toggleTemplate = Resources.FindObjectsOfTypeAll<GameplayModifierToggle>().First(x => x.name == "InstaFail");
+            GameplayModifierToggle baseModifier = Object.Instantiate(toggleTemplate, parent, false);
             baseModifier.name = "BSMLModifier";
 
             GameObject gameObject = baseModifier.gameObject;
             gameObject.SetActive(false);
 
-            MonoBehaviour.Destroy(baseModifier);
-            MonoBehaviour.Destroy(gameObject.GetComponent<HoverHint>());
-            
+            Object.Destroy(baseModifier);
+            Object.Destroy(gameObject.GetComponent<HoverTextSetter>());
+            Object.Destroy(gameObject.transform.Find("Multiplier").gameObject);
+
             GameObject nameText = gameObject.transform.Find("Name").gameObject;
             TextMeshProUGUI text = nameText.GetComponent<TextMeshProUGUI>();
             text.text = "Default Text";

@@ -11,11 +11,15 @@ namespace BeatSaberMarkupLanguage.Tags
 {
     public class ScrollViewTag : BSMLTag
     {
+        private TextPageScrollView scrollViewTemplate;
+
         public override string[] Aliases => new[] { "scroll-view" };
 
         public override GameObject CreateObject(Transform parent)
         {
-            TextPageScrollView textScrollView = MonoBehaviour.Instantiate(Resources.FindObjectsOfTypeAll<ReleaseInfoViewController>().First().GetField<TextPageScrollView, ReleaseInfoViewController>("_textPageScrollView"), parent);
+            if (scrollViewTemplate == null)
+                scrollViewTemplate = Resources.FindObjectsOfTypeAll<ReleaseInfoViewController>().First().GetField<TextPageScrollView, ReleaseInfoViewController>("_textPageScrollView");
+            TextPageScrollView textScrollView = Object.Instantiate(scrollViewTemplate, parent);
             textScrollView.name = "BSMLScrollView";
             Button pageUpButton = textScrollView.GetField<Button, ScrollView>("_pageUpButton");
             Button pageDownButton = textScrollView.GetField<Button, ScrollView>("_pageDownButton");
@@ -24,9 +28,9 @@ namespace BeatSaberMarkupLanguage.Tags
             RectTransform viewport = textScrollView.GetField<RectTransform, ScrollView>("_viewport");
             viewport.gameObject.AddComponent<VRGraphicRaycaster>().SetField("_physicsRaycaster", BeatSaberUI.PhysicsRaycasterWithCache);
 
-            GameObject.Destroy(textScrollView.GetField<TextMeshProUGUI, TextPageScrollView>("_text").gameObject);
+            Object.Destroy(textScrollView.GetField<TextMeshProUGUI, TextPageScrollView>("_text").gameObject);
             GameObject gameObject = textScrollView.gameObject;
-            MonoBehaviour.Destroy(textScrollView);
+            Object.Destroy(textScrollView);
             gameObject.SetActive(false);
 
             BSMLScrollView scrollView = gameObject.AddComponent<BSMLScrollView>();

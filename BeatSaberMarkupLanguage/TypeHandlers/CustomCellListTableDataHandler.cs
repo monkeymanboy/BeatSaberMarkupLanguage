@@ -84,9 +84,9 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 
             if (componentType.data.TryGetValue("id", out string id))
             {
-                TableViewScroller scroller = tableData.tableView.GetField<TableViewScroller, TableView>("scroller");
-                parserParams.AddEvent(id + "#PageUp", scroller.PageScrollUp);
-                parserParams.AddEvent(id + "#PageDown", scroller.PageScrollDown);
+                ScrollView scroller = tableData.tableView.GetField<ScrollView, TableView>("_scrollView");
+                parserParams.AddEvent(id + "#PageUp", scroller.PageUpButtonPressed);
+                parserParams.AddEvent(id + "#PageDown", scroller.PageDownButtonPressed);
             }
         }
     }

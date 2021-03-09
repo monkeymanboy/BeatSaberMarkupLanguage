@@ -44,7 +44,7 @@ namespace BeatSaberMarkupLanguage.Components
             set
             {
                 alignBottom = value;
-                ScrollTo(_destinationPosY, true);
+                ScrollTo(_destinationPos, true);
             }
         }
 
@@ -95,7 +95,7 @@ namespace BeatSaberMarkupLanguage.Components
 
         public void RefreshContent()
         {
-            SetContentHeight(_contentRectTransform.rect.height);
+            SetContentSize(_contentRectTransform.rect.height);
             contentHeight = _contentRectTransform.rect.height;
             RefreshBindings();
             ComputeScrollFocusPosY();
@@ -116,10 +116,10 @@ namespace BeatSaberMarkupLanguage.Components
 
             if (runScrollAnim)
             {
-                float num = Mathf.Lerp(_contentRectTransform.anchoredPosition.y, _destinationPosY, Time.deltaTime * _smooth);
-                if (Mathf.Abs(num - _destinationPosY) < 0.01f)
+                float num = Mathf.Lerp(_contentRectTransform.anchoredPosition.y, _destinationPos, Time.deltaTime * _smooth);
+                if (Mathf.Abs(num - _destinationPos) < 0.01f)
                 {
-                    num = _destinationPosY;
+                    num = _destinationPos;
                     runScrollAnim = false;
                 }
                 _contentRectTransform.anchoredPosition = new Vector2(0f, num);
@@ -130,15 +130,15 @@ namespace BeatSaberMarkupLanguage.Components
         public new void RefreshButtons()
         {
             if (PageUpButton != null)
-                PageUpButton.interactable = _destinationPosY > 0f;
+                PageUpButton.interactable = _destinationPos > 0f;
             if (PageDownButton != null)
-                PageDownButton.interactable = _destinationPosY < contentHeight - (_viewport?.rect.height ?? 0);
+                PageDownButton.interactable = _destinationPos < contentHeight - (_viewport?.rect.height ?? 0);
         }
 
         public new void ComputeScrollFocusPosY()
         {
             ItemForFocussedScrolling[] componentsInChildren = GetComponentsInChildren<ItemForFocussedScrolling>(true);
-            _scrollFocusPosYs = (from item in componentsInChildren
+            _scrollFocusPositions = (from item in componentsInChildren
                                       select WorldPositionToScrollViewPosition(item.transform.position).y into i
                                       orderby i
                                       select i).ToArray<float>();
@@ -168,8 +168,8 @@ namespace BeatSaberMarkupLanguage.Components
         public new void ScrollToWorldPositionIfOutsideArea(Vector3 worldPosition, float pageRelativePosition, float relativeBoundaryStart, float relativeBoundaryEnd, bool animated)
         {
             float num = WorldPositionToScrollViewPosition(worldPosition).y;
-            float num2 = _destinationPosY + relativeBoundaryStart * scrollPageHeight;
-            float num3 = _destinationPosY + relativeBoundaryEnd * scrollPageHeight;
+            float num2 = _destinationPos + relativeBoundaryStart * scrollPageHeight;
+            float num3 = _destinationPos + relativeBoundaryEnd * scrollPageHeight;
             if (num > num2 && num < num3)
             {
                 return;
@@ -183,7 +183,7 @@ namespace BeatSaberMarkupLanguage.Components
             SetDestinationPosY(dstPosY);
             if (!animated)
             {
-                _contentRectTransform.anchoredPosition = new Vector2(0f, _destinationPosY);
+                _contentRectTransform.anchoredPosition = new Vector2(0f, _destinationPos);
             }
             RefreshButtons();
             runScrollAnim = true;
@@ -191,7 +191,7 @@ namespace BeatSaberMarkupLanguage.Components
 
         public new void PageUpButtonPressed()
         {
-            float num = _destinationPosY;
+            float num = _destinationPos;
             switch (_scrollType)
             {
                 case ScrollType.PageSize:
@@ -203,10 +203,10 @@ namespace BeatSaberMarkupLanguage.Components
                     break;
                 case ScrollType.FocusItems:
                     {
-                        float threshold = _destinationPosY + _scrollItemRelativeThresholdPosition * scrollPageHeight;
-                        num = (from posy in _scrollFocusPosYs
+                        float threshold = _destinationPos + _scrollItemRelativeThresholdPosition * scrollPageHeight;
+                        num = (from posy in _scrollFocusPositions
                                where posy < threshold
-                               select posy).DefaultIfEmpty(_destinationPosY).Max();
+                               select posy).DefaultIfEmpty(_destinationPos).Max();
                         num -= _pageStepNormalizedSize * scrollPageHeight;
                         break;
                     }
@@ -218,7 +218,7 @@ namespace BeatSaberMarkupLanguage.Components
 
         public new void PageDownButtonPressed()
         {
-            float num = _destinationPosY;
+            float num = _destinationPos;
             switch (_scrollType)
             {
                 case ScrollType.PageSize:
@@ -230,10 +230,10 @@ namespace BeatSaberMarkupLanguage.Components
                     break;
                 case ScrollType.FocusItems:
                     {
-                        float threshold = _destinationPosY + (1f - _scrollItemRelativeThresholdPosition) * scrollPageHeight;
-                        num = (from posy in _scrollFocusPosYs
+                        float threshold = _destinationPos + (1f - _scrollItemRelativeThresholdPosition) * scrollPageHeight;
+                        num = (from posy in _scrollFocusPositions
                                where posy > threshold
-                               select posy).DefaultIfEmpty(_destinationPosY + scrollPageHeight).Min();
+                               select posy).DefaultIfEmpty(_destinationPos + scrollPageHeight).Min();
                         num -= (1f - _pageStepNormalizedSize) * scrollPageHeight;
                         break;
                     }
@@ -247,7 +247,7 @@ namespace BeatSaberMarkupLanguage.Components
         {
             float maxPosition = contentHeight - _viewport.rect.height;
             if (maxPosition < 0 && !AlignBottom) maxPosition = 0f;
-            _destinationPosY = Mathf.Min(maxPosition, Mathf.Max(0f, value));
+            _destinationPos = Mathf.Min(maxPosition, Mathf.Max(0f, value));
         }
     }
 }

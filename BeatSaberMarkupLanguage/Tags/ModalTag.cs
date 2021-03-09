@@ -1,31 +1,32 @@
-﻿using BeatSaberMarkupLanguage.Components;
-using HMUI;
+﻿using HMUI;
 using IPA.Utilities;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using VRUIControls;
-using Zenject;
 
 namespace BeatSaberMarkupLanguage.Tags
 {
     public class ModalTag : BSMLTag
     {
+        private ModalView modalViewTemplate;
+
         public override string[] Aliases => new[] { "modal" };
 
         public override GameObject CreateObject(Transform parent)
         {
-            ModalView yoinkFromView = Resources.FindObjectsOfTypeAll<ModalView>().First(x => x.name == "DropdownTableView");
-            ModalView modalView = GameObject.Instantiate(yoinkFromView, parent);
-            modalView.SetField("_presentPanelAnimations", yoinkFromView.GetField<PanelAnimationSO, ModalView>("_presentPanelAnimations"));
-            modalView.SetField("_dismissPanelAnimation", yoinkFromView.GetField<PanelAnimationSO, ModalView>("_dismissPanelAnimation"));
+            if (modalViewTemplate == null)
+                modalViewTemplate = Resources.FindObjectsOfTypeAll<ModalView>().First(x => x.name == "DropdownTableView");
+            ModalView modalView = Object.Instantiate(modalViewTemplate, parent);
+            modalView.SetField("_presentPanelAnimations", modalViewTemplate.GetField<PanelAnimationSO, ModalView>("_presentPanelAnimations"));
+            modalView.SetField("_dismissPanelAnimation", modalViewTemplate.GetField<PanelAnimationSO, ModalView>("_dismissPanelAnimation"));
             modalView.SetField("_container", BeatSaberUI.DiContainer);
             modalView.GetComponent<VRGraphicRaycaster>().SetField("_physicsRaycaster", BeatSaberUI.PhysicsRaycasterWithCache);
 
-            GameObject.DestroyImmediate(modalView.GetComponent<TableView>());
-            GameObject.DestroyImmediate(modalView.GetComponent<TableViewScroller>());
-            GameObject.DestroyImmediate(modalView.GetComponent<ScrollRect>());
-            GameObject.DestroyImmediate(modalView.GetComponent<EventSystemListener>());
+            Object.DestroyImmediate(modalView.GetComponent<TableView>());
+            Object.DestroyImmediate(modalView.GetComponent<ScrollRect>());
+            Object.DestroyImmediate(modalView.GetComponent<ScrollView>());
+            Object.DestroyImmediate(modalView.GetComponent<EventSystemListener>());
             //GameObject.DestroyImmediate(modalView.GetComponent<Touchable>());
             //modalView.gameObject.AddComponent<CurvedCanvasSettings>();
             //modalView.gameObject.AddComponent<EventSystemListener>();
@@ -39,7 +40,7 @@ namespace BeatSaberMarkupLanguage.Tags
                 }
                 else
                 {
-                    GameObject.Destroy(child.gameObject);
+                    Object.Destroy(child.gameObject);
                 }
             }
 
