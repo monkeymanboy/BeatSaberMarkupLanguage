@@ -11,11 +11,13 @@ namespace BeatSaberMarkupLanguage.Components
         void OnEnable()
         {
             scrollView?.SetText(scrollView.GetField<TextMeshProUGUI, TextPageScrollView>("_text").text);
+            scrollView?.RefreshButtons();
         }
 
         void OnRectTransformDimensionsChange()
         {
             scrollView?.SetText(scrollView.GetField<TextMeshProUGUI, TextPageScrollView>("_text").text);
+            scrollView?.RefreshButtons();
         }
     }
 }

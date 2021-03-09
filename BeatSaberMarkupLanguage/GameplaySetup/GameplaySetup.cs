@@ -17,29 +17,19 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
         [UIValue("mod-menus")]
         private List<object> menus = new List<object>();
 
-        [UIComponent("selector")]
-        private RectTransform selector;
-
-        [UIComponent("mod-tab")]
-        private RectTransform modTab;
-
         internal void Setup()
         {
             if (menus.Count == 0) return;
             gameplaySetupViewController = Resources.FindObjectsOfTypeAll<GameplaySetupViewController>().First();
-            gameplaySetupViewController.transform.Find("HeaderPanel").GetComponentInChildren<TextMeshProUGUI>().fontSize = 4;
             vanillaItems.Clear();
             foreach(Transform transform in gameplaySetupViewController.transform)
             {
                 if (transform.name != "HeaderPanel")
                     vanillaItems.Add(transform);
             }
-            // (gameplaySetupViewController.transform.Find("HeaderPanel") as RectTransform).sizeDelta = new Vector2(90, 6);
-            (gameplaySetupViewController.transform.Find("TextSegmentedControl") as RectTransform).localPosition = new Vector2(0, 38f);
+            (gameplaySetupViewController.transform.Find("TextSegmentedControl") as RectTransform).sizeDelta = new Vector2(0, 6);
             BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), "BeatSaberMarkupLanguage.Views.gameplay-setup.bsml"), gameplaySetupViewController.gameObject, this);
-            selector.parent.localPosition = new Vector3(0f, -8f);
-            selector.localPosition = new Vector3(0f, 45f);
-            modTab.localPosition = new Vector3(0f, 12f);
+            
             gameplaySetupViewController.didActivateEvent += GameplaySetupDidActivate;
         }
 
@@ -65,11 +55,6 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
             }
             foreach (GameplaySetupMenu menu in menus)
                 menu.SetVisible(menu.IsMenuType(menuType));
-            /*switch (BeatSaberUI.MainFlowCoordinator.YoungestChildFlowCoordinatorOrSelf().GetType())
-            {
-                case typeof(CampaignFlowCoordinator):
-                    break;
-            }*/
         }
 
         public void AddTab(string name, string resource, object host)
