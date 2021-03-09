@@ -10,6 +10,8 @@ namespace BeatSaberMarkupLanguage.Tags
 {
     public class CustomListTag : BSMLTag
     {
+        private Canvas canvasTemplate;
+
         public override string[] Aliases => new[] { "custom-list" };
         public override bool AddChildren { get => false; }
 
@@ -24,8 +26,11 @@ namespace BeatSaberMarkupLanguage.Tags
             gameObject.name = "BSMLCustomList";
             gameObject.SetActive(false);
 
+            if (canvasTemplate == null)
+                canvasTemplate = Resources.FindObjectsOfTypeAll<Canvas>().First(x => x.name == "DropdownTableView");
+
             gameObject.AddComponent<ScrollRect>();
-            gameObject.AddComponent(Resources.FindObjectsOfTypeAll<Canvas>().First(x => x.name == "DropdownTableView"));
+            gameObject.AddComponent(canvasTemplate);
             gameObject.AddComponent<VRGraphicRaycaster>().SetField("_physicsRaycaster", BeatSaberUI.PhysicsRaycasterWithCache);
             gameObject.AddComponent<Touchable>();
             gameObject.AddComponent<EventSystemListener>();
