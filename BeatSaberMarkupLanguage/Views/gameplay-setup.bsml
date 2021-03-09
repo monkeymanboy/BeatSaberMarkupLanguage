@@ -3,7 +3,7 @@
   <tab tags='new-tab' tab-name='Vanilla'>
     <macro.reparent transforms='vanilla-items'/>
   </tab>
-  <tab tags='new-tab' tab-name='Mods'>
+  <tab id='mod-tab' tags='new-tab' tab-name='Mods'>
     <horizontal child-expand-width='false' pref-height='7' anchor-pos-y='22.5' size-delta-x='-16'>
       <page-button direction='Left' pref-width='7' pref-height='7' tags='left-button'/>
       <tab-selector tab-tag='mod-tab' child-expand-width='true' child-control-width='true' has-separator='false' page-count='3' left-button-tag='left-button' right-button-tag='right-button'/>
