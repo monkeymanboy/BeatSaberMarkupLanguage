@@ -1,16 +1,20 @@
 ﻿using BeatSaberMarkupLanguage.Attributes;
+using IPA.Utilities;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.GameplaySetup
 {
     public class GameplaySetup : PersistentSingleton<GameplaySetup>
     {
+        private static readonly FieldAccessor<LayoutGroup, List<RectTransform>>.Accessor LayoutGroupChildren = FieldAccessor<LayoutGroup, List<RectTransform>>.GetAccessor("m_RectChildren");
         private GameplaySetupViewController gameplaySetupViewController;
-        
+        private LayoutGroup layoutGroup;
+
         [UIValue("vanilla-items")]
         private List<Transform> vanillaItems = new List<Transform>();
 
@@ -35,6 +39,8 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
 
         private void GameplaySetupDidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
         {
+            LayoutGroupChildren(ref layoutGroup).Clear();
+
             MenuType menuType;
             switch (BeatSaberUI.MainFlowCoordinator.YoungestChildFlowCoordinatorOrSelf())
             {
