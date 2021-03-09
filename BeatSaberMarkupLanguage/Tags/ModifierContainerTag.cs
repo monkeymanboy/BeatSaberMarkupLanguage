@@ -1,5 +1,4 @@
-﻿using BeatSaberMarkupLanguage.Components;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.Tags

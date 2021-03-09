@@ -8,20 +8,23 @@ namespace BeatSaberMarkupLanguage.Tags
 {
     public class IconSegmentedControlTag : BSMLTag
     {
+        private IconSegmentedControl segmentedControlTemplate;
+
         public override string[] Aliases => new[] { "icon-segments" };
 
         public override GameObject CreateObject(Transform parent)
         {
-            IconSegmentedControl prefab = Resources.FindObjectsOfTypeAll<IconSegmentedControl>().First(x => x.name == "BeatmapCharacteristicSegmentedControl" && x.GetField<DiContainer, IconSegmentedControl>("_container") != null);
-            IconSegmentedControl iconSegmentedControl = MonoBehaviour.Instantiate(prefab, parent, false);
+            if (segmentedControlTemplate == null)
+                segmentedControlTemplate = Resources.FindObjectsOfTypeAll<IconSegmentedControl>().First(x => x.name == "BeatmapCharacteristicSegmentedControl" && x.GetField<DiContainer, IconSegmentedControl>("_container") != null);
+            IconSegmentedControl iconSegmentedControl = Object.Instantiate(segmentedControlTemplate, parent, false);
             iconSegmentedControl.name = "BSMLIconSegmentedControl";
-            iconSegmentedControl.SetField("_container", prefab.GetField<DiContainer, IconSegmentedControl>("_container"));
+            iconSegmentedControl.SetField("_container", segmentedControlTemplate.GetField<DiContainer, IconSegmentedControl>("_container"));
             (iconSegmentedControl.transform as RectTransform).anchoredPosition = new Vector2(0, 0);
             foreach (Transform transform in iconSegmentedControl.transform)
             {
-                GameObject.Destroy(transform.gameObject);
+                Object.Destroy(transform.gameObject);
             }
-            MonoBehaviour.Destroy(iconSegmentedControl.GetComponent<BeatmapCharacteristicSegmentedControlController>());
+            Object.Destroy(iconSegmentedControl.GetComponent<BeatmapCharacteristicSegmentedControlController>());
             return iconSegmentedControl.gameObject;
         }
     }

@@ -20,7 +20,7 @@ namespace BeatSaberMarkupLanguage.Tags
                 prefab = vc.GetField<IconSegmentedControl, PlatformLeaderboardViewController>("_scopeSegmentedControl");
             }
 
-            IconSegmentedControl control = MonoBehaviour.Instantiate(prefab, parent, false);
+            IconSegmentedControl control = Object.Instantiate(prefab, parent, false);
             control.name = "BSMLVerticalIconSegmentedControl";
             control.SetField("_container", prefab.GetField<DiContainer, IconSegmentedControl>("_container"));
 
@@ -31,7 +31,7 @@ namespace BeatSaberMarkupLanguage.Tags
             rt.pivot = new Vector2(0.5f, 0.5f);
 
             foreach (Transform transform in control.transform)
-                GameObject.Destroy(transform.gameObject);
+                Object.Destroy(transform.gameObject);
 
             return control.gameObject;
         }

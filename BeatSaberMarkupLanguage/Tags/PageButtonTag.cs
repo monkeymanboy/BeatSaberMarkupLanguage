@@ -7,11 +7,15 @@ namespace BeatSaberMarkupLanguage.Tags
 {
     public class PageButtonTag : BSMLTag
     {
+        private Button buttonTemplate;
+
         public override string[] Aliases => new[] { "page-button", "pg-button" };
 
         public override GameObject CreateObject(Transform parent)
         {
-            Button button = MonoBehaviour.Instantiate(Resources.FindObjectsOfTypeAll<Button>().Last(x => (x.name == "UpButton")), parent, false);
+            if (buttonTemplate == null)
+                buttonTemplate = Resources.FindObjectsOfTypeAll<Button>().Last(x => x.name == "UpButton");
+            Button button = Object.Instantiate(buttonTemplate, parent, false);
             button.gameObject.SetActive(false);
             button.name = "BSMLPageButton";
             button.interactable = true;

@@ -9,18 +9,21 @@ namespace BeatSaberMarkupLanguage.Tags
 {
     public class TabSelectorTag : BSMLTag
     {
+        private TextSegmentedControl segmentControlTemplate;
+
         public override string[] Aliases => new[] { "tab-select", "tab-selector" };
 
         public override GameObject CreateObject(Transform parent)
         {
-            TextSegmentedControl prefab = Resources.FindObjectsOfTypeAll<TextSegmentedControl>().FirstOrDefault(x => x.transform.parent.name == "PlayerStatisticsViewController" && x.GetField<DiContainer, TextSegmentedControl>("_container") != null);
-            TextSegmentedControl textSegmentedControl = MonoBehaviour.Instantiate(prefab, parent, false);
+            if (segmentControlTemplate == null)
+                segmentControlTemplate = Resources.FindObjectsOfTypeAll<TextSegmentedControl>().FirstOrDefault(x => x.transform.parent.name == "PlayerStatisticsViewController" && x.GetField<DiContainer, TextSegmentedControl>("_container") != null);
+            TextSegmentedControl textSegmentedControl = Object.Instantiate(segmentControlTemplate, parent, false);
             textSegmentedControl.name = "BSMLTabSelector";
-            textSegmentedControl.SetField("_container", prefab.GetField<DiContainer, TextSegmentedControl>("_container"));
+            textSegmentedControl.SetField("_container", segmentControlTemplate.GetField<DiContainer, TextSegmentedControl>("_container"));
             (textSegmentedControl.transform as RectTransform).anchoredPosition = new Vector2(0, 0);
             foreach(Transform transform in textSegmentedControl.transform)
             {
-                GameObject.Destroy(transform.gameObject);
+                Object.Destroy(transform.gameObject);
             }
             textSegmentedControl.gameObject.AddComponent<TabSelector>().textSegmentedControl = textSegmentedControl;
             return textSegmentedControl.gameObject;

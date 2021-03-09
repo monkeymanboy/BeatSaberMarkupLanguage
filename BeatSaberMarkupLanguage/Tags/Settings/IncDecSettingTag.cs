@@ -11,13 +11,17 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
 {
     public abstract class IncDecSettingTag<T> : BSMLTag where T : IncDecSetting
     {
+        private FormattedFloatListSettingsValueController valueControllerTemplate;
+
         public override GameObject CreateObject(Transform parent)
         {
-            FormattedFloatListSettingsValueController baseSetting = MonoBehaviour.Instantiate(Resources.FindObjectsOfTypeAll<FormattedFloatListSettingsValueController>().First(x => (x.name == "VRRenderingScale")), parent, false);
+            if (valueControllerTemplate == null)
+                valueControllerTemplate = Resources.FindObjectsOfTypeAll<FormattedFloatListSettingsValueController>().First(x => x.name == "VRRenderingScale");
+            FormattedFloatListSettingsValueController baseSetting = Object.Instantiate(valueControllerTemplate, parent, false);
             baseSetting.name = "BSMLIncDecSetting";
 
             GameObject gameObject = baseSetting.gameObject;
-            MonoBehaviour.Destroy(baseSetting);
+            Object.Destroy(baseSetting);
             gameObject.SetActive(false);
 
             T boolSetting = gameObject.AddComponent<T>();

@@ -52,6 +52,7 @@ namespace BeatSaberMarkupLanguage
             }
         }
 
+        private static Canvas canvasTemplate;
 
         /// <summary>
         /// Creates a ViewController of type T, and marks it to not be destroyed.
@@ -60,8 +61,11 @@ namespace BeatSaberMarkupLanguage
         /// <returns>The newly created ViewController of type T.</returns>
         public static T CreateViewController<T>() where T : ViewController
         {
+            if (canvasTemplate == null)
+                canvasTemplate = Resources.FindObjectsOfTypeAll<Canvas>().First(x => x.name == "DropdownTableView");
+
             GameObject go = new GameObject(typeof(T).Name);
-            go.AddComponent(Resources.FindObjectsOfTypeAll<Canvas>().First(x => x.name == "DropdownTableView"));
+            go.AddComponent(canvasTemplate);
             go.gameObject.AddComponent<VRGraphicRaycaster>().SetField("_physicsRaycaster", PhysicsRaycasterWithCache);
             go.gameObject.AddComponent<CanvasGroup>();
             T vc = go.AddComponent<T>();
