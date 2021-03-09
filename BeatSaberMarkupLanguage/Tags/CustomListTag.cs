@@ -29,6 +29,7 @@ namespace BeatSaberMarkupLanguage.Tags
             gameObject.AddComponent<VRGraphicRaycaster>().SetField("_physicsRaycaster", BeatSaberUI.PhysicsRaycasterWithCache);
             gameObject.AddComponent<Touchable>();
             gameObject.AddComponent<EventSystemListener>();
+            ScrollView scrollView = gameObject.AddComponent<ScrollView>();
 
             TableView tableView = gameObject.AddComponent<BSMLTableView>();
             CustomCellListTableData tableData = container.gameObject.AddComponent<CustomCellListTableData>();
@@ -36,11 +37,18 @@ namespace BeatSaberMarkupLanguage.Tags
 
             tableView.SetField<TableView, TableView.CellsGroup[]>("_preallocatedCells", new TableView.CellsGroup[0]);
             tableView.SetField<TableView, bool>("_isInitialized", false);
+            tableView.SetField("_scrollView", scrollView);
 
             RectTransform viewport = new GameObject("Viewport").AddComponent<RectTransform>();
             viewport.SetParent(gameObject.GetComponent<RectTransform>(), false);
             gameObject.GetComponent<ScrollRect>().viewport = viewport;
             viewport.gameObject.AddComponent<RectMask2D>();
+
+            RectTransform content = new GameObject("Content").AddComponent<RectTransform>();
+            content.SetParent(viewport, false);
+
+            scrollView.SetField("_contentTransform", content);
+            scrollView.SetField("_viewport", viewport);
 
             (viewport.transform as RectTransform).anchorMin = new Vector2(0f, 0f);
             (viewport.transform as RectTransform).anchorMax = new Vector2(1f, 1f);

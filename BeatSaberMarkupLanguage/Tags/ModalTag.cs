@@ -23,7 +23,6 @@ namespace BeatSaberMarkupLanguage.Tags
             modalView.GetComponent<VRGraphicRaycaster>().SetField("_physicsRaycaster", BeatSaberUI.PhysicsRaycasterWithCache);
 
             GameObject.DestroyImmediate(modalView.GetComponent<TableView>());
-            GameObject.DestroyImmediate(modalView.GetComponent<TableViewScroller>());
             GameObject.DestroyImmediate(modalView.GetComponent<ScrollRect>());
             GameObject.DestroyImmediate(modalView.GetComponent<EventSystemListener>());
             //GameObject.DestroyImmediate(modalView.GetComponent<Touchable>());

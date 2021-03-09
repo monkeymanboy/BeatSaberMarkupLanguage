@@ -31,7 +31,7 @@ namespace BeatSaberMarkupLanguage.Components
         }
         private void UpdateScrollView()
         {
-            scrollView.SetContentHeight((transform.GetChild(0) as RectTransform).rect.height);
+            scrollView.SetContentSize((transform.GetChild(0) as RectTransform).rect.height);
             scrollView.RefreshButtons();
         }
     }
