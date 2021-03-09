@@ -1,16 +1,20 @@
 ﻿using BeatSaberMarkupLanguage.Attributes;
+using IPA.Utilities;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.GameplaySetup
 {
     public class GameplaySetup : PersistentSingleton<GameplaySetup>
     {
+        private static readonly FieldAccessor<LayoutGroup, List<RectTransform>>.Accessor LayoutGroupChildren = FieldAccessor<LayoutGroup, List<RectTransform>>.GetAccessor("m_RectChildren");
         private GameplaySetupViewController gameplaySetupViewController;
-        
+        private LayoutGroup layoutGroup;
+
         [UIValue("vanilla-items")]
         private List<Transform> vanillaItems = new List<Transform>();
 
@@ -29,7 +33,9 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
                     vanillaItems.Add(transform);
             }
             (gameplaySetupViewController.transform.Find("HeaderPanel") as RectTransform).sizeDelta = new Vector2(90, 6);
-            (gameplaySetupViewController.transform.Find("TextSegmentedControl") as RectTransform).anchoredPosition = new Vector2(0, -13);
+            var textSegmentedControl = gameplaySetupViewController.transform.Find("TextSegmentedControl") as RectTransform;
+            layoutGroup = textSegmentedControl.GetComponent<LayoutGroup>();
+            textSegmentedControl.anchoredPosition = new Vector2(0, -13);
             BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), "BeatSaberMarkupLanguage.Views.gameplay-setup.bsml"), gameplaySetupViewController.gameObject, this);
 
             gameplaySetupViewController.didActivateEvent += GameplaySetupDidActivate;
@@ -37,6 +43,8 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
 
         private void GameplaySetupDidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
         {
+            LayoutGroupChildren(ref layoutGroup).Clear();
+
             MenuType menuType;
             switch (BeatSaberUI.MainFlowCoordinator.YoungestChildFlowCoordinatorOrSelf())
             {
