@@ -18,7 +18,8 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             slider.numberOfSteps = (int)Math.Round((slider.maxValue - slider.minValue) / increments) + 1;
             ReceiveValue();
             slider.valueDidChangeEvent += OnChange;
-            StartCoroutine(SetInitialText());
+            if (isActiveAndEnabled)
+                StartCoroutine(SetInitialText());
         }
 
         private void OnEnable()

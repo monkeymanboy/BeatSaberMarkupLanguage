@@ -2,7 +2,6 @@
 using BeatSaberMarkupLanguage.Components.Settings;
 using HMUI;
 using Polyglot;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -13,16 +12,26 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
 {
     public abstract class GenericSliderSettingTag<T> : BSMLTag where T : GenericSliderSetting
     {
+        private FormattedFloatListSettingsValueController valueControllerTemplate;
+        private TimeSlider timeSliderTemplate;
+
         public override GameObject CreateObject(Transform parent)
         {
-            FormattedFloatListSettingsValueController baseSetting = MonoBehaviour.Instantiate(Resources.FindObjectsOfTypeAll<FormattedFloatListSettingsValueController>().First(x => (x.name == "VRRenderingScale")), parent, false);
+            if (valueControllerTemplate == null)
+                valueControllerTemplate = Resources.FindObjectsOfTypeAll<FormattedFloatListSettingsValueController>().First(x => x.name == "VRRenderingScale");
+
+            FormattedFloatListSettingsValueController baseSetting = Object.Instantiate(valueControllerTemplate, parent, false);
             baseSetting.name = "BSMLSliderSetting";
 
             GameObject gameObject = baseSetting.gameObject;
 
             T sliderSetting = gameObject.AddComponent<T>();
-            GameObject.Destroy(gameObject.transform.Find("ValuePicker").gameObject);
-            sliderSetting.slider = GameObject.Instantiate(Resources.FindObjectsOfTypeAll<HMUI.TimeSlider>().First(s => s.name == "RangeValuesTextSlider" && s.transform.parent?.name == "SongStart"), gameObject.transform, false);
+            Object.Destroy(gameObject.transform.Find("ValuePicker").gameObject);
+
+            if (timeSliderTemplate == null)
+                timeSliderTemplate = Resources.FindObjectsOfTypeAll<TimeSlider>().First(s => s.name == "RangeValuesTextSlider" && s.transform.parent?.name == "SongStart");
+
+            sliderSetting.slider = Object.Instantiate(timeSliderTemplate, gameObject.transform, false);
             sliderSetting.slider.name = "BSMLSlider";
             sliderSetting.slider.GetComponentInChildren<TextMeshProUGUI>().enableWordWrapping = false;
             (sliderSetting.slider.transform as RectTransform).anchorMin = new Vector2(1, 0);
@@ -31,7 +40,7 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
             (sliderSetting.slider.transform as RectTransform).pivot = new Vector2(1, 0.5f);
             (sliderSetting.slider.transform as RectTransform).anchoredPosition = new Vector2(0, 0);
 
-            MonoBehaviour.Destroy(baseSetting);
+            Object.Destroy(baseSetting);
 
             GameObject nameText = gameObject.transform.Find("NameText").gameObject;
             LocalizedTextMeshProUGUI localizedText = ConfigureLocalizedText(nameText);
