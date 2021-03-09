@@ -121,7 +121,8 @@ namespace BeatSaberMarkupLanguage
                 var name = font.FullName;
                 if (fullCache.ContainsKey(name))
                 {
-                    Logger.log.Warn($"Duplcicate font with full name '{name}' at {path}");
+                    // Beat Saber 1.13.4 includes well over 100+ fonts that most systems have, this completely blows up the console on game launch.
+                    // Logger.log.Warn($"Duplcicate font with full name '{name}' at {path}");
                 }
                 else
                 {
