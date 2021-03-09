@@ -26,8 +26,9 @@ namespace BeatSaberMarkupLanguage.Tags
             gameObject.SetActive(false);
 
             Object.Destroy(baseModifier);
-            Object.Destroy(gameObject.GetComponent<HoverHint>());
-            
+            Object.Destroy(gameObject.GetComponent<HoverTextSetter>());
+            Object.Destroy(gameObject.transform.Find("Multiplier").gameObject);
+
             GameObject nameText = gameObject.transform.Find("Name").gameObject;
             TextMeshProUGUI text = nameText.GetComponent<TextMeshProUGUI>();
             text.text = "Default Text";
