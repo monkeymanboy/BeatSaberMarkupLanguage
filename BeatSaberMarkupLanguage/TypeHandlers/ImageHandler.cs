@@ -19,7 +19,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
         {
             { "image", new Action<Image, string>(BeatSaberUI.SetImage) },
             { "preserveAspect", new Action<Image, string>((image, preserveAspect) => image.preserveAspect = bool.Parse(preserveAspect)) },
-            { "image-color", new Action<Image, string>((image, color) => image.color = GetColor(color)) }
+            { "imageColor", new Action<Image, string>((image, color) => image.color = GetColor(color)) }
 
         };
 
