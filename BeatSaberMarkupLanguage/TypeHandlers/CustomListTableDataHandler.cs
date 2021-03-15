@@ -4,6 +4,7 @@ using HMUI;
 using IPA.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
 using static BeatSaberMarkupLanguage.BSMLParser;
@@ -15,6 +16,10 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
     [ComponentHandler(typeof(CustomListTableData))]
     public class CustomListTableDataHandler : TypeHandler
     {
+        // We need to use hard reflection like this because ScrollView's direction enum is private.
+        private readonly FieldInfo scrollViewDirectionField = typeof(ScrollView)
+             .GetField("_scrollViewDirection", BindingFlags.Instance | BindingFlags.NonPublic);
+
         public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
         {
             { "selectCell", new[]{ "select-cell" } },
@@ -45,7 +50,13 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             }
 
             if (componentType.data.TryGetValue("listDirection", out string listDirection))
+            {
                 tableData.tableView.SetField<TableView, TableType>("_tableType", (TableType)Enum.Parse(typeof(TableType), listDirection));
+
+                var scrollView = tableData.tableView.GetField<ScrollView, TableView>("_scrollView");
+
+                scrollViewDirectionField.SetValue(scrollView, Enum.Parse(scrollViewDirectionField.FieldType, listDirection));
+            }
 
             if (componentType.data.TryGetValue("listStyle", out string listStyle))
                 tableData.Style = (ListStyle)Enum.Parse(typeof(ListStyle), listStyle);
