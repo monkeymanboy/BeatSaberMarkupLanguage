@@ -13,6 +13,7 @@ namespace BeatSaberMarkupLanguage.Tags
     {
         private GameObject toggleTemplate;
         private BoolSettingsController templateController;
+        private Toggle templateControllerToggle;
 
         public override string[] Aliases => new[] { "toggle-setting", "bool-setting", "checkbox-setting", "checkbox" };
         public virtual string PrefabToggleName => "Fullscreen";
@@ -23,13 +24,16 @@ namespace BeatSaberMarkupLanguage.Tags
             {
                 toggleTemplate = Resources.FindObjectsOfTypeAll<Toggle>().Select(x => x.transform.parent.gameObject).First(p => p.name == PrefabToggleName);
                 templateController = toggleTemplate.GetComponent<BoolSettingsController>();
+                templateControllerToggle = templateController.GetComponentInChildren<Toggle>();
             }
 
             templateController.enabled = false;
+            templateControllerToggle.isOn = false;
             GameObject gameObject = Object.Instantiate(toggleTemplate, parent, false);
             GameObject nameText = gameObject.transform.Find("NameText").gameObject;
             Object.Destroy(gameObject.GetComponent<BoolSettingsController>());
             templateController.enabled = true;
+            templateControllerToggle.isOn = true;
 
             gameObject.name = "BSMLToggle";
             gameObject.SetActive(false);
