@@ -8,7 +8,8 @@ namespace BeatSaberMarkupLanguage.Components
     public class ScrollViewContent : MonoBehaviour
     {
         public ScrollView scrollView;
-        
+        private bool _dirty = false;
+
         void Start()
         {
             LayoutRebuilder.ForceRebuildLayoutImmediate(transform as RectTransform);
@@ -21,7 +22,15 @@ namespace BeatSaberMarkupLanguage.Components
         }
         void OnRectTransformDimensionsChange()
         {
-            UpdateScrollView();
+            _dirty = true; // Need to delay the update such that it doesn't run during the rebuild loop
+        }
+        void Update()
+        {
+            if (_dirty)
+            {
+                _dirty = false;
+                UpdateScrollView();
+            }
         }
         private IEnumerator SetupScrollView()
         {
