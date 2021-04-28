@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using IPA.Utilities;
 using System.Linq;
 using TMPro;
+using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.Components.Settings
 {
-    public class DropDownListSetting : GenericSetting
+    public class DropDownListSetting : GenericInteractableSetting
     {
         private int index;
-        
+
         public List<object> values;
 
         public SimpleTextDropdown dropdown;
@@ -31,6 +32,12 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 
                 UpdateState();
             }
+        }
+
+        public override bool interactable
+        {
+            get => dropdown.GetField<Button, DropdownWithTableView>("_button").interactable;
+            set => dropdown.GetField<Button, DropdownWithTableView>("_button").interactable = value;
         }
 
         public override void Setup()

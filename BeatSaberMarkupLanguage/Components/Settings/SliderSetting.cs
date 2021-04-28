@@ -11,6 +11,15 @@ namespace BeatSaberMarkupLanguage.Components.Settings
     {
         public bool isInt = false;
         public float increments;
+        public float Value
+        {
+            get => slider.value;
+            set
+            {
+                slider.value = value;
+                text.text = TextForValue(value);
+            }
+        }
 
         public override void Setup()
         {
