@@ -1,5 +1,6 @@
 ﻿using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.Components.Settings;
+using HMUI;
 using Polyglot;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,8 +13,6 @@ namespace BeatSaberMarkupLanguage.Tags
     public class ToggleSettingTag : BSMLTag
     {
         private GameObject toggleTemplate;
-        private BoolSettingsController templateController;
-        private Toggle templateControllerToggle;
 
         public override string[] Aliases => new[] { "toggle-setting", "bool-setting", "checkbox-setting", "checkbox" };
         public virtual string PrefabToggleName => "Fullscreen";
@@ -23,27 +22,25 @@ namespace BeatSaberMarkupLanguage.Tags
             if (toggleTemplate == null)
             {
                 toggleTemplate = Resources.FindObjectsOfTypeAll<Toggle>().Select(x => x.transform.parent.gameObject).First(p => p.name == PrefabToggleName);
-                templateController = toggleTemplate.GetComponent<BoolSettingsController>();
-                templateControllerToggle = templateController.GetComponentInChildren<Toggle>();
             }
 
-            templateController.enabled = false;
-            templateControllerToggle.isOn = false;
             GameObject gameObject = Object.Instantiate(toggleTemplate, parent, false);
             GameObject nameText = gameObject.transform.Find("NameText").gameObject;
+            GameObject switchView = gameObject.transform.Find("SwitchView").gameObject;
             Object.Destroy(gameObject.GetComponent<BoolSettingsController>());
-            templateController.enabled = true;
-            templateControllerToggle.isOn = true;
 
             gameObject.name = "BSMLToggle";
             gameObject.SetActive(false);
 
             ToggleSetting toggleSetting = gameObject.AddComponent<ToggleSetting>();
+            AnimatedSwitchView animatedSwitchView = switchView.GetComponent<AnimatedSwitchView>();
 
-            toggleSetting.toggle = gameObject.GetComponentInChildren<Toggle>();
+            toggleSetting.toggle = switchView.GetComponent<Toggle>();
+            toggleSetting.toggle.onValueChanged.RemoveAllListeners();
+            toggleSetting.toggle.onValueChanged.AddListener(animatedSwitchView.HandleOnValueChanged);
             toggleSetting.toggle.interactable = true;
             toggleSetting.toggle.isOn = false;
-            toggleSetting.toggle.onValueChanged.RemoveAllListeners();
+            animatedSwitchView.enabled = true; // force refresh the UI state
 
             LocalizedTextMeshProUGUI localizedText = ConfigureLocalizedText(nameText);
 
