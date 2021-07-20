@@ -52,8 +52,6 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
                 case SinglePlayerLevelSelectionFlowCoordinator _:
                     menuType = MenuType.Solo;
                     break;
-                case HostGameServerLobbyFlowCoordinator _:
-                case QuickPlayLobbyFlowCoordinator _:
                 case GameServerLobbyFlowCoordinator _:
                     menuType = MenuType.Online;
                     break;
