@@ -91,13 +91,13 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             componentType.component.gameObject.GetComponent<LayoutElement>().preferredWidth = (componentType.component.gameObject.transform as RectTransform).sizeDelta.x;
 
             tableData.tableView.gameObject.SetActive(true);
-            tableData.tableView.LazyInit();
+            Utilities.InvokePrivateMethod(tableData.tableView, "LazyInit", null);
 
             if (componentType.data.TryGetValue("id", out string id))
             {
                 ScrollView scroller = tableData.tableView.GetField<ScrollView, TableView>("_scrollView");
-                parserParams.AddEvent(id + "#PageUp", scroller.PageUpButtonPressed);
-                parserParams.AddEvent(id + "#PageDown", scroller.PageDownButtonPressed);
+                parserParams.AddEvent(id + "#PageUp", Utilities.GetBindedPrivateAction(scroller, "PageUpButtonPressed"));
+                parserParams.AddEvent(id + "#PageDown", Utilities.GetBindedPrivateAction(scroller, "PageDownButtonPressed"));
             }
         }
     }

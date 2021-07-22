@@ -281,5 +281,25 @@ namespace BeatSaberMarkupLanguage
                 callback?.Invoke(www.downloadHandler.data);
             }
         }
+
+        public static U GetPrivateProperty<T, U>(T obj, string property) {
+            return (U)typeof(T).GetProperty(property, BindingFlags.NonPublic | BindingFlags.Instance).GetValue(obj);
+        }
+
+        public static void SetPrivateProperty<T, U>(T obj, string property, U value) {
+            typeof(T).GetProperty(property, BindingFlags.NonPublic | BindingFlags.Instance).SetValue(obj, value);
+        }
+
+        public static Action GetBindedPrivateAction<T>(T obj, string method) {
+            return () => typeof(T).GetMethod(method, BindingFlags.NonPublic | BindingFlags.Instance).Invoke(obj, null);
+        }
+
+        public static UnityEngine.Events.UnityAction<A> GetBindedPrivateAction<T, A>(T obj, string method) {
+            return (A a) => typeof(T).GetMethod(method, BindingFlags.NonPublic | BindingFlags.Instance).Invoke(obj, new object[] {a});
+        }
+
+        public static object InvokePrivateMethod<T>(T obj, string method, object[] args) {
+            return typeof(T).GetMethod(method, BindingFlags.NonPublic | BindingFlags.Instance).Invoke(obj, args);
+        }
     }
 }

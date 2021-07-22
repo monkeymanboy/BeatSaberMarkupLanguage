@@ -37,7 +37,7 @@ namespace BeatSaberMarkupLanguage.Tags
 
             toggleSetting.toggle = switchView.GetComponent<Toggle>();
             toggleSetting.toggle.onValueChanged.RemoveAllListeners();
-            toggleSetting.toggle.onValueChanged.AddListener(animatedSwitchView.HandleOnValueChanged);
+            toggleSetting.toggle.onValueChanged.AddListener(Utilities.GetBindedPrivateAction<AnimatedSwitchView, bool>(animatedSwitchView, "HandleOnValueChanged"));
             toggleSetting.toggle.interactable = true;
             toggleSetting.toggle.isOn = false;
             animatedSwitchView.enabled = true; // force refresh the UI state

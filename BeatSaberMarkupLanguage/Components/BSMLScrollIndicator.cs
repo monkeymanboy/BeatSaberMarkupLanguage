@@ -12,8 +12,8 @@ namespace BeatSaberMarkupLanguage.Components
     {
         public RectTransform Handle
         {
-            get => _handle;
-            set => _handle = value;
+            get => Utilities.GetPrivateProperty<VerticalScrollIndicator, RectTransform>(this, "_handle");
+            set => Utilities.SetPrivateProperty(this, "_handle", value);
         }
     }
 }

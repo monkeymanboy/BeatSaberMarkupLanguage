@@ -40,8 +40,8 @@ namespace BeatSaberMarkupLanguage.Components
         }
         private void UpdateScrollView()
         {
-            scrollView.SetContentSize((transform.GetChild(0) as RectTransform).rect.height);
-            scrollView.RefreshButtons();
+            Utilities.InvokePrivateMethod(scrollView, "SetContentSize", new object[] {(transform.GetChild(0) as RectTransform).rect.height});
+            Utilities.InvokePrivateMethod(scrollView, "RefreshButtons", null);
         }
     }
 }

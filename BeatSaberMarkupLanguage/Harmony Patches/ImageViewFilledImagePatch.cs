@@ -9,7 +9,7 @@ using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.Harmony_Patches
 {
-    [HarmonyPatch(typeof(ImageView), nameof(ImageView.GenerateFilledSprite))]
+    [HarmonyPatch(typeof(ImageView), "GenerateFilledSprite")]
     internal static class ImageViewFilledImagePatch
     {
         // This is Beat Games' incorrect AddQuad method, which completely forgets about the curvedUIRadius parameter.
