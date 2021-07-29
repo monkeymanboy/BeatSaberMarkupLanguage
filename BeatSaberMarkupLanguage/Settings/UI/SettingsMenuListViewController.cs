@@ -13,7 +13,7 @@ namespace BeatSaberMarkupLanguage.Settings.UI.ViewControllers
         [UIComponent("list")]
         public CustomListTableData list;
 
-        public Action<ViewController> clickedMenu;
+        public Action<SettingsMenu> clickedMenu;
 
         protected override void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
         {
@@ -31,7 +31,8 @@ namespace BeatSaberMarkupLanguage.Settings.UI.ViewControllers
         [UIAction("settings-click")]
         private void SettingsClick(TableView tableView, int index)
         {
-            clickedMenu?.Invoke((list.data[index] as SettingsMenu).viewController);
+            var settingsMenu = (list.data[index] as SettingsMenu);
+            clickedMenu?.Invoke(settingsMenu);
         }
     }
 }

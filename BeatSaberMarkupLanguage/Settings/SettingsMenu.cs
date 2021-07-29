@@ -12,6 +12,7 @@ namespace BeatSaberMarkupLanguage.Settings
         private const string SETTINGS_ERROR_PATH = "BeatSaberMarkupLanguage.Views.settings-error.bsml";
         public ViewController viewController;
         public BSMLParserParams parserParams;
+        public bool didSetup;
         
         public string resource;
         public object host;
@@ -31,6 +32,7 @@ namespace BeatSaberMarkupLanguage.Settings
                 viewController = BeatSaberUI.CreateViewController<ViewController>();
                 SetupViewControllerTransform(viewController);
                 parserParams = BSMLParser.instance.Parse(Utilities.GetResourceContent(assembly, resource), viewController.gameObject, host);
+                didSetup = true;
             }
             catch (Exception ex)
             {
