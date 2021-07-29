@@ -37,13 +37,13 @@ namespace BeatSaberMarkupLanguage.Settings
 
         internal void Setup()
         {
+            foreach (SettingsMenu menu in settingsMenus)
+                menu.didSetup = false;
+
             StopAllCoroutines();
             if(button == null)
                 StartCoroutine(AddButtonToMainScreen());
-            //foreach (SettingsMenu settingsMenu in settingsMenus)
-            //{
-            //    settingsMenu.Setup();
-            //}
+
             isInitialized = true;
         }
 
