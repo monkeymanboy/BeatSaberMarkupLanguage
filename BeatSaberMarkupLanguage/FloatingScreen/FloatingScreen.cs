@@ -124,6 +124,8 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
             screen.ScreenSize = screenSize;
             screen.ShowHandle = createHandle;
 
+            screen.gameObject.layer = 5;
+
             return screen;
         }
 
