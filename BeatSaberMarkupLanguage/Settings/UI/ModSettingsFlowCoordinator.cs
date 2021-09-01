@@ -36,15 +36,17 @@ namespace BeatSaberMarkupLanguage.Settings
                 settingsMenuListViewController.clickedMenu += OpenMenu;
                 SetViewControllerToNavigationController(navigationController, settingsMenuListViewController);
                 ProvideInitialViewControllers(navigationController);
-
-                foreach (CustomCellInfo cellInfo in BSMLSettings.instance.settingsMenus)
-                    (cellInfo as SettingsMenu).parserParams.AddEvent("back", Back);
             }
         }
 
-        public void OpenMenu(ViewController viewController)
+        public void OpenMenu(SettingsMenu menu)
         {
-            OpenMenu(viewController, false, false);
+            if (!menu.didSetup)
+            {
+                menu.Setup();
+                menu.parserParams.AddEvent("back", Back);
+            }
+            OpenMenu(menu.viewController, false, false);
         }
 
         public void OpenMenu(ViewController viewController, bool isSubmenu, bool isBack)
@@ -75,7 +77,7 @@ namespace BeatSaberMarkupLanguage.Settings
                 return;
 
             settingsMenuListViewController.list.tableView.SelectCellWithIdx(0);
-            OpenMenu((BSMLSettings.instance.settingsMenus.First() as SettingsMenu).viewController);
+            OpenMenu(BSMLSettings.instance.settingsMenus.First() as SettingsMenu);
             isPresenting = true;
         }
 
@@ -102,8 +104,9 @@ namespace BeatSaberMarkupLanguage.Settings
 
         private void EmitEventToAll(string ev)
         {
-            foreach (CustomCellInfo cellInfo in BSMLSettings.instance.settingsMenus)
-                (cellInfo as SettingsMenu).parserParams.EmitEvent(ev);
+            foreach (SettingsMenu menu in BSMLSettings.instance.settingsMenus)
+                if (menu.didSetup)
+                    menu.parserParams.EmitEvent(ev);
         }
     }
 }

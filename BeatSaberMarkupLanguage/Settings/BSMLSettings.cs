@@ -37,13 +37,13 @@ namespace BeatSaberMarkupLanguage.Settings
 
         internal void Setup()
         {
+            foreach (SettingsMenu menu in settingsMenus)
+                menu.didSetup = false;
+
             StopAllCoroutines();
             if(button == null)
                 StartCoroutine(AddButtonToMainScreen());
-            foreach (SettingsMenu settingsMenu in settingsMenus)
-            {
-                settingsMenu.Setup();
-            }
+
             isInitialized = true;
         }
 
@@ -60,7 +60,7 @@ namespace BeatSaberMarkupLanguage.Settings
             }
             SettingsMenu settingsMenu = new SettingsMenu(name, resource, host, Assembly.GetCallingAssembly());
             settingsMenus.Add(settingsMenu);
-            if(isInitialized)
+            if (isInitialized)
                 settingsMenu.Setup();
             if (button != null)
                 button.gameObject.SetActive(true);
