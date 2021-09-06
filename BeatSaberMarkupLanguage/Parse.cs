@@ -53,5 +53,10 @@ namespace BeatSaberMarkupLanguage
             else
                 return obj.ToString();
         }
+
+        public static string InvariantToString(this IFormattable obj, string format)
+        {
+            return obj.ToString(format, CultureInfo.InvariantCulture);
+        }
     }
 }
