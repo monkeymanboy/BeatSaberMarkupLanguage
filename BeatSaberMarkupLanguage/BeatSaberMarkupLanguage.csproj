@@ -136,6 +136,7 @@
     <Compile Include="Attributes\UIValue.cs" />
     <Compile Include="Attributes\ViewDefinitionAttribute.cs" />
     <Compile Include="BeatSaberUI.cs" />
+    <Compile Include="Components\BSMLBoxTableCell.cs" />
     <Compile Include="Components\BSMLScrollIndicator.cs" />
     <Compile Include="Components\BSMLScrollView.cs" />
     <Compile Include="Components\BSMLScrollableContainer.cs" />
