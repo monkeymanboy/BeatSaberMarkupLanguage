@@ -1,8 +1,10 @@
-﻿using HMUI;
+﻿using BeatSaberMarkupLanguage.Harmony_Patches;
+using HMUI;
 using IPA.Utilities;
 using System;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using VRUIControls;
 using Screen = HMUI.Screen;
@@ -57,10 +59,14 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
                         CreateHandle();
                     else
                         handle.SetActive(true);
+
+                    VRPointerEnabledPatch.PointerEnabled -= OnPointerCreated;
+                    VRPointerEnabledPatch.PointerEnabled += OnPointerCreated;
                 }
                 else if(!_showHandle && handle != null)
                 {
                     handle.SetActive(false);
+                    VRPointerEnabledPatch.PointerEnabled -= OnPointerCreated;
                 }
             }
         }
@@ -129,20 +135,35 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
             return screen;
         }
 
-        private void CreateHandle()
+        private void OnPointerCreated(VRPointer pointer) => CreateHandle(pointer, false);
+
+        private void CreateHandle(VRPointer pointer = null, bool createHandle = true)
         {
-            VRPointer pointer = Resources.FindObjectsOfTypeAll<VRPointer>().FirstOrDefault();
+            if (pointer == null)
+            {
+                // We need a pointer with a VRCursor Child
+                pointer = Resources.FindObjectsOfTypeAll<VRPointer>().FirstOrDefault(x => x.transform.childCount > 0);
+            }
+
             if (pointer != null)
             {
-                if (screenMover) Destroy(screenMover);
-                screenMover = pointer.gameObject.AddComponent<FloatingScreenMoverPointer>();
-                handle = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                bool pointerChanged = screenMover == null || screenMover.gameObject != pointer.gameObject;
 
-                handle.transform.SetParent(transform);
-                handle.transform.localRotation = Quaternion.identity;
-                UpdateHandle();
+                if (pointerChanged)
+                {
+                    if (screenMover) Destroy(screenMover);
+                    screenMover = pointer.gameObject.AddComponent<FloatingScreenMoverPointer>();
+                }
 
-                screenMover.Init(this);
+                if (createHandle)
+                {
+                    handle = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                    handle.transform.SetParent(transform);
+                    handle.transform.localRotation = Quaternion.identity;
+                    UpdateHandle();
+                }
+
+                if (pointerChanged) screenMover.Init(this);
             }
             else
             {

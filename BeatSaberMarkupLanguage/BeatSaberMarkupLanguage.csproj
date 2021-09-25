@@ -181,6 +181,7 @@
     <Compile Include="GameplaySetup\GameplaySetup.cs" />
     <Compile Include="GameplaySetup\GameplaySetupMenu.cs" />
     <Compile Include="GameplaySetup\MenuType.cs" />
+    <Compile Include="Harmony Patches\VRPointerEnabledPatch.cs" />
     <Compile Include="Harmony Patches\ImageViewFilledImagePatch.cs" />
     <Compile Include="Harmony Patches\ScrollViewGetPositionPatch.cs" />
     <Compile Include="Harmony Patches\SegmentedControlCellSelectionStateDidChange.cs" />
