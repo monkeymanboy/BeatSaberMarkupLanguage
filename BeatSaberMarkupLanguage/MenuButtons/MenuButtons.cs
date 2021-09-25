@@ -16,6 +16,7 @@ namespace BeatSaberMarkupLanguage.MenuButtons
     public class MenuButtons : PersistentSingleton<MenuButtons>
     {
         private MenuButtonsViewController menuButtonsViewController;
+        private HMUI.Screen leftScreen;
 
         [UIValue("buttons")]
         private List<object> buttons = new List<object>();
@@ -48,7 +49,14 @@ namespace BeatSaberMarkupLanguage.MenuButtons
 
         internal void ShowView(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
         {
-            BeatSaberUI.MainFlowCoordinator.InvokeMethod<object, FlowCoordinator>("SetLeftScreenViewController", menuButtonsViewController, ViewController.AnimationType.In);
+            if (leftScreen == null) leftScreen = Resources.FindObjectsOfTypeAll<HMUI.Screen>().FirstOrDefault(x => x.gameObject.name == "LeftScreen");
+
+            foreach (ModalView modalView in leftScreen.GetComponentsInChildren<ModalView>())
+            {
+                modalView.OnDisable();
+            }
+
+            BeatSaberUI.MainFlowCoordinator.InvokeMethod<object, FlowCoordinator>("SetLeftScreenViewController", menuButtonsViewController, ViewController.AnimationType.None);
         }
 
         internal void Refresh()

@@ -9,7 +9,7 @@
   "icon": "BeatSaberMarkupLanguage.Resources.icon.png",
   "id": "BeatSaberMarkupLanguage",
   "name": "BeatSaberMarkupLanguage",
-  "version": "1.5.8",
+  "version": "1.5.9",
   "dependsOn": {
     "BSIPA": "^4.1.6"
   },
