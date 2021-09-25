@@ -48,7 +48,7 @@ namespace BeatSaberMarkupLanguage.MenuButtons
 
         internal void ShowView(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
         {
-            BeatSaberUI.MainFlowCoordinator.InvokeMethod<object, FlowCoordinator>("SetLeftScreenViewController", menuButtonsViewController, ViewController.AnimationType.None);
+            BeatSaberUI.MainFlowCoordinator.InvokeMethod<object, FlowCoordinator>("SetLeftScreenViewController", menuButtonsViewController, ViewController.AnimationType.In);
         }
 
         internal void Refresh()
