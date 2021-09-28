@@ -71,6 +71,28 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
             }
         }
 
+        private bool _highlightHandle = false;
+        public bool HighlightHandle
+        {
+            get => _highlightHandle;
+            set
+            {
+                _highlightHandle = value;
+                if (_highlightHandle)
+                {
+                    if (!ShowHandle)
+                        ShowHandle = true;
+
+                    handle.GetComponent<FloatingScreenHandle>().enabled = true;
+                }
+                else
+                {
+                    if (handle != null)
+                        handle.GetComponent<FloatingScreenHandle>().enabled = false;
+                }
+            }
+        }
+
         private Side _handleSide = Side.Left;
         public Side HandleSide
         {
@@ -160,6 +182,7 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
                     handle.transform.SetParent(transform);
                     handle.transform.localRotation = Quaternion.identity;
                     UpdateHandle();
+                    handle.AddComponent<FloatingScreenHandle>().enabled = false;
                 }
 
                 if (pointerChanged) screenMover.Init(this);

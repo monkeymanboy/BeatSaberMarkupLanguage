@@ -175,6 +175,7 @@
     <Compile Include="Config.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="FloatingScreen\FloatingScreen.cs" />
+    <Compile Include="FloatingScreen\FloatingScreenHandle.cs" />
     <Compile Include="FloatingScreen\FloatingScreenMoverPointer.cs" />
     <Compile Include="FontManager.cs" />
     <Compile Include="GameplaySetupTest.cs" />
