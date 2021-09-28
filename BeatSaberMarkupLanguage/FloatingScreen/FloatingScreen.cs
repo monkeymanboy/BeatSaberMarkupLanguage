@@ -135,14 +135,13 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
             return screen;
         }
 
-        private void OnPointerCreated(VRPointer pointer) => CreateHandle(pointer, false);
+        private void OnPointerCreated(VRPointer pointer) => CreateHandle(pointer);
 
-        private void CreateHandle(VRPointer pointer = null, bool createHandle = true)
+        private void CreateHandle(VRPointer pointer = null)
         {
             if (pointer == null)
             {
-                // We need a pointer with a VRCursor Child
-                pointer = Resources.FindObjectsOfTypeAll<VRPointer>().FirstOrDefault(x => x.transform.childCount > 0);
+                pointer = Resources.FindObjectsOfTypeAll<VRPointer>().FirstOrDefault();
             }
 
             if (pointer != null)
@@ -155,7 +154,7 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
                     screenMover = pointer.gameObject.AddComponent<FloatingScreenMoverPointer>();
                 }
 
-                if (createHandle)
+                if (handle == null)
                 {
                     handle = GameObject.CreatePrimitive(PrimitiveType.Cube);
                     handle.transform.SetParent(transform);
@@ -208,6 +207,12 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
             }
 
             handle.GetComponent<MeshRenderer>().enabled = HandleSide != Side.Full;
+        }
+
+        public override void OnDestroy()
+        {
+            base.OnDestroy();
+            VRPointerEnabledPatch.PointerEnabled -= OnPointerCreated;
         }
 
         public enum Side
