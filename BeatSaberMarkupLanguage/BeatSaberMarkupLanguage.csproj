@@ -1,364 +1,129 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{D687A08D-BC5B-4457-B2F9-6BA9B171D56D}</ProjectGuid>
+    <TargetFramework>net472</TargetFramework>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BeatSaberMarkupLanguage</RootNamespace>
+    <LangVersion>8</LangVersion>
+    <Nullable>disable</Nullable>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <AssemblyName>BSML</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <LangVersion>8.0</LangVersion>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
+    <RootNamespace>BeatSaberMarkupLanguage</RootNamespace>
+    <LocalRefsDir Condition="Exists('..\Refs')">..\Refs</LocalRefsDir>
+    <BeatSaberDir>$(LocalRefsDir)</BeatSaberDir>
+    <AppOutputBase>$(MSBuildProjectDirectory)\</AppOutputBase>
     <DebugType>portable</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>portable</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-    <DebugSymbols>true</DebugSymbols>
+
+  <PropertyGroup Condition="$(DefineConstants.Contains('CIBuild')) OR '$(NCrunch)' == '1'">
+    <DisableCopyToPlugins>True</DisableCopyToPlugins>
   </PropertyGroup>
+
+  <PropertyGroup Condition="'$(NCrunch)' == '1'">
+    <DisableCopyToPlugins>True</DisableCopyToPlugins>
+    <DisableZipRelease>True</DisableZipRelease>
+  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="HMLib">
-      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\HMLib.dll</HintPath>
-    </Reference>
-    <Reference Include="HMUI">
-      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\HMUI.dll</HintPath>
-    </Reference>
-    <Reference Include="IPA.Loader">
-      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\IPA.Loader.dll</HintPath>
-    </Reference>
-    <Reference Include="Main">
-      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\Main.dll</HintPath>
-    </Reference>
-    <Reference Include="Polyglot">
-      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\Polyglot.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Xml" />
-    <Reference Include="Polyglot">
-      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\Polyglot.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.TextMeshPro">
-      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\Unity.TextMeshPro.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.ImageConversionModule">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.ImageConversionModule.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.InputLegacyModule">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
+      <Private>False</Private>
     </Reference>
-    <Reference Include="UnityEngine.PhysicsModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="UnityEngine.PhysicsModule">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.TextRenderingModule">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.UI.dll</HintPath>
+      <Private>False</Private>
     </Reference>
-    <Reference Include="UnityEngine.UIModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="UnityEngine.UIModule">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.UIModule.dll</HintPath>
+      <Private>False</Private>
     </Reference>
-    <Reference Include="UnityEngine.UnityWebRequestModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="UnityEngine.UnityWebRequestModule">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.UnityWebRequestModule.dll</HintPath>
+      <Private>False</Private>
     </Reference>
-    <Reference Include="UnityEngine.UnityWebRequestWWWModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.UnityWebRequestWWWModule.dll</HintPath>
+    <Reference Include="Unity.TextMeshPro">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\Unity.TextMeshPro.dll</HintPath>
+      <Private>False</Private>
     </Reference>
-    <Reference Include="VRUI, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Main">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\Main.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="GameplayCore">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\GameplayCore.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="HMLib">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\HMLib.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="HMUI">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\HMUI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Polyglot">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\Polyglot.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="VRUI">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\VRUI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="IPA.Loader">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\IPA.Loader.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="0Harmony">
+      <HintPath>$(BeatSaberDir)\Libs\0Harmony.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>$(BeatSaberDir)\Libs\Newtonsoft.Json.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Zenject">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\Zenject.dll</HintPath>
-    </Reference>
-    <Reference Include="Harmony">
-      <HintPath>$(BeatSaberDir)\Libs\0Harmony.dll</HintPath>
+      <Private>false</Private>
     </Reference>
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="Animations\AnimationLoader.cs" />
-    <Compile Include="Animations\AnimationStateUpdater.cs" />
-    <Compile Include="Animations\AnimationController.cs" />
-    <Compile Include="Animations\AnimationControllerData.cs" />
-    <Compile Include="Animations\APNG\APNGUnityDecoder.cs" />
-    <Compile Include="Animations\APNG\APNG.cs" />
-    <Compile Include="Animations\APNG\CrcHelper.cs" />
-    <Compile Include="Animations\APNG\Frame.cs" />
-    <Compile Include="Animations\APNG\Helper.cs" />
-    <Compile Include="Animations\APNG\IAnimatedImage.cs" />
-    <Compile Include="Animations\APNG\StreamExtensions.cs" />
-    <Compile Include="Animations\APNG\Chunks\acTLChunk.cs" />
-    <Compile Include="Animations\APNG\Chunks\Chunk.cs" />
-    <Compile Include="Animations\APNG\Chunks\fcTLChunk.cs" />
-    <Compile Include="Animations\APNG\Chunks\fdATChunk.cs" />
-    <Compile Include="Animations\APNG\Chunks\IDATChunk.cs" />
-    <Compile Include="Animations\APNG\Chunks\IENDChunk.cs" />
-    <Compile Include="Animations\APNG\Chunks\IHDRChunk.cs" />
-    <Compile Include="Animations\APNG\Chunks\OtherChunk.cs" />
-    <Compile Include="Animations\GIF\GIFUnityDecoder.cs" />
-    <Compile Include="Animations\AnimationInfo.cs" />
-    <Compile Include="Animations\LockBitmap.cs" />
-    <Compile Include="Attributes\HostOptionsAttribute.cs" />
-    <Compile Include="Attributes\HotReloadAttribute.cs" />
-    <Compile Include="Attributes\UIAction.cs" />
-    <Compile Include="Attributes\UIComponent.cs" />
-    <Compile Include="Attributes\UIObject.cs" />
-    <Compile Include="Attributes\UIParams.cs" />
-    <Compile Include="Attributes\UIValue.cs" />
-    <Compile Include="Attributes\ViewDefinitionAttribute.cs" />
-    <Compile Include="BeatSaberUI.cs" />
-    <Compile Include="Components\BSMLScrollIndicator.cs" />
-    <Compile Include="Components\BSMLScrollView.cs" />
-    <Compile Include="Components\BSMLScrollableContainer.cs" />
-    <Compile Include="Components\BSMLTableView.cs" />
-    <Compile Include="Components\ButtonArtworkImage.cs" />
-    <Compile Include="Components\ButtonIconImage.cs" />
-    <Compile Include="Components\ClickableImage.cs" />
-    <Compile Include="Components\ClickableText.cs" />
-    <Compile Include="Components\CustomCellListTableData.cs" />
-    <Compile Include="Components\ExternalComponents.cs" />
-    <Compile Include="Components\FormattableText.cs" />
-    <Compile Include="Components\Glowable.cs" />
-    <Compile Include="Components\LocalizableText.cs" />
-    <Compile Include="Components\ModalColorPicker.cs" />
-    <Compile Include="Components\ModalKeyboard.cs" />
-    <Compile Include="Components\NotifiableSingleton.cs" />
-    <Compile Include="Components\NotifyUpdater.cs" />
-    <Compile Include="Components\ScrollViewContent.cs" />
-    <Compile Include="Components\Settings\ToggleSetting.cs" />
-    <Compile Include="Components\Settings\BoolSetting.cs" />
-    <Compile Include="Components\Settings\ColorSetting.cs" />
-    <Compile Include="Components\Settings\DropDownListSetting.cs" />
-    <Compile Include="Components\Settings\GenericInteractableSetting.cs" />
-    <Compile Include="Components\Settings\GenericSetting.cs" />
-    <Compile Include="Components\Settings\GenericSliderSetting.cs" />
-    <Compile Include="Components\Settings\IncDecSetting.cs" />
-    <Compile Include="Components\Settings\IncrementSetting.cs" />
-    <Compile Include="Components\Settings\ListSetting.cs" />
-    <Compile Include="Components\Settings\ListSliderSetting.cs" />
-    <Compile Include="Components\Settings\SliderSetting.cs" />
-    <Compile Include="Components\Settings\StringSetting.cs" />
-    <Compile Include="Components\Strokable.cs" />
-    <Compile Include="Components\Tab.cs" />
-    <Compile Include="Components\TabSelector.cs" />
-    <Compile Include="Components\TextPageScrollViewRefresher.cs" />
-    <Compile Include="Config.cs" />
-    <Compile Include="Exceptions.cs" />
-    <Compile Include="FloatingScreen\FloatingScreen.cs" />
-    <Compile Include="FloatingScreen\FloatingScreenMoverPointer.cs" />
-    <Compile Include="FontManager.cs" />
-    <Compile Include="GameplaySetupTest.cs" />
-    <Compile Include="GameplaySetup\GameplaySetup.cs" />
-    <Compile Include="GameplaySetup\GameplaySetupMenu.cs" />
-    <Compile Include="GameplaySetup\MenuType.cs" />
-    <Compile Include="Harmony Patches\ImageViewFilledImagePatch.cs" />
-    <Compile Include="Harmony Patches\ScrollViewGetPositionPatch.cs" />
-    <Compile Include="Harmony Patches\SegmentedControlCellSelectionStateDidChange.cs" />
-    <Compile Include="Logger.cs" />
-    <Compile Include="Macros\AsHostMacro.cs" />
-    <Compile Include="Macros\BSMLMacro.cs" />
-    <Compile Include="Macros\DefineMacro.cs" />
-    <Compile Include="Macros\ForEachMacro.cs" />
-    <Compile Include="Macros\IfMacro.cs" />
-    <Compile Include="Macros\ReparentMacro.cs" />
-    <Compile Include="MenuButtons\MenuButton.cs" />
-    <Compile Include="MenuButtons\MenuButtons.cs" />
-    <Compile Include="MenuButtons\MenuButtonsViewController.cs" />
-    <Compile Include="Notify\INotifiableHost.cs" />
-    <Compile Include="OpenType\CollectionHeader.cs" />
-    <Compile Include="OpenType\NumericHelpers.cs" />
-    <Compile Include="OpenType\OffsetTable.cs" />
-    <Compile Include="OpenType\OpenTypeCollection.cs" />
-    <Compile Include="OpenType\OpenTypeCollectionReader.cs" />
-    <Compile Include="OpenType\OpenTypeFont.cs" />
-    <Compile Include="OpenType\OpenTypeFontReader.cs" />
-    <Compile Include="OpenType\OpenTypeReader.cs" />
-    <Compile Include="OpenType\OpenTypeTable.cs" />
-    <Compile Include="OpenType\OpenTypeTag.cs" />
-    <Compile Include="OpenType\TableRecord.cs" />
-    <Compile Include="Parse.cs" />
-    <Compile Include="Parser\BSMLAction.cs" />
-    <Compile Include="BSMLParser.cs" />
-    <Compile Include="Components\Backgroundable.cs" />
-    <Compile Include="Components\CustomListTableData.cs" />
-    <Compile Include="Components\PageButton.cs" />
-    <Compile Include="Parser\BSMLFieldValue.cs" />
-    <Compile Include="Parser\BSMLParserParams.cs" />
-    <Compile Include="Parser\BSMLPropertyValue.cs" />
-    <Compile Include="Parser\BSMLStringValue.cs" />
-    <Compile Include="Parser\BSMLValue.cs" />
-    <Compile Include="Plugin.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SettingsTest.cs" />
-    <Compile Include="Settings\BSMLSettings.cs" />
-    <Compile Include="Settings\UI\ModSettingsFlowCoordinator.cs" />
-    <Compile Include="Settings\SettingsMenu.cs" />
-    <Compile Include="Settings\UI\SettingsMenuListViewController.cs" />
-    <Compile Include="Tags\BackgroundTag.cs" />
-    <Compile Include="Tags\BSMLTag.cs" />
-    <Compile Include="Tags\Settings\ToggleSettingTag.cs" />
-    <Compile Include="Tags\ButtonTag.cs" />
-    <Compile Include="Tags\ClickableImageTag.cs" />
-    <Compile Include="Tags\ClickableTextTag.cs" />
-    <Compile Include="Tags\CustomListTag.cs" />
-    <Compile Include="Tags\GridLayoutTag.cs" />
-    <Compile Include="Tags\HorizontalLayoutTag.cs" />
-    <Compile Include="Tags\ButtonWithIconTag.cs" />
-    <Compile Include="Tags\IconSegmentedControlTag.cs" />
-    <Compile Include="Tags\ImageTag.cs" />
-    <Compile Include="Tags\ModalColorPickerTag.cs" />
-    <Compile Include="Tags\ModifierContainerTag.cs" />
-    <Compile Include="Tags\ModifierTag.cs" />
-    <Compile Include="Tags\PrimaryButtonTag.cs" />
-    <Compile Include="Tags\RawImageTag.cs" />
-    <Compile Include="Tags\LeaderboardTag.cs" />
-    <Compile Include="Tags\ListTag.cs" />
-    <Compile Include="Tags\LoadingIndicatorTag.cs" />
-    <Compile Include="Tags\ModalKeyboardTag.cs" />
-    <Compile Include="Tags\ModalTag.cs" />
-    <Compile Include="Tags\PageButtonTag.cs" />
-    <Compile Include="Tags\ScrollableContainerTag.cs" />
-    <Compile Include="Tags\ScrollableSettingsContainerTag.cs" />
-    <Compile Include="Tags\ScrollIndicatorTag.cs" />
-    <Compile Include="Tags\ScrollViewTag.cs" />
-    <Compile Include="Tags\Settings\BoolSettingTag.cs" />
-    <Compile Include="Tags\Settings\ColorSettingTag.cs" />
-    <Compile Include="Tags\Settings\DropdownListSettingTag.cs" />
-    <Compile Include="Tags\Settings\GenericSliderSettingTag.cs" />
-    <Compile Include="Tags\Settings\IncDecSettingTag.cs" />
-    <Compile Include="Tags\Settings\IncrementSettingTag.cs" />
-    <Compile Include="Tags\Settings\ListSettingTag.cs" />
-    <Compile Include="Tags\Settings\ListSliderSettingTag.cs" />
-    <Compile Include="Tags\Settings\SliderSettingTag.cs" />
-    <Compile Include="Tags\Settings\StringSettingTag.cs" />
-    <Compile Include="Tags\Settings\SubmenuTag.cs" />
-    <Compile Include="Tags\StackLayoutTag.cs" />
-    <Compile Include="Tags\TabSelectorTag.cs" />
-    <Compile Include="Tags\TabTag.cs" />
-    <Compile Include="Tags\TextPageScrollViewTag.cs" />
-    <Compile Include="Tags\TextSegmentedControlTag.cs" />
-    <Compile Include="Tags\TextTag.cs" />
-    <Compile Include="Tags\VerticalIconSegmentedControlTag.cs" />
-    <Compile Include="Tags\VerticalLayoutTag.cs" />
-    <Compile Include="TypeHandlers\BackgroundableHandler.cs" />
-    <Compile Include="TypeHandlers\ButtonArtworkHandler.cs" />
-    <Compile Include="TypeHandlers\GenericInteractableSettingHandler.cs" />
-    <Compile Include="TypeHandlers\SelectableHandler.cs" />
-    <Compile Include="TypeHandlers\ButtonHandler.cs" />
-    <Compile Include="TypeHandlers\ButtonIconHandler.cs" />
-    <Compile Include="TypeHandlers\ClickableImageHandler.cs" />
-    <Compile Include="TypeHandlers\ClickableTextHandler.cs" />
-    <Compile Include="TypeHandlers\ContentSizeFitterHandler.cs" />
-    <Compile Include="TypeHandlers\CustomCellListTableDataHandler.cs" />
-    <Compile Include="TypeHandlers\CustomListTableDataHandler.cs" />
-    <Compile Include="TypeHandlers\FormattableTextHandler.cs" />
-    <Compile Include="TypeHandlers\GlowableHandler.cs" />
-    <Compile Include="TypeHandlers\GridLayoutGroupHandler.cs" />
-    <Compile Include="TypeHandlers\HorizontalOrVerticalLayoutGroupHandler.cs" />
-    <Compile Include="TypeHandlers\IconSegmentedControlHandler.cs" />
-    <Compile Include="TypeHandlers\ImageHandler.cs" />
-    <Compile Include="TypeHandlers\ModalColorPickerHandler.cs" />
-    <Compile Include="TypeHandlers\RawImageHandler.cs" />
-    <Compile Include="TypeHandlers\LayoutElementHandler.cs" />
-    <Compile Include="TypeHandlers\LayoutGroupHandler.cs" />
-    <Compile Include="TypeHandlers\LeaderboardHandler.cs" />
-    <Compile Include="TypeHandlers\ModalKeyboardHandler.cs" />
-    <Compile Include="TypeHandlers\ModalViewHandler.cs" />
-    <Compile Include="TypeHandlers\PageButtonHandler.cs" />
-    <Compile Include="TypeHandlers\RectTransformHandler.cs" />
-    <Compile Include="TypeHandlers\ScrollIndicatorHandler.cs" />
-    <Compile Include="TypeHandlers\ScrollableContainerHandler.cs" />
-    <Compile Include="TypeHandlers\Settings\DropDownListSettingHandler.cs" />
-    <Compile Include="TypeHandlers\Settings\GenericSettingHandler.cs" />
-    <Compile Include="TypeHandlers\Settings\IncrementSettingHandler.cs" />
-    <Compile Include="TypeHandlers\Settings\ListSliderSettingHandler.cs" />
-    <Compile Include="TypeHandlers\Settings\ListSettingHandler.cs" />
-    <Compile Include="TypeHandlers\Settings\SliderSettingHandler.cs" />
-    <Compile Include="TypeHandlers\StrokableHandler.cs" />
-    <Compile Include="TypeHandlers\TabHandler.cs" />
-    <Compile Include="TypeHandlers\TabSelectorHandler.cs" />
-    <Compile Include="TypeHandlers\LocalizedTextMeshProUGUIHandler.cs" />
-    <Compile Include="TypeHandlers\TextMeshProUGUIHandler.cs" />
-    <Compile Include="TypeHandlers\TextPageScrollViewHandler.cs" />
-    <Compile Include="TypeHandlers\TextSegmentedControlHandler.cs" />
-    <Compile Include="TypeHandlers\TypeHandler.cs" />
-    <Compile Include="Utilities.cs" />
-    <Compile Include="ViewControllers\BSMLAutomaticViewController.cs" />
-    <Compile Include="ViewControllers\BSMLResourceViewController.cs" />
-    <Compile Include="ViewControllers\BSMLViewController.cs" />
-    <Compile Include="ViewControllers\HotReloadableViewController.cs" />
-    <Compile Include="ViewControllers\LocalizationTestViewController.cs" />
-    <Compile Include="ViewControllers\TestViewController.cs" />
-    <Compile Include="ViewControllers\WatcherGroup.cs" />
+    <None Include="Directory.Build.props" Condition="Exists('Directory.Build.props')" />
+    <None Include="Directory.Build.targets" Condition="Exists('Directory.Build.targets')" />
+    <None Include="BeatSaberMarkupLanguage.csproj.user" Condition="Exists('BeatSaberMarkupLanguage.csproj.user')" />
   </ItemGroup>
+
   <ItemGroup>
-    <EmbeddedResource Include="Views\test.bsml" />
-    <EmbeddedResource Include="Views\localization-test.bsml" />
     <EmbeddedResource Include="manifest.json" />
-    <EmbeddedResource Include="Views\settings-buttons.bsml" />
-    <EmbeddedResource Include="Views\settings-list.bsml" />
-    <EmbeddedResource Include="Views\settings-about.bsml" />
-    <EmbeddedResource Include="Views\settings-test.bsml" />
-    <EmbeddedResource Include="Resources\icon.png" />
+    <EmbeddedResource Include="Resources\*.apng" />
+    <EmbeddedResource Include="Resources\*.png" />
     <EmbeddedResource Include="Resources\description.md" />
-    <EmbeddedResource Include="Views\main-left-screen.bsml">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
+    <EmbeddedResource Include="Views\*.bsml" />
   </ItemGroup>
+
   <ItemGroup>
-    <EmbeddedResource Include="Views\main-menu-screen.bsml" />
+    <PackageReference Include="BeatSaberModdingTools.Tasks" Version="1.4.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Views\gameplay-setup.bsml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Views\gameplay-setup-test.bsml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\loading.apng" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\mods_idle.png" />
-    <EmbeddedResource Include="Resources\mods_selected.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Views\settings-error.bsml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Views\gameplay-tab-error.bsml" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>copy "$(TargetPath)" "$(BeatSaberDir)\Plugins"
-copy "$(AssemblyName).pdb" "$(BeatSaberDir)\Plugins"</PostBuildEvent>
-  </PropertyGroup>
 </Project>
