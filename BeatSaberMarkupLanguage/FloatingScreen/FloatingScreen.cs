@@ -1,8 +1,10 @@
-﻿using HMUI;
+﻿using BeatSaberMarkupLanguage.Harmony_Patches;
+using HMUI;
 using IPA.Utilities;
 using System;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using VRUIControls;
 using Screen = HMUI.Screen;
@@ -57,10 +59,36 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
                         CreateHandle();
                     else
                         handle.SetActive(true);
+
+                    VRPointerEnabledPatch.PointerEnabled -= OnPointerCreated;
+                    VRPointerEnabledPatch.PointerEnabled += OnPointerCreated;
                 }
                 else if(!_showHandle && handle != null)
                 {
                     handle.SetActive(false);
+                    VRPointerEnabledPatch.PointerEnabled -= OnPointerCreated;
+                }
+            }
+        }
+
+        private bool _highlightHandle = false;
+        public bool HighlightHandle
+        {
+            get => _highlightHandle;
+            set
+            {
+                _highlightHandle = value;
+                if (_highlightHandle)
+                {
+                    if (!ShowHandle)
+                        ShowHandle = true;
+
+                    handle.GetComponent<FloatingScreenHandle>().enabled = true;
+                }
+                else
+                {
+                    if (handle != null)
+                        handle.GetComponent<FloatingScreenHandle>().enabled = false;
                 }
             }
         }
@@ -129,20 +157,35 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
             return screen;
         }
 
-        private void CreateHandle()
+        private void OnPointerCreated(VRPointer pointer) => CreateHandle(pointer);
+
+        private void CreateHandle(VRPointer pointer = null)
         {
-            VRPointer pointer = Resources.FindObjectsOfTypeAll<VRPointer>().FirstOrDefault();
+            if (pointer == null)
+            {
+                pointer = Resources.FindObjectsOfTypeAll<VRPointer>().FirstOrDefault();
+            }
+
             if (pointer != null)
             {
-                if (screenMover) Destroy(screenMover);
-                screenMover = pointer.gameObject.AddComponent<FloatingScreenMoverPointer>();
-                handle = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                bool pointerChanged = screenMover == null || screenMover.gameObject != pointer.gameObject;
 
-                handle.transform.SetParent(transform);
-                handle.transform.localRotation = Quaternion.identity;
-                UpdateHandle();
+                if (pointerChanged)
+                {
+                    if (screenMover) Destroy(screenMover);
+                    screenMover = pointer.gameObject.AddComponent<FloatingScreenMoverPointer>();
+                }
 
-                screenMover.Init(this);
+                if (handle == null)
+                {
+                    handle = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                    handle.transform.SetParent(transform);
+                    handle.transform.localRotation = Quaternion.identity;
+                    UpdateHandle();
+                    handle.AddComponent<FloatingScreenHandle>().enabled = false;
+                }
+
+                if (pointerChanged) screenMover.Init(this);
             }
             else
             {
@@ -187,6 +230,12 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
             }
 
             handle.GetComponent<MeshRenderer>().enabled = HandleSide != Side.Full;
+        }
+
+        public override void OnDestroy()
+        {
+            base.OnDestroy();
+            VRPointerEnabledPatch.PointerEnabled -= OnPointerCreated;
         }
 
         public enum Side

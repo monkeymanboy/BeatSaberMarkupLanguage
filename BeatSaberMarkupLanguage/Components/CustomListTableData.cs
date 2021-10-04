@@ -6,7 +6,7 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using LevelPackTableCell = AnnotatedBeatmapLevelCollectionTableCell;//This got renamed at a point, but old name is more clear so I'm using that
+using LevelPackCell = AnnotatedBeatmapLevelCollectionCell;//This got renamed at a point, but old name is more clear so I'm using that
 
 namespace BeatSaberMarkupLanguage.Components
 {
@@ -20,7 +20,7 @@ namespace BeatSaberMarkupLanguage.Components
         private ListStyle listStyle = ListStyle.List;
 
         private LevelListTableCell songListTableCellInstance;
-        private LevelPackTableCell levelPackTableCellInstance;
+        private LevelPackCell levelPackTableCellInstance;
         private SimpleTextTableCell simpleTextTableCellInstance;
 
         public List<CustomCellInfo> data = new List<CustomCellInfo>();
@@ -72,19 +72,37 @@ namespace BeatSaberMarkupLanguage.Components
             return tableCell;
         }
 
-        public LevelPackTableCell GetLevelPackTableCell()
+        public BSMLBoxTableCell GetBoxTableCell()
         {
-            LevelPackTableCell tableCell = (LevelPackTableCell)tableView.DequeueReusableCellForIdentifier(reuseIdentifier);
+            BSMLBoxTableCell tableCell = (BSMLBoxTableCell)tableView.DequeueReusableCellForIdentifier(reuseIdentifier);
             if (!tableCell)
             {
                 if (levelPackTableCellInstance == null)
-                    levelPackTableCellInstance = Resources.FindObjectsOfTypeAll<LevelPackTableCell>().First(x => x.name == "AnnotatedBeatmapLevelCollectionTableCell");
+                    levelPackTableCellInstance = Resources.FindObjectsOfTypeAll<LevelPackCell>().First(x => x.name == "AnnotatedBeatmapLevelCollectionCell");
 
-                tableCell = Instantiate(levelPackTableCellInstance);
+                tableCell = InstantiateBoxTableCell(levelPackTableCellInstance);
             }
 
             tableCell.reuseIdentifier = reuseIdentifier;
             return tableCell;
+        }
+
+        public BSMLBoxTableCell InstantiateBoxTableCell(LevelPackCell levelPackTableCell)
+        {
+            levelPackTableCell = Instantiate(levelPackTableCell);
+            ImageView coverImage = levelPackTableCell.GetField<ImageView, LevelPackCell>("_coverImage");
+            ImageView selectionImage = levelPackTableCell.GetField<ImageView, LevelPackCell>("_selectionImage");
+
+            foreach (Transform child in coverImage.transform)
+            {
+                GameObject.Destroy(child.gameObject);
+            }
+
+            GameObject cellObject = levelPackTableCell.gameObject;
+            Destroy(levelPackTableCell);
+            BSMLBoxTableCell boxTableCell = cellObject.AddComponent<BSMLBoxTableCell>();
+            boxTableCell.SetComponents(coverImage, selectionImage);
+            return boxTableCell;
         }
 
         public SimpleTextTableCell GetSimpleTextTableCell()
@@ -127,12 +145,8 @@ namespace BeatSaberMarkupLanguage.Components
 
                     return tableCell;
                 case ListStyle.Box:
-                    LevelPackTableCell cell = GetLevelPackTableCell();
-                    cell.showNewRibbon = false;
-                    cell.GetField<TextMeshProUGUI, LevelPackTableCell>("_infoText").text = $"{data[idx].text}\n{data[idx].subtext}";
-                    Image packCoverImage = cell.GetField<Image, LevelPackTableCell>("_coverImage");
-
-                    packCoverImage.sprite = data[idx].icon == null ? Utilities.LoadSpriteFromTexture(Texture2D.blackTexture) : data[idx].icon;
+                    BSMLBoxTableCell cell = GetBoxTableCell();
+                    cell.SetData(data[idx].icon == null ? Utilities.LoadSpriteFromTexture(Texture2D.blackTexture) : data[idx].icon);
 
                     return cell;
                 case ListStyle.Simple:
