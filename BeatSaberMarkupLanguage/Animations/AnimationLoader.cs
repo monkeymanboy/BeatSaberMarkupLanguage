@@ -84,10 +84,12 @@ namespace BeatSaberMarkupLanguage.Animations
             while (true) {
                 int numFrames = frameInfo.frameCount;
                 // Make sure the number of frames is cleanly divisible by our testNum
-                if (!(numFrames % testNum != 0))
+                if (numFrames % testNum == 0)
                     numFrames += numFrames % testNum;
 
-                numFramesInRow = numFrames / testNum;
+                // Math.Max to ensure numFramesInRow never becomes 0 to prevent DivideByZeroException
+                // This would happen with single frame GIFs
+                numFramesInRow = Math.Max(numFrames / testNum, 1);
                 numFramesInColumn = numFrames / numFramesInRow;
                 
                 if (numFramesInRow <= numFramesInColumn)
