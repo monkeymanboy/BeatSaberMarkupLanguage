@@ -1,9 +1,9 @@
 ﻿using BeatSaberMarkupLanguage.Attributes;
+using BeatSaberMarkupLanguage.Components;
 using IPA.Utilities;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,6 +14,15 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
         private static readonly FieldAccessor<LayoutGroup, List<RectTransform>>.Accessor LayoutGroupChildren = FieldAccessor<LayoutGroup, List<RectTransform>>.GetAccessor("m_RectChildren");
         private GameplaySetupViewController gameplaySetupViewController;
         private LayoutGroup layoutGroup;
+
+        [UIComponent("new-tab-selector")]
+        private TabSelector tabSelector;
+
+        [UIComponent("vanilla-tab")]
+        private Transform vanillaTab;
+
+        [UIComponent("mods-tab")]
+        private Transform modsTab;
 
         [UIValue("vanilla-items")]
         private List<Transform> vanillaItems = new List<Transform>();
@@ -37,6 +46,7 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
             BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), "BeatSaberMarkupLanguage.Views.gameplay-setup.bsml"), gameplaySetupViewController.gameObject, this);
             
             gameplaySetupViewController.didActivateEvent += GameplaySetupDidActivate;
+            gameplaySetupViewController.didDeactivateEvent += GameplaySetupDidDeactivate;
         }
 
         private void GameplaySetupDidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
@@ -61,6 +71,13 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
             }
             foreach (GameplaySetupMenu menu in menus)
                 menu.SetVisible(menu.IsMenuType(menuType));
+        }
+
+        private void GameplaySetupDidDeactivate(bool removedFromHierarchy, bool screenSystemDisabling)
+        {
+            tabSelector.textSegmentedControl.SelectCellWithNumber(0);
+            vanillaTab.gameObject.SetActive(true);
+            modsTab.gameObject.SetActive(false);
         }
 
         public void AddTab(string name, string resource, object host)

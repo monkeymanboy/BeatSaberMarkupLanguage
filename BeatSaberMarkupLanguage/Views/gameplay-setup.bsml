@@ -1,9 +1,9 @@
 ﻿<bg xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
-  <tab-selector tab-tag='new-tab' anchor-pos-y='0' size-delta-y='6' size-delta-x='-20' child-expand-width='true' child-control-width='true' has-separator='false'/>
-  <tab tags='new-tab' tab-name='Vanilla' anchor-pos-y='-8'>
+  <tab-selector id='new-tab-selector' tab-tag='new-tab' anchor-pos-y='0' size-delta-y='6' size-delta-x='-20' child-expand-width='true' child-control-width='true' has-separator='false'/>
+  <tab id='vanilla-tab' tags='new-tab' tab-name='Vanilla' anchor-pos-y='-8'>
     <macro.reparent transforms='vanilla-items'/>
   </tab>
-  <tab tags='new-tab' tab-name='Mods'>
+  <tab id='mods-tab' tags='new-tab' tab-name='Mods'>
     <horizontal child-expand-width='false' pref-height='6' anchor-pos-y='28' size-delta-x='-16'>
       <page-button direction='Left' pref-width='6' pref-height='6' tags='left-button'/>
       <tab-selector tab-tag='mod-tab' child-expand-width='true' child-control-width='true' has-separator='false' page-count='3' left-button-tag='left-button' right-button-tag='right-button'/>
