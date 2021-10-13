@@ -1,6 +1,7 @@
 ﻿using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components;
 using IPA.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -11,6 +12,8 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
 {
     public class GameplaySetup : PersistentSingleton<GameplaySetup>
     {
+        public event Action TabsCreatedEvent;
+
         private static readonly FieldAccessor<LayoutGroup, List<RectTransform>>.Accessor LayoutGroupChildren = FieldAccessor<LayoutGroup, List<RectTransform>>.GetAccessor("m_RectChildren");
         private GameplaySetupViewController gameplaySetupViewController;
         private LayoutGroup layoutGroup;
@@ -71,6 +74,8 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
             }
             foreach (GameplaySetupMenu menu in menus)
                 menu.SetVisible(menu.IsMenuType(menuType));
+
+            TabsCreatedEvent?.Invoke();
         }
 
         private void GameplaySetupDidDeactivate(bool removedFromHierarchy, bool screenSystemDisabling)
