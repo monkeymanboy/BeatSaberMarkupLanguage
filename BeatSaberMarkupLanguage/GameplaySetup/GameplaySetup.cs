@@ -105,6 +105,9 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
         /// <summary>Allows tab to dynamically disappear and reappear</summary>
         public void SetTabVisibility(string name, bool isVisible)
         {
+            if (!gameplaySetupViewController.isActiveAndEnabled)
+                return;
+
             IEnumerable<GameplaySetupMenu> menu = menus.OfType<GameplaySetupMenu>().Where(x => x.name == name);
             if (menu.Count() > 0)
                 menu.FirstOrDefault().SetVisible(isVisible);
