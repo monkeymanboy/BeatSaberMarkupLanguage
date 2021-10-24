@@ -24,6 +24,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 
         public override void Setup()
         {
+            base.Setup();
             slider.minValue = 0;
             slider.maxValue = values.Count() - 1;
             text = slider.GetComponentInChildren<TextMeshProUGUI>();

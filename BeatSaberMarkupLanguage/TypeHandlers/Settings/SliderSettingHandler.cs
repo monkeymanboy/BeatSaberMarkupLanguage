@@ -15,7 +15,8 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
             { "increment", new[] { "increment" } },
             { "minValue", new[] { "min" } },
             { "maxValue", new[] { "max" } },
-            { "isInt", new[] { "integer-only" } }
+            { "isInt", new[] { "integer-only" } },
+            { "showButtons", new[] { "show-buttons" } }
         };
 
         public override void HandleType(ComponentTypeWithData componentType, BSMLParserParams parserParams)
@@ -33,6 +34,9 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
 
             if (componentType.data.TryGetValue("maxValue", out string maxValue))
                 sliderSetting.slider.maxValue = Parse.Float(maxValue);
+
+            if (componentType.data.TryGetValue("showButtons", out string showButtons))
+                sliderSetting.showButtons = Parse.Bool(showButtons);
         }
     }
 }
