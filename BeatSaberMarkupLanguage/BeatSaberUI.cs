@@ -296,7 +296,7 @@ namespace BeatSaberMarkupLanguage
                 }
                 catch
                 {
-                    Logger.log.Error($"Could not find Texture with image name {imgName}");
+                    Logger.log.Error($"Could not find Sprite with image name {imgName}");
                 }
             }
             else if (IsAnimated(location) || (isURL && IsAnimated(uri.LocalPath)))
