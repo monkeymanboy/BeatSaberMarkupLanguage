@@ -52,6 +52,17 @@ namespace BeatSaberMarkupLanguage
             }
         }
 
+        private static IVRPlatformHelper _platformHelper;
+        public static IVRPlatformHelper PlatformHelper
+        {
+            get
+            {
+                if (_platformHelper == null)
+                    _platformHelper = Resources.FindObjectsOfTypeAll<LevelCollectionTableView>().FirstOrDefault().GetComponentInChildren<ScrollView>().GetField<IVRPlatformHelper, ScrollView>("_platformHelper");
+                return _platformHelper;
+            }
+        }
+
         private static Canvas canvasTemplate;
 
         /// <summary>

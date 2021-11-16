@@ -38,6 +38,7 @@ namespace BeatSaberMarkupLanguage.Tags
             scrollView.SetField<ScrollView, Button>("_pageDownButton", pageDownButton);
             scrollView.SetField<ScrollView, VerticalScrollIndicator>("_verticalScrollIndicator", verticalScrollIndicator);
             scrollView.SetField<ScrollView, RectTransform>("_viewport", viewport);
+            (scrollView as ScrollView).SetField("_platformHelper", BeatSaberUI.PlatformHelper);
 
             viewport.anchorMin = new Vector2(0, 0);
             viewport.anchorMax = new Vector2(1, 1);
