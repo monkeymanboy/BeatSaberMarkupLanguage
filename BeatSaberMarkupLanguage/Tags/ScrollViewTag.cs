@@ -11,15 +11,22 @@ namespace BeatSaberMarkupLanguage.Tags
 {
     public class ScrollViewTag : BSMLTag
     {
-        private TextPageScrollView scrollViewTemplate;
+        private static TextPageScrollView _scrollViewTemplate;
+        public static TextPageScrollView ScrollViewTemplate
+        {
+            get
+            {
+                if (_scrollViewTemplate == null)
+                    _scrollViewTemplate = Resources.FindObjectsOfTypeAll<ReleaseInfoViewController>().First().GetField<TextPageScrollView, ReleaseInfoViewController>("_textPageScrollView");
+                return _scrollViewTemplate;
+            }
+        }
 
         public override string[] Aliases => new[] { "scroll-view" };
 
         public override GameObject CreateObject(Transform parent)
         {
-            if (scrollViewTemplate == null)
-                scrollViewTemplate = Resources.FindObjectsOfTypeAll<ReleaseInfoViewController>().First().GetField<TextPageScrollView, ReleaseInfoViewController>("_textPageScrollView");
-            TextPageScrollView textScrollView = Object.Instantiate(scrollViewTemplate, parent);
+            TextPageScrollView textScrollView = Object.Instantiate(ScrollViewTemplate, parent);
             textScrollView.name = "BSMLScrollView";
             Button pageUpButton = textScrollView.GetField<Button, ScrollView>("_pageUpButton");
             Button pageDownButton = textScrollView.GetField<Button, ScrollView>("_pageDownButton");

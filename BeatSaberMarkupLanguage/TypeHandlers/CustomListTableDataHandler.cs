@@ -1,5 +1,6 @@
 ﻿using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.Parser;
+using BeatSaberMarkupLanguage.Tags;
 using HMUI;
 using IPA.Utilities;
 using System;
@@ -32,12 +33,16 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "expandCell", new[] { "expand-cell" } },
             { "listStyle", new[] { "list-style" } },
             { "listDirection", new[] { "list-direction" } },
-            { "alignCenter", new[] { "align-to-center" } }
+            { "alignCenter", new[] { "align-to-center" } },
+            { "stickScrolling", new[] { "stick-scrolling" } },
+            { "showScrollbar", new[] { "show-scrollbar" } }
         };
 
         public override void HandleType(ComponentTypeWithData componentType, BSMLParserParams parserParams)
         {
             CustomListTableData tableData = componentType.component as CustomListTableData;
+            ScrollView scrollView = tableData.tableView.GetField<ScrollView, TableView>("_scrollView");
+
             if (componentType.data.TryGetValue("selectCell", out string selectCell))
             {
                 tableData.tableView.didSelectCellWithIdxEvent += delegate (TableView table, int index)
@@ -52,9 +57,6 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             if (componentType.data.TryGetValue("listDirection", out string listDirection))
             {
                 tableData.tableView.SetField<TableView, TableType>("_tableType", (TableType)Enum.Parse(typeof(TableType), listDirection));
-
-                var scrollView = tableData.tableView.GetField<ScrollView, TableView>("_scrollView");
-
                 scrollViewDirectionField.SetValue(scrollView, Enum.Parse(scrollViewDirectionField.FieldType, listDirection));
             }
 
@@ -70,6 +72,36 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             if (componentType.data.TryGetValue("alignCenter", out string alignCenter))
                 tableData.tableView.SetField<TableView, bool>("_alignToCenter", Parse.Bool(alignCenter));
 
+            if (componentType.data.TryGetValue("stickScrolling", out string stickScrolling))
+            {
+                if (Parse.Bool(stickScrolling))
+                    scrollView.SetField("_platformHelper", BeatSaberUI.PlatformHelper);
+            }
+
+            if (componentType.data.TryGetValue("showScrollbar", out string showScrollbar))
+            {
+                if (Parse.Bool(showScrollbar))
+                {
+                    TextPageScrollView textScrollView = UnityEngine.Object.Instantiate(ScrollViewTag.ScrollViewTemplate, componentType.component.transform);
+
+                    Button pageUpButton = textScrollView.GetField<Button, ScrollView>("_pageUpButton");
+                    Button pageDownButton = textScrollView.GetField<Button, ScrollView>("_pageDownButton");
+                    VerticalScrollIndicator verticalScrollIndicator = textScrollView.GetField<VerticalScrollIndicator, ScrollView>("_verticalScrollIndicator");
+                    RectTransform scrollBar = verticalScrollIndicator.transform.parent as RectTransform;
+
+                    scrollView.SetField("_pageUpButton", pageUpButton);
+                    scrollView.SetField("_pageDownButton", pageDownButton);
+                    scrollView.SetField("_verticalScrollIndicator", verticalScrollIndicator);
+                    scrollBar.SetParent(componentType.component.transform);
+                    GameObject.Destroy(textScrollView.gameObject);
+
+                    // Need to adjust scroll bar positioning
+                    scrollBar.anchorMin = new Vector2(1, 0);
+                    scrollBar.anchorMax = Vector2.one;
+                    scrollBar.offsetMin = Vector2.zero;
+                    scrollBar.offsetMax = new Vector2(8, 0);
+                }
+            }
 
             if (componentType.data.TryGetValue("data", out string value))
             {
@@ -97,7 +129,6 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 
             if (componentType.data.TryGetValue("id", out string id))
             {
-                ScrollView scrollView = tableData.tableView.GetField<ScrollView, TableView>("_scrollView");
                 parserParams.AddEvent(id + "#PageUp", scrollView.PageUpButtonPressed);
                 parserParams.AddEvent(id + "#PageDown", scrollView.PageDownButtonPressed);
             }
