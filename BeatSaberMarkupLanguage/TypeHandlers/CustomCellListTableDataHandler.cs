@@ -53,10 +53,13 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 };
             }
 
+            bool verticalList = true;
+
             if (componentType.data.TryGetValue("listDirection", out string listDirection))
             {
                 tableData.tableView.SetField<TableView, TableType>("_tableType", (TableType)Enum.Parse(typeof(TableType), listDirection));
                 scrollViewDirectionField.SetValue(scrollView, Enum.Parse(scrollViewDirectionField.FieldType, listDirection));
+                verticalList = listDirection.ToLower() != "horizontal";
             }
 
             if (componentType.data.TryGetValue("cellSize", out string cellSize))
@@ -77,7 +80,8 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                     scrollView.SetField("_platformHelper", BeatSaberUI.PlatformHelper);
             }
 
-            if (componentType.data.TryGetValue("showScrollbar", out string showScrollbar))
+            // We can only show the scroll bar for vertical lists
+            if (verticalList && componentType.data.TryGetValue("showScrollbar", out string showScrollbar))
             {
                 if (Parse.Bool(showScrollbar))
                 {
