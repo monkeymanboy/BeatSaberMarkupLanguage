@@ -36,6 +36,7 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
             dropdown.name = "Dropdown";
             dropdown.GetComponentInChildren<VRGraphicRaycaster>(true).SetField("_physicsRaycaster", BeatSaberUI.PhysicsRaycasterWithCache);
             dropdown.GetComponentInChildren<ModalView>(true).SetField("_container", BeatSaberUI.DiContainer);
+            dropdown.GetComponentInChildren<ScrollView>(true).SetField("_platformHelper", BeatSaberUI.PlatformHelper);
 
             GameObject labelObject = gameObject.transform.Find("Label").gameObject;
             LocalizedTextMeshProUGUI localizedText = ConfigureLocalizedText(labelObject);
