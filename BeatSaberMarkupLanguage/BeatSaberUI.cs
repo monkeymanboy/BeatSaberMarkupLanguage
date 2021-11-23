@@ -53,12 +53,16 @@ namespace BeatSaberMarkupLanguage
         }
 
         private static IVRPlatformHelper _platformHelper;
+        private static ScrollView _levelCollectionScrollView;
         public static IVRPlatformHelper PlatformHelper
         {
             get
             {
-                if (_platformHelper == null)
-                    _platformHelper = Resources.FindObjectsOfTypeAll<LevelCollectionTableView>().FirstOrDefault().GetComponentInChildren<ScrollView>().GetField<IVRPlatformHelper, ScrollView>("_platformHelper");
+                if (_levelCollectionScrollView == null)
+                {
+                    _levelCollectionScrollView = Resources.FindObjectsOfTypeAll<LevelCollectionTableView>().FirstOrDefault().GetComponentInChildren<ScrollView>();
+                    _platformHelper = _levelCollectionScrollView.GetField<IVRPlatformHelper, ScrollView>("_platformHelper");
+                }
                 return _platformHelper;
             }
         }
