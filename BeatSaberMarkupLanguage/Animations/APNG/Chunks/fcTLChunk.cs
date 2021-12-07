@@ -56,7 +56,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         private BlendOps blendOp;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AnimatedImages.fcTLChunk"/> class.
+        /// Initializes a new instance of the <see cref="fcTLChunk"/> class.
         /// </summary>
         internal fcTLChunk()
         {
@@ -66,7 +66,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AnimatedImages.fcTLChunk"/> class.
+        /// Initializes a new instance of the <see cref="fcTLChunk"/> class.
         /// </summary>
         /// <param name="bytes">Byte Array of chunk data.</param>
         public fcTLChunk(byte[] bytes)
@@ -75,7 +75,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AnimatedImages.fcTLChunk"/> class.
+        /// Initializes a new instance of the <see cref="fcTLChunk"/> class.
         /// </summary>
         /// <param name="ms">Memory Stream of chunk data.</param>
         public fcTLChunk(MemoryStream ms)
@@ -84,7 +84,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AnimatedImages.fcTLChunk"/> class.
+        /// Initializes a new instance of the <see cref="fcTLChunk"/> class.
         /// </summary>
         /// <param name="chunk">Chunk data.</param>
         public fcTLChunk(Chunk chunk)

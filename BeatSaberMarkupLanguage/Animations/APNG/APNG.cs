@@ -40,7 +40,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG
         /// <summary>
         /// Load the specified stream.
         /// </summary>
-        /// <param name="stream">Streamrepresentation of the png file.</param>
+        /// <param name="stream">Stream representation of the png file.</param>
         internal void Load(MemoryStream stream)
         {
             ms = stream;

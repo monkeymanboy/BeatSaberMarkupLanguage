@@ -8,7 +8,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
     internal class OtherChunk : Chunk
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="AnimatedImages.OtherChunk"/> class.
+        /// Initializes a new instance of the <see cref="OtherChunk"/> class.
         /// </summary>
         /// <param name="bytes">Byte Array of chunk data.</param>
         public OtherChunk(byte[] bytes)
@@ -17,7 +17,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AnimatedImages.OtherChunk"/> class.
+        /// Initializes a new instance of the <see cref="OtherChunk"/> class.
         /// </summary>
         /// <param name="ms">Memory Stream of chunk data.</param>
         public OtherChunk(MemoryStream ms)
@@ -26,7 +26,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AnimatedImages.OtherChunk"/> class.
+        /// Initializes a new instance of the <see cref="OtherChunk"/> class.
         /// </summary>
         /// <param name="chunk">Chunk data.</param>
         public OtherChunk(Chunk chunk)

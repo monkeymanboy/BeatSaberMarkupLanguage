@@ -12,7 +12,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         private byte[] frameData;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AnimatedImages.fdATChunk"/> class.
+        /// Initializes a new instance of the <see cref="fdATChunk"/> class.
         /// </summary>
         /// <param name="bytes">Byte array of chunk data.</param>
         public fdATChunk(byte[] bytes)
@@ -21,7 +21,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AnimatedImages.fdATChunk"/> class.
+        /// Initializes a new instance of the <see cref="fdATChunk"/> class.
         /// </summary>
         /// <param name="ms">Memory stream of chunk data.</param>
         public fdATChunk(MemoryStream ms)
@@ -30,7 +30,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AnimatedImages.fdATChunk"/> class.
+        /// Initializes a new instance of the <see cref="fdATChunk"/> class.
         /// </summary>
         /// <param name="chunk">Chunk data.</param>
         public fdATChunk(Chunk chunk)

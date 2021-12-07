@@ -12,7 +12,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         private uint playCount;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AnimatedImages.acTLChunk"/> class.
+        /// Initializes a new instance of the <see cref="acTLChunk"/> class.
         /// </summary>
         internal acTLChunk()
         {
@@ -22,7 +22,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AnimatedImages.acTLChunk"/> class.
+        /// Initializes a new instance of the <see cref="acTLChunk"/> class.
         /// </summary>
         /// <param name="bytes">Byte array of chunk data.</param>
         public acTLChunk(byte[] bytes)
@@ -31,7 +31,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AnimatedImages.acTLChunk"/> class.
+        /// Initializes a new instance of the <see cref="acTLChunk"/> class.
         /// </summary>
         /// <param name="ms">Memory stream of chunk data.</param>
         public acTLChunk(MemoryStream ms)
@@ -40,7 +40,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AnimatedImages.acTLChunk"/> class.
+        /// Initializes a new instance of the <see cref="acTLChunk"/> class.
         /// </summary>
         /// <param name="chunk">Chunk object.</param>
         public acTLChunk(Chunk chunk)

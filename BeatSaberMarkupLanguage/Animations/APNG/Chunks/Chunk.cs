@@ -10,7 +10,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
     public class Chunk
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="AnimatedImages.Chunk"/> class.
+        /// Initializes a new instance of the <see cref="Chunk"/> class.
         /// </summary>
         internal Chunk()
         {
@@ -21,9 +21,9 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AnimatedImages.Chunk"/> class.
+        /// Initializes a new instance of the <see cref="Chunk"/> class.
         /// </summary>
-        /// <param name="bytes">Byte Array of chiunk data.</param>
+        /// <param name="bytes">Byte Array of chunk data.</param>
         internal Chunk(byte[] bytes)
         {
             var ms = new MemoryStream(bytes);
@@ -41,7 +41,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AnimatedImages.Chunk"/> class.
+        /// Initializes a new instance of the <see cref="Chunk"/> class.
         /// </summary>
         /// <param name="ms">Memory Stream of chunk data.</param>
         internal Chunk(MemoryStream ms)
@@ -55,7 +55,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AnimatedImages.Chunk"/> class.
+        /// Initializes a new instance of the <see cref="Chunk"/> class.
         /// </summary>
         /// <param name="chunk">Chunk data.</param>
         internal Chunk(Chunk chunk)
@@ -142,11 +142,11 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         }
 
         /// <summary>
-        /// Determines whether the specified <see cref="System.Object"/> is equal to the current <see cref="AnimatedImages.Chunk"/>.
+        /// Determines whether the specified <see cref="System.Object"/> is equal to the current <see cref="Chunk"/>.
         /// </summary>
-        /// <param name="obj">The <see cref="System.Object"/> to compare with the current <see cref="AnimatedImages.Chunk"/>.</param>
+        /// <param name="obj">The <see cref="System.Object"/> to compare with the current <see cref="Chunk"/>.</param>
         /// <returns><c>true</c> if the specified <see cref="System.Object"/> is equal to the current
-        /// <see cref="AnimatedImages.Chunk"/>; otherwise, <c>false</c>.</returns>
+        /// <see cref="Chunk"/>; otherwise, <c>false</c>.</returns>
         public override bool Equals(object obj)
         {
             bool result = false;

@@ -17,7 +17,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         private byte interlaceMethod;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AnimatedImages.IHDRChunk"/> class.
+        /// Initializes a new instance of the <see cref="IHDRChunk"/> class.
         /// </summary>
         /// <param name="chunkBytes">Byte Array representation.</param>
         public IHDRChunk(byte[] chunkBytes)
@@ -26,7 +26,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AnimatedImages.IHDRChunk"/> class.
+        /// Initializes a new instance of the <see cref="IHDRChunk"/> class.
         /// </summary>
         /// <param name="ms">Memory stream representation.</param>
         public IHDRChunk(MemoryStream ms)
@@ -35,7 +35,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AnimatedImages.IHDRChunk"/> class.
+        /// Initializes a new instance of the <see cref="IHDRChunk"/> class.
         /// </summary>
         /// <param name="chunk">Chunk representation.</param>
         public IHDRChunk(Chunk chunk)
