@@ -123,7 +123,7 @@ namespace BeatSaberMarkupLanguage
                 if (fullCache.ContainsKey(name))
                 {
                     // Beat Saber 1.13.4 includes well over 100+ fonts that most systems have, this completely blows up the console on game launch.
-                    // Logger.log.Warn($"Duplcicate font with full name '{name}' at {path}");
+                    // Logger.log.Warn($"Duplicate font with full name '{name}' at {path}");
                 }
                 else
                 {
@@ -194,7 +194,7 @@ namespace BeatSaberMarkupLanguage
         }
 
         /// <summary>
-        /// Attemts to get a font given a family name, and optionally a subfamily name.
+        /// Attempts to get a font given a family name, and optionally a subfamily name.
         /// </summary>
         /// <remarks>
         /// When <paramref name="subfamily"/> is <see langword="null"/>, <paramref name="fallbackIfNoSubfamily"/> is ignored,
