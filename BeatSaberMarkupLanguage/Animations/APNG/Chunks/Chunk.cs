@@ -112,25 +112,23 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         /// <summary>
         /// Modify the ChunkData part.
         /// </summary>
-        public void ModifyChunkData(int postion, byte[] newData)
+        public void ModifyChunkData(int position, byte[] newData)
         {
-            Array.Copy(newData, 0, ChunkData, postion, newData.Length);
+            Array.Copy(newData, 0, ChunkData, position, newData.Length);
 
-            using (var msCrc = new MemoryStream())
-            {
-                msCrc.WriteBytes(Encoding.ASCII.GetBytes(ChunkType));
-                msCrc.WriteBytes(ChunkData);
+            using var msCrc = new MemoryStream();
+            msCrc.WriteBytes(Encoding.ASCII.GetBytes(ChunkType));
+            msCrc.WriteBytes(ChunkData);
 
-                Crc = CrcHelper.Calculate(msCrc.ToArray());
-            }
+            Crc = CrcHelper.Calculate(msCrc.ToArray());
         }
 
         /// <summary>
         /// Modify the ChunkData part.
         /// </summary>
-        public void ModifyChunkData(int postion, uint newData)
+        public void ModifyChunkData(int position, uint newData)
         {
-            ModifyChunkData(postion, BitConverter.GetBytes(newData));
+            ModifyChunkData(position, BitConverter.GetBytes(newData));
         }
 
         /// <summary>
@@ -156,8 +154,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
             }
             else
             {
-                Chunk chunk = obj as Chunk;
-                if (chunk != null)
+                if (obj is Chunk chunk)
                 {
                     result = (this.Length == chunk.Length &&
                     this.ChunkType == chunk.ChunkType &&
@@ -169,7 +166,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         }
 
         /// <summary>
-        /// Serves as a hash function for a <see cref="AnimatedImages.Chunk"/> object.
+        /// Serves as a hash function for a <see cref="Chunk"/> object.
         /// </summary>
         /// <returns>A hash code for this instance that is suitable for use in hashing algorithms and data structures such as a
         /// hash table.</returns>

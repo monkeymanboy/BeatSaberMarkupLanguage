@@ -44,10 +44,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         /// <value>The sequence number.</value>
         public uint SequenceNumber 
         { 
-            get
-            {
-                return this.sequenceNumber;
-            }
+            get => this.sequenceNumber;
             internal set
             {
                 this.sequenceNumber = value;
@@ -61,10 +58,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         /// <value>The frame data.</value>
         public byte[] FrameData 
         { 
-            get
-            {
-                return this.frameData;
-            }
+            get => this.frameData;
             internal set
             {
                 this.frameData = value;

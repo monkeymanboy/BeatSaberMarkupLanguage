@@ -97,10 +97,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         /// </summary>
         public uint SequenceNumber 
         { 
-            get
-            {
-                return sequenceNumber;
-            }
+            get => sequenceNumber;
             internal set
             {
                 sequenceNumber = value;
@@ -113,10 +110,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         /// </summary>
         public uint Width 
         { 
-            get
-            {
-                return width;
-            }
+            get => width;
             internal set
             {
                 width = value;
@@ -129,10 +123,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         /// </summary>
         public uint Height 
         { 
-            get
-            {
-                return height;
-            }
+            get => height;
             internal set
             {
                 height = value;
@@ -145,10 +136,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         /// </summary>
         public uint XOffset 
         { 
-            get
-            {
-                return xOffset;
-            }
+            get => xOffset;
             internal set
             {
                 xOffset = value;
@@ -161,10 +149,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         /// </summary>
         public uint YOffset 
         { 
-            get
-            {
-                return yOffset;
-            }
+            get => yOffset;
             internal set
             {
                 yOffset = value;
@@ -177,10 +162,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         /// </summary>
         public ushort DelayNumerator 
         { 
-            get
-            {
-                return delayNumerator;
-            }
+            get => delayNumerator;
             internal set
             {
                 delayNumerator = value;
@@ -193,10 +175,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         /// </summary>
         public ushort DelayDenominator 
         { 
-            get
-            {
-                return delayDenominator;
-            }
+            get => delayDenominator;
             internal set
             {
                 delayDenominator = value;
@@ -209,14 +188,11 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         /// </summary>
         public DisposeOps DisposeOp 
         { 
-            get
-            {
-                return disposeOp;
-            }
+            get => disposeOp;
             internal set
             {
                 disposeOp = value;
-                ModifyChunkData(24, new byte[]{ (byte)value });
+                ModifyChunkData(24, new[]{ (byte)value });
             }
         }
 
@@ -225,14 +201,11 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         /// </summary>
         public BlendOps BlendOp 
         { 
-            get
-            {
-                return blendOp;
-            }
+            get => blendOp;
             internal set
             {
                 blendOp = value;
-                ModifyChunkData(25, new byte[]{ (byte)value });
+                ModifyChunkData(25, new[]{ (byte)value });
             }
         }
 

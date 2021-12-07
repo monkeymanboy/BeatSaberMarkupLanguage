@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using System;
 
 namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
 {
@@ -54,10 +53,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         /// <value>The number frames.</value>
         public uint FrameCount
         { 
-            get 
-            {
-                return frameCount;
-            } 
+            get => frameCount;
             internal set 
             {
                 frameCount = value;
@@ -71,10 +67,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         /// <value>The number plays.</value>
         public uint PlayCount 
         { 
-            get
-            {
-                return playCount;
-            }
+            get => playCount;
             internal set
             {
                 playCount = value;
