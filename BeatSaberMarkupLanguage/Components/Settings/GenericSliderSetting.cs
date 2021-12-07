@@ -36,7 +36,9 @@ namespace BeatSaberMarkupLanguage.Components.Settings
                 slider.image.sprite = roundRect10;
                 GameObject.Destroy(slider.GetField<Button, RangeValuesTextSlider>("_incButton").gameObject);
                 GameObject.Destroy(slider.GetField<Button, RangeValuesTextSlider>("_decButton").gameObject);
-                slider.transform.localPosition = new Vector3(slider.transform.localPosition.x + 7, 0, 0);
+                (slider.transform.Find("BG") as RectTransform).sizeDelta = new Vector2(0, 6);
+                (slider.transform as RectTransform).sizeDelta = new Vector2(38, 0);
+                (slider.transform.Find("SlidingArea") as RectTransform).sizeDelta = new Vector2(-4, -4);
             }
         }
     }
