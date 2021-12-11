@@ -78,7 +78,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 
 
                 var tableDataValue = contents.GetValue();
-                if (tableDataValue is not List<CustomCellInfo> tableDataList) {
+                if (!(tableDataValue is List<CustomCellInfo> tableDataList)) {
                     throw new Exception($"Value '{value}' is not a List<CustomCellInfo>, which is required for custom-list");
                 }
 

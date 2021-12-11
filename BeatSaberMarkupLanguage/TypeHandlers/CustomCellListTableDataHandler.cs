@@ -75,7 +75,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                     throw new Exception("value '" + value + "' not found");
 
                 var tableDataValue = contents.GetValue();
-                if (tableDataValue is not List<object> tableDataList) {
+                if (!(tableDataValue is List<object> tableDataList)) {
                     throw new Exception($"Value '{value}' is not a List<object>, which is required for custom-list");
                 }
 
