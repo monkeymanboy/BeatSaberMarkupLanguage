@@ -12,7 +12,8 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
     {
         public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
         {
-            { "options", new[]{ "options", "choices" } }
+            { "options", new[]{ "options", "choices" } },
+            { "showButtons", new[] { "show-buttons" } }
         };
 
         public override void HandleType(ComponentTypeWithData componentType, BSMLParserParams parserParams)
@@ -30,6 +31,9 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
             {
                 throw new Exception("list must have associated options");
             }
+
+            if (componentType.data.TryGetValue("showButtons", out string showButtons))
+                listSetting.showButtons = Parse.Bool(showButtons);
         }
     }
 }

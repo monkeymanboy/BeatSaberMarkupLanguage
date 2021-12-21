@@ -23,6 +23,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 
         public override void Setup()
         {
+            base.Setup();
             text = slider.GetComponentInChildren<TextMeshProUGUI>();
             slider.numberOfSteps = (int)Math.Round((slider.maxValue - slider.minValue) / increments) + 1;
             ReceiveValue();
