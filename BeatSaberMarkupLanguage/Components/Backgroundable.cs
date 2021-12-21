@@ -34,6 +34,8 @@ namespace BeatSaberMarkupLanguage.Components
 
         public Image background;
 
+        private static readonly Dictionary<string, ImageView> _backgroundCache = new Dictionary<string, ImageView>();
+
         public void ApplyBackground(string name)
         {
             if (background != null)
@@ -42,8 +44,17 @@ namespace BeatSaberMarkupLanguage.Components
             if (!Backgrounds.TryGetValue(name, out string backgroundName))
                 throw new Exception($"Background type '{name}' not found");
 
-            try {
-                background = gameObject.AddComponent(Resources.FindObjectsOfTypeAll<ImageView>().First(x => x.gameObject?.name == ObjectNames[name] && x.sprite?.name == backgroundName && x.transform.parent?.name == ObjectParentNames[name]));
+            try
+            {
+                if (!_backgroundCache.TryGetValue(name, out ImageView bgTemplate) || bgTemplate == null)
+                {
+                    if (!(bgTemplate is null) && bgTemplate == null)
+                        _backgroundCache.Remove(name);
+
+                    bgTemplate = Resources.FindObjectsOfTypeAll<ImageView>().First(x => x.gameObject?.name == ObjectNames[name] && x.sprite?.name == backgroundName && x.transform.parent?.name == ObjectParentNames[name]);
+                    _backgroundCache.Add(name, bgTemplate);
+                }
+                background = gameObject.AddComponent(bgTemplate);
                 background.enabled = true;
             }
             catch
