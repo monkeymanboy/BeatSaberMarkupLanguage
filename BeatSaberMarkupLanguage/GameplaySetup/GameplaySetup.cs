@@ -1,9 +1,10 @@
 ﻿using BeatSaberMarkupLanguage.Attributes;
+using BeatSaberMarkupLanguage.Components;
 using IPA.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,9 +12,20 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
 {
     public class GameplaySetup : PersistentSingleton<GameplaySetup>
     {
+        public event Action TabsCreatedEvent;
+
         private static readonly FieldAccessor<LayoutGroup, List<RectTransform>>.Accessor LayoutGroupChildren = FieldAccessor<LayoutGroup, List<RectTransform>>.GetAccessor("m_RectChildren");
         private GameplaySetupViewController gameplaySetupViewController;
         private LayoutGroup layoutGroup;
+
+        [UIComponent("new-tab-selector")]
+        private TabSelector tabSelector;
+
+        [UIComponent("vanilla-tab")]
+        private Transform vanillaTab;
+
+        [UIComponent("mods-tab")]
+        private Transform modsTab;
 
         [UIValue("vanilla-items")]
         private List<Transform> vanillaItems = new List<Transform>();
@@ -37,6 +49,7 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
             BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), "BeatSaberMarkupLanguage.Views.gameplay-setup.bsml"), gameplaySetupViewController.gameObject, this);
             
             gameplaySetupViewController.didActivateEvent += GameplaySetupDidActivate;
+            gameplaySetupViewController.didDeactivateEvent += GameplaySetupDidDeactivate;
         }
 
         private void GameplaySetupDidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
@@ -61,6 +74,15 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
             }
             foreach (GameplaySetupMenu menu in menus)
                 menu.SetVisible(menu.IsMenuType(menuType));
+
+            TabsCreatedEvent?.Invoke();
+        }
+
+        private void GameplaySetupDidDeactivate(bool removedFromHierarchy, bool screenSystemDisabling)
+        {
+            tabSelector.textSegmentedControl.SelectCellWithNumber(0);
+            vanillaTab.gameObject.SetActive(true);
+            modsTab.gameObject.SetActive(false);
         }
 
         public void AddTab(string name, string resource, object host)
@@ -78,6 +100,17 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
             if (menus.Any(x => (x as GameplaySetupMenu).name == name))
                 return;
             menus.Add(new GameplaySetupMenu(name, resource, host, assembly, menuType));
+        }
+
+        /// <summary>Allows tab to dynamically disappear and reappear</summary>
+        public void SetTabVisibility(string name, bool isVisible)
+        {
+            if (!gameplaySetupViewController.isActiveAndEnabled)
+                return;
+
+            IEnumerable<GameplaySetupMenu> menu = menus.OfType<GameplaySetupMenu>().Where(x => x.name == name);
+            if (menu.Count() > 0)
+                menu.FirstOrDefault().SetVisible(isVisible);
         }
 
         /// <summary>Warning, for now it will not be removed until fresh menu scene reload</summary>
