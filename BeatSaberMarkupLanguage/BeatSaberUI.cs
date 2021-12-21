@@ -142,6 +142,8 @@ namespace BeatSaberMarkupLanguage
             var noglowShader = MainTextFont.material.shader;
             var newFont = Object.Instantiate(font);
             newFont.material.shader = noglowShader;
+            newFont.material.EnableKeyword("CURVED");
+            newFont.material.EnableKeyword("UNITY_UI_CLIP_RECT");
             return newFont;
         }
 
