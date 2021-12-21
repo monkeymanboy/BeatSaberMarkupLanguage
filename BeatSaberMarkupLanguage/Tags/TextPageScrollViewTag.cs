@@ -21,6 +21,7 @@ namespace BeatSaberMarkupLanguage.Tags
             TextPageScrollView scrollView = Object.Instantiate(pageTemplate, parent);
             scrollView.name = "BSMLTextPageScrollView";
             scrollView.enabled = true;
+            (scrollView as ScrollView).SetField("_platformHelper", BeatSaberUI.PlatformHelper);
 
             TextMeshProUGUI textMesh = scrollView.GetField<TextMeshProUGUI, TextPageScrollView>("_text");
             textMesh.text = "Default Text";
