@@ -8,7 +8,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
     internal class IDATChunk : Chunk
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="AnimatedImages.IDATChunk"/> class.
+        /// Initializes a new instance of the <see cref="IDATChunk"/> class.
         /// </summary>
         /// <param name="bytes">Bytes array representation.</param>
         public IDATChunk(byte[] bytes)
@@ -17,7 +17,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AnimatedImages.IDATChunk"/> class.
+        /// Initializes a new instance of the <see cref="IDATChunk"/> class.
         /// </summary>
         /// <param name="ms">Memory stream representation..</param>
         public IDATChunk(MemoryStream ms)
@@ -26,7 +26,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AnimatedImages.IDATChunk"/> class.
+        /// Initializes a new instance of the <see cref="IDATChunk"/> class.
         /// </summary>
         /// <param name="chunk">Chunk representation.</param>
         public IDATChunk(Chunk chunk)

@@ -8,7 +8,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
     internal class IENDChunk : Chunk
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="AnimatedImages.IENDChunk"/> class.
+        /// Initializes a new instance of the <see cref="IENDChunk"/> class.
         /// </summary>
         /// <param name="bytes">Bytes array representation.</param>
         public IENDChunk(byte[] bytes)
@@ -17,7 +17,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AnimatedImages.IENDChunk"/> class.
+        /// Initializes a new instance of the <see cref="IENDChunk"/> class.
         /// </summary>
         /// <param name="ms">Memory Stream representation..</param>
         public IENDChunk(MemoryStream ms)
@@ -26,7 +26,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AnimatedImages.IENDChunk"/> class.
+        /// Initializes a new instance of the <see cref="IENDChunk"/> class.
         /// </summary>
         /// <param name="chunk">Chunk representation.</param>
         public IENDChunk(Chunk chunk)

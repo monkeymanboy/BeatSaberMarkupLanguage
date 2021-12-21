@@ -61,14 +61,14 @@ namespace BeatSaberMarkupLanguage.Animations
         void SetFrameRate(int index, int frameRate);
 
         /// <summary>
-        /// Gets the dispose operation for the specfied frame.
+        /// Gets the dispose operation for the specified frame.
         /// </summary>
         /// <returns>The dispose operation for the specified frame.</returns>
         /// <param name="index">Index of the animation frame.</param>
         DisposeOps GetDisposeOperationFor(int index);
 
         /// <summary>
-        /// Gets the blend operation for the specfied frame.
+        /// Gets the blend operation for the specified frame.
         /// </summary>
         /// <returns>The blend operation for the specified frame.</returns>
         /// <param name="index">Index of the animation frame.</param>

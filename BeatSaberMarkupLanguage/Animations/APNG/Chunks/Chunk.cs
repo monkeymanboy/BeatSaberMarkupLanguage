@@ -10,7 +10,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
     public class Chunk
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="AnimatedImages.Chunk"/> class.
+        /// Initializes a new instance of the <see cref="Chunk"/> class.
         /// </summary>
         internal Chunk()
         {
@@ -21,9 +21,9 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AnimatedImages.Chunk"/> class.
+        /// Initializes a new instance of the <see cref="Chunk"/> class.
         /// </summary>
-        /// <param name="bytes">Byte Array of chiunk data.</param>
+        /// <param name="bytes">Byte Array of chunk data.</param>
         internal Chunk(byte[] bytes)
         {
             var ms = new MemoryStream(bytes);
@@ -41,7 +41,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AnimatedImages.Chunk"/> class.
+        /// Initializes a new instance of the <see cref="Chunk"/> class.
         /// </summary>
         /// <param name="ms">Memory Stream of chunk data.</param>
         internal Chunk(MemoryStream ms)
@@ -55,7 +55,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AnimatedImages.Chunk"/> class.
+        /// Initializes a new instance of the <see cref="Chunk"/> class.
         /// </summary>
         /// <param name="chunk">Chunk data.</param>
         internal Chunk(Chunk chunk)
@@ -112,25 +112,23 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         /// <summary>
         /// Modify the ChunkData part.
         /// </summary>
-        public void ModifyChunkData(int postion, byte[] newData)
+        public void ModifyChunkData(int position, byte[] newData)
         {
-            Array.Copy(newData, 0, ChunkData, postion, newData.Length);
+            Array.Copy(newData, 0, ChunkData, position, newData.Length);
 
-            using (var msCrc = new MemoryStream())
-            {
-                msCrc.WriteBytes(Encoding.ASCII.GetBytes(ChunkType));
-                msCrc.WriteBytes(ChunkData);
+            using var msCrc = new MemoryStream();
+            msCrc.WriteBytes(Encoding.ASCII.GetBytes(ChunkType));
+            msCrc.WriteBytes(ChunkData);
 
-                Crc = CrcHelper.Calculate(msCrc.ToArray());
-            }
+            Crc = CrcHelper.Calculate(msCrc.ToArray());
         }
 
         /// <summary>
         /// Modify the ChunkData part.
         /// </summary>
-        public void ModifyChunkData(int postion, uint newData)
+        public void ModifyChunkData(int position, uint newData)
         {
-            ModifyChunkData(postion, BitConverter.GetBytes(newData));
+            ModifyChunkData(position, BitConverter.GetBytes(newData));
         }
 
         /// <summary>
@@ -142,11 +140,11 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         }
 
         /// <summary>
-        /// Determines whether the specified <see cref="System.Object"/> is equal to the current <see cref="AnimatedImages.Chunk"/>.
+        /// Determines whether the specified <see cref="System.Object"/> is equal to the current <see cref="Chunk"/>.
         /// </summary>
-        /// <param name="obj">The <see cref="System.Object"/> to compare with the current <see cref="AnimatedImages.Chunk"/>.</param>
+        /// <param name="obj">The <see cref="System.Object"/> to compare with the current <see cref="Chunk"/>.</param>
         /// <returns><c>true</c> if the specified <see cref="System.Object"/> is equal to the current
-        /// <see cref="AnimatedImages.Chunk"/>; otherwise, <c>false</c>.</returns>
+        /// <see cref="Chunk"/>; otherwise, <c>false</c>.</returns>
         public override bool Equals(object obj)
         {
             bool result = false;
@@ -156,8 +154,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
             }
             else
             {
-                Chunk chunk = obj as Chunk;
-                if (chunk != null)
+                if (obj is Chunk chunk)
                 {
                     result = (this.Length == chunk.Length &&
                     this.ChunkType == chunk.ChunkType &&
@@ -169,7 +166,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         }
 
         /// <summary>
-        /// Serves as a hash function for a <see cref="AnimatedImages.Chunk"/> object.
+        /// Serves as a hash function for a <see cref="Chunk"/> object.
         /// </summary>
         /// <returns>A hash code for this instance that is suitable for use in hashing algorithms and data structures such as a
         /// hash table.</returns>

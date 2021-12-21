@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using System;
 
 namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
 {
@@ -12,7 +11,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         private uint playCount;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AnimatedImages.acTLChunk"/> class.
+        /// Initializes a new instance of the <see cref="acTLChunk"/> class.
         /// </summary>
         internal acTLChunk()
         {
@@ -22,7 +21,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AnimatedImages.acTLChunk"/> class.
+        /// Initializes a new instance of the <see cref="acTLChunk"/> class.
         /// </summary>
         /// <param name="bytes">Byte array of chunk data.</param>
         public acTLChunk(byte[] bytes)
@@ -31,7 +30,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AnimatedImages.acTLChunk"/> class.
+        /// Initializes a new instance of the <see cref="acTLChunk"/> class.
         /// </summary>
         /// <param name="ms">Memory stream of chunk data.</param>
         public acTLChunk(MemoryStream ms)
@@ -40,7 +39,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AnimatedImages.acTLChunk"/> class.
+        /// Initializes a new instance of the <see cref="acTLChunk"/> class.
         /// </summary>
         /// <param name="chunk">Chunk object.</param>
         public acTLChunk(Chunk chunk)
@@ -54,10 +53,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         /// <value>The number frames.</value>
         public uint FrameCount
         { 
-            get 
-            {
-                return frameCount;
-            } 
+            get => frameCount;
             internal set 
             {
                 frameCount = value;
@@ -71,10 +67,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         /// <value>The number plays.</value>
         public uint PlayCount 
         { 
-            get
-            {
-                return playCount;
-            }
+            get => playCount;
             internal set
             {
                 playCount = value;

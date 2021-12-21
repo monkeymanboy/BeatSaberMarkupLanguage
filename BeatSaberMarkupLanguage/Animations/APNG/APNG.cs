@@ -12,8 +12,8 @@ namespace BeatSaberMarkupLanguage.Animations.APNG
     /// </summary>
     public class APNG : IAnimatedImage
     {
+        private readonly List<Frame> frames = new List<Frame>();
         private Frame defaultImage = new Frame();
-        private List<Frame> frames = new List<Frame>();
         private MemoryStream ms;
         private Size viewSize;
 
@@ -40,7 +40,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG
         /// <summary>
         /// Load the specified stream.
         /// </summary>
-        /// <param name="stream">Streamrepresentation of the png file.</param>
+        /// <param name="stream">Stream representation of the png file.</param>
         internal void Load(MemoryStream stream)
         {
             ms = stream;
@@ -172,68 +172,66 @@ namespace BeatSaberMarkupLanguage.Animations.APNG
         /// <param name="filename">The filename to output to.</param>
         public void Save(string filename)
         {
-            using (BinaryWriter writer = new BinaryWriter(new FileStream(filename, FileMode.OpenOrCreate, FileAccess.Write)))
+            using BinaryWriter writer = new BinaryWriter(new FileStream(filename, FileMode.OpenOrCreate, FileAccess.Write));
+            int frameWriteStartIndex = 0;
+
+            //Write signature
+            writer.Write(Frame.Signature);
+
+            //Write header
+            writer.Write(this.IHDRChunk.RawData); 
+
+            //If acTL exists 
+            if (acTLChunk != null)
             {
-                int frameWriteStartIndex = 0;
-
-                //Write signature
-                writer.Write(Frame.Signature);
-
-                //Write header
-                writer.Write(this.IHDRChunk.RawData); 
-
-                //If acTL exists 
-                if (acTLChunk != null)
-                {
-                    //write actl.
-                    writer.Write(acTLChunk.RawData);
-                }
-
-                //Write all other chunks. (NOTE: These should be consistently the same for all frames)
-                foreach(OtherChunk otherChunk in defaultImage.OtherChunks)
-                {
-                    writer.Write(otherChunk.RawData);
-                }
-
-                uint sequenceNumber = 0;
-                //If Default Image is not animated
-                if (!DefaultImageIsAnimated)
-                {
-                    //write IDAT
-                    defaultImage.IDATChunks.ForEach(i => writer.Write(i.RawData));
-                }
-                else
-                {
-                    frames[0].fcTLChunk.SequenceNumber = sequenceNumber++;
-                    //Write fcTL
-                    writer.Write(frames[0].fcTLChunk.RawData);
-                    //Write IDAT of first frame.
-                    frames[0].IDATChunks.ForEach(i => writer.Write(i.RawData));
-                    //Set start frame indes to 1
-                    frameWriteStartIndex = 1;
-                }
-
-                //Foreach frame 
-                for (int i = frameWriteStartIndex; i < frames.Count; ++i)
-                {
-                    frames[i].fcTLChunk.SequenceNumber = sequenceNumber++;
-                    //write fcTL
-                    writer.Write(frames[i].fcTLChunk.RawData);
-
-                    //Write fDAT
-                    for(int j = 0; j < frames[i].IDATChunks.Count; ++j)
-                    {
-                        fdATChunk fdat = fdATChunk.FromIDATChunk(frames[i].IDATChunks[j], sequenceNumber++);
-
-                        writer.Write(fdat.RawData);
-                    }
-                }
-
-                //Write IEnd
-                writer.Write(defaultImage.IENDChunk.RawData);
-
-                writer.Close();
+                //write actl.
+                writer.Write(acTLChunk.RawData);
             }
+
+            //Write all other chunks. (NOTE: These should be consistently the same for all frames)
+            foreach(OtherChunk otherChunk in defaultImage.OtherChunks)
+            {
+                writer.Write(otherChunk.RawData);
+            }
+
+            uint sequenceNumber = 0;
+            //If Default Image is not animated
+            if (!DefaultImageIsAnimated)
+            {
+                //write IDAT
+                defaultImage.IDATChunks.ForEach(i => writer.Write(i.RawData));
+            }
+            else
+            {
+                frames[0].fcTLChunk.SequenceNumber = sequenceNumber++;
+                //Write fcTL
+                writer.Write(frames[0].fcTLChunk.RawData);
+                //Write IDAT of first frame.
+                frames[0].IDATChunks.ForEach(i => writer.Write(i.RawData));
+                //Set start frame indes to 1
+                frameWriteStartIndex = 1;
+            }
+
+            //Foreach frame 
+            for (int i = frameWriteStartIndex; i < frames.Count; ++i)
+            {
+                frames[i].fcTLChunk.SequenceNumber = sequenceNumber++;
+                //write fcTL
+                writer.Write(frames[i].fcTLChunk.RawData);
+
+                //Write fDAT
+                for(int j = 0; j < frames[i].IDATChunks.Count; ++j)
+                {
+                    fdATChunk fdat = fdATChunk.FromIDATChunk(frames[i].IDATChunks[j], sequenceNumber++);
+
+                    writer.Write(fdat.RawData);
+                }
+            }
+
+            //Write IEnd
+            writer.Write(defaultImage.IENDChunk.RawData);
+
+            writer.Close();
         }
 
         /// <summary>
@@ -251,10 +249,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG
         ///     If IsSimplePNG = True, returns the only image;
         ///     if False, returns the default image
         /// </summary>
-        public Frame DefaultImage
-        {
-            get { return defaultImage; }
-        }
+        public Frame DefaultImage => defaultImage;
 
         /// <summary>
         ///     Gets the frame array.
@@ -262,7 +257,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG
         /// </summary>
         public Frame[] Frames
         {
-            get { return IsSimplePNG ? new Frame[]{defaultImage}:frames.ToArray(); }
+            get { return IsSimplePNG ? new[]{defaultImage}:frames.ToArray(); }
         }
 
         /// <summary>
@@ -295,10 +290,8 @@ namespace BeatSaberMarkupLanguage.Animations.APNG
             {
                 return DefaultImage.ToBitmap();
             }
-            else
-            {
-                return this[0];
-            }
+
+            return this[0];
         }
 
         /// <summary>
@@ -324,13 +317,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG
         /// Gets the frame count.
         /// </summary>
         /// <value>The frame count.</value>
-        public int FrameCount
-        {
-            get
-            {
-                return (int)(acTLChunk?.FrameCount??1);
-            }
-        }
+        public int FrameCount => (int)(acTLChunk?.FrameCount??1);
 
         /// <summary>
         /// Gets the frame rate from the first frame as a global frame rate.
@@ -339,10 +326,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG
         /// <value>The global frame rate.</value>
         public int FrameRate
         {
-            get
-            {
-                return GetFrameRate(0);
-            }
+            get => GetFrameRate(0);
             set
             {
                 for(int i = 0; i < frames.Count; ++i)
@@ -386,14 +370,8 @@ namespace BeatSaberMarkupLanguage.Animations.APNG
         /// <value>The size of the displayed animated image.</value>
         public Size ViewSize
         {
-            get
-            {
-                return this.viewSize;
-            }
-            set
-            {
-                this.viewSize = value;
-            }
+            get => this.viewSize;
+            set => this.viewSize = value;
         }
 
         /// <summary>
@@ -402,10 +380,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG
         /// <value>The actual size.</value>
         public Size ActualSize
         {
-            get
-            {
-                return new Size(this.IHDRChunk.Width, this.IHDRChunk.Height);
-            }
+            get => new Size(this.IHDRChunk.Width, this.IHDRChunk.Height);
             set
             {
                 this.IHDRChunk.Width = value.Width;
@@ -419,14 +394,8 @@ namespace BeatSaberMarkupLanguage.Animations.APNG
         /// <value>The play count.</value>
         public int PlayCount
         {
-            get
-            {
-                return (int)(acTLChunk?.PlayCount??0);
-            }
-            set
-            {
-                this.acTLChunk.PlayCount = (uint)value;
-            }
+            get => (int)(acTLChunk?.PlayCount??0);
+            set => this.acTLChunk.PlayCount = (uint)value;
         }
 
         /// <summary>
@@ -625,7 +594,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG
         /// <param name="image">Image.</param>
         private static MemoryStream ImageToStream(Image image)
         {
-            var stream = new System.IO.MemoryStream();
+            var stream = new MemoryStream();
             image.Save(stream, ImageFormat.Png);
             stream.Position = 0;
             return stream;
