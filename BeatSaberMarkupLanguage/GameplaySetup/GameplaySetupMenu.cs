@@ -23,6 +23,22 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
         [UIComponent("root-tab")]
         private Tab tab;
 
+        public bool visible
+        {
+            get => !Plugin.config.HiddenTabs.Contains(name);
+            set
+            {
+                if (value)
+                {
+                    Plugin.config.HiddenTabs.Remove(name);
+                }
+                else if (visible)
+                {
+                    Plugin.config.HiddenTabs.Add(name);
+                }
+            }
+        }
+
         public GameplaySetupMenu(string name, string resource, object host, Assembly assembly, MenuType menuType)
         {
             this.name = name;
@@ -56,7 +72,7 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
 
         public void SetVisible(bool isVisible)
         {
-            tab.IsVisible = isVisible;
+            tab.IsVisible = visible && isVisible;
         }
 
         public bool IsMenuType(MenuType toCheck)

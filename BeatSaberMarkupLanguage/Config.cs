@@ -8,5 +8,8 @@ namespace BeatSaberMarkupLanguage
     {
         [NonNullable, UseConverter(typeof(ListConverter<string>))]
         public virtual List<string> PinnedMods { get; set; } = new List<string>();
+
+        [NonNullable, UseConverter(typeof(ListConverter<string>))]
+        public virtual List<string> HiddenTabs { get; set; } = new List<string>();
     }
 }
