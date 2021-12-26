@@ -23,7 +23,7 @@ namespace BeatSaberMarkupLanguage.MenuButtons
 
         public void RefreshView()
         {
-            if (rootObject == null)
+            if (rootObject == null || !BSMLParser.IsSingletonAvailable)
                 return;
             GameObject.Destroy(rootObject);
             DidActivate(true, false, false);
