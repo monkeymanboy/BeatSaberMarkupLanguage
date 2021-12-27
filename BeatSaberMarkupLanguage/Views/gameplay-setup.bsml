@@ -8,9 +8,15 @@
       <page-button direction='Left' pref-width='6' pref-height='6' tags='left-button'/>
       <tab-selector tab-tag='mod-tab' child-expand-width='true' child-control-width='true' has-separator='false' page-count='3' left-button-tag='left-button' right-button-tag='right-button'/>
       <page-button direction='Right' pref-width='6' pref-height='6' tags='right-button'/>
+	  <clickable-text text='👁' hover-hint='Show/Hide Tabs' on-click='show-modal' />
     </horizontal>
     <macro.for-each items='mod-menus' pass-back-tags='true'>
       <tab tags='mod-tab' tab-name='~tab-name' id='root-tab' anchor-max-y='0.75'/>
     </macro.for-each>
+	<modal id='list-modal' clickerino-offerino-closerino='true' size-delta-x='65' size-delta-y='35'>
+	  <horizontal anchor-pos-x='-2' horizontal-fit='PreferredSize' vertical-fit='PreferredSize'>
+	    <list id='mods-list' show-scrollbar='true' stick-scrolling='true' pref-width='55' pref-height='32' />
+	  </horizontal>
+	</modal>
   </tab>
 </bg>
