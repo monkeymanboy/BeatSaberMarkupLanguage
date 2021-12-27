@@ -1,5 +1,6 @@
 ﻿using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components;
+using HMUI;
 using IPA.Utilities;
 using System;
 using System.Collections.Generic;
@@ -10,13 +11,14 @@ using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.GameplaySetup
 {
-    public class GameplaySetup : PersistentSingleton<GameplaySetup>
+    public class GameplaySetup : NotifiableSingleton<GameplaySetup>, TableView.IDataSource
     {
         public event Action TabsCreatedEvent;
 
         private static readonly FieldAccessor<LayoutGroup, List<RectTransform>>.Accessor LayoutGroupChildren = FieldAccessor<LayoutGroup, List<RectTransform>>.GetAccessor("m_RectChildren");
         private GameplaySetupViewController gameplaySetupViewController;
         private LayoutGroup layoutGroup;
+        private bool listParsed;
 
         [UIComponent("new-tab-selector")]
         private TabSelector tabSelector;
@@ -27,11 +29,34 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
         [UIComponent("mods-tab")]
         private Transform modsTab;
 
+        [UIComponent("list-modal")]
+        private ModalView listModal;
+
+        [UIComponent("mods-list")]
+        private CustomListTableData modsList;
+
         [UIValue("vanilla-items")]
         private List<Transform> vanillaItems = new List<Transform>();
 
         [UIValue("mod-menus")]
         private List<object> menus = new List<object>();
+
+        private bool _loaded;
+
+        [UIValue("is-loading")]
+        public bool IsLoading => !Loaded;
+
+        [UIValue("loaded")]
+        public bool Loaded
+        {
+            get => _loaded;
+            set
+            {
+                _loaded = value;
+                NotifyPropertyChanged();
+                NotifyPropertyChanged(nameof(IsLoading));
+            }
+        }
 
         internal void Setup()
         {
@@ -47,9 +72,12 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
             textSegmentedControl.sizeDelta = new Vector2(0, 6);
             layoutGroup = textSegmentedControl.GetComponent<LayoutGroup>();
             BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), "BeatSaberMarkupLanguage.Views.gameplay-setup.bsml"), gameplaySetupViewController.gameObject, this);
-            
+
+            modsList.tableView.SetDataSource(this, false);
+            listParsed = false;
             gameplaySetupViewController.didActivateEvent += GameplaySetupDidActivate;
             gameplaySetupViewController.didDeactivateEvent += GameplaySetupDidDeactivate;
+            listModal.blockerClickedEvent += ClickedOffModal;
         }
 
         private void GameplaySetupDidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
@@ -83,6 +111,27 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
             tabSelector.textSegmentedControl.SelectCellWithNumber(0);
             vanillaTab.gameObject.SetActive(true);
             modsTab.gameObject.SetActive(false);
+        }
+
+        private void ClickedOffModal()
+        {
+            GameplaySetupDidActivate(false, false, false);
+        }
+
+        [UIAction("show-modal")]
+        private void ShowModal()
+        {
+            Loaded = false;
+            listModal.Show(true, true, () =>
+            {
+                if (!listParsed)
+                {
+                    modsList.tableView.ReloadData();
+                    listParsed = true;
+                }
+                modsList.tableView.RefreshContentSize();
+                Loaded = true;
+            });
         }
 
         public void AddTab(string name, string resource, object host)
@@ -120,5 +169,37 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
             if (menu.Count() > 0)
                 menus.Remove(menu.FirstOrDefault());
         }
+
+        #region Data Source
+
+        public const string ReuseIdentifier = "GameplaySetupCell";
+        private GameplaySetupCell GetCell()
+        {
+            TableCell tableCell = modsList.tableView.DequeueReusableCellForIdentifier(ReuseIdentifier);
+
+            if (tableCell == null)
+            {
+                tableCell = new GameObject(nameof(GameplaySetupCell)).AddComponent<GameplaySetupCell>();
+                tableCell.interactable = true;
+
+                tableCell.reuseIdentifier = ReuseIdentifier;
+                BSMLParser.instance.Parse(
+                BeatSaberMarkupLanguage.Utilities.GetResourceContent(
+                    Assembly.GetExecutingAssembly(),
+                    "BeatSaberMarkupLanguage.Views.gameplay-setup-cell.bsml"),
+                tableCell.gameObject,
+                tableCell);
+            }
+
+            return (GameplaySetupCell)tableCell;
+        }
+
+        public float CellSize() => 8f;
+
+        public int NumberOfCells() => menus.Count;
+
+        public TableCell CellForIdx(TableView tableView, int idx) => GetCell().PopulateCell((GameplaySetupMenu)menus[idx]);
+
+        #endregion
     }
 }
