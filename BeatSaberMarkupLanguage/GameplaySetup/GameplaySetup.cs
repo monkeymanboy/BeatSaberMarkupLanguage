@@ -11,13 +11,14 @@ using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.GameplaySetup
 {
-    public class GameplaySetup : PersistentSingleton<GameplaySetup>, TableView.IDataSource
+    public class GameplaySetup : NotifiableSingleton<GameplaySetup>, TableView.IDataSource
     {
         public event Action TabsCreatedEvent;
 
         private static readonly FieldAccessor<LayoutGroup, List<RectTransform>>.Accessor LayoutGroupChildren = FieldAccessor<LayoutGroup, List<RectTransform>>.GetAccessor("m_RectChildren");
         private GameplaySetupViewController gameplaySetupViewController;
         private LayoutGroup layoutGroup;
+        private bool listParsed;
 
         [UIComponent("new-tab-selector")]
         private TabSelector tabSelector;
@@ -40,6 +41,23 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
         [UIValue("mod-menus")]
         private List<object> menus = new List<object>();
 
+        private bool _loaded;
+
+        [UIValue("is-loading")]
+        public bool IsLoading => !Loaded;
+
+        [UIValue("loaded")]
+        public bool Loaded
+        {
+            get => _loaded;
+            set
+            {
+                _loaded = value;
+                NotifyPropertyChanged();
+                NotifyPropertyChanged(nameof(IsLoading));
+            }
+        }
+
         internal void Setup()
         {
             if (menus.Count == 0) return;
@@ -56,6 +74,7 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
             BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), "BeatSaberMarkupLanguage.Views.gameplay-setup.bsml"), gameplaySetupViewController.gameObject, this);
 
             modsList.tableView.SetDataSource(this, false);
+            listParsed = false;
             gameplaySetupViewController.didActivateEvent += GameplaySetupDidActivate;
             gameplaySetupViewController.didDeactivateEvent += GameplaySetupDidDeactivate;
             listModal.blockerClickedEvent += ClickedOffModal;
@@ -84,7 +103,6 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
             foreach (GameplaySetupMenu menu in menus)
                 menu.SetVisible(menu.IsMenuType(menuType));
 
-            modsList.tableView.ReloadData();
             TabsCreatedEvent?.Invoke();
         }
 
@@ -101,11 +119,18 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
         }
 
         [UIAction("show-modal")]
-        private void UpdateTable()
+        private void ShowModal()
         {
+            Loaded = false;
             listModal.Show(true, true, () =>
             {
-                modsList.tableView.ReloadDataKeepingPosition();
+                if (!listParsed)
+                {
+                    modsList.tableView.ReloadData();
+                    listParsed = true;
+                }
+                modsList.tableView.RefreshContentSize();
+                Loaded = true;
             });
         }
 
