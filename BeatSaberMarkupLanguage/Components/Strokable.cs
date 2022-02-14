@@ -24,7 +24,7 @@ namespace BeatSaberMarkupLanguage.Components
                     image.enabled = true;
                     if (_roundRectSmallStroke == null)
                         _roundRectSmallStroke = Resources.FindObjectsOfTypeAll<Sprite>().Last(x => x.name == "RoundRectSmallStroke");
-                    image.sprite =
+                    image.sprite = _roundRectSmallStroke;
                     break;
                 case StrokeType.Regular:
                     image.enabled = true;
