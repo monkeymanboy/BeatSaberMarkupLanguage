@@ -63,7 +63,7 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
             if (menus.Count == 0) return;
             gameplaySetupViewController = Resources.FindObjectsOfTypeAll<GameplaySetupViewController>().First();
             vanillaItems.Clear();
-            foreach(Transform transform in gameplaySetupViewController.transform)
+            foreach (Transform transform in gameplaySetupViewController.transform)
             {
                 if (transform.name != "HeaderPanel")
                     vanillaItems.Add(transform);

@@ -35,7 +35,7 @@ namespace BeatSaberMarkupLanguage
         {
             get
             {
-                if(_physicsRaycaster == null)
+                if (_physicsRaycaster == null)
                     _physicsRaycaster = Resources.FindObjectsOfTypeAll<MainMenuViewController>().First().GetComponent<VRGraphicRaycaster>().GetField<PhysicsRaycasterWithCache, VRGraphicRaycaster>("_physicsRaycaster");
                 return _physicsRaycaster;
             }
@@ -64,6 +64,17 @@ namespace BeatSaberMarkupLanguage
                     _platformHelper = _levelCollectionScrollView.GetField<IVRPlatformHelper, ScrollView>("_platformHelper");
                 }
                 return _platformHelper;
+            }
+        }
+
+        private static HoverHintController _hoverHintController;
+        public static HoverHintController HoverHintController
+        {
+            get
+            {
+                if (_hoverHintController == null)
+                    _hoverHintController = Resources.FindObjectsOfTypeAll<HoverHintController>().First();
+                return _hoverHintController;
             }
         }
 
@@ -202,7 +213,7 @@ namespace BeatSaberMarkupLanguage
         {
             return CreateText<CurvedTextMeshPro>(parent, text, anchoredPosition, sizeDelta);
         }
-        
+
         /// <summary>
         /// Creates a TMP_Text (or one of its inheritances) component.
         /// </summary>
@@ -214,7 +225,7 @@ namespace BeatSaberMarkupLanguage
         {
             return CreateText<T>(parent, text, anchoredPosition, new Vector2(60f, 10f));
         }
-        
+
         /// <summary>
         /// Creates a TMP_Text (or one of its inheritances) component.
         /// </summary>
@@ -280,11 +291,11 @@ namespace BeatSaberMarkupLanguage
             if (_button.GetComponentsInChildren<Image>().Count() > 0)
                 _button.GetComponentsInChildren<Image>()[0].sprite = _background;
         }
-        
+
         public static void SetButtonStates(this Button _button, Sprite _normal, Sprite _hover)
         {
             ButtonSpriteSwap swap = _button.GetComponent<ButtonSpriteSwap>();
-            
+
             swap.SetField("_disabledStateSprite", _normal);
             swap.SetField("_normalStateSprite", _normal);
             swap.SetField("_highlightStateSprite", _hover);
@@ -292,7 +303,7 @@ namespace BeatSaberMarkupLanguage
             swap.SetField("_pressedStateSprite", _hover);
         }
         #endregion
-        
+
         /// <summary>
         /// Sets an image or gif/apng from a resource path
         /// </summary>
@@ -328,7 +339,8 @@ namespace BeatSaberMarkupLanguage
                 }
                 else
                 {
-                    Utilities.GetData(location, (byte[] data) => {
+                    Utilities.GetData(location, (byte[] data) =>
+                    {
                         AnimationLoader.Process((location.EndsWith(".gif") || (isURL && uri.LocalPath.EndsWith(".gif"))) ? AnimationType.GIF : AnimationType.APNG, data, (Texture2D tex, Rect[] uvs, float[] delays, int width, int height) =>
                         {
                             AnimationControllerData controllerData = AnimationController.instance.Register(location, tex, uvs, delays);

@@ -571,7 +571,7 @@ namespace BeatSaberMarkupLanguage.Components
 
                 HoverHint _MyHintText = mybutton.gameObject.AddComponent<HoverHint>();
                 _MyHintText.text = value;
-                _MyHintText.SetField("_hoverHintController", Resources.FindObjectsOfTypeAll<HoverHintController>().First());
+                _MyHintText.SetField("_hoverHintController", BeatSaberUI.HoverHintController);
             }
         }
     }

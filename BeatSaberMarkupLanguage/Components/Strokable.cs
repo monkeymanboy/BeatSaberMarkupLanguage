@@ -8,6 +8,9 @@ namespace BeatSaberMarkupLanguage.Components
     {
         public Image image;
 
+        private static Sprite _roundRectSmallStroke;
+        private static Sprite _roundRectBigStroke;
+
         public void SetType(StrokeType strokeType)
         {
             if (image == null)
@@ -19,11 +22,15 @@ namespace BeatSaberMarkupLanguage.Components
                     break;
                 case StrokeType.Clean:
                     image.enabled = true;
-                    image.sprite = Resources.FindObjectsOfTypeAll<Sprite>().Last(x => x.name == "RoundRectSmallStroke");
+                    if (_roundRectSmallStroke == null)
+                        _roundRectSmallStroke = Resources.FindObjectsOfTypeAll<Sprite>().Last(x => x.name == "RoundRectSmallStroke");
+                    image.sprite =
                     break;
                 case StrokeType.Regular:
                     image.enabled = true;
-                    image.sprite = Resources.FindObjectsOfTypeAll<Sprite>().Last(x => x.name == "RoundRectBigStroke");
+                    if (_roundRectBigStroke == null)
+                        _roundRectBigStroke = Resources.FindObjectsOfTypeAll<Sprite>().Last(x => x.name == "RoundRectBigStroke");
+                    image.sprite = _roundRectBigStroke;
                     break;
             }
         }

@@ -4,7 +4,6 @@ using IPA.Utilities;
 using System;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using VRUIControls;
 using Screen = HMUI.Screen;
@@ -17,7 +16,10 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
         public GameObject handle;
         public event EventHandler<FloatingScreenHandleEventArgs> HandleReleased;
         public event EventHandler<FloatingScreenHandleEventArgs> HandleGrabbed;
-        
+
+        private static Sprite _mainScreenMask;
+        private static Material _fogMaterial;
+
         public Vector2 ScreenSize
         {
             get => (transform as RectTransform).sizeDelta;
@@ -27,7 +29,7 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
                 UpdateHandle();
             }
         }
-        
+
         public Vector3 ScreenPosition
         {
             get => transform.position;
@@ -36,7 +38,7 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
                 (transform as RectTransform).position = value;
             }
         }
-        
+
         public Quaternion ScreenRotation
         {
             get => (transform as RectTransform).rotation;
@@ -53,7 +55,7 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
             set
             {
                 _showHandle = value;
-                if(_showHandle)
+                if (_showHandle)
                 {
                     if (handle == null)
                         CreateHandle();
@@ -63,7 +65,7 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
                     VRPointerEnabledPatch.PointerEnabled -= OnPointerCreated;
                     VRPointerEnabledPatch.PointerEnabled += OnPointerCreated;
                 }
-                else if(!_showHandle && handle != null)
+                else if (!_showHandle && handle != null)
                 {
                     handle.SetActive(false);
                     VRPointerEnabledPatch.PointerEnabled -= OnPointerCreated;
@@ -124,7 +126,7 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
             CanvasScaler scaler = screen.GetComponent<CanvasScaler>();
             scaler.dynamicPixelsPerUnit = 3.44f;
             scaler.referencePixelsPerUnit = 10f;
-            
+
             if (hasBackground)
             {
                 GameObject backGroundGo = new GameObject("bg", typeof(RectTransform), typeof(ImageView));
@@ -137,10 +139,14 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
                 rectTransform.offsetMax = Vector2.zero;
 
                 ImageView background = backGroundGo.GetComponent<ImageView>();
-                background.sprite = Resources.FindObjectsOfTypeAll<Sprite>().First(x => x.name == "MainScreenMask");
+                if (_mainScreenMask == null)
+                    _mainScreenMask = Resources.FindObjectsOfTypeAll<Sprite>().First(x => x.name == "MainScreenMask");
+                background.sprite = _mainScreenMask;
                 background.type = Image.Type.Sliced;
                 background.color = new Color(0.7450981f, 0.7450981f, 0.7450981f, 1f);
-                background.material = Resources.FindObjectsOfTypeAll<Material>().First(x => x.name == "UIFogBG");
+                if (_fogMaterial == null)
+                    _fogMaterial = Resources.FindObjectsOfTypeAll<Material>().First(x => x.name == "UIFogBG");
+                background.material = _fogMaterial;
                 background.preserveAspect = true;
             }
 
