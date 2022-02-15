@@ -2,6 +2,8 @@
 using HMUI;
 using IPA.Utilities;
 using System;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using TMPro;
@@ -10,6 +12,9 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using VRUIControls;
 using Zenject;
+using Color = UnityEngine.Color;
+using Font = UnityEngine.Font;
+using Image = UnityEngine.UI.Image;
 using Object = UnityEngine.Object;
 
 namespace BeatSaberMarkupLanguage
@@ -161,7 +166,7 @@ namespace BeatSaberMarkupLanguage
         }
 
         /// <summary>
-        /// Creates a <see cref="TMP_FontAsset"/> from a Unity <see cref="Font"/>.
+        /// Creates a <see cref="TMP_FontAsset"/> from a Unity <see cref="UnityEngine.Font"/>.
         /// </summary>
         /// <remarks>
         /// The <see cref="TMP_FontAsset"/> returned is not usable for UI text. Use <see cref="CreateFixedUIFontClone(TMP_FontAsset)"/>
@@ -292,13 +297,15 @@ namespace BeatSaberMarkupLanguage
             swap.SetField("_pressedStateSprite", _hover);
         }
         #endregion
-        
+
         /// <summary>
         /// Sets an image or gif/apng from a resource path
         /// </summary>
         /// <param name="image">Image component to set the image to</param>
         /// <param name="location">Resource path, file path, or url of image. Can prefix with # to find and use a base game sprite. May need to prefix resource paths with 'AssemblyName:'</param>
-        public static void SetImage(this Image image, string location)
+        /// <param name="loadingAnimation">Whether a loading animation is shown as a placeholder until the image is loaded</param>
+        /// <param name="compressImage">Whether image is compressed</param>
+        public static void SetImage(this Image image, string location, bool loadingAnimation = true, bool compressImage = false)
         {
             AnimationStateUpdater oldStateUpdater = image.GetComponent<AnimationStateUpdater>();
             if (oldStateUpdater != null)
@@ -316,11 +323,12 @@ namespace BeatSaberMarkupLanguage
                     Logger.log.Error($"Could not find Sprite with image name {imgName}");
                 }
             }
-            else if (IsAnimated(location) || (isURL && IsAnimated(uri.LocalPath)))
+            else if (IsAnimated(location) || isURL && IsAnimated(uri.LocalPath))
             {
                 AnimationStateUpdater stateUpdater = image.gameObject.AddComponent<AnimationStateUpdater>();
                 stateUpdater.image = image;
-                stateUpdater.controllerData = AnimationController.instance.loadingAnimation;
+                if (loadingAnimation) 
+                    stateUpdater.controllerData = AnimationController.instance.loadingAnimation;
 
                 if (AnimationController.instance.RegisteredAnimations.TryGetValue(location, out AnimationControllerData animControllerData))
                 {
@@ -329,7 +337,7 @@ namespace BeatSaberMarkupLanguage
                 else
                 {
                     Utilities.GetData(location, (byte[] data) => {
-                        AnimationLoader.Process((location.EndsWith(".gif") || (isURL && uri.LocalPath.EndsWith(".gif"))) ? AnimationType.GIF : AnimationType.APNG, data, (Texture2D tex, Rect[] uvs, float[] delays, int width, int height) =>
+                        AnimationLoader.Process(location.EndsWith(".gif") || isURL && uri.LocalPath.EndsWith(".gif") ? AnimationType.GIF : AnimationType.APNG, data, (Texture2D tex, Rect[] uvs, float[] delays, int width, int height) =>
                         {
                             AnimationControllerData controllerData = AnimationController.instance.Register(location, tex, uvs, delays);
                             stateUpdater.controllerData = controllerData;
@@ -341,13 +349,29 @@ namespace BeatSaberMarkupLanguage
             {
                 AnimationStateUpdater stateUpdater = image.gameObject.AddComponent<AnimationStateUpdater>();
                 stateUpdater.image = image;
-                stateUpdater.controllerData = AnimationController.instance.loadingAnimation;
+                if (loadingAnimation) 
+                    stateUpdater.controllerData = AnimationController.instance.loadingAnimation;
 
                 Utilities.GetData(location, (byte[] data) =>
                 {
                     if (stateUpdater != null)
                         GameObject.DestroyImmediate(stateUpdater);
-                    image.sprite = Utilities.LoadSpriteRaw(data);
+                    
+                    var originalImage = System.Drawing.Image.FromStream(new MemoryStream(data));
+                    if (!compressImage || originalImage.Width + originalImage.Height <= 1024f)
+                    {
+                        image.sprite = Utilities.LoadSpriteRaw(data);
+                        image.sprite.texture.wrapMode = TextureWrapMode.Clamp;
+                    }
+                    
+                    var ratio = (double)originalImage.Width / originalImage.Height;
+                    var resizedImage = 512 * ratio <= originalImage.Width
+                        ? new Bitmap(originalImage, (int) (512f * ratio), 512)
+                        : new Bitmap(originalImage, 512, (int) (512 / ratio));
+                    
+                    using var ms = new MemoryStream();
+                    resizedImage.Save(ms, originalImage.RawFormat);
+                    image.sprite = Utilities.LoadSpriteRaw(ms.ToArray());
                     image.sprite.texture.wrapMode = TextureWrapMode.Clamp;
                 });
             }
