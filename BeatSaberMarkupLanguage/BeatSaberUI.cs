@@ -356,8 +356,10 @@ namespace BeatSaberMarkupLanguage
                 {
                     if (stateUpdater != null)
                         GameObject.DestroyImmediate(stateUpdater);
-                    
-                    var originalImage = System.Drawing.Image.FromStream(new MemoryStream(data));
+
+                    using var memoryStream = new MemoryStream(data);
+                    var originalImage = System.Drawing.Image.FromStream(memoryStream);
+
                     if (!compressImage || originalImage.Width + originalImage.Height <= 1024f)
                     {
                         image.sprite = Utilities.LoadSpriteRaw(data);
@@ -369,9 +371,9 @@ namespace BeatSaberMarkupLanguage
                         ? new Bitmap(originalImage, (int) (512f * ratio), 512)
                         : new Bitmap(originalImage, 512, (int) (512 / ratio));
                     
-                    using var ms = new MemoryStream();
-                    resizedImage.Save(ms, originalImage.RawFormat);
-                    image.sprite = Utilities.LoadSpriteRaw(ms.ToArray());
+                    memoryStream.SetLength(0);
+                    resizedImage.Save(memoryStream, originalImage.RawFormat);
+                    image.sprite = Utilities.LoadSpriteRaw(memoryStream.ToArray());
                     image.sprite.texture.wrapMode = TextureWrapMode.Clamp;
                 });
             }
