@@ -303,9 +303,19 @@ namespace BeatSaberMarkupLanguage
         /// </summary>
         /// <param name="image">Image component to set the image to</param>
         /// <param name="location">Resource path, file path, or url of image. Can prefix with # to find and use a base game sprite. May need to prefix resource paths with 'AssemblyName:'</param>
+        public static void SetImage(this Image image, string location)
+        {
+            SetImage(image, location, true, false);
+        }
+        
+        /// <summary>
+        /// Sets an image or gif/apng from a resource path
+        /// </summary>
+        /// <param name="image">Image component to set the image to</param>
+        /// <param name="location">Resource path, file path, or url of image. Can prefix with # to find and use a base game sprite. May need to prefix resource paths with 'AssemblyName:'</param>
         /// <param name="loadingAnimation">Whether a loading animation is shown as a placeholder until the image is loaded</param>
         /// <param name="compressImage">Whether image is compressed</param>
-        public static void SetImage(this Image image, string location, bool loadingAnimation = true, bool compressImage = false)
+        public static void SetImage(this Image image, string location, bool loadingAnimation, bool compressImage)
         {
             AnimationStateUpdater oldStateUpdater = image.GetComponent<AnimationStateUpdater>();
             if (oldStateUpdater != null)
@@ -364,6 +374,7 @@ namespace BeatSaberMarkupLanguage
                     {
                         image.sprite = Utilities.LoadSpriteRaw(data);
                         image.sprite.texture.wrapMode = TextureWrapMode.Clamp;
+                        return;
                     }
                     
                     var ratio = (double)originalImage.Width / originalImage.Height;
