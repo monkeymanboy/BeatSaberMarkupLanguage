@@ -48,7 +48,7 @@ namespace BeatSaberMarkupLanguage.Components
             {
                 if (!_backgroundCache.TryGetValue(name, out ImageView bgTemplate) || bgTemplate == null)
                 {
-                    if (!bgTemplate && bgTemplate)
+                    if (!bgTemplate)
                         _backgroundCache.Remove(name);
 
                     bgTemplate = FindTemplate(name, backgroundName);
