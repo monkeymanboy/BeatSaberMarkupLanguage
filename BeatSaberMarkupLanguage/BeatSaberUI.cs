@@ -6,6 +6,8 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
+using IPA.Utilities.Async;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -305,7 +307,7 @@ namespace BeatSaberMarkupLanguage
         /// <param name="location">Resource path, file path, or url of image. Can prefix with # to find and use a base game sprite. May need to prefix resource paths with 'AssemblyName:'</param>
         public static void SetImage(this Image image, string location)
         {
-            SetImage(image, location, true, false);
+            SetImage(image, location, true, new ScaleOptions());
         }
         
         /// <summary>
@@ -314,8 +316,8 @@ namespace BeatSaberMarkupLanguage
         /// <param name="image">Image component to set the image to</param>
         /// <param name="location">Resource path, file path, or url of image. Can prefix with # to find and use a base game sprite. May need to prefix resource paths with 'AssemblyName:'</param>
         /// <param name="loadingAnimation">Whether a loading animation is shown as a placeholder until the image is loaded</param>
-        /// <param name="downscaleImage">Whether the image is downscaled to 512 width / height</param>
-        public static void SetImage(this Image image, string location, bool loadingAnimation, bool downscaleImage)
+        /// <param name="scaleOptions">If the image should be downscaled and what it should be downscaled to</param>
+        public static void SetImage(this Image image, string location, bool loadingAnimation, ScaleOptions scaleOptions)
         {
             AnimationStateUpdater oldStateUpdater = image.GetComponent<AnimationStateUpdater>();
             if (oldStateUpdater != null)
@@ -361,35 +363,74 @@ namespace BeatSaberMarkupLanguage
                 stateUpdater.image = image;
                 if (loadingAnimation) 
                     stateUpdater.controllerData = AnimationController.instance.loadingAnimation;
-
-                Utilities.GetData(location, (byte[] data) =>
+                
+                Utilities.GetData(location, async (byte[] data) =>
                 {
                     if (stateUpdater != null)
                         GameObject.DestroyImmediate(stateUpdater);
 
-                    using var memoryStream = new MemoryStream(data);
-                    var originalImage = System.Drawing.Image.FromStream(memoryStream);
-
-                    if (!downscaleImage || originalImage.Width + originalImage.Height <= 1024f)
+                    if (scaleOptions.ShouldScale)
+                    {
+                        var imageBytes = await Task.Run(() => DownScaleImage(data, scaleOptions)).ConfigureAwait(false);
+                        _ = UnityMainThreadTaskScheduler.Factory.StartNew(() =>
+                        {
+                            image.sprite = Utilities.LoadSpriteRaw(imageBytes);
+                            image.sprite.texture.wrapMode = TextureWrapMode.Clamp;
+                        });
+                    }
+                    else
                     {
                         image.sprite = Utilities.LoadSpriteRaw(data);
                         image.sprite.texture.wrapMode = TextureWrapMode.Clamp;
-                        return;
                     }
-                    
-                    var ratio = (double)originalImage.Width / originalImage.Height;
-                    var resizedImage = 512 * ratio <= originalImage.Width
-                        ? new Bitmap(originalImage, (int) (512f * ratio), 512)
-                        : new Bitmap(originalImage, 512, (int) (512 / ratio));
-                    
-                    memoryStream.SetLength(0);
-                    resizedImage.Save(memoryStream, originalImage.RawFormat);
-                    image.sprite = Utilities.LoadSpriteRaw(memoryStream.ToArray());
-                    image.sprite.texture.wrapMode = TextureWrapMode.Clamp;
                 });
             }
         }
+        
+        public struct ScaleOptions
+        {
+            public bool ShouldScale;
+            public bool MaintainRatio;
+            public int Width;
+            public int Height;
+        }
+        
+        private static byte[] DownScaleImage(byte[] data, ScaleOptions options)
+        {
+            try
+            {
+                using var memoryStream = new MemoryStream(data);
+                var originalImage = System.Drawing.Image.FromStream(memoryStream);
 
+                if (originalImage.Width + originalImage.Height <= options.Width + options.Height)
+                {
+                    return data;
+                }
+
+                Bitmap resizedImage;
+                if (options.MaintainRatio)
+                {
+                    var ratio = (double)originalImage.Width / originalImage.Height;
+                    var scale = options.Width > options.Height ? options.Width : options.Height;
+                    resizedImage = scale * ratio <= originalImage.Width
+                        ? new Bitmap(originalImage, (int) (scale * ratio), scale)
+                        : new Bitmap(originalImage, scale, (int) (scale / ratio));
+                }
+                else
+                {
+                    resizedImage = new Bitmap(originalImage, options.Width, options.Height);
+                }
+                
+                memoryStream.SetLength(0);
+                resizedImage.Save(memoryStream, originalImage.RawFormat);
+                return data;
+            }
+            catch
+            {
+                return data;
+            }
+        }
+        
         private static bool IsAnimated(string str)
         {
             return str.EndsWith(".gif") || str.EndsWith(".apng");
