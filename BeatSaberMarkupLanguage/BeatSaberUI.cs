@@ -314,8 +314,8 @@ namespace BeatSaberMarkupLanguage
         /// <param name="image">Image component to set the image to</param>
         /// <param name="location">Resource path, file path, or url of image. Can prefix with # to find and use a base game sprite. May need to prefix resource paths with 'AssemblyName:'</param>
         /// <param name="loadingAnimation">Whether a loading animation is shown as a placeholder until the image is loaded</param>
-        /// <param name="compressImage">Whether image is compressed</param>
-        public static void SetImage(this Image image, string location, bool loadingAnimation, bool compressImage)
+        /// <param name="downscaleImage">Whether the image is downscaled to 512 width / height</param>
+        public static void SetImage(this Image image, string location, bool loadingAnimation, bool downscaleImage)
         {
             AnimationStateUpdater oldStateUpdater = image.GetComponent<AnimationStateUpdater>();
             if (oldStateUpdater != null)
@@ -370,7 +370,7 @@ namespace BeatSaberMarkupLanguage
                     using var memoryStream = new MemoryStream(data);
                     var originalImage = System.Drawing.Image.FromStream(memoryStream);
 
-                    if (!compressImage || originalImage.Width + originalImage.Height <= 1024f)
+                    if (!downscaleImage || originalImage.Width + originalImage.Height <= 1024f)
                     {
                         image.sprite = Utilities.LoadSpriteRaw(data);
                         image.sprite.texture.wrapMode = TextureWrapMode.Clamp;
