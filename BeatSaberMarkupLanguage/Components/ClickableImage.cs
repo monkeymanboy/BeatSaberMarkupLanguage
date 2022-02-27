@@ -1,12 +1,15 @@
 ﻿using HMUI;
 using System;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace BeatSaberMarkupLanguage.Components
 {
-    public class ClickableImage : ImageView, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler, IEventSystemHandler
+    public class ClickableImage : ImageView, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
     {
+        private BasicUIAudioManager _basicUIAudioManager;
+        
         private Color _highlightColor = new Color(0.60f, 0.80f, 1);
         public Color HighlightColor
         {
@@ -44,6 +47,11 @@ namespace BeatSaberMarkupLanguage.Components
         {
             IsHighlighted = false;
             OnClickEvent?.Invoke(eventData);
+            if (_basicUIAudioManager == null)
+            {
+                _basicUIAudioManager = Resources.FindObjectsOfTypeAll<BasicUIAudioManager>().First();
+            }
+            _basicUIAudioManager.HandleButtonClickEvent();
         }
 
         public void OnPointerEnter(PointerEventData eventData)
