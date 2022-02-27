@@ -1,5 +1,6 @@
 ﻿using HMUI;
 using System;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -8,6 +9,8 @@ namespace BeatSaberMarkupLanguage.Components
 {
     public class ClickableText : CurvedTextMeshPro, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler, IEventSystemHandler
     {
+        private BasicUIAudioManager _basicUIAudioManager;
+        
         private Color _highlightColor = new Color(0.60f, 0.80f, 1);
         public Color HighlightColor
         {
@@ -45,6 +48,11 @@ namespace BeatSaberMarkupLanguage.Components
         {
             IsHighlighted = false;
             OnClickEvent?.Invoke(eventData);
+            if (_basicUIAudioManager == null)
+            {
+                _basicUIAudioManager = Resources.FindObjectsOfTypeAll<BasicUIAudioManager>().First();
+            }
+            _basicUIAudioManager.HandleButtonClickEvent();
         }
 
         public void OnPointerEnter(PointerEventData eventData)
