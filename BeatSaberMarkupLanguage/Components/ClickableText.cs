@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 
 namespace BeatSaberMarkupLanguage.Components
 {
-    public class ClickableText : CurvedTextMeshPro, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler, IEventSystemHandler
+    public class ClickableText : CurvedTextMeshPro, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
     {
         private BasicUIAudioManager _basicUIAudioManager;
         
