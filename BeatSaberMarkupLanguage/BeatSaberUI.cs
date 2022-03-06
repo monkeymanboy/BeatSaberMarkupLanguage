@@ -420,12 +420,13 @@ namespace BeatSaberMarkupLanguage
                 {
                     resizedImage = new Bitmap(originalImage, options.Width, options.Height);
                 }
-                
-                memoryStream.SetLength(0);
-                resizedImage.Save(memoryStream, originalImage.RawFormat);
-                return data;
+
+                using var anotherMemoryStreamYippee = new MemoryStream();
+                resizedImage.Save(anotherMemoryStreamYippee, originalImage.RawFormat);
+
+                return anotherMemoryStreamYippee.ToArray();
             }
-            catch
+            catch (Exception)
             {
                 return data;
             }
