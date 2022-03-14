@@ -48,10 +48,10 @@ namespace BeatSaberMarkupLanguage.Components
             {
                 if (!_backgroundCache.TryGetValue(name, out ImageView bgTemplate) || bgTemplate == null)
                 {
-                    if (!(bgTemplate is null) && bgTemplate == null)
+                    if (!bgTemplate)
                         _backgroundCache.Remove(name);
 
-                    bgTemplate = Resources.FindObjectsOfTypeAll<ImageView>().First(x => x.gameObject?.name == ObjectNames[name] && x.sprite?.name == backgroundName && x.transform.parent?.name == ObjectParentNames[name]);
+                    bgTemplate = FindTemplate(name, backgroundName);
                     _backgroundCache.Add(name, bgTemplate);
                 }
                 background = gameObject.AddComponent(bgTemplate);
@@ -61,6 +61,31 @@ namespace BeatSaberMarkupLanguage.Components
             {
                 Logger.log.Error($"Error loading background: '{name}'");
             }
+        }
+
+        private static ImageView FindTemplate(string name, string backgroundName)
+        {
+            string objectName = ObjectNames[name];
+            string parentName = ObjectParentNames[name];
+            ImageView[] images = Resources.FindObjectsOfTypeAll<ImageView>();
+            for (int i = 0; i < images.Length; i++)
+            {
+                ImageView image = images[i];
+                Sprite sprite = image.sprite;
+                if (!sprite || sprite.name != backgroundName)
+                    continue;
+
+                Transform parent = image.transform.parent;
+                if (!parent || parent.name != parentName)
+                    continue;
+
+                string goName = image.gameObject?.name;
+                if (goName != objectName)
+                    continue;
+
+                return image;
+            }
+            return null;
         }
     }
 }

@@ -49,7 +49,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
         {
             HoverHint hover = rectTransform.gameObject.AddComponent<HoverHint>();
             hover.text = text;
-            hover.SetField("_hoverHintController", Resources.FindObjectsOfTypeAll<HoverHintController>().First());
+            hover.SetField("_hoverHintController", BeatSaberUI.HoverHintController);
         }
 
         private void AddHoverHintKey(RectTransform rectTransform, string key)

@@ -13,9 +13,14 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
     {
         public override string[] Aliases => new[] { "color-setting" };
 
+        private static FormattedFloatListSettingsValueController _baseSettings;
+        private static Image _colorImage;
+
         public override GameObject CreateObject(Transform parent)
         {
-            FormattedFloatListSettingsValueController baseSetting = MonoBehaviour.Instantiate(Resources.FindObjectsOfTypeAll<FormattedFloatListSettingsValueController>().First(x => (x.name == "VRRenderingScale")), parent, false);
+            if (_baseSettings == null)
+                _baseSettings = Resources.FindObjectsOfTypeAll<FormattedFloatListSettingsValueController>().First(x => x.name == "VRRenderingScale");
+            FormattedFloatListSettingsValueController baseSetting = Object.Instantiate(_baseSettings, parent, false);
             baseSetting.name = "BSMLColorSetting";
 
             GameObject gameObject = baseSetting.gameObject;
@@ -46,8 +51,10 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
             externalComponents.Add(localizedText);
 
             gameObject.GetComponent<LayoutElement>().preferredWidth = 90;
-            
-            Image colorImage = Object.Instantiate(Resources.FindObjectsOfTypeAll<Image>().First(x => x.gameObject.name == "ColorImage" && x.sprite?.name == "NoteCircle"), valuePick, false);
+
+            if (_colorImage == null)
+                _colorImage = Resources.FindObjectsOfTypeAll<Image>().First(x => x.gameObject.name == "ColorImage" && x.sprite?.name == "NoteCircle");
+            Image colorImage = Object.Instantiate(_colorImage, valuePick, false);
             colorImage.name = "BSMLCurrentColor";
             (colorImage.gameObject.transform as RectTransform).anchoredPosition = new Vector2(0, 0);
             (colorImage.gameObject.transform as RectTransform).sizeDelta = new Vector2(5, 5);
