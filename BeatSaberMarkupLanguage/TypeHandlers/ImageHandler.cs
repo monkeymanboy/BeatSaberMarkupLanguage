@@ -17,7 +17,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 
         public override Dictionary<string, Action<Image, string>> Setters => new Dictionary<string, Action<Image, string>>()
         {
-            { "image", new Action<Image, string>(BeatSaberUI.SetImage) },
+            { "image", new Action<Image, string>((image, path) => image.SetImage(path)) },
             { "preserveAspect", new Action<Image, string>((image, preserveAspect) => image.preserveAspect = bool.Parse(preserveAspect)) },
             { "imageColor", new Action<Image, string>((image, color) => image.color = GetColor(color)) }
 
