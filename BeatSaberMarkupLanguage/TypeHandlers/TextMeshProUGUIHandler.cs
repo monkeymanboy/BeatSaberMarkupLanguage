@@ -22,6 +22,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "alignment", new[]{ "font-align","align" } },
             { "overflowMode", new[]{ "overflow-mode" } },
             { "wordWrapping", new[]{ "word-wrapping" } },
+            { "raycastTarget", new[]{ "raycast" } },
             { "bold", new[]{ "bold" } },
             { "italics", new[]{ "italics" } },
             { "underlined", new[]{ "underlined" } },
@@ -40,11 +41,12 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             {"alignment", new Action<TextMeshProUGUI,string>((textMesh, value) => textMesh.alignment = (TextAlignmentOptions)Enum.Parse(typeof(TextAlignmentOptions), value)) },
             {"overflowMode", new Action<TextMeshProUGUI,string>((textMesh, value) => textMesh.overflowMode = (TextOverflowModes)Enum.Parse(typeof(TextOverflowModes), value)) },
             {"wordWrapping", new Action<TextMeshProUGUI,string>((textMesh, value) => textMesh.enableWordWrapping = Parse.Bool(value)) },
+            {"raycastTarget", new Action<TextMeshProUGUI,string>((textMesh, value) => textMesh.raycastTarget = Parse.Bool(value)) },
             {"bold", new Action<TextMeshProUGUI, string>((textMesh, value) => textMesh.fontStyle = SetStyle(textMesh.fontStyle, FontStyles.Bold, value)) },
             {"italics", new Action<TextMeshProUGUI,string>((textMesh, value) => textMesh.fontStyle = SetStyle(textMesh.fontStyle, FontStyles.Italic, value))  },
             {"underlined", new Action<TextMeshProUGUI,string>((textMesh, value) => textMesh.fontStyle = SetStyle(textMesh.fontStyle, FontStyles.Underline, value))  },
             {"strikethrough", new Action<TextMeshProUGUI,string>((textMesh, value) => textMesh.fontStyle = SetStyle(textMesh.fontStyle, FontStyles.Strikethrough, value))  },
-            {"allUppercase", new Action<TextMeshProUGUI,string>((textMesh, value) => textMesh.fontStyle = SetStyle(textMesh.fontStyle, FontStyles.UpperCase, value))  },
+            {"allUppercase", new Action<TextMeshProUGUI,string>((textMesh, value) => textMesh.fontStyle = SetStyle(textMesh.fontStyle, FontStyles.UpperCase, value))  }
         };
 
         private static FontStyles SetStyle(FontStyles existing, FontStyles modifyStyle, string flag)

@@ -2,14 +2,21 @@
 using HMUI;
 using IPA.Utilities;
 using System;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
+using IPA.Utilities.Async;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using VRUIControls;
 using Zenject;
+using Color = UnityEngine.Color;
+using Font = UnityEngine.Font;
+using Image = UnityEngine.UI.Image;
 using Object = UnityEngine.Object;
 
 namespace BeatSaberMarkupLanguage
@@ -75,6 +82,19 @@ namespace BeatSaberMarkupLanguage
                 if (_hoverHintController == null)
                     _hoverHintController = Resources.FindObjectsOfTypeAll<HoverHintController>().First();
                 return _hoverHintController;
+            }
+        }
+      
+        private static BasicUIAudioManager _basicUIAudioManager;
+        public static BasicUIAudioManager BasicUIAudioManager
+        {
+            get
+            {
+                if (_basicUIAudioManager == null)
+                {
+                    _basicUIAudioManager = Resources.FindObjectsOfTypeAll<BasicUIAudioManager>().First();
+                }
+                return _basicUIAudioManager;
             }
         }
 
@@ -172,7 +192,7 @@ namespace BeatSaberMarkupLanguage
         }
 
         /// <summary>
-        /// Creates a <see cref="TMP_FontAsset"/> from a Unity <see cref="Font"/>.
+        /// Creates a <see cref="TMP_FontAsset"/> from a Unity <see cref="UnityEngine.Font"/>.
         /// </summary>
         /// <remarks>
         /// The <see cref="TMP_FontAsset"/> returned is not usable for UI text. Use <see cref="CreateFixedUIFontClone(TMP_FontAsset)"/>
@@ -311,6 +331,18 @@ namespace BeatSaberMarkupLanguage
         /// <param name="location">Resource path, file path, or url of image. Can prefix with # to find and use a base game sprite. May need to prefix resource paths with 'AssemblyName:'</param>
         public static void SetImage(this Image image, string location)
         {
+            SetImage(image, location, true, new ScaleOptions());
+        }
+        
+        /// <summary>
+        /// Sets an image or gif/apng from a resource path
+        /// </summary>
+        /// <param name="image">Image component to set the image to</param>
+        /// <param name="location">Resource path, file path, or url of image. Can prefix with # to find and use a base game sprite. May need to prefix resource paths with 'AssemblyName:'</param>
+        /// <param name="loadingAnimation">Whether a loading animation is shown as a placeholder until the image is loaded</param>
+        /// <param name="scaleOptions">If the image should be downscaled and what it should be downscaled to</param>
+        public static void SetImage(this Image image, string location, bool loadingAnimation, ScaleOptions scaleOptions)
+        {
             AnimationStateUpdater oldStateUpdater = image.GetComponent<AnimationStateUpdater>();
             if (oldStateUpdater != null)
                 MonoBehaviour.DestroyImmediate(oldStateUpdater);
@@ -327,11 +359,12 @@ namespace BeatSaberMarkupLanguage
                     Logger.log.Error($"Could not find Sprite with image name {imgName}");
                 }
             }
-            else if (IsAnimated(location) || (isURL && IsAnimated(uri.LocalPath)))
+            else if (IsAnimated(location) || isURL && IsAnimated(uri.LocalPath))
             {
                 AnimationStateUpdater stateUpdater = image.gameObject.AddComponent<AnimationStateUpdater>();
                 stateUpdater.image = image;
-                stateUpdater.controllerData = AnimationController.instance.loadingAnimation;
+                if (loadingAnimation) 
+                    stateUpdater.controllerData = AnimationController.instance.loadingAnimation;
 
                 if (AnimationController.instance.RegisteredAnimations.TryGetValue(location, out AnimationControllerData animControllerData))
                 {
@@ -353,18 +386,77 @@ namespace BeatSaberMarkupLanguage
             {
                 AnimationStateUpdater stateUpdater = image.gameObject.AddComponent<AnimationStateUpdater>();
                 stateUpdater.image = image;
-                stateUpdater.controllerData = AnimationController.instance.loadingAnimation;
-
-                Utilities.GetData(location, (byte[] data) =>
+                if (loadingAnimation) 
+                    stateUpdater.controllerData = AnimationController.instance.loadingAnimation;
+                
+                Utilities.GetData(location, async (byte[] data) =>
                 {
                     if (stateUpdater != null)
                         GameObject.DestroyImmediate(stateUpdater);
-                    image.sprite = Utilities.LoadSpriteRaw(data);
-                    image.sprite.texture.wrapMode = TextureWrapMode.Clamp;
+
+                    if (scaleOptions.ShouldScale)
+                    {
+                        var imageBytes = await Task.Run(() => DownScaleImage(data, scaleOptions)).ConfigureAwait(false);
+                        _ = UnityMainThreadTaskScheduler.Factory.StartNew(() =>
+                        {
+                            image.sprite = Utilities.LoadSpriteRaw(imageBytes);
+                            image.sprite.texture.wrapMode = TextureWrapMode.Clamp;
+                        });
+                    }
+                    else
+                    {
+                        image.sprite = Utilities.LoadSpriteRaw(data);
+                        image.sprite.texture.wrapMode = TextureWrapMode.Clamp;
+                    }
                 });
             }
         }
+        
+        public struct ScaleOptions
+        {
+            public bool ShouldScale;
+            public bool MaintainRatio;
+            public int Width;
+            public int Height;
+        }
+        
+        private static byte[] DownScaleImage(byte[] data, ScaleOptions options)
+        {
+            try
+            {
+                using var memoryStream = new MemoryStream(data);
+                var originalImage = System.Drawing.Image.FromStream(memoryStream);
 
+                if (originalImage.Width + originalImage.Height <= options.Width + options.Height)
+                {
+                    return data;
+                }
+
+                Bitmap resizedImage;
+                if (options.MaintainRatio)
+                {
+                    var ratio = (double)originalImage.Width / originalImage.Height;
+                    var scale = options.Width > options.Height ? options.Width : options.Height;
+                    resizedImage = scale * ratio <= originalImage.Width
+                        ? new Bitmap(originalImage, (int) (scale * ratio), scale)
+                        : new Bitmap(originalImage, scale, (int) (scale / ratio));
+                }
+                else
+                {
+                    resizedImage = new Bitmap(originalImage, options.Width, options.Height);
+                }
+
+                using var anotherMemoryStreamYippee = new MemoryStream();
+                resizedImage.Save(anotherMemoryStreamYippee, originalImage.RawFormat);
+
+                return anotherMemoryStreamYippee.ToArray();
+            }
+            catch (Exception)
+            {
+                return data;
+            }
+        }
+        
         private static bool IsAnimated(string str)
         {
             return str.EndsWith(".gif") || str.EndsWith(".apng");
