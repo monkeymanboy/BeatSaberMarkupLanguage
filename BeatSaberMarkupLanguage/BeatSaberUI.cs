@@ -74,6 +74,19 @@ namespace BeatSaberMarkupLanguage
             }
         }
 
+        private static BasicUIAudioManager _basicUIAudioManager;
+        public static BasicUIAudioManager BasicUIAudioManager
+        {
+            get
+            {
+                if (_basicUIAudioManager == null)
+                {
+                    _basicUIAudioManager = Resources.FindObjectsOfTypeAll<BasicUIAudioManager>().First();
+                }
+                return _basicUIAudioManager;
+            }
+        }
+
         private static Canvas canvasTemplate;
 
         /// <summary>
