@@ -12,30 +12,40 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         public RangeValuesTextSlider slider;
         protected TextMeshProUGUI text;
         public bool showButtons = false;
-        private static Sprite roundRect10; 
+        private static Sprite roundRect10;
+        private Button incButton;
+        private Button decButton;
 
         public override bool interactable 
         { 
             get => slider?.interactable ?? false;
             set
             {
-                if(slider != null)
+                if (slider != null)
                 {
                     slider.interactable = value;
+                    if (showButtons)
+                    {
+                        incButton.interactable = value;
+                        decButton.interactable = value;
+                    }
                 }
             }
         }
 
         public override void Setup()
         {
+            incButton = slider.GetField<Button, RangeValuesTextSlider>("_incButton");
+            decButton = slider.GetField<Button, RangeValuesTextSlider>("_decButton");
+            
             if (!showButtons)
             {
                 if (roundRect10 == null)
                     roundRect10 = Resources.FindObjectsOfTypeAll<Sprite>().First(x => x.name == "RoundRect10");
 
                 slider.image.sprite = roundRect10;
-                GameObject.Destroy(slider.GetField<Button, RangeValuesTextSlider>("_incButton").gameObject);
-                GameObject.Destroy(slider.GetField<Button, RangeValuesTextSlider>("_decButton").gameObject);
+                GameObject.Destroy(incButton);
+                GameObject.Destroy(decButton);
                 (slider.transform.Find("BG") as RectTransform).sizeDelta = new Vector2(0, 6);
                 (slider.transform as RectTransform).sizeDelta = new Vector2(38, 0);
                 (slider.transform.Find("SlidingArea") as RectTransform).sizeDelta = new Vector2(-4, -4);
