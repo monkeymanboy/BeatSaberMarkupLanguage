@@ -44,8 +44,8 @@ namespace BeatSaberMarkupLanguage.Components.Settings
                     roundRect10 = Resources.FindObjectsOfTypeAll<Sprite>().First(x => x.name == "RoundRect10");
 
                 slider.image.sprite = roundRect10;
-                GameObject.Destroy(incButton);
-                GameObject.Destroy(decButton);
+                GameObject.Destroy(incButton.gameObject);
+                GameObject.Destroy(decButton.gameObject);
                 (slider.transform.Find("BG") as RectTransform).sizeDelta = new Vector2(0, 6);
                 (slider.transform as RectTransform).sizeDelta = new Vector2(38, 0);
                 (slider.transform.Find("SlidingArea") as RectTransform).sizeDelta = new Vector2(-4, -4);
