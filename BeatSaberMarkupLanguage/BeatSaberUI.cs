@@ -331,7 +331,7 @@ namespace BeatSaberMarkupLanguage
         /// <param name="location">Resource path, file path, or url of image. Can prefix with # to find and use a base game sprite. May need to prefix resource paths with 'AssemblyName:'</param>
         public static void SetImage(this Image image, string location)
         {
-            SetImage(image, location, true, new ScaleOptions());
+            SetImage(image, location, true, new ScaleOptions(), null);
         }
         
         /// <summary>
@@ -342,6 +342,19 @@ namespace BeatSaberMarkupLanguage
         /// <param name="loadingAnimation">Whether a loading animation is shown as a placeholder until the image is loaded</param>
         /// <param name="scaleOptions">If the image should be downscaled and what it should be downscaled to</param>
         public static void SetImage(this Image image, string location, bool loadingAnimation, ScaleOptions scaleOptions)
+        {
+            SetImage(image, location, loadingAnimation, scaleOptions, null);
+        }
+        
+        /// <summary>
+        /// Sets an image or gif/apng from a resource path
+        /// </summary>
+        /// <param name="image">Image component to set the image to</param>
+        /// <param name="location">Resource path, file path, or url of image. Can prefix with # to find and use a base game sprite. May need to prefix resource paths with 'AssemblyName:'</param>
+        /// <param name="loadingAnimation">Whether a loading animation is shown as a placeholder until the image is loaded</param>
+        /// <param name="scaleOptions">If the image should be downscaled and what it should be downscaled to</param>
+        /// <param name="callback">Method to call once SetImage has finished</param>
+        public static void SetImage(this Image image, string location, bool loadingAnimation, ScaleOptions scaleOptions, Action callback)
         {
             AnimationStateUpdater oldStateUpdater = image.GetComponent<AnimationStateUpdater>();
             if (oldStateUpdater != null)
@@ -408,8 +421,12 @@ namespace BeatSaberMarkupLanguage
                         image.sprite = Utilities.LoadSpriteRaw(data);
                         image.sprite.texture.wrapMode = TextureWrapMode.Clamp;
                     }
+
+                    callback?.Invoke();
                 });
+                return;
             }
+            callback?.Invoke();
         }
         
         public struct ScaleOptions
