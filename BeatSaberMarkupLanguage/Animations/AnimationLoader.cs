@@ -56,7 +56,7 @@ namespace BeatSaberMarkupLanguage.Animations
                 {
                     yield break;
                 }
-                yield return null;
+                //yield return null;
 
                 texList[i] = frameTexture;
 
