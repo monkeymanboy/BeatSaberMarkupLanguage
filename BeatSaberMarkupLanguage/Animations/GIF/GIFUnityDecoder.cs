@@ -67,7 +67,7 @@ namespace BeatSaberMarkupLanguage.Animations
 				gifImage.SelectActiveFrame(dimension, i);
 
 				using(Bitmap bitmap = new Bitmap(gifImage)) {
-					bitmap.MakeTransparent();
+					bitmap.MakeTransparent(System.Drawing.Color.Black);
 					bitmap.RotateFlip(RotateFlipType.Rotate180FlipX);
 
 					BitmapData frame = bitmap.LockBits(new Rectangle(Point.Empty, gifImage.Size), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
