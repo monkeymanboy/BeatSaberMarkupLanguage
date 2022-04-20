@@ -25,7 +25,7 @@ namespace BeatSaberMarkupLanguage.Animations
 
         public static IEnumerator ProcessAnimationInfo(AnimationInfo animationInfo, Action<Texture2D, Rect[], float[], int, int> callback)
         {
-            int textureSize = 2048, width = 0, height = 0;
+            int textureSize = 4096, width = 0, height = 0;
             Texture2D texture = null;
             Texture2D[] texList = new Texture2D[animationInfo.frameCount];
             float[] delays = new float[animationInfo.frameCount];
@@ -99,8 +99,8 @@ namespace BeatSaberMarkupLanguage.Animations
                 testNum += 2;
             }
 
-            int textureWidth = Mathf.Clamp(numFramesInRow * frameInfo.frames[i].width, 0, 2048);
-            int textureHeight = Mathf.Clamp(numFramesInColumn * frameInfo.frames[i].height, 0, 2048);
+            int textureWidth = Mathf.Clamp(numFramesInRow * frameInfo.frames[i].width, 0, 4096);
+            int textureHeight = Mathf.Clamp(numFramesInColumn * frameInfo.frames[i].height, 0, 4096);
             return Mathf.Max(textureWidth, textureHeight);
         }
     }
