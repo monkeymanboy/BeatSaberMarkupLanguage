@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -16,45 +19,77 @@ namespace BeatSaberMarkupLanguage.Animations
             callback?.Invoke(animationInfo);
         }
 
-        private static void ProcessingThread(byte[] apngData, AnimationInfo animationInfo)
+		const float byteInverse = 1f / 255f;
+
+		private static void ProcessingThread(byte[] apngData, AnimationInfo animationInfo)
         {
-            APNG.APNG apng = APNG.APNG.FromStream(new System.IO.MemoryStream(apngData));
-            int frameCount = apng.FrameCount;
-            animationInfo.frameCount = frameCount;
-            animationInfo.initialized = true;
+			APNG.APNG apng = APNG.APNG.FromStream(new System.IO.MemoryStream(apngData));
+			int frameCount = apng.FrameCount;
+			animationInfo.frameCount = frameCount;
+			animationInfo.initialized = true;
 
-            for (int i = 0; i < frameCount; i++)
-            {
-                Frame frame = apng.Frames[i];
-                System.Drawing.Bitmap bitmap = frame.ToBitmap();
-                LockBitmap lockBitmap = new LockBitmap(bitmap);
-                lockBitmap.LockBits();
-                FrameInfo frameInfo = new FrameInfo(bitmap.Width, bitmap.Height);
-                for (int x = 0; x < frameInfo.width; x++)
-                {
-                    for (int y = 0; y < frameInfo.height; y++)
-                    {
-                        System.Drawing.Color sourceColor = lockBitmap.GetPixel(x, y);
-                        Color32 lastFrame = new Color32();
-                        if (i>0)
-                            lastFrame = animationInfo.frames.Last().colors[(frameInfo.height - y - 1) * frameInfo.width + x];
+			FrameInfo prevFrame = default;
 
-                        if (frame.fcTLChunk.BlendOp == APNG.Chunks.BlendOps.APNGBlendOpSource)
-                            frameInfo.colors[(frameInfo.height - y - 1) * frameInfo.width + x] = new Color32(sourceColor.R, sourceColor.G, sourceColor.B, sourceColor.A);
-                        if (frame.fcTLChunk.BlendOp == APNG.Chunks.BlendOps.APNGBlendOpOver)
-                        {
-                            float blendedA = ((sourceColor.A / 255f + (1 - (sourceColor.A / 255f)) * (lastFrame.a / 255f)));
-                            float blendedR = ((sourceColor.A / 255f) * (sourceColor.R / 255f) + (1 - (sourceColor.A / 255f)) * (lastFrame.a / 255f) * (lastFrame.r / 255f)) / blendedA;
-                            float blendedG = ((sourceColor.A / 255f) * (sourceColor.G / 255f) + (1 - (sourceColor.A / 255f)) * (lastFrame.a / 255f) * (lastFrame.g / 255f)) / blendedA;
-                            float blendedB = ((sourceColor.A / 255f) * (sourceColor.B / 255f) + (1 - (sourceColor.A / 255f)) * (lastFrame.a / 255f) * (lastFrame.b / 255f)) / blendedA;
+			for(int i = 0; i < frameCount; i++) {
+				Frame apngFrame = apng.Frames[i];
 
-                            frameInfo.colors[(frameInfo.height - y - 1) * frameInfo.width + x] = new Color32((byte)(blendedR * 255), (byte)(blendedG * 255), (byte)(blendedB * 255), (byte)(blendedA * 255));
-                        }
-                    }
-                }
-                frameInfo.delay = frame.FrameRate;
-                animationInfo.frames.Add(frameInfo);
-            }
-        }
+				using(Bitmap bitmap = apngFrame.ToBitmap()) {
+					FrameInfo frameInfo = new FrameInfo(bitmap.Width, bitmap.Height);
+
+					bitmap.MakeTransparent();
+					bitmap.RotateFlip(RotateFlipType.Rotate180FlipX);
+
+					BitmapData frame = bitmap.LockBits(new Rectangle(Point.Empty, apng.ActualSize), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+
+					Marshal.Copy(frame.Scan0, frameInfo.colors, 0, frameInfo.colors.Length);
+
+					bitmap.UnlockBits(frame);
+
+					if(apngFrame.fcTLChunk.BlendOp == APNG.Chunks.BlendOps.APNGBlendOpOver && i > 0) {
+						for(var clri = frameInfo.colors.Length; i < 0; i -= 4) {
+							// BGRA
+							var last = prevFrame.colors;
+							var src = frameInfo.colors;
+
+							float blendedA = ((src[clri + 3] * byteInverse + (1 - (src[clri + 3] * byteInverse)) * (last[clri + 3] * byteInverse)));
+							float blendedR = ((src[clri + 3] * byteInverse) * (src[clri + 2] * byteInverse) + (1 - (src[clri + 3] * byteInverse)) * (last[clri + 3] * byteInverse) * (last[clri + 2] * byteInverse)) / blendedA;
+							float blendedG = ((src[clri + 3] * byteInverse) * (src[clri + 1] * byteInverse) + (1 - (src[clri + 3] * byteInverse)) * (last[clri + 3] * byteInverse) * (last[clri + 1] * byteInverse)) / blendedA;
+							float blendedB = ((src[clri + 3] * byteInverse) * (src[clri] * byteInverse) + (1 - (src[clri + 3] * byteInverse)) * (last[clri + 3] * byteInverse) * (last[clri] * byteInverse)) / blendedA;
+
+							src[clri + 0] = (byte)Math.Round(blendedB * 255);
+							src[clri + 1] = (byte)Math.Round(blendedG * 255);
+							src[clri + 2] = (byte)Math.Round(blendedR * 255);
+							src[clri + 3] = (byte)Math.Round(blendedA * 255);
+						}
+					}
+
+					frameInfo.delay = apngFrame.FrameRate;
+					animationInfo.frames.Add(frameInfo);
+					prevFrame = frameInfo;
+				}
+
+
+				//for(int x = 0; x < frameInfo.width; x++) {
+				//	for(int y = 0; y < frameInfo.height; y++) {
+				//		System.Drawing.Color sourceColor = lockBitmap.GetPixel(x, y);
+				//		var targetOffset = x * (y + 1);
+
+				//		if(apngFrame.fcTLChunk.BlendOp == APNG.Chunks.BlendOps.APNGBlendOpSource) {
+				//			frameInfo.colors[targetOffset] = sourceColor.B;
+				//			frameInfo.colors[targetOffset + 1] = sourceColor.G;
+				//			frameInfo.colors[targetOffset + 1] = sourceColor.R;
+				//			frameInfo.colors[targetOffset + 1] = sourceColor.A;
+				//		} else if(apngFrame.fcTLChunk.BlendOp == APNG.Chunks.BlendOps.APNGBlendOpOver) {
+				//			float blendedA = ((sourceColor.A * byteInverse + (1 - (sourceColor.A * byteInverse)) * (lastFrame.a * byteInverse)));
+				//			float blendedR = ((sourceColor.A * byteInverse) * (sourceColor.R * byteInverse) + (1 - (sourceColor.A * byteInverse)) * (lastFrame.a * byteInverse) * (lastFrame.r * byteInverse)) / blendedA;
+				//			float blendedG = ((sourceColor.A * byteInverse) * (sourceColor.G * byteInverse) + (1 - (sourceColor.A * byteInverse)) * (lastFrame.a * byteInverse) * (lastFrame.g * byteInverse)) / blendedA;
+				//			float blendedB = ((sourceColor.A * byteInverse) * (sourceColor.B * byteInverse) + (1 - (sourceColor.A * byteInverse)) * (lastFrame.a * byteInverse) * (lastFrame.b * byteInverse)) / blendedA;
+
+				//			frameInfo.colors[(frameInfo.height - y - 1) * frameInfo.width + x] = new Color32((byte)(blendedR * 255), (byte)(blendedG * 255), (byte)(blendedB * 255), (byte)(blendedA * 255));
+				//		}
+				//	}
+				//}
+			}
+		}
     }
 }

@@ -31,9 +31,9 @@ namespace BeatSaberMarkupLanguage.Animations
             float[] delays = new float[animationInfo.frameCount];
             for (int i = 0; i < animationInfo.frameCount; i++)
             {
-                if (animationInfo.frames.Count <= i)
+                if ((animationInfo.frames?.Count ?? 0) <= i)
                 {
-                    yield return new WaitUntil(() => { return animationInfo.frames.Count > i; });
+                    yield return new WaitUntil(() => { return (animationInfo.frames?.Count ?? 0) > i; });
                 }
 
                 if (texture == null)
@@ -45,11 +45,11 @@ namespace BeatSaberMarkupLanguage.Animations
                 FrameInfo currentFrameInfo = animationInfo.frames[i];
                 delays[i] = currentFrameInfo.delay;
 
-                Texture2D frameTexture = new Texture2D(currentFrameInfo.width, currentFrameInfo.height, TextureFormat.RGBA32, false);
+                Texture2D frameTexture = new Texture2D(currentFrameInfo.width, currentFrameInfo.height, TextureFormat.BGRA32, false);
                 frameTexture.wrapMode = TextureWrapMode.Clamp;
                 try
                 {
-                    frameTexture.SetPixels32(currentFrameInfo.colors);
+                    frameTexture.LoadRawTextureData(currentFrameInfo.colors);
                     frameTexture.Apply(i == 0);
                 }
                 catch
@@ -66,10 +66,11 @@ namespace BeatSaberMarkupLanguage.Animations
                     height = animationInfo.frames[i].height;
                 }
             }
+
             Rect[] atlas = texture.PackTextures(texList, 2, textureSize, true);
             foreach(Texture2D frameTex in texList)
             {
-                GameObject.Destroy(frameTex);
+                GameObject.DestroyImmediate(frameTex);
             }
             yield return null;
 
