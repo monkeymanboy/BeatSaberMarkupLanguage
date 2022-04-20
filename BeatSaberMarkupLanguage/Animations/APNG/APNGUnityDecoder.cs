@@ -48,31 +48,23 @@ namespace BeatSaberMarkupLanguage.Animations
 					bitmap.UnlockBits(frame);
 
 					if(apngFrame.fcTLChunk.BlendOp == APNG.Chunks.BlendOps.APNGBlendOpOver && i > 0) {
+						// BGRA
+						var last = prevFrame.colors;
+						var src = frameInfo.colors;
+
 						for(var clri = frameInfo.colors.Length - 1; i > 2; i -= 4) {
-							// BGRA
-							var last = prevFrame.colors;
-							var src = frameInfo.colors;
-
 							var srcA = src[clri - 3] * byteInverse;
-							var srcR = src[clri - 2] * byteInverse;
-							var srcG = src[clri - 1] * byteInverse;
-							var srcB = src[clri - 0] * byteInverse;
-
 							var lastA = last[clri - 3] * byteInverse;
-							var lastR = last[clri - 2] * byteInverse;
-							var lastG = last[clri - 1] * byteInverse;
-							var lastB = last[clri - 0] * byteInverse;
 
 							float blendedA = srcA + (1 - srcA) * lastA;
-							float blendedR = (srcA * srcR + (1 - srcA) * lastA * lastR) * blendedA * byteInverse;
-							float blendedG = (srcA * srcG + (1 - srcA) * lastA * lastG) * blendedA * byteInverse;
-							float blendedB = (srcA * srcB + (1 - srcA) * lastA * lastB) * blendedA * byteInverse;
-
-
-							src[clri] = (byte)Math.Round(blendedB * 255);
-							src[clri - 1] = (byte)Math.Round(blendedG * 255);
-							src[clri - 2] = (byte)Math.Round(blendedR * 255);
 							src[clri - 3] = (byte)Math.Round(blendedA * 255);
+
+							for(var c = 0; c < 3; c++) {
+								var srcC = src[clri - i] * byteInverse;
+								var lastC = last[clri - i] * byteInverse;
+
+								src[clri - i] = (byte)Math.Round((srcA * srcC + (1 - srcA) * lastA * lastC * 255f) / blendedA);
+							}
 						}
 					}
 
