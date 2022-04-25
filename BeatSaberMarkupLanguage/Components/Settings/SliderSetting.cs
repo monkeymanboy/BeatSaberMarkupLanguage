@@ -29,11 +29,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         public float Value
         {
             get => slider.value;
-            set
-            {
-                slider.value = value;
-                text.text = TextForValue(value);
-            }
+            set => slider.value = value;
         }
 
         public override void Setup()
