@@ -72,28 +72,6 @@ namespace BeatSaberMarkupLanguage.Animations
 					animationInfo.frames.Add(frameInfo);
 					prevFrame = frameInfo;
 				}
-
-
-				//for(int x = 0; x < frameInfo.width; x++) {
-				//	for(int y = 0; y < frameInfo.height; y++) {
-				//		System.Drawing.Color sourceColor = lockBitmap.GetPixel(x, y);
-				//		var targetOffset = x * (y + 1);
-
-				//		if(apngFrame.fcTLChunk.BlendOp == APNG.Chunks.BlendOps.APNGBlendOpSource) {
-				//			frameInfo.colors[targetOffset] = sourceColor.B;
-				//			frameInfo.colors[targetOffset + 1] = sourceColor.G;
-				//			frameInfo.colors[targetOffset + 1] = sourceColor.R;
-				//			frameInfo.colors[targetOffset + 1] = srcA;
-				//		} else if(apngFrame.fcTLChunk.BlendOp == APNG.Chunks.BlendOps.APNGBlendOpOver) {
-				//			float blendedA = ((srcA * byteInverse + (1 - (srcA * byteInverse)) * (lastFrame.a * byteInverse)));
-				//			float blendedR = ((srcA * byteInverse) * (sourceColor.R * byteInverse) + (1 - (srcA * byteInverse)) * (lastFrame.a * byteInverse) * (lastFrame.r * byteInverse)) / blendedA;
-				//			float blendedG = ((srcA * byteInverse) * (sourceColor.G * byteInverse) + (1 - (srcA * byteInverse)) * (lastFrame.a * byteInverse) * (lastFrame.g * byteInverse)) / blendedA;
-				//			float blendedB = ((srcA * byteInverse) * (sourceColor.B * byteInverse) + (1 - (srcA * byteInverse)) * (lastFrame.a * byteInverse) * (lastFrame.b * byteInverse)) / blendedA;
-
-				//			frameInfo.colors[(frameInfo.height - y - 1) * frameInfo.width + x] = new Color32((byte)(blendedR * 255), (byte)(blendedG * 255), (byte)(blendedB * 255), (byte)(blendedA * 255));
-				//		}
-				//	}
-				//}
 			}
 		}
     }

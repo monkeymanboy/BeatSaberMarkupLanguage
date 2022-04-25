@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
+using System.Linq;
 
 namespace BeatSaberMarkupLanguage.Animations
 {
@@ -29,17 +30,24 @@ namespace BeatSaberMarkupLanguage.Animations
             Texture2D texture = null;
             Texture2D[] texList = new Texture2D[animationInfo.frameCount];
             float[] delays = new float[animationInfo.frameCount];
+
+            var lastThrottleTime = Time.realtimeSinceStartup;
+
             for (int i = 0; i < animationInfo.frameCount; i++)
             {
                 if ((animationInfo.frames?.Count ?? 0) <= i)
                 {
                     yield return new WaitUntil(() => { return (animationInfo.frames?.Count ?? 0) > i; });
+                    lastThrottleTime = Time.realtimeSinceStartup;
                 }
 
                 if (texture == null)
                 {
                     textureSize = GetTextureSize(animationInfo, i);
                     texture = new Texture2D(animationInfo.frames[i].width, animationInfo.frames[i].height);
+
+                    width = animationInfo.frames[i].width;
+                    height = animationInfo.frames[i].height;
                 }
                 
                 FrameInfo currentFrameInfo = animationInfo.frames[i];
@@ -50,29 +58,26 @@ namespace BeatSaberMarkupLanguage.Animations
                 try
                 {
                     frameTexture.LoadRawTextureData(currentFrameInfo.colors);
-                    frameTexture.Apply(i == 0);
                 }
                 catch
                 {
                     yield break;
                 }
-                //yield return null;
 
                 texList[i] = frameTexture;
 
-                if (i == 0)
-                {
-                    width = animationInfo.frames[i].width;
-                    height = animationInfo.frames[i].height;
+                // Allow up to .5ms of thread usage for loading this anim
+                if(Time.realtimeSinceStartup > lastThrottleTime + 0.0005f) {
+                    yield return null;
+                    lastThrottleTime = Time.realtimeSinceStartup;
                 }
             }
 
             Rect[] atlas = texture.PackTextures(texList, 2, textureSize, true);
             foreach(Texture2D frameTex in texList)
             {
-                GameObject.DestroyImmediate(frameTex);
+                GameObject.Destroy(frameTex);
             }
-            yield return null;
 
             callback?.Invoke(texture, atlas, delays, width, height);
         }
