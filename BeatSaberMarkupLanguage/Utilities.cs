@@ -295,7 +295,7 @@ namespace BeatSaberMarkupLanguage
                 if (x.name.Length == 0)
                     continue;
 
-                if(!spriteCache.TryGetValue(x.name, out var a) || x == null)
+                if(!spriteCache.TryGetValue(x.name, out var a) || a == null)
                     spriteCache[x.name] = x;
 
                 if (x.name == name)
@@ -316,7 +316,7 @@ namespace BeatSaberMarkupLanguage
                 if (x.name.Length == 0)
                     continue;
 
-                if(!textureCache.TryGetValue(x.name, out var a) || x == null)
+                if(!textureCache.TryGetValue(x.name, out var a) || a == null)
                     textureCache[x.name] = x;
 
                 if (x.name == name)
