@@ -49,7 +49,7 @@ namespace BeatSaberMarkupLanguage.MenuButtons
 
         internal void ShowView(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
         {
-            if (leftScreen == null) leftScreen = Resources.FindObjectsOfTypeAll<HMUI.Screen>().FirstOrDefault(x => x.gameObject.name == "LeftScreen");
+            if (leftScreen == null) leftScreen = Resources.FindObjectsOfTypeAll<HMUI.Screen>().Where(x => x.gameObject.name == "LeftScreen").FirstOrDefault();
 
             foreach (ModalView modalView in leftScreen.GetComponentsInChildren<ModalView>())
             {

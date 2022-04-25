@@ -54,7 +54,7 @@ namespace BeatSaberMarkupLanguage
                 if (File.Exists(folder))
                 {
                     string[] lines = File.ReadAllLines(folder);
-                    string pinnnedModsLine = lines.FirstOrDefault(x => x.StartsWith("Pinned Mods", StringComparison.Ordinal)) ?? "";
+                    string pinnnedModsLine = lines.Where(x => x.StartsWith("Pinned Mods", StringComparison.Ordinal)).FirstOrDefault() ?? "";
                     var splitLine = pinnnedModsLine.Split('=');
                     if (splitLine.Length > 1)
                     {

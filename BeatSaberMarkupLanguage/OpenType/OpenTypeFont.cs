@@ -24,7 +24,7 @@ namespace BeatSaberMarkupLanguage.OpenType
             offsetTable = offsets;
             tables = reader.ReadTableRecords(offsetTable);
             nameTableRecord = tables.Select(t => new TableRecord?(t))
-                .FirstOrDefault(t => t.Value.TableTag == OpenTypeTag.NAME);
+                .Where(t => t.Value.TableTag == OpenTypeTag.NAME).FirstOrDefault();
 
             if (lazyLoad)
                 Reader = reader;

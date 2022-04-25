@@ -56,15 +56,18 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             {
                 scrollView.PageUpButton = parserParams.GetObjectsWithTag("PageUpFor:" + id)
                     .Select(o => o.GetComponent<Button>())
-                    .FirstOrDefault(b => b != null);
+                    .Where(b => b != null)
+                    .FirstOrDefault();
 
                 scrollView.PageDownButton = parserParams.GetObjectsWithTag("PageDownFor:" + id)
                     .Select(o => o.GetComponent<Button>())
-                    .FirstOrDefault(b => b != null);
+                    .Where(b => b != null)
+                    .FirstOrDefault();
 
                 scrollView.ScrollIndicator = parserParams.GetObjectsWithTag("IndicatorFor:" + id)
                     .Select(o => o.GetComponent<VerticalScrollIndicator>() ?? o.GetComponent<BSMLScrollIndicator>())
-                    .FirstOrDefault(i => i != null);
+                    .Where(i => i != null)
+                    .FirstOrDefault();
             }
 
             scrollView.RefreshContent();

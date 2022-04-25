@@ -55,7 +55,7 @@ namespace BeatSaberMarkupLanguage
             get
             {
                 if (_diContainer == null)
-                    _diContainer = Resources.FindObjectsOfTypeAll<TextSegmentedControl>().FirstOrDefault(x => x.transform.parent.name == "PlayerStatisticsViewController" && x.GetField<DiContainer, TextSegmentedControl>("_container") != null).GetField<DiContainer, TextSegmentedControl>("_container");
+                    _diContainer = Resources.FindObjectsOfTypeAll<TextSegmentedControl>().Where(x => x.transform.parent.name == "PlayerStatisticsViewController" && x.GetField<DiContainer, TextSegmentedControl>("_container") != null).FirstOrDefault().GetField<DiContainer, TextSegmentedControl>("_container");
                 return _diContainer;
             }
         }
@@ -147,7 +147,7 @@ namespace BeatSaberMarkupLanguage
             get
             {
                 if (mainTextFont == null)
-                    mainTextFont = Resources.FindObjectsOfTypeAll<TMP_FontAsset>().FirstOrDefault(t => t.name == "Teko-Medium SDF");
+                    mainTextFont = Resources.FindObjectsOfTypeAll<TMP_FontAsset>().Where(t => t.name == "Teko-Medium SDF").FirstOrDefault();
                 return mainTextFont;
             }
         }
@@ -159,7 +159,7 @@ namespace BeatSaberMarkupLanguage
             get
             {
                 if (mainUIFontMaterial == null)
-                    mainUIFontMaterial = Resources.FindObjectsOfTypeAll<Material>().First(m => m.name == "Teko-Medium SDF Curved Softer");
+                    mainUIFontMaterial = Resources.FindObjectsOfTypeAll<Material>().Where(m => m.name == "Teko-Medium SDF Curved Softer").First();
                 return mainUIFontMaterial;
             }
         }
