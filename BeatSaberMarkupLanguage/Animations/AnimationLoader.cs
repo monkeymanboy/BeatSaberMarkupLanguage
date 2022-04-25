@@ -26,7 +26,7 @@ namespace BeatSaberMarkupLanguage.Animations
 
         public static IEnumerator ProcessAnimationInfo(AnimationInfo animationInfo, Action<Texture2D, Rect[], float[], int, int> callback)
         {
-            int textureSize = 4096, width = 0, height = 0;
+            int textureSize = SystemInfo.maxTextureSize >= 4096 ? 4096 : 2048, width = 0, height = 0;
             Texture2D texture = null;
             Texture2D[] texList = new Texture2D[animationInfo.frameCount];
             float[] delays = new float[animationInfo.frameCount];
