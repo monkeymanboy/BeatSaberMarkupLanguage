@@ -1,12 +1,27 @@
 ﻿using BeatSaberMarkupLanguage.Parser;
+using HarmonyLib;
 using HMUI;
 using System;
 using System.Collections;
+using System.Runtime.CompilerServices;
 using TMPro;
 using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.Components.Settings
-{
+ {
+    [HarmonyPatch(typeof(CustomFormatRangeValuesSlider), "TextForValue")]
+    static class ApplyCustomSliderTexts {
+        public static ConditionalWeakTable<RangeValuesTextSlider, SliderSetting> remappers = new ConditionalWeakTable<RangeValuesTextSlider, SliderSetting>();
+
+        static bool Prefix(RangeValuesTextSlider __instance, float value, ref string __result) {
+            if(!remappers.TryGetValue(__instance, out var gss))
+                return true;
+            
+            __result = gss.TextForValue(value);
+            return false;
+        }
+    }
+
     public class SliderSetting : GenericSliderSetting
     {
         public bool isInt = false;
@@ -24,35 +39,31 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         public override void Setup()
         {
             base.Setup();
+
+            ApplyCustomSliderTexts.remappers.Add(slider, this);
+
             text = slider.GetComponentInChildren<TextMeshProUGUI>();
             slider.numberOfSteps = (int)Math.Round((slider.maxValue - slider.minValue) / increments) + 1;
             ReceiveValue();
             slider.valueDidChangeEvent += OnChange;
-            if (isActiveAndEnabled)
-                StartCoroutine(SetInitialText());
         }
 
-        private void OnEnable()
-        {
-            StartCoroutine(SetInitialText());
-        }
-
-        // I don't really like this but for some reason I can't get the initial starting text any other quick way and this works perfectly fine
-        private IEnumerator SetInitialText()
-        {
-            yield return new WaitForFixedUpdate();
-            text.text = TextForValue(slider.value);
-            yield return new WaitForSeconds(0.1f); // If the first one is too fast, don't yell at me pls
-            text.text = TextForValue(slider.value);
-        }
+        float lastValue = float.NegativeInfinity;
 
         private void OnChange(TextSlider _, float val)
         {
-            text.text = TextForValue(slider.value);
-            if (isInt)
-                onChange?.Invoke((int)Math.Round(slider.value));
+            if(isInt)
+                val = (int)Math.Round(val);
+
+            if(lastValue == val)
+                return;
+
+            lastValue = val;
+
+            if(isInt)
+                onChange?.Invoke((int)val);
             else
-                onChange?.Invoke(slider.value);
+                onChange?.Invoke(val);
 
             if (updateOnChange)
                 ApplyValue();
@@ -73,11 +84,9 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         {
             if (associatedValue != null)
                 slider.value = isInt ? (int)associatedValue.GetValue() : (float)associatedValue.GetValue();
-
-            text.text = TextForValue(slider.value);
         }
 
-        protected string TextForValue(float value)
+        internal string TextForValue(float value)
         {
             if (isInt)
                 return formatter == null ? ((int)Math.Round(value)).ToString() : (formatter.Invoke((int)Math.Round(value)) as string);
