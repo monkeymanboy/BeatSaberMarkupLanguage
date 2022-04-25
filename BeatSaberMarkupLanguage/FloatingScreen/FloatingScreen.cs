@@ -17,7 +17,6 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
         public event EventHandler<FloatingScreenHandleEventArgs> HandleReleased;
         public event EventHandler<FloatingScreenHandleEventArgs> HandleGrabbed;
 
-        private static Sprite _mainScreenMask;
         private static Material _fogMaterial;
 
         public Vector2 ScreenSize
@@ -139,9 +138,7 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
                 rectTransform.offsetMax = Vector2.zero;
 
                 ImageView background = backGroundGo.GetComponent<ImageView>();
-                if (_mainScreenMask == null)
-                    _mainScreenMask = Resources.FindObjectsOfTypeAll<Sprite>().First(x => x.name == "MainScreenMask");
-                background.sprite = _mainScreenMask;
+                background.sprite = Utilities.FindSpriteCached("MainScreenMask");
                 background.type = Image.Type.Sliced;
                 background.color = new Color(0.7450981f, 0.7450981f, 0.7450981f, 1f);
                 if (_fogMaterial == null)

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
@@ -280,6 +281,56 @@ namespace BeatSaberMarkupLanguage
             {
                 callback?.Invoke(www.downloadHandler.data);
             }
+        }
+
+
+        public static Dictionary<string, Sprite> spriteCache = new Dictionary<string, Sprite>();
+        internal static Sprite FindSpriteCached(string name) {
+            if(spriteCache.TryGetValue(name, out var sprite) && sprite != null)
+            {
+                return sprite;
+            }
+
+            foreach(var x in Resources.FindObjectsOfTypeAll<Sprite>())
+            {
+                if(x.name.Length == 0)
+                {
+                    continue;
+                }
+
+                // If we iterate over it we might as well cache it
+                spriteCache[x.name] = x;
+                Console.WriteLine("Cached Sprite {0}", x.name);
+
+                if(x.name == name)
+                    return x;
+            }
+
+            return null;
+        }
+
+        public static Dictionary<string, Texture> textureCache = new Dictionary<string, Texture>();
+        internal static Texture FindTextureCached(string name) {
+            if(textureCache.TryGetValue(name, out var texture) && texture != null)
+            {
+                return texture;
+            }
+
+            foreach(var x in Resources.FindObjectsOfTypeAll<Texture>())
+            {
+                if(x.name.Length == 0) {
+                    continue;
+                }
+
+                // If we iterate over it we might as well cache it
+                textureCache[x.name] = x;
+                Console.WriteLine("Cached Texture {0}", x.name);
+
+                if(x.name == name)
+                    return x;
+            }
+
+            return null;
         }
     }
 }
