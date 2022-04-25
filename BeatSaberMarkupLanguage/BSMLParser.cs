@@ -228,7 +228,7 @@ namespace BeatSaberMarkupLanguage
                 componentInfo = componentInfo.Concat(components);
             }
 
-            foreach (KeyValuePair<string, BSMLAction> action in parserParams.actions.Where(x => x.Key.StartsWith(SUBSCRIVE_EVENT_ACTION_PREFIX)))
+            foreach (KeyValuePair<string, BSMLAction> action in parserParams.actions.Where(x => x.Key.StartsWith(SUBSCRIVE_EVENT_ACTION_PREFIX, StringComparison.Ordinal)))
                 parserParams.AddEvent(action.Key.Substring(1), delegate { action.Value.Invoke(); });
 
             foreach (ComponentTypeWithData component in componentInfo)
@@ -241,7 +241,7 @@ namespace BeatSaberMarkupLanguage
 
         public void HandleNode(XmlNode node, GameObject parent, BSMLParserParams parserParams, out IEnumerable<ComponentTypeWithData> componentInfo)
         {
-            if (node.Name.StartsWith(MACRO_PREFIX))
+            if (node.Name.StartsWith(MACRO_PREFIX, StringComparison.Ordinal))
                 HandleMacroNode(node, parent, parserParams, out componentInfo);
             else
                 HandleTagNode(node, parent, parserParams, out componentInfo);
@@ -353,7 +353,7 @@ namespace BeatSaberMarkupLanguage
                     if (node.Attributes[alias] != null)
                     {
                         string value = node.Attributes[alias].Value;
-                        if (value.StartsWith(RETRIEVE_VALUE_PREFIX))
+                        if (value.StartsWith(RETRIEVE_VALUE_PREFIX, StringComparison.Ordinal))
                         {
                             try
                             {

@@ -21,10 +21,9 @@ namespace BeatSaberMarkupLanguage.Macros
             components = Enumerable.Empty<BSMLParser.ComponentTypeWithData>();
             if (data.TryGetValue("value", out string valueId))
             {
-                bool notOperator = false;
-                if (valueId.StartsWith("!"))
+                bool notOperator = valueId.Length > 1 && valueId[0] == '!';
+                if (notOperator)
                 {
-                    notOperator = true;
                     valueId = valueId.Substring(1);
                 }
                 if (!parserParams.values.TryGetValue(valueId, out BSMLValue value))

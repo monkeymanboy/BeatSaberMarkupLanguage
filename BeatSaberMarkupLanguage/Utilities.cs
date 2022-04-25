@@ -247,7 +247,7 @@ namespace BeatSaberMarkupLanguage
         {
             try
             {
-                if (location.StartsWith("http://") || location.StartsWith("https://"))
+                if (location.StartsWith("http://", StringComparison.OrdinalIgnoreCase) || location.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
                 {
                     SharedCoroutineStarter.instance.StartCoroutine(GetWebDataCoroutine(location, callback));
                 }

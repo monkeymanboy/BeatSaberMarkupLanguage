@@ -550,7 +550,7 @@ namespace BeatSaberMarkupLanguage.Components
                         return;
                     }
 
-                    if (value.EndsWith("%CR%"))
+                    if (value.EndsWith("%CR%", StringComparison.Ordinal))
                     {
                         kb.KeyboardText.text += value.Substring(0, value.Length - 4);
                         kb.Enter(this);

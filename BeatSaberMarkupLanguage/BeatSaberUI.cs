@@ -374,7 +374,11 @@ namespace BeatSaberMarkupLanguage
                 {
                     Utilities.GetData(location, (byte[] data) =>
                     {
-                        AnimationLoader.Process((location.EndsWith(".gif") || (isURL && uri.LocalPath.EndsWith(".gif"))) ? AnimationType.GIF : AnimationType.APNG, data, (Texture2D tex, Rect[] uvs, float[] delays, int width, int height) =>
+                        AnimationLoader.Process(
+                            (location.EndsWith(".gif", StringComparison.OrdinalIgnoreCase) || 
+                            (isURL && uri.LocalPath.EndsWith(".gif", StringComparison.OrdinalIgnoreCase))) ? AnimationType.GIF : AnimationType.APNG, 
+                            
+                            data, (Texture2D tex, Rect[] uvs, float[] delays, int width, int height) =>
                         {
                             AnimationControllerData controllerData = AnimationController.instance.Register(location, tex, uvs, delays);
                             stateUpdater.controllerData = controllerData;
@@ -459,7 +463,7 @@ namespace BeatSaberMarkupLanguage
         
         private static bool IsAnimated(string str)
         {
-            return str.EndsWith(".gif") || str.EndsWith(".apng");
+            return str.EndsWith(".gif", StringComparison.OrdinalIgnoreCase) || str.EndsWith(".apng", StringComparison.OrdinalIgnoreCase);
         }
 
         #region FlowCoordinator Extensions
