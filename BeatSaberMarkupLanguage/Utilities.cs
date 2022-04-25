@@ -298,15 +298,15 @@ namespace BeatSaberMarkupLanguage
                     continue;
                 }
 
-                // If we iterate over it we might as well cache it
                 spriteCache[x.name] = x;
-                Console.WriteLine("Cached Sprite {0}", x.name);
 
                 if(x.name == name)
-                    return x;
+                {
+                    sprite = x;
+                }
             }
 
-            return null;
+            return sprite;
         }
 
         public static Dictionary<string, Texture> textureCache = new Dictionary<string, Texture>();
@@ -318,19 +318,20 @@ namespace BeatSaberMarkupLanguage
 
             foreach(var x in Resources.FindObjectsOfTypeAll<Texture>())
             {
-                if(x.name.Length == 0) {
+                if(x.name.Length == 0)
+                {
                     continue;
                 }
 
-                // If we iterate over it we might as well cache it
                 textureCache[x.name] = x;
-                Console.WriteLine("Cached Texture {0}", x.name);
 
                 if(x.name == name)
-                    return x;
+                {
+                    texture = x;
+                }
             }
 
-            return null;
+            return texture;
         }
     }
 }
