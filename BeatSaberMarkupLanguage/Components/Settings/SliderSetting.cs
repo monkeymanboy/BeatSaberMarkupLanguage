@@ -10,10 +10,12 @@ using UnityEngine;
 namespace BeatSaberMarkupLanguage.Components.Settings
  {
     [HarmonyPatch(typeof(CustomFormatRangeValuesSlider), "TextForValue")]
-    static class ApplyCustomSliderTexts {
+    static class ApplyCustomSliderTexts
+    {
         public static ConditionalWeakTable<RangeValuesTextSlider, SliderSetting> remappers = new ConditionalWeakTable<RangeValuesTextSlider, SliderSetting>();
 
-        static bool Prefix(RangeValuesTextSlider __instance, float value, ref string __result) {
+        static bool Prefix(RangeValuesTextSlider __instance, float value, ref string __result)
+        {
             if(!remappers.TryGetValue(__instance, out var gss))
                 return true;
             
@@ -48,15 +50,15 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 
         private void OnChange(TextSlider _, float val)
         {
-            if(isInt)
+            if (isInt)
                 val = (int)Math.Round(val);
 
-            if(lastValue == val)
+            if (lastValue == val)
                 return;
 
             lastValue = val;
 
-            if(isInt)
+            if (isInt)
                 onChange?.Invoke((int)val);
             else
                 onChange?.Invoke(val);

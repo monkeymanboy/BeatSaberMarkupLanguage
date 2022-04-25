@@ -285,22 +285,23 @@ namespace BeatSaberMarkupLanguage
 
 
         public static Dictionary<string, Sprite> spriteCache = new Dictionary<string, Sprite>();
-        internal static Sprite FindSpriteCached(string name) {
-            if(spriteCache.TryGetValue(name, out var sprite) && sprite != null)
+        internal static Sprite FindSpriteCached(string name)
+        {
+            if (spriteCache.TryGetValue(name, out var sprite) && sprite != null)
             {
                 return sprite;
             }
 
-            foreach(var x in Resources.FindObjectsOfTypeAll<Sprite>())
+            foreach (var x in Resources.FindObjectsOfTypeAll<Sprite>())
             {
-                if(x.name.Length == 0)
+                if (x.name.Length == 0)
                 {
                     continue;
                 }
 
                 spriteCache[x.name] = x;
 
-                if(x.name == name)
+                if (x.name == name)
                 {
                     sprite = x;
                 }
@@ -310,22 +311,23 @@ namespace BeatSaberMarkupLanguage
         }
 
         public static Dictionary<string, Texture> textureCache = new Dictionary<string, Texture>();
-        internal static Texture FindTextureCached(string name) {
-            if(textureCache.TryGetValue(name, out var texture) && texture != null)
+        internal static Texture FindTextureCached(string name)
+        {
+            if (textureCache.TryGetValue(name, out var texture) && texture != null)
             {
                 return texture;
             }
 
-            foreach(var x in Resources.FindObjectsOfTypeAll<Texture>())
+            foreach (var x in Resources.FindObjectsOfTypeAll<Texture>())
             {
-                if(x.name.Length == 0)
+                if (x.name.Length == 0)
                 {
                     continue;
                 }
 
                 textureCache[x.name] = x;
 
-                if(x.name == name)
+                if (x.name == name)
                 {
                     texture = x;
                 }
