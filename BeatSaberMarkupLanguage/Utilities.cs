@@ -288,23 +288,18 @@ namespace BeatSaberMarkupLanguage
         internal static Sprite FindSpriteCached(string name)
         {
             if (spriteCache.TryGetValue(name, out var sprite) && sprite != null)
-            {
                 return sprite;
-            }
 
             foreach (var x in Resources.FindObjectsOfTypeAll<Sprite>())
             {
                 if (x.name.Length == 0)
-                {
                     continue;
-                }
 
-                spriteCache[x.name] = x;
+                if(!spriteCache.TryGetValue(x.name, out var a) || x == null)
+                    spriteCache[x.name] = x;
 
                 if (x.name == name)
-                {
                     sprite = x;
-                }
             }
 
             return sprite;
@@ -314,23 +309,18 @@ namespace BeatSaberMarkupLanguage
         internal static Texture FindTextureCached(string name)
         {
             if (textureCache.TryGetValue(name, out var texture) && texture != null)
-            {
                 return texture;
-            }
 
             foreach (var x in Resources.FindObjectsOfTypeAll<Texture>())
             {
                 if (x.name.Length == 0)
-                {
                     continue;
-                }
 
-                textureCache[x.name] = x;
+                if(!textureCache.TryGetValue(x.name, out var a) || x == null)
+                    textureCache[x.name] = x;
 
                 if (x.name == name)
-                {
                     texture = x;
-                }
             }
 
             return texture;
