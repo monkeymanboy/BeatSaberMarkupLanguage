@@ -391,8 +391,10 @@ namespace BeatSaberMarkupLanguage
                         {
                             AnimationControllerData controllerData = AnimationController.instance.Register(location, tex, uvs, delays);
                             stateUpdater.controllerData = controllerData;
+                            callback?.Invoke();
                         });
                     });
+                    return;
                 }
             }
             else
