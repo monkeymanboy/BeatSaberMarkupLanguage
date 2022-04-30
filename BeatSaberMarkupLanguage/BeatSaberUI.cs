@@ -18,6 +18,7 @@ using Color = UnityEngine.Color;
 using Font = UnityEngine.Font;
 using Image = UnityEngine.UI.Image;
 using Object = UnityEngine.Object;
+using System.Runtime.CompilerServices;
 
 namespace BeatSaberMarkupLanguage
 {
@@ -54,7 +55,7 @@ namespace BeatSaberMarkupLanguage
             get
             {
                 if (_diContainer == null)
-                    _diContainer = Resources.FindObjectsOfTypeAll<TextSegmentedControl>().FirstOrDefault(x => x.transform.parent.name == "PlayerStatisticsViewController" && x.GetField<DiContainer, TextSegmentedControl>("_container") != null).GetField<DiContainer, TextSegmentedControl>("_container");
+                    _diContainer = Resources.FindObjectsOfTypeAll<TextSegmentedControl>().Where(x => x.transform.parent.name == "PlayerStatisticsViewController" && x.GetField<DiContainer, TextSegmentedControl>("_container") != null).FirstOrDefault().GetField<DiContainer, TextSegmentedControl>("_container");
                 return _diContainer;
             }
         }
@@ -146,7 +147,7 @@ namespace BeatSaberMarkupLanguage
             get
             {
                 if (mainTextFont == null)
-                    mainTextFont = Resources.FindObjectsOfTypeAll<TMP_FontAsset>().FirstOrDefault(t => t.name == "Teko-Medium SDF");
+                    mainTextFont = Resources.FindObjectsOfTypeAll<TMP_FontAsset>().Where(t => t.name == "Teko-Medium SDF").FirstOrDefault();
                 return mainTextFont;
             }
         }
@@ -158,7 +159,7 @@ namespace BeatSaberMarkupLanguage
             get
             {
                 if (mainUIFontMaterial == null)
-                    mainUIFontMaterial = Resources.FindObjectsOfTypeAll<Material>().First(m => m.name == "Teko-Medium SDF Curved Softer");
+                    mainUIFontMaterial = Resources.FindObjectsOfTypeAll<Material>().Where(m => m.name == "Teko-Medium SDF Curved Softer").First();
                 return mainUIFontMaterial;
             }
         }
@@ -359,20 +360,22 @@ namespace BeatSaberMarkupLanguage
             AnimationStateUpdater oldStateUpdater = image.GetComponent<AnimationStateUpdater>();
             if (oldStateUpdater != null)
                 MonoBehaviour.DestroyImmediate(oldStateUpdater);
-            bool isURL = Uri.TryCreate(location, UriKind.Absolute, out Uri uri);
-            if (location.StartsWith("#"))
+
+            if (location.Length > 1 && location[0] == '#')
             {
                 string imgName = location.Substring(1);
-                try
-                {
-                    image.sprite = Resources.FindObjectsOfTypeAll<Sprite>().First(x => x.name == imgName);
-                }
-                catch
+                image.sprite = Utilities.FindSpriteCached(imgName);
+                if(image.sprite == null)
                 {
                     Logger.log.Error($"Could not find Sprite with image name {imgName}");
                 }
+
+                return;
             }
-            else if (IsAnimated(location) || isURL && IsAnimated(uri.LocalPath))
+
+
+            bool isURL = Uri.TryCreate(location, UriKind.Absolute, out Uri uri);
+            if (IsAnimated(location) || isURL && IsAnimated(uri.LocalPath))
             {
                 AnimationStateUpdater stateUpdater = image.gameObject.AddComponent<AnimationStateUpdater>();
                 stateUpdater.image = image;
@@ -387,7 +390,11 @@ namespace BeatSaberMarkupLanguage
                 {
                     Utilities.GetData(location, (byte[] data) =>
                     {
-                        AnimationLoader.Process((location.EndsWith(".gif") || (isURL && uri.LocalPath.EndsWith(".gif"))) ? AnimationType.GIF : AnimationType.APNG, data, (Texture2D tex, Rect[] uvs, float[] delays, int width, int height) =>
+                        AnimationLoader.Process(
+                            (location.EndsWith(".gif", StringComparison.OrdinalIgnoreCase) || 
+                            (isURL && uri.LocalPath.EndsWith(".gif", StringComparison.OrdinalIgnoreCase))) ? AnimationType.GIF : AnimationType.APNG, 
+                            
+                            data, (Texture2D tex, Rect[] uvs, float[] delays, int width, int height) =>
                         {
                             AnimationControllerData controllerData = AnimationController.instance.Register(location, tex, uvs, delays);
                             stateUpdater.controllerData = controllerData;
@@ -478,7 +485,7 @@ namespace BeatSaberMarkupLanguage
         
         private static bool IsAnimated(string str)
         {
-            return str.EndsWith(".gif") || str.EndsWith(".apng");
+            return str.EndsWith(".gif", StringComparison.OrdinalIgnoreCase) || str.EndsWith(".apng", StringComparison.OrdinalIgnoreCase);
         }
 
         #region FlowCoordinator Extensions

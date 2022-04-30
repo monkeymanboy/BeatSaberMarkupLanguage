@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -18,48 +20,40 @@ namespace BeatSaberMarkupLanguage.Animations
             yield return new WaitUntil(() => { return animationInfo.initialized; });
             callback?.Invoke(animationInfo);
         }
-        
-        private static void ProcessingThread(byte[] gifData, AnimationInfo animationInfo)
-        {
-            System.Drawing.Image gifImage = System.Drawing.Image.FromStream(new MemoryStream(gifData));
-            FrameDimension dimension = new FrameDimension(gifImage.FrameDimensionsList[0]);
-            int frameCount = gifImage.GetFrameCount(dimension);
 
-            animationInfo.frameCount = frameCount;
-            animationInfo.initialized = true;
+		private static void ProcessingThread(byte[] gifData, AnimationInfo animationInfo) {
+			System.Drawing.Image gifImage = System.Drawing.Image.FromStream(new MemoryStream(gifData));
+			FrameDimension dimension = new FrameDimension(gifImage.FrameDimensionsList[0]);
+			int frameCount = gifImage.GetFrameCount(dimension);
 
-            int index = 0;
-            int firstDelayValue = -1;
+			animationInfo.frameCount = frameCount;
+			animationInfo.initialized = true;
+			animationInfo.frames = new List<FrameInfo>(frameCount);
 
-            for (int i = 0; i < frameCount; i++)
-            {
-                gifImage.SelectActiveFrame(dimension, i);
-                System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(gifImage.Width, gifImage.Height);
-                System.Drawing.Graphics.FromImage(bitmap).DrawImage(gifImage, System.Drawing.Point.Empty);
-                LockBitmap frame = new LockBitmap(bitmap);
-                frame.LockBits();
-                FrameInfo currentFrame = new FrameInfo(bitmap.Width, bitmap.Height);
-                if (currentFrame.colors == null)
-                    currentFrame.colors = new Color32[frame.Height * frame.Width];
-                for (int x = 0; x < frame.Width; x++)
-                {
-                    for (int y = 0; y < frame.Height; y++)
-                    {
-                        System.Drawing.Color sourceColor = frame.GetPixel(x, y);
-                        currentFrame.colors[(frame.Height - y - 1) * frame.Width + x] = new Color32(sourceColor.R, sourceColor.G, sourceColor.B, sourceColor.A);
-                    }
-                }
+			int firstDelayValue = -1;
 
-                int delayPropertyValue = BitConverter.ToInt32(gifImage.GetPropertyItem(20736).Value, index);
-                if (firstDelayValue == -1)
-                    firstDelayValue = delayPropertyValue;
+			var delays = gifImage.GetPropertyItem(20736).Value;
 
-                currentFrame.delay = delayPropertyValue * 10;
-                animationInfo.frames.Add(currentFrame);
-                index += 4;
+			for(int i = 0; i < frameCount; i++) {
+				gifImage.SelectActiveFrame(dimension, i);
 
-                Thread.Sleep(0);
-            }
-        }
+				using(Bitmap bitmap = new Bitmap(gifImage)) {
+					bitmap.MakeTransparent(System.Drawing.Color.Black);
+					bitmap.RotateFlip(RotateFlipType.Rotate180FlipX);
+
+					BitmapData frame = bitmap.LockBits(new Rectangle(Point.Empty, gifImage.Size), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+					FrameInfo currentFrame = new FrameInfo(frame.Width, frame.Height);
+
+					Marshal.Copy(frame.Scan0, currentFrame.colors, 0, currentFrame.colors.Length);
+
+					int delayPropertyValue = BitConverter.ToInt32(delays, i * 4);
+					if(firstDelayValue == -1)
+						firstDelayValue = delayPropertyValue;
+
+					currentFrame.delay = delayPropertyValue * 10;
+					animationInfo.frames.Add(currentFrame);
+				}
+			}
+		}
     }
 }

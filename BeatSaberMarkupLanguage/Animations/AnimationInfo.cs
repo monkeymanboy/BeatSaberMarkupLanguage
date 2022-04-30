@@ -5,20 +5,20 @@ namespace BeatSaberMarkupLanguage.Animations
 {
     public class AnimationInfo
     {
-        public List<FrameInfo> frames = new List<FrameInfo>();
+        public List<FrameInfo> frames;
         public int frameCount = 0;
         public bool initialized = false;
     }
     public struct FrameInfo
     {
         public int width, height;
-        public Color32[] colors;
+        public byte[] colors;
         public int delay;
-        public FrameInfo(int width, int height)
+        public FrameInfo(int width, int height, int bpp = 4)
         {
             this.width = width;
             this.height = height;
-            colors = new Color32[width * height];
+            colors = new byte[width * height * bpp];
             this.delay = 0;
         }
     }

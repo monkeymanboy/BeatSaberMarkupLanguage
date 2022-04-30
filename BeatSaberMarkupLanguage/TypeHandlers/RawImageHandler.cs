@@ -21,14 +21,12 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 
         public void SetImage(RawImage image, string imagePath)
         {
-            if (imagePath.StartsWith("#"))
+            if (imagePath.Length > 1 && imagePath[0] == '#')
             {
                 string imgName = imagePath.Substring(1);
-                try
-                {
-                    image.texture = Resources.FindObjectsOfTypeAll<Texture>().First(x => x.name == imgName);
-                }
-                catch
+
+                image.texture = Utilities.FindTextureCached(imgName);
+                if(image.texture == null)
                 {
                     Logger.log.Error($"Could not find Texture with image name {imgName}");
                 }

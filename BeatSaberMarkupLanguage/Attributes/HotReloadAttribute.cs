@@ -37,7 +37,7 @@ namespace BeatSaberMarkupLanguage.Attributes
                         for (int i = 0; i < PathMap.Length; i += 2)
                         {
                             if (i + 1 >= PathMap.Length) break;
-                            if (GivenPath.StartsWith(PathMap[i]))
+                            if (GivenPath.StartsWith(PathMap[i], StringComparison.Ordinal))
                             {
                                 _path = PathMap[i + 1] + GivenPath.Substring(PathMap[i].Length);
                                 break;

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
@@ -247,7 +248,7 @@ namespace BeatSaberMarkupLanguage
         {
             try
             {
-                if (location.StartsWith("http://") || location.StartsWith("https://"))
+                if (location.StartsWith("http://", StringComparison.OrdinalIgnoreCase) || location.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
                 {
                     SharedCoroutineStarter.instance.StartCoroutine(GetWebDataCoroutine(location, callback));
                 }
@@ -280,6 +281,49 @@ namespace BeatSaberMarkupLanguage
             {
                 callback?.Invoke(www.downloadHandler.data);
             }
+        }
+
+
+        public static Dictionary<string, Sprite> spriteCache = new Dictionary<string, Sprite>();
+        internal static Sprite FindSpriteCached(string name)
+        {
+            if (spriteCache.TryGetValue(name, out var sprite) && sprite != null)
+                return sprite;
+
+            foreach (var x in Resources.FindObjectsOfTypeAll<Sprite>())
+            {
+                if (x.name.Length == 0)
+                    continue;
+
+                if(!spriteCache.TryGetValue(x.name, out var a) || a == null)
+                    spriteCache[x.name] = x;
+
+                if (x.name == name)
+                    sprite = x;
+            }
+
+            return sprite;
+        }
+
+        public static Dictionary<string, Texture> textureCache = new Dictionary<string, Texture>();
+        internal static Texture FindTextureCached(string name)
+        {
+            if (textureCache.TryGetValue(name, out var texture) && texture != null)
+                return texture;
+
+            foreach (var x in Resources.FindObjectsOfTypeAll<Texture>())
+            {
+                if (x.name.Length == 0)
+                    continue;
+
+                if(!textureCache.TryGetValue(x.name, out var a) || a == null)
+                    textureCache[x.name] = x;
+
+                if (x.name == name)
+                    texture = x;
+            }
+
+            return texture;
         }
     }
 }

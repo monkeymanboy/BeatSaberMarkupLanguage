@@ -12,7 +12,6 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         public RangeValuesTextSlider slider;
         protected TextMeshProUGUI text;
         public bool showButtons = false;
-        private static Sprite roundRect10;
         private Button incButton;
         private Button decButton;
 
@@ -40,10 +39,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             
             if (!showButtons)
             {
-                if (roundRect10 == null)
-                    roundRect10 = Resources.FindObjectsOfTypeAll<Sprite>().First(x => x.name == "RoundRect10");
-
-                slider.image.sprite = roundRect10;
+                slider.image.sprite = Utilities.FindSpriteCached("RoundRect10");
                 GameObject.Destroy(incButton.gameObject);
                 GameObject.Destroy(decButton.gameObject);
                 (slider.transform.Find("BG") as RectTransform).sizeDelta = new Vector2(0, 6);
