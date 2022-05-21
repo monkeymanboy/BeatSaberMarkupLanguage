@@ -40,6 +40,7 @@ namespace BeatSaberMarkupLanguage.Tags
 
             localizedText.enabled = false;
             localizedText.Key = string.Empty;
+            Localization.Instance.RemoveOnLocalizeEvent(localizedText);
 
             return localizedText;
         }
