@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using HMUI;
 using UnityEngine;
 using UnityEngine.UI;
 using static BeatSaberMarkupLanguage.Components.CustomListTableData;
@@ -106,7 +107,7 @@ namespace BeatSaberMarkupLanguage.Settings
             BeatSaberUI.MainFlowCoordinator.PresentFlowCoordinator(flowCoordinator, new Action(delegate{
                 flowCoordinator.ShowInitial();
                 flowCoordinator.isAnimating = false;
-            }));
+            }), ViewController.AnimationDirection.Vertical);
         }
 
     }
