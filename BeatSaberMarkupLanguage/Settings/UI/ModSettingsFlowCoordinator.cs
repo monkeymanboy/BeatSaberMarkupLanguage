@@ -92,7 +92,7 @@ namespace BeatSaberMarkupLanguage.Settings
         private void Cancel()
         {
             if (isPresenting || isAnimating) return;
-            BeatSaberUI.MainFlowCoordinator.DismissFlowCoordinator(this);
+            BeatSaberUI.MainFlowCoordinator.DismissFlowCoordinator(this, null, ViewController.AnimationDirection.Vertical);
             EmitEventToAll("cancel");
         }
 
