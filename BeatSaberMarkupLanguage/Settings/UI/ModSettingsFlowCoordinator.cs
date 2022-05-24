@@ -85,7 +85,7 @@ namespace BeatSaberMarkupLanguage.Settings
         private void Ok()
         {
             EmitEventToAll("apply");
-            Resources.FindObjectsOfTypeAll<MenuTransitionsHelper>().First().RestartGame();
+            FindObjectOfType<MenuTransitionsHelper>().RestartGame();
         }
 
         [UIAction("cancel-click")]
