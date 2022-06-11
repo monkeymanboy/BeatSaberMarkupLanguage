@@ -9,7 +9,7 @@
   ],
   "author": "monkeymanboy",
   "gameVersion": "1.22.1",
-  "version": "1.6.6",
+  "version": "1.6.7",
   "dependsOn": {
     "BSIPA": "^4.2.0"
   },

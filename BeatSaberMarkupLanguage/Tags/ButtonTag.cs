@@ -18,11 +18,14 @@ namespace BeatSaberMarkupLanguage.Tags
         {
             if (buttonPrefab == null)
                 buttonPrefab = Resources.FindObjectsOfTypeAll<Button>().Last(x => (x.name == PrefabButton));
-            Button button = MonoBehaviour.Instantiate(buttonPrefab, parent, false);
+            Button button = Object.Instantiate(buttonPrefab, parent, false);
             button.name = "BSMLButton";
             button.interactable = true;
 
-            ExternalComponents externalComponents = button.gameObject.AddComponent<ExternalComponents>();
+            GameObject gameObject = button.gameObject;
+            gameObject.SetActive(true);
+
+            ExternalComponents externalComponents = gameObject.AddComponent<ExternalComponents>();
             GameObject textObject = button.transform.Find("Content/Text").gameObject;
 
             LocalizedTextMeshProUGUI localizedText = ConfigureLocalizedText(textObject);
@@ -33,9 +36,9 @@ namespace BeatSaberMarkupLanguage.Tags
             textMesh.richText = true;
             externalComponents.components.Add(textMesh);
 
-            GameObject.Destroy(button.transform.Find("Content").GetComponent<LayoutElement>());
+            Object.Destroy(button.transform.Find("Content").GetComponent<LayoutElement>());
 
-            ContentSizeFitter buttonSizeFitter = button.gameObject.AddComponent<ContentSizeFitter>();
+            ContentSizeFitter buttonSizeFitter = gameObject.AddComponent<ContentSizeFitter>();
             buttonSizeFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
             buttonSizeFitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
 
@@ -44,23 +47,23 @@ namespace BeatSaberMarkupLanguage.Tags
                 externalComponents.components.Add(stackLayoutGroup);
 
             /*
-            Image glowImage = button.gameObject.GetComponentsInChildren<Image>(true).Where(x => x.gameObject.name == "Glow").FirstOrDefault();
+            Image glowImage = gameObject.GetComponentsInChildren<Image>(true).Where(x => x.gameObject.name == "Glow").FirstOrDefault();
             if (glowImage != null)
             {
-                Glowable glowable = button.gameObject.AddComponent<Glowable>();
+                Glowable glowable = gameObject.AddComponent<Glowable>();
                 glowable.image = glowImage;
                 glowable.SetGlow("none");
             }
 
-            Image strokeImage = button.gameObject.GetComponentsInChildren<Image>(true).Where(x => x.gameObject.name == "Stroke").FirstOrDefault();
+            Image strokeImage = gameObject.GetComponentsInChildren<Image>(true).Where(x => x.gameObject.name == "Stroke").FirstOrDefault();
             if (strokeImage != null)
             {
-                Strokable strokable = button.gameObject.AddComponent<Strokable>();
+                Strokable strokable = gameObject.AddComponent<Strokable>();
                 strokable.image = strokeImage;
                 strokable.SetType(StrokeType.Regular);
             }*/
 
-            return button.gameObject;
+            return gameObject;
         }
     }
 }
