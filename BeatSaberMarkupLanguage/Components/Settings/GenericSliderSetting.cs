@@ -46,6 +46,11 @@ namespace BeatSaberMarkupLanguage.Components.Settings
                 (slider.transform as RectTransform).sizeDelta = new Vector2(38, 0);
                 (slider.transform.Find("SlidingArea") as RectTransform).sizeDelta = new Vector2(-4, -4);
             }
+            else
+            {
+                incButton.interactable = interactable;
+                decButton.interactable = interactable;
+            }
         }
     }
 }
