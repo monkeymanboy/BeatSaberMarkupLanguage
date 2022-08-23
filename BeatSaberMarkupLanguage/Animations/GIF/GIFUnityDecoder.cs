@@ -43,9 +43,8 @@ namespace BeatSaberMarkupLanguage.Animations
 #pragma warning restore CS0612, CS0618
             animationInfo.frames = new List<FrameInfo>(frameCount);
 
-            int firstDelayValue = -1;
-
             byte[] delays = gifImage.GetPropertyItem(20736).Value;
+            Rectangle rect = new(Point.Empty, gifImage.Size);
 
             for (int i = 0; i < frameCount; i++)
             {
@@ -53,20 +52,14 @@ namespace BeatSaberMarkupLanguage.Animations
 
                 using (Bitmap bitmap = new(gifImage))
                 {
-                    bitmap.MakeTransparent(System.Drawing.Color.Black);
                     bitmap.RotateFlip(RotateFlipType.Rotate180FlipX);
 
-                    BitmapData frame = bitmap.LockBits(new Rectangle(Point.Empty, gifImage.Size), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+                    BitmapData frame = bitmap.LockBits(rect, ImageLockMode.ReadOnly, bitmap.PixelFormat);
                     FrameInfo currentFrame = new(frame.Width, frame.Height);
 
                     Marshal.Copy(frame.Scan0, currentFrame.colors, 0, currentFrame.colors.Length);
 
                     int delayPropertyValue = BitConverter.ToInt32(delays, i * 4);
-                    if (firstDelayValue == -1)
-                    {
-                        firstDelayValue = delayPropertyValue;
-                    }
-
                     currentFrame.delay = delayPropertyValue * 10;
                     animationInfo.frames.Add(currentFrame);
                 }
