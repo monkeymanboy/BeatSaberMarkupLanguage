@@ -9,9 +9,9 @@ using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.ViewControllers
 {
-    internal class WatcherGroup
+    public class WatcherGroup
     {
-        internal interface IHotReloadableController
+        public interface IHotReloadableController
         {
             bool ContentChanged { get; }
             string ContentFilePath { get; }
@@ -21,17 +21,17 @@ namespace BeatSaberMarkupLanguage.ViewControllers
             int GetInstanceID();
         }
 
-        internal FileSystemWatcher Watcher { get; private set; }
+        public FileSystemWatcher Watcher { get; private set; }
 
-        internal string ContentDirectory { get; private set; }
-            
-        internal bool IsReloading { get; private set; }
+        public string ContentDirectory { get; private set; }
+
+        public bool IsReloading { get; private set; }
 
         private readonly WaitForSeconds HotReloadDelay = new WaitForSeconds(.5f);
 
         private readonly Dictionary<int, WeakReference<IHotReloadableController>> BoundControllers = new Dictionary<int, WeakReference<IHotReloadableController>>();
 
-        internal WatcherGroup(string directory)
+        public WatcherGroup(string directory)
         {
             ContentDirectory = directory;
             CreateWatcher();
@@ -116,8 +116,8 @@ namespace BeatSaberMarkupLanguage.ViewControllers
             }
             IsReloading = false;
         }
-            
-        internal bool BindController(IHotReloadableController controller)
+
+        public bool BindController(IHotReloadableController controller)
         {
             if (BoundControllers.ContainsKey(controller.GetInstanceID()))
             {
@@ -135,7 +135,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
             return true;
         }
 
-        internal bool UnbindController(int instanceId)
+        public bool UnbindController(int instanceId)
         {
 #if HRVC_DEBUG
             if (BoundControllers.TryGetValue(instanceId, out WeakReference<IHotReloadableController> controllerRef))
@@ -152,7 +152,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
             return remove;
         }
 
-        internal bool UnbindController(IHotReloadableController controller)
+        public bool UnbindController(IHotReloadableController controller)
         {
             if (controller == null)
             {
