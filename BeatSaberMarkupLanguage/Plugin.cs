@@ -19,7 +19,9 @@ using IPA.Config.Stores;
 using System.IO;
 using Zenject;
 using HMUI;
+using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("BSML.BeatmapEditor", AllInternalsVisible = true)]
 namespace BeatSaberMarkupLanguage
 {
     [Plugin(RuntimeOptions.SingleStartInit)]
