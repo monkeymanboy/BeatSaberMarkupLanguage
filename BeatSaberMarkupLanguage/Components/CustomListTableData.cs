@@ -131,10 +131,8 @@ namespace BeatSaberMarkupLanguage.Components
                     TextMeshProUGUI authorText = tableCell.GetField<TextMeshProUGUI, LevelListTableCell>("_songAuthorText");
                     tableCell.GetField<TextMeshProUGUI, LevelListTableCell>("_songBpmText").gameObject.SetActive(false);
                     tableCell.GetField<TextMeshProUGUI, LevelListTableCell>("_songDurationText").gameObject.SetActive(false);
-                    tableCell.GetField<GameObject, LevelListTableCell>("_promoBackgroundGo").SetActive(false);
                     tableCell.GetField<GameObject, LevelListTableCell>("_promoBadgeGo").SetActive(false);
                     tableCell.GetField<GameObject, LevelListTableCell>("_updatedBadgeGo").SetActive(false);
-                    tableCell.GetField<LayoutWidthLimiter, LevelListTableCell>("_layoutWidthLimiter").limitWidth = false;
                     tableCell.GetField<Image, LevelListTableCell>("_favoritesBadgeImage").gameObject.SetActive(false);
                     tableCell.transform.Find("BpmIcon").gameObject.SetActive(false);
                     if (expandCell)
