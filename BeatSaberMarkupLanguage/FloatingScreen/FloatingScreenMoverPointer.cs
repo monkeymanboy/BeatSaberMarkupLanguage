@@ -44,23 +44,25 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
 
         private bool IsFpfc => _fpfc != null &&_fpfc.enabled;
 
+#pragma warning disable CS0618
         protected virtual void Update()
         {
             VRPointer pointer = _vrPointer;
-            if (pointer?.vrController != null)
-                if (pointer.vrController.triggerValue > 0.9f || Input.GetMouseButton(0))
+            VRController vrController = pointer != null ? pointer.lastSelectedVrController : null;
+
+            if (vrController != null && vrController.triggerValue > 0.9f || Input.GetMouseButton(0))
+            {
+                if (_grabbingController != null) return;
+                if (Physics.Raycast(vrController.position, vrController.forward, out RaycastHit hit, MaxLaserDistance))
                 {
-                    if (_grabbingController != null) return;
-                    if (Physics.Raycast(pointer.vrController.position, pointer.vrController.forward, out RaycastHit hit, MaxLaserDistance))
-                    {
-                        if (hit.transform != _screenHandle) return;
-                        _grabbingController = pointer.vrController;
-                        _grabPos = pointer.vrController.transform.InverseTransformPoint(_floatingScreen.transform.position);
-                        _grabRot = Quaternion.Inverse(pointer.vrController.transform.rotation) * _floatingScreen.transform.rotation;
-                        _floatingScreen.OnHandleGrab(pointer);
-                        OnGrab?.Invoke(_floatingScreen.transform.position, _floatingScreen.transform.rotation);
-                    }
+                    if (hit.transform != _screenHandle) return;
+                    _grabbingController = vrController;
+                    _grabPos = vrController.transform.InverseTransformPoint(_floatingScreen.transform.position);
+                    _grabRot = Quaternion.Inverse(vrController.transform.rotation) * _floatingScreen.transform.rotation;
+                    _floatingScreen.OnHandleGrab(pointer);
+                    OnGrab?.Invoke(_floatingScreen.transform.position, _floatingScreen.transform.rotation);
                 }
+            }
 
             if (_grabbingController == null || !IsFpfc && _grabbingController.triggerValue > 0.9f ||
                 IsFpfc && Input.GetMouseButton(0)) return;
@@ -78,12 +80,13 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
             _screenHandle = null;
             _grabbingController = null;
         }
+#pragma warning restore CS0618
 
         protected virtual void LateUpdate()
         {
             if (_grabbingController != null)
             {
-                float diff = _grabbingController.verticalAxisValue * Time.unscaledDeltaTime;
+                float diff = _grabbingController.thumbstick.y * Time.unscaledDeltaTime;
                 if (_grabPos.magnitude > MinScrollDistance)
                 {
                     _grabPos -= Vector3.forward * diff;
