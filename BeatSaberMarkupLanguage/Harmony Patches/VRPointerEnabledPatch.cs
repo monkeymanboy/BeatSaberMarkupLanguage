@@ -4,7 +4,7 @@ using VRUIControls;
 
 namespace BeatSaberMarkupLanguage.Harmony_Patches
 {
-    [HarmonyPatch(typeof(VRPointer), nameof(VRPointer.OnEnable), MethodType.Normal)]
+    [HarmonyPatch(typeof(VRPointer), nameof(VRPointer.EnabledLastSelectedPointer), MethodType.Normal)]
     internal class VRPointerEnabledPatch
     {
         /*
