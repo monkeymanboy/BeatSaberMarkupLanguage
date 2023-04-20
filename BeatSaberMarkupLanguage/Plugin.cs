@@ -20,6 +20,7 @@ using System.IO;
 using Zenject;
 using HMUI;
 using System.Runtime.CompilerServices;
+using System.Collections.Generic;
 
 [assembly: InternalsVisibleTo("BSML.BeatmapEditor", AllInternalsVisible = true)]
 namespace BeatSaberMarkupLanguage
@@ -27,6 +28,8 @@ namespace BeatSaberMarkupLanguage
     [Plugin(RuntimeOptions.SingleStartInit)]
     public class Plugin
     {
+        private static readonly string[] fontNamesToRemove = { "NotoSansJP-Medium SDF", "NotoSansKR-Medium SDF", "SourceHanSansCN-Bold-SDF-Common-1(2k)", "SourceHanSansCN-Bold-SDF-Common-2(2k)", "SourceHanSansCN-Bold-SDF-Uncommon(2k)" };
+
         public static Config config;
         private static bool hasInited = false;
 
@@ -76,21 +79,20 @@ namespace BeatSaberMarkupLanguage
             FontManager.AsyncLoadSystemFonts()
                 .ContinueWith(_ =>
                 {
-                    if (!FontManager.TryGetTMPFontByFullName("Segoe UI", out TMP_FontAsset fallback))
+                    if (!FontManager.TryGetTMPFontByFullName("Segoe UI", out TMP_FontAsset fallback) &&
+                        !FontManager.TryGetTMPFontByFamily("Arial", out fallback))
                     {
-                        if (!FontManager.TryGetTMPFontByFamily("Arial", out fallback))
-                        {
-                            Logger.log.Warn("Could not find fonts for either Segoe UI or Arial to set up fallbacks");
-                            return;
-                        }
+                        Logger.log.Warn("Could not find fonts for either Segoe UI or Arial to set up fallbacks");
+                        return;
                     }
 
                     IEnumerator SetupFont()
                     {
                         yield return new WaitUntil(() => BeatSaberUI.MainTextFont != null);
                         Logger.log.Debug("Setting up default font fallbacks");
-                        // FontManager doesn't give fixed fonts
-                        //fallback = BeatSaberUI.CreateFixedUIFontClone(fallback);
+                        // remove built-in fallback fonts to avoid inconsistencies between CJK characters
+                        BeatSaberUI.MainTextFont.GetField<List<TMP_FontAsset>, TMP_FontAsset>("fallbackFontAssets").RemoveAll((asset) => fontNamesToRemove.Contains(asset.name));
+                        BeatSaberUI.MainTextFont.fallbackFontAssetTable.RemoveAll((asset) => fontNamesToRemove.Contains(asset.name));
                         BeatSaberUI.MainTextFont.fallbackFontAssetTable.Add(fallback);
                     }
 

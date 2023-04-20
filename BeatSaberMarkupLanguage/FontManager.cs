@@ -1,15 +1,16 @@
 ﻿using BeatSaberMarkupLanguage.OpenType;
+using IPA.Utilities;
 using IPA.Utilities.Async;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using UnityEngine.TextCore;
 
 namespace BeatSaberMarkupLanguage
 {
@@ -380,6 +381,12 @@ namespace BeatSaberMarkupLanguage
                     {
                         if (tmpFont.fallbackFontAssetTable == null)
                             tmpFont.fallbackFontAssetTable = new List<TMP_FontAsset>();
+
+                        // these fallbacks are used for non-latin characters which are more often than not much larger than Teko
+                        FaceInfo faceInfo = fallbackFont.faceInfo;
+                        faceInfo.scale = 0.85f;
+                        fallbackFont.SetProperty(nameof(TMP_FontAsset.faceInfo), faceInfo);
+
                         tmpFont.fallbackFontAssetTable.Add(fallbackFont);
                     }
                     else
@@ -391,7 +398,7 @@ namespace BeatSaberMarkupLanguage
 
                 /*tmpFontCache.Add((font, setupOsFallbacks), tmpFont);
             }*/
-            return tmpFont;
+                        return tmpFont;
         }
     }
 }
