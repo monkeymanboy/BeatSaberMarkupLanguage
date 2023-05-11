@@ -18,7 +18,6 @@ using Color = UnityEngine.Color;
 using Font = UnityEngine.Font;
 using Image = UnityEngine.UI.Image;
 using Object = UnityEngine.Object;
-using System.Runtime.CompilerServices;
 
 namespace BeatSaberMarkupLanguage
 {
@@ -27,65 +26,29 @@ namespace BeatSaberMarkupLanguage
 
     public static class BeatSaberUI
     {
-        private static MainFlowCoordinator _mainFlowCoordinator;
-        public static MainFlowCoordinator MainFlowCoordinator
-        {
-            get
-            {
-                if (_mainFlowCoordinator == null)
-                    _mainFlowCoordinator = Resources.FindObjectsOfTypeAll<MainFlowCoordinator>().First();
-                return _mainFlowCoordinator;
-            }
-        }
+        internal static DiContainer diContainer;
 
-        private static PhysicsRaycasterWithCache _physicsRaycaster;
-        public static PhysicsRaycasterWithCache PhysicsRaycasterWithCache
-        {
-            get
-            {
-                if (_physicsRaycaster == null)
-                    _physicsRaycaster = Resources.FindObjectsOfTypeAll<MainMenuViewController>().First().GetComponent<VRGraphicRaycaster>().GetField<PhysicsRaycasterWithCache, VRGraphicRaycaster>("_physicsRaycaster");
-                return _physicsRaycaster;
-            }
-        }
-
-        private static DiContainer _diContainer;
         public static DiContainer DiContainer
         {
             get
             {
-                if (_diContainer == null)
-                    _diContainer = Resources.FindObjectsOfTypeAll<TextSegmentedControl>().Where(x => x.transform.parent.name == "PlayerStatisticsViewController" && x.GetField<DiContainer, TextSegmentedControl>("_container") != null).FirstOrDefault().GetField<DiContainer, TextSegmentedControl>("_container");
-                return _diContainer;
-            }
-        }
-
-        private static IVRPlatformHelper _platformHelper;
-        private static ScrollView _levelCollectionScrollView;
-        public static IVRPlatformHelper PlatformHelper
-        {
-            get
-            {
-                if (_levelCollectionScrollView == null)
+                if (diContainer == null)
                 {
-                    _levelCollectionScrollView = Resources.FindObjectsOfTypeAll<LevelCollectionTableView>().FirstOrDefault().GetComponentInChildren<ScrollView>();
-                    _platformHelper = _levelCollectionScrollView.GetField<IVRPlatformHelper, ScrollView>("_platformHelper");
+                    Logger.log.Error("Tried getting DiContainer too early!");
                 }
-                return _platformHelper;
+
+                return diContainer;
             }
         }
 
-        private static HoverHintController _hoverHintController;
-        public static HoverHintController HoverHintController
-        {
-            get
-            {
-                if (_hoverHintController == null)
-                    _hoverHintController = Resources.FindObjectsOfTypeAll<HoverHintController>().First();
-                return _hoverHintController;
-            }
-        }
-      
+        public static MainFlowCoordinator MainFlowCoordinator => diContainer.Resolve<MainFlowCoordinator>();
+
+        public static PhysicsRaycasterWithCache PhysicsRaycasterWithCache => diContainer.Resolve<PhysicsRaycasterWithCache>();
+
+        public static IVRPlatformHelper PlatformHelper => DiContainer.Resolve<IVRPlatformHelper>();
+
+        public static HoverHintController HoverHintController => diContainer.Resolve<HoverHintController>();
+
         private static BasicUIAudioManager _basicUIAudioManager;
         public static BasicUIAudioManager BasicUIAudioManager
         {

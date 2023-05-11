@@ -114,6 +114,7 @@ namespace BeatSaberMarkupLanguage
             //SharedCoroutineStarter.instance.StartCoroutine(PresentTest<TestViewController>());
             //SharedCoroutineStarter.instance.StartCoroutine(PresentTest<LocalizationTestViewController>());
             //MenuButtons.MenuButtons.instance.RegisterButton(new MenuButtons.MenuButton("test", () => MenuButtons.MenuButtons.instance.RegisterButton(new MenuButtons.MenuButton("test2",null))));
+            BeatSaberUI.diContainer = diContainer;
             BSMLSettings.instance.Setup();
             MenuButtons.MenuButtons.instance.Setup();
             GameplaySetup.GameplaySetup.instance.Setup();
