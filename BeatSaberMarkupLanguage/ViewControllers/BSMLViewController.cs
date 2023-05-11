@@ -28,8 +28,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
             }
             catch (Exception ex)
             {
-                Logger.log?.Error($"Error Invoking PropertyChanged: {ex.Message}");
-                Logger.log?.Error(ex);
+                Logger.log?.Error($"Error invoking PropertyChanged for property '{propertyName}' on View Controller {name}\n{ex}");
             }
         }
     }
