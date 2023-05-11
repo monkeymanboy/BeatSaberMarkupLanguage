@@ -112,10 +112,10 @@ namespace BeatSaberMarkupLanguage
             //SharedCoroutineStarter.instance.StartCoroutine(PresentTest<TestViewController>());
             //SharedCoroutineStarter.instance.StartCoroutine(PresentTest<LocalizationTestViewController>());
             //MenuButtons.MenuButtons.instance.RegisterButton(new MenuButtons.MenuButton("test", () => MenuButtons.MenuButtons.instance.RegisterButton(new MenuButtons.MenuButton("test2",null))));
-            BeatSaberUI.diContainer = diContainer;
             BSMLSettings.instance.Setup();
             MenuButtons.MenuButtons.instance.Setup();
             GameplaySetup.GameplaySetup.instance.Setup();
+            gameScenesManager.installEarlyBindingsEvent -= OnInstallEarlyBindings;
             gameScenesManager.transitionDidFinishEvent -= MenuLoadFresh;
         }
 
@@ -132,8 +132,15 @@ namespace BeatSaberMarkupLanguage
                 {
                     gameScenesManager = Resources.FindObjectsOfTypeAll<GameScenesManager>().FirstOrDefault();
                 }
+                // installEarlyBindingsEvent is invoked by Zenject's LoadSceneAsync so we get the container as early as possible without using another FindObjectsOfTypeAll
+                gameScenesManager.installEarlyBindingsEvent += OnInstallEarlyBindings;
                 gameScenesManager.transitionDidFinishEvent += MenuLoadFresh;
             }
+        }
+
+        private void OnInstallEarlyBindings(ScenesTransitionSetupDataSO setupData, DiContainer diContainer)
+        {
+            BeatSaberUI.DiContainer = diContainer;
         }
 
         //It's just for testing so don't yell at me

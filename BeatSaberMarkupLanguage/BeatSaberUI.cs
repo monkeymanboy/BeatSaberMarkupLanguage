@@ -26,28 +26,29 @@ namespace BeatSaberMarkupLanguage
 
     public static class BeatSaberUI
     {
-        internal static DiContainer diContainer;
+        private static DiContainer _diContainer;
 
         public static DiContainer DiContainer
         {
             get
             {
-                if (diContainer == null)
+                if (_diContainer == null)
                 {
                     Logger.log.Error("Tried getting DiContainer too early!");
                 }
 
-                return diContainer;
+                return _diContainer;
             }
+            internal set => _diContainer = value;
         }
 
-        public static MainFlowCoordinator MainFlowCoordinator => diContainer.Resolve<MainFlowCoordinator>();
+        public static MainFlowCoordinator MainFlowCoordinator => DiContainer.Resolve<MainFlowCoordinator>();
 
-        public static PhysicsRaycasterWithCache PhysicsRaycasterWithCache => diContainer.Resolve<PhysicsRaycasterWithCache>();
+        public static PhysicsRaycasterWithCache PhysicsRaycasterWithCache => DiContainer.Resolve<PhysicsRaycasterWithCache>();
 
         public static IVRPlatformHelper PlatformHelper => DiContainer.Resolve<IVRPlatformHelper>();
 
-        public static HoverHintController HoverHintController => diContainer.Resolve<HoverHintController>();
+        public static HoverHintController HoverHintController => DiContainer.Resolve<HoverHintController>();
 
         private static BasicUIAudioManager _basicUIAudioManager;
         public static BasicUIAudioManager BasicUIAudioManager
