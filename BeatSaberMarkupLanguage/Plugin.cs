@@ -71,8 +71,6 @@ namespace BeatSaberMarkupLanguage
             });
         }
 
-
-
         [OnStart]
         public void OnStart()
         {
@@ -129,6 +127,7 @@ namespace BeatSaberMarkupLanguage
             {
                 hasInited = false;
                 BSMLParser.instance.MenuSceneLoaded();
+                BeatSaberUI.MainTextFont.boldSpacing = 2.2f; // default bold spacing is rather  w i d e
                 if (gameScenesManager == null)
                 {
                     gameScenesManager = Resources.FindObjectsOfTypeAll<GameScenesManager>().FirstOrDefault();
