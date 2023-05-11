@@ -42,4 +42,21 @@ namespace BeatSaberMarkupLanguage.Harmony_Patches
             return codes;
         }
     }
+
+
+    [HarmonyPatch(typeof(ScrollView), "CheckScrollInput")]
+    class ScrollViewCheckScrollInputPatch
+    {
+        static bool Prefix(ScrollView __instance)
+        {
+            var platformHelper = Traverse.Create(__instance).Field("_platformHelper").GetValue();
+
+            if (platformHelper == null)
+            {
+                // In Mod Settings, _platformHelper is null
+                return false;
+            }
+            return true;
+        }
+    }
 }
