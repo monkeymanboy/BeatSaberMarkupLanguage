@@ -51,7 +51,7 @@ namespace BeatSaberMarkupLanguage
             else if (obj is double doubleValue)
                 return doubleValue.ToString(CultureInfo.InvariantCulture);
             else
-                return obj.ToString();
+                return obj?.ToString();
         }
     }
 }
