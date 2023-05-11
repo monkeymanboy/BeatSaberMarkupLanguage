@@ -53,6 +53,7 @@ namespace BeatSaberMarkupLanguage.Tags
 
             scrollView.SetField("_contentRectTransform", content);
             scrollView.SetField("_viewport", viewport);
+            scrollView.SetField("_platformHelper", BeatSaberUI.PlatformHelper);
 
             (viewport.transform as RectTransform).anchorMin = new Vector2(0f, 0f);
             (viewport.transform as RectTransform).anchorMax = new Vector2(1f, 1f);
