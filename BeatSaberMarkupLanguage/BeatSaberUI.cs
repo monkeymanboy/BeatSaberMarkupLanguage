@@ -382,7 +382,7 @@ namespace BeatSaberMarkupLanguage
 
                     if (scaleOptions.ShouldScale)
                     {
-                        var imageBytes = await Task.Run(() => DownScaleImage(data, scaleOptions)).ConfigureAwait(false);
+                        var imageBytes = await Task.Run(() => DownscaleImage(data, scaleOptions.Width, scaleOptions.Height, scaleOptions.MaintainRatio)).ConfigureAwait(false);
                         _ = UnityMainThreadTaskScheduler.Factory.StartNew(() =>
                         {
                             image.sprite = Utilities.LoadSpriteRaw(imageBytes);
@@ -409,37 +409,47 @@ namespace BeatSaberMarkupLanguage
             public int Width;
             public int Height;
         }
-        
-        private static byte[] DownScaleImage(byte[] data, ScaleOptions options)
+
+        /// <summary>
+        /// Downscale the image in <paramref name="data"/> to the specified size.
+        /// 
+        /// If <paramref name="maintainAspectRatio"/> is true, the image will be scaled to fit into the bounds defined by <paramref name="width"/> × <paramref name="height"/>.
+        /// </summary>
+        /// <param name="data">Byte array containing the image data.</param>
+        /// <param name="width">The maximum width of the scaled image.</param>
+        /// <param name="height">The maximum height of the scaled image.</param>
+        /// <param name="maintainAspectRatio">If true, the image will be scaled while maintaining its aspect ratio.</param>
+        /// <returns>A byte array containing the image data.</returns>
+        public static byte[] DownscaleImage(byte[] data, int width, int height, bool maintainAspectRatio = true)
         {
             try
             {
-                using var memoryStream = new MemoryStream(data);
-                var originalImage = System.Drawing.Image.FromStream(memoryStream);
+                System.Drawing.Image originalImage;
+                using (var readMemoryStream = new MemoryStream(data))
+                {
+                    originalImage = System.Drawing.Image.FromStream(readMemoryStream);
+                }
 
-                if (originalImage.Width + originalImage.Height <= options.Width + options.Height)
+                if (originalImage.Width <= width && originalImage.Height <= height)
                 {
                     return data;
                 }
 
                 Bitmap resizedImage;
-                if (options.MaintainRatio)
+                if (maintainAspectRatio)
                 {
-                    var ratio = (double)originalImage.Width / originalImage.Height;
-                    var scale = options.Width > options.Height ? options.Width : options.Height;
-                    resizedImage = scale * ratio <= originalImage.Width
-                        ? new Bitmap(originalImage, (int) (scale * ratio), scale)
-                        : new Bitmap(originalImage, scale, (int) (scale / ratio));
+                    var scale = Math.Min((double)width / originalImage.Width, (double)height / originalImage.Height);
+                    resizedImage = new Bitmap(originalImage, (int)Math.Round(width * scale), (int)Math.Round(height * scale));
                 }
                 else
                 {
-                    resizedImage = new Bitmap(originalImage, options.Width, options.Height);
+                    resizedImage = new Bitmap(originalImage, width, height);
                 }
 
-                using var anotherMemoryStreamYippee = new MemoryStream();
-                resizedImage.Save(anotherMemoryStreamYippee, originalImage.RawFormat);
+                using var writeMemoryStream = new MemoryStream();
+                resizedImage.Save(writeMemoryStream, originalImage.RawFormat);
 
-                return anotherMemoryStreamYippee.ToArray();
+                return writeMemoryStream.ToArray();
             }
             catch (Exception)
             {
