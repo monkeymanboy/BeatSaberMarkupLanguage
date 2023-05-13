@@ -273,7 +273,7 @@ namespace BeatSaberMarkupLanguage
             UnityWebRequest www = UnityWebRequest.Get(url);
             yield return www.SendWebRequest();
 
-            if (www.isNetworkError || www.isHttpError)
+            if (www.result != UnityWebRequest.Result.Success)
             {
                 Logger.log.Debug($"Error getting data from {url}, Message:{www.error}");
             }
