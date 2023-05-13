@@ -5,13 +5,14 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
 {
     internal class FloatingScreenHandle : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
-        private static Material hoverMaterial = new Material(Shader.Find("Hidden/Internal-DepthNormalsTexture"));
+        private static Material hoverMaterial;
         private Material originalMaterial;
 
         private MeshRenderer renderer;
 
         public void Awake()
         {
+            hoverMaterial = new Material(Shader.Find("Hidden/Internal-DepthNormalsTexture"));
             renderer = GetComponent<MeshRenderer>();
             originalMaterial = renderer.material;
         }
