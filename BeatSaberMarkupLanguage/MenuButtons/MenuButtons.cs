@@ -1,22 +1,15 @@
 ﻿using BeatSaberMarkupLanguage.Attributes;
-using BeatSaberMarkupLanguage.Parser;
 using HMUI;
 using IPA.Utilities;
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.MenuButtons
 {
     public class MenuButtons : PersistentSingleton<MenuButtons>
     {
         private MenuButtonsViewController menuButtonsViewController;
-        private HMUI.Screen leftScreen;
+        private ScreenSystem screenSystem;
 
         [UIValue("buttons")]
         private List<object> buttons = new List<object>();
@@ -24,34 +17,27 @@ namespace BeatSaberMarkupLanguage.MenuButtons
         [UIValue("pin-buttons")]
         internal List<object> pinButtons = new List<object>();
 
-        [UIParams]
-        private BSMLParserParams parserParams;
+        // [UIParams]
+        // private BSMLParserParams parserParams;
 
         internal void Setup()
         {
             menuButtonsViewController = BeatSaberUI.CreateViewController<MenuButtonsViewController>();
             menuButtonsViewController.buttons = buttons;
-            StopAllCoroutines();
-            StartCoroutine(PresentView());
-            /*
-            if (MenuPins.instance.rootObject == null)
+
+            BeatSaberUI.DiContainer.Resolve<MainMenuViewController>().didActivateEvent += ShowView;
+
+            /*if (MenuPins.instance.rootObject == null)
                 MenuPins.instance.Setup();
             else
                 MenuPins.instance.Refresh();*/
         }
-        IEnumerator PresentView()
-        {
-            yield return new WaitForSeconds(0.2f);//Forgive me lord for what I must do
-            yield return new WaitWhile(() => BeatSaberUI.MainFlowCoordinator == null);
-            ShowView(false, false, false);
-            Resources.FindObjectsOfTypeAll<MainMenuViewController>().First().didActivateEvent += ShowView;
-        }
 
         internal void ShowView(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
         {
-            if (leftScreen == null) leftScreen = Resources.FindObjectsOfTypeAll<HMUI.Screen>().Where(x => x.gameObject.name == "LeftScreen").FirstOrDefault();
+            screenSystem = BeatSaberUI.MainFlowCoordinator.GetField<ScreenSystem, FlowCoordinator>("_screenSystem");
 
-            foreach (ModalView modalView in leftScreen.GetComponentsInChildren<ModalView>())
+            foreach (ModalView modalView in screenSystem.leftScreen.GetComponentsInChildren<ModalView>())
             {
                 modalView.OnDisable();
             }
