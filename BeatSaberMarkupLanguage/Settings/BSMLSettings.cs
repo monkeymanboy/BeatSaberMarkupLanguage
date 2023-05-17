@@ -9,6 +9,7 @@ using HMUI;
 using UnityEngine;
 using UnityEngine.UI;
 using static BeatSaberMarkupLanguage.Components.CustomListTableData;
+using BeatSaberMarkupLanguage.Attributes;
 
 namespace BeatSaberMarkupLanguage.Settings
 {
@@ -110,5 +111,20 @@ namespace BeatSaberMarkupLanguage.Settings
             }), ViewController.AnimationDirection.Vertical);
         }
 
+
+        [UIValue("thumbstick_value")]
+        private bool Thumbstick_Value
+        {
+            get => Plugin.config.DisableThumbstickScroll;
+            set
+            {
+                Plugin.config.DisableThumbstickScroll = value;
+            }
+        }
+        [UIAction("set_thumbstick")]
+        private void Set_Thumbstick(bool value)
+        {
+            Thumbstick_Value = value;
+        }
     }
 }
