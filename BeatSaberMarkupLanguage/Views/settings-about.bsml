@@ -9,5 +9,5 @@
 	<horizontal>
 		<text text="---" font-color="#00000000"/>
 	</horizontal>
-	<checkbox-setting value="thumbstick_value" on-change="set_thumbstick" text="Disable thumbstick scrolling in Mod Tabs" hover-hint="Limit scrolling to scrollbars in left menu. Prevents autoscrolling if you have stick drift"/>
+	<checkbox-setting value="thumbstick_value" on-change="set_thumbstick" text="Disable thumbstick scrolling in Mod Tabs" hover-hint="Limit control to scrollbars in left menu. Prevents autoscrolling if you have stick drift"/>
 </settings-container>
