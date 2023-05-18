@@ -11,7 +11,7 @@ namespace BeatSaberMarkupLanguage.Harmony_Patches
     {
         static void Postfix(ScrollView __instance)
         {
-            if (__instance.GetComponentInParent<GameplaySetupViewController>() != null && Plugin.config.DisableThumbstickScroll)
+            if (Plugin.config.DisableThumbstickScroll && __instance.GetComponentInParent<GameplaySetupViewController>() != null)
             {
                 Traverse.Create(__instance).Field("_isHoveredByPointer").SetValue(false);
             }
