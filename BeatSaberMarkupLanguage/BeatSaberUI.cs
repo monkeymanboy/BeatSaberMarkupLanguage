@@ -1,16 +1,14 @@
 ﻿using BeatSaberMarkupLanguage.Animations;
 using HMUI;
-using IPA.Utilities;
+using IPA.Utilities.Async;
 using System;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using IPA.Utilities.Async;
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using VRUIControls;
 using Zenject;
@@ -77,7 +75,7 @@ namespace BeatSaberMarkupLanguage
 
             GameObject go = new GameObject(typeof(T).Name);
             go.AddComponent(canvasTemplate);
-            go.gameObject.AddComponent<VRGraphicRaycaster>().SetField("_physicsRaycaster", PhysicsRaycasterWithCache);
+            DiContainer.InstantiateComponent<VRGraphicRaycaster>(go.gameObject);
             go.gameObject.AddComponent<CanvasGroup>();
             T vc = go.AddComponent<T>();
 
@@ -90,17 +88,11 @@ namespace BeatSaberMarkupLanguage
         }
 
         /// <summary>
-        /// Creates a FlowCoordinator of type T, and marks it to not be destroyed.
+        /// Creates a <see cref="FlowCoordinator"/> of type <typeparamref name="T"/>.
         /// </summary>
         /// <typeparam name="T">The variation of FlowCoordinator you want to create.</typeparam>
-        /// <returns>The newly created FlowCoordinator of type T.</returns>
-        public static T CreateFlowCoordinator<T>() where T : FlowCoordinator
-        {
-            T flow = new GameObject(typeof(T).Name).AddComponent<T>();
-            flow.SetField<FlowCoordinator, BaseInputModule>("_baseInputModule", MainFlowCoordinator.GetField<BaseInputModule, FlowCoordinator>("_baseInputModule"));
-            return flow;
-        }
-
+        /// <returns>The newly created <see cref="FlowCoordinator"/> of type <typeparamref name="T"/>.</returns>
+        public static T CreateFlowCoordinator<T>() where T : FlowCoordinator => DiContainer.InstantiateComponentOnNewGameObject<T>(typeof(T).Name);
 
         private static TMP_FontAsset mainTextFont = null;
         /// <summary>
@@ -281,11 +273,11 @@ namespace BeatSaberMarkupLanguage
         {
             ButtonSpriteSwap swap = _button.GetComponent<ButtonSpriteSwap>();
 
-            swap.SetField("_disabledStateSprite", _normal);
-            swap.SetField("_normalStateSprite", _normal);
-            swap.SetField("_highlightStateSprite", _hover);
+            swap._disabledStateSprite = _normal;
+            swap._normalStateSprite = _normal;
+            swap._highlightStateSprite = _hover;
             //Unneeded?
-            swap.SetField("_pressedStateSprite", _hover);
+            swap._pressedStateSprite = _hover;
         }
         #endregion
 

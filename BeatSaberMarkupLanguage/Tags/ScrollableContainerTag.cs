@@ -2,7 +2,6 @@
 using HMUI;
 using UnityEngine;
 using UnityEngine.UI;
-using IPA.Utilities;
 
 namespace BeatSaberMarkupLanguage.Tags
 {
@@ -62,10 +61,9 @@ namespace BeatSaberMarkupLanguage.Tags
 
             go.AddComponent<Touchable>(); // Required by EventSystemListener
             go.AddComponent<EventSystemListener>(); // Required by ScrollView
-            BSMLScrollableContainer scrollView = go.AddComponent<BSMLScrollableContainer>();
+            BSMLScrollableContainer scrollView = diContainer.InstantiateComponent<BSMLScrollableContainer>(go);
             scrollView.ContentRect = content;
             scrollView.Viewport = viewport;
-            (scrollView as ScrollView).SetField("_platformHelper", BeatSaberUI.PlatformHelper);
 
             contentgo.AddComponent<ExternalComponents>().components.Add(scrollView);
 

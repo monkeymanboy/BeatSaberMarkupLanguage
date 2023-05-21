@@ -1,9 +1,8 @@
-﻿using System;
+﻿using BeatSaberMarkupLanguage.Parser;
+using HMUI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using BeatSaberMarkupLanguage.Parser;
-using HMUI;
-using IPA.Utilities;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -569,9 +568,8 @@ namespace BeatSaberMarkupLanguage.Components
                     kb.DrawCursor();
                 });
 
-                HoverHint _MyHintText = mybutton.gameObject.AddComponent<HoverHint>();
+                HoverHint _MyHintText = BeatSaberUI.DiContainer.InstantiateComponent<HoverHint>(mybutton.gameObject);
                 _MyHintText.text = value;
-                _MyHintText.SetField("_hoverHintController", BeatSaberUI.HoverHintController);
             }
         }
     }

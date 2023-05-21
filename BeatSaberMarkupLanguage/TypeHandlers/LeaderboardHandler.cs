@@ -1,5 +1,4 @@
-﻿using IPA.Utilities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace BeatSaberMarkupLanguage.TypeHandlers
@@ -14,7 +13,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 
         public override Dictionary<string, Action<LeaderboardTableView, string>> Setters => new Dictionary<string, Action<LeaderboardTableView, string>>()
         {
-            {"cellSize", new Action<LeaderboardTableView, string>((component, value) => component.SetField("_rowHeight", Parse.Float(value))) }
+            { "cellSize", new Action<LeaderboardTableView, string>((component, value) => component._rowHeight = Parse.Float(value)) }
         };
     }
 }

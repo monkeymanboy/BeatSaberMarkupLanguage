@@ -1,7 +1,6 @@
 ﻿using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.Components.Settings;
 using HMUI;
-using IPA.Utilities;
 using Polyglot;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,14 +28,11 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
 
         public override GameObject CreateObject(Transform parent)
         {
-            GameObject gameObject = Object.Instantiate(safePrefab, parent, false);
+            GameObject gameObject = diContainer.InstantiatePrefab(safePrefab, parent);
             gameObject.name = "BSMLDropdownList";
             SimpleTextDropdown dropdown = gameObject.GetComponentInChildren<SimpleTextDropdown>();
             dropdown.gameObject.SetActive(false);
             dropdown.name = "Dropdown";
-            dropdown.GetComponentInChildren<VRGraphicRaycaster>(true).SetField("_physicsRaycaster", BeatSaberUI.PhysicsRaycasterWithCache);
-            dropdown.GetComponentInChildren<ModalView>(true).SetField("_container", BeatSaberUI.DiContainer);
-            dropdown.GetComponentInChildren<ScrollView>(true).SetField("_platformHelper", BeatSaberUI.PlatformHelper);
 
             GameObject labelObject = gameObject.transform.Find("Label").gameObject;
             LocalizedTextMeshProUGUI localizedText = ConfigureLocalizedText(labelObject);

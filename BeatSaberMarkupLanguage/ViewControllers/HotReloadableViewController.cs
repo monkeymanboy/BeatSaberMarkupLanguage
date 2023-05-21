@@ -117,7 +117,6 @@ namespace BeatSaberMarkupLanguage.ViewControllers
             didActivate?.Invoke(firstActivation, addedToHierarchy, screenSystemEnabling);
         }
 
-
         protected override void DidDeactivate(bool removedFromHierarchy, bool screenSystemDisabling)
         {
             _content = null;

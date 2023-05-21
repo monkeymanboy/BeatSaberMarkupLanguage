@@ -1,6 +1,4 @@
 ﻿using HMUI;
-using IPA.Utilities;
-using TMPro;
 using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.Components
@@ -10,13 +8,13 @@ namespace BeatSaberMarkupLanguage.Components
         public TextPageScrollView scrollView;
         void OnEnable()
         {
-            scrollView?.SetText(scrollView.GetField<TextMeshProUGUI, TextPageScrollView>("_text").text);
+            scrollView?.SetText(scrollView._text.text);
             scrollView?.RefreshButtons();
         }
 
         void OnRectTransformDimensionsChange()
         {
-            scrollView?.SetText(scrollView.GetField<TextMeshProUGUI, TextPageScrollView>("_text").text);
+            scrollView?.SetText(scrollView._text.text);
             scrollView?.RefreshButtons();
         }
     }

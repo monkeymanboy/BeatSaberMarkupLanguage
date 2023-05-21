@@ -1,6 +1,5 @@
 ﻿using BeatSaberMarkupLanguage.Components;
 using HMUI;
-using IPA.Utilities;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -17,13 +16,12 @@ namespace BeatSaberMarkupLanguage.Tags
         public override GameObject CreateObject(Transform parent)
         {
             if (pageTemplate == null)
-                pageTemplate = Resources.FindObjectsOfTypeAll<ReleaseInfoViewController>().First().GetField<TextPageScrollView, ReleaseInfoViewController>("_textPageScrollView");
-            TextPageScrollView scrollView = Object.Instantiate(pageTemplate, parent);
+                pageTemplate = Resources.FindObjectsOfTypeAll<ReleaseInfoViewController>().First()._textPageScrollView;
+            TextPageScrollView scrollView = diContainer.InstantiatePrefabForComponent<TextPageScrollView>(pageTemplate, parent);
             scrollView.name = "BSMLTextPageScrollView";
             scrollView.enabled = true;
-            (scrollView as ScrollView).SetField("_platformHelper", BeatSaberUI.PlatformHelper);
 
-            TextMeshProUGUI textMesh = scrollView.GetField<TextMeshProUGUI, TextPageScrollView>("_text");
+            TextMeshProUGUI textMesh = scrollView._text;
             textMesh.text = "Default Text";
 
             LocalizableText localizedText = CreateLocalizableText(textMesh.gameObject);

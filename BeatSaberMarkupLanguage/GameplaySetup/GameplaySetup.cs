@@ -1,7 +1,6 @@
 ﻿using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components;
 using HMUI;
-using IPA.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +14,6 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
     {
         public event Action TabsCreatedEvent;
 
-        private static readonly FieldAccessor<LayoutGroup, List<RectTransform>>.Accessor LayoutGroupChildren = FieldAccessor<LayoutGroup, List<RectTransform>>.GetAccessor("m_RectChildren");
         private GameplaySetupViewController gameplaySetupViewController;
         private LayoutGroup layoutGroup;
         private bool listParsed;
@@ -82,7 +80,7 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
 
         private void GameplaySetupDidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
         {
-            LayoutGroupChildren(ref layoutGroup).Clear();
+            layoutGroup.m_RectChildren.Clear();
 
             MenuType menuType;
             switch (BeatSaberUI.MainFlowCoordinator.YoungestChildFlowCoordinatorOrSelf())

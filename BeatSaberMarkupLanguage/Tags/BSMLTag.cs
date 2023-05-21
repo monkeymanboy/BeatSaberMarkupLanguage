@@ -3,11 +3,14 @@ using Polyglot;
 using System;
 using TMPro;
 using UnityEngine;
+using Zenject;
 
 namespace BeatSaberMarkupLanguage.Tags
 {
     public abstract class BSMLTag
     {
+        protected DiContainer diContainer => BeatSaberUI.DiContainer;
+
         public bool isInitialized = false;
         public abstract string[] Aliases { get; }
         public virtual bool AddChildren { get => true; }

@@ -1,26 +1,24 @@
-﻿using HarmonyLib;
-using BeatSaberMarkupLanguage.Animations;
+﻿using BeatSaberMarkupLanguage.Animations;
 using BeatSaberMarkupLanguage.Settings;
-using BeatSaberMarkupLanguage.ViewControllers;
+using HarmonyLib;
+using HMUI;
 using IPA;
+using IPA.Config.Stores;
+using IPA.Utilities;
 using IPA.Utilities.Async;
 using System;
 using System.Collections;
+using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
-using Conf = IPA.Config.Config;
 using UnityEngine.SceneManagement;
-using IPALogger = IPA.Logging.Logger;
-using IPA.Utilities;
-using IPA.Config.Stores;
-using System.IO;
 using Zenject;
-using HMUI;
-using System.Runtime.CompilerServices;
-using System.Collections.Generic;
+using Conf = IPA.Config.Config;
+using IPALogger = IPA.Logging.Logger;
 
 [assembly: InternalsVisibleTo("BSML.BeatmapEditor", AllInternalsVisible = true)]
 namespace BeatSaberMarkupLanguage
@@ -89,7 +87,7 @@ namespace BeatSaberMarkupLanguage
                         yield return new WaitUntil(() => BeatSaberUI.MainTextFont != null);
                         Logger.log.Debug("Setting up default font fallbacks");
                         // remove built-in fallback fonts to avoid inconsistencies between CJK characters
-                        BeatSaberUI.MainTextFont.GetField<List<TMP_FontAsset>, TMP_FontAsset>("fallbackFontAssets").RemoveAll((asset) => fontNamesToRemove.Contains(asset.name));
+                        BeatSaberUI.MainTextFont.fallbackFontAssets.RemoveAll((asset) => fontNamesToRemove.Contains(asset.name));
                         BeatSaberUI.MainTextFont.fallbackFontAssetTable.RemoveAll((asset) => fontNamesToRemove.Contains(asset.name));
                         BeatSaberUI.MainTextFont.fallbackFontAssetTable.Add(fallback);
                     }
@@ -150,7 +148,7 @@ namespace BeatSaberMarkupLanguage
             ViewController testViewController = BeatSaberUI.CreateViewController<T>();
             FloatingScreen.FloatingScreen floatingScreen = FloatingScreen.FloatingScreen.CreateFloatingScreen(new Vector2(400, 200), true, Vector3.zero, Quaternion.identity);
             floatingScreen.SetRootViewController(testViewController, ViewController.AnimationType.None);
-            Resources.FindObjectsOfTypeAll<MainFlowCoordinator>().First().InvokeMethod<object, FlowCoordinator>("PresentViewController", new object[] { testViewController, null, ViewController.AnimationDirection.Horizontal, false });
+            Resources.FindObjectsOfTypeAll<MainFlowCoordinator>().First().PresentViewController(testViewController, null, ViewController.AnimationDirection.Horizontal, false);
         }
 
         [OnExit]

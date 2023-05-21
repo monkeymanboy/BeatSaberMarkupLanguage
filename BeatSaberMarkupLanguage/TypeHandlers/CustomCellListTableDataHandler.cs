@@ -2,7 +2,6 @@
 using BeatSaberMarkupLanguage.Parser;
 using BeatSaberMarkupLanguage.Tags;
 using HMUI;
-using IPA.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -40,7 +39,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
         public override void HandleType(ComponentTypeWithData componentType, BSMLParserParams parserParams)
         {
             CustomCellListTableData tableData = componentType.component as CustomCellListTableData;
-            ScrollView scrollView = tableData.tableView.GetField<ScrollView, TableView>("_scrollView");
+            ScrollView scrollView = tableData.tableView._scrollView;
 
             if (componentType.data.TryGetValue("selectCell", out string selectCell))
             {
@@ -57,7 +56,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 
             if (componentType.data.TryGetValue("listDirection", out string listDirection))
             {
-                tableData.tableView.SetField<TableView, TableType>("_tableType", (TableType)Enum.Parse(typeof(TableType), listDirection));
+                tableData.tableView._tableType = (TableType)Enum.Parse(typeof(TableType), listDirection);
                 scrollViewDirectionField.SetValue(scrollView, Enum.Parse(scrollViewDirectionField.FieldType, listDirection));
                 verticalList = listDirection.ToLower() != "horizontal";
             }
@@ -72,13 +71,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 tableData.clickableCells = Parse.Bool(cellClickable);
 
             if (componentType.data.TryGetValue("alignCenter", out string alignCenter))
-                tableData.tableView.SetField<TableView, bool>("_alignToCenter", Parse.Bool(alignCenter));
-
-            if (componentType.data.TryGetValue("stickScrolling", out string stickScrolling))
-            {
-                if (Parse.Bool(stickScrolling))
-                    scrollView.SetField("_platformHelper", BeatSaberUI.PlatformHelper);
-            }
+                tableData.tableView._alignToCenter = Parse.Bool(alignCenter);
 
             // We can only show the scroll bar for vertical lists
             if (verticalList && componentType.data.TryGetValue("showScrollbar", out string showScrollbar))
@@ -87,14 +80,14 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 {
                     TextPageScrollView textScrollView = UnityEngine.Object.Instantiate(ScrollViewTag.ScrollViewTemplate, componentType.component.transform);
 
-                    Button pageUpButton = textScrollView.GetField<Button, ScrollView>("_pageUpButton");
-                    Button pageDownButton = textScrollView.GetField<Button, ScrollView>("_pageDownButton");
-                    VerticalScrollIndicator verticalScrollIndicator = textScrollView.GetField<VerticalScrollIndicator, ScrollView>("_verticalScrollIndicator");
+                    Button pageUpButton = textScrollView._pageUpButton;
+                    Button pageDownButton = textScrollView._pageDownButton;
+                    VerticalScrollIndicator verticalScrollIndicator = textScrollView._verticalScrollIndicator;
                     RectTransform scrollBar = verticalScrollIndicator.transform.parent as RectTransform;
 
-                    scrollView.SetField("_pageUpButton", pageUpButton);
-                    scrollView.SetField("_pageDownButton", pageDownButton);
-                    scrollView.SetField("_verticalScrollIndicator", verticalScrollIndicator);
+                    scrollView._pageUpButton = pageUpButton;
+                    scrollView._pageDownButton = pageDownButton;
+                    scrollView._verticalScrollIndicator = verticalScrollIndicator;
                     scrollBar.SetParent(componentType.component.transform);
                     GameObject.Destroy(textScrollView.gameObject);
 

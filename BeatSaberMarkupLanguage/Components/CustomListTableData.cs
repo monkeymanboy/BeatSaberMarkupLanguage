@@ -1,11 +1,8 @@
 ﻿using HMUI;
-using IPA.Utilities;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 using LevelPackCell = AnnotatedBeatmapLevelCollectionCell;//This got renamed at a point, but old name is more clear so I'm using that
 
 namespace BeatSaberMarkupLanguage.Components
@@ -65,8 +62,8 @@ namespace BeatSaberMarkupLanguage.Components
 
             }
 
-            //tableCell.SetField("_beatmapCharacteristicImages", new Image[0]);
-            tableCell.SetField("_notOwned", false);
+            //tableCell._beatmapCharacteristicImages = new Image[0];
+            tableCell._notOwned = false;
 
             tableCell.reuseIdentifier = reuseIdentifier;
             return tableCell;
@@ -90,8 +87,8 @@ namespace BeatSaberMarkupLanguage.Components
         public BSMLBoxTableCell InstantiateBoxTableCell(LevelPackCell levelPackTableCell)
         {
             levelPackTableCell = Instantiate(levelPackTableCell);
-            ImageView coverImage = levelPackTableCell.GetField<ImageView, LevelPackCell>("_coverImage");
-            ImageView selectionImage = levelPackTableCell.GetField<ImageView, LevelPackCell>("_selectionImage");
+            ImageView coverImage = levelPackTableCell._coverImage;
+            ImageView selectionImage = levelPackTableCell._selectionImage;
 
             foreach (Transform child in coverImage.transform)
             {
@@ -127,13 +124,13 @@ namespace BeatSaberMarkupLanguage.Components
                 case ListStyle.List:
                     LevelListTableCell tableCell = GetTableCell();
 
-                    TextMeshProUGUI nameText = tableCell.GetField<TextMeshProUGUI, LevelListTableCell>("_songNameText");
-                    TextMeshProUGUI authorText = tableCell.GetField<TextMeshProUGUI, LevelListTableCell>("_songAuthorText");
-                    tableCell.GetField<TextMeshProUGUI, LevelListTableCell>("_songBpmText").gameObject.SetActive(false);
-                    tableCell.GetField<TextMeshProUGUI, LevelListTableCell>("_songDurationText").gameObject.SetActive(false);
-                    tableCell.GetField<GameObject, LevelListTableCell>("_promoBadgeGo").SetActive(false);
-                    tableCell.GetField<GameObject, LevelListTableCell>("_updatedBadgeGo").SetActive(false);
-                    tableCell.GetField<Image, LevelListTableCell>("_favoritesBadgeImage").gameObject.SetActive(false);
+                    TextMeshProUGUI nameText = tableCell._songNameText;
+                    TextMeshProUGUI authorText = tableCell._songAuthorText;
+                    tableCell._songBpmText.gameObject.SetActive(false);
+                    tableCell._songDurationText.gameObject.SetActive(false);
+                    tableCell._promoBadgeGo.SetActive(false);
+                    tableCell._updatedBadgeGo.SetActive(false);
+                    tableCell._favoritesBadgeImage.gameObject.SetActive(false);
                     tableCell.transform.Find("BpmIcon").gameObject.SetActive(false);
                     if (expandCell)
                     {
@@ -143,7 +140,7 @@ namespace BeatSaberMarkupLanguage.Components
 
                     nameText.text = data[idx].text;
                     authorText.text = data[idx].subtext;
-                    tableCell.GetField<Image, LevelListTableCell>("_coverImage").sprite = data[idx].icon == null ? Utilities.LoadSpriteFromTexture(Texture2D.blackTexture) : data[idx].icon;
+                    tableCell._coverImage.sprite = data[idx].icon == null ? Utilities.LoadSpriteFromTexture(Texture2D.blackTexture) : data[idx].icon;
 
                     return tableCell;
                 case ListStyle.Box:
@@ -153,8 +150,8 @@ namespace BeatSaberMarkupLanguage.Components
                     return cell;
                 case ListStyle.Simple:
                     SimpleTextTableCell simpleCell = GetSimpleTextTableCell();
-                    simpleCell.GetField<TextMeshProUGUI, SimpleTextTableCell>("_text").richText = true;
-                    simpleCell.GetField<TextMeshProUGUI, SimpleTextTableCell>("_text").enableWordWrapping = true;
+                    simpleCell._text.richText = true;
+                    simpleCell._text.enableWordWrapping = true;
                     simpleCell.text = data[idx].text;
 
                     return simpleCell;

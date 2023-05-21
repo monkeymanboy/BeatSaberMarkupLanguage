@@ -1,6 +1,5 @@
 ﻿using BeatSaberMarkupLanguage.Harmony_Patches;
 using HMUI;
-using IPA.Utilities;
 using System;
 using System.Linq;
 using UnityEngine;
@@ -112,8 +111,10 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
 
         public static FloatingScreen CreateFloatingScreen(Vector2 screenSize, bool createHandle, Vector3 position, Quaternion rotation, float curvatureRadius = 0f, bool hasBackground = false)
         {
-            FloatingScreen screen = new GameObject("BSMLFloatingScreen", typeof(FloatingScreen), typeof(CanvasScaler), typeof(RectMask2D), typeof(VRGraphicRaycaster), typeof(CurvedCanvasSettings)).GetComponent<FloatingScreen>();
-            screen.GetComponent<VRGraphicRaycaster>().SetField("_physicsRaycaster", BeatSaberUI.PhysicsRaycasterWithCache);
+            GameObject gameObject = new GameObject("BSMLFloatingScreen", typeof(FloatingScreen), typeof(CanvasScaler), typeof(RectMask2D), typeof(VRGraphicRaycaster), typeof(CurvedCanvasSettings));
+            BeatSaberUI.DiContainer.InjectGameObject(gameObject);
+
+            FloatingScreen screen = gameObject.GetComponent<FloatingScreen>();
 
             CurvedCanvasSettings curvedCanvasSettings = screen.GetComponent<CurvedCanvasSettings>();
             curvedCanvasSettings.SetRadius(curvatureRadius);
@@ -235,7 +236,7 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
             handle.GetComponent<MeshRenderer>().enabled = HandleSide != Side.Full;
         }
 
-        public override void OnDestroy()
+        public new void OnDestroy()
         {
             base.OnDestroy();
             VRPointerEnabledPatch.PointerEnabled -= OnPointerCreated;

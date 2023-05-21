@@ -1,6 +1,4 @@
 ﻿using HMUI;
-using IPA.Utilities;
-using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -34,8 +32,8 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 
         public override void Setup()
         {
-            incButton = slider.GetField<Button, RangeValuesTextSlider>("_incButton");
-            decButton = slider.GetField<Button, RangeValuesTextSlider>("_decButton");
+            incButton = slider._incButton;
+            decButton = slider._decButton;
             
             if (!showButtons)
             {

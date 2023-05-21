@@ -1,9 +1,7 @@
 ﻿using HMUI;
-using IPA.Utilities;
 using Polyglot;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.TypeHandlers
@@ -47,9 +45,8 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 
         private void AddHoverHint(RectTransform rectTransform, string text)
         {
-            HoverHint hover = rectTransform.gameObject.AddComponent<HoverHint>();
+            HoverHint hover = BeatSaberUI.DiContainer.InstantiateComponent<HoverHint>(rectTransform.gameObject);
             hover.text = text;
-            hover.SetField("_hoverHintController", BeatSaberUI.HoverHintController);
         }
 
         private void AddHoverHintKey(RectTransform rectTransform, string key)

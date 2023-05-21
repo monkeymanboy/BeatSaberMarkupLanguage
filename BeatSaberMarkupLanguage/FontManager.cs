@@ -1,5 +1,4 @@
 ﻿using BeatSaberMarkupLanguage.OpenType;
-using IPA.Utilities;
 using IPA.Utilities.Async;
 using Microsoft.Win32;
 using System;
@@ -385,7 +384,7 @@ namespace BeatSaberMarkupLanguage
                         // these fallbacks are used for non-latin characters which are more often than not much larger than Teko
                         FaceInfo faceInfo = fallbackFont.faceInfo;
                         faceInfo.scale = 0.85f;
-                        fallbackFont.SetProperty(nameof(TMP_FontAsset.faceInfo), faceInfo);
+                        fallbackFont.faceInfo = faceInfo;
 
                         tmpFont.fallbackFontAssetTable.Add(fallbackFont);
                     }

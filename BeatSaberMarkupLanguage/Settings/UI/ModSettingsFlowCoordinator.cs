@@ -1,12 +1,10 @@
 ﻿using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Settings.UI.ViewControllers;
 using HMUI;
-using IPA.Utilities;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
-using static BeatSaberMarkupLanguage.Components.CustomListTableData;
 
 namespace BeatSaberMarkupLanguage.Settings
 {
@@ -28,7 +26,7 @@ namespace BeatSaberMarkupLanguage.Settings
         {
             if (firstActivation)
             {
-                this.SetField<FlowCoordinator, string>("_title", "Mod Settings");
+                this._title = "Mod Settings";
                 navigationController = BeatSaberUI.CreateViewController<NavigationController>();
                 BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), "BeatSaberMarkupLanguage.Views.settings-buttons.bsml"), navigationController.gameObject, this);
 

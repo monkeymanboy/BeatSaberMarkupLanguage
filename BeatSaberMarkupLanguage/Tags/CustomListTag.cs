@@ -1,6 +1,5 @@
 ﻿using BeatSaberMarkupLanguage.Components;
 using HMUI;
-using IPA.Utilities;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
@@ -31,18 +30,18 @@ namespace BeatSaberMarkupLanguage.Tags
 
             gameObject.AddComponent<ScrollRect>();
             gameObject.AddComponent(canvasTemplate);
-            gameObject.AddComponent<VRGraphicRaycaster>().SetField("_physicsRaycaster", BeatSaberUI.PhysicsRaycasterWithCache);
+            diContainer.InstantiateComponent<VRGraphicRaycaster>(gameObject);
             gameObject.AddComponent<Touchable>();
             gameObject.AddComponent<EventSystemListener>();
-            ScrollView scrollView = gameObject.AddComponent<ScrollView>();
+            ScrollView scrollView = diContainer.InstantiateComponent<ScrollView>(gameObject);
 
             TableView tableView = gameObject.AddComponent<BSMLTableView>();
             CustomCellListTableData tableData = container.gameObject.AddComponent<CustomCellListTableData>();
             tableData.tableView = tableView;
 
-            tableView.SetField<TableView, TableView.CellsGroup[]>("_preallocatedCells", new TableView.CellsGroup[0]);
-            tableView.SetField<TableView, bool>("_isInitialized", false);
-            tableView.SetField("_scrollView", scrollView);
+            tableView._preallocatedCells = new TableView.CellsGroup[0];
+            tableView._isInitialized = false;
+            tableView._scrollView = scrollView;
 
             RectTransform viewport = new GameObject("Viewport").AddComponent<RectTransform>();
             viewport.SetParent(gameObject.GetComponent<RectTransform>(), false);
@@ -52,9 +51,8 @@ namespace BeatSaberMarkupLanguage.Tags
             RectTransform content = new GameObject("Content").AddComponent<RectTransform>();
             content.SetParent(viewport, false);
 
-            scrollView.SetField("_contentRectTransform", content);
-            scrollView.SetField("_viewport", viewport);
-            scrollView.SetField("_platformHelper", BeatSaberUI.PlatformHelper);
+            scrollView._contentRectTransform = content;
+            scrollView._viewport = viewport;
 
             (viewport.transform as RectTransform).anchorMin = new Vector2(0f, 0f);
             (viewport.transform as RectTransform).anchorMax = new Vector2(1f, 1f);

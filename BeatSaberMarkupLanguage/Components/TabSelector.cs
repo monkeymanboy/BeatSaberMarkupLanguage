@@ -98,8 +98,8 @@ namespace BeatSaberMarkupLanguage.Components
                 //textSegmentedControl.SelectCellWithNumber(lastClickedPage == currentPage? lastClickedIndex : -1);
                 /*
                 int selectCellNumber = lastClickedPage == currentPage ? lastClickedIndex : -1;
-                textSegmentedControl.SetField<SegmentedControl, int>("_selectedCellNumber", selectCellNumber);
-                List<SegmentedControlCell> cells = textSegmentedControl.GetField<List<SegmentedControlCell>, SegmentedControl>("_cells");
+                textSegmentedControl._selectedCellNumber = selectCellNumber;
+                List<SegmentedControlCell> cells = textSegmentedControl._cells;
                 for (int i = 0; i < textSegmentedControl.NumberOfCells(); i++)
                 {
                     cells[i].SetSelected(i == selectCellNumber, SelectableCell.TransitionType.Instant, this, ignoreCurrentValue: true);

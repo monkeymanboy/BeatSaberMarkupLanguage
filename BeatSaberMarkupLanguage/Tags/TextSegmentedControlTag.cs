@@ -1,8 +1,6 @@
 ﻿using HMUI;
-using IPA.Utilities;
 using System.Linq;
 using UnityEngine;
-using Zenject;
 
 namespace BeatSaberMarkupLanguage.Tags
 {
@@ -15,10 +13,9 @@ namespace BeatSaberMarkupLanguage.Tags
         public override GameObject CreateObject(Transform parent)
         {
             if (segmentControlTemplate == null)
-                segmentControlTemplate = Resources.FindObjectsOfTypeAll<TextSegmentedControl>().First(x => x.name == "BeatmapDifficultySegmentedControl" && x.GetField<DiContainer, TextSegmentedControl>("_container") != null);
-            TextSegmentedControl textSegmentedControl = Object.Instantiate(segmentControlTemplate, parent, false);
+                segmentControlTemplate = Resources.FindObjectsOfTypeAll<TextSegmentedControl>().First(x => x.name == "BeatmapDifficultySegmentedControl" && x._container != null);
+            TextSegmentedControl textSegmentedControl = diContainer.InstantiatePrefabForComponent<TextSegmentedControl>(segmentControlTemplate, parent);
             textSegmentedControl.name = "BSMLTextSegmentedControl";
-            textSegmentedControl.SetField("_container", segmentControlTemplate.GetField<DiContainer, TextSegmentedControl>("_container"));
             (textSegmentedControl.transform as RectTransform).anchoredPosition = new Vector2(0, 0);
             foreach (Transform transform in textSegmentedControl.transform)
             {

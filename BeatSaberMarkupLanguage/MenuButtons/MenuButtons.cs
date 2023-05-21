@@ -1,6 +1,5 @@
 ﻿using BeatSaberMarkupLanguage.Attributes;
 using HMUI;
-using IPA.Utilities;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -35,14 +34,14 @@ namespace BeatSaberMarkupLanguage.MenuButtons
 
         internal void ShowView(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
         {
-            screenSystem = BeatSaberUI.MainFlowCoordinator.GetField<ScreenSystem, FlowCoordinator>("_screenSystem");
+            screenSystem = BeatSaberUI.MainFlowCoordinator._screenSystem;
 
             foreach (ModalView modalView in screenSystem.leftScreen.GetComponentsInChildren<ModalView>())
             {
                 modalView.OnDisable();
             }
 
-            BeatSaberUI.MainFlowCoordinator.InvokeMethod<object, FlowCoordinator>("SetLeftScreenViewController", menuButtonsViewController, ViewController.AnimationType.None);
+            BeatSaberUI.MainFlowCoordinator.SetLeftScreenViewController(menuButtonsViewController, ViewController.AnimationType.None);
         }
 
         internal void Refresh()

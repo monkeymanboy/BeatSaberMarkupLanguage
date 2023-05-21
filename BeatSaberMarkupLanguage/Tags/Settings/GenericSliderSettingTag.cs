@@ -1,7 +1,6 @@
 ﻿using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.Components.Settings;
 using HMUI;
-using IPA.Utilities;
 using Polyglot;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,7 +29,7 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
             sliderSetting.slider = baseSetting.GetComponentInChildren<CustomFormatRangeValuesSlider>();
             sliderSetting.slider.name = "BSMLSlider";
             sliderSetting.slider.GetComponentInChildren<TextMeshProUGUI>().enableWordWrapping = false;
-            (sliderSetting.slider as TextSlider).SetField("_enableDragging", true);
+            (sliderSetting.slider as TextSlider)._enableDragging = true;
             (sliderSetting.slider.transform as RectTransform).anchorMin = new Vector2(1, 0);
             (sliderSetting.slider.transform as RectTransform).anchorMax = new Vector2(1, 1);
             (sliderSetting.slider.transform as RectTransform).sizeDelta = new Vector2(52, 0);

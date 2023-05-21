@@ -1,15 +1,14 @@
-﻿using IPA.Utilities;
+﻿using BeatSaberMarkupLanguage.Attributes;
+using HMUI;
 using Polyglot;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using HMUI;
 using UnityEngine;
 using UnityEngine.UI;
 using static BeatSaberMarkupLanguage.Components.CustomListTableData;
-using BeatSaberMarkupLanguage.Attributes;
 
 namespace BeatSaberMarkupLanguage.Settings
 {
@@ -83,7 +82,7 @@ namespace BeatSaberMarkupLanguage.Settings
                 optionsViewController = Resources.FindObjectsOfTypeAll<OptionsViewController>().FirstOrDefault();
                 yield return new WaitForFixedUpdate();
             }
-            button = Instantiate(optionsViewController.GetField<Button, OptionsViewController>("_settingsButton"), optionsViewController.transform.Find("Wrapper"));
+            button = Instantiate(optionsViewController._settingsButton, optionsViewController.transform.Find("Wrapper"));
             button.GetComponentInChildren<LocalizedTextMeshProUGUI>().Key = "Mod Settings";
             button.onClick.RemoveAllListeners();
             button.onClick.AddListener(PresentSettings);

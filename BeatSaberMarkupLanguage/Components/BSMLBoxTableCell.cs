@@ -1,5 +1,4 @@
 ﻿using HMUI;
-using System.Threading;
 using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.Components

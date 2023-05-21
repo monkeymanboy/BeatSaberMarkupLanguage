@@ -1,9 +1,6 @@
 ﻿using HMUI;
 using System.Collections.Generic;
-using IPA.Utilities;
 using System.Linq;
-using TMPro;
-using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.Components.Settings
 {
@@ -36,8 +33,8 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 
         public override bool interactable
         {
-            get => dropdown.GetField<Button, DropdownWithTableView>("_button").interactable;
-            set => dropdown.GetField<Button, DropdownWithTableView>("_button").interactable = value;
+            get => dropdown._button.interactable;
+            set => dropdown._button.interactable = value;
         }
 
         public override void Setup()
@@ -87,7 +84,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 
         private void UpdateState()
         {
-            dropdown.GetField<TextMeshProUGUI, SimpleTextDropdown>("_text").text = formatter == null ? Value.ToString() : (formatter.Invoke(Value) as string);
+            dropdown._text.text = formatter == null ? Value.ToString() : (formatter.Invoke(Value) as string);
         }
     }
 }

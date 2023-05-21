@@ -11,7 +11,7 @@
   "gameVersion": "1.29.4_4821066007",
   "version": "1.6.11",
   "dependsOn": {
-    "BSIPA": "^4.2.0"
+    "BSIPA": "^4.3.0"
   },
   "links": {
     "project-home": "https://github.com/monkeymanboy/BeatSaberMarkupLanguage",
