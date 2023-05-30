@@ -9,11 +9,11 @@ namespace BeatSaberMarkupLanguage.Harmony_Patches
     {
         /*
         * The bug in question:
-        * 
+        *
         * VRPointer now get initialized again on GameScene, rendering an old reference for FloatingScreens useless
         * To fix this, we subscribe to an event for when a VRPointer is enabled (which happens when it is being used)
         * and update this reference for the FloatingScreen.
-        * 
+        *
         */
 
         public static event Action<VRPointer> PointerEnabled;

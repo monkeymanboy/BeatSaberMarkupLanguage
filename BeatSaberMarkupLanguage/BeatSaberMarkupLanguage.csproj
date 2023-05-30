@@ -112,6 +112,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="D:\Users\Nicolas\Source\Repos\BeatSaberMarkupLanguage\BeatSaberMarkupLanguage\.editorconfig" />
     <None Include="Directory.Build.props" Condition="Exists('Directory.Build.props')" />
     <None Include="Directory.Build.targets" Condition="Exists('Directory.Build.targets')" />
     <None Include="BeatSaberMarkupLanguage.csproj.user" Condition="Exists('BeatSaberMarkupLanguage.csproj.user')" />
@@ -134,5 +135,17 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.CodeStyle" Version="4.6.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Unity.Analyzers" Version="1.16.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EditorConfigFiles Remove="D:\Users\Nicolas\Source\Repos\BeatSaberMarkupLanguage\BeatSaberMarkupLanguage\.editorconfig" />
   </ItemGroup>
 </Project>

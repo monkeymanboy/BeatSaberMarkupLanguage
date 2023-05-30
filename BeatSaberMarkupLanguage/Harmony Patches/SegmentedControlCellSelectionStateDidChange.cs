@@ -7,12 +7,12 @@ namespace BeatSaberMarkupLanguage.Harmony_Patches
 {
     //todo: try and remove need for this
     //this is needed for tab pages so that when you change pages nothing is selected
-    
+
     [HarmonyPatch(typeof(SegmentedControl), "HandleCellSelectionDidChange",
         new Type[] { typeof(SelectableCell), typeof(SelectableCell.TransitionType), typeof(object) })]
-    class SegmentedControlCellSelectionStateDidChange
+    internal class SegmentedControlCellSelectionStateDidChange
     {
-        static bool Prefix(SelectableCell selectableCell, SelectableCell.TransitionType transitionType, object changeOwner, ref int ____selectedCellNumber, Action<SegmentedControl, int> ___didSelectCellEvent, Dictionary<int, Action<int>> ____callbacks, SegmentedControl __instance)
+        private static bool Prefix(SelectableCell selectableCell, SelectableCell.TransitionType transitionType, object changeOwner, ref int ____selectedCellNumber, Action<SegmentedControl, int> ___didSelectCellEvent, Dictionary<int, Action<int>> ____callbacks, SegmentedControl __instance)
         {
             if (____selectedCellNumber == -1)
             {

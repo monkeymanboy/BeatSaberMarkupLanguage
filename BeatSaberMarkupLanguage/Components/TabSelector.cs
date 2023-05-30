@@ -18,12 +18,13 @@ namespace BeatSaberMarkupLanguage.Components
         private List<Tab> tabs = new List<Tab>();
 
         private int pageCount = -1;
-        public int PageCount {
+        public int PageCount
+        {
             get => pageCount;
             set
             {
                 pageCount = value;
-                if(tabs.Count > 0) Refresh();
+                if (tabs.Count > 0) Refresh();
             }
         }
 
@@ -32,15 +33,12 @@ namespace BeatSaberMarkupLanguage.Components
         private Button leftButton;
         private Button rightButton;
 
-        private int lastClickedPage;
-        private int lastClickedIndex;
-
         private bool shouldRefresh;
 
         public void Setup()
         {
             tabs.Clear();
-            foreach(GameObject gameObject in parserParams.GetObjectsWithTag(tabTag))
+            foreach (GameObject gameObject in parserParams.GetObjectsWithTag(tabTag))
             {
                 Tab tab = gameObject.GetComponent<Tab>();
                 tabs.Add(tab);
@@ -58,8 +56,6 @@ namespace BeatSaberMarkupLanguage.Components
         }
         private void TabSelected(SegmentedControl segmentedControl, int index)
         {
-            lastClickedPage = currentPage;
-            lastClickedIndex = index;
             if (PageCount != -1) index += PageCount * currentPage;
             for (int i = 0; i < tabs.Count; i++)
             {
@@ -86,24 +82,15 @@ namespace BeatSaberMarkupLanguage.Components
             {
                 if (currentPage < 0)
                     currentPage = 0;
-                if(currentPage > (visibleTabs.Count - 1) / pageCount)
+                if (currentPage > (visibleTabs.Count - 1) / pageCount)
                     currentPage = (visibleTabs.Count - 1) / pageCount;
                 SetSegmentedControlTexts(visibleTabs.Skip(PageCount * currentPage).Take(PageCount).ToList());
-                if(leftButton != null)
+                if (leftButton != null)
                     leftButton.interactable = currentPage > 0;
-                if(rightButton != null)
+                if (rightButton != null)
                     rightButton.interactable = currentPage < (visibleTabs.Count - 1) / pageCount;
 
                 TabSelected(null, 0);
-                //textSegmentedControl.SelectCellWithNumber(lastClickedPage == currentPage? lastClickedIndex : -1);
-                /*
-                int selectCellNumber = lastClickedPage == currentPage ? lastClickedIndex : -1;
-                textSegmentedControl._selectedCellNumber = selectCellNumber;
-                List<SegmentedControlCell> cells = textSegmentedControl._cells;
-                for (int i = 0; i < textSegmentedControl.NumberOfCells(); i++)
-                {
-                    cells[i].SetSelected(i == selectCellNumber, SelectableCell.TransitionType.Instant, this, ignoreCurrentValue: true);
-                }*/
             }
         }
         private void SetSegmentedControlTexts(List<Tab> tabs)
@@ -137,7 +124,7 @@ namespace BeatSaberMarkupLanguage.Components
             Refresh();
         }
 
-        void OnEnable()
+        private void OnEnable()
         {
             if (shouldRefresh)
                 Refresh();

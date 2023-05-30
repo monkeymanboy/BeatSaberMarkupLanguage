@@ -61,7 +61,7 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
             icon.sprite = Utilities.EditIcon;
             icon.rectTransform.sizeDelta = new Vector2(4, 4);
             stringSetting.editButton.interactable = true;
-            
+
             (stringSetting.editButton.transform as RectTransform).anchorMin = new Vector2(0, 0);
 
             stringSetting.modalKeyboard = base.CreateObject(gameObject.transform).GetComponent<ModalKeyboard>();

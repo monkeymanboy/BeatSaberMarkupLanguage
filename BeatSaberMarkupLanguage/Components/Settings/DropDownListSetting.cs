@@ -55,14 +55,16 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             this.index = index;
             UpdateState();
             onChange?.Invoke(Value);
+
             if (updateOnChange)
+            {
                 ApplyValue();
+            }
         }
 
         public override void ApplyValue()
         {
-            if (associatedValue != null)
-                associatedValue.SetValue(Value);
+            associatedValue?.SetValue(Value);
         }
 
         public override void ReceiveValue()

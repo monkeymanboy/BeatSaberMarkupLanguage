@@ -6,7 +6,7 @@ using UnityEngine.UI;
 namespace BeatSaberMarkupLanguage.TypeHandlers
 {
     [ComponentHandler(typeof(Image))]
-    class ImageHandler : TypeHandler<Image>
+    internal class ImageHandler : TypeHandler<Image>
     {
         public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
         {

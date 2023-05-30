@@ -14,12 +14,12 @@ namespace BeatSaberMarkupLanguage.Components
             get { return _notifyHost; }
             set
             {
-                if ((object)_notifyHost != null)
+                if (_notifyHost != null)
                 {
                     _notifyHost.PropertyChanged -= NotifyHost_PropertyChanged;
                 }
                 _notifyHost = value;
-                if ((object)_notifyHost != null)
+                if (_notifyHost != null)
                 {
                     _notifyHost.PropertyChanged -= NotifyHost_PropertyChanged;
                     _notifyHost.PropertyChanged += NotifyHost_PropertyChanged;
@@ -35,12 +35,12 @@ namespace BeatSaberMarkupLanguage.Components
                 return;
             }
             PropertyInfo prop = sender.GetType().GetProperty(e.PropertyName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-            Action<object> action = null;
-            if (ActionDict.TryGetValue(e.PropertyName, out action))
+
+            if (ActionDict.TryGetValue(e.PropertyName, out Action<object> action))
                 action?.Invoke(prop.GetValue(sender));
         }
-        
-        private Dictionary<string, Action<object>> ActionDict{ get; set; } = new Dictionary<string, Action<object>>();
+
+        private Dictionary<string, Action<object>> ActionDict { get; set; } = new Dictionary<string, Action<object>>();
 
         public bool AddAction(string propertyName, Action<object> action)
         {
@@ -55,7 +55,7 @@ namespace BeatSaberMarkupLanguage.Components
             return false;
         }
 
-        void OnDestroy()
+        private void OnDestroy()
         {
             Logger.log?.Debug($"NotifyUpdater destroyed.");
             ActionDict.Clear();

@@ -29,12 +29,14 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
             sliderSetting.slider = baseSetting.GetComponentInChildren<CustomFormatRangeValuesSlider>();
             sliderSetting.slider.name = "BSMLSlider";
             sliderSetting.slider.GetComponentInChildren<TextMeshProUGUI>().enableWordWrapping = false;
-            (sliderSetting.slider as TextSlider)._enableDragging = true;
-            (sliderSetting.slider.transform as RectTransform).anchorMin = new Vector2(1, 0);
-            (sliderSetting.slider.transform as RectTransform).anchorMax = new Vector2(1, 1);
-            (sliderSetting.slider.transform as RectTransform).sizeDelta = new Vector2(52, 0);
-            (sliderSetting.slider.transform as RectTransform).pivot = new Vector2(1, 0.5f);
-            (sliderSetting.slider.transform as RectTransform).anchoredPosition = new Vector2(0, 0);
+            sliderSetting.slider._enableDragging = true;
+
+            RectTransform rectTransform = (RectTransform)sliderSetting.slider.transform;
+            rectTransform.anchorMin = new Vector2(1, 0);
+            rectTransform.anchorMax = new Vector2(1, 1);
+            rectTransform.sizeDelta = new Vector2(52, 0);
+            rectTransform.pivot = new Vector2(1, 0.5f);
+            rectTransform.anchoredPosition = new Vector2(0, 0);
 
             GameObject nameText = gameObject.transform.Find("Title").gameObject;
             LocalizedTextMeshProUGUI localizedText = ConfigureLocalizedText(nameText);

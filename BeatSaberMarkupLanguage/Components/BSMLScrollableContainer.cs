@@ -50,14 +50,14 @@ namespace BeatSaberMarkupLanguage.Components
 
 
         private bool maskOverflow = true;
-        public bool MaskOverflow 
+        public bool MaskOverflow
         {
             get => maskOverflow;
-            set 
+            set
             {
                 maskOverflow = value;
                 UpdateViewportMask();
-            } 
+            }
         }
 
         private float contentHeight;
@@ -73,7 +73,7 @@ namespace BeatSaberMarkupLanguage.Components
         public new void Awake()
         {
             _buttonBinder = new ButtonBinder();
-            
+
             RefreshContent();
             RefreshButtons();
             runScrollAnim = false;
@@ -135,13 +135,13 @@ namespace BeatSaberMarkupLanguage.Components
                 PageDownButton.interactable = _destinationPos < contentHeight - (_viewport?.rect.height ?? 0);
         }
 
-        public new void ComputeScrollFocusPosY()
+        public void ComputeScrollFocusPosY()
         {
             ItemForFocussedScrolling[] componentsInChildren = GetComponentsInChildren<ItemForFocussedScrolling>(true);
             _scrollFocusPositions = (from item in componentsInChildren
-                                      select WorldPositionToScrollViewPosition(item.transform.position).y into i
-                                      orderby i
-                                      select i).ToArray<float>();
+                                     select WorldPositionToScrollViewPosition(item.transform.position).y into i
+                                     orderby i
+                                     select i).ToArray();
         }
 
         public new void UpdateVerticalScrollIndicator(float posY)
@@ -152,7 +152,7 @@ namespace BeatSaberMarkupLanguage.Components
             }
         }
 
-        public new void ScrollDown(bool animated)
+        public void ScrollDown(bool animated)
         {
             float dstPosY = contentHeight - _viewport.rect.height;
             ScrollTo(dstPosY, animated);
@@ -198,8 +198,8 @@ namespace BeatSaberMarkupLanguage.Components
                     num -= _pageStepNormalizedSize * scrollPageHeight;
                     break;
                 case ScrollType.FixedCellSize:
-                    num -= _fixedCellSize * (float)(Mathf.RoundToInt(scrollPageHeight / _fixedCellSize) - 1);
-                    num = (float)Mathf.FloorToInt(num / _fixedCellSize) * _fixedCellSize;
+                    num -= _fixedCellSize * (Mathf.RoundToInt(scrollPageHeight / _fixedCellSize) - 1);
+                    num = Mathf.FloorToInt(num / _fixedCellSize) * _fixedCellSize;
                     break;
                 case ScrollType.FocusItems:
                     {
@@ -225,8 +225,8 @@ namespace BeatSaberMarkupLanguage.Components
                     num += _pageStepNormalizedSize * scrollPageHeight;
                     break;
                 case ScrollType.FixedCellSize:
-                    num += _fixedCellSize * (float)(Mathf.RoundToInt(scrollPageHeight / _fixedCellSize) - 1);
-                    num = (float)Mathf.CeilToInt(num / _fixedCellSize) * _fixedCellSize;
+                    num += _fixedCellSize * (Mathf.RoundToInt(scrollPageHeight / _fixedCellSize) - 1);
+                    num = Mathf.CeilToInt(num / _fixedCellSize) * _fixedCellSize;
                     break;
                 case ScrollType.FocusItems:
                     {
@@ -243,7 +243,7 @@ namespace BeatSaberMarkupLanguage.Components
             enabled = true;
         }
 
-        public new void SetDestinationPosY(float value)
+        public void SetDestinationPosY(float value)
         {
             float maxPosition = contentHeight - _viewport.rect.height;
             if (maxPosition < 0 && !AlignBottom) maxPosition = 0f;

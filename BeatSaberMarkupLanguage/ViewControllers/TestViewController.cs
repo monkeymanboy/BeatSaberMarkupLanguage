@@ -1,9 +1,7 @@
-﻿using BeatSaberMarkupLanguage.Attributes;
+﻿using System.Collections.Generic;
+using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components;
-using BeatSaberMarkupLanguage.Notify;
 using HMUI;
-using System.Collections.Generic;
-using System.ComponentModel;
 using TMPro;
 using static BeatSaberMarkupLanguage.Components.CustomListTableData;
 
@@ -69,7 +67,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
             get
             {
                 List<object> list = new List<object>();
-                for(int i = 0; i < 30; i++)
+                for (int i = 0; i < 30; i++)
                 {
                     list.Add(new TestListObject($"item {i}", false));
                 }
@@ -122,7 +120,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
         }
 
         [UIAction("button-click")]
-        void ClickedButton()
+        private void ClickedButton()
         {
             Logger.log.Info("Button - " + title);
         }

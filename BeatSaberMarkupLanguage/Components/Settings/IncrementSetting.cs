@@ -6,7 +6,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
     public class IncrementSetting : IncDecSetting
     {
         private float currentValue;
-        
+
         public bool isInt;
         public float minValue = float.MinValue;
         public float maxValue = float.MaxValue;

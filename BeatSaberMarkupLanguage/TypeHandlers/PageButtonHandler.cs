@@ -1,8 +1,6 @@
-﻿using BeatSaberMarkupLanguage.Components;
-using BeatSaberMarkupLanguage.Parser;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using BeatSaberMarkupLanguage.Components;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -51,7 +49,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                     buttonTransform.localRotation = Quaternion.Euler(0, 0, 90);
                     break;
             }
-            if(layoutElement.preferredHeight == -1) //Establish default dimensions if they weren't changed
+            if (layoutElement.preferredHeight == -1) // Establish default dimensions if they weren't changed
             {
                 layoutElement.preferredHeight = isHorizontal ? 6 : 40;
             }

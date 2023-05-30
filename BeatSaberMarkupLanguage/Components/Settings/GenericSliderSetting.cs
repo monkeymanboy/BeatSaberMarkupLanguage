@@ -13,8 +13,8 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         private Button incButton;
         private Button decButton;
 
-        public override bool interactable 
-        { 
+        public override bool interactable
+        {
             get => slider?.interactable ?? false;
             set
             {
@@ -34,7 +34,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         {
             incButton = slider._incButton;
             decButton = slider._decButton;
-            
+
             if (!showButtons)
             {
                 slider.image.sprite = Utilities.FindSpriteCached("RoundRect10");

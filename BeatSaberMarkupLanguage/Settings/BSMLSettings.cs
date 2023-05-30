@@ -42,7 +42,7 @@ namespace BeatSaberMarkupLanguage.Settings
                 menu.didSetup = false;
 
             StopAllCoroutines();
-            if(button == null)
+            if (button == null)
                 StartCoroutine(AddButtonToMainScreen());
 
             isInitialized = true;
@@ -104,7 +104,8 @@ namespace BeatSaberMarkupLanguage.Settings
             if (flowCoordinator == null)
                 flowCoordinator = BeatSaberUI.CreateFlowCoordinator<ModSettingsFlowCoordinator>();
             flowCoordinator.isAnimating = true;
-            BeatSaberUI.MainFlowCoordinator.PresentFlowCoordinator(flowCoordinator, new Action(delegate{
+            BeatSaberUI.MainFlowCoordinator.PresentFlowCoordinator(flowCoordinator, new Action(() =>
+            {
                 flowCoordinator.ShowInitial();
                 flowCoordinator.isAnimating = false;
             }), ViewController.AnimationDirection.Vertical);
@@ -120,6 +121,7 @@ namespace BeatSaberMarkupLanguage.Settings
                 Plugin.config.DisableThumbstickScroll = value;
             }
         }
+
         [UIAction("set_thumbstick")]
         private void Set_Thumbstick(bool value)
         {

@@ -11,7 +11,7 @@ namespace BeatSaberMarkupLanguage.Animations
             get => _controllerData;
             set
             {
-                if(_controllerData != null)
+                if (_controllerData != null)
                 {
                     OnDisable();
                 }

@@ -7,9 +7,9 @@ namespace BeatSaberMarkupLanguage.Harmony_Patches
     // who just want to set sliders without them scrolling away
 
     [HarmonyPatch(typeof(ScrollView), "HandlePointerDidEnter")]
-    class ScrollViewHandlePointerDidEnterPatch
+    internal class ScrollViewHandlePointerDidEnterPatch
     {
-        static void Postfix(ScrollView __instance)
+        private static void Postfix(ScrollView __instance)
         {
             if (Plugin.config.DisableThumbstickScroll && __instance.GetComponentInParent<GameplaySetupViewController>() != null)
             {

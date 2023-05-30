@@ -8,10 +8,12 @@ namespace BeatSaberMarkupLanguage.MenuButtons
     public class MenuButton : INotifyPropertyChanged
     {
         public virtual Action OnClick { get; protected set; }
-        
+
         private string _text;
+
         [UIValue("text")]
-        public virtual string Text {
+        public virtual string Text
+        {
             get => _text;
             set
             {
@@ -19,9 +21,12 @@ namespace BeatSaberMarkupLanguage.MenuButtons
                 NotifyPropertyChanged();
             }
         }
+
         private string _hoverHint;
+
         [UIValue("hover-hint")]
-        public virtual string HoverHint {
+        public virtual string HoverHint
+        {
             get => _hoverHint;
             set
             {
@@ -29,22 +34,28 @@ namespace BeatSaberMarkupLanguage.MenuButtons
                 NotifyPropertyChanged();
             }
         }
+
         private bool _interactable;
+
         [UIValue("interactable")]
-        public virtual bool Interactable {
+        public virtual bool Interactable
+        {
             get => _interactable;
-            set {
+            set
+            {
                 _interactable = value;
                 NotifyPropertyChanged();
             }
         }
+
         [UIAction("button-click")]
         public void ButtonClicked()
         {
             OnClick?.Invoke();
         }
-        
+
         protected MenuButton() { }
+
         public MenuButton(string text, string hoverHint, Action onClick, bool interactable = true)
         {
             Text = text;

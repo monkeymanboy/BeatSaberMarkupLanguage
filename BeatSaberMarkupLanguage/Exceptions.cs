@@ -25,7 +25,7 @@ namespace BeatSaberMarkupLanguage
         public BSMLResourceException()
         {
         }
-        public BSMLResourceException(Assembly assembly, string resourcePath) 
+        public BSMLResourceException(Assembly assembly, string resourcePath)
             : base($"Error loading resource from assembly '{assembly?.GetName().Name ?? "N/A"}' ({resourcePath ?? "<NULL>"})")
         {
             Assembly = assembly;

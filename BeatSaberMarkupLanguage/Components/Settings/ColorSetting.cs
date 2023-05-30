@@ -69,14 +69,12 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 
         public override void ApplyValue()
         {
-            if (associatedValue != null)
-                associatedValue.SetValue(CurrentColor);
+            associatedValue?.SetValue(CurrentColor);
         }
 
         public override void ReceiveValue()
         {
-            if (associatedValue != null)
-                CurrentColor = (Color)associatedValue.GetValue();
+            CurrentColor = (Color)associatedValue?.GetValue();
         }
     }
 }

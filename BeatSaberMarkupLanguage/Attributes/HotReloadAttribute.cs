@@ -10,11 +10,11 @@ namespace BeatSaberMarkupLanguage.Attributes
     {
         public string GivenPath { get; }
         /// <summary>
-        /// There should always be an even number of elements, where the first is the thing to map from, 
+        /// There should always be an even number of elements, where the first is the thing to map from,
         /// and the second of each pair is the target.
         /// </summary>
         public string[] PathMap { get; set; }
-        
+
         /// <summary>
         /// Can be used to specify the path to the layout file relative to the path of class in which the attribute is being used.
         /// </summary>

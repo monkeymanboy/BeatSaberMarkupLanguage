@@ -1,12 +1,11 @@
-﻿using BeatSaberMarkupLanguage.Parser;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace BeatSaberMarkupLanguage.Components.Settings
 {
     public class ListSetting : IncDecSetting
     {
         private int index;
-        
+
         public List<object> values;
 
         public object Value
@@ -53,8 +52,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 
         public override void ApplyValue()
         {
-            if (associatedValue != null)
-                associatedValue.SetValue(Value);
+            associatedValue?.SetValue(Value);
         }
 
         public override void ReceiveValue()

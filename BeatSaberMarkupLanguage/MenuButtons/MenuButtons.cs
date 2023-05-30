@@ -171,7 +171,7 @@ namespace BeatSaberMarkupLanguage.MenuButtons
             PinButtonText = IsPinned ? "x" : "+";
             PinButtonStrokeColor = IsPinned ? "#34eb55" : "white";
         }
-        
+
         public event PropertyChangedEventHandler PropertyChanged;
         protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {

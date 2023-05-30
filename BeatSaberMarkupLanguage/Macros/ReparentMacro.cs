@@ -30,7 +30,7 @@ namespace BeatSaberMarkupLanguage.Macros
             {
                 if (!parserParams.values.TryGetValue(transformsId, out BSMLValue value))
                     throw new Exception("transform list '" + transformsId + "' not found");
-                foreach(Transform transform in value.GetValue() as List<Transform>)
+                foreach (Transform transform in value.GetValue() as List<Transform>)
                     transform.SetParent(parent.transform, false);
             }
         }

@@ -29,7 +29,7 @@ namespace BeatSaberMarkupLanguage.Macros
                 if (!parserParams.values.TryGetValue(valueId, out BSMLValue value))
                     throw new Exception("value '" + valueId + "' not found");
 
-                bool boolValue = (bool) value.GetValue();
+                bool boolValue = (bool)value.GetValue();
                 if (boolValue != notOperator)
                 {
                     foreach (XmlNode childNode in node.ChildNodes)

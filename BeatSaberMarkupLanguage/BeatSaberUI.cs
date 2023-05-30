@@ -238,7 +238,7 @@ namespace BeatSaberMarkupLanguage
         {
             Polyglot.LocalizedTextMeshProUGUI localizer = _button.GetComponentInChildren<Polyglot.LocalizedTextMeshProUGUI>(true);
             if (localizer != null)
-                GameObject.Destroy(localizer);
+                Object.Destroy(localizer);
 
             TextMeshProUGUI tmpUgui = _button.GetComponentInChildren<TextMeshProUGUI>();
             if (tmpUgui != null)
@@ -290,7 +290,7 @@ namespace BeatSaberMarkupLanguage
         {
             SetImage(image, location, true, new ScaleOptions(), null);
         }
-        
+
         /// <summary>
         /// Sets an image or gif/apng from a resource path
         /// </summary>
@@ -302,7 +302,7 @@ namespace BeatSaberMarkupLanguage
         {
             SetImage(image, location, loadingAnimation, scaleOptions, null);
         }
-        
+
         /// <summary>
         /// Sets an image or gif/apng from a resource path
         /// </summary>
@@ -315,13 +315,13 @@ namespace BeatSaberMarkupLanguage
         {
             AnimationStateUpdater oldStateUpdater = image.GetComponent<AnimationStateUpdater>();
             if (oldStateUpdater != null)
-                MonoBehaviour.DestroyImmediate(oldStateUpdater);
+                Object.DestroyImmediate(oldStateUpdater);
 
             if (location.Length > 1 && location[0] == '#')
             {
                 string imgName = location.Substring(1);
                 image.sprite = Utilities.FindSpriteCached(imgName);
-                if(image.sprite == null)
+                if (image.sprite == null)
                 {
                     Logger.log.Error($"Could not find Sprite with image name {imgName}");
                 }
@@ -335,7 +335,7 @@ namespace BeatSaberMarkupLanguage
             {
                 AnimationStateUpdater stateUpdater = image.gameObject.AddComponent<AnimationStateUpdater>();
                 stateUpdater.image = image;
-                if (loadingAnimation) 
+                if (loadingAnimation)
                     stateUpdater.controllerData = AnimationController.instance.loadingAnimation;
 
                 if (AnimationController.instance.RegisteredAnimations.TryGetValue(location, out AnimationControllerData animControllerData))
@@ -347,9 +347,9 @@ namespace BeatSaberMarkupLanguage
                     Utilities.GetData(location, (byte[] data) =>
                     {
                         AnimationLoader.Process(
-                            (location.EndsWith(".gif", StringComparison.OrdinalIgnoreCase) || 
-                            (isURL && uri.LocalPath.EndsWith(".gif", StringComparison.OrdinalIgnoreCase))) ? AnimationType.GIF : AnimationType.APNG, 
-                            
+                            (location.EndsWith(".gif", StringComparison.OrdinalIgnoreCase) ||
+                            (isURL && uri.LocalPath.EndsWith(".gif", StringComparison.OrdinalIgnoreCase))) ? AnimationType.GIF : AnimationType.APNG,
+
                             data, (Texture2D tex, Rect[] uvs, float[] delays, int width, int height) =>
                         {
                             AnimationControllerData controllerData = AnimationController.instance.Register(location, tex, uvs, delays);
@@ -364,9 +364,9 @@ namespace BeatSaberMarkupLanguage
             {
                 AnimationStateUpdater stateUpdater = image.gameObject.AddComponent<AnimationStateUpdater>();
                 stateUpdater.image = image;
-                if (loadingAnimation) 
+                if (loadingAnimation)
                     stateUpdater.controllerData = AnimationController.instance.loadingAnimation;
-                
+
                 Utilities.GetData(location, async (byte[] data) =>
                 {
                     if (stateUpdater != null)
@@ -393,7 +393,7 @@ namespace BeatSaberMarkupLanguage
             }
             callback?.Invoke();
         }
-        
+
         public struct ScaleOptions
         {
             public bool ShouldScale;
@@ -404,7 +404,7 @@ namespace BeatSaberMarkupLanguage
 
         /// <summary>
         /// Downscale the image in <paramref name="data"/> to the specified size.
-        /// 
+        ///
         /// If <paramref name="maintainAspectRatio"/> is true, the image will be scaled to fit into the bounds defined by <paramref name="width"/> × <paramref name="height"/>.
         /// </summary>
         /// <param name="data">Byte array containing the image data.</param>
@@ -448,7 +448,7 @@ namespace BeatSaberMarkupLanguage
                 return data;
             }
         }
-        
+
         private static bool IsAnimated(string str)
         {
             return str.EndsWith(".gif", StringComparison.OrdinalIgnoreCase) || str.EndsWith(".apng", StringComparison.OrdinalIgnoreCase);

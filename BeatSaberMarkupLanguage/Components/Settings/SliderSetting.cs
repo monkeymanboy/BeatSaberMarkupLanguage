@@ -1,25 +1,24 @@
-﻿using BeatSaberMarkupLanguage.Parser;
+﻿using System;
+using System.Runtime.CompilerServices;
 using HarmonyLib;
 using HMUI;
-using System;
-using System.Collections;
-using System.Runtime.CompilerServices;
 using TMPro;
-using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.Components.Settings
- {
+{
     [HarmonyPatch(typeof(CustomFormatRangeValuesSlider), "TextForValue")]
-    static class ApplyCustomSliderTexts
+    internal static class ApplyCustomSliderTexts
     {
         public static ConditionalWeakTable<RangeValuesTextSlider, SliderSetting> remappers = new ConditionalWeakTable<RangeValuesTextSlider, SliderSetting>();
 
-        static bool Prefix(RangeValuesTextSlider __instance, float value, ref string __result)
+        private static bool Prefix(RangeValuesTextSlider __instance, float value, ref string __result)
         {
-            if(!remappers.TryGetValue(__instance, out var gss))
+            if (!remappers.TryGetValue(__instance, out var sliderSetting))
+            {
                 return true;
-            
-            __result = gss.TextForValue(value);
+            }
+
+            __result = sliderSetting.TextForValue(value);
             return false;
         }
     }
@@ -46,7 +45,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             slider.valueDidChangeEvent += OnChange;
         }
 
-        float lastValue = float.NegativeInfinity;
+        private float lastValue = float.NegativeInfinity;
 
         private void OnChange(TextSlider _, float val)
         {

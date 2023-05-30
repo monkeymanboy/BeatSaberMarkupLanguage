@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
 using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.TypeHandlers
 {
     [ComponentHandler(typeof(RawImage))]
-    class RawImageHandler : TypeHandler<RawImage>
+    internal class RawImageHandler : TypeHandler<RawImage>
     {
         public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
         {
@@ -26,7 +24,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 string imgName = imagePath.Substring(1);
 
                 image.texture = Utilities.FindTextureCached(imgName);
-                if(image.texture == null)
+                if (image.texture == null)
                 {
                     Logger.log.Error($"Could not find Texture with image name {imgName}");
                 }

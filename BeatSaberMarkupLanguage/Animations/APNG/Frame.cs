@@ -15,10 +15,7 @@ namespace BeatSaberMarkupLanguage.Animations
         /// <summary>
         /// The chunk signature.
         /// </summary>
-        public static byte[] Signature = {0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A};
-
-        private List<IDATChunk> idatChunks = new List<IDATChunk>();
-        private List<OtherChunk> otherChunks = new List<OtherChunk>();
+        public static byte[] Signature = { 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A };
 
         /// <summary>
         ///     Gets or Sets the acTL chunk
@@ -38,27 +35,19 @@ namespace BeatSaberMarkupLanguage.Animations
         /// <summary>
         ///     Gets or Sets the other chunks
         /// </summary>
-        internal List<OtherChunk> OtherChunks
-        {
-            get { return otherChunks; }
-            set { otherChunks = value; }
-        }
+        internal List<OtherChunk> OtherChunks { get; set; } = new List<OtherChunk>();
 
         /// <summary>
         ///     Gets or Sets the IDAT chunks
         /// </summary>
-        internal List<IDATChunk> IDATChunks
-        {
-            get { return idatChunks; }
-            set { idatChunks = value; }
-        }
+        internal List<IDATChunk> IDATChunks { get; set; } = new List<IDATChunk>();
 
         /// <summary>
         ///     Add an Chunk to end end of existing list.
         /// </summary>
         internal void AddOtherChunk(OtherChunk chunk)
         {
-            otherChunks.Add(chunk);
+            OtherChunks.Add(chunk);
         }
 
         /// <summary>
@@ -66,7 +55,7 @@ namespace BeatSaberMarkupLanguage.Animations
         /// </summary>
         internal void AddIDATChunk(IDATChunk chunk)
         {
-            idatChunks.Add(chunk);
+            IDATChunks.Add(chunk);
         }
 
         /// <summary>
@@ -86,8 +75,8 @@ namespace BeatSaberMarkupLanguage.Animations
             var ms = new MemoryStream();
             ms.WriteBytes(Signature);
             ms.WriteBytes(ihdrChunk.RawData);
-            otherChunks.ForEach(o => ms.WriteBytes(o.RawData));
-            idatChunks.ForEach(i => ms.WriteBytes(i.RawData));
+            OtherChunks.ForEach(o => ms.WriteBytes(o.RawData));
+            IDATChunks.ForEach(i => ms.WriteBytes(i.RawData));
             ms.WriteBytes(IENDChunk.RawData);
 
             ms.Position = 0;
@@ -121,19 +110,19 @@ namespace BeatSaberMarkupLanguage.Animations
         /// <remarks>Should not be less than 10 ms or animation will not occur.</remarks>
         public int FrameRate
         {
-            get 
+            get
             {
                 int frameRate = fcTLChunk.DelayNumerator;
                 double denominatorOffset = 1000 / fcTLChunk.DelayDenominator;
-                if((int)Math.Round(denominatorOffset) != 1) //If not millisecond based make it so for easier processing
+                if ((int)Math.Round(denominatorOffset) != 1) //If not millisecond based make it so for easier processing
                 {
                     frameRate = (int)(fcTLChunk.DelayNumerator * denominatorOffset);
                 }
 
-                return frameRate; 
+                return frameRate;
             }
-            internal set 
-            { 
+            internal set
+            {
                 //Standardize to milliseconds.
 
                 fcTLChunk.DelayNumerator = (ushort)(value);

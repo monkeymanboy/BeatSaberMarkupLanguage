@@ -107,7 +107,8 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 
 
                 var tableDataValue = contents.GetValue();
-                if (!(tableDataValue is List<CustomCellInfo> tableDataList)) {
+                if (!(tableDataValue is List<CustomCellInfo> tableDataList))
+                {
                     throw new Exception($"Value '{value}' is not a List<CustomCellInfo>, which is required for custom-list");
                 }
 
@@ -124,7 +125,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                     (componentType.component.gameObject.transform as RectTransform).sizeDelta = new Vector2(tableData.cellSize * (componentType.data.TryGetValue("visibleCells", out string hVisibleCells) ? Parse.Float(hVisibleCells) : 4), componentType.data.TryGetValue("listHeight", out string hListHeight) ? Parse.Float(hListHeight) : 40);
                     break;
             }
-            
+
             componentType.component.gameObject.GetComponent<LayoutElement>().preferredHeight = (componentType.component.gameObject.transform as RectTransform).sizeDelta.y;
             componentType.component.gameObject.GetComponent<LayoutElement>().preferredWidth = (componentType.component.gameObject.transform as RectTransform).sizeDelta.x;
 

@@ -9,7 +9,7 @@ namespace BeatSaberMarkupLanguage.Tags
     {
         private GameObject loadingTemplate;
 
-        public override string[] Aliases => new string[] {"loading", "loading-indicator"};
+        public override string[] Aliases => new string[] { "loading", "loading-indicator" };
 
         public override GameObject CreateObject(Transform parent)
         {

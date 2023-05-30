@@ -2,12 +2,8 @@
 #define HRVC_DEBUG
 #endif
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using UnityEngine;
-using HMUI;
 
 namespace BeatSaberMarkupLanguage.ViewControllers
 {
@@ -42,7 +38,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
                 {
                     __Deactivate(false, false, false);
                     for (int i = 0; i < transform.childCount; i++)
-                        GameObject.Destroy(transform.GetChild(i).gameObject);
+                        Destroy(transform.GetChild(i).gameObject);
                     __Activate(false, false);
                 }
                 catch (Exception ex)
@@ -75,7 +71,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
                         {
                             _content = File.ReadAllText(ContentFilePath);
                         }
-                        catch(Exception ex)
+                        catch (Exception ex)
                         {
                             Logger.log?.Warn($"Unable to read file {ContentFilePath} for {name}: {ex.Message}");
                             Logger.log?.Debug(ex);
@@ -113,7 +109,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
             else
                 Logger.log.Error($"Failed to register {this.name}");
 #endif
-            
+
             didActivate?.Invoke(firstActivation, addedToHierarchy, screenSystemEnabling);
         }
 

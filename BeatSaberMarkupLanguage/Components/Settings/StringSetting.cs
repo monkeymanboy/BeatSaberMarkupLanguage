@@ -5,7 +5,7 @@ using UnityEngine.UI;
 namespace BeatSaberMarkupLanguage.Components.Settings
 {
     public class StringSetting : GenericInteractableSetting
-    {   
+    {
         public TextMeshProUGUI text;
         public Button editButton;
 
@@ -32,11 +32,6 @@ namespace BeatSaberMarkupLanguage.Components.Settings
                 currentValue = value;
                 text.text = formatter == null ? value : formatter.Invoke(value) as string;
             }
-        }
-
-        void Update()//TODO: Remove need for this to be called in Update
-        {
-            //boundingBox.sizeDelta = new Vector2(text.textBounds.size.x + 7, 0);
         }
 
         public override void Setup()
@@ -73,8 +68,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 
         public override void ApplyValue()
         {
-            if (associatedValue != null)
-                associatedValue.SetValue(Text);
+            associatedValue?.SetValue(Text);
         }
 
         public override void ReceiveValue()

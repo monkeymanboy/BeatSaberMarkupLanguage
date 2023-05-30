@@ -95,8 +95,8 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         /// <summary>
         /// Sequence number of the animation chunk, starting from 0
         /// </summary>
-        public uint SequenceNumber 
-        { 
+        public uint SequenceNumber
+        {
             get => sequenceNumber;
             internal set
             {
@@ -108,8 +108,8 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         /// <summary>
         /// Width of the following frame
         /// </summary>
-        public uint Width 
-        { 
+        public uint Width
+        {
             get => width;
             internal set
             {
@@ -121,8 +121,8 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         /// <summary>
         /// Height of the following frame
         /// </summary>
-        public uint Height 
-        { 
+        public uint Height
+        {
             get => height;
             internal set
             {
@@ -134,8 +134,8 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         /// <summary>
         /// X position at which to render the following frame
         /// </summary>
-        public uint XOffset 
-        { 
+        public uint XOffset
+        {
             get => xOffset;
             internal set
             {
@@ -147,8 +147,8 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         /// <summary>
         /// Y position at which to render the following frame
         /// </summary>
-        public uint YOffset 
-        { 
+        public uint YOffset
+        {
             get => yOffset;
             internal set
             {
@@ -160,8 +160,8 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         /// <summary>
         /// Frame delay fraction numerator
         /// </summary>
-        public ushort DelayNumerator 
-        { 
+        public ushort DelayNumerator
+        {
             get => delayNumerator;
             internal set
             {
@@ -173,8 +173,8 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         /// <summary>
         /// Frame delay fraction denominator
         /// </summary>
-        public ushort DelayDenominator 
-        { 
+        public ushort DelayDenominator
+        {
             get => delayDenominator;
             internal set
             {
@@ -186,26 +186,26 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         /// <summary>
         /// Type of frame area disposal to be done after rendering this frame
         /// </summary>
-        public DisposeOps DisposeOp 
-        { 
+        public DisposeOps DisposeOp
+        {
             get => disposeOp;
             internal set
             {
                 disposeOp = value;
-                ModifyChunkData(24, new[]{ (byte)value });
+                ModifyChunkData(24, new[] { (byte)value });
             }
         }
 
         /// <summary>
         /// Type of frame area rendering for this frame
         /// </summary>
-        public BlendOps BlendOp 
-        { 
+        public BlendOps BlendOp
+        {
             get => blendOp;
             internal set
             {
                 blendOp = value;
-                ModifyChunkData(25, new[]{ (byte)value });
+                ModifyChunkData(25, new[] { (byte)value });
             }
         }
 

@@ -42,8 +42,8 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         /// Gets or sets the frame sequence number.
         /// </summary>
         /// <value>The sequence number.</value>
-        public uint SequenceNumber 
-        { 
+        public uint SequenceNumber
+        {
             get => this.sequenceNumber;
             internal set
             {
@@ -56,8 +56,8 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         /// Gets or sets the frame data.
         /// </summary>
         /// <value>The frame data.</value>
-        public byte[] FrameData 
-        { 
+        public byte[] FrameData
+        {
             get => this.frameData;
             internal set
             {
@@ -85,7 +85,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
             uint newCrc;
             using (var msCrc = new MemoryStream())
             {
-                msCrc.WriteBytes(new[] {(byte)'I', (byte)'D', (byte)'A', (byte)'T'});
+                msCrc.WriteBytes(new[] { (byte)'I', (byte)'D', (byte)'A', (byte)'T' });
                 msCrc.WriteBytes(FrameData);
 
                 newCrc = CrcHelper.Calculate(msCrc.ToArray());
@@ -94,7 +94,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
             using (var ms = new MemoryStream())
             {
                 ms.WriteUInt32(Helper.ConvertEndian(Length - 4));
-                ms.WriteBytes(new[] {(byte)'I', (byte)'D', (byte)'A', (byte)'T'});
+                ms.WriteBytes(new[] { (byte)'I', (byte)'D', (byte)'A', (byte)'T' });
                 ms.WriteBytes(FrameData);
                 ms.WriteUInt32(Helper.ConvertEndian(newCrc));
                 ms.Position = 0;
@@ -117,7 +117,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
 
             using (var msCrc = new MemoryStream())
             {
-                msCrc.WriteBytes(new[] {(byte)'f', (byte)'d', (byte)'A', (byte)'T'});
+                msCrc.WriteBytes(new[] { (byte)'f', (byte)'d', (byte)'A', (byte)'T' });
                 byte[] seqNum = BitConverter.GetBytes(Helper.ConvertEndian(sequenceNumber));
                 frameData = new byte[seqNum.Length + idatChunk.ChunkData.Length];
                 Buffer.BlockCopy(seqNum, 0, frameData, 0, seqNum.Length);
@@ -130,7 +130,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
             using (var ms = new MemoryStream())
             {
                 ms.WriteUInt32((uint)Helper.ConvertEndian(idatChunk.ChunkData.Length + 4));
-                ms.WriteBytes(new[] {(byte)'f', (byte)'d', (byte)'A', (byte)'T'});
+                ms.WriteBytes(new[] { (byte)'f', (byte)'d', (byte)'A', (byte)'T' });
                 ms.WriteBytes(frameData);
                 ms.WriteUInt32(Helper.ConvertEndian(newCrc));
                 ms.Position = 0;

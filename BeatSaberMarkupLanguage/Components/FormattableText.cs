@@ -24,7 +24,7 @@ namespace BeatSaberMarkupLanguage.Components
             if (data == null)
                 return;
             string val;
-            
+
             object o = data;
             if (TextFormatter != null)
                 val = TextFormatter.Format(TextFormat, o, null);
@@ -80,9 +80,7 @@ namespace BeatSaberMarkupLanguage.Components
 
         protected override void OnDestroy()
         {
-            EventHandler handler = Destroyed;
-            if (handler != null)
-                handler.Invoke(this, null);
+            Destroyed?.Invoke(this, null);
             base.OnDestroy();
         }
 

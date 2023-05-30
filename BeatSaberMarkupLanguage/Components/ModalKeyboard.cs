@@ -6,6 +6,7 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Object = UnityEngine.Object;
 
 namespace BeatSaberMarkupLanguage.Components
 {
@@ -18,7 +19,7 @@ namespace BeatSaberMarkupLanguage.Components
         public BSMLAction onEnter;
         public bool clearOnOpen;
 
-        void OnEnable()
+        private void OnEnable()
         {
             if (associatedValue != null)
                 SetText(associatedValue.GetValue() as string);
@@ -45,17 +46,17 @@ namespace BeatSaberMarkupLanguage.Components
     {
         public List<KEY> keys = new List<KEY>();
 
-        private KEY dummy = new KEY(); // This allows for some lazy programming, since unfound key searches will point to this instead of null. It still logs an error though
+        private readonly KEY dummy = new KEY(); // This allows for some lazy programming, since unfound key searches will point to this instead of null. It still logs an error though
 
-        private bool EnableInputField = true;
+        private readonly bool enableInputField = true;
         private bool Shift = false;
         private bool Caps = false;
-        private RectTransform container;
-        private Vector2 currentposition;
-        private Vector2 baseposition;
+        private readonly RectTransform container;
+        private Vector2 currentPosition;
+        private Vector2 basePosition;
         private float scale = 0.5f; // BUG: Effect of changing this has NOT been tested. assume changing it doesn't work.
-        private float padding = 0.5f;
-        private float buttonwidth = 12f;
+        private readonly float padding = 0.5f;
+        private readonly float buttonWidth = 12f;
 
         public TextMeshProUGUI KeyboardText;
         public event Action<string> EnterPressed;
@@ -70,7 +71,7 @@ namespace BeatSaberMarkupLanguage.Components
 (`~) (1!) (2@) (3#) (4$) (5%) (6^) (7&) (8*) (9() (0)) (-_) (=+) [<--]/15
 [TAB]/15'\t' (qQ) (wW) (eE) (rR) (tT) (yY) (uU) (iI) (oO) (pP) ([{) (]}) (\|)
 [CAPS]/20 (aA) (sS) (dD) (fF) (gG) (hH) (jJ) (kK) (lL) (;:) ('"") [ENTER]/20,22#20A0D0
-[SHIFT]/25 (zZ) (xX) (cC) (vV) (bB) (nN) (mM) (,<) (.>) (/?)  
+[SHIFT]/25 (zZ) (xX) (cC) (vV) (bB) (nN) (mM) (,<) (.>) (/?)
 /23 (!!) (@@) [SPACE]/40' ' (##) (__)";
 
         public const string FKEYROW =
@@ -121,26 +122,21 @@ namespace BeatSaberMarkupLanguage.Components
 
         public void SetValue(string keylabel, string value)
         {
-            bool found = false;
             foreach (KEY key in keys)
             {
                 if (key.name == keylabel)
                 {
-                    found = true;
                     key.value = value;
-                    //key.shifted = value;
                 }
             }
         }
 
         public void SetAction(string keyname, Action<KEY> action)
         {
-            bool found = false;
             foreach (KEY key in keys)
             {
                 if (key.name == keyname)
                 {
-                    found = true;
                     key.keyaction = action;
                 }
             }
@@ -148,7 +144,7 @@ namespace BeatSaberMarkupLanguage.Components
 
         private KEY AddKey(string keylabel, float width = 12, float height = 10, int color = 0xffffff)
         {
-            Vector2 position = currentposition;
+            Vector2 position = currentPosition;
             //position.x += width / 4;
 
             Color co = Color.white;
@@ -173,7 +169,7 @@ namespace BeatSaberMarkupLanguage.Components
         // BUG: Refactor this within a keyboard parser subclass once everything works.
         private void EmitKey(ref float spacing, ref float Width, ref string Label, ref string Key, ref bool space, ref string newvalue, ref float height, ref int color)
         {
-            currentposition.x += spacing;
+            currentPosition.x += spacing;
 
             if (Label != "")
                 AddKey(Label, Width, height, color).Set(newvalue);
@@ -181,7 +177,7 @@ namespace BeatSaberMarkupLanguage.Components
                 AddKey(Key[0].ToString(), Key[1].ToString()).Set(newvalue);
 
             spacing = 0;
-            Width = buttonwidth;
+            Width = buttonWidth;
             height = 10f;
             Label = "";
             Key = "";
@@ -192,7 +188,7 @@ namespace BeatSaberMarkupLanguage.Components
             return;
         }
 
-        private bool ReadFloat(ref String data, ref int Position, ref float result)
+        private bool ReadFloat(ref string data, ref int Position, ref float result)
         {
             if (Position >= data.Length)
                 return false;
@@ -221,7 +217,7 @@ namespace BeatSaberMarkupLanguage.Components
             this.scale = scale;
             bool space = true;
             float spacing = padding;
-            float width = buttonwidth;
+            float width = buttonWidth;
             float height = 10f;
             string Label = "";
             string Key = "";
@@ -238,14 +234,14 @@ namespace BeatSaberMarkupLanguage.Components
                         case '@': // Position key
                             EmitKey(ref spacing, ref width, ref Label, ref Key, ref space, ref newvalue, ref height, ref color);
                             p++;
-                            if (ReadFloat(ref Keyboard, ref p, ref currentposition.x))
+                            if (ReadFloat(ref Keyboard, ref p, ref currentPosition.x))
                             {
-                                baseposition.x = currentposition.x;
+                                basePosition.x = currentPosition.x;
                                 if (p < Keyboard.Length && Keyboard[p] == ',')
                                 {
                                     p++;
-                                    ReadFloat(ref Keyboard, ref p, ref currentposition.y);
-                                    baseposition.y = currentposition.y;
+                                    ReadFloat(ref Keyboard, ref p, ref currentPosition.y);
+                                    basePosition.y = currentPosition.y;
                                 }
                             }
 
@@ -363,10 +359,10 @@ namespace BeatSaberMarkupLanguage.Components
 
         public KEYBOARD(RectTransform container, string DefaultKeyboard = QWERTY, bool EnableInputField = true, float x = 0, float y = 0)
         {
-            this.EnableInputField = EnableInputField;
+            this.enableInputField = EnableInputField;
             this.container = container;
-            baseposition = new Vector2(-50 + x, 23 + y);
-            currentposition = baseposition;
+            basePosition = new Vector2(-50 + x, 23 + y);
+            currentPosition = basePosition;
             //bool addhint = true;
 
             SetButtonType();
@@ -378,14 +374,14 @@ namespace BeatSaberMarkupLanguage.Components
             KeyboardText.alignment = TextAlignmentOptions.Center;
             KeyboardText.enableWordWrapping = false;
             KeyboardText.text = "";
-            KeyboardText.enabled = this.EnableInputField;
+            KeyboardText.enabled = this.enableInputField;
 
             KeyboardCursor = BeatSaberUI.CreateText(container, "|", new Vector2(0, 0));
             KeyboardCursor.fontSize = 6f;
             KeyboardCursor.color = new Color(0.60f, 0.80f, 1);
             KeyboardCursor.alignment = TextAlignmentOptions.Left;
             KeyboardCursor.enableWordWrapping = false;
-            KeyboardCursor.enabled = this.EnableInputField;
+            KeyboardCursor.enabled = this.enableInputField;
 
             DrawCursor(); // BUG: Doesn't handle trailing spaces.. seriously, wtf.
 
@@ -403,8 +399,8 @@ namespace BeatSaberMarkupLanguage.Components
 
         public KEYBOARD NextRow(float adjustx = 0)
         {
-            currentposition.y -= currentposition.x == baseposition.x ? 3 : 6; // Next row on an empty row only results in a half row advance
-            currentposition.x = baseposition.x;
+            currentPosition.y -= currentPosition.x == basePosition.x ? 3 : 6; // Next row on an empty row only results in a half row advance
+            currentPosition.x = basePosition.x;
             return this;
         }
 
@@ -459,7 +455,7 @@ namespace BeatSaberMarkupLanguage.Components
 
         public void DrawCursor()
         {
-            if (!EnableInputField)
+            if (!enableInputField)
                 return;
 
             Vector2 v = KeyboardText.GetPreferredValues(KeyboardText.text + "|");
@@ -498,13 +494,13 @@ namespace BeatSaberMarkupLanguage.Components
                 this.kb = kb;
 
                 name = text;
-                mybutton = Button.Instantiate(kb.BaseButton, kb.container, false);
-                GameObject.Destroy(mybutton.GetComponent<UIKeyboardKey>());
+                mybutton = Object.Instantiate(kb.BaseButton, kb.container, false);
+                Object.Destroy(mybutton.GetComponent<UIKeyboardKey>());
 
                 Polyglot.LocalizedTextMeshProUGUI localizer = mybutton.GetComponentInChildren<Polyglot.LocalizedTextMeshProUGUI>(true);
                 if (localizer != null)
                 {
-                    GameObject.Destroy(localizer);
+                    Object.Destroy(localizer);
                 }
                 ExternalComponents externalComponents = mybutton.gameObject.AddComponent<ExternalComponents>();
                 TextMeshProUGUI textMesh = mybutton.GetComponentInChildren<TextMeshProUGUI>();
@@ -536,7 +532,7 @@ namespace BeatSaberMarkupLanguage.Components
 
                 (mybutton.transform as RectTransform).sizeDelta = new Vector2(width, height);
 
-                kb.currentposition.x += width * kb.scale + kb.padding;
+                kb.currentPosition.x += width * kb.scale + kb.padding;
 
                 mybutton.onClick.RemoveAllListeners();
 

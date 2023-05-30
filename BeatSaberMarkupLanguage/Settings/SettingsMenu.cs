@@ -13,7 +13,7 @@ namespace BeatSaberMarkupLanguage.Settings
         public ViewController viewController;
         public BSMLParserParams parserParams;
         public bool didSetup;
-        
+
         public string resource;
         public object host;
         public Assembly assembly;

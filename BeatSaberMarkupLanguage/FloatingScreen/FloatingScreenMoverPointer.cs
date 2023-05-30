@@ -33,7 +33,7 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
             _realPos = floatingScreen.transform.position;
             _realRot = floatingScreen.transform.rotation;
             _vrPointer = pointer;
-            _fpfc = Resources.FindObjectsOfTypeAll<FirstPersonFlyingController>().FirstOrDefault();    
+            _fpfc = Resources.FindObjectsOfTypeAll<FirstPersonFlyingController>().FirstOrDefault();
         }
 
         public virtual void Init(FloatingScreen floatingScreen)
@@ -42,7 +42,7 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
             Init(floatingScreen, vrPointer);
         }
 
-        private bool IsFpfc => _fpfc != null &&_fpfc.enabled;
+        private bool IsFpfc => _fpfc != null && _fpfc.enabled;
 
 #pragma warning disable CS0618
         protected virtual void Update()
@@ -100,11 +100,11 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
             }
             else return;
 
-            
+
             _floatingScreen.transform.position = Vector3.Lerp(_floatingScreen.transform.position, _realPos, 10 * Time.unscaledDeltaTime);
 
             _floatingScreen.transform.rotation = Quaternion.Slerp(_floatingScreen.transform.rotation, _realRot, 5 * Time.unscaledDeltaTime);
-              
+
         }
     }
 }

@@ -16,10 +16,10 @@ namespace BeatSaberMarkupLanguage.Animations
         public Sprite[] sprites;
         public bool IsPlaying { get; set; } = true;
         public Material animMaterial;
-        private bool _isDelayConsistent = true;
+        private readonly bool _isDelayConsistent = true;
 
         public List<Image> activeImages = new List<Image>();
-        
+
         public AnimationControllerData(Texture2D tex, Rect[] uvs, float[] delays)
         {
             sprites = new Sprite[uvs.Length];

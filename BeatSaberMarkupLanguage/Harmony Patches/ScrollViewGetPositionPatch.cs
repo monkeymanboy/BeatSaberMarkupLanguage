@@ -7,20 +7,20 @@ using System.Reflection.Emit;
 namespace BeatSaberMarkupLanguage.Harmony_Patches
 {
     [HarmonyPatch(typeof(ScrollView), nameof(ScrollView.position), MethodType.Getter)]
-    class ScrollViewGetPositionPatch
+    internal class ScrollViewGetPositionPatch
     {
         /*
          * The bug in question:
-         * 
+         *
          * ScrollView has a "position" property, which is used in TableView.GetVisibleCellsIdRange.
          * The property in question interrogates the anchored X position of the transform.
-         * 
+         *
          * The problem comes from the fact that, in a horizontal list, the anchored X position is often negative,
          * and TableView.GetVisibleCellsIdRange expects positive numbers only, so the returned range is (0, 0).
-         * 
+         *
          * So to fix this, we need to simply invert the "position" property on horizontal lists.
          */
-        static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> original)
+        private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> original)
         {
             var codes = original.ToList();
             for (int i = 0; i < codes.Count; i++)

@@ -6,13 +6,14 @@ namespace BeatSaberMarkupLanguage.Components
     internal class TextPageScrollViewRefresher : MonoBehaviour
     {
         public TextPageScrollView scrollView;
-        void OnEnable()
+
+        private void OnEnable()
         {
             scrollView?.SetText(scrollView._text.text);
             scrollView?.RefreshButtons();
         }
 
-        void OnRectTransformDimensionsChange()
+        private void OnRectTransformDimensionsChange()
         {
             scrollView?.SetText(scrollView._text.text);
             scrollView?.RefreshButtons();

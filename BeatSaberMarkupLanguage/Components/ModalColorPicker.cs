@@ -29,16 +29,16 @@ namespace BeatSaberMarkupLanguage.Components
             set
             {
                 _currentColor = value;
-                if(rgbPanel != null)
+                if (rgbPanel != null)
                     rgbPanel.color = _currentColor;
-                if(hsvPanel != null && hsvPanel.color != _currentColor) //If you're wondering why we check this for hsv it's so that if color is one where changing hue has no effect it won't lock up the hue slider
+                if (hsvPanel != null && hsvPanel.color != _currentColor) //If you're wondering why we check this for hsv it's so that if color is one where changing hue has no effect it won't lock up the hue slider
                     hsvPanel.color = _currentColor;
-                if(colorImage != null)
+                if (colorImage != null)
                     colorImage.color = _currentColor;
             }
         }
 
-        void OnEnable()
+        private void OnEnable()
         {
             if (associatedValue != null)
                 CurrentColor = (Color)associatedValue.GetValue();

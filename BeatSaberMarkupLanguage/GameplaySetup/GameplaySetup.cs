@@ -82,24 +82,18 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
         {
             layoutGroup.m_RectChildren.Clear();
 
-            MenuType menuType;
-            switch (BeatSaberUI.MainFlowCoordinator.YoungestChildFlowCoordinatorOrSelf())
+            var menuType = BeatSaberUI.MainFlowCoordinator.YoungestChildFlowCoordinatorOrSelf() switch
             {
-                case CampaignFlowCoordinator _:
-                    menuType = MenuType.Campaign;
-                    break;
-                case SinglePlayerLevelSelectionFlowCoordinator _:
-                    menuType = MenuType.Solo;
-                    break;
-                case GameServerLobbyFlowCoordinator _:
-                    menuType = MenuType.Online;
-                    break;
-                default:
-                    menuType = MenuType.Custom;
-                    break;
-            }
+                CampaignFlowCoordinator _ => MenuType.Campaign,
+                SinglePlayerLevelSelectionFlowCoordinator _ => MenuType.Solo,
+                GameServerLobbyFlowCoordinator _ => MenuType.Online,
+                _ => MenuType.Custom,
+            };
+
             foreach (GameplaySetupMenu menu in menus)
+            {
                 menu.SetVisible(menu.IsMenuType(menuType));
+            }
 
             TabsCreatedEvent?.Invoke();
         }
@@ -182,7 +176,7 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
 
                 tableCell.reuseIdentifier = ReuseIdentifier;
                 BSMLParser.instance.Parse(
-                BeatSaberMarkupLanguage.Utilities.GetResourceContent(
+                Utilities.GetResourceContent(
                     Assembly.GetExecutingAssembly(),
                     "BeatSaberMarkupLanguage.Views.gameplay-setup-cell.bsml"),
                 tableCell.gameObject,

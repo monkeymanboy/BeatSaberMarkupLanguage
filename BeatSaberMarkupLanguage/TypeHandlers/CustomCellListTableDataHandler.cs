@@ -9,6 +9,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using static BeatSaberMarkupLanguage.BSMLParser;
 using static HMUI.TableView;
+using Object = UnityEngine.Object;
 
 namespace BeatSaberMarkupLanguage.TypeHandlers
 {
@@ -65,7 +66,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 tableData.cellSize = Parse.Float(cellSize);
 
             if (componentType.data.TryGetValue("cellTemplate", out string cellTemplate))
-                tableData.cellTemplate = "<bg>"+cellTemplate+"</bg>";
+                tableData.cellTemplate = $"<bg>{cellTemplate}</bg>";
 
             if (componentType.data.TryGetValue("cellClickable", out string cellClickable))
                 tableData.clickableCells = Parse.Bool(cellClickable);
@@ -78,7 +79,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             {
                 if (Parse.Bool(showScrollbar))
                 {
-                    TextPageScrollView textScrollView = UnityEngine.Object.Instantiate(ScrollViewTag.ScrollViewTemplate, componentType.component.transform);
+                    TextPageScrollView textScrollView = Object.Instantiate(ScrollViewTag.ScrollViewTemplate, componentType.component.transform);
 
                     Button pageUpButton = textScrollView._pageUpButton;
                     Button pageDownButton = textScrollView._pageDownButton;
@@ -89,7 +90,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                     scrollView._pageDownButton = pageDownButton;
                     scrollView._verticalScrollIndicator = verticalScrollIndicator;
                     scrollBar.SetParent(componentType.component.transform);
-                    GameObject.Destroy(textScrollView.gameObject);
+                    Object.Destroy(textScrollView.gameObject);
 
                     // Need to adjust scroll bar positioning
                     scrollBar.anchorMin = new Vector2(1, 0);
@@ -105,7 +106,8 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                     throw new Exception("value '" + value + "' not found");
 
                 var tableDataValue = contents.GetValue();
-                if (!(tableDataValue is List<object> tableDataList)) {
+                if (!(tableDataValue is List<object> tableDataList))
+                {
                     throw new Exception($"Value '{value}' is not a List<object>, which is required for custom-list");
                 }
 

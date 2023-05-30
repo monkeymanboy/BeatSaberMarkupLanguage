@@ -1,12 +1,12 @@
-﻿using BeatSaberMarkupLanguage.OpenType;
-using IPA.Utilities.Async;
-using Microsoft.Win32;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using BeatSaberMarkupLanguage.OpenType;
+using IPA.Utilities.Async;
+using Microsoft.Win32;
 using TMPro;
 using UnityEngine;
 using UnityEngine.TextCore;
@@ -70,8 +70,6 @@ namespace BeatSaberMarkupLanguage
             fontInfoLookupFullName = null;
             return UnityMainThreadTaskScheduler.Factory.StartNew(() => DestroyObjects(loadedFontsCache.Select(p => p.Value))).Unwrap()
                 .ContinueWith(_ => loadedFontsCache.Clear());
-                //.ContinueWith(_ => DestroyObjects(tmpFontCache.Select(p => p.Value)), UnityMainThreadTaskScheduler.Default).Unwrap()
-                //.ContinueWith(_ => tmpFontCache.Clear());
         }
 
         private static async Task DestroyObjects(IEnumerable<UnityEngine.Object> objects)
@@ -163,7 +161,7 @@ namespace BeatSaberMarkupLanguage
         /// </summary>
         /// <param name="path">the path to add to the manager</param>
         /// <returns>the <see cref="Font"/> the file contained</returns>
-        /// <exception cref="ArgumentException">if the file pointed to by <paramref name="path"/> is not an OpenType file -or- 
+        /// <exception cref="ArgumentException">if the file pointed to by <paramref name="path"/> is not an OpenType file -or-
         /// <paramref name="path"/> is not a valid file path</exception>
         /// <exception cref="FileNotFoundException">if the file does not exist</exception>
         public static Font AddFontFile(string path)
@@ -378,8 +376,7 @@ namespace BeatSaberMarkupLanguage
                     Logger.log.Debug($"Reading fallback '{fallback}'");
                     if (TryGetTMPFontByFullName(fallback, out var fallbackFont, false))
                     {
-                        if (tmpFont.fallbackFontAssetTable == null)
-                            tmpFont.fallbackFontAssetTable = new List<TMP_FontAsset>();
+                        tmpFont.fallbackFontAssetTable ??= new List<TMP_FontAsset>();
 
                         // these fallbacks are used for non-latin characters which are more often than not much larger than Teko
                         FaceInfo faceInfo = fallbackFont.faceInfo;
@@ -395,9 +392,7 @@ namespace BeatSaberMarkupLanguage
                 }
             }
 
-                /*tmpFontCache.Add((font, setupOsFallbacks), tmpFont);
-            }*/
-                        return tmpFont;
+            return tmpFont;
         }
     }
 }

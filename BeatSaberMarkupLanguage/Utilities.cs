@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
@@ -94,7 +93,7 @@ namespace BeatSaberMarkupLanguage
 
         public static T AddComponent<T>(this GameObject go, T toAdd) where T : Component
         {
-            return go.AddComponent<T>().GetCopyOf(toAdd) as T;
+            return go.AddComponent<T>().GetCopyOf(toAdd);
         }
 
         //end of yoink
@@ -295,7 +294,7 @@ namespace BeatSaberMarkupLanguage
                 if (x.name.Length == 0)
                     continue;
 
-                if(!spriteCache.TryGetValue(x.name, out var a) || a == null)
+                if (!spriteCache.TryGetValue(x.name, out var a) || a == null)
                     spriteCache[x.name] = x;
 
                 if (x.name == name)
@@ -316,7 +315,7 @@ namespace BeatSaberMarkupLanguage
                 if (x.name.Length == 0)
                     continue;
 
-                if(!textureCache.TryGetValue(x.name, out var a) || a == null)
+                if (!textureCache.TryGetValue(x.name, out var a) || a == null)
                     textureCache[x.name] = x;
 
                 if (x.name == name)

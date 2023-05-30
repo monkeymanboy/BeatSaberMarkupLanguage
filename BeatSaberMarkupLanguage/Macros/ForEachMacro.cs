@@ -17,7 +17,7 @@ namespace BeatSaberMarkupLanguage.Macros
             { "hosts", new[]{"hosts","items"} },
             { "passTags", new[]{"pass-back-tags"}}
         };
-        
+
         public override void Execute(XmlNode node, GameObject parent, Dictionary<string, string> data, BSMLParserParams parserParams, out IEnumerable<BSMLParser.ComponentTypeWithData> components)
         {
             components = Enumerable.Empty<BSMLParser.ComponentTypeWithData>();
@@ -28,7 +28,7 @@ namespace BeatSaberMarkupLanguage.Macros
                 bool passTags = false;
                 if (data.TryGetValue("passTags", out string passTagsString))
                     passTags = Parse.Bool(passTagsString);
-                foreach(object host in values.GetValue() as IEnumerable)
+                foreach (object host in values.GetValue() as IEnumerable)
                 {
                     BSMLParserParams nodeParams = BSMLParser.instance.Parse(node, parent, host);
                     if (passTags)

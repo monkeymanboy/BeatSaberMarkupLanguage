@@ -52,21 +52,21 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         /// </summary>
         /// <value>The number frames.</value>
         public uint FrameCount
-        { 
+        {
             get => frameCount;
-            internal set 
+            internal set
             {
                 frameCount = value;
                 ModifyChunkData(0, Helper.ConvertEndian(value));
-            } 
+            }
         }
 
         /// <summary>
         /// Gets the number plays.
         /// </summary>
         /// <value>The number plays.</value>
-        public uint PlayCount 
-        { 
+        public uint PlayCount
+        {
             get => playCount;
             internal set
             {

@@ -44,7 +44,7 @@ namespace BeatSaberMarkupLanguage.Tags
             buttonSizeFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
             buttonSizeFitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
 
-            return button.gameObject; 
+            return button.gameObject;
         }
     }
 }

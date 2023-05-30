@@ -20,12 +20,12 @@ namespace BeatSaberMarkupLanguage
         internal static string RETRIEVE_VALUE_PREFIX => "~";
         internal static string SUBSCRIVE_EVENT_ACTION_PREFIX => "#";
 
-        private Dictionary<string, BSMLTag> tags = new Dictionary<string, BSMLTag>();
-        private Dictionary<string, BSMLMacro> macros = new Dictionary<string, BSMLMacro>();
+        private readonly Dictionary<string, BSMLTag> tags = new Dictionary<string, BSMLTag>();
+        private readonly Dictionary<string, BSMLMacro> macros = new Dictionary<string, BSMLMacro>();
         private List<TypeHandler> typeHandlers;
 
-        private XmlDocument doc = new XmlDocument();
-        private XmlReaderSettings readerSettings = new XmlReaderSettings();
+        private readonly XmlDocument doc = new XmlDocument();
+        private readonly XmlReaderSettings readerSettings = new XmlReaderSettings();
 
         public void Awake()
         {
@@ -130,7 +130,7 @@ namespace BeatSaberMarkupLanguage
                         uiActionName = uiaction.id;
                         if (parserParams.actions.TryGetValue(uiActionName, out BSMLAction existing))
                         {
-                            if(existing.FromUIAction)
+                            if (existing.FromUIAction)
                                 throw new InvalidOperationException($"UIAction '{uiActionName}' is already used by member '{existing.MemberName}'.");
                             existing.methodInfo = methodInfo;
                             existing.FromUIAction = true;
@@ -197,13 +197,13 @@ namespace BeatSaberMarkupLanguage
                         uiValueName = uivalue.id;
                         if (parserParams.values.TryGetValue(uiValueName, out BSMLValue existing))
                         {
-                            if(existing.FromUIValue)
+                            if (existing.FromUIValue)
                                 throw new InvalidOperationException($"UIValue '{uiValueName}' is already used by member '{existing.MemberName}'.");
                             if (existing is BSMLPropertyValue existingProp)
                             {
                                 existingProp.propertyInfo = propertyInfo;
                                 existingProp.FromUIValue = true;
-                            }  
+                            }
                         }
                         else
                             parserParams.values.Add(uiValueName, new BSMLPropertyValue(host, propertyInfo));
@@ -341,7 +341,6 @@ namespace BeatSaberMarkupLanguage
         private Dictionary<string, string> GetParameters(XmlNode node, Dictionary<string, string[]> properties, BSMLParserParams parserParams, out Dictionary<string, BSMLValue> valueMap)
         {
             Dictionary<string, string> parameters = new Dictionary<string, string>();
-            bool isNotifyHost = parserParams.host == null ? false : typeof(System.ComponentModel.INotifyPropertyChanged).IsAssignableFrom(parserParams.host.GetType());
             valueMap = new Dictionary<string, BSMLValue>();
             foreach (KeyValuePair<string, string[]> propertyAliases in properties)
             {

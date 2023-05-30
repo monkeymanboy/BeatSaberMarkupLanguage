@@ -1,15 +1,11 @@
 ﻿#if DEBUG
 #define HRVC_DEBUG
 #endif
-using BeatSaberMarkupLanguage.Attributes;
-using HMUI;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+using BeatSaberMarkupLanguage.Attributes;
 using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.ViewControllers
@@ -35,7 +31,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
 
         private string _resourceName;
         private string _content;
-        public override string Content 
+        public override string Content
         {
             get
             {
@@ -71,7 +67,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
                     }
                 }
                 return _content;
-            } 
+            }
         }
 
         public bool ContentChanged { get; protected set; }
@@ -109,7 +105,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
             }
             else
             {
-                if(firstActivation)
+                if (firstActivation)
                     ParseWithFallback();
             }
 

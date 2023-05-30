@@ -9,11 +9,14 @@ namespace BeatSaberMarkupLanguage.Components
 
         public T Get<T>() where T : Component
         {
-            foreach(Component component in components)
+            foreach (Component component in components)
             {
                 if (component is T componentT)
+                {
                     return componentT;
+                }
             }
+
             return null;
         }
     }

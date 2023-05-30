@@ -30,7 +30,8 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 
             if (componentType.data.TryGetValue("selectCell", out string selectCell))
             {
-                textControl.didSelectCellEvent += (SegmentedControl control, int index) => {
+                textControl.didSelectCellEvent += (SegmentedControl control, int index) =>
+                {
                     if (!parserParams.actions.TryGetValue(selectCell, out BSMLAction action))
                         throw new Exception("select-cell action '" + componentType.data["selectCell"] + "' not found");
                     action.Invoke(control, index);

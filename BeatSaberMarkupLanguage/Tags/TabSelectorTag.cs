@@ -18,7 +18,7 @@ namespace BeatSaberMarkupLanguage.Tags
             TextSegmentedControl textSegmentedControl = diContainer.InstantiatePrefabForComponent<TextSegmentedControl>(segmentControlTemplate, parent);
             textSegmentedControl.name = "BSMLTabSelector";
             (textSegmentedControl.transform as RectTransform).anchoredPosition = new Vector2(0, 0);
-            foreach(Transform transform in textSegmentedControl.transform)
+            foreach (Transform transform in textSegmentedControl.transform)
             {
                 Object.Destroy(transform.gameObject);
             }

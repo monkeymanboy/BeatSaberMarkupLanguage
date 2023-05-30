@@ -24,7 +24,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
         internal FileSystemWatcher Watcher { get; private set; }
 
         internal string ContentDirectory { get; private set; }
-            
+
         internal bool IsReloading { get; private set; }
 
         private readonly WaitForSeconds HotReloadDelay = new WaitForSeconds(.5f);
@@ -109,14 +109,13 @@ namespace BeatSaberMarkupLanguage.ViewControllers
 #if HRVC_DEBUG
                     Logger.log.Critical($"{pair.Key} seems to exist and has changed content.");
 #endif
-                    if (controller != null)
-                        controller.Refresh();
+                    controller?.Refresh();
                     //RefreshViewController(controller);
                 }
             }
             IsReloading = false;
         }
-            
+
         internal bool BindController(IHotReloadableController controller)
         {
             if (BoundControllers.ContainsKey(controller.GetInstanceID()))
@@ -172,8 +171,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
             if (string.IsNullOrEmpty(contentFile)) return false;
             string contentDirectory = Path.GetDirectoryName(contentFile);
             if (!Directory.Exists(contentDirectory)) return false;
-            WatcherGroup watcherGroup;
-            if (!WatcherDictionary.TryGetValue(contentDirectory, out watcherGroup))
+            if (!WatcherDictionary.TryGetValue(contentDirectory, out WatcherGroup watcherGroup))
             {
                 watcherGroup = new WatcherGroup(contentDirectory);
                 WatcherDictionary.Add(contentDirectory, watcherGroup);

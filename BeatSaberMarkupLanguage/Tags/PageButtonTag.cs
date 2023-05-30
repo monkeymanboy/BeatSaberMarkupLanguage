@@ -36,7 +36,7 @@ namespace BeatSaberMarkupLanguage.Tags
             buttonTransform.sizeDelta = new Vector2(0, 0);
 
             (button.transform as RectTransform).pivot = new Vector2(.5f, .5f);
-            
+
             /*RectTransform glow = MonoBehaviour.Instantiate(Resources.FindObjectsOfTypeAll<GameObject>().Last(x => (x.name == "GlowContainer")), button.transform).transform as RectTransform;
             glow.gameObject.name = "BSMLPageButtonGlowContainer";
             glow.SetParent(buttonTransform);

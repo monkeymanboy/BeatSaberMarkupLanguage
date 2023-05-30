@@ -50,7 +50,7 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
             externalComponents.Add(layoutElement);
 
             DropDownListSetting dropDownListSetting = dropdown.gameObject.AddComponent<DropDownListSetting>();
-            
+
             dropDownListSetting.dropdown = dropdown;
             dropdown.gameObject.SetActive(true);
             gameObject.SetActive(true);

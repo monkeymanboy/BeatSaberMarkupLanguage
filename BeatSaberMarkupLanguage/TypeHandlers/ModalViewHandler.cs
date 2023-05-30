@@ -40,7 +40,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 {
                     parserParams.AddEvent(hideEvent, delegate
                     {
-                        modalView.Hide(true, ()=> modalView.transform.SetParent(originalParent, true));
+                        modalView.Hide(true, () => modalView.transform.SetParent(originalParent, true));
                     });
                 }
 
