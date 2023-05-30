@@ -1,7 +1,7 @@
-﻿using HMUI;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using HMUI;
 
 namespace BeatSaberMarkupLanguage.ViewControllers
 {
@@ -14,12 +14,15 @@ namespace BeatSaberMarkupLanguage.ViewControllers
         protected override void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
         {
             if (firstActivation)
+            {
                 BSMLParser.instance.Parse(Content, gameObject, this);
+            }
 
             didActivate?.Invoke(firstActivation, addedToHierarchy, screenSystemEnabling);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
         protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
             try
@@ -28,7 +31,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
             }
             catch (Exception ex)
             {
-                Logger.log?.Error($"Error invoking PropertyChanged for property '{propertyName}' on View Controller {name}\n{ex}");
+                Logger.Log?.Error($"Error invoking PropertyChanged for property '{propertyName}' on View Controller {name}\n{ex}");
             }
         }
     }

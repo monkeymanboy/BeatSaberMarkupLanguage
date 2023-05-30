@@ -1,12 +1,11 @@
-﻿using BeatSaberMarkupLanguage.Components;
+﻿using System.Collections.Generic;
+using System.Linq;
+using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.Components.Settings;
 using HMUI;
 using Polyglot;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
-using VRUIControls;
 
 namespace BeatSaberMarkupLanguage.Tags.Settings
 {
@@ -17,10 +16,14 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
         public override string[] Aliases => new[] { "dropdown-list-setting" };
 
         private GameObject safePrefab;
+
         public override void Setup()
         {
             if (dropdownTemplate == null)
+            {
                 dropdownTemplate = Resources.FindObjectsOfTypeAll<SimpleTextDropdown>().First(x => x.transform?.parent?.name == "NormalLevels").transform.parent.gameObject;
+            }
+
             safePrefab = Object.Instantiate(dropdownTemplate, BSMLParser.instance.transform, false);
             safePrefab.SetActive(false);
             safePrefab.name = "BSMLDropdownListPrefab";
@@ -28,7 +31,7 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
 
         public override GameObject CreateObject(Transform parent)
         {
-            GameObject gameObject = diContainer.InstantiatePrefab(safePrefab, parent);
+            GameObject gameObject = DiContainer.InstantiatePrefab(safePrefab, parent);
             gameObject.name = "BSMLDropdownList";
             SimpleTextDropdown dropdown = gameObject.GetComponentInChildren<SimpleTextDropdown>();
             dropdown.gameObject.SetActive(false);

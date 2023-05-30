@@ -1,7 +1,6 @@
-﻿using BeatSaberMarkupLanguage.Components;
-using HMUI;
+﻿using System.Linq;
+using BeatSaberMarkupLanguage.Components;
 using Polyglot;
-using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,13 +10,18 @@ namespace BeatSaberMarkupLanguage.Tags
     public class ButtonTag : BSMLTag
     {
         public override string[] Aliases => new[] { "button" };
+
         public virtual string PrefabButton => "PracticeButton";
 
         private Button buttonPrefab;
+
         public override GameObject CreateObject(Transform parent)
         {
             if (buttonPrefab == null)
+            {
                 buttonPrefab = Resources.FindObjectsOfTypeAll<Button>().Last(x => (x.name == PrefabButton));
+            }
+
             Button button = Object.Instantiate(buttonPrefab, parent, false);
             button.name = "BSMLButton";
             button.interactable = true;
@@ -44,7 +48,9 @@ namespace BeatSaberMarkupLanguage.Tags
 
             LayoutGroup stackLayoutGroup = button.GetComponentInChildren<LayoutGroup>();
             if (stackLayoutGroup != null)
+            {
                 externalComponents.components.Add(stackLayoutGroup);
+            }
 
             /*
             Image glowImage = gameObject.GetComponentsInChildren<Image>(true).Where(x => x.gameObject.name == "Glow").FirstOrDefault();

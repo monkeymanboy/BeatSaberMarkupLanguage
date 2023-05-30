@@ -1,6 +1,6 @@
-﻿using BeatSaberMarkupLanguage.Components;
+﻿using System.Linq;
+using BeatSaberMarkupLanguage.Components;
 using HMUI;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,7 +15,10 @@ namespace BeatSaberMarkupLanguage.Tags
         public override GameObject CreateObject(Transform parent)
         {
             if (buttonWithIconTemplate == null)
+            {
                 buttonWithIconTemplate = Resources.FindObjectsOfTypeAll<Button>().Last(x => x.name == "PracticeButton");
+            }
+
             Button button = Object.Instantiate(buttonWithIconTemplate, parent, false);
             button.name = "BSMLIconButton";
             button.interactable = true;

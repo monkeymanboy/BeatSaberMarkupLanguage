@@ -1,10 +1,10 @@
-﻿using BeatSaberMarkupLanguage.Attributes;
-using BeatSaberMarkupLanguage.Components;
-using HMUI;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using BeatSaberMarkupLanguage.Attributes;
+using BeatSaberMarkupLanguage.Components;
+using HMUI;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -39,7 +39,7 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
         [UIValue("mod-menus")]
         private List<object> menus = new List<object>();
 
-        private bool _loaded;
+        private bool loaded;
 
         [UIValue("is-loading")]
         public bool IsLoading => !Loaded;
@@ -47,10 +47,10 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
         [UIValue("loaded")]
         public bool Loaded
         {
-            get => _loaded;
+            get => loaded;
             set
             {
-                _loaded = value;
+                loaded = value;
                 NotifyPropertyChanged();
                 NotifyPropertyChanged(nameof(IsLoading));
             }
@@ -58,14 +58,21 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
 
         internal void Setup()
         {
-            if (menus.Count == 0) return;
+            if (menus.Count == 0)
+            {
+                return;
+            }
+
             gameplaySetupViewController = Resources.FindObjectsOfTypeAll<GameplaySetupViewController>().First();
             vanillaItems.Clear();
             foreach (Transform transform in gameplaySetupViewController.transform)
             {
                 if (transform.name != "HeaderPanel")
+                {
                     vanillaItems.Add(transform);
+                }
             }
+
             RectTransform textSegmentedControl = gameplaySetupViewController.transform.Find("TextSegmentedControl") as RectTransform;
             textSegmentedControl.sizeDelta = new Vector2(0, 6);
             layoutGroup = textSegmentedControl.GetComponent<LayoutGroup>();
@@ -121,6 +128,7 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
                     modsList.tableView.ReloadData();
                     listParsed = true;
                 }
+
                 modsList.tableView.RefreshContentSize();
                 Loaded = true;
             });
@@ -139,32 +147,44 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
         private void AddTab(Assembly assembly, string name, string resource, object host, MenuType menuType)
         {
             if (menus.Any(x => (x as GameplaySetupMenu).name == name))
+            {
                 return;
+            }
+
             menus.Add(new GameplaySetupMenu(name, resource, host, assembly, menuType));
         }
 
-        /// <summary>Allows tab to dynamically disappear and reappear</summary>
+        /// <summary>
+        /// Allows tab to dynamically disappear and reappear.
+        /// </summary>
+        /// <param name="name">The name of the tab.</param>
+        /// <param name="isVisible">Whether or not the tab should be visible.</param>
         public void SetTabVisibility(string name, bool isVisible)
         {
             if (!gameplaySetupViewController.isActiveAndEnabled)
+            {
                 return;
+            }
 
-            IEnumerable<GameplaySetupMenu> menu = menus.OfType<GameplaySetupMenu>().Where(x => x.name == name);
-            if (menu.Count() > 0)
-                menu.FirstOrDefault().SetVisible(isVisible);
+            GameplaySetupMenu menu = menus.OfType<GameplaySetupMenu>().Where(x => x.name == name).FirstOrDefault();
+            menu?.SetVisible(isVisible);
         }
 
-        /// <summary>Warning, for now it will not be removed until fresh menu scene reload</summary>
+        /// <summary>
+        /// Warning, for now it will not be removed until fresh menu scene reload.
+        /// </summary>
+        /// <param name="name">The name of the tab.</param>
         public void RemoveTab(string name)
         {
             IEnumerable<object> menu = menus.Where(x => (x as GameplaySetupMenu).name == name);
             if (menu.Count() > 0)
+            {
                 menus.Remove(menu.FirstOrDefault());
+            }
         }
 
-        #region Data Source
-
         public const string ReuseIdentifier = "GameplaySetupCell";
+
         private GameplaySetupCell GetCell()
         {
             TableCell tableCell = modsList.tableView.DequeueReusableCellForIdentifier(ReuseIdentifier);
@@ -191,7 +211,5 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
         public int NumberOfCells() => menus.Count;
 
         public TableCell CellForIdx(TableView tableView, int idx) => GetCell().PopulateCell((GameplaySetupMenu)menus[idx]);
-
-        #endregion
     }
 }

@@ -14,12 +14,12 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
         [UIValue("tab-visible")]
         private bool Visible
         {
-            get => tab != null && tab.visible;
+            get => tab != null && tab.Visible;
             set
             {
                 if (tab != null)
                 {
-                    tab.visible = value;
+                    tab.Visible = value;
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Visible)));
                 }
             }

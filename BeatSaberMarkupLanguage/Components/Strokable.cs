@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.Components
@@ -11,7 +10,10 @@ namespace BeatSaberMarkupLanguage.Components
         public void SetType(StrokeType strokeType)
         {
             if (image == null)
+            {
                 return;
+            }
+
             switch (strokeType)
             {
                 case StrokeType.None:
@@ -31,16 +33,24 @@ namespace BeatSaberMarkupLanguage.Components
         public void SetColor(string strokeColor)
         {
             if (image == null)
+            {
                 return;
+            }
+
             if (!ColorUtility.TryParseHtmlString(strokeColor, out Color color))
-                Logger.log.Warn($"Invalid color: {strokeColor}");
+            {
+                Logger.Log.Warn($"Invalid color: {strokeColor}");
+            }
+
             image.color = color;
             image.enabled = true;
         }
 
         public enum StrokeType
         {
-            None, Clean, Regular
+            None,
+            Clean,
+            Regular,
         }
     }
 }

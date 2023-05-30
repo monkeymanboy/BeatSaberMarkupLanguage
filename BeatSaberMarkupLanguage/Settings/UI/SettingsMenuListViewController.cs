@@ -1,8 +1,8 @@
-﻿using BeatSaberMarkupLanguage.Attributes;
+﻿using System;
+using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.ViewControllers;
 using HMUI;
-using System;
 using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.Settings.UI.ViewControllers
@@ -24,6 +24,7 @@ namespace BeatSaberMarkupLanguage.Settings.UI.ViewControllers
                 rectTransform.anchorMin = new Vector2(0.5f, 0);
                 rectTransform.anchorMax = new Vector2(0.5f, 1);
             }
+
             list.data = BSMLSettings.instance.settingsMenus;
             list.tableView?.ReloadData();
         }
@@ -31,7 +32,7 @@ namespace BeatSaberMarkupLanguage.Settings.UI.ViewControllers
         [UIAction("settings-click")]
         private void SettingsClick(TableView tableView, int index)
         {
-            var settingsMenu = (list.data[index] as SettingsMenu);
+            var settingsMenu = list.data[index] as SettingsMenu;
             clickedMenu?.Invoke(settingsMenu);
         }
     }

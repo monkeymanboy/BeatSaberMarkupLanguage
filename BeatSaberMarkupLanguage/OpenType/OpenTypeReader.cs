@@ -1,47 +1,56 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace BeatSaberMarkupLanguage.OpenType
 {
     public abstract class OpenTypeReader : BinaryReader
     {
-        protected OpenTypeReader(Stream input) : base(input)
+        protected OpenTypeReader(Stream input)
+            : base(input)
         {
         }
 
-        protected OpenTypeReader(Stream input, Encoding encoding) : base(input, encoding)
+        protected OpenTypeReader(Stream input, Encoding encoding)
+            : base(input, encoding)
         {
         }
 
-        protected OpenTypeReader(Stream input, Encoding encoding, bool leaveOpen) : base(input, encoding, leaveOpen)
+        protected OpenTypeReader(Stream input, Encoding encoding, bool leaveOpen)
+            : base(input, encoding, leaveOpen)
         {
         }
 
         public static byte[] FromBigEndian(byte[] bytes)
         {
             if (BitConverter.IsLittleEndian)
+            {
                 Array.Reverse(bytes);
+            }
+
             return bytes;
         }
 
         public byte ReadUInt8() => ReadByte();
+
         public sbyte ReadInt8() => ReadSByte();
+
         public new ushort ReadUInt16()
             => BitConverter.ToUInt16(FromBigEndian(ReadBytes(2)), 0);
+
         public new short ReadInt16()
             => BitConverter.ToInt16(FromBigEndian(ReadBytes(2)), 0);
+
         public new uint ReadUInt32()
             => BitConverter.ToUInt32(FromBigEndian(ReadBytes(4)), 0);
+
         public new int ReadInt32()
             => BitConverter.ToInt32(FromBigEndian(ReadBytes(4)), 0);
 
         public int ReadFixed() => ReadInt32();
 
         public short ReadFWord() => ReadInt16();
+
         public ushort ReadUFWord() => ReadUInt16();
 
         public short ReadF2Dot14() => ReadInt16();
@@ -52,8 +61,8 @@ namespace BeatSaberMarkupLanguage.OpenType
         public OpenTypeTag ReadTag() => new OpenTypeTag(ReadBytes(4));
 
         public ushort ReadOffset16() => ReadUInt16();
-        public uint ReadOffset32() => ReadUInt32();
 
+        public uint ReadOffset32() => ReadUInt32();
 
         public static OpenTypeReader For(Stream stream, Encoding enc = null, bool leaveOpen = false)
         {

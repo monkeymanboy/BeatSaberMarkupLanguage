@@ -6,8 +6,11 @@ namespace BeatSaberMarkupLanguage.Parser
     {
         protected object host;
         internal MethodInfo methodInfo;
+
         public bool FromUIAction { get; internal set; }
+
         public string MemberName => methodInfo?.Name;
+
         public BSMLAction(object host, MethodInfo methodInfo, bool fromUiAction = true)
         {
             this.host = host;

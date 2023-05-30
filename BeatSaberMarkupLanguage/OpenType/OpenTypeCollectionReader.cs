@@ -1,23 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace BeatSaberMarkupLanguage.OpenType
 {
     public class OpenTypeCollectionReader : OpenTypeFontReader
     {
-        public OpenTypeCollectionReader(Stream input) : base(input)
+        public OpenTypeCollectionReader(Stream input)
+            : base(input)
         {
         }
 
-        public OpenTypeCollectionReader(Stream input, Encoding encoding) : base(input, encoding)
+        public OpenTypeCollectionReader(Stream input, Encoding encoding)
+            : base(input, encoding)
         {
         }
 
-        public OpenTypeCollectionReader(Stream input, Encoding encoding, bool leaveOpen) : base(input, encoding, leaveOpen)
+        public OpenTypeCollectionReader(Stream input, Encoding encoding, bool leaveOpen)
+            : base(input, encoding, leaveOpen)
         {
         }
 
@@ -32,7 +31,9 @@ namespace BeatSaberMarkupLanguage.OpenType
             };
             header.OffsetTable = new uint[header.NumFonts];
             for (uint i = 0; i < header.NumFonts; i++)
+            {
                 header.OffsetTable[i] = ReadOffset32();
+            }
 
             if (header.MajorVersion == 2)
             {
@@ -52,6 +53,7 @@ namespace BeatSaberMarkupLanguage.OpenType
                 BaseStream.Position = header.OffsetTable[i];
                 tables[i] = ReadOffsetTable();
             }
+
             return tables;
         }
 
@@ -63,6 +65,7 @@ namespace BeatSaberMarkupLanguage.OpenType
                 BaseStream.Position = header.OffsetTable[i];
                 fonts[i] = new OpenTypeFont(this, lazyLoad);
             }
+
             return fonts;
         }
     }

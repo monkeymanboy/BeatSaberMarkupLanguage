@@ -1,9 +1,9 @@
-﻿using BeatSaberMarkupLanguage.Attributes;
-using BeatSaberMarkupLanguage.Settings.UI.ViewControllers;
-using HMUI;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using BeatSaberMarkupLanguage.Attributes;
+using BeatSaberMarkupLanguage.Settings.UI.ViewControllers;
+using HMUI;
 using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.Settings
@@ -15,7 +15,7 @@ namespace BeatSaberMarkupLanguage.Settings
 
         protected ViewController activeController;
 
-        private Stack<ViewController> submenuStack = new Stack<ViewController>();
+        private readonly Stack<ViewController> submenuStack = new Stack<ViewController>();
         private bool isPresenting;
         public bool isAnimating;
 
@@ -44,35 +44,54 @@ namespace BeatSaberMarkupLanguage.Settings
                 menu.Setup();
                 menu.parserParams.AddEvent("back", Back);
             }
+
             OpenMenu(menu.viewController, false, false);
         }
 
         public void OpenMenu(ViewController viewController, bool isSubmenu, bool isBack)
         {
-            if (isPresenting) return;
+            if (isPresenting)
+            {
+                return;
+            }
+
             if (!isBack)
             {
                 if (isSubmenu)
+                {
                     submenuStack.Push(activeController);
+                }
                 else
+                {
                     submenuStack.Clear();
+                }
             }
 
             bool wasActive = activeController != null;
             if (wasActive)
-                PopViewControllerFromNavigationController(navigationController, null, immediately: true);
-            PushViewControllerToNavigationController(navigationController, viewController, delegate
             {
-                isPresenting = false;
-                bottomButtons?.SetAsLastSibling();
-            }, wasActive);
+                PopViewControllerFromNavigationController(navigationController, null, immediately: true);
+            }
+
+            PushViewControllerToNavigationController(
+                navigationController,
+                viewController,
+                () =>
+                {
+                    isPresenting = false;
+                    bottomButtons?.SetAsLastSibling();
+                },
+                wasActive);
+
             activeController = viewController;
         }
 
         public void ShowInitial()
         {
             if (activeController != null)
+            {
                 return;
+            }
 
             settingsMenuListViewController.list.tableView.SelectCellWithIdx(0);
             OpenMenu(BSMLSettings.instance.settingsMenus.First() as SettingsMenu);
@@ -89,7 +108,11 @@ namespace BeatSaberMarkupLanguage.Settings
         [UIAction("cancel-click")]
         private void Cancel()
         {
-            if (isPresenting || isAnimating) return;
+            if (isPresenting || isAnimating)
+            {
+                return;
+            }
+
             BeatSaberUI.MainFlowCoordinator.DismissFlowCoordinator(this, null, ViewController.AnimationDirection.Vertical);
             EmitEventToAll("cancel");
         }
@@ -97,14 +120,20 @@ namespace BeatSaberMarkupLanguage.Settings
         private void Back()
         {
             if (submenuStack.Count > 0)
+            {
                 OpenMenu(submenuStack.Pop(), false, true);
+            }
         }
 
         private void EmitEventToAll(string ev)
         {
             foreach (SettingsMenu menu in BSMLSettings.instance.settingsMenus)
+            {
                 if (menu.didSetup)
+                {
                     menu.parserParams.EmitEvent(ev);
+                }
+            }
         }
     }
 }

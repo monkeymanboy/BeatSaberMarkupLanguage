@@ -50,7 +50,9 @@ namespace BeatSaberMarkupLanguage.Animations
 
                     int delayPropertyValue = BitConverter.ToInt32(delays, i * 4);
                     if (firstDelayValue == -1)
+                    {
                         firstDelayValue = delayPropertyValue;
+                    }
 
                     currentFrame.delay = delayPropertyValue * 10;
                     animationInfo.frames.Add(currentFrame);

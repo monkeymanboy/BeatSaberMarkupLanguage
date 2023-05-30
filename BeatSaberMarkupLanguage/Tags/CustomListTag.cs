@@ -1,6 +1,6 @@
-﻿using BeatSaberMarkupLanguage.Components;
+﻿using System.Linq;
+using BeatSaberMarkupLanguage.Components;
 using HMUI;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using VRUIControls;
@@ -12,6 +12,7 @@ namespace BeatSaberMarkupLanguage.Tags
         private Canvas canvasTemplate;
 
         public override string[] Aliases => new[] { "custom-list" };
+
         public override bool AddChildren { get => false; }
 
         public override GameObject CreateObject(Transform parent)
@@ -26,14 +27,16 @@ namespace BeatSaberMarkupLanguage.Tags
             gameObject.SetActive(false);
 
             if (canvasTemplate == null)
+            {
                 canvasTemplate = Resources.FindObjectsOfTypeAll<Canvas>().First(x => x.name == "DropdownTableView");
+            }
 
             gameObject.AddComponent<ScrollRect>();
             gameObject.AddComponent(canvasTemplate);
-            diContainer.InstantiateComponent<VRGraphicRaycaster>(gameObject);
+            DiContainer.InstantiateComponent<VRGraphicRaycaster>(gameObject);
             gameObject.AddComponent<Touchable>();
             gameObject.AddComponent<EventSystemListener>();
-            ScrollView scrollView = diContainer.InstantiateComponent<ScrollView>(gameObject);
+            ScrollView scrollView = DiContainer.InstantiateComponent<ScrollView>(gameObject);
 
             TableView tableView = gameObject.AddComponent<BSMLTableView>();
             CustomCellListTableData tableData = container.gameObject.AddComponent<CustomCellListTableData>();

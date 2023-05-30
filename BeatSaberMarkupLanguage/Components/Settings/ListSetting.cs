@@ -15,11 +15,14 @@ namespace BeatSaberMarkupLanguage.Components.Settings
                 ValidateRange();
                 return values[index];
             }
+
             set
             {
                 index = values.IndexOf(value);
                 if (index < 0)
+                {
                     index = 0;
+                }
 
                 UpdateState();
             }
@@ -47,7 +50,9 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             UpdateState();
             onChange?.Invoke(Value);
             if (updateOnChange)
+            {
                 ApplyValue();
+            }
         }
 
         public override void ApplyValue()
@@ -58,16 +63,22 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         public override void ReceiveValue()
         {
             if (associatedValue != null)
+            {
                 Value = associatedValue.GetValue();
+            }
         }
 
         private void ValidateRange()
         {
             if (index >= values.Count)
+            {
                 index = values.Count - 1;
+            }
 
             if (index < 0)
+            {
                 index = 0;
+            }
         }
 
         private void UpdateState()

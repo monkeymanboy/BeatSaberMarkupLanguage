@@ -1,5 +1,5 @@
-﻿using HMUI;
-using System.Linq;
+﻿using System.Linq;
+using HMUI;
 using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.Tags
@@ -18,7 +18,7 @@ namespace BeatSaberMarkupLanguage.Tags
                 prefab = vc._scopeSegmentedControl;
             }
 
-            IconSegmentedControl control = diContainer.InstantiatePrefabForComponent<IconSegmentedControl>(prefab, parent);
+            IconSegmentedControl control = DiContainer.InstantiatePrefabForComponent<IconSegmentedControl>(prefab, parent);
             control.name = "BSMLVerticalIconSegmentedControl";
 
             RectTransform rt = control.transform as RectTransform;
@@ -28,7 +28,9 @@ namespace BeatSaberMarkupLanguage.Tags
             rt.pivot = new Vector2(0.5f, 0.5f);
 
             foreach (Transform transform in control.transform)
+            {
                 Object.Destroy(transform.gameObject);
+            }
 
             return control.gameObject;
         }

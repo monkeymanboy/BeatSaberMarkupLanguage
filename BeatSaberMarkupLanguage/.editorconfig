@@ -276,3 +276,27 @@ csharp_space_between_square_brackets = false
 # Wrapping preferences
 csharp_preserve_single_line_blocks = true
 csharp_preserve_single_line_statements = true
+
+# Temporarily disabled StyleCop rules that would cause a lot of noise to correct
+dotnet_diagnostic.SA1101.severity = silent # Prefix local calls with this
+dotnet_diagnostic.SA1201.severity = silent # A struct should not follow a class
+dotnet_diagnostic.SA1202.severity = silent # 'x' members should come before 'y' members
+dotnet_diagnostic.SA1203.severity = silent # Constant fields should appear before non-constant fields
+dotnet_diagnostic.SA1204.severity = silent # Static members should appear before non-static members
+dotnet_diagnostic.SA1214.severity = silent # Readonly fields should appear before non-readonly fields
+
+dotnet_diagnostic.SA1402.severity = silent # File may only contain a single type
+
+dotnet_diagnostic.SA1600.severity = silent # Elements should be documented
+dotnet_diagnostic.SA1602.severity = silent # Enumeration items should be documented
+dotnet_diagnostic.SA1633.severity = silent # The file header is missing or not located at the top of the file.
+dotnet_diagnostic.SA1649.severity = silent # File name should match first type name.
+
+dotnet_diagnostic.SA1611.severity = silent # The documentation for <something> is missing
+dotnet_diagnostic.CS1591.severity = silent # Missing XML comment for publicly visible type or member
+
+# Diagnostics that would cause breaking changes if fixed
+dotnet_diagnostic.SA1300.severity = silent # Element should begin with an uppercase letter
+dotnet_diagnostic.SA1307.severity = silent # Field should begin with upper-case letter
+dotnet_diagnostic.SA1309.severity = silent # Field should not begin with an underscore
+dotnet_diagnostic.SA1401.severity = silent # Field should be private

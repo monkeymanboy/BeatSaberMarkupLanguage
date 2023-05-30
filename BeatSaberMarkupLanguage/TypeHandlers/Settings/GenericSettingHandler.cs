@@ -1,7 +1,7 @@
-﻿using BeatSaberMarkupLanguage.Components.Settings;
-using BeatSaberMarkupLanguage.Parser;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using BeatSaberMarkupLanguage.Components.Settings;
+using BeatSaberMarkupLanguage.Parser;
 using static BeatSaberMarkupLanguage.BSMLParser;
 
 namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
@@ -11,13 +11,13 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
     {
         public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
         {
-            { "onChange", new[] { "on-change"} },
-            { "value", new[] { "value"} },
-            { "setEvent", new[] { "set-event"} },
-            { "getEvent", new[] { "get-event"} },
+            { "onChange", new[] { "on-change" } },
+            { "value", new[] { "value" } },
+            { "setEvent", new[] { "set-event" } },
+            { "getEvent", new[] { "get-event" } },
             { "applyOnChange", new[] { "apply-on-change" } },
             { "formatter", new[] { "formatter" } },
-            { "bindValue", new[] { "bind-value" } }
+            { "bindValue", new[] { "bind-value" } },
         };
 
         public override Dictionary<string, Action<GenericSetting, string>> Setters => new Dictionary<string, Action<GenericSetting, string>>();
@@ -29,18 +29,24 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
             if (componentType.data.TryGetValue("formatter", out string formatterId))
             {
                 if (!parserParams.actions.TryGetValue(formatterId, out BSMLAction formatter))
+                {
                     throw new Exception("formatter action '" + formatter + "' not found");
+                }
 
                 genericSetting.formatter = formatter;
             }
 
             if (componentType.data.TryGetValue("applyOnChange", out string applyOnChange))
+            {
                 genericSetting.updateOnChange = Parse.Bool(applyOnChange);
+            }
 
             if (componentType.data.TryGetValue("onChange", out string onChange))
             {
                 if (!parserParams.actions.TryGetValue(onChange, out BSMLAction onChangeAction))
+                {
                     throw new Exception("on-change action '" + onChange + "' not found");
+                }
 
                 genericSetting.onChange = onChangeAction;
             }
@@ -48,11 +54,15 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
             if (componentType.data.TryGetValue("value", out string value))
             {
                 if (!parserParams.values.TryGetValue(value, out BSMLValue associatedValue))
+                {
                     throw new Exception("value '" + value + "' not found");
+                }
 
                 genericSetting.associatedValue = associatedValue;
                 if (componentType.data.TryGetValue("bindValue", out string bindValue) && Parse.Bool(bindValue))
+                {
                     BindValue(componentType, parserParams, associatedValue, _ => genericSetting.ReceiveValue());
+                }
             }
 
             parserParams.AddEvent(componentType.data.TryGetValue("setEvent", out string setEvent) ? setEvent : "apply", genericSetting.ApplyValue);

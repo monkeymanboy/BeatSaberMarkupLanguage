@@ -9,41 +9,41 @@ namespace BeatSaberMarkupLanguage.MenuButtons
     {
         public virtual Action OnClick { get; protected set; }
 
-        private string _text;
+        private string text;
 
         [UIValue("text")]
         public virtual string Text
         {
-            get => _text;
+            get => text;
             set
             {
-                _text = value;
+                text = value;
                 NotifyPropertyChanged();
             }
         }
 
-        private string _hoverHint;
+        private string hoverHint;
 
         [UIValue("hover-hint")]
         public virtual string HoverHint
         {
-            get => _hoverHint;
+            get => hoverHint;
             set
             {
-                _hoverHint = value;
+                hoverHint = value;
                 NotifyPropertyChanged();
             }
         }
 
-        private bool _interactable;
+        private bool interactable;
 
         [UIValue("interactable")]
         public virtual bool Interactable
         {
-            get => _interactable;
+            get => interactable;
             set
             {
-                _interactable = value;
+                interactable = value;
                 NotifyPropertyChanged();
             }
         }
@@ -54,7 +54,9 @@ namespace BeatSaberMarkupLanguage.MenuButtons
             OnClick?.Invoke();
         }
 
-        protected MenuButton() { }
+        protected MenuButton()
+        {
+        }
 
         public MenuButton(string text, string hoverHint, Action onClick, bool interactable = true)
         {
@@ -65,10 +67,12 @@ namespace BeatSaberMarkupLanguage.MenuButtons
         }
 
         public MenuButton(string text, Action onClick)
-        : this(text, string.Empty, onClick)
-        { }
+            : this(text, string.Empty, onClick)
+        {
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
         protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
             try
@@ -77,8 +81,8 @@ namespace BeatSaberMarkupLanguage.MenuButtons
             }
             catch (Exception ex)
             {
-                Logger.log?.Error($"Error Invoking PropertyChanged: {ex.Message}");
-                Logger.log?.Error(ex);
+                Logger.Log?.Error($"Error Invoking PropertyChanged: {ex.Message}");
+                Logger.Log?.Error(ex);
             }
         }
     }

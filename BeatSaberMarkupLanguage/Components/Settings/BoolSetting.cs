@@ -1,5 +1,5 @@
-﻿using Polyglot;
-using System;
+﻿using System;
+using Polyglot;
 
 namespace BeatSaberMarkupLanguage.Components.Settings
 {
@@ -39,7 +39,9 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         {
             onChange?.Invoke(Value);
             if (updateOnChange)
+            {
                 ApplyValue();
+            }
         }
 
         public override void ApplyValue()
@@ -50,7 +52,9 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         public override void ReceiveValue()
         {
             if (associatedValue != null)
+            {
                 Value = (bool)associatedValue.GetValue();
+            }
         }
 
         private void UpdateState()
@@ -58,9 +62,13 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             EnableDec = currentValue;
             EnableInc = !currentValue;
             if (formatter != null)
+            {
                 Text = formatter.Invoke(currentValue) as string;
+            }
             else
+            {
                 Text = currentValue ? Localization.Get("SETTINGS_ON") : Localization.Get("SETTINGS_OFF");
+            }
         }
     }
 }

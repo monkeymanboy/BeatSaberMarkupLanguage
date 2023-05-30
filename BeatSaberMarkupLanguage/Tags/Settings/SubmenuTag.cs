@@ -1,7 +1,7 @@
-﻿using BeatSaberMarkupLanguage.Components;
+﻿using System.Linq;
+using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.Settings;
 using HMUI;
-using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -33,12 +33,17 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
             ViewController submenuController = BeatSaberUI.CreateViewController<ViewController>();
             SettingsMenu.SetupViewControllerTransform(submenuController);
 
-            clickableText.OnClickEvent += delegate
+            clickableText.OnClickEvent += (eventData) =>
             {
                 if (flow == null)
+                {
                     flow = Resources.FindObjectsOfTypeAll<ModSettingsFlowCoordinator>().FirstOrDefault();
+                }
+
                 if (flow)
+                {
                     flow.OpenMenu(submenuController, true, false);
+                }
             };
 
             ExternalComponents externalComponents = submenuController.gameObject.AddComponent<ExternalComponents>();

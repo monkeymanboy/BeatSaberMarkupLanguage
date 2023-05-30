@@ -16,7 +16,9 @@ namespace BeatSaberMarkupLanguage.Components
                 selector?.Refresh();
             }
         }
+
         private bool isVisible = true;
+
         public bool IsVisible
         {
             get => isVisible;

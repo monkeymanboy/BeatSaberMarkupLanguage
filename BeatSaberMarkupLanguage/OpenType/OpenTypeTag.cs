@@ -8,6 +8,7 @@ namespace BeatSaberMarkupLanguage.OpenType
         public static readonly OpenTypeTag NAME = FromString("name");
 
         public byte[] Value { get; set; }
+
         public uint IntValue => BitConverter.ToUInt32(Value, 0);
 
         public bool Validate()
@@ -23,6 +24,7 @@ namespace BeatSaberMarkupLanguage.OpenType
 
         public static OpenTypeTag FromChars(char[] chrs)
             => new OpenTypeTag(chrs.Select(c => (byte)c).ToArray());
+
         public static OpenTypeTag FromString(string str)
             => FromChars(str.ToCharArray(0, 4));
 

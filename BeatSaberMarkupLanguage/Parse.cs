@@ -42,16 +42,24 @@ namespace BeatSaberMarkupLanguage
         }
 
         /// <summary>
-        /// Culture Invariant ToString for BSML values
+        /// Culture Invariant ToString for BSML values.
         /// </summary>
+        /// <param name="obj">The object to stringify.</param>
+        /// <returns>The string representation of the value.</returns>
         public static string InvariantToString(this object obj)
         {
             if (obj is float floatValue)
+            {
                 return floatValue.ToString(CultureInfo.InvariantCulture);
+            }
             else if (obj is double doubleValue)
+            {
                 return doubleValue.ToString(CultureInfo.InvariantCulture);
+            }
             else
+            {
                 return obj?.ToString();
+            }
         }
     }
 }

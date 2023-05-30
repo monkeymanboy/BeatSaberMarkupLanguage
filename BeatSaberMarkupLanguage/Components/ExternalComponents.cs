@@ -5,9 +5,10 @@ namespace BeatSaberMarkupLanguage.Components
 {
     public class ExternalComponents : MonoBehaviour
     {
-        public List<Component> components = new List<Component>(); //Components added to this list will be handled as if they are part of this object while parsing even if they aren't
+        public List<Component> components = new List<Component>(); // Components added to this list will be handled as if they are part of this object while parsing even if they aren't
 
-        public T Get<T>() where T : Component
+        public T Get<T>()
+            where T : Component
         {
             foreach (Component component in components)
             {

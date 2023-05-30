@@ -1,6 +1,6 @@
-﻿using BeatSaberMarkupLanguage.Components;
+﻿using System.Linq;
+using BeatSaberMarkupLanguage.Components;
 using HMUI;
-using System.Linq;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -10,15 +10,18 @@ namespace BeatSaberMarkupLanguage.Tags
     {
         public override string[] Aliases { get; } = new[] { "vertical-scroll-indicator", "scroll-indicator" };
 
-        private static GameObject _verticalScrollTemplate = null;
+        private static GameObject verticalScrollTemplate = null;
+
         public static GameObject VerticalScrollTemplate
         {
             get
             {
-                if (_verticalScrollTemplate == null)
-                    _verticalScrollTemplate = Resources.FindObjectsOfTypeAll<VerticalScrollIndicator>().First().gameObject;
+                if (verticalScrollTemplate == null)
+                {
+                    verticalScrollTemplate = Resources.FindObjectsOfTypeAll<VerticalScrollIndicator>().First().gameObject;
+                }
 
-                return _verticalScrollTemplate;
+                return verticalScrollTemplate;
             }
         }
 

@@ -9,12 +9,12 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
     {
         public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
         {
-            { "image", new[]{"source", "src"} }
+            { "image", new[] { "source", "src" } },
         };
 
         public override Dictionary<string, Action<RawImage, string>> Setters => new Dictionary<string, Action<RawImage, string>>()
         {
-            { "image", new Action<RawImage, string>(SetImage) }
+            { "image", new Action<RawImage, string>(SetImage) },
         };
 
         public void SetImage(RawImage image, string imagePath)
@@ -26,7 +26,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 image.texture = Utilities.FindTextureCached(imgName);
                 if (image.texture == null)
                 {
-                    Logger.log.Error($"Could not find Texture with image name {imgName}");
+                    Logger.Log.Error($"Could not find Texture with image name {imgName}");
                 }
             }
             else
@@ -36,7 +36,6 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                     image.texture = Utilities.LoadTextureRaw(data);
                 });
             }
-
         }
     }
 }

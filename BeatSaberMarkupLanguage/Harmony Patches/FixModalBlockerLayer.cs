@@ -6,7 +6,7 @@ using UnityEngine;
 namespace BeatSaberMarkupLanguage.Harmony_Patches
 {
     [HarmonyPatch(typeof(ModalView), nameof(ModalView.Show))]
-    public static class FixModalBlockerLayer
+    internal static class FixModalBlockerLayer
     {
         private static void Postfix(ModalView __instance, GameObject ____blockerGO)
         {

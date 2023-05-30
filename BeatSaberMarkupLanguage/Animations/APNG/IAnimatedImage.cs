@@ -1,5 +1,5 @@
-﻿using BeatSaberMarkupLanguage.Animations.APNG.Chunks;
-using System.Drawing;
+﻿using System.Drawing;
+using BeatSaberMarkupLanguage.Animations.APNG.Chunks;
 
 namespace BeatSaberMarkupLanguage.Animations
 {
@@ -37,7 +37,7 @@ namespace BeatSaberMarkupLanguage.Animations
         }
 
         /// <summary>
-        /// Gets and sets the play count.
+        /// Gets or sets the play count.
         /// </summary>
         /// <value>The play count.</value>
         int PlayCount
@@ -47,14 +47,14 @@ namespace BeatSaberMarkupLanguage.Animations
         }
 
         /// <summary>
-        /// Gets the frame rate of a specific frame
+        /// Gets the frame rate of a specific frame.
         /// </summary>
-        /// <returns>The frame rate of a specific frame</returns>
+        /// <returns>The frame rate of a specific frame.</returns>
         /// <param name="index">The frame index.</param>
         int GetFrameRate(int index);
 
         /// <summary>
-        /// Sets the frame rate of a specific frame
+        /// Sets the frame rate of a specific frame.
         /// </summary>
         /// <param name="index">The frame index.</param>
         /// <param name="frameRate">Frame rate in milliseconds.</param>
@@ -101,4 +101,3 @@ namespace BeatSaberMarkupLanguage.Animations
         }
     }
 }
-

@@ -9,19 +9,22 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         public Button decButton;
         public Button incButton;
         private bool _interactable = true;
+
         public override bool interactable
         {
             get => _interactable;
             set
             {
                 if (_interactable == value)
+                {
                     return;
+                }
+
                 _interactable = value;
                 EnableDec = decEnabled;
                 EnableInc = incEnabled;
             }
         }
-
 
         private bool decEnabled;
         private bool incEnabled;

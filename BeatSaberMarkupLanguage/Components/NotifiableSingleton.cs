@@ -5,9 +5,11 @@ using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.Components
 {
-    public class NotifiableSingleton<T> : PersistentSingleton<T>, INotifyPropertyChanged where T : MonoBehaviour
+    public class NotifiableSingleton<T> : PersistentSingleton<T>, INotifyPropertyChanged
+        where T : MonoBehaviour
     {
         public event PropertyChangedEventHandler PropertyChanged;
+
         protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
             try
@@ -16,8 +18,8 @@ namespace BeatSaberMarkupLanguage.Components
             }
             catch (Exception ex)
             {
-                Logger.log?.Error($"Error Invoking PropertyChanged: {ex.Message}");
-                Logger.log?.Error(ex);
+                Logger.Log?.Error($"Error Invoking PropertyChanged: {ex.Message}");
+                Logger.Log?.Error(ex);
             }
         }
     }

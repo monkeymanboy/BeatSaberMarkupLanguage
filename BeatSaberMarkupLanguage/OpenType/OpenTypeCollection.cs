@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BeatSaberMarkupLanguage.OpenType
 {
@@ -15,17 +12,23 @@ namespace BeatSaberMarkupLanguage.OpenType
 
         public OpenTypeCollectionReader Reader { get; }
 
-        public OpenTypeCollection(OpenTypeCollectionReader reader, bool lazyLoad = true) : this(reader.ReadCollectionHeader(), reader, lazyLoad)
+        public OpenTypeCollection(OpenTypeCollectionReader reader, bool lazyLoad = true)
+            : this(reader.ReadCollectionHeader(), reader, lazyLoad)
         {
         }
+
         public OpenTypeCollection(CollectionHeader header, OpenTypeCollectionReader reader, bool lazyLoad = true)
         {
             this.header = header;
             lazy = lazyLoad;
             if (lazyLoad)
+            {
                 Reader = reader;
+            }
             else
+            {
                 LoadAll(reader);
+            }
         }
 
         private void LoadAll(OpenTypeCollectionReader reader)
@@ -45,7 +48,6 @@ namespace BeatSaberMarkupLanguage.OpenType
         IEnumerator IEnumerable.GetEnumerator()
             => Fonts.GetEnumerator();
 
-        #region IDisposable Support
         private bool disposedValue = false; // To detect redundant calls
 
         protected virtual void Dispose(bool disposing)
@@ -59,7 +61,6 @@ namespace BeatSaberMarkupLanguage.OpenType
 
                 // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
                 // TODO: set large fields to null.
-
                 disposedValue = true;
             }
         }
@@ -76,9 +77,9 @@ namespace BeatSaberMarkupLanguage.OpenType
         {
             // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
             Dispose(true);
+
             // TODO: uncomment the following line if the finalizer is overridden above.
             // GC.SuppressFinalize(this);
         }
-        #endregion
     }
 }

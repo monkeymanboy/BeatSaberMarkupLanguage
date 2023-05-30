@@ -12,37 +12,36 @@ namespace BeatSaberMarkupLanguage
 {
     public static class Utilities
     {
-        private static Sprite _editIcon = null;
+        private static Sprite editIcon = null;
 
         public static Sprite EditIcon
         {
             get
             {
-                if (!_editIcon)
-                    _editIcon = Resources.FindObjectsOfTypeAll<Image>().First(x => x.sprite?.name == "EditIcon").sprite;
+                if (editIcon == null)
+                {
+                    editIcon = Resources.FindObjectsOfTypeAll<Image>().Where(x => x.sprite != null).First(x => x.sprite.name == "EditIcon").sprite;
+                }
 
-                return _editIcon;
+                return editIcon;
             }
         }
 
         /// <summary>
         /// Gets the content of a resource as a string.
         /// </summary>
-        /// <param name="assembly">Assembly containing the resource</param>
-        /// <param name="resource">Full path to the resource</param>
-        /// <returns></returns>
-        /// <exception cref="BSMLException"></exception>
+        /// <param name="assembly">Assembly containing the resource.</param>
+        /// <param name="resource">Full path to the resource.</param>
+        /// <returns>The contents of the resource as a string.</returns>
+        /// <exception cref="BSMLResourceException">Thrown if any exception occurs while loading the resource.</exception>
         public static string GetResourceContent(Assembly assembly, string resource)
         {
             try
             {
-                //Logger.log.Debug($"Loading resource from assembly, {assembly.FullName} ({resource}).");
                 using (Stream stream = assembly.GetManifestResourceStream(resource))
+                using (StreamReader reader = new StreamReader(stream))
                 {
-                    using (StreamReader reader = new StreamReader(stream))
-                    {
-                        return reader.ReadToEnd();
-                    }
+                    return reader.ReadToEnd();
                 }
             }
             catch (Exception ex)
@@ -55,17 +54,22 @@ namespace BeatSaberMarkupLanguage
         {
             List<T> objects = new List<T>();
             foreach (Type type in Assembly.GetAssembly(typeof(T)).GetTypes().Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(typeof(T))))
+            {
                 objects.Add((T)Activator.CreateInstance(type, constructorArgs));
+            }
 
             return objects;
         }
 
-        //yoinked from https://answers.unity.com/questions/530178/how-to-get-a-component-from-an-object-and-add-it-t.html
-        public static T GetCopyOf<T>(this Component comp, T other) where T : Component
+        // yoinked from https://answers.unity.com/questions/530178/how-to-get-a-component-from-an-object-and-add-it-t.html
+        public static T GetCopyOf<T>(this Component comp, T other)
+            where T : Component
         {
             Type type = comp.GetType();
             if (type != other.GetType())
+            {
                 return null; // type mismatch
+            }
 
             BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
             PropertyInfo[] pinfos = type.GetProperties(flags);
@@ -86,17 +90,18 @@ namespace BeatSaberMarkupLanguage
 
             FieldInfo[] finfos = type.GetFields(flags);
             foreach (FieldInfo finfo in finfos)
+            {
                 finfo.SetValue(comp, finfo.GetValue(other));
+            }
 
             return comp as T;
         }
 
-        public static T AddComponent<T>(this GameObject go, T toAdd) where T : Component
+        public static T AddComponent<T>(this GameObject go, T toAdd)
+            where T : Component
         {
             return go.AddComponent<T>().GetCopyOf(toAdd);
         }
-
-        //end of yoink
 
         public static string EscapeXml(string source)
         {
@@ -111,8 +116,8 @@ namespace BeatSaberMarkupLanguage
         public static class ImageResources
         {
             private static Material noGlowMat;
-            private static Sprite _blankSprite = null;
-            private static Sprite _whitePixel = null;
+            private static Sprite blankSprite;
+            private static Sprite whitePixel;
 
             public static Material NoGlowMat
             {
@@ -132,10 +137,12 @@ namespace BeatSaberMarkupLanguage
             {
                 get
                 {
-                    if (!_blankSprite)
-                        _blankSprite = Sprite.Create(Texture2D.blackTexture, new Rect(), Vector2.zero);
+                    if (!blankSprite)
+                    {
+                        blankSprite = Sprite.Create(Texture2D.blackTexture, default, Vector2.zero);
+                    }
 
-                    return _blankSprite;
+                    return blankSprite;
                 }
             }
 
@@ -143,10 +150,12 @@ namespace BeatSaberMarkupLanguage
             {
                 get
                 {
-                    if (!_whitePixel)
-                        _whitePixel = Resources.FindObjectsOfTypeAll<Image>().First(i => i.sprite?.name == "WhitePixel").sprite;
+                    if (!whitePixel)
+                    {
+                        whitePixel = Resources.FindObjectsOfTypeAll<Image>().Where(i => i.sprite != null).First(i => i.sprite.name == "WhitePixel").sprite;
+                    }
 
-                    return _whitePixel;
+                    return whitePixel;
                 }
             }
         }
@@ -157,12 +166,15 @@ namespace BeatSaberMarkupLanguage
             {
                 AssemblyFromPath(path, out Assembly asm, out string newPath);
                 if (asm.GetManifestResourceNames().Contains(newPath))
+                {
                     return LoadTextureRaw(GetResource(asm, newPath));
+                }
             }
             catch (Exception ex)
             {
-                Logger.log?.Error("Unable to find texture in assembly! (You must prefix path with 'assembly name:' if the assembly and root namespace don't have the same name) Exception: " + ex);
+                Logger.Log?.Error("Unable to find texture in assembly! (You must prefix path with 'assembly name:' if the assembly and root namespace don't have the same name) Exception: " + ex);
             }
+
             return null;
         }
 
@@ -172,12 +184,15 @@ namespace BeatSaberMarkupLanguage
             {
                 AssemblyFromPath(path, out Assembly asm, out string newPath);
                 if (asm.GetManifestResourceNames().Contains(newPath))
+                {
                     return LoadSpriteRaw(GetResource(asm, newPath));
+                }
             }
             catch (Exception ex)
             {
-                Logger.log?.Error("Unable to find sprite in assembly! (You must prefix path with 'assembly name:' if the assembly and root namespace don't have the same name) Exception: " + ex);
+                Logger.Log?.Error("Unable to find sprite in assembly! (You must prefix path with 'assembly name:' if the assembly and root namespace don't have the same name) Exception: " + ex);
             }
+
             return null;
         }
 
@@ -203,28 +218,34 @@ namespace BeatSaberMarkupLanguage
         {
             if (file.Count() > 0)
             {
-                Texture2D Tex2D = new Texture2D(2, 2, TextureFormat.RGBA32, false, false);
-                if (Tex2D.LoadImage(file))
-                    return Tex2D;
+                Texture2D tex2D = new Texture2D(2, 2, TextureFormat.RGBA32, false, false);
+                if (tex2D.LoadImage(file))
+                {
+                    return tex2D;
+                }
             }
+
             return null;
         }
 
-        public static Sprite LoadSpriteRaw(byte[] image, float PixelsPerUnit = 100.0f)
+        public static Sprite LoadSpriteRaw(byte[] image, float pixelsPerUnit = 100.0f)
         {
-            return LoadSpriteFromTexture(LoadTextureRaw(image), PixelsPerUnit);
+            return LoadSpriteFromTexture(LoadTextureRaw(image), pixelsPerUnit);
         }
 
-        public static Sprite LoadSpriteFromTexture(Texture2D SpriteTexture, float PixelsPerUnit = 100.0f)
+        public static Sprite LoadSpriteFromTexture(Texture2D spriteTexture, float pixelsPerUnit = 100.0f)
         {
-            if (SpriteTexture)
-                return Sprite.Create(SpriteTexture, new Rect(0, 0, SpriteTexture.width, SpriteTexture.height), new Vector2(0, 0), PixelsPerUnit);
-            return null;
+            if (spriteTexture == null)
+            {
+                return null;
+            }
+
+            return Sprite.Create(spriteTexture, new Rect(0, 0, spriteTexture.width, spriteTexture.height), new Vector2(0, 0), pixelsPerUnit);
         }
 
-        public static byte[] GetResource(Assembly asm, string ResourceName)
+        public static byte[] GetResource(Assembly asm, string resourceName)
         {
-            Stream stream = asm.GetManifestResourceStream(ResourceName);
+            Stream stream = asm.GetManifestResourceStream(resourceName);
             byte[] data = new byte[stream.Length];
             stream.Read(data, 0, (int)stream.Length);
             return data;
@@ -233,16 +254,19 @@ namespace BeatSaberMarkupLanguage
         public static IEnumerable<T> SingleEnumerable<T>(this T item)
             => Enumerable.Empty<T>().Append(item);
 
-        public static IEnumerable<T?> AsNullable<T>(this IEnumerable<T> seq) where T : struct
+        public static IEnumerable<T?> AsNullable<T>(this IEnumerable<T> seq)
+            where T : struct
             => seq.Select(v => new T?(v));
 
-        public static T? AsNullable<T>(this T item) where T : struct => item;
+        public static T? AsNullable<T>(this T item)
+            where T : struct
+            => item;
 
         /// <summary>
-        /// Get data from either a resource path, a file path, or a url
+        /// Get data from either a resource path, a file path, or a url.
         /// </summary>
-        /// <param name="location">Resource path, file path, or url. May need to prefix resource paths with 'AssemblyName:'</param>
-        /// <param name="callback">Received data</param>
+        /// <param name="location">Resource path, file path, or url. May need to prefix resource paths with 'AssemblyName:'.</param>
+        /// <param name="callback">Received data.</param>
         public static void GetData(string location, Action<byte[]> callback)
         {
             try
@@ -263,7 +287,7 @@ namespace BeatSaberMarkupLanguage
             }
             catch
             {
-                Logger.log.Error($"Error getting data from '{location}' either invalid path or file does not exist");
+                Logger.Log.Error($"Error getting data from '{location}' either invalid path or file does not exist");
             }
         }
 
@@ -274,7 +298,7 @@ namespace BeatSaberMarkupLanguage
 
             if (www.result != UnityWebRequest.Result.Success)
             {
-                Logger.log.Debug($"Error getting data from {url}, Message:{www.error}");
+                Logger.Log.Debug($"Error getting data from {url}, Message:{www.error}");
             }
             else
             {
@@ -282,44 +306,61 @@ namespace BeatSaberMarkupLanguage
             }
         }
 
-
         public static Dictionary<string, Sprite> spriteCache = new Dictionary<string, Sprite>();
+
         internal static Sprite FindSpriteCached(string name)
         {
             if (spriteCache.TryGetValue(name, out var sprite) && sprite != null)
+            {
                 return sprite;
+            }
 
             foreach (var x in Resources.FindObjectsOfTypeAll<Sprite>())
             {
                 if (x.name.Length == 0)
+                {
                     continue;
+                }
 
                 if (!spriteCache.TryGetValue(x.name, out var a) || a == null)
+                {
                     spriteCache[x.name] = x;
+                }
 
                 if (x.name == name)
+                {
                     sprite = x;
+                }
             }
 
             return sprite;
         }
 
         public static Dictionary<string, Texture> textureCache = new Dictionary<string, Texture>();
+
         internal static Texture FindTextureCached(string name)
         {
             if (textureCache.TryGetValue(name, out var texture) && texture != null)
+            {
                 return texture;
+            }
 
             foreach (var x in Resources.FindObjectsOfTypeAll<Texture>())
             {
                 if (x.name.Length == 0)
+                {
                     continue;
+                }
 
                 if (!textureCache.TryGetValue(x.name, out var a) || a == null)
+                {
                     textureCache[x.name] = x;
+                }
 
                 if (x.name == name)
+                {
                     texture = x;
+                }
             }
 
             return texture;

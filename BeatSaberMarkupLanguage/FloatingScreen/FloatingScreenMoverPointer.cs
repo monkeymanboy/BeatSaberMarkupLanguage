@@ -5,7 +5,7 @@ using VRUIControls;
 
 namespace BeatSaberMarkupLanguage.FloatingScreen
 {
-    //yoinked from https://github.com/Kylemc1413/CameraPlus/blob/master/CameraPlus/CameraMoverPointer.cs
+    // yoinked from https://github.com/Kylemc1413/CameraPlus/blob/master/CameraPlus/CameraMoverPointer.cs
     public class FloatingScreenMoverPointer : MonoBehaviour
     {
         protected const float MinScrollDistance = 0.25f;
@@ -50,12 +50,20 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
             VRPointer pointer = _vrPointer;
             VRController vrController = pointer != null ? pointer.lastSelectedVrController : null;
 
-            if (vrController != null && vrController.triggerValue > 0.9f || Input.GetMouseButton(0))
+            if ((vrController != null && vrController.triggerValue > 0.9f) || Input.GetMouseButton(0))
             {
-                if (_grabbingController != null) return;
+                if (_grabbingController != null)
+                {
+                    return;
+                }
+
                 if (Physics.Raycast(vrController.position, vrController.forward, out RaycastHit hit, MaxLaserDistance))
                 {
-                    if (hit.transform != _screenHandle) return;
+                    if (hit.transform != _screenHandle)
+                    {
+                        return;
+                    }
+
                     _grabbingController = vrController;
                     _grabPos = vrController.transform.InverseTransformPoint(_floatingScreen.transform.position);
                     _grabRot = Quaternion.Inverse(vrController.transform.rotation) * _floatingScreen.transform.rotation;
@@ -64,8 +72,11 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
                 }
             }
 
-            if (_grabbingController == null || !IsFpfc && _grabbingController.triggerValue > 0.9f ||
-                IsFpfc && Input.GetMouseButton(0)) return;
+            if (_grabbingController == null || (!IsFpfc && _grabbingController.triggerValue > 0.9f) || (IsFpfc && Input.GetMouseButton(0)))
+            {
+                return;
+            }
+
             _grabbingController = null;
             _floatingScreen.OnHandleReleased(pointer);
             OnRelease?.Invoke(_floatingScreen.transform.position, _floatingScreen.transform.rotation);
@@ -87,6 +98,7 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
             if (_grabbingController != null)
             {
                 float diff = _grabbingController.thumbstick.y * Time.unscaledDeltaTime;
+
                 if (_grabPos.magnitude > MinScrollDistance)
                 {
                     _grabPos -= Vector3.forward * diff;
@@ -95,16 +107,18 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
                 {
                     _grabPos -= Vector3.forward * Mathf.Clamp(diff, float.MinValue, 0);
                 }
+
                 _realPos = _grabbingController.transform.TransformPoint(_grabPos);
                 _realRot = _grabbingController.transform.rotation * _grabRot;
             }
-            else return;
-
+            else
+            {
+                return;
+            }
 
             _floatingScreen.transform.position = Vector3.Lerp(_floatingScreen.transform.position, _realPos, 10 * Time.unscaledDeltaTime);
 
             _floatingScreen.transform.rotation = Quaternion.Slerp(_floatingScreen.transform.rotation, _realRot, 5 * Time.unscaledDeltaTime);
-
         }
     }
 }

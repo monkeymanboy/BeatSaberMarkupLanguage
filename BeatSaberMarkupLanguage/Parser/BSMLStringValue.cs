@@ -3,6 +3,7 @@
     public class BSMLStringValue : BSMLValue
     {
         private string value;
+
         public override string MemberName { get; }
 
         public BSMLStringValue(string value, string memberName = "")

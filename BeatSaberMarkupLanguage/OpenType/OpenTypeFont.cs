@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BeatSaberMarkupLanguage.OpenType
 {
@@ -15,7 +13,8 @@ namespace BeatSaberMarkupLanguage.OpenType
 
         public OpenTypeFontReader Reader { get; }
 
-        public OpenTypeFont(OpenTypeFontReader reader, bool lazyLoad = true) : this(reader.ReadOffsetTable(), reader, lazyLoad)
+        public OpenTypeFont(OpenTypeFontReader reader, bool lazyLoad = true)
+            : this(reader.ReadOffsetTable(), reader, lazyLoad)
         {
         }
 
@@ -27,34 +26,43 @@ namespace BeatSaberMarkupLanguage.OpenType
                 .Where(t => t.Value.TableTag == OpenTypeTag.NAME).FirstOrDefault();
 
             if (lazyLoad)
+            {
                 Reader = reader;
+            }
             else
+            {
                 LoadAllTables(reader);
+            }
         }
 
         private void LoadAllTables(OpenTypeFontReader reader)
         {
-            nameTable = ReadNameTable(reader);
             // TODO: do something with this
+            nameTable = ReadNameTable(reader);
         }
 
         private OpenTypeNameTable nameTable = null;
+
         public OpenTypeNameTable NameTable
             => nameTable ??= ReadNameTable(Reader);
 
         private string uniqueId = null;
+
         public string UniqueId
             => uniqueId ??= FindBestNameRecord(OpenTypeNameTable.NameRecord.NameType.UniqueId)?.Value;
 
         private string family = null;
+
         public string Family
             => family ??= FindBestNameRecord(OpenTypeNameTable.NameRecord.NameType.FontFamily)?.Value;
 
         private string subfamily = null;
+
         public string Subfamily
             => subfamily ??= FindBestNameRecord(OpenTypeNameTable.NameRecord.NameType.FontSubfamily)?.Value;
 
         private string fullName = null;
+
         public string FullName
             => fullName ??= FindBestNameRecord(OpenTypeNameTable.NameRecord.NameType.FullFontName)?.Value;
 
@@ -74,10 +82,8 @@ namespace BeatSaberMarkupLanguage.OpenType
             static int RankLanguage(OpenTypeNameTable.NameRecord record)
                 => record switch
                 {
-                    { // because i'm a stupid little bitch i prefer US English
-                        PlatformID: OpenTypeNameTable.NameRecord.Platform.Windows,
-                        LanguageID: OpenTypeNameTable.NameRecord.USEnglishLangID
-                    } => 100,
+                    // because I'm a stupid little bitch I prefer US English
+                    { PlatformID: OpenTypeNameTable.NameRecord.Platform.Windows, LanguageID: OpenTypeNameTable.NameRecord.USEnglishLangID } => 100,
                     _ => 0,
                 };
 
@@ -88,7 +94,6 @@ namespace BeatSaberMarkupLanguage.OpenType
 
         public IEnumerable<TableRecord> Tables => tables;
 
-        #region IDisposable Support
         private bool disposedValue = false; // To detect redundant calls
 
         protected virtual void Dispose(bool disposing)
@@ -102,7 +107,6 @@ namespace BeatSaberMarkupLanguage.OpenType
 
                 // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
                 // TODO: set large fields to null.
-
                 disposedValue = true;
             }
         }
@@ -119,9 +123,9 @@ namespace BeatSaberMarkupLanguage.OpenType
         {
             // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
             Dispose(true);
+
             // TODO: uncomment the following line if the finalizer is overridden above.
             // GC.SuppressFinalize(this);
         }
-        #endregion
     }
 }

@@ -3,7 +3,7 @@
 namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
 {
     /// <summary>
-    /// IEND chunk representing the end of the PNG
+    /// IEND chunk representing the end of the PNG.
     /// </summary>
     internal class IENDChunk : Chunk
     {

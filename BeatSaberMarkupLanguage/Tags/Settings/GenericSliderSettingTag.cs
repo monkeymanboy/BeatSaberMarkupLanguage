@@ -1,23 +1,26 @@
-﻿using BeatSaberMarkupLanguage.Components;
+﻿using System.Collections.Generic;
+using System.Linq;
+using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.Components.Settings;
 using HMUI;
 using Polyglot;
-using System.Collections.Generic;
-using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.Tags.Settings
 {
-    public abstract class GenericSliderSettingTag<T> : BSMLTag where T : GenericSliderSetting
+    public abstract class GenericSliderSettingTag<T> : BSMLTag
+        where T : GenericSliderSetting
     {
         private LayoutElement controllersTransformTemplate;
 
         public override GameObject CreateObject(Transform parent)
         {
             if (controllersTransformTemplate == null)
+            {
                 controllersTransformTemplate = Resources.FindObjectsOfTypeAll<LayoutElement>().First(x => x.name == "PositionX");
+            }
 
             LayoutElement baseSetting = Object.Instantiate(controllersTransformTemplate, parent, false);
             baseSetting.name = "BSMLSliderSetting";

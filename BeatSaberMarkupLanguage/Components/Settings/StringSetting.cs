@@ -20,7 +20,9 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             set
             {
                 if (editButton != null)
+                {
                     editButton.interactable = value;
+                }
             }
         }
 
@@ -63,7 +65,9 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             Text = text;
             onChange?.Invoke(Text);
             if (updateOnChange)
+            {
                 ApplyValue();
+            }
         }
 
         public override void ApplyValue()
@@ -74,7 +78,9 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         public override void ReceiveValue()
         {
             if (associatedValue != null)
+            {
                 Text = (string)associatedValue.GetValue();
+            }
         }
     }
 }

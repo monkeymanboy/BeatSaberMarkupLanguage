@@ -1,7 +1,7 @@
-﻿using BeatSaberMarkupLanguage.Parser;
-using HMUI;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using BeatSaberMarkupLanguage.Parser;
+using HMUI;
 using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.Components
@@ -22,6 +22,7 @@ namespace BeatSaberMarkupLanguage.Components
                 tableCell.gameObject.AddComponent<Touchable>();
                 tableCell.interactable = true;
             }
+
             tableCell.reuseIdentifier = "BSMLCustomCellListCell";
             tableCell.name = "BSMLCustomTableCell";
             tableCell.parserParams = BSMLParser.instance.Parse(cellTemplate, tableCell.gameObject, data[idx]);
@@ -39,6 +40,7 @@ namespace BeatSaberMarkupLanguage.Components
             return data.Count();
         }
     }
+
     public class CustomCellTableCell : TableCell
     {
         public BSMLParserParams parserParams;
@@ -67,18 +69,23 @@ namespace BeatSaberMarkupLanguage.Components
         {
             foreach (GameObject gameObject in selectedTags)
             {
-                gameObject.SetActive(base.selected);
+                gameObject.SetActive(selected);
             }
+
             foreach (GameObject gameObject in hoveredTags)
             {
-                gameObject.SetActive(base.highlighted);
+                gameObject.SetActive(highlighted);
             }
+
             foreach (GameObject gameObject in neitherTags)
             {
-                gameObject.SetActive(!(base.selected || base.highlighted));
+                gameObject.SetActive(!(selected || highlighted));
             }
+
             if (parserParams.actions.TryGetValue("refresh-visuals", out BSMLAction action))
-                action.Invoke(base.selected, base.highlighted);
+            {
+                action.Invoke(selected, highlighted);
+            }
         }
     }
 }

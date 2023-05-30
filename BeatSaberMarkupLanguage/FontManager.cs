@@ -19,6 +19,7 @@ namespace BeatSaberMarkupLanguage
         {
             public string Path;
             public OpenTypeFont Info;
+
             public FontInfo(string path, OpenTypeFont info)
             {
                 Path = path;
@@ -26,17 +27,17 @@ namespace BeatSaberMarkupLanguage
             }
         }
 
-        // family -> list of fonts in family
+        // family → list of fonts in family
         private static Dictionary<string, List<FontInfo>> fontInfoLookup;
-        // full name -> font info
+
+        // full name → font info
         private static Dictionary<string, FontInfo> fontInfoLookupFullName;
-        // path -> loaded font object
-        private static readonly Dictionary<string, Font> loadedFontsCache = new Dictionary<string, Font>();
-        // (unity font, has system fallback set) -> tmp font
-        //private static readonly Dictionary<(Font font, bool hasFallbacks), TMP_FontAsset> tmpFontCache = new Dictionary<(Font font, bool hasFallbacks), TMP_FontAsset>();
+
+        // path → loaded font object
+        private static readonly Dictionary<string, Font> LoadedFontsCache = new Dictionary<string, Font>();
 
         /// <summary>
-        /// The <see cref="Task"/> associated with an ongoing call to <see cref="AsyncLoadSystemFonts"/>.
+        /// Gets the <see cref="Task"/> associated with an ongoing call to <see cref="AsyncLoadSystemFonts"/>.
         /// </summary>
         public static Task SystemFontLoadTask { get; private set; }
 
@@ -47,20 +48,31 @@ namespace BeatSaberMarkupLanguage
         /// Only one of this may be running at a time. If this has already been called, this will simply return the existing task.
         /// If <see cref="FontManager"/> has been initialized, this completes immediately.
         /// </remarks>
-        /// <returns>a task representing the async operation</returns>
+        /// <returns>A task representing the async operation.</returns>
         public static Task AsyncLoadSystemFonts()
         {
-            if (IsInitialized) return Task.CompletedTask;
-            if (SystemFontLoadTask != null) return SystemFontLoadTask;
-            var task = Task.Factory.StartNew(LoadSystemFonts).Unwrap();
-            SystemFontLoadTask = task.ContinueWith(t =>
+            if (IsInitialized)
             {
-                Logger.log.Debug("Font loading complete");
-                Interlocked.CompareExchange(ref fontInfoLookupFullName, t.Result.fulls, null);
-                Interlocked.CompareExchange(ref fontInfoLookup, t.Result.families, null);
                 return Task.CompletedTask;
-            }, TaskContinuationOptions.ExecuteSynchronously | TaskContinuationOptions.OnlyOnRanToCompletion).Unwrap();
-            task.ContinueWith(t => Logger.log.Error($"Font loading errored: {t.Exception}"), TaskContinuationOptions.ExecuteSynchronously | TaskContinuationOptions.NotOnRanToCompletion);
+            }
+
+            if (SystemFontLoadTask != null)
+            {
+                return SystemFontLoadTask;
+            }
+
+            var task = Task.Factory.StartNew(LoadSystemFonts).Unwrap();
+            SystemFontLoadTask = task.ContinueWith(
+                t =>
+                {
+                    Logger.Log.Debug("Font loading complete");
+                    Interlocked.CompareExchange(ref fontInfoLookupFullName, t.Result.fulls, null);
+                    Interlocked.CompareExchange(ref fontInfoLookup, t.Result.families, null);
+                    return Task.CompletedTask;
+                },
+                TaskContinuationOptions.ExecuteSynchronously | TaskContinuationOptions.OnlyOnRanToCompletion).Unwrap();
+
+            task.ContinueWith(t => Logger.Log.Error($"Font loading errored: {t.Exception}"), TaskContinuationOptions.ExecuteSynchronously | TaskContinuationOptions.NotOnRanToCompletion);
             return SystemFontLoadTask;
         }
 
@@ -68,8 +80,8 @@ namespace BeatSaberMarkupLanguage
         {
             fontInfoLookup = null;
             fontInfoLookupFullName = null;
-            return UnityMainThreadTaskScheduler.Factory.StartNew(() => DestroyObjects(loadedFontsCache.Select(p => p.Value))).Unwrap()
-                .ContinueWith(_ => loadedFontsCache.Clear());
+            return UnityMainThreadTaskScheduler.Factory.StartNew(() => DestroyObjects(LoadedFontsCache.Select(p => p.Value))).Unwrap()
+                .ContinueWith(_ => LoadedFontsCache.Clear());
         }
 
         private static async Task DestroyObjects(IEnumerable<UnityEngine.Object> objects)
@@ -97,7 +109,7 @@ namespace BeatSaberMarkupLanguage
                 }
                 catch (Exception e)
                 {
-                    Logger.log.Error(e);
+                    Logger.Log.Error(e);
                 }
 
                 await Task.Yield();
@@ -111,7 +123,7 @@ namespace BeatSaberMarkupLanguage
             FontInfo AddFont(OpenTypeFont font)
             {
 #if DEBUG
-                Logger.log.Debug($"'{path}' = '{font.Family}' '{font.Subfamily}' ({font.FullName})");
+                Logger.Log.Debug($"'{path}' = '{font.Family}' '{font.Subfamily}' ({font.FullName})");
 #endif
                 var fontInfo = new FontInfo(path, font);
 
@@ -127,6 +139,7 @@ namespace BeatSaberMarkupLanguage
                 {
                     fullCache.Add(name, fontInfo);
                 }
+
                 return fontInfo;
             }
 
@@ -144,7 +157,7 @@ namespace BeatSaberMarkupLanguage
             }
             else
             {
-                Logger.log.Warn($"Font file '{path}' is not an OpenType file");
+                Logger.Log.Warn($"Font file '{path}' is not an OpenType file");
                 return Enumerable.Empty<FontInfo>();
             }
         }
@@ -152,18 +165,20 @@ namespace BeatSaberMarkupLanguage
         private static List<FontInfo> GetListForFamily(Dictionary<string, List<FontInfo>> cache, string family)
         {
             if (!cache.TryGetValue(family, out var list))
+            {
                 cache.Add(family, list = new List<FontInfo>());
+            }
+
             return list;
         }
 
         /// <summary>
         /// Adds a specified OpenType file to the font manager for lookup by name.
         /// </summary>
-        /// <param name="path">the path to add to the manager</param>
-        /// <returns>the <see cref="Font"/> the file contained</returns>
-        /// <exception cref="ArgumentException">if the file pointed to by <paramref name="path"/> is not an OpenType file -or-
-        /// <paramref name="path"/> is not a valid file path</exception>
-        /// <exception cref="FileNotFoundException">if the file does not exist</exception>
+        /// <param name="path">The path to add to the manager.</param>
+        /// <returns>the <see cref="Font"/> the file contained.</returns>
+        /// <exception cref="ArgumentException">If the file pointed to by <paramref name="path"/> is not an OpenType file or if <paramref name="path"/> is not a valid file path.</exception>
+        /// <exception cref="FileNotFoundException">If the file does not exist.</exception>
         public static Font AddFontFile(string path)
         {
             ThrowIfNotInitialized();
@@ -172,13 +187,16 @@ namespace BeatSaberMarkupLanguage
             {
                 var set = AddFontFileToCache(fontInfoLookup, fontInfoLookupFullName, path);
                 if (!set.Any())
+                {
                     throw new ArgumentException("File is not an OpenType font or collection", nameof(path));
+                }
+
                 return GetFontFromCacheOrLoad(set.First());
             }
         }
 
         /// <summary>
-        /// Gets whether or not <see cref="FontManager"/> is initialized.
+        /// Gets a value indicating whether or not <see cref="FontManager"/> is initialized.
         /// </summary>
         /// <remarks>
         /// You can <see langword="await"/> <see cref="AsyncLoadSystemFonts"/>, or <see cref="SystemFontLoadTask"/> if it is non-null.
@@ -188,7 +206,10 @@ namespace BeatSaberMarkupLanguage
 
         private static void ThrowIfNotInitialized()
         {
-            if (!IsInitialized) throw new InvalidOperationException("FontManager not initialized");
+            if (!IsInitialized)
+            {
+                throw new InvalidOperationException("FontManager not initialized");
+            }
         }
 
         /// <summary>
@@ -198,12 +219,11 @@ namespace BeatSaberMarkupLanguage
         /// When <paramref name="subfamily"/> is <see langword="null"/>, <paramref name="fallbackIfNoSubfamily"/> is ignored,
         /// and always treated as if it were <see langword="true"/>.
         /// </remarks>
-        /// <param name="family">the name of the font family to look for</param>
-        /// <param name="font">the font with that family name, if any</param>
-        /// <param name="subfamily">the font subfamily name</param>
-        /// <param name="fallbackIfNoSubfamily">whether or not to fallback to the first font with the given family name
-        /// if the given subfamily name was not found</param>
-        /// <returns><see langword="true"/> if the font was found, <see langword="false"/> otherwise</returns>
+        /// <param name="family">The name of the font family to look for.</param>
+        /// <param name="font">The font with that family name, if any.</param>
+        /// <param name="subfamily">The font subfamily name.</param>
+        /// <param name="fallbackIfNoSubfamily">Whether or not to fallback to the first font with the given family name if the given subfamily name was not found.</param>
+        /// <returns><see langword="true"/> if the font was found, <see langword="false"/> otherwise.</returns>
         public static bool TryGetFontByFamily(string family, out Font font, string subfamily = null, bool fallbackIfNoSubfamily = false)
         {
             if (TryGetFontInfoByFamily(family, out var info, subfamily, fallbackIfNoSubfamily))
@@ -220,7 +240,11 @@ namespace BeatSaberMarkupLanguage
         {
             ThrowIfNotInitialized();
 
-            if (subfamily == null) fallbackIfNoSubfamily = true;
+            if (subfamily == null)
+            {
+                fallbackIfNoSubfamily = true;
+            }
+
             subfamily ??= "Regular"; // this is a typical default family name
 
             lock (fontInfoLookup)
@@ -253,9 +277,9 @@ namespace BeatSaberMarkupLanguage
         /// <summary>
         /// Attempts to get a font by its full name.
         /// </summary>
-        /// <param name="fullName">the full name of the font to look for</param>
-        /// <param name="font">the font identified by <paramref name="fullName"/>, if any</param>
-        /// <returns><see langword="true"/> if the font was found, <see langword="false"/> otherwise</returns>
+        /// <param name="fullName">The full name of the font to look for.</param>
+        /// <param name="font">The font identified by <paramref name="fullName"/>, if any.</param>
+        /// <returns><see langword="true"/> if the font was found, <see langword="false"/> otherwise.</returns>
         public static bool TryGetFontByFullName(string fullName, out Font font)
         {
             if (TryGetFontInfoByFullName(fullName, out var info))
@@ -282,18 +306,18 @@ namespace BeatSaberMarkupLanguage
 
         private static Font GetFontFromCacheOrLoad(FontInfo info)
         {
-            lock (loadedFontsCache)
+            lock (LoadedFontsCache)
             {
-                if (!loadedFontsCache.TryGetValue(info.Path, out var font))
+                if (!LoadedFontsCache.TryGetValue(info.Path, out var font))
                 {
                     font = new Font(info.Path);
                     font.name = info.Info.FullName;
-                    loadedFontsCache.Add(info.Path, font);
+                    LoadedFontsCache.Add(info.Path, font);
                 }
+
                 return font;
             }
         }
-
 
         /// <summary>
         /// Gets the font fallback list provided by the OS for a given font name, if there is any.
@@ -301,12 +325,15 @@ namespace BeatSaberMarkupLanguage
         /// <remarks>
         /// If the OS specifies no fallbacks, then the result of this function will be empty.
         /// </remarks>
-        /// <param name="fullname">the full name of the font to look up the fallbacks for</param>
-        /// <returns>a list of fallbacks defined by the OS</returns>
+        /// <param name="fullname">The full name of the font to look up the fallbacks for.</param>
+        /// <returns>A list of fallbacks defined by the OS.</returns>
         public static IEnumerable<string> GetOSFontFallbackList(string fullname)
         {
             using var syslinkKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\FontLink\SystemLink");
-            if (syslinkKey == null) return Enumerable.Empty<string>();
+            if (syslinkKey == null)
+            {
+                return Enumerable.Empty<string>();
+            }
 
             var keyVal = syslinkKey.GetValue(fullname);
             if (keyVal is string[] names)
@@ -323,13 +350,12 @@ namespace BeatSaberMarkupLanguage
         /// <summary>
         /// Attempts to get a <see cref="TMP_FontAsset"/> with the given family name, and optionally subfamily.
         /// </summary>
-        /// <param name="family">the name of the font family to look for</param>
-        /// <param name="font">the font with that family name, if any</param>
-        /// <param name="subfamily">the font subfamily name</param>
-        /// <param name="fallbackIfNoSubfamily">whether or not to fallback to the first font with the given family name
-        /// if the given subfamily name was not found</param>
-        /// <param name="setupOsFallbacks">whether or not to set up the fallbacks specified by the OS</param>
-        /// <returns><see langword="true"/> if the font was found, <see langword="false"/> otherwise</returns>
+        /// <param name="family">The name of the font family to look for.</param>
+        /// <param name="font">The font with that family name, if any.</param>
+        /// <param name="subfamily">The font subfamily name.</param>
+        /// <param name="fallbackIfNoSubfamily">Whether or not to fallback to the first font with the given family name if the given subfamily name was not found.</param>
+        /// <param name="setupOsFallbacks">Whether or not to set up the fallbacks specified by the OS.</param>
+        /// <returns><see langword="true"/> if the font was found, <see langword="false"/> otherwise.</returns>
         public static bool TryGetTMPFontByFamily(string family, out TMP_FontAsset font, string subfamily = null, bool fallbackIfNoSubfamily = false, bool setupOsFallbacks = true)
         {
             if (!TryGetFontInfoByFamily(family, out var info, subfamily, fallbackIfNoSubfamily))
@@ -337,6 +363,7 @@ namespace BeatSaberMarkupLanguage
                 font = null;
                 return false;
             }
+
             font = GetOrSetupTMPFontFor(info, setupOsFallbacks);
             return true;
         }
@@ -344,17 +371,18 @@ namespace BeatSaberMarkupLanguage
         /// <summary>
         /// Attempts to get a <see cref="TMP_FontAsset"/> by its font's full name.
         /// </summary>
-        /// <param name="fullname">the full name of the font to look for</param>
-        /// <param name="font">the font identified by <paramref name="fullName"/>, if any</param>
-        /// <param name="setupOsFallbacks">whether or not to set up the fallbacks specified by the OS</param>
-        /// <returns><see langword="true"/> if the font was found, <see langword="false"/> otherwise</returns>
-        public static bool TryGetTMPFontByFullName(string fullname, out TMP_FontAsset font, bool setupOsFallbacks = true)
+        /// <param name="fullName">The full name of the font to look for.</param>
+        /// <param name="font">The font identified by <paramref name="fullName"/>, if any.</param>
+        /// <param name="setupOsFallbacks">Whether or not to set up the fallbacks specified by the OS.</param>
+        /// <returns><see langword="true"/> if the font was found, <see langword="false"/> otherwise.</returns>
+        public static bool TryGetTMPFontByFullName(string fullName, out TMP_FontAsset font, bool setupOsFallbacks = true)
         {
-            if (!TryGetFontInfoByFullName(fullname, out var info))
+            if (!TryGetFontInfoByFullName(fullName, out var info))
             {
                 font = null;
                 return false;
             }
+
             font = GetOrSetupTMPFontFor(info, setupOsFallbacks);
             return true;
         }
@@ -363,17 +391,15 @@ namespace BeatSaberMarkupLanguage
         {
             // don't lock on this because this is mutually recursive with TryGetTMPFontByFullName
             var font = GetFontFromCacheOrLoad(info);
-            /*if (!tmpFontCache.TryGetValue((font, setupOsFallbacks), out var tmpFont))
-            {*/
             var tmpFont = BeatSaberUI.CreateTMPFont(font, info.Info.FullName);
 
             if (setupOsFallbacks)
             {
-                Logger.log.Debug($"Reading fallbacks for '{info.Info.FullName}'");
+                Logger.Log.Debug($"Reading fallbacks for '{info.Info.FullName}'");
                 var fallbacks = GetOSFontFallbackList(info.Info.FullName);
                 foreach (var fallback in fallbacks)
                 {
-                    Logger.log.Debug($"Reading fallback '{fallback}'");
+                    Logger.Log.Debug($"Reading fallback '{fallback}'");
                     if (TryGetTMPFontByFullName(fallback, out var fallbackFont, false))
                     {
                         tmpFont.fallbackFontAssetTable ??= new List<TMP_FontAsset>();
@@ -387,7 +413,7 @@ namespace BeatSaberMarkupLanguage
                     }
                     else
                     {
-                        Logger.log.Debug($"-> Not found");
+                        Logger.Log.Debug($"-> Not found");
                     }
                 }
             }

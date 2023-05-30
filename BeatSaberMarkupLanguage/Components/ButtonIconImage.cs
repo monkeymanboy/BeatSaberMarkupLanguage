@@ -10,7 +10,10 @@ namespace BeatSaberMarkupLanguage.Components
         public void SetIcon(string path)
         {
             if (image == null)
+            {
                 return;
+            }
+
             image.SetImage(path);
         }
     }

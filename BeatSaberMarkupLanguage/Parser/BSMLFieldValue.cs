@@ -6,6 +6,7 @@ namespace BeatSaberMarkupLanguage.Parser
     {
         private readonly object host;
         internal FieldInfo fieldInfo;
+
         public override string MemberName => fieldInfo?.Name;
 
         public BSMLFieldValue(object host, FieldInfo fieldInfo, bool fromUiValue = true)

@@ -48,7 +48,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         }
 
         /// <summary>
-        /// Gets the number frames.
+        /// Gets or sets the number frames.
         /// </summary>
         /// <value>The number frames.</value>
         public uint FrameCount
@@ -62,7 +62,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         }
 
         /// <summary>
-        /// Gets the number plays.
+        /// Gets or sets the number plays.
         /// </summary>
         /// <value>The number plays.</value>
         public uint PlayCount

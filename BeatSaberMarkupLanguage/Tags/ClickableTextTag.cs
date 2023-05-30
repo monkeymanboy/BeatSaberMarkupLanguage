@@ -1,6 +1,4 @@
 ﻿using BeatSaberMarkupLanguage.Components;
-using System.Linq;
-using TMPro;
 using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.Tags

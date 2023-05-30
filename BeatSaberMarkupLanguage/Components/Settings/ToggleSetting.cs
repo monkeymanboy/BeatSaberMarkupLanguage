@@ -45,7 +45,9 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         public override void ReceiveValue()
         {
             if (associatedValue != null)
+            {
                 Value = (bool)associatedValue.GetValue();
+            }
         }
 
         private void OnEnable()
@@ -66,7 +68,9 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             onChange?.Invoke(Value);
 
             if (updateOnChange)
+            {
                 ApplyValue();
+            }
         }
     }
 }

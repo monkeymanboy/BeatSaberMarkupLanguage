@@ -11,7 +11,9 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         public bool updateOnChange;
 
         public abstract void Setup();
+
         public abstract void ApplyValue();
+
         public abstract void ReceiveValue();
     }
 }

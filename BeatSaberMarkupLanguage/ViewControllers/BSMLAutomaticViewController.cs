@@ -6,7 +6,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using BeatSaberMarkupLanguage.Attributes;
-using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.ViewControllers
 {
@@ -16,10 +15,12 @@ namespace BeatSaberMarkupLanguage.ViewControllers
         {
             string ns = type.Namespace;
             string name = type.Name;
-            string resourceNoExtension = (ns.Length > 0 ? ns + "." : "") + name;
-            //First we check with no extension in case DependentUpon is being used on the embedded resource
+            string resourceNoExtension = (ns.Length > 0 ? ns + "." : string.Empty) + name;
+
+            // First we check with no extension in case DependentUpon is being used on the embedded resource
             return type.Assembly.GetManifestResourceNames().Contains(resourceNoExtension) ? resourceNoExtension : $"{resourceNoExtension}.bsml";
         }
+
         public virtual string FallbackContent => @"<bg>
                                                      <vertical child-control-height='false' child-control-width='true' child-align='UpperCenter' pref-width='110' pad-left='3' pad-right='3'>
                                                        <horizontal bg='panel-top' pad-left='10' pad-right='10' horizontal-fit='PreferredSize' vertical-fit='PreferredSize'>
@@ -29,44 +30,55 @@ namespace BeatSaberMarkupLanguage.ViewControllers
                                                      <text-page text='{0}' anchor-min-x='0.1' anchor-max-x='0.9' anchor-max-y='0.8'/>
                                                    </bg>";
 
-        private string _resourceName;
-        private string _content;
+        private string resourceName;
+        private string content;
+
         public override string Content
         {
             get
             {
-                if (_resourceName == null)
+                if (resourceName == null)
                 {
                     ViewDefinitionAttribute viewDef = GetType().GetCustomAttribute<ViewDefinitionAttribute>();
-                    if (viewDef != null) _resourceName = viewDef.Definition;
-                    else _resourceName = GetDefaultResourceName(GetType());
+                    if (viewDef != null)
+                    {
+                        resourceName = viewDef.Definition;
+                    }
+                    else
+                    {
+                        resourceName = GetDefaultResourceName(GetType());
+                    }
                 }
-                if (string.IsNullOrEmpty(_content))
+
+                if (string.IsNullOrEmpty(content))
                 {
                     if (!string.IsNullOrEmpty(ContentFilePath) && File.Exists(ContentFilePath))
                     {
                         try
                         {
-                            _content = File.ReadAllText(ContentFilePath);
+                            content = File.ReadAllText(ContentFilePath);
                         }
                         catch (Exception ex)
                         {
-                            Logger.log?.Warn($"Unable to read file {ContentFilePath} for {name}: {ex.Message}");
-                            Logger.log?.Debug(ex);
+                            Logger.Log?.Warn($"Unable to read file {ContentFilePath} for {name}: {ex.Message}");
+                            Logger.Log?.Debug(ex);
                         }
                     }
-                    if (string.IsNullOrEmpty(_content) && !string.IsNullOrEmpty(_resourceName))
+
+                    if (string.IsNullOrEmpty(content) && !string.IsNullOrEmpty(resourceName))
                     {
                         if (ContentFilePath != null)
                         {
 #if HRVC_DEBUG
-                            Logger.log.Warn($"No content from file {ContentFilePath}, using resource {_resourceName}");
+                            Logger.Log.Warn($"No content from file {ContentFilePath}, using resource {resourceName}");
 #endif
                         }
-                        _content = Utilities.GetResourceContent(GetType().Assembly, _resourceName);
+
+                        content = Utilities.GetResourceContent(GetType().Assembly, resourceName);
                     }
                 }
-                return _content;
+
+                return content;
             }
         }
 
@@ -76,59 +88,70 @@ namespace BeatSaberMarkupLanguage.ViewControllers
 
         string WatcherGroup.IHotReloadableController.Name => name;
 
-        protected BSMLAutomaticViewController() : base()
+        protected BSMLAutomaticViewController()
+            : base()
         {
             HotReloadAttribute hotReloadAttr = GetType().GetCustomAttribute<HotReloadAttribute>();
-            if (hotReloadAttr == null) ContentFilePath = null;
-            else ContentFilePath = Path.ChangeExtension(hotReloadAttr.Path, ".bsml");
+            if (hotReloadAttr == null)
+            {
+                ContentFilePath = null;
+            }
+            else
+            {
+                ContentFilePath = Path.ChangeExtension(hotReloadAttr.Path, ".bsml");
+            }
         }
 
         protected override void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
         {
             if (!string.IsNullOrEmpty(ContentFilePath))
             {
-
                 if (ContentChanged && !firstActivation)
                 {
                     ContentChanged = false;
                     ParseWithFallback();
                 }
                 else if (firstActivation)
+                {
                     ParseWithFallback();
+                }
+
                 bool registered = WatcherGroup.RegisterViewController(this);
 #if HRVC_DEBUG
                 if (registered)
-                    Logger.log.Info($"Registered {this.name}");
+                {
+                    Logger.Log.Info($"Registered {this.name}");
+                }
                 else
-                    Logger.log.Error($"Failed to register {this.name}");
+                {
+                    Logger.Log.Error($"Failed to register {this.name}");
+                }
 #endif
             }
-            else
+            else if (firstActivation)
             {
-                if (firstActivation)
-                    ParseWithFallback();
+                ParseWithFallback();
             }
 
             didActivate?.Invoke(firstActivation, addedToHierarchy, screenSystemEnabling);
         }
 
-
         protected override void DidDeactivate(bool removedFromHierarchy, bool screenSystemDisabling)
         {
             if (!string.IsNullOrEmpty(ContentFilePath))
             {
-
-                _content = null;
+                content = null;
 #if HRVC_DEBUG
-                Logger.log.Warn($"DidDeactive: {GetInstanceID()}:{name}");
+                Logger.Log.Warn($"DidDeactive: {GetInstanceID()}:{name}");
 #endif
                 if (!WatcherGroup.UnregisterViewController(this))
                 {
 #if HRVC_DEBUG
-                    Logger.log.Warn($"Failed to Unregister {GetInstanceID()}:{name}");
+                    Logger.Log.Warn($"Failed to Unregister {GetInstanceID()}:{name}");
 #endif
                 }
             }
+
             base.DidDeactivate(removedFromHierarchy, screenSystemDisabling);
         }
 
@@ -140,8 +163,8 @@ namespace BeatSaberMarkupLanguage.ViewControllers
             }
             catch (Exception ex)
             {
-                Logger.log.Error($"Error parsing BSML: {ex.Message}");
-                Logger.log.Debug(ex);
+                Logger.Log.Error($"Error parsing BSML: {ex.Message}");
+                Logger.Log.Debug(ex);
                 BSMLParser.instance.Parse(string.Format(FallbackContent, Utilities.EscapeXml(ex.Message)), gameObject, null);
             }
         }
@@ -149,7 +172,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
         void WatcherGroup.IHotReloadableController.MarkDirty()
         {
             ContentChanged = true;
-            _content = null;
+            content = null;
         }
 
         void WatcherGroup.IHotReloadableController.Refresh(bool forceReload)
@@ -157,22 +180,27 @@ namespace BeatSaberMarkupLanguage.ViewControllers
             if (!isActiveAndEnabled)
             {
 #if HRVC_DEBUG
-                Logger.log.Warn($"Trying to refresh {GetInstanceID()}:{name} when it isn't ActiveAndEnabled.");
+                Logger.Log.Warn($"Trying to refresh {GetInstanceID()}:{name} when it isn't ActiveAndEnabled.");
 #endif
                 return;
             }
+
             if (ContentChanged || forceReload)
             {
                 try
                 {
                     __Deactivate(false, false, false);
+
                     for (int i = 0; i < transform.childCount; i++)
-                        GameObject.Destroy(transform.GetChild(i).gameObject);
+                    {
+                        Destroy(transform.GetChild(i).gameObject);
+                    }
+
                     __Activate(false, false);
                 }
                 catch (Exception ex)
                 {
-                    Logger.log?.Error(ex);
+                    Logger.Log?.Error(ex);
                 }
             }
         }

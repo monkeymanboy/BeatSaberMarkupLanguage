@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.Animations
 {
@@ -9,11 +8,14 @@ namespace BeatSaberMarkupLanguage.Animations
         public int frameCount = 0;
         public bool initialized = false;
     }
+
     public struct FrameInfo
     {
-        public int width, height;
+        public int width;
+        public int height;
         public byte[] colors;
         public int delay;
+
         public FrameInfo(int width, int height, int bpp = 4)
         {
             this.width = width;

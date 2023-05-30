@@ -1,8 +1,8 @@
-﻿using HMUI;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using HMUI;
 using TMPro;
 using UnityEngine;
 
@@ -48,12 +48,14 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             text.text = TextForValue(Value);
         }
 
-        private void OnChange(TextSlider _, float val)
+        private void OnChange(TextSlider textSlider, float val)
         {
             text.text = TextForValue(Value);
             onChange?.Invoke(Value);
             if (updateOnChange)
+            {
                 ApplyValue();
+            }
         }
 
         public override void ApplyValue()
@@ -64,7 +66,9 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         public override void ReceiveValue()
         {
             if (associatedValue != null)
+            {
                 Value = associatedValue.GetValue();
+            }
         }
 
         protected string TextForValue(object value)

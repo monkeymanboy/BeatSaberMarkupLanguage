@@ -1,6 +1,6 @@
-﻿using BeatSaberMarkupLanguage.Parser;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using BeatSaberMarkupLanguage.Parser;
 using UnityEngine.UI;
 using static BeatSaberMarkupLanguage.BSMLParser;
 
@@ -11,8 +11,8 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
     {
         public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
         {
-            { "onClick", new[]{ "on-click" } },
-            { "clickEvent", new[]{ "click-event", "event-click"} }
+            { "onClick", new[] { "on-click" } },
+            { "clickEvent", new[] { "click-event", "event-click" } },
         };
 
         public override Dictionary<string, Action<Button, string>> Setters => new Dictionary<string, Action<Button, string>>();
@@ -25,10 +25,12 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 
                 if (componentType.data.TryGetValue("onClick", out string onClick))
                 {
-                    button.onClick.AddListener(delegate
+                    button.onClick.AddListener(() =>
                     {
                         if (!parserParams.actions.TryGetValue(onClick, out BSMLAction onClickAction))
+                        {
                             throw new Exception("on-click action '" + onClick + "' not found");
+                        }
 
                         onClickAction.Invoke();
                     });
@@ -36,16 +38,17 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 
                 if (componentType.data.TryGetValue("clickEvent", out string clickEvent))
                 {
-                    button.onClick.AddListener(delegate
+                    button.onClick.AddListener(() =>
                     {
                         parserParams.EmitEvent(clickEvent);
                     });
                 }
+
                 base.HandleType(componentType, parserParams);
             }
             catch (Exception ex)
             {
-                Logger.log?.Error(ex);
+                Logger.Log?.Error(ex);
             }
         }
 
@@ -53,6 +56,5 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
         {
             button.interactable = Parse.Bool(flag);
         }
-
     }
 }

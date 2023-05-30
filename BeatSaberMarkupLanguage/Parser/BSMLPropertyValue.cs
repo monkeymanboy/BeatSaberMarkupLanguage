@@ -7,6 +7,7 @@ namespace BeatSaberMarkupLanguage.Parser
     {
         private readonly object host;
         internal PropertyInfo propertyInfo;
+
         public override string MemberName => propertyInfo?.Name;
 
         public BSMLPropertyValue(object host, PropertyInfo propertyInfo, bool fromUiValue = true)

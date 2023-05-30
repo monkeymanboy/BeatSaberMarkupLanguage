@@ -1,7 +1,7 @@
-﻿using BeatSaberMarkupLanguage.Components;
-using BeatSaberMarkupLanguage.Parser;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using BeatSaberMarkupLanguage.Components;
+using BeatSaberMarkupLanguage.Parser;
 using static BeatSaberMarkupLanguage.BSMLParser;
 
 namespace BeatSaberMarkupLanguage.TypeHandlers
@@ -11,9 +11,9 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
     {
         public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
         {
-            { "value", new[]{ "value" } },
-            { "onEnter", new[]{ "on-enter" } },
-            { "clearOnOpen", new[]{ "clear-on-open" } }
+            { "value", new[] { "value" } },
+            { "onEnter", new[] { "on-enter" } },
+            { "clearOnOpen", new[] { "clear-on-open" } },
         };
 
         public override void HandleType(ComponentTypeWithData componentType, BSMLParserParams parserParams)
@@ -22,12 +22,16 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             {
                 ModalKeyboard modalKeyboard = componentType.component as ModalKeyboard;
                 if (componentType.data.TryGetValue("clearOnOpen", out string clearOnOpen))
+                {
                     modalKeyboard.clearOnOpen = bool.Parse(clearOnOpen);
+                }
 
                 if (componentType.data.TryGetValue("value", out string value))
                 {
                     if (!parserParams.values.TryGetValue(value, out BSMLValue associatedValue))
+                    {
                         throw new Exception("value '" + value + "' not found");
+                    }
 
                     modalKeyboard.associatedValue = associatedValue;
                 }
@@ -35,14 +39,16 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 if (componentType.data.TryGetValue("onEnter", out string onEnter))
                 {
                     if (!parserParams.actions.TryGetValue(onEnter, out BSMLAction onEnterAction))
+                    {
                         throw new Exception("on-enter action '" + onEnter + "' not found");
+                    }
 
                     modalKeyboard.onEnter = onEnterAction;
                 }
             }
             catch (Exception ex)
             {
-                Logger.log?.Error(ex);
+                Logger.Log?.Error(ex);
             }
         }
     }

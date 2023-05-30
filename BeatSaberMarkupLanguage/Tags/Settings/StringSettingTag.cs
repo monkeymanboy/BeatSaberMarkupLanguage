@@ -1,8 +1,8 @@
-﻿using BeatSaberMarkupLanguage.Components;
+﻿using System.Collections.Generic;
+using System.Linq;
+using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.Components.Settings;
 using Polyglot;
-using System.Collections.Generic;
-using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -18,7 +18,10 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
         public override GameObject CreateObject(Transform parent)
         {
             if (valueControllerTemplate == null)
+            {
                 valueControllerTemplate = Resources.FindObjectsOfTypeAll<FormattedFloatListSettingsValueController>().First(x => x.name == "VRRenderingScale");
+            }
+
             FormattedFloatListSettingsValueController baseSetting = Object.Instantiate(valueControllerTemplate, parent, false);
             baseSetting.name = "BSMLStringSetting";
 

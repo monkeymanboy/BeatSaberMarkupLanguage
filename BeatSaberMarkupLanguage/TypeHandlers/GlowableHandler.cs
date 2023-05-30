@@ -1,6 +1,6 @@
-﻿using BeatSaberMarkupLanguage.Components;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using BeatSaberMarkupLanguage.Components;
 
 namespace BeatSaberMarkupLanguage.TypeHandlers
 {
@@ -9,18 +9,17 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
     {
         public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
         {
-            { "glowColor", new[]{ "glow-color" } }
+            { "glowColor", new[] { "glow-color" } },
         };
 
         public override Dictionary<string, Action<Glowable, string>> Setters => new Dictionary<string, Action<Glowable, string>>()
         {
-            {"glowColor", new Action<Glowable, string>(SetGlow) }
+            { "glowColor", new Action<Glowable, string>(SetGlow) },
         };
 
         public static void SetGlow(Glowable glowable, string glowColor)
         {
             glowable.SetGlow(glowColor);
         }
-
     }
 }

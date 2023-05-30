@@ -1,8 +1,8 @@
-﻿using HarmonyLib;
-using HMUI;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
+using HarmonyLib;
+using HMUI;
 
 namespace BeatSaberMarkupLanguage.Harmony_Patches
 {
@@ -29,16 +29,22 @@ namespace BeatSaberMarkupLanguage.Harmony_Patches
                 // on Horizontal lists.
                 if (codes[i].opcode == OpCodes.Ret)
                 {
-                    codes.InsertRange(i, new[] {
+                    var additionalCodeInstructions = new[]
+                    {
                         // Loads -1f onto the stack
                         new CodeInstruction(OpCodes.Ldc_R4, -1f),
+
                         // Multiplies the top two numbers on the stack (-1, and our anchored X coordinate)
-                        new CodeInstruction(OpCodes.Mul)
-                    });
+                        new CodeInstruction(OpCodes.Mul),
+                    };
+
+                    codes.InsertRange(i, additionalCodeInstructions);
+
                     // We don't need to do this on the second "ret" command, which only executes on Vertical lists.
                     break;
                 }
             }
+
             return codes;
         }
     }

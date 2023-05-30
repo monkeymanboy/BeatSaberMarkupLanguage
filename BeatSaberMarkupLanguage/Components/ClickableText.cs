@@ -1,5 +1,5 @@
-﻿using HMUI;
-using System;
+﻿using System;
+using HMUI;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -7,35 +7,42 @@ namespace BeatSaberMarkupLanguage.Components
 {
     public class ClickableText : CurvedTextMeshPro, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
     {
-        private Color _highlightColor = new Color(0.60f, 0.80f, 1);
+        private Color highlightColor = new Color(0.60f, 0.80f, 1);
+
         public Color HighlightColor
         {
-            get => _highlightColor;
+            get => highlightColor;
             set
             {
-                _highlightColor = value;
+                highlightColor = value;
                 UpdateHighlight();
             }
         }
-        private Color _defaultColor = Color.white;
+
+        private Color defaultColor = Color.white;
+
         public Color DefaultColor
         {
-            get => _defaultColor;
+            get => defaultColor;
             set
             {
-                _defaultColor = value;
+                defaultColor = value;
                 UpdateHighlight();
             }
         }
-        public Action<PointerEventData> OnClickEvent, PointerEnterEvent, PointerExitEvent;
 
-        private bool _isHighlighted = false;
+        public Action<PointerEventData> OnClickEvent;
+        public Action<PointerEventData> PointerEnterEvent;
+        public Action<PointerEventData> PointerExitEvent;
+
+        private bool isHighlighted = false;
+
         private bool IsHighlighted
         {
-            get => _isHighlighted;
+            get => isHighlighted;
             set
             {
-                _isHighlighted = value;
+                isHighlighted = value;
                 UpdateHighlight();
             }
         }

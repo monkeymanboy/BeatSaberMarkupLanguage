@@ -1,8 +1,7 @@
-﻿using HMUI;
-using System.Linq;
+﻿using System.Linq;
+using HMUI;
 using UnityEngine;
 using UnityEngine.UI;
-using VRUIControls;
 
 namespace BeatSaberMarkupLanguage.Tags
 {
@@ -15,8 +14,11 @@ namespace BeatSaberMarkupLanguage.Tags
         public override GameObject CreateObject(Transform parent)
         {
             if (modalViewTemplate == null)
+            {
                 modalViewTemplate = Resources.FindObjectsOfTypeAll<ModalView>().First(x => x.name == "DropdownTableView");
-            ModalView modalView = diContainer.InstantiatePrefabForComponent<ModalView>(modalViewTemplate, parent);
+            }
+
+            ModalView modalView = DiContainer.InstantiatePrefabForComponent<ModalView>(modalViewTemplate, parent);
             modalView._presentPanelAnimations = modalViewTemplate._presentPanelAnimations;
             modalView._dismissPanelAnimation = modalViewTemplate._dismissPanelAnimation;
 
@@ -24,9 +26,6 @@ namespace BeatSaberMarkupLanguage.Tags
             Object.DestroyImmediate(modalView.GetComponent<ScrollRect>());
             Object.DestroyImmediate(modalView.GetComponent<ScrollView>());
             Object.DestroyImmediate(modalView.GetComponent<EventSystemListener>());
-            //GameObject.DestroyImmediate(modalView.GetComponent<Touchable>());
-            //modalView.gameObject.AddComponent<CurvedCanvasSettings>();
-            //modalView.gameObject.AddComponent<EventSystemListener>();
 
             foreach (RectTransform child in modalView.transform)
             {

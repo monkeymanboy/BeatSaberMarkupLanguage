@@ -1,6 +1,5 @@
-﻿using HMUI;
-using System;
-using TMPro;
+﻿using System;
+using HMUI;
 
 namespace BeatSaberMarkupLanguage.Components
 {
@@ -9,6 +8,7 @@ namespace BeatSaberMarkupLanguage.Components
         private string textFormat;
         private ICustomFormatter textFormatter;
         private object data;
+
         public object Data
         {
             get => data;
@@ -22,18 +22,26 @@ namespace BeatSaberMarkupLanguage.Components
         public void RefreshText()
         {
             if (data == null)
+            {
                 return;
+            }
+
             string val;
 
             object o = data;
             if (TextFormatter != null)
+            {
                 val = TextFormatter.Format(TextFormat, o, null);
+            }
             else if (o is IFormattable formattable && !string.IsNullOrEmpty(TextFormat))
+            {
                 val = formattable.ToString(TextFormat, null); // TODO: Will this cause problems for certain types if formatProvider is null?
+            }
             else
             {
-                val = o?.ToString() ?? "";
+                val = o?.ToString() ?? string.Empty;
             }
+
             text = val;
         }
 
@@ -43,7 +51,10 @@ namespace BeatSaberMarkupLanguage.Components
             set
             {
                 if (textFormatter == value)
+                {
                     return;
+                }
+
                 textFormatter = value;
                 RefreshText();
             }
@@ -55,7 +66,10 @@ namespace BeatSaberMarkupLanguage.Components
             set
             {
                 if (textFormat == value)
+                {
                     return;
+                }
+
                 textFormat = value;
                 RefreshText();
             }
@@ -68,6 +82,7 @@ namespace BeatSaberMarkupLanguage.Components
                 TextFormatter = null;
                 return;
             }
+
             if (formatter is ICustomFormatter valueConverter)
             {
                 TextFormatter = valueConverter;

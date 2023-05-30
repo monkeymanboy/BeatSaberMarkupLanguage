@@ -1,6 +1,6 @@
-﻿using BeatSaberMarkupLanguage.Components;
+﻿using System;
+using BeatSaberMarkupLanguage.Components;
 using Polyglot;
-using System;
 using TMPro;
 using UnityEngine;
 using Zenject;
@@ -9,20 +9,28 @@ namespace BeatSaberMarkupLanguage.Tags
 {
     public abstract class BSMLTag
     {
-        protected DiContainer diContainer => BeatSaberUI.DiContainer;
+        protected DiContainer DiContainer => BeatSaberUI.DiContainer;
 
         public bool isInitialized = false;
+
         public abstract string[] Aliases { get; }
+
         public virtual bool AddChildren { get => true; }
 
         public abstract GameObject CreateObject(Transform parent);
-        public virtual void Setup() { }
+
+        public virtual void Setup()
+        {
+        }
 
         protected LocalizableText CreateLocalizableText(GameObject gameObject)
         {
             TextMeshProUGUI textMesh = gameObject.GetComponent<TextMeshProUGUI>();
 
-            if (!textMesh) throw new InvalidOperationException("CreateLocalizableText should only be called if a TextMeshProUGUI instance already exists on the GameObject");
+            if (!textMesh)
+            {
+                throw new InvalidOperationException("CreateLocalizableText should only be called if a TextMeshProUGUI instance already exists on the GameObject");
+            }
 
             bool wasActive = gameObject.activeSelf;
             gameObject.SetActive(false);

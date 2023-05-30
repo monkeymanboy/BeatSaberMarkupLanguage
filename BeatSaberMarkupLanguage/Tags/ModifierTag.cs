@@ -1,8 +1,8 @@
-﻿using BeatSaberMarkupLanguage.Components;
+﻿using System.Collections.Generic;
+using System.Linq;
+using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.Components.Settings;
 using HMUI;
-using System.Collections.Generic;
-using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -18,7 +18,10 @@ namespace BeatSaberMarkupLanguage.Tags
         public override GameObject CreateObject(Transform parent)
         {
             if (toggleTemplate == null)
+            {
                 toggleTemplate = Resources.FindObjectsOfTypeAll<GameplayModifierToggle>().First(x => x.name == "InstaFail");
+            }
+
             GameplayModifierToggle baseModifier = Object.Instantiate(toggleTemplate, parent, false);
             baseModifier.name = "BSMLModifier";
 

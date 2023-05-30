@@ -1,6 +1,6 @@
-﻿using BeatSaberMarkupLanguage.Components;
+﻿using System.Linq;
+using BeatSaberMarkupLanguage.Components;
 using HMUI;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -25,11 +25,19 @@ namespace BeatSaberMarkupLanguage.Tags
             colorPicker.modalView = gameObject.GetComponent<ModalView>();
 
             if (rgbTemplate == null)
+            {
                 rgbTemplate = Resources.FindObjectsOfTypeAll<RGBPanelController>().First(x => x.name == "RGBColorPicker");
+            }
+
             if (hsvTemplate == null)
+            {
                 hsvTemplate = Resources.FindObjectsOfTypeAll<HSVPanelController>().First(x => x.name == "HSVColorPicker");
+            }
+
             if (currentColorTemplate == null)
+            {
                 currentColorTemplate = Resources.FindObjectsOfTypeAll<ImageView>().First(x => x.gameObject.name == "SaberColorA" && x.transform.parent?.name == "ColorSchemeView");
+            }
 
             RGBPanelController rgbController = Object.Instantiate(rgbTemplate, gameObject.transform, false);
             rgbController.name = "BSMLRGBPanel";

@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System;
+using System.IO;
 using BeatSaberMarkupLanguage.Animations.APNG.Chunks;
 
 namespace BeatSaberMarkupLanguage.Animations
@@ -18,32 +18,32 @@ namespace BeatSaberMarkupLanguage.Animations
         public static byte[] Signature = { 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A };
 
         /// <summary>
-        ///     Gets or Sets the acTL chunk
+        /// Gets or sets the acTL chunk.
         /// </summary>
         internal IHDRChunk IHDRChunk { get; set; }
 
         /// <summary>
-        ///     Gets or Sets the fcTL chunk
+        /// Gets or sets the fcTL chunk.
         /// </summary>
         internal fcTLChunk fcTLChunk { get; set; }
 
         /// <summary>
-        ///     Gets or Sets the IEND chunk
+        /// Gets or sets the IEND chunk.
         /// </summary>
         internal IENDChunk IENDChunk { get; set; }
 
         /// <summary>
-        ///     Gets or Sets the other chunks
+        /// Gets or sets the other chunks.
         /// </summary>
         internal List<OtherChunk> OtherChunks { get; set; } = new List<OtherChunk>();
 
         /// <summary>
-        ///     Gets or Sets the IDAT chunks
+        /// Gets or sets the IDAT chunks.
         /// </summary>
         internal List<IDATChunk> IDATChunks { get; set; } = new List<IDATChunk>();
 
         /// <summary>
-        ///     Add an Chunk to end end of existing list.
+        /// Add an Chunk to end end of existing list.
         /// </summary>
         internal void AddOtherChunk(OtherChunk chunk)
         {
@@ -51,7 +51,7 @@ namespace BeatSaberMarkupLanguage.Animations
         }
 
         /// <summary>
-        ///     Add an IDAT Chunk to end end of existing list.
+        /// Add an IDAT Chunk to end end of existing list.
         /// </summary>
         internal void AddIDATChunk(IDATChunk chunk)
         {
@@ -59,8 +59,9 @@ namespace BeatSaberMarkupLanguage.Animations
         }
 
         /// <summary>
-        ///     Gets the frame as PNG FileStream.
+        /// Gets the frame as PNG FileStream.
         /// </summary>
+        /// <returns>The PNG file as a <see cref="Stream"/>.</returns>
         public MemoryStream GetStream()
         {
             var ihdrChunk = new IHDRChunk(IHDRChunk);
@@ -84,7 +85,7 @@ namespace BeatSaberMarkupLanguage.Animations
         }
 
         /// <summary>
-        /// Converts the Frame to a Bitmap
+        /// Converts the Frame to a Bitmap.
         /// </summary>
         /// <returns>The bitmap of the frame.</returns>
         public Bitmap ToBitmap()
@@ -104,7 +105,7 @@ namespace BeatSaberMarkupLanguage.Animations
         }
 
         /// <summary>
-        /// Gets or sets the frame rate.
+        /// Gets the frame rate.
         /// </summary>
         /// <value>The frame rate in milliseconds.</value>
         /// <remarks>Should not be less than 10 ms or animation will not occur.</remarks>
@@ -114,18 +115,20 @@ namespace BeatSaberMarkupLanguage.Animations
             {
                 int frameRate = fcTLChunk.DelayNumerator;
                 double denominatorOffset = 1000 / fcTLChunk.DelayDenominator;
-                if ((int)Math.Round(denominatorOffset) != 1) //If not millisecond based make it so for easier processing
+
+                // If not millisecond based make it so for easier processing
+                if ((int)Math.Round(denominatorOffset) != 1)
                 {
                     frameRate = (int)(fcTLChunk.DelayNumerator * denominatorOffset);
                 }
 
                 return frameRate;
             }
+
             internal set
             {
-                //Standardize to milliseconds.
-
-                fcTLChunk.DelayNumerator = (ushort)(value);
+                // Standardize to milliseconds.
+                fcTLChunk.DelayNumerator = (ushort)value;
                 fcTLChunk.DelayDenominator = 1000;
             }
         }

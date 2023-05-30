@@ -1,6 +1,6 @@
-﻿using Polyglot;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Polyglot;
 
 namespace BeatSaberMarkupLanguage.TypeHandlers
 {
@@ -10,13 +10,19 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
         public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
         {
             { "textKey", new[] { "text-key" } },
-            { "maintainTextAlignment", new[] { "maintain-text-alignment" } }
+            { "maintainTextAlignment", new[] { "maintain-text-alignment" } },
         };
 
         public override Dictionary<string, Action<LocalizedTextMeshProUGUI, string>> Setters => new Dictionary<string, Action<LocalizedTextMeshProUGUI, string>>()
         {
-            {"textKey", new Action<LocalizedTextMeshProUGUI, string>((localizedText, value) => { localizedText.Key = value; localizedText.enabled = true; }) },
-            {"maintainTextAlignment", new Action<LocalizedTextMeshProUGUI, string>((localizedText, value) => localizedText.MaintainTextAlignment = Parse.Bool(value)) }
+            {
+                "textKey", new Action<LocalizedTextMeshProUGUI, string>((localizedText, value) =>
+                {
+                    localizedText.Key = value;
+                    localizedText.enabled = true;
+                })
+            },
+            { "maintainTextAlignment", new Action<LocalizedTextMeshProUGUI, string>((localizedText, value) => localizedText.MaintainTextAlignment = Parse.Bool(value)) },
         };
     }
 }

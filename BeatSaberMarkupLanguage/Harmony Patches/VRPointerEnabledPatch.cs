@@ -1,5 +1,5 @@
-﻿using HarmonyLib;
-using System;
+﻿using System;
+using HarmonyLib;
 using VRUIControls;
 
 namespace BeatSaberMarkupLanguage.Harmony_Patches
@@ -17,6 +17,7 @@ namespace BeatSaberMarkupLanguage.Harmony_Patches
         */
 
         public static event Action<VRPointer> PointerEnabled;
+
         public static void Postfix(VRPointer __instance)
         {
             PointerEnabled?.Invoke(__instance);

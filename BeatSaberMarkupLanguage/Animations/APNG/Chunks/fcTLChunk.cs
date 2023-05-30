@@ -1,5 +1,5 @@
-﻿using System.IO;
-using System;
+﻿using System;
+using System.IO;
 
 namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
 {
@@ -93,7 +93,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         }
 
         /// <summary>
-        /// Sequence number of the animation chunk, starting from 0
+        /// Gets or sets the sequence number of the animation chunk, starting from 0.
         /// </summary>
         public uint SequenceNumber
         {
@@ -106,7 +106,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         }
 
         /// <summary>
-        /// Width of the following frame
+        /// Gets or sets the width of the following frame.
         /// </summary>
         public uint Width
         {
@@ -119,7 +119,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         }
 
         /// <summary>
-        /// Height of the following frame
+        /// Gets or sets the height of the following frame.
         /// </summary>
         public uint Height
         {
@@ -132,7 +132,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         }
 
         /// <summary>
-        /// X position at which to render the following frame
+        /// Gets or sets the X position at which to render the following frame.
         /// </summary>
         public uint XOffset
         {
@@ -145,7 +145,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         }
 
         /// <summary>
-        /// Y position at which to render the following frame
+        /// Gets or sets the Y position at which to render the following frame.
         /// </summary>
         public uint YOffset
         {
@@ -158,7 +158,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         }
 
         /// <summary>
-        /// Frame delay fraction numerator
+        /// Gets or sets the frame delay fraction numerator.
         /// </summary>
         public ushort DelayNumerator
         {
@@ -171,7 +171,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         }
 
         /// <summary>
-        /// Frame delay fraction denominator
+        /// Gets or sets the frame delay fraction denominator.
         /// </summary>
         public ushort DelayDenominator
         {
@@ -184,7 +184,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         }
 
         /// <summary>
-        /// Type of frame area disposal to be done after rendering this frame
+        /// Gets or sets the type of frame area disposal to be done after rendering this frame.
         /// </summary>
         public DisposeOps DisposeOp
         {
@@ -197,7 +197,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         }
 
         /// <summary>
-        /// Type of frame area rendering for this frame
+        /// Gets or sets the type of frame area rendering for this frame.
         /// </summary>
         public BlendOps BlendOp
         {

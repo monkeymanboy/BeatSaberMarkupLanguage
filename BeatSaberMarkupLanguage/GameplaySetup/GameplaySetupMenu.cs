@@ -1,14 +1,14 @@
-﻿using BeatSaberMarkupLanguage.Attributes;
-using BeatSaberMarkupLanguage.Components;
-using System;
+﻿using System;
 using System.Reflection;
+using BeatSaberMarkupLanguage.Attributes;
+using BeatSaberMarkupLanguage.Components;
 using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.GameplaySetup
 {
     internal class GameplaySetupMenu
     {
-        private const string ERROR_PATH = "BeatSaberMarkupLanguage.Views.gameplay-tab-error.bsml";
+        private const string ErrorViewResourcePath = "BeatSaberMarkupLanguage.Views.gameplay-tab-error.bsml";
         public string resource;
         public object host;
         public Assembly assembly;
@@ -23,7 +23,7 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
         [UIComponent("root-tab")]
         private Tab tab;
 
-        public bool visible
+        public bool Visible
         {
             get => !Plugin.config.HiddenTabs.Contains(name);
             set
@@ -32,7 +32,7 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
                 {
                     Plugin.config.HiddenTabs.Remove(name);
                 }
-                else if (visible)
+                else if (Visible)
                 {
                     Plugin.config.HiddenTabs.Add(name);
                 }
@@ -59,20 +59,21 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
             {
                 if (ex is BSMLResourceException resEx)
                 {
-                    Logger.log.Error($"Cannot find bsml resource '{resEx.ResourcePath}' in '{resEx.Assembly?.GetName().Name ?? "<NULL>"}' for Gameplay Settings tab.");
+                    Logger.Log.Error($"Cannot find bsml resource '{resEx.ResourcePath}' in '{resEx.Assembly?.GetName().Name ?? "<NULL>"}' for Gameplay Settings tab.");
                 }
                 else
                 {
-                    Logger.log.Error($"Error adding gameplay settings tab for {assembly?.GetName().Name ?? "<NULL>"} ({name}): {ex.Message}");
+                    Logger.Log.Error($"Error adding gameplay settings tab for {assembly?.GetName().Name ?? "<NULL>"} ({name}): {ex.Message}");
                 }
-                Logger.log.Debug(ex);
-                BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), ERROR_PATH), tabObject);
+
+                Logger.Log.Debug(ex);
+                BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), ErrorViewResourcePath), tabObject);
             }
         }
 
         public void SetVisible(bool isVisible)
         {
-            tab.IsVisible = visible && isVisible;
+            tab.IsVisible = Visible && isVisible;
         }
 
         public bool IsMenuType(MenuType toCheck)

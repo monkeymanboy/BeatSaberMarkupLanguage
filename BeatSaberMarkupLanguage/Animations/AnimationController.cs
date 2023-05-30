@@ -29,6 +29,7 @@ namespace BeatSaberMarkupLanguage.Animations
             {
                 Destroy(tex); // if the identifier exists then this texture is a duplicate so might as well destroy it and free some memory (this can happen if you try to load a gif twice before the first one finishes processing)
             }
+
             return animationData;
         }
 

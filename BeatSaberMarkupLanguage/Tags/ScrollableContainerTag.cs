@@ -61,7 +61,7 @@ namespace BeatSaberMarkupLanguage.Tags
 
             go.AddComponent<Touchable>(); // Required by EventSystemListener
             go.AddComponent<EventSystemListener>(); // Required by ScrollView
-            BSMLScrollableContainer scrollView = diContainer.InstantiateComponent<BSMLScrollableContainer>(go);
+            BSMLScrollableContainer scrollView = DiContainer.InstantiateComponent<BSMLScrollableContainer>(go);
             scrollView.ContentRect = content;
             scrollView.Viewport = viewport;
 

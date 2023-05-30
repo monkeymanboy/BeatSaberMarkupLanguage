@@ -5,9 +5,8 @@ namespace BeatSaberMarkupLanguage.Harmony_Patches
 {
     // Feature to disable thumbstick scrolling in BSMLTabs for users suffering from thumbstick drift
     // who just want to set sliders without them scrolling away
-
     [HarmonyPatch(typeof(ScrollView), "HandlePointerDidEnter")]
-    internal class ScrollViewHandlePointerDidEnterPatch
+    internal static class ScrollViewHandlePointerDidEnterPatch
     {
         private static void Postfix(ScrollView __instance)
         {

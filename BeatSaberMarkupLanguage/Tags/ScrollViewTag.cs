@@ -1,6 +1,6 @@
+using System.Linq;
 using BeatSaberMarkupLanguage.Components;
 using HMUI;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using VRUIControls;
@@ -9,14 +9,18 @@ namespace BeatSaberMarkupLanguage.Tags
 {
     public class ScrollViewTag : BSMLTag
     {
-        private static TextPageScrollView _scrollViewTemplate;
+        private static TextPageScrollView scrollViewTemplate;
+
         public static TextPageScrollView ScrollViewTemplate
         {
             get
             {
-                if (_scrollViewTemplate == null)
-                    _scrollViewTemplate = Resources.FindObjectsOfTypeAll<ReleaseInfoViewController>().First()._textPageScrollView;
-                return _scrollViewTemplate;
+                if (scrollViewTemplate == null)
+                {
+                    scrollViewTemplate = Resources.FindObjectsOfTypeAll<ReleaseInfoViewController>().First()._textPageScrollView;
+                }
+
+                return scrollViewTemplate;
             }
         }
 
@@ -31,14 +35,14 @@ namespace BeatSaberMarkupLanguage.Tags
             VerticalScrollIndicator verticalScrollIndicator = textScrollView._verticalScrollIndicator;
 
             RectTransform viewport = textScrollView._viewport;
-            diContainer.InstantiateComponent<VRGraphicRaycaster>(viewport.gameObject);
+            DiContainer.InstantiateComponent<VRGraphicRaycaster>(viewport.gameObject);
 
             Object.Destroy(textScrollView._text.gameObject);
             GameObject gameObject = textScrollView.gameObject;
             Object.Destroy(textScrollView);
             gameObject.SetActive(false);
 
-            BSMLScrollView scrollView = diContainer.InstantiateComponent<BSMLScrollView>(gameObject);
+            BSMLScrollView scrollView = DiContainer.InstantiateComponent<BSMLScrollView>(gameObject);
             scrollView._pageUpButton = pageUpButton;
             scrollView._pageDownButton = pageDownButton;
             scrollView._verticalScrollIndicator = verticalScrollIndicator;
@@ -67,7 +71,6 @@ namespace BeatSaberMarkupLanguage.Tags
             rectTransform.anchorMax = new Vector2(1, 1);
             rectTransform.sizeDelta = new Vector2(0, 0);
             rectTransform.pivot = new Vector2(0.5f, 1);
-            //parentObj.AddComponent<LayoutElement>();
             parentObj.AddComponent<ScrollViewContent>().scrollView = scrollView;
 
             GameObject child = new GameObject();
@@ -80,9 +83,6 @@ namespace BeatSaberMarkupLanguage.Tags
             layoutGroup.childAlignment = TextAnchor.LowerCenter;
             layoutGroup.spacing = 0.5f;
 
-            //parentObj.AddComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.PreferredSize;
-            //child.AddComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.PreferredSize;
-            //child.AddComponent<LayoutElement>();
             ExternalComponents externalComponents = child.AddComponent<ExternalComponents>();
             externalComponents.components.Add(scrollView);
             externalComponents.components.Add(scrollView.transform);

@@ -1,6 +1,6 @@
-﻿using HMUI;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using HMUI;
 
 namespace BeatSaberMarkupLanguage.Components.Settings
 {
@@ -19,11 +19,14 @@ namespace BeatSaberMarkupLanguage.Components.Settings
                 ValidateRange();
                 return values[index];
             }
+
             set
             {
                 index = values.IndexOf(value);
                 if (index < 0)
+                {
                     index = 0;
+                }
 
                 dropdown.SelectCellWithIdx(index);
 
@@ -78,10 +81,14 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         private void ValidateRange()
         {
             if (index >= values.Count)
+            {
                 index = values.Count - 1;
+            }
 
             if (index < 0)
+            {
                 index = 0;
+            }
         }
 
         private void UpdateState()

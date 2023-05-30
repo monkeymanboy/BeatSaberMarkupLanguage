@@ -1,5 +1,5 @@
-﻿using BeatSaberMarkupLanguage.Attributes;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using BeatSaberMarkupLanguage.Attributes;
 
 namespace BeatSaberMarkupLanguage.ViewControllers
 {

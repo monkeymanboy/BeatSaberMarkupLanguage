@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
-using System.Linq;
 using Object = UnityEngine.Object;
 
 namespace BeatSaberMarkupLanguage.Animations
 {
     public enum AnimationType
     {
-        GIF, APNG
+        GIF,
+        APNG,
     }
+
     public class AnimationLoader
     {
         public static void Process(AnimationType type, byte[] data, Action<Texture2D, Rect[], float[], int, int> callback)
@@ -94,9 +95,12 @@ namespace BeatSaberMarkupLanguage.Animations
             while (true)
             {
                 int numFrames = frameInfo.frameCount;
+
                 // Make sure the number of frames is cleanly divisible by our testNum
                 if (numFrames % testNum == 0)
+                {
                     numFrames += numFrames % testNum;
+                }
 
                 // Math.Max to ensure numFramesInRow never becomes 0 to prevent DivideByZeroException
                 // This would happen with single frame GIFs
@@ -107,6 +111,7 @@ namespace BeatSaberMarkupLanguage.Animations
                 {
                     break;
                 }
+
                 testNum += 2;
             }
 

@@ -1,7 +1,7 @@
-﻿using BeatSaberMarkupLanguage.Attributes;
-using HMUI;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using BeatSaberMarkupLanguage.Attributes;
+using HMUI;
 
 namespace BeatSaberMarkupLanguage.MenuButtons
 {
@@ -16,8 +16,10 @@ namespace BeatSaberMarkupLanguage.MenuButtons
         [UIValue("pin-buttons")]
         internal List<object> pinButtons = new List<object>();
 
-        // [UIParams]
-        // private BSMLParserParams parserParams;
+        /*
+        [UIParams]
+        private BSMLParserParams parserParams;
+        */
 
         internal void Setup()
         {
@@ -47,25 +49,37 @@ namespace BeatSaberMarkupLanguage.MenuButtons
         internal void Refresh()
         {
             if (menuButtonsViewController == null)
+            {
                 return;
+            }
+
             menuButtonsViewController.RefreshView();
         }
 
         public void RegisterButton(MenuButton menuButton)
         {
-            if (buttons.Any(x => (x as MenuButton).Text == menuButton.Text)) return;
+            if (buttons.Any(x => (x as MenuButton).Text == menuButton.Text))
+            {
+                return;
+            }
+
             buttons.Add(menuButton);
-            //pinButtons.Add(new PinnedMod(menuButton));
+
+            /* pinButtons.Add(new PinnedMod(menuButton)); */
+
             Refresh();
         }
 
         public void UnregisterButton(MenuButton menuButton)
         {
             buttons.Remove(menuButton);
-            //pinButtons.RemoveAll(x => (x as PinnedMod).menuButton == menuButton);
+
+            /* pinButtons.RemoveAll(x => (x as PinnedMod).menuButton == menuButton); */
+
             Refresh();
         }
     }
+
     /*
     internal class MenuPins : PersistentSingleton<MenuPins>
     {

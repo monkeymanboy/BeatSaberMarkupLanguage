@@ -9,15 +9,18 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         public ModalColorPicker modalColorPicker;
         public Image colorImage;
 
-        private Color _currentColor = Color.white;
+        private Color currentColor = Color.white;
+
         public Color CurrentColor
         {
-            get => _currentColor;
+            get => currentColor;
             set
             {
-                _currentColor = value;
+                currentColor = value;
                 if (colorImage != null)
-                    colorImage.color = _currentColor;
+                {
+                    colorImage.color = currentColor;
+                }
             }
         }
 
@@ -27,7 +30,9 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             set
             {
                 if (editButton != null)
+                {
                     editButton.interactable = value;
+                }
             }
         }
 
@@ -59,7 +64,9 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         {
             CurrentColor = color;
             if (updateOnChange)
+            {
                 ApplyValue();
+            }
         }
 
         public void CancelPressed()

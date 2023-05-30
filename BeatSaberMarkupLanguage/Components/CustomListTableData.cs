@@ -1,9 +1,9 @@
-﻿using HMUI;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using HMUI;
 using TMPro;
 using UnityEngine;
-using LevelPackCell = AnnotatedBeatmapLevelCollectionCell;//This got renamed at a point, but old name is more clear so I'm using that
+using LevelPackCell = AnnotatedBeatmapLevelCollectionCell; // This got renamed at a point, but old name is more clear so I'm using that
 
 namespace BeatSaberMarkupLanguage.Components
 {
@@ -11,7 +11,9 @@ namespace BeatSaberMarkupLanguage.Components
     {
         public enum ListStyle
         {
-            List, Box, Simple
+            List,
+            Box,
+            Simple,
         }
 
         private ListStyle listStyle = ListStyle.List;
@@ -32,7 +34,7 @@ namespace BeatSaberMarkupLanguage.Components
             get => listStyle;
             set
             {
-                //Sets the default cell size for certain styles
+                // Sets the default cell size for certain styles
                 switch (value)
                 {
                     case ListStyle.List:
@@ -56,13 +58,13 @@ namespace BeatSaberMarkupLanguage.Components
             if (!tableCell)
             {
                 if (songListTableCellInstance == null)
+                {
                     songListTableCellInstance = Resources.FindObjectsOfTypeAll<LevelListTableCell>().First(x => (x.name == "LevelListTableCell"));
+                }
 
                 tableCell = Instantiate(songListTableCellInstance);
-
             }
 
-            //tableCell._beatmapCharacteristicImages = new Image[0];
             tableCell._notOwned = false;
 
             tableCell.reuseIdentifier = reuseIdentifier;
@@ -75,7 +77,9 @@ namespace BeatSaberMarkupLanguage.Components
             if (!tableCell)
             {
                 if (levelPackTableCellInstance == null)
+                {
                     levelPackTableCellInstance = Resources.FindObjectsOfTypeAll<LevelPackCell>().First(x => x.name == "AnnotatedBeatmapLevelCollectionCell");
+                }
 
                 tableCell = InstantiateBoxTableCell(levelPackTableCellInstance);
             }
@@ -92,7 +96,7 @@ namespace BeatSaberMarkupLanguage.Components
 
             foreach (Transform child in coverImage.transform)
             {
-                GameObject.Destroy(child.gameObject);
+                Destroy(child.gameObject);
             }
 
             GameObject cellObject = levelPackTableCell.gameObject;
@@ -108,7 +112,9 @@ namespace BeatSaberMarkupLanguage.Components
             if (!tableCell)
             {
                 if (simpleTextTableCellInstance == null)
+                {
                     simpleTextTableCellInstance = Resources.FindObjectsOfTypeAll<SimpleTextTableCell>().First(x => x.name == "SimpleTextTableCell");
+                }
 
                 tableCell = Instantiate(simpleTextTableCellInstance);
             }
@@ -182,6 +188,6 @@ namespace BeatSaberMarkupLanguage.Components
                 this.subtext = subtext;
                 this.icon = icon;
             }
-        };
+        }
     }
 }

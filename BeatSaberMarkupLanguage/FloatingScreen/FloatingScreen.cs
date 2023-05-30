@@ -1,7 +1,7 @@
-﻿using BeatSaberMarkupLanguage.Harmony_Patches;
-using HMUI;
-using System;
+﻿using System;
 using System.Linq;
+using BeatSaberMarkupLanguage.Harmony_Patches;
+using HMUI;
 using UnityEngine;
 using UnityEngine.UI;
 using VRUIControls;
@@ -13,10 +13,12 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
     {
         public FloatingScreenMoverPointer screenMover;
         public GameObject handle;
+
         public event EventHandler<FloatingScreenHandleEventArgs> HandleReleased;
+
         public event EventHandler<FloatingScreenHandleEventArgs> HandleGrabbed;
 
-        private static Material _fogMaterial;
+        private static Material fogMaterial;
 
         public Vector2 ScreenSize
         {
@@ -46,24 +48,29 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
             }
         }
 
-        private bool _showHandle = false;
+        private bool showHandle = false;
+
         public bool ShowHandle
         {
-            get => _showHandle;
+            get => showHandle;
             set
             {
-                _showHandle = value;
-                if (_showHandle)
+                showHandle = value;
+                if (showHandle)
                 {
                     if (handle == null)
+                    {
                         CreateHandle();
+                    }
                     else
+                    {
                         handle.SetActive(true);
+                    }
 
                     VRPointerEnabledPatch.PointerEnabled -= OnPointerCreated;
                     VRPointerEnabledPatch.PointerEnabled += OnPointerCreated;
                 }
-                else if (!_showHandle && handle != null)
+                else if (!showHandle && handle != null)
                 {
                     handle.SetActive(false);
                     VRPointerEnabledPatch.PointerEnabled -= OnPointerCreated;
@@ -71,40 +78,46 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
             }
         }
 
-        private bool _highlightHandle = false;
+        private bool highlightHandle = false;
+
         public bool HighlightHandle
         {
-            get => _highlightHandle;
+            get => highlightHandle;
             set
             {
-                _highlightHandle = value;
-                if (_highlightHandle)
+                highlightHandle = value;
+                if (highlightHandle)
                 {
                     if (!ShowHandle)
+                    {
                         ShowHandle = true;
+                    }
 
                     handle.GetComponent<FloatingScreenHandle>().enabled = true;
                 }
                 else
                 {
                     if (handle != null)
+                    {
                         handle.GetComponent<FloatingScreenHandle>().enabled = false;
+                    }
                 }
             }
         }
 
-        private Side _handleSide = Side.Left;
+        private Side handleSide = Side.Left;
+
         public Side HandleSide
         {
-            get => _handleSide;
+            get => handleSide;
             set
             {
-                _handleSide = value;
+                handleSide = value;
                 UpdateHandle();
             }
         }
 
-        public static FloatingScreen CreateFloatingScreen(Vector2 screenSize, bool createHandle, Vector3 position, Quaternion rotation)//for binary compatibility
+        public static FloatingScreen CreateFloatingScreen(Vector2 screenSize, bool createHandle, Vector3 position, Quaternion rotation) // for binary compatibility
         {
             return CreateFloatingScreen(screenSize, createHandle, position, rotation, 0, false);
         }
@@ -142,9 +155,13 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
                 background.sprite = Utilities.FindSpriteCached("MainScreenMask");
                 background.type = Image.Type.Sliced;
                 background.color = new Color(0.7450981f, 0.7450981f, 0.7450981f, 1f);
-                if (_fogMaterial == null)
-                    _fogMaterial = Resources.FindObjectsOfTypeAll<Material>().First(x => x.name == "UIFogBG");
-                background.material = _fogMaterial;
+
+                if (fogMaterial == null)
+                {
+                    fogMaterial = Resources.FindObjectsOfTypeAll<Material>().First(x => x.name == "UIFogBG");
+                }
+
+                background.material = fogMaterial;
                 background.preserveAspect = true;
             }
 
@@ -176,7 +193,11 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
 
                 if (pointerChanged)
                 {
-                    if (screenMover) Destroy(screenMover);
+                    if (screenMover)
+                    {
+                        Destroy(screenMover);
+                    }
+
                     screenMover = pointer.gameObject.AddComponent<FloatingScreenMoverPointer>();
                 }
 
@@ -189,11 +210,14 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
                     handle.AddComponent<FloatingScreenHandle>().enabled = false;
                 }
 
-                if (pointerChanged) screenMover.Init(this);
+                if (pointerChanged)
+                {
+                    screenMover.Init(this);
+                }
             }
             else
             {
-                Logger.log.Warn("Failed to get VRPointer!");
+                Logger.Log.Warn("Failed to get VRPointer!");
             }
         }
 
@@ -201,6 +225,7 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
         {
             HandleGrabbed?.Invoke(this, new FloatingScreenHandleEventArgs(vrPointer, transform.position, transform.rotation));
         }
+
         internal void OnHandleReleased(VRPointer vrPointer)
         {
             HandleReleased?.Invoke(this, new FloatingScreenHandleEventArgs(vrPointer, transform.position, transform.rotation));
@@ -208,7 +233,11 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
 
         public void UpdateHandle()
         {
-            if (handle == null) return;
+            if (handle == null)
+            {
+                return;
+            }
+
             switch (HandleSide)
             {
                 case Side.Left:
@@ -244,9 +273,14 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
 
         public enum Side
         {
-            Left, Right, Bottom, Top, Full
+            Left,
+            Right,
+            Bottom,
+            Top,
+            Full,
         }
     }
+
     public struct FloatingScreenHandleEventArgs
     {
         public FloatingScreenHandleEventArgs(VRPointer vrPointer, Vector3 position, Quaternion rotation)
@@ -266,6 +300,7 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
             {
                 return Position == posRot.Position && Rotation == posRot.Rotation;
             }
+
             return false;
         }
 

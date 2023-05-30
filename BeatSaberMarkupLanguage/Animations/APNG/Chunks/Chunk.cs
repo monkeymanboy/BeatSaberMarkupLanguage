@@ -15,7 +15,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         internal Chunk()
         {
             Length = 0;
-            ChunkType = String.Empty;
+            ChunkType = string.Empty;
             ChunkData = null;
             Crc = 0;
         }
@@ -33,9 +33,14 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
             Crc = Helper.ConvertEndian(ms.ReadUInt32());
 
             if (ms.Position != ms.Length)
+            {
                 throw new Exception("Chunk length not correct.");
+            }
+
             if (Length != ChunkData.Length)
+            {
                 throw new Exception("Chunk data length not correct.");
+            }
 
             ParseData(new MemoryStream(ChunkData));
         }
@@ -93,7 +98,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         public uint Crc { get; set; }
 
         /// <summary>
-        /// Get raw data of the chunk
+        /// Gets raw data of the chunk.
         /// </summary>
         public byte[] RawData
         {
@@ -140,10 +145,10 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         }
 
         /// <summary>
-        /// Determines whether the specified <see cref="System.Object"/> is equal to the current <see cref="Chunk"/>.
+        /// Determines whether the specified <see cref="object"/> is equal to the current <see cref="Chunk"/>.
         /// </summary>
-        /// <param name="obj">The <see cref="System.Object"/> to compare with the current <see cref="Chunk"/>.</param>
-        /// <returns><c>true</c> if the specified <see cref="System.Object"/> is equal to the current
+        /// <param name="obj">The <see cref="object"/> to compare with the current <see cref="Chunk"/>.</param>
+        /// <returns><c>true</c> if the specified <see cref="object"/> is equal to the current
         /// <see cref="Chunk"/>; otherwise, <c>false</c>.</returns>
         public override bool Equals(object obj)
         {
@@ -156,9 +161,9 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
             {
                 if (obj is Chunk chunk)
                 {
-                    result = (this.Length == chunk.Length &&
-                    this.ChunkType == chunk.ChunkType &&
-                    this.Crc == chunk.Crc);
+                    result = this.Length == chunk.Length &&
+                        this.ChunkType == chunk.ChunkType &&
+                        this.Crc == chunk.Crc;
                 }
             }
 
@@ -172,7 +177,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         /// hash table.</returns>
         public override int GetHashCode()
         {
-            //TODO: Build a better hash code. Perhaps for equality where chunktype bytes XOR'd with crc.
+            // TODO: Build a better hash code. Perhaps for equality where chunktype bytes XOR'd with crc.
             return base.GetHashCode();
         }
     }

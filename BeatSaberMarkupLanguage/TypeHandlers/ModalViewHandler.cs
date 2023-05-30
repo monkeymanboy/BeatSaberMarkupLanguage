@@ -1,7 +1,7 @@
-﻿using BeatSaberMarkupLanguage.Parser;
-using HMUI;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using BeatSaberMarkupLanguage.Parser;
+using HMUI;
 using UnityEngine;
 using static BeatSaberMarkupLanguage.BSMLParser;
 
@@ -12,10 +12,10 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
     {
         public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
         {
-            { "showEvent", new[]{ "show-event" } },
-            { "hideEvent", new[]{ "hide-event" } },
-            { "clickOffCloses", new[]{ "click-off-closes", "clickerino-offerino-closerino" } },
-            { "moveToCenter", new[]{ "move-to-center" } }
+            { "showEvent", new[] { "show-event" } },
+            { "hideEvent", new[] { "hide-event" } },
+            { "clickOffCloses", new[] { "click-off-closes", "clickerino-offerino-closerino" } },
+            { "moveToCenter", new[] { "move-to-center" } },
         };
 
         public override void HandleType(ComponentTypeWithData componentType, BSMLParserParams parserParams)
@@ -26,11 +26,13 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 Transform originalParent = modalView.transform.parent;
                 bool moveToCenter = true;
                 if (componentType.data.TryGetValue("moveToCenter", out string moveToCenterString))
+                {
                     moveToCenter = bool.Parse(moveToCenterString);
+                }
 
                 if (componentType.data.TryGetValue("showEvent", out string showEvent))
                 {
-                    parserParams.AddEvent(showEvent, delegate
+                    parserParams.AddEvent(showEvent, () =>
                     {
                         modalView.Show(true, moveToCenter);
                     });
@@ -38,7 +40,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 
                 if (componentType.data.TryGetValue("hideEvent", out string hideEvent))
                 {
-                    parserParams.AddEvent(hideEvent, delegate
+                    parserParams.AddEvent(hideEvent, () =>
                     {
                         modalView.Hide(true, () => modalView.transform.SetParent(originalParent, true));
                     });
@@ -46,7 +48,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 
                 if (componentType.data.TryGetValue("clickOffCloses", out string clickOffCloses) && Parse.Bool(clickOffCloses))
                 {
-                    modalView.blockerClickedEvent += delegate
+                    modalView.blockerClickedEvent += () =>
                     {
                         modalView.Hide(true, () => modalView.transform.SetParent(originalParent, true));
                     };
@@ -54,7 +56,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             }
             catch (Exception ex)
             {
-                Logger.log?.Error(ex);
+                Logger.Log?.Error(ex);
             }
         }
     }

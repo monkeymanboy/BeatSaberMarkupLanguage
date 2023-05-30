@@ -12,11 +12,18 @@ namespace BeatSaberMarkupLanguage.Tags
         public override GameObject CreateObject(Transform parent)
         {
             if (leaderboardTemplate == null)
+            {
                 leaderboardTemplate = Resources.FindObjectsOfTypeAll<LeaderboardTableView>().First(x => x.name == "LeaderboardTableView");
-            LeaderboardTableView table = diContainer.InstantiatePrefabForComponent<LeaderboardTableView>(leaderboardTemplate, parent);
+            }
+
+            LeaderboardTableView table = DiContainer.InstantiatePrefabForComponent<LeaderboardTableView>(leaderboardTemplate, parent);
             table.name = "BSMLLeaderboard";
-            foreach (LeaderboardTableCell tableCell in table.GetComponentsInChildren<LeaderboardTableCell>()) //This is to ensure if a leaderboard with scores already on it gets cloned that old scores are cleared off
+
+            // This is to ensure if a leaderboard with scores already on it gets cloned that old scores are cleared off
+            foreach (LeaderboardTableCell tableCell in table.GetComponentsInChildren<LeaderboardTableCell>())
+            {
                 Object.Destroy(tableCell.gameObject);
+            }
 
             return table.gameObject;
         }

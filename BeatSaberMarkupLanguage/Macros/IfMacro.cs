@@ -1,8 +1,8 @@
-﻿using BeatSaberMarkupLanguage.Parser;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
+using BeatSaberMarkupLanguage.Parser;
 using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.Macros
@@ -13,7 +13,7 @@ namespace BeatSaberMarkupLanguage.Macros
 
         public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
         {
-            { "value", new[]{"bool","value"} },
+            { "value", new[] { "bool", "value" } },
         };
 
         public override void Execute(XmlNode node, GameObject parent, Dictionary<string, string> data, BSMLParserParams parserParams, out IEnumerable<BSMLParser.ComponentTypeWithData> components)
@@ -26,8 +26,11 @@ namespace BeatSaberMarkupLanguage.Macros
                 {
                     valueId = valueId.Substring(1);
                 }
+
                 if (!parserParams.values.TryGetValue(valueId, out BSMLValue value))
+                {
                     throw new Exception("value '" + valueId + "' not found");
+                }
 
                 bool boolValue = (bool)value.GetValue();
                 if (boolValue != notOperator)

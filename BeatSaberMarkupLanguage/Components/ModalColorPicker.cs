@@ -1,7 +1,7 @@
-﻿using BeatSaberMarkupLanguage.Attributes;
+﻿using System;
+using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Parser;
 using HMUI;
-using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,26 +22,38 @@ namespace BeatSaberMarkupLanguage.Components
         public Action<Color> doneEvent;
         public Action cancelEvent;
 
-        private Color _currentColor;
+        private Color currentColor;
+
         public Color CurrentColor
         {
-            get => _currentColor;
+            get => currentColor;
             set
             {
-                _currentColor = value;
+                currentColor = value;
                 if (rgbPanel != null)
-                    rgbPanel.color = _currentColor;
-                if (hsvPanel != null && hsvPanel.color != _currentColor) //If you're wondering why we check this for hsv it's so that if color is one where changing hue has no effect it won't lock up the hue slider
-                    hsvPanel.color = _currentColor;
+                {
+                    rgbPanel.color = currentColor;
+                }
+
+                // If you're wondering why we check this for HSV it's so that if color is one where changing hue has no effect it won't lock up the hue slider
+                if (hsvPanel != null && hsvPanel.color != currentColor)
+                {
+                    hsvPanel.color = currentColor;
+                }
+
                 if (colorImage != null)
-                    colorImage.color = _currentColor;
+                {
+                    colorImage.color = currentColor;
+                }
             }
         }
 
         private void OnEnable()
         {
             if (associatedValue != null)
+            {
                 CurrentColor = (Color)associatedValue.GetValue();
+            }
         }
 
         [UIAction("cancel")]

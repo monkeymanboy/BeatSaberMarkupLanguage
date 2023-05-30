@@ -1,6 +1,6 @@
-﻿using BeatSaberMarkupLanguage.Components;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using BeatSaberMarkupLanguage.Components;
 
 namespace BeatSaberMarkupLanguage.TypeHandlers
 {
@@ -9,13 +9,12 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
     {
         public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
         {
-            { "icon", new[]{"icon"} }
+            { "icon", new[] { "icon" } },
         };
 
         public override Dictionary<string, Action<ButtonIconImage, string>> Setters => new Dictionary<string, Action<ButtonIconImage, string>>()
         {
-            { "icon", new Action<ButtonIconImage, string>((images, iconPath) => images.SetIcon(iconPath))}
+            { "icon", new Action<ButtonIconImage, string>((images, iconPath) => images.SetIcon(iconPath)) },
         };
-
     }
 }

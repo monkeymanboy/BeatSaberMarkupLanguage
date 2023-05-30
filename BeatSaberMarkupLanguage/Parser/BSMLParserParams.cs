@@ -18,9 +18,13 @@ namespace BeatSaberMarkupLanguage.Parser
             foreach (string id in ids.Split(','))
             {
                 if (events.ContainsKey(id))
+                {
                     events[id] += action;
+                }
                 else
+                {
                     events.Add(id, action);
+                }
             }
         }
 
@@ -29,7 +33,9 @@ namespace BeatSaberMarkupLanguage.Parser
             foreach (string id in ids.Split(','))
             {
                 if (events.ContainsKey(id))
+                {
                     events[id].Invoke();
+                }
             }
         }
 
@@ -38,26 +44,40 @@ namespace BeatSaberMarkupLanguage.Parser
             foreach (string tag in tags)
             {
                 if (objectsWithTag.TryGetValue(tag, out List<GameObject> list))
+                {
                     list.Add(gameObject);
+                }
                 else
+                {
                     objectsWithTag.Add(tag, new List<GameObject> { gameObject });
+                }
             }
         }
+
         public List<GameObject> GetObjectsWithTag(string tag)
         {
             if (objectsWithTag.TryGetValue(tag, out List<GameObject> list))
+            {
                 return list;
+            }
             else
+            {
                 return new List<GameObject>();
+            }
         }
 
         private void AddObjectsToTag(string tag, List<GameObject> gameObjects)
         {
             if (objectsWithTag.TryGetValue(tag, out List<GameObject> list))
+            {
                 list.AddRange(gameObjects);
+            }
             else
+            {
                 objectsWithTag.Add(tag, gameObjects);
+            }
         }
+
         public void PassTaggedObjects(BSMLParserParams parserParams)
         {
             foreach (KeyValuePair<string, List<GameObject>> pair in objectsWithTag)
