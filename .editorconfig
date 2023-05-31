@@ -1,6 +1,6 @@
 root = true
 
-[*.{csproj,csproj.user,props,targets}]
+[*.{bsml,csproj,csproj.user,props,targets}]
 indent_size = 2
 indent_style = space
 trim_trailing_whitespace = true
@@ -277,4 +277,5 @@ csharp_space_between_square_brackets = false
 csharp_preserve_single_line_blocks = true
 csharp_preserve_single_line_statements = true
 
+# We don't care about file headers (at least for the time being)
 dotnet_diagnostic.SA1633.severity = silent # The file header is missing or not located at the top of the file.
