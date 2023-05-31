@@ -6,10 +6,14 @@ namespace BeatSaberMarkupLanguage
 {
     public class Config
     {
-        [NonNullable, UseConverter(typeof(ListConverter<string>))]
+        [NonNullable]
+        [UseConverter(typeof(ListConverter<string>))]
         public virtual List<string> PinnedMods { get; set; } = new List<string>();
 
-        [NonNullable, UseConverter(typeof(ListConverter<string>))]
+        [NonNullable]
+        [UseConverter(typeof(ListConverter<string>))]
         public virtual List<string> HiddenTabs { get; set; } = new List<string>();
+
+        public virtual bool DisableThumbstickScroll { get; set; } = false;
     }
 }

@@ -12,9 +12,15 @@ namespace BeatSaberMarkupLanguage.Components
         public void SetArtwork(string path)
         {
             if (image == null)
+            {
                 image = GetComponentsInChildren<Image>().Where(x => x.name == "BGArtwork").FirstOrDefault();
+            }
+
             if (image == null)
+            {
                 throw new Exception("Unable to find BG artwork image!");
+            }
+
             image.SetImage(path);
         }
     }

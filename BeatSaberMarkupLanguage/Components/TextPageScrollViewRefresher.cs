@@ -1,6 +1,4 @@
 ﻿using HMUI;
-using IPA.Utilities;
-using TMPro;
 using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.Components
@@ -8,15 +6,16 @@ namespace BeatSaberMarkupLanguage.Components
     internal class TextPageScrollViewRefresher : MonoBehaviour
     {
         public TextPageScrollView scrollView;
-        void OnEnable()
+
+        private void OnEnable()
         {
-            scrollView?.SetText(scrollView.GetField<TextMeshProUGUI, TextPageScrollView>("_text").text);
+            scrollView?.SetText(scrollView._text.text);
             scrollView?.RefreshButtons();
         }
 
-        void OnRectTransformDimensionsChange()
+        private void OnRectTransformDimensionsChange()
         {
-            scrollView?.SetText(scrollView.GetField<TextMeshProUGUI, TextPageScrollView>("_text").text);
+            scrollView?.SetText(scrollView._text.text);
             scrollView?.RefreshButtons();
         }
     }

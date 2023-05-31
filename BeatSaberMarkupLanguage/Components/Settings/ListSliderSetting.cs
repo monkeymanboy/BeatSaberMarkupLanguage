@@ -1,8 +1,8 @@
-﻿using HMUI;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using HMUI;
 using TMPro;
 using UnityEngine;
 
@@ -34,6 +34,24 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             StartCoroutine(SetInitialText());
         }
 
+        public override void ApplyValue()
+        {
+            associatedValue?.SetValue(Value);
+        }
+
+        public override void ReceiveValue()
+        {
+            if (associatedValue != null)
+            {
+                Value = associatedValue.GetValue();
+            }
+        }
+
+        protected string TextForValue(object value)
+        {
+            return formatter == null ? value.ToString() : (formatter.Invoke(value) as string);
+        }
+
         private void OnEnable()
         {
             StartCoroutine(SetInitialText());
@@ -48,29 +66,14 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             text.text = TextForValue(Value);
         }
 
-        private void OnChange(TextSlider _, float val)
+        private void OnChange(TextSlider textSlider, float val)
         {
             text.text = TextForValue(Value);
             onChange?.Invoke(Value);
             if (updateOnChange)
+            {
                 ApplyValue();
-        }
-
-        public override void ApplyValue()
-        {
-            if (associatedValue != null)
-                associatedValue.SetValue(Value);
-        }
-
-        public override void ReceiveValue()
-        {
-            if (associatedValue != null)
-                Value = associatedValue.GetValue();
-        }
-
-        protected string TextForValue(object value)
-        {
-            return formatter == null ? value.ToString() : (formatter.Invoke(value) as string);
+            }
         }
     }
 }

@@ -1,5 +1,5 @@
-﻿using HMUI;
-using System.Collections;
+﻿using System.Collections;
+using HMUI;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,36 +8,41 @@ namespace BeatSaberMarkupLanguage.Components
     public class ScrollViewContent : MonoBehaviour
     {
         public ScrollView scrollView;
-        private bool _dirty = false;
+        private bool dirty = false;
 
-        void Start()
+        private void Start()
         {
             LayoutRebuilder.ForceRebuildLayoutImmediate(transform as RectTransform);
             StopAllCoroutines();
             StartCoroutine(SetupScrollView());
         }
-        void OnEnable()
+
+        private void OnEnable()
         {
             UpdateScrollView();
         }
-        void OnRectTransformDimensionsChange()
+
+        private void OnRectTransformDimensionsChange()
         {
-            _dirty = true; // Need to delay the update such that it doesn't run during the rebuild loop
+            dirty = true; // Need to delay the update such that it doesn't run during the rebuild loop
         }
-        void Update()
+
+        private void Update()
         {
-            if (_dirty)
+            if (dirty)
             {
-                _dirty = false;
+                dirty = false;
                 UpdateScrollView();
             }
         }
+
         private IEnumerator SetupScrollView()
         {
-            RectTransform rectTransform = (transform.GetChild(0) as RectTransform);
-            yield return new WaitWhile(() => rectTransform.sizeDelta.y == -1); //This is a reliable way to wait for the vertical layout group to be set up which it must be before the scrollview can be setup
+            RectTransform rectTransform = (RectTransform)transform.GetChild(0);
+            yield return new WaitWhile(() => rectTransform.sizeDelta.y == -1); // This is a reliable way to wait for the vertical layout group to be set up which it must be before the scrollview can be setup
             UpdateScrollView();
         }
+
         private void UpdateScrollView()
         {
             scrollView.SetContentSize((transform.GetChild(0) as RectTransform).rect.height);

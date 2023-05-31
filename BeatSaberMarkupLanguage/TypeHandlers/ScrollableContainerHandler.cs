@@ -1,20 +1,19 @@
-﻿using BeatSaberMarkupLanguage.Components;
+﻿using System.Collections.Generic;
+using System.Linq;
+using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.Parser;
 using HMUI;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.TypeHandlers
 {
-    
     [ComponentHandler(typeof(BSMLScrollableContainer))]
     public class ScrollableContainerHandler : TypeHandler
     {
         public override Dictionary<string, string[]> Props { get; } = new Dictionary<string, string[]>
         {
-            { "id", new[]{ "id" } },
+            { "id", new[] { "id" } },
             { "maskOverflow", new[] { "mask-overflow" } },
             { "alignBottom", new[] { "align-bottom" } },
             { "scrollToBottomOnUpdate", new[] { "scroll-to-bottom-on-update" } },
@@ -78,7 +77,6 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 
             scrollView.RefreshContent();
             scrollView.RefreshButtons();
-            //scrollView.ScrollAt(0, false);
         }
     }
 }

@@ -8,24 +8,24 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
     {
         private GameplaySetupMenu tab;
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
         [UIValue("tab-name")]
         private string Name => tab?.name;
 
         [UIValue("tab-visible")]
         private bool Visible
         {
-            get => tab != null && tab.visible;
+            get => tab != null && tab.Visible;
             set
             {
                 if (tab != null)
                 {
-                    tab.visible = value;
+                    tab.Visible = value;
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Visible)));
                 }
             }
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         public GameplaySetupCell PopulateCell(GameplaySetupMenu tab)
         {

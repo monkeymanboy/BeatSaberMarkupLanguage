@@ -1,7 +1,6 @@
-﻿using HMUI;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using HMUI;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,6 +8,10 @@ namespace BeatSaberMarkupLanguage.Components
 {
     public class Backgroundable : MonoBehaviour
     {
+        public Image background;
+
+        private static readonly Dictionary<string, ImageView> BackgroundCache = new Dictionary<string, ImageView>();
+
         private static Dictionary<string, string> Backgrounds => new Dictionary<string, string>()
         {
             { "round-rect-panel", "RoundRect10" },
@@ -24,6 +27,7 @@ namespace BeatSaberMarkupLanguage.Components
             { "panel-fade-gradient", "Background" },
             { "panel-top-gradient", "BG" },
         };
+
         private static Dictionary<string, string> ObjectParentNames => new Dictionary<string, string>()
         {
             { "round-rect-panel", "Wrapper" },
@@ -32,34 +36,37 @@ namespace BeatSaberMarkupLanguage.Components
             { "panel-top-gradient", "ActionButton" },
         };
 
-        public Image background;
-
-        private static readonly Dictionary<string, ImageView> _backgroundCache = new Dictionary<string, ImageView>();
-
         public void ApplyBackground(string name)
         {
             if (background != null)
+            {
                 throw new Exception("Cannot add multiple backgrounds");
+            }
 
             if (!Backgrounds.TryGetValue(name, out string backgroundName))
+            {
                 throw new Exception($"Background type '{name}' not found");
+            }
 
             try
             {
-                if (!_backgroundCache.TryGetValue(name, out ImageView bgTemplate) || bgTemplate == null)
+                if (!BackgroundCache.TryGetValue(name, out ImageView bgTemplate) || bgTemplate == null)
                 {
                     if (!bgTemplate)
-                        _backgroundCache.Remove(name);
+                    {
+                        BackgroundCache.Remove(name);
+                    }
 
                     bgTemplate = FindTemplate(name, backgroundName);
-                    _backgroundCache.Add(name, bgTemplate);
+                    BackgroundCache.Add(name, bgTemplate);
                 }
+
                 background = gameObject.AddComponent(bgTemplate);
                 background.enabled = true;
             }
             catch
             {
-                Logger.log.Error($"Error loading background: '{name}'");
+                Logger.Log.Error($"Error loading background: '{name}'");
             }
         }
 
@@ -73,18 +80,25 @@ namespace BeatSaberMarkupLanguage.Components
                 ImageView image = images[i];
                 Sprite sprite = image.sprite;
                 if (!sprite || sprite.name != backgroundName)
+                {
                     continue;
+                }
 
                 Transform parent = image.transform.parent;
                 if (!parent || parent.name != parentName)
+                {
                     continue;
+                }
 
                 string goName = image.gameObject?.name;
                 if (goName != objectName)
+                {
                     continue;
+                }
 
                 return image;
             }
+
             return null;
         }
     }

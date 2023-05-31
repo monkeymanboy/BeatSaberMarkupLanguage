@@ -1,8 +1,8 @@
-﻿using BeatSaberMarkupLanguage.Components;
+﻿using System.Collections.Generic;
+using System.Linq;
+using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.Components.Settings;
 using Polyglot;
-using System.Collections.Generic;
-using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -18,7 +18,10 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
         public override GameObject CreateObject(Transform parent)
         {
             if (valueControllerTemplate == null)
+            {
                 valueControllerTemplate = Resources.FindObjectsOfTypeAll<FormattedFloatListSettingsValueController>().First(x => x.name == "VRRenderingScale");
+            }
+
             FormattedFloatListSettingsValueController baseSetting = Object.Instantiate(valueControllerTemplate, parent, false);
             baseSetting.name = "BSMLStringSetting";
 
@@ -61,7 +64,7 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
             icon.sprite = Utilities.EditIcon;
             icon.rectTransform.sizeDelta = new Vector2(4, 4);
             stringSetting.editButton.interactable = true;
-            
+
             (stringSetting.editButton.transform as RectTransform).anchorMin = new Vector2(0, 0);
 
             stringSetting.modalKeyboard = base.CreateObject(gameObject.transform).GetComponent<ModalKeyboard>();

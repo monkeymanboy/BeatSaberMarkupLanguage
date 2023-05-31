@@ -7,44 +7,10 @@ namespace BeatSaberMarkupLanguage.MenuButtons
 {
     public class MenuButton : INotifyPropertyChanged
     {
-        public virtual Action OnClick { get; protected set; }
-        
-        private string _text;
-        [UIValue("text")]
-        public virtual string Text {
-            get => _text;
-            set
-            {
-                _text = value;
-                NotifyPropertyChanged();
-            }
-        }
-        private string _hoverHint;
-        [UIValue("hover-hint")]
-        public virtual string HoverHint {
-            get => _hoverHint;
-            set
-            {
-                _hoverHint = value;
-                NotifyPropertyChanged();
-            }
-        }
-        private bool _interactable;
-        [UIValue("interactable")]
-        public virtual bool Interactable {
-            get => _interactable;
-            set {
-                _interactable = value;
-                NotifyPropertyChanged();
-            }
-        }
-        [UIAction("button-click")]
-        public void ButtonClicked()
-        {
-            OnClick?.Invoke();
-        }
-        
-        protected MenuButton() { }
+        private string text;
+        private string hoverHint;
+        private bool interactable;
+
         public MenuButton(string text, string hoverHint, Action onClick, bool interactable = true)
         {
             Text = text;
@@ -54,10 +20,57 @@ namespace BeatSaberMarkupLanguage.MenuButtons
         }
 
         public MenuButton(string text, Action onClick)
-        : this(text, string.Empty, onClick)
-        { }
+            : this(text, string.Empty, onClick)
+        {
+        }
+
+        protected MenuButton()
+        {
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public virtual Action OnClick { get; protected set; }
+
+        [UIValue("text")]
+        public virtual string Text
+        {
+            get => text;
+            set
+            {
+                text = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        [UIValue("hover-hint")]
+        public virtual string HoverHint
+        {
+            get => hoverHint;
+            set
+            {
+                hoverHint = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        [UIValue("interactable")]
+        public virtual bool Interactable
+        {
+            get => interactable;
+            set
+            {
+                interactable = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        [UIAction("button-click")]
+        public void ButtonClicked()
+        {
+            OnClick?.Invoke();
+        }
+
         protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
             try
@@ -66,8 +79,8 @@ namespace BeatSaberMarkupLanguage.MenuButtons
             }
             catch (Exception ex)
             {
-                Logger.log?.Error($"Error Invoking PropertyChanged: {ex.Message}");
-                Logger.log?.Error(ex);
+                Logger.Log?.Error($"Error Invoking PropertyChanged: {ex.Message}");
+                Logger.Log?.Error(ex);
             }
         }
     }

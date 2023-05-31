@@ -1,16 +1,27 @@
-﻿using BeatSaberMarkupLanguage.Attributes;
+﻿using System.Collections.Generic;
+using System.Linq;
+using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.Parser;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
-namespace BeatSaberMarkupLanguage
+namespace BeatSaberMarkupLanguage.Settings
 {
     public class SettingsTest : NotifiableSingleton<SettingsTest>
     {
         [UIParams]
         private BSMLParserParams parserParams;
+
+        private bool boolTest = true;
+
+        [UIValue("slider-value")]
+        private int sliderValue = 5;
+
+        [UIValue("string-value")]
+        private string testString = "Shazam";
+
+        [UIValue("color-value")]
+        private Color testColor = Color.yellow;
 
         [UIValue("list-options")]
         private List<object> options = new object[] { "1", "Something", "Kapow", "Yeet" }.ToList();
@@ -28,24 +39,14 @@ namespace BeatSaberMarkupLanguage
                 NotifyPropertyChanged();
             }
         }
-        private bool boolTest = true;
-
-        [UIValue("slider-value")]
-        private int sliderValue = 5;
-
-        [UIValue("string-value")]
-        private string testString = "Shazam";
-
-        [UIValue("color-value")]
-        private Color testColor = Color.yellow;
 
         [UIAction("#apply")]
         public void OnApply()
         {
-            Logger.log.Info($"{sliderValue}");
-            Logger.log.Info($"{testString}");
-            Logger.log.Info($"Bool Test: {boolTest}");
-            Logger.log.Info($"List Test: {listChoice}");
+            Logger.Log.Info($"{sliderValue}");
+            Logger.Log.Info($"{testString}");
+            Logger.Log.Info($"Bool Test: {boolTest}");
+            Logger.Log.Info($"List Test: {listChoice}");
         }
 
         [UIAction("format")]
@@ -58,14 +59,6 @@ namespace BeatSaberMarkupLanguage
         public void ChangeBool()
         {
             BoolTest = !BoolTest;
-        }
-
-        public void Update()
-        {
-            //Logger.log.Info($"{sliderValue}");
-            //Logger.log.Info($"{testString}");
-            //Logger.log.Info($"Bool Test: {boolTest}");
-            //Logger.log.Info($"List Test: {listChoice}");
         }
     }
 }

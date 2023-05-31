@@ -1,9 +1,9 @@
-﻿using BeatSaberMarkupLanguage.Components;
+﻿using System.Collections.Generic;
+using System.Linq;
+using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.Components.Settings;
 using HMUI;
 using Polyglot;
-using System.Collections.Generic;
-using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,6 +15,7 @@ namespace BeatSaberMarkupLanguage.Tags
         private GameObject toggleTemplate;
 
         public override string[] Aliases => new[] { "toggle-setting", "bool-setting", "checkbox-setting", "checkbox" };
+
         public virtual string PrefabToggleName => "Fullscreen";
 
         public override GameObject CreateObject(Transform parent)

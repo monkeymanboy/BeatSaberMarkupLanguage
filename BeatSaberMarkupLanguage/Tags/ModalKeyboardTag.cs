@@ -25,7 +25,7 @@ namespace BeatSaberMarkupLanguage.Tags
             ModalKeyboard modalKeyboard = gameObject.AddComponent<ModalKeyboard>();
             modalKeyboard.keyboard = keyboard;
             modalKeyboard.modalView = gameObject.GetComponent<ModalView>();
-            keyboard.EnterPressed += delegate (string value) { modalKeyboard.OnEnter(value); };
+            keyboard.EnterPressed += (value) => modalKeyboard.OnEnter(value);
 
             return gameObject;
         }

@@ -1,7 +1,7 @@
-﻿using BeatSaberMarkupLanguage.Parser;
-using HMUI;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using BeatSaberMarkupLanguage.Parser;
+using HMUI;
 using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.Components
@@ -22,6 +22,7 @@ namespace BeatSaberMarkupLanguage.Components
                 tableCell.gameObject.AddComponent<Touchable>();
                 tableCell.interactable = true;
             }
+
             tableCell.reuseIdentifier = "BSMLCustomCellListCell";
             tableCell.name = "BSMLCustomTableCell";
             tableCell.parserParams = BSMLParser.instance.Parse(cellTemplate, tableCell.gameObject, data[idx]);
@@ -39,12 +40,36 @@ namespace BeatSaberMarkupLanguage.Components
             return data.Count();
         }
     }
+
     public class CustomCellTableCell : TableCell
     {
         public BSMLParserParams parserParams;
         public List<GameObject> selectedTags;
         public List<GameObject> hoveredTags;
         public List<GameObject> neitherTags;
+
+        public virtual void RefreshVisuals()
+        {
+            foreach (GameObject gameObject in selectedTags)
+            {
+                gameObject.SetActive(selected);
+            }
+
+            foreach (GameObject gameObject in hoveredTags)
+            {
+                gameObject.SetActive(highlighted);
+            }
+
+            foreach (GameObject gameObject in neitherTags)
+            {
+                gameObject.SetActive(!(selected || highlighted));
+            }
+
+            if (parserParams.actions.TryGetValue("refresh-visuals", out BSMLAction action))
+            {
+                action.Invoke(selected, highlighted);
+            }
+        }
 
         internal void SetupPostParse()
         {
@@ -61,24 +86,6 @@ namespace BeatSaberMarkupLanguage.Components
         protected override void HighlightDidChange(TransitionType transitionType)
         {
             RefreshVisuals();
-        }
-
-        public virtual void RefreshVisuals()
-        {
-            foreach (GameObject gameObject in selectedTags)
-            {
-                gameObject.SetActive(base.selected);
-            }
-            foreach (GameObject gameObject in hoveredTags)
-            {
-                gameObject.SetActive(base.highlighted);
-            }
-            foreach (GameObject gameObject in neitherTags)
-            {
-                gameObject.SetActive(!(base.selected || base.highlighted));
-            }
-            if (parserParams.actions.TryGetValue("refresh-visuals", out BSMLAction action))
-                action.Invoke(base.selected, base.highlighted);
         }
     }
 }

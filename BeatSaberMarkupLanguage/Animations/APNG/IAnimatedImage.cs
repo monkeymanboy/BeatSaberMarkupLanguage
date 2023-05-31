@@ -1,5 +1,5 @@
-﻿using BeatSaberMarkupLanguage.Animations.APNG.Chunks;
-using System.Drawing;
+﻿using System.Drawing;
+using BeatSaberMarkupLanguage.Animations.APNG.Chunks;
 
 namespace BeatSaberMarkupLanguage.Animations
 {
@@ -8,15 +8,6 @@ namespace BeatSaberMarkupLanguage.Animations
     /// </summary>
     public interface IAnimatedImage
     {
-        /// <summary>
-        /// Gets the bitmap at the specified index.
-        /// </summary>
-        /// <param name="index">Index of the animation frame.</param>
-        Bitmap this[int index]
-        {
-            get;
-        }
-
         /// <summary>
         /// Gets or sets the frame rate.
         /// </summary>
@@ -37,7 +28,7 @@ namespace BeatSaberMarkupLanguage.Animations
         }
 
         /// <summary>
-        /// Gets and sets the play count.
+        /// Gets or sets the play count.
         /// </summary>
         /// <value>The play count.</value>
         int PlayCount
@@ -47,14 +38,43 @@ namespace BeatSaberMarkupLanguage.Animations
         }
 
         /// <summary>
-        /// Gets the frame rate of a specific frame
+        /// Gets or sets the size.
         /// </summary>
-        /// <returns>The frame rate of a specific frame</returns>
+        /// <value>The size of the displayed animated image.</value>
+        Size ViewSize
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Gets or sets the actual size.
+        /// </summary>
+        /// <value>The actual size.</value>
+        Size ActualSize
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Gets the bitmap at the specified index.
+        /// </summary>
+        /// <param name="index">Index of the animation frame.</param>
+        Bitmap this[int index]
+        {
+            get;
+        }
+
+        /// <summary>
+        /// Gets the frame rate of a specific frame.
+        /// </summary>
+        /// <returns>The frame rate of a specific frame.</returns>
         /// <param name="index">The frame index.</param>
         int GetFrameRate(int index);
 
         /// <summary>
-        /// Sets the frame rate of a specific frame
+        /// Sets the frame rate of a specific frame.
         /// </summary>
         /// <param name="index">The frame index.</param>
         /// <param name="frameRate">Frame rate in milliseconds.</param>
@@ -79,26 +99,5 @@ namespace BeatSaberMarkupLanguage.Animations
         /// </summary>
         /// <returns>The default image.</returns>
         Bitmap GetDefaultImage();
-
-        /// <summary>
-        /// Gets or sets the size.
-        /// </summary>
-        /// <value>The size of the displayed animated image.</value>
-        Size ViewSize
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// Gets or sets the actual size.
-        /// </summary>
-        /// <value>The actual size.</value>
-        Size ActualSize
-        {
-            get;
-            set;
-        }
     }
 }
-

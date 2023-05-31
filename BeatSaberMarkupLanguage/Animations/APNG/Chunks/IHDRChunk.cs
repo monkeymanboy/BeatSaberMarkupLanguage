@@ -47,8 +47,8 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         /// Gets or sets the width.
         /// </summary>
         /// <value>The width.</value>
-        public int Width 
-        { 
+        public int Width
+        {
             get => this.width;
             internal set
             {
@@ -61,8 +61,8 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         /// Gets or sets the height.
         /// </summary>
         /// <value>The height.</value>
-        public int Height 
-        { 
+        public int Height
+        {
             get => this.height;
             internal set
             {
@@ -75,13 +75,13 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         /// Gets or sets the bit depth.
         /// </summary>
         /// <value>The bit depth.</value>
-        public byte BitDepth 
-        { 
+        public byte BitDepth
+        {
             get => this.bitDepth;
             internal set
             {
                 this.bitDepth = value;
-                ModifyChunkData(5, new[]{ value });
+                ModifyChunkData(5, new[] { value });
             }
         }
 
@@ -89,13 +89,13 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         /// Gets or sets the type of the color.
         /// </summary>
         /// <value>The type of the color.</value>
-        public byte ColorType 
-        { 
+        public byte ColorType
+        {
             get => this.colorType;
             internal set
             {
                 this.colorType = value;
-                ModifyChunkData(6, new[]{ value });
+                ModifyChunkData(6, new[] { value });
             }
         }
 
@@ -103,13 +103,13 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         /// Gets or sets the compression method.
         /// </summary>
         /// <value>The compression method.</value>
-        public byte CompressionMethod 
-        { 
+        public byte CompressionMethod
+        {
             get => this.compressionMethod;
             internal set
             {
                 this.compressionMethod = value;
-                ModifyChunkData(7, new[]{ value });
+                ModifyChunkData(7, new[] { value });
             }
         }
 
@@ -117,13 +117,13 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         /// Gets or sets the filter method.
         /// </summary>
         /// <value>The filter method.</value>
-        public byte FilterMethod 
-        { 
+        public byte FilterMethod
+        {
             get => this.filterMethod;
             internal set
             {
                 this.filterMethod = value;
-                ModifyChunkData(8, new[]{ value });
+                ModifyChunkData(8, new[] { value });
             }
         }
 
@@ -131,13 +131,13 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         /// Gets or sets the interlace method.
         /// </summary>
         /// <value>The interlace method.</value>
-        public byte InterlaceMethod 
-        { 
+        public byte InterlaceMethod
+        {
             get => this.interlaceMethod;
             internal set
             {
                 this.interlaceMethod = value;
-                ModifyChunkData(9, new[]{ value });
+                ModifyChunkData(9, new[] { value });
             }
         }
 

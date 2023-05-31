@@ -10,11 +10,17 @@ namespace BeatSaberMarkupLanguage.Components
         public void SetGlow(string colorString)
         {
             if (image == null)
+            {
                 return;
+            }
+
             if (colorString != "none")
             {
                 if (!ColorUtility.TryParseHtmlString(colorString, out Color color))
-                    Logger.log.Warn($"Invalid color: {colorString}");
+                {
+                    Logger.Log.Warn($"Invalid color: {colorString}");
+                }
+
                 image.color = color;
                 image.gameObject.SetActive(true);
             }

@@ -1,27 +1,28 @@
-﻿using BeatSaberMarkupLanguage.Components;
+﻿using System.Collections.Generic;
+using System.Linq;
+using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.Components.Settings;
 using HMUI;
-using IPA.Utilities;
 using Polyglot;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
-using VRUIControls;
 
 namespace BeatSaberMarkupLanguage.Tags.Settings
 {
     public class DropdownListSettingTag : BSMLTag
     {
         private GameObject dropdownTemplate;
+        private GameObject safePrefab;
 
         public override string[] Aliases => new[] { "dropdown-list-setting" };
 
-        private GameObject safePrefab;
         public override void Setup()
         {
             if (dropdownTemplate == null)
-                dropdownTemplate = Resources.FindObjectsOfTypeAll<SimpleTextDropdown>().First(x => x.transform?.parent?.name == "NormalLevels").transform.parent.gameObject;
+            {
+                dropdownTemplate = Resources.FindObjectsOfTypeAll<SimpleTextDropdown>().Where(td => td.transform.parent != null).First(td => td.transform.parent.name == "NormalLevels").transform.parent.gameObject;
+            }
+
             safePrefab = Object.Instantiate(dropdownTemplate, BSMLParser.instance.transform, false);
             safePrefab.SetActive(false);
             safePrefab.name = "BSMLDropdownListPrefab";
@@ -29,14 +30,11 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
 
         public override GameObject CreateObject(Transform parent)
         {
-            GameObject gameObject = Object.Instantiate(safePrefab, parent, false);
+            GameObject gameObject = DiContainer.InstantiatePrefab(safePrefab, parent);
             gameObject.name = "BSMLDropdownList";
             SimpleTextDropdown dropdown = gameObject.GetComponentInChildren<SimpleTextDropdown>();
             dropdown.gameObject.SetActive(false);
             dropdown.name = "Dropdown";
-            dropdown.GetComponentInChildren<VRGraphicRaycaster>(true).SetField("_physicsRaycaster", BeatSaberUI.PhysicsRaycasterWithCache);
-            dropdown.GetComponentInChildren<ModalView>(true).SetField("_container", BeatSaberUI.DiContainer);
-            dropdown.GetComponentInChildren<ScrollView>(true).SetField("_platformHelper", BeatSaberUI.PlatformHelper);
 
             GameObject labelObject = gameObject.transform.Find("Label").gameObject;
             LocalizedTextMeshProUGUI localizedText = ConfigureLocalizedText(labelObject);
@@ -54,7 +52,7 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
             externalComponents.Add(layoutElement);
 
             DropDownListSetting dropDownListSetting = dropdown.gameObject.AddComponent<DropDownListSetting>();
-            
+
             dropDownListSetting.dropdown = dropdown;
             dropdown.gameObject.SetActive(true);
             gameObject.SetActive(true);

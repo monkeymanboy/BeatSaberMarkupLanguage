@@ -8,10 +8,10 @@
     "An XML based UI system."
   ],
   "author": "monkeymanboy",
-  "gameVersion": "1.29.0",
-  "version": "1.6.10",
+  "gameVersion": "1.29.4_4821066007",
+  "version": "1.6.11",
   "dependsOn": {
-    "BSIPA": "^4.2.0"
+    "BSIPA": "^4.3.0"
   },
   "links": {
     "project-home": "https://github.com/monkeymanboy/BeatSaberMarkupLanguage",

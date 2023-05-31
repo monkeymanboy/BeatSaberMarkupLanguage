@@ -1,22 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
 using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.TypeHandlers
 {
     [ComponentHandler(typeof(RawImage))]
-    class RawImageHandler : TypeHandler<RawImage>
+    internal class RawImageHandler : TypeHandler<RawImage>
     {
         public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
         {
-            { "image", new[]{"source", "src"} }
+            { "image", new[] { "source", "src" } },
         };
 
         public override Dictionary<string, Action<RawImage, string>> Setters => new Dictionary<string, Action<RawImage, string>>()
         {
-            { "image", new Action<RawImage, string>(SetImage) }
+            { "image", new Action<RawImage, string>(SetImage) },
         };
 
         public void SetImage(RawImage image, string imagePath)
@@ -26,9 +24,9 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 string imgName = imagePath.Substring(1);
 
                 image.texture = Utilities.FindTextureCached(imgName);
-                if(image.texture == null)
+                if (image.texture == null)
                 {
-                    Logger.log.Error($"Could not find Texture with image name {imgName}");
+                    Logger.Log.Error($"Could not find Texture with image name {imgName}");
                 }
             }
             else
@@ -38,7 +36,6 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                     image.texture = Utilities.LoadTextureRaw(data);
                 });
             }
-
         }
     }
 }

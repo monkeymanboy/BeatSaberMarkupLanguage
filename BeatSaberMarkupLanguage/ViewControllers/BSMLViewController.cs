@@ -1,25 +1,28 @@
-﻿using HMUI;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using HMUI;
 
 namespace BeatSaberMarkupLanguage.ViewControllers
 {
     public abstract class BSMLViewController : ViewController, INotifyPropertyChanged
     {
-        public abstract string Content { get; }
-
         public Action<bool, bool, bool> didActivate;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public abstract string Content { get; }
 
         protected override void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
         {
             if (firstActivation)
+            {
                 BSMLParser.instance.Parse(Content, gameObject, this);
+            }
 
             didActivate?.Invoke(firstActivation, addedToHierarchy, screenSystemEnabling);
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
         protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
             try
@@ -28,8 +31,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
             }
             catch (Exception ex)
             {
-                Logger.log?.Error($"Error Invoking PropertyChanged: {ex.Message}");
-                Logger.log?.Error(ex);
+                Logger.Log?.Error($"Error invoking PropertyChanged for property '{propertyName}' on View Controller {name}\n{ex}");
             }
         }
     }

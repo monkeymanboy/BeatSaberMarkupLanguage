@@ -1,28 +1,14 @@
-﻿using HMUI;
-using IPA.Utilities;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using HMUI;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
-using LevelPackCell = AnnotatedBeatmapLevelCollectionCell;//This got renamed at a point, but old name is more clear so I'm using that
+using LevelPackCell = AnnotatedBeatmapLevelCollectionCell; // This got renamed at a point, but old name is more clear so I'm using that
 
 namespace BeatSaberMarkupLanguage.Components
 {
     public class CustomListTableData : MonoBehaviour, TableView.IDataSource
     {
-        public enum ListStyle
-        {
-            List, Box, Simple
-        }
-
-        private ListStyle listStyle = ListStyle.List;
-
-        private LevelListTableCell songListTableCellInstance;
-        private LevelPackCell levelPackTableCellInstance;
-        private SimpleTextTableCell simpleTextTableCellInstance;
-
         public List<CustomCellInfo> data = new List<CustomCellInfo>();
         public float cellSize = 8.5f;
         public string reuseIdentifier = "BSMLListTableCell";
@@ -30,12 +16,24 @@ namespace BeatSaberMarkupLanguage.Components
 
         public bool expandCell = false;
 
+        private LevelListTableCell songListTableCellInstance;
+        private LevelPackCell levelPackTableCellInstance;
+        private SimpleTextTableCell simpleTextTableCellInstance;
+        private ListStyle listStyle = ListStyle.List;
+
+        public enum ListStyle
+        {
+            List,
+            Box,
+            Simple,
+        }
+
         public ListStyle Style
         {
             get => listStyle;
             set
             {
-                //Sets the default cell size for certain styles
+                // Sets the default cell size for certain styles
                 switch (value)
                 {
                     case ListStyle.List:
@@ -59,14 +57,14 @@ namespace BeatSaberMarkupLanguage.Components
             if (!tableCell)
             {
                 if (songListTableCellInstance == null)
+                {
                     songListTableCellInstance = Resources.FindObjectsOfTypeAll<LevelListTableCell>().First(x => (x.name == "LevelListTableCell"));
+                }
 
                 tableCell = Instantiate(songListTableCellInstance);
-
             }
 
-            //tableCell.SetField("_beatmapCharacteristicImages", new Image[0]);
-            tableCell.SetField("_notOwned", false);
+            tableCell._notOwned = false;
 
             tableCell.reuseIdentifier = reuseIdentifier;
             return tableCell;
@@ -78,7 +76,9 @@ namespace BeatSaberMarkupLanguage.Components
             if (!tableCell)
             {
                 if (levelPackTableCellInstance == null)
+                {
                     levelPackTableCellInstance = Resources.FindObjectsOfTypeAll<LevelPackCell>().First(x => x.name == "AnnotatedBeatmapLevelCollectionCell");
+                }
 
                 tableCell = InstantiateBoxTableCell(levelPackTableCellInstance);
             }
@@ -90,12 +90,12 @@ namespace BeatSaberMarkupLanguage.Components
         public BSMLBoxTableCell InstantiateBoxTableCell(LevelPackCell levelPackTableCell)
         {
             levelPackTableCell = Instantiate(levelPackTableCell);
-            ImageView coverImage = levelPackTableCell.GetField<ImageView, LevelPackCell>("_coverImage");
-            ImageView selectionImage = levelPackTableCell.GetField<ImageView, LevelPackCell>("_selectionImage");
+            ImageView coverImage = levelPackTableCell._coverImage;
+            ImageView selectionImage = levelPackTableCell._selectionImage;
 
             foreach (Transform child in coverImage.transform)
             {
-                GameObject.Destroy(child.gameObject);
+                Destroy(child.gameObject);
             }
 
             GameObject cellObject = levelPackTableCell.gameObject;
@@ -111,7 +111,9 @@ namespace BeatSaberMarkupLanguage.Components
             if (!tableCell)
             {
                 if (simpleTextTableCellInstance == null)
+                {
                     simpleTextTableCellInstance = Resources.FindObjectsOfTypeAll<SimpleTextTableCell>().First(x => x.name == "SimpleTextTableCell");
+                }
 
                 tableCell = Instantiate(simpleTextTableCellInstance);
             }
@@ -127,13 +129,13 @@ namespace BeatSaberMarkupLanguage.Components
                 case ListStyle.List:
                     LevelListTableCell tableCell = GetTableCell();
 
-                    TextMeshProUGUI nameText = tableCell.GetField<TextMeshProUGUI, LevelListTableCell>("_songNameText");
-                    TextMeshProUGUI authorText = tableCell.GetField<TextMeshProUGUI, LevelListTableCell>("_songAuthorText");
-                    tableCell.GetField<TextMeshProUGUI, LevelListTableCell>("_songBpmText").gameObject.SetActive(false);
-                    tableCell.GetField<TextMeshProUGUI, LevelListTableCell>("_songDurationText").gameObject.SetActive(false);
-                    tableCell.GetField<GameObject, LevelListTableCell>("_promoBadgeGo").SetActive(false);
-                    tableCell.GetField<GameObject, LevelListTableCell>("_updatedBadgeGo").SetActive(false);
-                    tableCell.GetField<Image, LevelListTableCell>("_favoritesBadgeImage").gameObject.SetActive(false);
+                    TextMeshProUGUI nameText = tableCell._songNameText;
+                    TextMeshProUGUI authorText = tableCell._songAuthorText;
+                    tableCell._songBpmText.gameObject.SetActive(false);
+                    tableCell._songDurationText.gameObject.SetActive(false);
+                    tableCell._promoBadgeGo.SetActive(false);
+                    tableCell._updatedBadgeGo.SetActive(false);
+                    tableCell._favoritesBadgeImage.gameObject.SetActive(false);
                     tableCell.transform.Find("BpmIcon").gameObject.SetActive(false);
                     if (expandCell)
                     {
@@ -143,7 +145,7 @@ namespace BeatSaberMarkupLanguage.Components
 
                     nameText.text = data[idx].text;
                     authorText.text = data[idx].subtext;
-                    tableCell.GetField<Image, LevelListTableCell>("_coverImage").sprite = data[idx].icon == null ? Utilities.LoadSpriteFromTexture(Texture2D.blackTexture) : data[idx].icon;
+                    tableCell._coverImage.sprite = data[idx].icon == null ? Utilities.LoadSpriteFromTexture(Texture2D.blackTexture) : data[idx].icon;
 
                     return tableCell;
                 case ListStyle.Box:
@@ -153,8 +155,8 @@ namespace BeatSaberMarkupLanguage.Components
                     return cell;
                 case ListStyle.Simple:
                     SimpleTextTableCell simpleCell = GetSimpleTextTableCell();
-                    simpleCell.GetField<TextMeshProUGUI, SimpleTextTableCell>("_text").richText = true;
-                    simpleCell.GetField<TextMeshProUGUI, SimpleTextTableCell>("_text").enableWordWrapping = true;
+                    simpleCell._text.richText = true;
+                    simpleCell._text.enableWordWrapping = true;
                     simpleCell.text = data[idx].text;
 
                     return simpleCell;
@@ -185,6 +187,6 @@ namespace BeatSaberMarkupLanguage.Components
                 this.subtext = subtext;
                 this.icon = icon;
             }
-        };
+        }
     }
 }

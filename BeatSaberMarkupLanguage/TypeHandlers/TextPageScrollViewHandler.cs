@@ -1,6 +1,6 @@
-﻿using HMUI;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using HMUI;
 
 namespace BeatSaberMarkupLanguage.TypeHandlers
 {
@@ -9,12 +9,12 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
     {
         public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
         {
-            { "text", new[]{ "text" } }
+            { "text", new[] { "text" } },
         };
 
         public override Dictionary<string, Action<TextPageScrollView, string>> Setters => new Dictionary<string, Action<TextPageScrollView, string>>()
         {
-            {"text", new Action<TextPageScrollView, string>((component, value) => component.SetText(value ?? string.Empty)) }
+            { "text", new Action<TextPageScrollView, string>((component, value) => component.SetText(value ?? string.Empty)) },
         };
     }
 }

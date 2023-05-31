@@ -1,0 +1,14 @@
+{
+  "profiles": {
+    "Beat Saber": {
+      "commandName": "Executable",
+      "executablePath": "$(SteamExecutable)",
+      "commandLineArgs": "-applaunch 620980 --verbose --debug"
+    },
+    "Beat Saber (FPFC)": {
+      "commandName": "Executable",
+      "executablePath": "$(SteamExecutable)",
+      "commandLineArgs": "-applaunch 620980 fpfc --verbose --debug"
+    }
+  }
+}

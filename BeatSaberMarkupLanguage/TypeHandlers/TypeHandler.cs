@@ -1,8 +1,7 @@
-﻿using BeatSaberMarkupLanguage.Components;
-using BeatSaberMarkupLanguage.Notify;
-using BeatSaberMarkupLanguage.Parser;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using BeatSaberMarkupLanguage.Components;
+using BeatSaberMarkupLanguage.Parser;
 using UnityEngine;
 using static BeatSaberMarkupLanguage.BSMLParser;
 
@@ -11,34 +10,29 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
     public abstract class TypeHandler
     {
         private Dictionary<string, string[]> cachedProps;
-        public Dictionary<string, string[]> CachedProps
-        {
-            get{
-                if (cachedProps == null)
-                    cachedProps = Props;
-                return cachedProps;
-            }
-        }
+
+        public Dictionary<string, string[]> CachedProps => cachedProps ??= Props;
+
         public abstract Dictionary<string, string[]> Props { get; }
+
         public abstract void HandleType(ComponentTypeWithData componentType, BSMLParserParams parserParams);
-        public virtual void HandleTypeAfterChildren(ComponentTypeWithData componentType, BSMLParserParams parserParams) { }
-        public virtual void HandleTypeAfterParse(ComponentTypeWithData componentType, BSMLParserParams parserParams) { }
+
+        public virtual void HandleTypeAfterChildren(ComponentTypeWithData componentType, BSMLParserParams parserParams)
+        {
+        }
+
+        public virtual void HandleTypeAfterParse(ComponentTypeWithData componentType, BSMLParserParams parserParams)
+        {
+        }
     }
 
     public abstract class TypeHandler<T> : TypeHandler
         where T : Component
     {
-
         private Dictionary<string, Action<T, string>> cachedSetters;
-        public Dictionary<string, Action<T, string>> CachedSetters
-        {
-            get
-            {
-                if (cachedSetters == null)
-                    cachedSetters = Setters;
-                return cachedSetters;
-            }
-        }
+
+        public Dictionary<string, Action<T, string>> CachedSetters => cachedSetters ??= Setters;
+
         public abstract Dictionary<string, Action<T, string>> Setters { get; }
 
         public override void HandleType(ComponentTypeWithData componentType, BSMLParserParams parserParams)
@@ -52,12 +46,15 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                     {
                         action.Invoke(obj, pair.Value);
                         if (componentType.valueMap.TryGetValue(pair.Key, out BSMLValue value))
+                        {
                             updater = BindValue(componentType, parserParams, value, val => action.Invoke(obj, val.InvariantToString()), updater);
+                        }
                     }
                 }
             }
         }
-        protected static NotifyUpdater GetOrCreateNotifyUpdater(BSMLParser.ComponentTypeWithData componentType, BSMLParserParams parserParams)
+
+        protected static NotifyUpdater GetOrCreateNotifyUpdater(ComponentTypeWithData componentType, BSMLParserParams parserParams)
         {
             NotifyUpdater updater = null;
             if (parserParams.host is System.ComponentModel.INotifyPropertyChanged notifyHost)
@@ -69,21 +66,31 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                     updater.NotifyHost = notifyHost;
                 }
             }
+
             return updater;
         }
 
-        protected static NotifyUpdater BindValue(BSMLParser.ComponentTypeWithData componentType, BSMLParserParams parserParams, BSMLValue value, Action<object> onChange, NotifyUpdater notifyUpdater = null)
+        protected static NotifyUpdater BindValue(ComponentTypeWithData componentType, BSMLParserParams parserParams, BSMLValue value, Action<object> onChange, NotifyUpdater notifyUpdater = null)
         {
-            if (value == null) return notifyUpdater;
+            if (value == null)
+            {
+                return notifyUpdater;
+            }
+
             if (value is BSMLPropertyValue prop)
             {
                 if (notifyUpdater == null)
+                {
                     notifyUpdater = GetOrCreateNotifyUpdater(componentType, parserParams);
-                notifyUpdater?.AddAction(prop.propertyInfo.Name, onChange);
+                }
+
+                notifyUpdater?.AddAction(prop.PropertyInfo.Name, onChange);
             }
+
             return notifyUpdater;
         }
     }
+
     public class ComponentHandler : Attribute
     {
         public Type type;

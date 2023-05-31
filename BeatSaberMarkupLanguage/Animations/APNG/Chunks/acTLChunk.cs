@@ -13,16 +13,6 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         /// <summary>
         /// Initializes a new instance of the <see cref="acTLChunk"/> class.
         /// </summary>
-        internal acTLChunk()
-        {
-            Length = 8;
-            ChunkType = "acTL";
-            ChunkData = new byte[Length];
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="acTLChunk"/> class.
-        /// </summary>
         /// <param name="bytes">Byte array of chunk data.</param>
         public acTLChunk(byte[] bytes)
             : base(bytes)
@@ -48,25 +38,35 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         }
 
         /// <summary>
-        /// Gets the number frames.
+        /// Initializes a new instance of the <see cref="acTLChunk"/> class.
         /// </summary>
-        /// <value>The number frames.</value>
-        public uint FrameCount
-        { 
-            get => frameCount;
-            internal set 
-            {
-                frameCount = value;
-                ModifyChunkData(0, Helper.ConvertEndian(value));
-            } 
+        internal acTLChunk()
+        {
+            Length = 8;
+            ChunkType = "acTL";
+            ChunkData = new byte[Length];
         }
 
         /// <summary>
-        /// Gets the number plays.
+        /// Gets or sets the number frames.
+        /// </summary>
+        /// <value>The number frames.</value>
+        public uint FrameCount
+        {
+            get => frameCount;
+            internal set
+            {
+                frameCount = value;
+                ModifyChunkData(0, Helper.ConvertEndian(value));
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the number plays.
         /// </summary>
         /// <value>The number plays.</value>
-        public uint PlayCount 
-        { 
+        public uint PlayCount
+        {
             get => playCount;
             internal set
             {

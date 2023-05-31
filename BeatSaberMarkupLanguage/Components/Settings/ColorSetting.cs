@@ -9,15 +9,18 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         public ModalColorPicker modalColorPicker;
         public Image colorImage;
 
-        private Color _currentColor = Color.white;
+        private Color currentColor = Color.white;
+
         public Color CurrentColor
         {
-            get => _currentColor;
+            get => currentColor;
             set
             {
-                _currentColor = value;
+                currentColor = value;
                 if (colorImage != null)
-                    colorImage.color = _currentColor;
+                {
+                    colorImage.color = currentColor;
+                }
             }
         }
 
@@ -27,7 +30,9 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             set
             {
                 if (editButton != null)
+                {
                     editButton.interactable = value;
+                }
             }
         }
 
@@ -37,16 +42,6 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             modalColorPicker.doneEvent += DonePressed;
             modalColorPicker.cancelEvent += CancelPressed;
             ReceiveValue();
-        }
-
-        protected virtual void OnEnable()
-        {
-            editButton.onClick.AddListener(EditButtonPressed);
-        }
-
-        protected void OnDisable()
-        {
-            editButton.onClick.RemoveListener(EditButtonPressed);
         }
 
         public void EditButtonPressed()
@@ -59,7 +54,9 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         {
             CurrentColor = color;
             if (updateOnChange)
+            {
                 ApplyValue();
+            }
         }
 
         public void CancelPressed()
@@ -69,14 +66,22 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 
         public override void ApplyValue()
         {
-            if (associatedValue != null)
-                associatedValue.SetValue(CurrentColor);
+            associatedValue?.SetValue(CurrentColor);
         }
 
         public override void ReceiveValue()
         {
-            if (associatedValue != null)
-                CurrentColor = (Color)associatedValue.GetValue();
+            CurrentColor = (Color)associatedValue?.GetValue();
+        }
+
+        protected virtual void OnEnable()
+        {
+            editButton.onClick.AddListener(EditButtonPressed);
+        }
+
+        protected void OnDisable()
+        {
+            editButton.onClick.RemoveListener(EditButtonPressed);
         }
     }
 }

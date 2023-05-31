@@ -1,10 +1,6 @@
-﻿using BeatSaberMarkupLanguage.Attributes;
+﻿using System.Collections.Generic;
+using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.ViewControllers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.MenuButtons
@@ -15,17 +11,20 @@ namespace BeatSaberMarkupLanguage.MenuButtons
         [UIValue("buttons")]
         public List<object> buttons = new List<object>();
 
-        [UIValue("any-buttons")]
-        private bool AnyButtons => buttons.Count > 0;
-
         [UIObject("root-object")]
         private GameObject rootObject;
+
+        [UIValue("any-buttons")]
+        private bool AnyButtons => buttons.Count > 0;
 
         public void RefreshView()
         {
             if (rootObject == null || !BSMLParser.IsSingletonAvailable)
+            {
                 return;
-            GameObject.Destroy(rootObject);
+            }
+
+            Destroy(rootObject);
             DidActivate(true, false, false);
         }
     }

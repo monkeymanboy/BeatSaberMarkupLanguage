@@ -1,8 +1,6 @@
-﻿using BeatSaberMarkupLanguage.Components;
-using BeatSaberMarkupLanguage.Parser;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using BeatSaberMarkupLanguage.Components;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,17 +11,20 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
     {
         public enum PageButtonDirection
         {
-            Up, Down, Left, Right
+            Up,
+            Down,
+            Left,
+            Right,
         }
 
         public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
         {
-            { "direction", new[]{"dir", "direction"} }
+            { "direction", new[] { "dir", "direction" } },
         };
 
         public override Dictionary<string, Action<PageButton, string>> Setters => new Dictionary<string, Action<PageButton, string>>()
         {
-            {"direction", new Action<PageButton, string>(SetButtonDirection) }
+            { "direction", new Action<PageButton, string>(SetButtonDirection) },
         };
 
         public static void SetButtonDirection(PageButton button, string value)
@@ -51,10 +52,13 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                     buttonTransform.localRotation = Quaternion.Euler(0, 0, 90);
                     break;
             }
-            if(layoutElement.preferredHeight == -1) //Establish default dimensions if they weren't changed
+
+            // Establish default dimensions if they weren't changed
+            if (layoutElement.preferredHeight == -1)
             {
                 layoutElement.preferredHeight = isHorizontal ? 6 : 40;
             }
+
             if (layoutElement.preferredWidth == -1)
             {
                 layoutElement.preferredWidth = isHorizontal ? 40 : 6;

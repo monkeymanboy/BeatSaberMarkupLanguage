@@ -14,12 +14,11 @@ namespace BeatSaberMarkupLanguage.Animations
         public Rect[] uvs;
         public float[] delays;
         public Sprite[] sprites;
-        public bool IsPlaying { get; set; } = true;
         public Material animMaterial;
-        private bool _isDelayConsistent = true;
-
         public List<Image> activeImages = new List<Image>();
-        
+
+        private readonly bool isDelayConsistent = true;
+
         public AnimationControllerData(Texture2D tex, Rect[] uvs, float[] delays)
         {
             sprites = new Sprite[uvs.Length];
@@ -27,11 +26,16 @@ namespace BeatSaberMarkupLanguage.Animations
             for (int i = 0; i < uvs.Length; i++)
             {
                 sprites[i] = Sprite.Create(tex, new Rect(uvs[i].x * tex.width, uvs[i].y * tex.height, uvs[i].width * tex.width, uvs[i].height * tex.height), new Vector2(0, 0), 100f);
+
                 if (i == 0)
+                {
                     firstDelay = delays[i];
+                }
 
                 if (delays[i] != firstDelay)
-                    _isDelayConsistent = false;
+                {
+                    isDelayConsistent = false;
+                }
             }
 
             sprite = Utilities.LoadSpriteFromTexture(tex);
@@ -39,15 +43,22 @@ namespace BeatSaberMarkupLanguage.Animations
             this.delays = delays;
         }
 
+        public bool IsPlaying { get; set; } = true;
+
         internal void CheckFrame(DateTime now)
         {
             if (activeImages.Count == 0)
+            {
                 return;
+            }
+
             double differenceMs = (now - lastSwitch).TotalMilliseconds;
             if (differenceMs < delays[uvIndex])
+            {
                 return;
+            }
 
-            if (_isDelayConsistent && delays[uvIndex] <= 10 && differenceMs < 100)
+            if (isDelayConsistent && delays[uvIndex] <= 10 && differenceMs < 100)
             {
                 // Bump animations with consistently 10ms or lower frame timings to 100ms
                 return;
@@ -58,9 +69,11 @@ namespace BeatSaberMarkupLanguage.Animations
             {
                 uvIndex++;
                 if (uvIndex >= uvs.Length)
+                {
                     uvIndex = 0;
+                }
             }
-            while (!_isDelayConsistent && delays[uvIndex] == 0);
+            while (!isDelayConsistent && delays[uvIndex] == 0);
 
             foreach (Image image in activeImages)
             {

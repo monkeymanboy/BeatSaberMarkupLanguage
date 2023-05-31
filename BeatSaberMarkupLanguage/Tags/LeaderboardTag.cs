@@ -1,8 +1,5 @@
-﻿using IPA.Utilities;
-using System.Linq;
-using TMPro;
+﻿using System.Linq;
 using UnityEngine;
-using VRUIControls;
 
 namespace BeatSaberMarkupLanguage.Tags
 {
@@ -15,13 +12,18 @@ namespace BeatSaberMarkupLanguage.Tags
         public override GameObject CreateObject(Transform parent)
         {
             if (leaderboardTemplate == null)
+            {
                 leaderboardTemplate = Resources.FindObjectsOfTypeAll<LeaderboardTableView>().First(x => x.name == "LeaderboardTableView");
-            LeaderboardTableView table = Object.Instantiate(leaderboardTemplate, parent, false);
+            }
+
+            LeaderboardTableView table = DiContainer.InstantiatePrefabForComponent<LeaderboardTableView>(leaderboardTemplate, parent);
             table.name = "BSMLLeaderboard";
-            table.GetField<LeaderboardTableCell, LeaderboardTableView>("_cellPrefab").GetField<TextMeshProUGUI, LeaderboardTableCell>("_scoreText").enableWordWrapping = false;
-            table.GetComponent<VRGraphicRaycaster>().SetField("_physicsRaycaster", BeatSaberUI.PhysicsRaycasterWithCache);
-            foreach (LeaderboardTableCell tableCell in table.GetComponentsInChildren<LeaderboardTableCell>()) //This is to ensure if a leaderboard with scores already on it gets cloned that old scores are cleared off
+
+            // This is to ensure if a leaderboard with scores already on it gets cloned that old scores are cleared off
+            foreach (LeaderboardTableCell tableCell in table.GetComponentsInChildren<LeaderboardTableCell>())
+            {
                 Object.Destroy(tableCell.gameObject);
+            }
 
             return table.gameObject;
         }

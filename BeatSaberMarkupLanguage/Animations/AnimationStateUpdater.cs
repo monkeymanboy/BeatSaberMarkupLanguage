@@ -5,25 +5,28 @@ namespace BeatSaberMarkupLanguage.Animations
 {
     public class AnimationStateUpdater : MonoBehaviour
     {
+        public Image image;
+
         private AnimationControllerData _controllerData;
+
         public AnimationControllerData controllerData
         {
             get => _controllerData;
             set
             {
-                if(_controllerData != null)
+                if (_controllerData != null)
                 {
                     OnDisable();
                 }
+
                 _controllerData = value;
+
                 if (isActiveAndEnabled)
                 {
                     OnEnable();
                 }
             }
         }
-
-        public Image image;
 
         private void OnEnable()
         {

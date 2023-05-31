@@ -3,13 +3,14 @@
     public class BSMLStringValue : BSMLValue
     {
         private string value;
-        public override string MemberName { get; }
 
         public BSMLStringValue(string value, string memberName = "")
         {
             this.value = value;
             MemberName = memberName;
         }
+
+        public override string MemberName { get; }
 
         public override object GetValue()
         {

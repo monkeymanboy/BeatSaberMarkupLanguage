@@ -1,13 +1,12 @@
-﻿using BeatSaberMarkupLanguage.Parser;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace BeatSaberMarkupLanguage.Components.Settings
 {
     public class ListSetting : IncDecSetting
     {
-        private int index;
-        
         public List<object> values;
+
+        private int index;
 
         public object Value
         {
@@ -16,11 +15,14 @@ namespace BeatSaberMarkupLanguage.Components.Settings
                 ValidateRange();
                 return values[index];
             }
+
             set
             {
                 index = values.IndexOf(value);
                 if (index < 0)
+                {
                     index = 0;
+                }
 
                 UpdateState();
             }
@@ -43,33 +45,40 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             EitherPressed();
         }
 
-        private void EitherPressed()
-        {
-            UpdateState();
-            onChange?.Invoke(Value);
-            if (updateOnChange)
-                ApplyValue();
-        }
-
         public override void ApplyValue()
         {
-            if (associatedValue != null)
-                associatedValue.SetValue(Value);
+            associatedValue?.SetValue(Value);
         }
 
         public override void ReceiveValue()
         {
             if (associatedValue != null)
+            {
                 Value = associatedValue.GetValue();
+            }
+        }
+
+        private void EitherPressed()
+        {
+            UpdateState();
+            onChange?.Invoke(Value);
+            if (updateOnChange)
+            {
+                ApplyValue();
+            }
         }
 
         private void ValidateRange()
         {
             if (index >= values.Count)
+            {
                 index = values.Count - 1;
+            }
 
             if (index < 0)
+            {
                 index = 0;
+            }
         }
 
         private void UpdateState()

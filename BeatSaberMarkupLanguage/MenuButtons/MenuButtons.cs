@@ -1,86 +1,85 @@
-﻿using BeatSaberMarkupLanguage.Attributes;
-using BeatSaberMarkupLanguage.Parser;
-using HMUI;
-using IPA.Utilities;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using UnityEngine;
+using BeatSaberMarkupLanguage.Attributes;
+using HMUI;
 
 namespace BeatSaberMarkupLanguage.MenuButtons
 {
     public class MenuButtons : PersistentSingleton<MenuButtons>
     {
-        private MenuButtonsViewController menuButtonsViewController;
-        private HMUI.Screen leftScreen;
+        [UIValue("pin-buttons")]
+        internal List<object> pinButtons = new List<object>();
 
         [UIValue("buttons")]
         private List<object> buttons = new List<object>();
 
-        [UIValue("pin-buttons")]
-        internal List<object> pinButtons = new List<object>();
-
+        /*
         [UIParams]
         private BSMLParserParams parserParams;
+        */
 
-        internal void Setup()
-        {
-            menuButtonsViewController = BeatSaberUI.CreateViewController<MenuButtonsViewController>();
-            menuButtonsViewController.buttons = buttons;
-            StopAllCoroutines();
-            StartCoroutine(PresentView());
-            /*
-            if (MenuPins.instance.rootObject == null)
-                MenuPins.instance.Setup();
-            else
-                MenuPins.instance.Refresh();*/
-        }
-        IEnumerator PresentView()
-        {
-            yield return new WaitForSeconds(0.2f);//Forgive me lord for what I must do
-            yield return new WaitWhile(() => BeatSaberUI.MainFlowCoordinator == null);
-            ShowView(false, false, false);
-            Resources.FindObjectsOfTypeAll<MainMenuViewController>().First().didActivateEvent += ShowView;
-        }
-
-        internal void ShowView(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
-        {
-            if (leftScreen == null) leftScreen = Resources.FindObjectsOfTypeAll<HMUI.Screen>().Where(x => x.gameObject.name == "LeftScreen").FirstOrDefault();
-
-            foreach (ModalView modalView in leftScreen.GetComponentsInChildren<ModalView>())
-            {
-                modalView.OnDisable();
-            }
-
-            BeatSaberUI.MainFlowCoordinator.InvokeMethod<object, FlowCoordinator>("SetLeftScreenViewController", menuButtonsViewController, ViewController.AnimationType.None);
-        }
-
-        internal void Refresh()
-        {
-            if (menuButtonsViewController == null)
-                return;
-            menuButtonsViewController.RefreshView();
-        }
+        private MenuButtonsViewController menuButtonsViewController;
+        private ScreenSystem screenSystem;
 
         public void RegisterButton(MenuButton menuButton)
         {
-            if (buttons.Any(x => (x as MenuButton).Text == menuButton.Text)) return;
+            if (buttons.Any(x => (x as MenuButton).Text == menuButton.Text))
+            {
+                return;
+            }
+
             buttons.Add(menuButton);
-            //pinButtons.Add(new PinnedMod(menuButton));
+
+            /* pinButtons.Add(new PinnedMod(menuButton)); */
+
             Refresh();
         }
 
         public void UnregisterButton(MenuButton menuButton)
         {
             buttons.Remove(menuButton);
-            //pinButtons.RemoveAll(x => (x as PinnedMod).menuButton == menuButton);
+
+            /* pinButtons.RemoveAll(x => (x as PinnedMod).menuButton == menuButton); */
+
             Refresh();
         }
+
+        internal void Setup()
+        {
+            menuButtonsViewController = BeatSaberUI.CreateViewController<MenuButtonsViewController>();
+            menuButtonsViewController.buttons = buttons;
+
+            BeatSaberUI.DiContainer.Resolve<MainMenuViewController>().didActivateEvent += ShowView;
+
+            /*if (MenuPins.instance.rootObject == null)
+                MenuPins.instance.Setup();
+            else
+                MenuPins.instance.Refresh();*/
+        }
+
+        internal void ShowView(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
+        {
+            screenSystem = BeatSaberUI.MainFlowCoordinator._screenSystem;
+
+            foreach (ModalView modalView in screenSystem.leftScreen.GetComponentsInChildren<ModalView>())
+            {
+                modalView.OnDisable();
+            }
+
+            BeatSaberUI.MainFlowCoordinator.SetLeftScreenViewController(menuButtonsViewController, ViewController.AnimationType.None);
+        }
+
+        internal void Refresh()
+        {
+            if (menuButtonsViewController == null)
+            {
+                return;
+            }
+
+            menuButtonsViewController.RefreshView();
+        }
     }
+
     /*
     internal class MenuPins : PersistentSingleton<MenuPins>
     {
@@ -186,7 +185,7 @@ namespace BeatSaberMarkupLanguage.MenuButtons
             PinButtonText = IsPinned ? "x" : "+";
             PinButtonStrokeColor = IsPinned ? "#34eb55" : "white";
         }
-        
+
         public event PropertyChangedEventHandler PropertyChanged;
         protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {

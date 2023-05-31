@@ -1,8 +1,7 @@
-﻿using BeatSaberMarkupLanguage.Components.Settings;
-using BeatSaberMarkupLanguage.Parser;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
+using BeatSaberMarkupLanguage.Components.Settings;
+using BeatSaberMarkupLanguage.Parser;
 using static BeatSaberMarkupLanguage.BSMLParser;
 
 namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
@@ -12,7 +11,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
     {
         public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
         {
-            { "options", new[]{ "options", "choices" } }
+            { "options", new[] { "options", "choices" } },
         };
 
         public override void HandleType(ComponentTypeWithData componentType, BSMLParserParams parserParams)
@@ -21,13 +20,15 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
             if (componentType.data.TryGetValue("options", out string options))
             {
                 if (!parserParams.values.TryGetValue(options, out BSMLValue values))
-                    throw new Exception("options '" + options + "' not found");
+                {
+                    throw new Exception($"Options '{options}' not found");
+                }
 
                 listSetting.values = values.GetValue() as List<object>;
             }
             else
             {
-                throw new Exception("list must have associated options");
+                throw new Exception("List must have associated options");
             }
         }
     }

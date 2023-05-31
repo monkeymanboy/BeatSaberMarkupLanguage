@@ -19,7 +19,6 @@ namespace BeatSaberMarkupLanguage.Tags
             vertical.childForceExpandHeight = false;
 
             gameObject.AddComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.PreferredSize;
-            //gameObject.AddComponent<Backgroundable>().ApplyBackground("round-rect-panel");
 
             RectTransform rectTransform = gameObject.transform as RectTransform;
             rectTransform.anchoredPosition = new Vector2(0, 3);

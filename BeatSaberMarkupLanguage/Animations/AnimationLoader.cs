@@ -1,16 +1,20 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
-using System.Linq;
+using Object = UnityEngine.Object;
 
 namespace BeatSaberMarkupLanguage.Animations
 {
     public enum AnimationType
     {
-        GIF, APNG
+        GIF,
+        APNG,
     }
+
     public class AnimationLoader
     {
+        private static readonly int AtlasSizeLimit = Mathf.Min(SystemInfo.maxTextureSize, 4096);
+
         public static void Process(AnimationType type, byte[] data, Action<Texture2D, Rect[], float[], int, int> callback)
         {
             switch (type)
@@ -23,8 +27,6 @@ namespace BeatSaberMarkupLanguage.Animations
                     break;
             }
         }
-
-        static readonly int AtlasSizeLimit = SystemInfo.maxTextureSize >= 4096 ? 4096 : 2048;
 
         public static IEnumerator ProcessAnimationInfo(AnimationInfo animationInfo, Action<Texture2D, Rect[], float[], int, int> callback)
         {
@@ -51,7 +53,7 @@ namespace BeatSaberMarkupLanguage.Animations
                     width = animationInfo.frames[i].width;
                     height = animationInfo.frames[i].height;
                 }
-                
+
                 FrameInfo currentFrameInfo = animationInfo.frames[i];
                 delays[i] = currentFrameInfo.delay;
 
@@ -69,16 +71,17 @@ namespace BeatSaberMarkupLanguage.Animations
                 texList[i] = frameTexture;
 
                 // Allow up to .5ms of thread usage for loading this anim
-                if(Time.realtimeSinceStartup > lastThrottleTime + 0.0005f) {
+                if (Time.realtimeSinceStartup > lastThrottleTime + 0.0005f)
+                {
                     yield return null;
                     lastThrottleTime = Time.realtimeSinceStartup;
                 }
             }
 
             Rect[] atlas = texture.PackTextures(texList, 2, textureSize, true);
-            foreach(Texture2D frameTex in texList)
+            foreach (Texture2D frameTex in texList)
             {
-                GameObject.Destroy(frameTex);
+                Object.Destroy(frameTex);
             }
 
             callback?.Invoke(texture, atlas, delays, width, height);
@@ -89,21 +92,26 @@ namespace BeatSaberMarkupLanguage.Animations
             int testNum = 2;
             int numFramesInRow;
             int numFramesInColumn;
-            while (true) {
+            while (true)
+            {
                 int numFrames = frameInfo.frameCount;
+
                 // Make sure the number of frames is cleanly divisible by our testNum
                 if (numFrames % testNum == 0)
+                {
                     numFrames += numFrames % testNum;
+                }
 
                 // Math.Max to ensure numFramesInRow never becomes 0 to prevent DivideByZeroException
                 // This would happen with single frame GIFs
                 numFramesInRow = Math.Max(numFrames / testNum, 1);
                 numFramesInColumn = numFrames / numFramesInRow;
-                
+
                 if (numFramesInRow <= numFramesInColumn)
                 {
                     break;
                 }
+
                 testNum += 2;
             }
 

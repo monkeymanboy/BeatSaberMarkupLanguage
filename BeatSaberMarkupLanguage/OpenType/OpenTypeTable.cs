@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace BeatSaberMarkupLanguage.OpenType
 {
@@ -16,19 +13,23 @@ namespace BeatSaberMarkupLanguage.OpenType
     {
         public enum FormatEnum : ushort
         {
-            Default = 0, LangTagged = 1
+            Default = 0,
+            LangTagged = 1,
         }
 
         public FormatEnum Format { get; private set; }
 
         public ushort Count { get; private set; }
+
         /// <summary>
-        /// Offset to start of string storage from table start
+        /// Gets the offset to start of string storage from table start.
         /// </summary>
         public ushort StringOffset { get; private set; }
+
         public IReadOnlyList<NameRecord> NameRecords { get; private set; }
 
         public ushort LangTagCount { get; private set; } = 0;
+
         public IReadOnlyList<LangTagRecord> LangTagRecords { get; private set; } = new List<LangTagRecord>();
 
         public override void ReadFrom(OpenTypeReader reader, uint length)
@@ -49,7 +50,6 @@ namespace BeatSaberMarkupLanguage.OpenType
 
             reader.BaseStream.Seek(seekOffset, SeekOrigin.Current);
             var startBase = reader.BaseStream.Position;
-
 
             foreach (var name in NameRecords)
             {
@@ -91,54 +91,11 @@ namespace BeatSaberMarkupLanguage.OpenType
                     LanguageID = reader.ReadUInt16(),
                     NameID = (NameRecord.NameType)reader.ReadUInt16(),
                     Length = reader.ReadUInt16(),
-                    Offset = reader.ReadOffset16()
+                    Offset = reader.ReadOffset16(),
                 });
             }
+
             return list;
-        }
-
-        public class NameRecord
-        {
-            public const uint Size = 12;
-            public const ushort USEnglishLangID = 0x0409;
-
-            public enum Platform : ushort
-            {
-                Unicode = 0, Macintosh = 1, ISO = 2,
-                Windows = 3, Custom = 4
-            }
-
-            public Platform PlatformID { get; set; }
-
-            public ushort EncodingID { get; set; }
-            public ushort LanguageID { get; set; }
-
-            public enum NameType : ushort
-            {
-                Copyright = 0, FontFamily = 1, FontSubfamily = 2,
-                UniqueId = 3, FullFontName = 4, Version = 5,
-                PostScriptName = 6, Trademark = 7, Manufacturer = 8,
-                Designer = 9, Description = 10, VendorURL = 11,
-                DesignerURL = 12, LicenseDescription = 13,
-                LicenseInfoURL = 14, Reserved1 = 15,
-                TypographicFamily = 16,
-                TypographicSubfamily = 17,
-                /// <summary>
-                /// This is a Macintosh only field.
-                /// </summary>
-                CompatibleFull = 18,
-                SampleText = 19, PostScriptCID = 20,
-                WWSFamily = 21, WWSSubfamily = 22,
-                LightBackgroundPalette = 23,
-                DarkBackgroundPalette = 24,
-                VariationsPostScriptPrefix = 25,
-            }
-
-            public NameType NameID { get; set; }
-            public ushort Length { get; set; }
-            public ushort Offset { get; set; }
-
-            public string Value { get; set; }
         }
 
         // uses LangTagCount to read them
@@ -150,18 +107,84 @@ namespace BeatSaberMarkupLanguage.OpenType
                 list.Add(new LangTagRecord
                 {
                     Length = reader.ReadUInt16(),
-                    Offset = reader.ReadOffset16()
+                    Offset = reader.ReadOffset16(),
                 });
             }
+
             return list;
+        }
+
+        public class NameRecord
+        {
+            public const uint Size = 12;
+            public const ushort USEnglishLangID = 0x0409;
+
+            public enum Platform : ushort
+            {
+                Unicode = 0,
+                Macintosh = 1,
+                ISO = 2,
+                Windows = 3,
+                Custom = 4,
+            }
+
+            public enum NameType : ushort
+            {
+                Copyright = 0,
+                FontFamily = 1,
+                FontSubfamily = 2,
+                UniqueId = 3,
+                FullFontName = 4,
+                Version = 5,
+                PostScriptName = 6,
+                Trademark = 7,
+                Manufacturer = 8,
+                Designer = 9,
+                Description = 10,
+                VendorURL = 11,
+                DesignerURL = 12,
+                LicenseDescription = 13,
+                LicenseInfoURL = 14,
+                Reserved1 = 15,
+                TypographicFamily = 16,
+                TypographicSubfamily = 17,
+
+                /// <summary>
+                /// This is a Macintosh only field.
+                /// </summary>
+                CompatibleFull = 18,
+                SampleText = 19,
+                PostScriptCID = 20,
+                WWSFamily = 21,
+                WWSSubfamily = 22,
+                LightBackgroundPalette = 23,
+                DarkBackgroundPalette = 24,
+                VariationsPostScriptPrefix = 25,
+            }
+
+            public Platform PlatformID { get; set; }
+
+            public ushort EncodingID { get; set; }
+
+            public ushort LanguageID { get; set; }
+
+            public NameType NameID { get; set; }
+
+            public ushort Length { get; set; }
+
+            public ushort Offset { get; set; }
+
+            public string Value { get; set; }
         }
 
         public class LangTagRecord
         {
             public const uint Size = 4;
+
             public ushort Length { get; set; }
+
             /// <summary>
-            /// string offset from start of storage area
+            /// Gets or sets the string offset from start of storage area.
             /// </summary>
             public ushort Offset { get; set; }
 
