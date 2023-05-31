@@ -40,7 +40,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 scrollView.AlignBottom = bool.TryParse(value, out bool bval) ? bval : false;
             }
 
-            if (componentType.data.TryGetValue("scrollToBottomOnUpdate", out value))
+            if (componentType.data.TryGetValue("onUpdateToBottom", out value))
             {
                 scrollView.OnUpdateToBottom = bool.TryParse(value, out bool bval) ? bval : false;
             }
