@@ -49,7 +49,7 @@ namespace BeatSaberMarkupLanguage.Components
         }
 
         private bool scrollToBottomOnUpdate = false;
-        public bool OnUpdateToBottom
+        public bool ScrollToBottomOnUpdate
         {
             get => scrollToBottomOnUpdate;
             set => scrollToBottomOnUpdate = value;
@@ -111,7 +111,7 @@ namespace BeatSaberMarkupLanguage.Components
         {
             RefreshContent();
             RefreshButtons();
-            ScrollTo(OnUpdateToBottom ? float.MaxValue : 0f, false);
+            ScrollTo(ScrollToBottomOnUpdate ? float.MaxValue : 0f, false);
         }
 
         private bool runScrollAnim = false;

@@ -17,7 +17,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "id", new[]{ "id" } },
             { "maskOverflow", new[] { "mask-overflow" } },
             { "alignBottom", new[] { "align-bottom" } },
-            { "onUpdateToBottom", new[] { "on-update-to-bottom" } },
+            { "scrollToBottomOnUpdate", new[] { "scroll-to-bottom-on-update" } },
         };
 
         public override void HandleType(BSMLParser.ComponentTypeWithData componentType, BSMLParserParams parserParams)
@@ -40,9 +40,9 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 scrollView.AlignBottom = bool.TryParse(value, out bool bval) ? bval : false;
             }
 
-            if (componentType.data.TryGetValue("onUpdateToBottom", out value))
+            if (componentType.data.TryGetValue("scrollToBottomOnUpdate", out value))
             {
-                scrollView.OnUpdateToBottom = bool.TryParse(value, out bool bval) ? bval : false;
+                scrollView.ScrollToBottomOnUpdate = bool.TryParse(value, out bool bval) ? bval : false;
             }
         }
 
