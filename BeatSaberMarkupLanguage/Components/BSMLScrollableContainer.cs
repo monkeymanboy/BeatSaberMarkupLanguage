@@ -53,14 +53,7 @@ namespace BeatSaberMarkupLanguage.Components
             }
         }
 
-        private bool scrollToBottomOnUpdate = false;
-        public bool ScrollToBottomOnUpdate
-        {
-            get => scrollToBottomOnUpdate;
-            set => scrollToBottomOnUpdate = value;
-        }
-
-        private bool maskOverflow = true;
+        public bool ScrollToBottomOnUpdate { get; set; } = false;
 
         public bool MaskOverflow
         {
