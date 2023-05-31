@@ -48,23 +48,6 @@ namespace BeatSaberMarkupLanguage.Components
         public List<GameObject> hoveredTags;
         public List<GameObject> neitherTags;
 
-        internal void SetupPostParse()
-        {
-            selectedTags = parserParams.GetObjectsWithTag("selected");
-            hoveredTags = parserParams.GetObjectsWithTag("hovered");
-            neitherTags = parserParams.GetObjectsWithTag("un-selected-un-hovered");
-        }
-
-        protected override void SelectionDidChange(TransitionType transitionType)
-        {
-            RefreshVisuals();
-        }
-
-        protected override void HighlightDidChange(TransitionType transitionType)
-        {
-            RefreshVisuals();
-        }
-
         public virtual void RefreshVisuals()
         {
             foreach (GameObject gameObject in selectedTags)
@@ -86,6 +69,23 @@ namespace BeatSaberMarkupLanguage.Components
             {
                 action.Invoke(selected, highlighted);
             }
+        }
+
+        internal void SetupPostParse()
+        {
+            selectedTags = parserParams.GetObjectsWithTag("selected");
+            hoveredTags = parserParams.GetObjectsWithTag("hovered");
+            neitherTags = parserParams.GetObjectsWithTag("un-selected-un-hovered");
+        }
+
+        protected override void SelectionDidChange(TransitionType transitionType)
+        {
+            RefreshVisuals();
+        }
+
+        protected override void HighlightDidChange(TransitionType transitionType)
+        {
+            RefreshVisuals();
         }
     }
 }

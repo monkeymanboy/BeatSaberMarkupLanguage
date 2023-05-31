@@ -8,7 +8,6 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
 {
     internal class GameplaySetupMenu
     {
-        private const string ErrorViewResourcePath = "BeatSaberMarkupLanguage.Views.gameplay-tab-error.bsml";
         public string resource;
         public object host;
         public Assembly assembly;
@@ -17,11 +16,22 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
         [UIValue("tab-name")]
         public string name;
 
+        private const string ErrorViewResourcePath = "BeatSaberMarkupLanguage.Views.gameplay-tab-error.bsml";
+
         [UIObject("root-tab")]
         private GameObject tabObject;
 
         [UIComponent("root-tab")]
         private Tab tab;
+
+        public GameplaySetupMenu(string name, string resource, object host, Assembly assembly, MenuType menuType)
+        {
+            this.name = name;
+            this.resource = resource;
+            this.host = host;
+            this.assembly = assembly;
+            this.menuType = menuType;
+        }
 
         public bool Visible
         {
@@ -37,15 +47,6 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
                     Plugin.config.HiddenTabs.Add(name);
                 }
             }
-        }
-
-        public GameplaySetupMenu(string name, string resource, object host, Assembly assembly, MenuType menuType)
-        {
-            this.name = name;
-            this.resource = resource;
-            this.host = host;
-            this.assembly = assembly;
-            this.menuType = menuType;
         }
 
         [UIAction("#post-parse")]

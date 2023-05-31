@@ -11,11 +11,11 @@ namespace BeatSaberMarkupLanguage.MenuButtons
         [UIValue("buttons")]
         public List<object> buttons = new List<object>();
 
-        [UIValue("any-buttons")]
-        private bool AnyButtons => buttons.Count > 0;
-
         [UIObject("root-object")]
         private GameObject rootObject;
+
+        [UIValue("any-buttons")]
+        private bool AnyButtons => buttons.Count > 0;
 
         public void RefreshView()
         {

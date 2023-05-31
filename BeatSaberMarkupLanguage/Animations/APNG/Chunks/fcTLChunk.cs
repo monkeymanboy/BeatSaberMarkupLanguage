@@ -58,16 +58,6 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         /// <summary>
         /// Initializes a new instance of the <see cref="fcTLChunk"/> class.
         /// </summary>
-        internal fcTLChunk()
-        {
-            Length = 26;
-            ChunkType = "fcTL";
-            ChunkData = new byte[Length];
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="fcTLChunk"/> class.
-        /// </summary>
         /// <param name="bytes">Byte Array of chunk data.</param>
         public fcTLChunk(byte[] bytes)
             : base(bytes)
@@ -90,6 +80,16 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         public fcTLChunk(Chunk chunk)
             : base(chunk)
         {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="fcTLChunk"/> class.
+        /// </summary>
+        internal fcTLChunk()
+        {
+            Length = 26;
+            ChunkType = "fcTL";
+            ChunkData = new byte[Length];
         }
 
         /// <summary>

@@ -10,6 +10,55 @@ namespace BeatSaberMarkupLanguage.ViewControllers
     [Obsolete("It is now recommended that you use BSMLAutomaticViewController and it's associated attributes", false)]
     public abstract class HotReloadableViewController : BSMLViewController, WatcherGroup.IHotReloadableController
     {
+        private string content;
+
+        public abstract string ResourceName { get; }
+
+        public abstract string ContentFilePath { get; }
+
+        public virtual string FallbackContent => @"<vertical child-control-height='false' child-control-width='true' child-align='UpperCenter' pref-width='110' pad-left='3' pad-right='3'>
+                                                      <horizontal bg='panel-top' pad-left='10' pad-right='10' horizontal-fit='PreferredSize' vertical-fit='PreferredSize'>
+                                                        <text text='Invalid BSML' font-size='10'/>
+                                                      </horizontal>
+                                                      <text text='{0}' font-size='5'/>
+                                                    </vertical>";
+
+        public override string Content
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(content))
+                {
+                    if (!string.IsNullOrEmpty(ContentFilePath) && File.Exists(ContentFilePath))
+                    {
+                        try
+                        {
+                            content = File.ReadAllText(ContentFilePath);
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger.Log?.Warn($"Unable to read file {ContentFilePath} for {name}: {ex.Message}");
+                            Logger.Log?.Debug(ex);
+                        }
+                    }
+
+                    if (string.IsNullOrEmpty(content) && !string.IsNullOrEmpty(ResourceName))
+                    {
+#if HRVC_DEBUG
+                        Logger.Log.Warn($"No content from file {ContentFilePath}, using resource {ResourceName}");
+#endif
+                        content = Utilities.GetResourceContent(Assembly.GetAssembly(this.GetType()), ResourceName);
+                    }
+                }
+
+                return content;
+            }
+        }
+
+        public bool ContentChanged { get; protected set; }
+
+        string WatcherGroup.IHotReloadableController.Name => name;
+
         public static void RefreshViewController(HotReloadableViewController viewController, bool forceReload = false)
         {
             if (viewController == null)
@@ -53,54 +102,11 @@ namespace BeatSaberMarkupLanguage.ViewControllers
             }
         }
 
-        public abstract string ResourceName { get; }
-
-        public abstract string ContentFilePath { get; }
-
-        public virtual string FallbackContent => @"<vertical child-control-height='false' child-control-width='true' child-align='UpperCenter' pref-width='110' pad-left='3' pad-right='3'>
-                                                      <horizontal bg='panel-top' pad-left='10' pad-right='10' horizontal-fit='PreferredSize' vertical-fit='PreferredSize'>
-                                                        <text text='Invalid BSML' font-size='10'/>
-                                                      </horizontal>
-                                                      <text text='{0}' font-size='5'/>
-                                                    </vertical>";
-
-        private string content;
-
-        public override string Content
+        public void MarkDirty()
         {
-            get
-            {
-                if (string.IsNullOrEmpty(content))
-                {
-                    if (!string.IsNullOrEmpty(ContentFilePath) && File.Exists(ContentFilePath))
-                    {
-                        try
-                        {
-                            content = File.ReadAllText(ContentFilePath);
-                        }
-                        catch (Exception ex)
-                        {
-                            Logger.Log?.Warn($"Unable to read file {ContentFilePath} for {name}: {ex.Message}");
-                            Logger.Log?.Debug(ex);
-                        }
-                    }
-
-                    if (string.IsNullOrEmpty(content) && !string.IsNullOrEmpty(ResourceName))
-                    {
-#if HRVC_DEBUG
-                        Logger.Log.Warn($"No content from file {ContentFilePath}, using resource {ResourceName}");
-#endif
-                        content = Utilities.GetResourceContent(Assembly.GetAssembly(this.GetType()), ResourceName);
-                    }
-                }
-
-                return content;
-            }
+            ContentChanged = true;
+            content = null;
         }
-
-        public bool ContentChanged { get; protected set; }
-
-        string WatcherGroup.IHotReloadableController.Name => name;
 
         protected override void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
         {
@@ -157,12 +163,6 @@ namespace BeatSaberMarkupLanguage.ViewControllers
                 Logger.Log.Debug(ex);
                 BSMLParser.instance.Parse(string.Format(FallbackContent, Utilities.EscapeXml(ex.Message)), gameObject, this);
             }
-        }
-
-        public void MarkDirty()
-        {
-            ContentChanged = true;
-            content = null;
         }
     }
 }

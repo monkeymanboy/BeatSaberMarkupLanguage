@@ -7,7 +7,13 @@ namespace BeatSaberMarkupLanguage.Components
 {
     public class ClickableImage : ImageView, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
     {
+        public Action<PointerEventData> OnClickEvent;
+        public Action<PointerEventData> PointerEnterEvent;
+        public Action<PointerEventData> PointerExitEvent;
+
         private Color highlightColor = new Color(0.60f, 0.80f, 1);
+        private Color defaultColor = Color.white;
+        private bool isHighlighted = false;
 
         public Color HighlightColor
         {
@@ -19,8 +25,6 @@ namespace BeatSaberMarkupLanguage.Components
             }
         }
 
-        private Color defaultColor = Color.white;
-
         public Color DefaultColor
         {
             get => defaultColor;
@@ -30,12 +34,6 @@ namespace BeatSaberMarkupLanguage.Components
                 UpdateHighlight();
             }
         }
-
-        public Action<PointerEventData> OnClickEvent;
-        public Action<PointerEventData> PointerEnterEvent;
-        public Action<PointerEventData> PointerExitEvent;
-
-        private bool isHighlighted = false;
 
         private bool IsHighlighted
         {

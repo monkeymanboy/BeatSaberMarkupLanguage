@@ -15,17 +15,8 @@ namespace BeatSaberMarkupLanguage
 {
     public static class FontManager
     {
-        private class FontInfo
-        {
-            public string Path;
-            public OpenTypeFont Info;
-
-            public FontInfo(string path, OpenTypeFont info)
-            {
-                Path = path;
-                Info = info;
-            }
-        }
+        // path → loaded font object
+        private static readonly Dictionary<string, Font> LoadedFontsCache = new Dictionary<string, Font>();
 
         // family → list of fonts in family
         private static Dictionary<string, List<FontInfo>> fontInfoLookup;
@@ -33,13 +24,19 @@ namespace BeatSaberMarkupLanguage
         // full name → font info
         private static Dictionary<string, FontInfo> fontInfoLookupFullName;
 
-        // path → loaded font object
-        private static readonly Dictionary<string, Font> LoadedFontsCache = new Dictionary<string, Font>();
-
         /// <summary>
         /// Gets the <see cref="Task"/> associated with an ongoing call to <see cref="AsyncLoadSystemFonts"/>.
         /// </summary>
         public static Task SystemFontLoadTask { get; private set; }
+
+        /// <summary>
+        /// Gets a value indicating whether or not <see cref="FontManager"/> is initialized.
+        /// </summary>
+        /// <remarks>
+        /// You can <see langword="await"/> <see cref="AsyncLoadSystemFonts"/>, or <see cref="SystemFontLoadTask"/> if it is non-null.
+        /// When they complete, <see cref="FontManager"/> will be initialized.
+        /// </remarks>
+        public static bool IsInitialized => fontInfoLookup != null;
 
         /// <summary>
         /// Asynchronously loads all of the installed system fonts into <see cref="FontManager"/>.
@@ -76,12 +73,155 @@ namespace BeatSaberMarkupLanguage
             return SystemFontLoadTask;
         }
 
+        /// <summary>
+        /// Adds a specified OpenType file to the font manager for lookup by name.
+        /// </summary>
+        /// <param name="path">The path to add to the manager.</param>
+        /// <returns>the <see cref="Font"/> the file contained.</returns>
+        /// <exception cref="ArgumentException">If the file pointed to by <paramref name="path"/> is not an OpenType file or if <paramref name="path"/> is not a valid file path.</exception>
+        /// <exception cref="FileNotFoundException">If the file does not exist.</exception>
+        public static Font AddFontFile(string path)
+        {
+            ThrowIfNotInitialized();
+
+            lock (fontInfoLookup)
+            {
+                var set = AddFontFileToCache(fontInfoLookup, fontInfoLookupFullName, path);
+                if (!set.Any())
+                {
+                    throw new ArgumentException("File is not an OpenType font or collection", nameof(path));
+                }
+
+                return GetFontFromCacheOrLoad(set.First());
+            }
+        }
+
+        /// <summary>
+        /// Attempts to get a font given a family name, and optionally a subfamily name.
+        /// </summary>
+        /// <remarks>
+        /// When <paramref name="subfamily"/> is <see langword="null"/>, <paramref name="fallbackIfNoSubfamily"/> is ignored,
+        /// and always treated as if it were <see langword="true"/>.
+        /// </remarks>
+        /// <param name="family">The name of the font family to look for.</param>
+        /// <param name="font">The font with that family name, if any.</param>
+        /// <param name="subfamily">The font subfamily name.</param>
+        /// <param name="fallbackIfNoSubfamily">Whether or not to fallback to the first font with the given family name if the given subfamily name was not found.</param>
+        /// <returns><see langword="true"/> if the font was found, <see langword="false"/> otherwise.</returns>
+        public static bool TryGetFontByFamily(string family, out Font font, string subfamily = null, bool fallbackIfNoSubfamily = false)
+        {
+            if (TryGetFontInfoByFamily(family, out var info, subfamily, fallbackIfNoSubfamily))
+            {
+                font = GetFontFromCacheOrLoad(info);
+                return true;
+            }
+
+            font = null;
+            return false;
+        }
+
+        /// <summary>
+        /// Attempts to get a font by its full name.
+        /// </summary>
+        /// <param name="fullName">The full name of the font to look for.</param>
+        /// <param name="font">The font identified by <paramref name="fullName"/>, if any.</param>
+        /// <returns><see langword="true"/> if the font was found, <see langword="false"/> otherwise.</returns>
+        public static bool TryGetFontByFullName(string fullName, out Font font)
+        {
+            if (TryGetFontInfoByFullName(fullName, out var info))
+            {
+                font = GetFontFromCacheOrLoad(info);
+                return true;
+            }
+            else
+            {
+                font = null;
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Gets the font fallback list provided by the OS for a given font name, if there is any.
+        /// </summary>
+        /// <remarks>
+        /// If the OS specifies no fallbacks, then the result of this function will be empty.
+        /// </remarks>
+        /// <param name="fullname">The full name of the font to look up the fallbacks for.</param>
+        /// <returns>A list of fallbacks defined by the OS.</returns>
+        public static IEnumerable<string> GetOSFontFallbackList(string fullname)
+        {
+            using var syslinkKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\FontLink\SystemLink");
+            if (syslinkKey == null)
+            {
+                return Enumerable.Empty<string>();
+            }
+
+            var keyVal = syslinkKey.GetValue(fullname);
+            if (keyVal is string[] names)
+            {
+                // the format in this is '<filename>,<font full name>[,<some other stuff>]'
+                return names.Select(s => s.Split(','))
+                            .Select(a => a.Length > 1 ? a[1] : null)
+                            .Where(s => s != null);
+            }
+
+            return Enumerable.Empty<string>();
+        }
+
+        /// <summary>
+        /// Attempts to get a <see cref="TMP_FontAsset"/> with the given family name, and optionally subfamily.
+        /// </summary>
+        /// <param name="family">The name of the font family to look for.</param>
+        /// <param name="font">The font with that family name, if any.</param>
+        /// <param name="subfamily">The font subfamily name.</param>
+        /// <param name="fallbackIfNoSubfamily">Whether or not to fallback to the first font with the given family name if the given subfamily name was not found.</param>
+        /// <param name="setupOsFallbacks">Whether or not to set up the fallbacks specified by the OS.</param>
+        /// <returns><see langword="true"/> if the font was found, <see langword="false"/> otherwise.</returns>
+        public static bool TryGetTMPFontByFamily(string family, out TMP_FontAsset font, string subfamily = null, bool fallbackIfNoSubfamily = false, bool setupOsFallbacks = true)
+        {
+            if (!TryGetFontInfoByFamily(family, out var info, subfamily, fallbackIfNoSubfamily))
+            {
+                font = null;
+                return false;
+            }
+
+            font = GetOrSetupTMPFontFor(info, setupOsFallbacks);
+            return true;
+        }
+
+        /// <summary>
+        /// Attempts to get a <see cref="TMP_FontAsset"/> by its font's full name.
+        /// </summary>
+        /// <param name="fullName">The full name of the font to look for.</param>
+        /// <param name="font">The font identified by <paramref name="fullName"/>, if any.</param>
+        /// <param name="setupOsFallbacks">Whether or not to set up the fallbacks specified by the OS.</param>
+        /// <returns><see langword="true"/> if the font was found, <see langword="false"/> otherwise.</returns>
+        public static bool TryGetTMPFontByFullName(string fullName, out TMP_FontAsset font, bool setupOsFallbacks = true)
+        {
+            if (!TryGetFontInfoByFullName(fullName, out var info))
+            {
+                font = null;
+                return false;
+            }
+
+            font = GetOrSetupTMPFontFor(info, setupOsFallbacks);
+            return true;
+        }
+
         internal static Task Destroy()
         {
             fontInfoLookup = null;
             fontInfoLookupFullName = null;
             return UnityMainThreadTaskScheduler.Factory.StartNew(() => DestroyObjects(LoadedFontsCache.Select(p => p.Value))).Unwrap()
                 .ContinueWith(_ => LoadedFontsCache.Clear());
+        }
+
+        private static void ThrowIfNotInitialized()
+        {
+            if (!IsInitialized)
+            {
+                throw new InvalidOperationException("FontManager not initialized");
+            }
         }
 
         private static async Task DestroyObjects(IEnumerable<UnityEngine.Object> objects)
@@ -172,70 +312,6 @@ namespace BeatSaberMarkupLanguage
             return list;
         }
 
-        /// <summary>
-        /// Adds a specified OpenType file to the font manager for lookup by name.
-        /// </summary>
-        /// <param name="path">The path to add to the manager.</param>
-        /// <returns>the <see cref="Font"/> the file contained.</returns>
-        /// <exception cref="ArgumentException">If the file pointed to by <paramref name="path"/> is not an OpenType file or if <paramref name="path"/> is not a valid file path.</exception>
-        /// <exception cref="FileNotFoundException">If the file does not exist.</exception>
-        public static Font AddFontFile(string path)
-        {
-            ThrowIfNotInitialized();
-
-            lock (fontInfoLookup)
-            {
-                var set = AddFontFileToCache(fontInfoLookup, fontInfoLookupFullName, path);
-                if (!set.Any())
-                {
-                    throw new ArgumentException("File is not an OpenType font or collection", nameof(path));
-                }
-
-                return GetFontFromCacheOrLoad(set.First());
-            }
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether or not <see cref="FontManager"/> is initialized.
-        /// </summary>
-        /// <remarks>
-        /// You can <see langword="await"/> <see cref="AsyncLoadSystemFonts"/>, or <see cref="SystemFontLoadTask"/> if it is non-null.
-        /// When they complete, <see cref="FontManager"/> will be initialized.
-        /// </remarks>
-        public static bool IsInitialized => fontInfoLookup != null;
-
-        private static void ThrowIfNotInitialized()
-        {
-            if (!IsInitialized)
-            {
-                throw new InvalidOperationException("FontManager not initialized");
-            }
-        }
-
-        /// <summary>
-        /// Attempts to get a font given a family name, and optionally a subfamily name.
-        /// </summary>
-        /// <remarks>
-        /// When <paramref name="subfamily"/> is <see langword="null"/>, <paramref name="fallbackIfNoSubfamily"/> is ignored,
-        /// and always treated as if it were <see langword="true"/>.
-        /// </remarks>
-        /// <param name="family">The name of the font family to look for.</param>
-        /// <param name="font">The font with that family name, if any.</param>
-        /// <param name="subfamily">The font subfamily name.</param>
-        /// <param name="fallbackIfNoSubfamily">Whether or not to fallback to the first font with the given family name if the given subfamily name was not found.</param>
-        /// <returns><see langword="true"/> if the font was found, <see langword="false"/> otherwise.</returns>
-        public static bool TryGetFontByFamily(string family, out Font font, string subfamily = null, bool fallbackIfNoSubfamily = false)
-        {
-            if (TryGetFontInfoByFamily(family, out var info, subfamily, fallbackIfNoSubfamily))
-            {
-                font = GetFontFromCacheOrLoad(info);
-                return true;
-            }
-
-            font = null;
-            return false;
-        }
-
         private static bool TryGetFontInfoByFamily(string family, out FontInfo info, string subfamily = null, bool fallbackIfNoSubfamily = false)
         {
             ThrowIfNotInitialized();
@@ -274,26 +350,6 @@ namespace BeatSaberMarkupLanguage
             }
         }
 
-        /// <summary>
-        /// Attempts to get a font by its full name.
-        /// </summary>
-        /// <param name="fullName">The full name of the font to look for.</param>
-        /// <param name="font">The font identified by <paramref name="fullName"/>, if any.</param>
-        /// <returns><see langword="true"/> if the font was found, <see langword="false"/> otherwise.</returns>
-        public static bool TryGetFontByFullName(string fullName, out Font font)
-        {
-            if (TryGetFontInfoByFullName(fullName, out var info))
-            {
-                font = GetFontFromCacheOrLoad(info);
-                return true;
-            }
-            else
-            {
-                font = null;
-                return false;
-            }
-        }
-
         private static bool TryGetFontInfoByFullName(string fullname, out FontInfo info)
         {
             ThrowIfNotInitialized();
@@ -317,74 +373,6 @@ namespace BeatSaberMarkupLanguage
 
                 return font;
             }
-        }
-
-        /// <summary>
-        /// Gets the font fallback list provided by the OS for a given font name, if there is any.
-        /// </summary>
-        /// <remarks>
-        /// If the OS specifies no fallbacks, then the result of this function will be empty.
-        /// </remarks>
-        /// <param name="fullname">The full name of the font to look up the fallbacks for.</param>
-        /// <returns>A list of fallbacks defined by the OS.</returns>
-        public static IEnumerable<string> GetOSFontFallbackList(string fullname)
-        {
-            using var syslinkKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\FontLink\SystemLink");
-            if (syslinkKey == null)
-            {
-                return Enumerable.Empty<string>();
-            }
-
-            var keyVal = syslinkKey.GetValue(fullname);
-            if (keyVal is string[] names)
-            {
-                // the format in this is '<filename>,<font full name>[,<some other stuff>]'
-                return names.Select(s => s.Split(','))
-                            .Select(a => a.Length > 1 ? a[1] : null)
-                            .Where(s => s != null);
-            }
-
-            return Enumerable.Empty<string>();
-        }
-
-        /// <summary>
-        /// Attempts to get a <see cref="TMP_FontAsset"/> with the given family name, and optionally subfamily.
-        /// </summary>
-        /// <param name="family">The name of the font family to look for.</param>
-        /// <param name="font">The font with that family name, if any.</param>
-        /// <param name="subfamily">The font subfamily name.</param>
-        /// <param name="fallbackIfNoSubfamily">Whether or not to fallback to the first font with the given family name if the given subfamily name was not found.</param>
-        /// <param name="setupOsFallbacks">Whether or not to set up the fallbacks specified by the OS.</param>
-        /// <returns><see langword="true"/> if the font was found, <see langword="false"/> otherwise.</returns>
-        public static bool TryGetTMPFontByFamily(string family, out TMP_FontAsset font, string subfamily = null, bool fallbackIfNoSubfamily = false, bool setupOsFallbacks = true)
-        {
-            if (!TryGetFontInfoByFamily(family, out var info, subfamily, fallbackIfNoSubfamily))
-            {
-                font = null;
-                return false;
-            }
-
-            font = GetOrSetupTMPFontFor(info, setupOsFallbacks);
-            return true;
-        }
-
-        /// <summary>
-        /// Attempts to get a <see cref="TMP_FontAsset"/> by its font's full name.
-        /// </summary>
-        /// <param name="fullName">The full name of the font to look for.</param>
-        /// <param name="font">The font identified by <paramref name="fullName"/>, if any.</param>
-        /// <param name="setupOsFallbacks">Whether or not to set up the fallbacks specified by the OS.</param>
-        /// <returns><see langword="true"/> if the font was found, <see langword="false"/> otherwise.</returns>
-        public static bool TryGetTMPFontByFullName(string fullName, out TMP_FontAsset font, bool setupOsFallbacks = true)
-        {
-            if (!TryGetFontInfoByFullName(fullName, out var info))
-            {
-                font = null;
-                return false;
-            }
-
-            font = GetOrSetupTMPFontFor(info, setupOsFallbacks);
-            return true;
         }
 
         private static TMP_FontAsset GetOrSetupTMPFontFor(FontInfo info, bool setupOsFallbacks)
@@ -419,6 +407,18 @@ namespace BeatSaberMarkupLanguage
             }
 
             return tmpFont;
+        }
+
+        private class FontInfo
+        {
+            public string Path;
+            public OpenTypeFont Info;
+
+            public FontInfo(string path, OpenTypeFont info)
+            {
+                Path = path;
+                Info = info;
+            }
         }
     }
 }

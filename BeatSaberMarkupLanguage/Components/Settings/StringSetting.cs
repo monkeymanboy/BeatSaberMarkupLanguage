@@ -42,18 +42,6 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             ReceiveValue();
         }
 
-        protected virtual void OnEnable()
-        {
-            editButton.onClick.AddListener(EditButtonPressed);
-            modalKeyboard.keyboard.EnterPressed += EnterPressed;
-        }
-
-        protected void OnDisable()
-        {
-            editButton.onClick.RemoveListener(EditButtonPressed);
-            modalKeyboard.keyboard.EnterPressed -= EnterPressed;
-        }
-
         public void EditButtonPressed()
         {
             modalKeyboard.modalView.Show(true, true);
@@ -81,6 +69,18 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             {
                 Text = (string)associatedValue.GetValue();
             }
+        }
+
+        protected virtual void OnEnable()
+        {
+            editButton.onClick.AddListener(EditButtonPressed);
+            modalKeyboard.keyboard.EnterPressed += EnterPressed;
+        }
+
+        protected void OnDisable()
+        {
+            editButton.onClick.RemoveListener(EditButtonPressed);
+            modalKeyboard.keyboard.EnterPressed -= EnterPressed;
         }
     }
 }

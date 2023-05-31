@@ -4,8 +4,11 @@ namespace BeatSaberMarkupLanguage.Components
 {
     public class Tab : MonoBehaviour
     {
+        public TabSelector selector;
+
         private string tabName;
         private string tabKey;
+        private bool isVisible = true;
 
         public string TabName
         {
@@ -16,8 +19,6 @@ namespace BeatSaberMarkupLanguage.Components
                 selector?.Refresh();
             }
         }
-
-        private bool isVisible = true;
 
         public bool IsVisible
         {
@@ -38,7 +39,5 @@ namespace BeatSaberMarkupLanguage.Components
                 selector?.Refresh();
             }
         }
-
-        public TabSelector selector;
     }
 }

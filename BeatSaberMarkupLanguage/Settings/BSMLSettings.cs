@@ -14,15 +14,15 @@ namespace BeatSaberMarkupLanguage.Settings
 {
     public class BSMLSettings : MonoBehaviour
     {
+        public List<CustomCellInfo> settingsMenus = new List<CustomCellInfo>();
+
+        private static BSMLSettings _instance = null;
         private bool isInitialized;
         private Button button;
         private Sprite normal;
         private Sprite hover;
-        private static BSMLSettings _instance = null;
 
         private ModSettingsFlowCoordinator flowCoordinator;
-
-        public List<CustomCellInfo> settingsMenus = new List<CustomCellInfo>();
 
         public static BSMLSettings instance
         {
@@ -38,24 +38,15 @@ namespace BeatSaberMarkupLanguage.Settings
             private set => _instance = value;
         }
 
-        internal void Setup()
+        [UIValue("thumbstick-value")]
+        private bool ThumbstickValue
         {
-            foreach (SettingsMenu menu in settingsMenus)
+            get => Plugin.config.DisableThumbstickScroll;
+            set
             {
-                menu.didSetup = false;
+                Plugin.config.DisableThumbstickScroll = value;
             }
-
-            StopAllCoroutines();
-
-            if (button == null)
-            {
-                StartCoroutine(AddButtonToMainScreen());
-            }
-
-            isInitialized = true;
         }
-
-        private void Awake() => DontDestroyOnLoad(this.gameObject);
 
         public void AddSettingsMenu(string name, string resource, object host)
         {
@@ -91,6 +82,31 @@ namespace BeatSaberMarkupLanguage.Settings
                 settingsMenus.Remove(menu.FirstOrDefault());
             }
         }
+
+        internal void Setup()
+        {
+            foreach (SettingsMenu menu in settingsMenus)
+            {
+                menu.didSetup = false;
+            }
+
+            StopAllCoroutines();
+
+            if (button == null)
+            {
+                StartCoroutine(AddButtonToMainScreen());
+            }
+
+            isInitialized = true;
+        }
+
+        [UIAction("set-thumbstick")]
+        private void SetThumbstick(bool value)
+        {
+            ThumbstickValue = value;
+        }
+
+        private void Awake() => DontDestroyOnLoad(this.gameObject);
 
         private IEnumerator AddButtonToMainScreen()
         {
@@ -136,22 +152,6 @@ namespace BeatSaberMarkupLanguage.Settings
                     flowCoordinator.isAnimating = false;
                 }),
                 ViewController.AnimationDirection.Vertical);
-        }
-
-        [UIValue("thumbstick_value")]
-        private bool Thumbstick_Value
-        {
-            get => Plugin.config.DisableThumbstickScroll;
-            set
-            {
-                Plugin.config.DisableThumbstickScroll = value;
-            }
-        }
-
-        [UIAction("set_thumbstick")]
-        private void Set_Thumbstick(bool value)
-        {
-            Thumbstick_Value = value;
         }
     }
 }

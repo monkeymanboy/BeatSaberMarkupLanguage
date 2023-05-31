@@ -8,15 +8,10 @@ namespace BeatSaberMarkupLanguage.Animations
 {
     public class AnimationController : PersistentSingleton<AnimationController>
     {
-        private readonly Dictionary<string, AnimationControllerData> registeredAnimations = new Dictionary<string, AnimationControllerData>();
-
         public ReadOnlyDictionary<string, AnimationControllerData> RegisteredAnimations;
         public AnimationControllerData loadingAnimation;
 
-        private void Awake()
-        {
-            RegisteredAnimations = new ReadOnlyDictionary<string, AnimationControllerData>(registeredAnimations);
-        }
+        private readonly Dictionary<string, AnimationControllerData> registeredAnimations = new Dictionary<string, AnimationControllerData>();
 
         public AnimationControllerData Register(string identifier, Texture2D tex, Rect[] uvs, float[] delays)
         {
@@ -42,7 +37,12 @@ namespace BeatSaberMarkupLanguage.Animations
             });
         }
 
-        public void Update()
+        private void Awake()
+        {
+            RegisteredAnimations = new ReadOnlyDictionary<string, AnimationControllerData>(registeredAnimations);
+        }
+
+        private void Update()
         {
             DateTime now = DateTime.UtcNow;
             foreach (AnimationControllerData animation in registeredAnimations.Values)

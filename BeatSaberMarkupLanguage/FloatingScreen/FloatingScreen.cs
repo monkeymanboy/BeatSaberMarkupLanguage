@@ -9,16 +9,68 @@ using Screen = HMUI.Screen;
 
 namespace BeatSaberMarkupLanguage.FloatingScreen
 {
+    public struct FloatingScreenHandleEventArgs
+    {
+        public readonly VRPointer Pointer;
+        public readonly Vector3 Position;
+        public readonly Quaternion Rotation;
+
+        public FloatingScreenHandleEventArgs(VRPointer vrPointer, Vector3 position, Quaternion rotation)
+        {
+            Pointer = vrPointer;
+            Position = position;
+            Rotation = rotation;
+        }
+
+        public static bool operator ==(FloatingScreenHandleEventArgs left, FloatingScreenHandleEventArgs right)
+        {
+            return left.Position == right.Position && left.Rotation == right.Rotation;
+        }
+
+        public static bool operator !=(FloatingScreenHandleEventArgs left, FloatingScreenHandleEventArgs right)
+        {
+            return !(left == right);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is FloatingScreenHandleEventArgs posRot)
+            {
+                return Position == posRot.Position && Rotation == posRot.Rotation;
+            }
+
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return Position.GetHashCode() ^ Rotation.GetHashCode();
+        }
+    }
+
     public class FloatingScreen : Screen
     {
         public FloatingScreenMoverPointer screenMover;
         public GameObject handle;
 
+        private static Material fogMaterial;
+
+        private bool showHandle = false;
+        private bool highlightHandle = false;
+        private Side handleSide = Side.Left;
+
         public event EventHandler<FloatingScreenHandleEventArgs> HandleReleased;
 
         public event EventHandler<FloatingScreenHandleEventArgs> HandleGrabbed;
 
-        private static Material fogMaterial;
+        public enum Side
+        {
+            Left,
+            Right,
+            Bottom,
+            Top,
+            Full,
+        }
 
         public Vector2 ScreenSize
         {
@@ -48,8 +100,6 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
             }
         }
 
-        private bool showHandle = false;
-
         public bool ShowHandle
         {
             get => showHandle;
@@ -78,8 +128,6 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
             }
         }
 
-        private bool highlightHandle = false;
-
         public bool HighlightHandle
         {
             get => highlightHandle;
@@ -104,8 +152,6 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
                 }
             }
         }
-
-        private Side handleSide = Side.Left;
 
         public Side HandleSide
         {
@@ -178,6 +224,56 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
             return screen;
         }
 
+        public void UpdateHandle()
+        {
+            if (handle == null)
+            {
+                return;
+            }
+
+            switch (HandleSide)
+            {
+                case Side.Left:
+                    handle.transform.localPosition = new Vector3(-ScreenSize.x / 2f, 0f, 0f);
+                    handle.transform.localScale = new Vector3(ScreenSize.x / 15f, ScreenSize.y * 0.8f, ScreenSize.x / 15f);
+                    break;
+                case Side.Right:
+                    handle.transform.localPosition = new Vector3(ScreenSize.x / 2f, 0f, 0f);
+                    handle.transform.localScale = new Vector3(ScreenSize.x / 15f, ScreenSize.y * 0.8f, ScreenSize.x / 15f);
+                    break;
+                case Side.Top:
+                    handle.transform.localPosition = new Vector3(0f, ScreenSize.y / 2f, 0f);
+                    handle.transform.localScale = new Vector3(ScreenSize.x * 0.8f, ScreenSize.y / 15f, ScreenSize.y / 15f);
+                    break;
+                case Side.Bottom:
+                    handle.transform.localPosition = new Vector3(0f, -ScreenSize.y / 2f, 0f);
+                    handle.transform.localScale = new Vector3(ScreenSize.x * 0.8f, ScreenSize.y / 15f, ScreenSize.y / 15f);
+                    break;
+                case Side.Full:
+                    handle.transform.localPosition = Vector3.zero;
+                    handle.transform.localScale = new Vector3(ScreenSize.x, ScreenSize.y, ScreenSize.x / 15f);
+                    break;
+            }
+
+            handle.GetComponent<MeshRenderer>().enabled = HandleSide != Side.Full;
+        }
+
+        public new void OnDestroy()
+        {
+            base.OnDestroy();
+            VRPointerEnabledPatch.PointerEnabled -= OnPointerCreated;
+        }
+
+        internal void OnHandleGrab(VRPointer vrPointer)
+        {
+            HandleGrabbed?.Invoke(this, new FloatingScreenHandleEventArgs(vrPointer, transform.position, transform.rotation));
+        }
+
+        internal void OnHandleReleased(VRPointer vrPointer)
+        {
+            HandleReleased?.Invoke(this, new FloatingScreenHandleEventArgs(vrPointer, transform.position, transform.rotation));
+        }
+
         private void OnPointerCreated(VRPointer pointer) => CreateHandle(pointer);
 
         private void CreateHandle(VRPointer pointer = null)
@@ -219,104 +315,6 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
             {
                 Logger.Log.Warn("Failed to get VRPointer!");
             }
-        }
-
-        internal void OnHandleGrab(VRPointer vrPointer)
-        {
-            HandleGrabbed?.Invoke(this, new FloatingScreenHandleEventArgs(vrPointer, transform.position, transform.rotation));
-        }
-
-        internal void OnHandleReleased(VRPointer vrPointer)
-        {
-            HandleReleased?.Invoke(this, new FloatingScreenHandleEventArgs(vrPointer, transform.position, transform.rotation));
-        }
-
-        public void UpdateHandle()
-        {
-            if (handle == null)
-            {
-                return;
-            }
-
-            switch (HandleSide)
-            {
-                case Side.Left:
-                    handle.transform.localPosition = new Vector3(-ScreenSize.x / 2f, 0f, 0f);
-                    handle.transform.localScale = new Vector3(ScreenSize.x / 15f, ScreenSize.y * 0.8f, ScreenSize.x / 15f);
-                    break;
-                case Side.Right:
-                    handle.transform.localPosition = new Vector3(ScreenSize.x / 2f, 0f, 0f);
-                    handle.transform.localScale = new Vector3(ScreenSize.x / 15f, ScreenSize.y * 0.8f, ScreenSize.x / 15f);
-                    break;
-                case Side.Top:
-                    handle.transform.localPosition = new Vector3(0f, ScreenSize.y / 2f, 0f);
-                    handle.transform.localScale = new Vector3(ScreenSize.x * 0.8f, ScreenSize.y / 15f, ScreenSize.y / 15f);
-                    break;
-                case Side.Bottom:
-                    handle.transform.localPosition = new Vector3(0f, -ScreenSize.y / 2f, 0f);
-                    handle.transform.localScale = new Vector3(ScreenSize.x * 0.8f, ScreenSize.y / 15f, ScreenSize.y / 15f);
-                    break;
-                case Side.Full:
-                    handle.transform.localPosition = Vector3.zero;
-                    handle.transform.localScale = new Vector3(ScreenSize.x, ScreenSize.y, ScreenSize.x / 15f);
-                    break;
-            }
-
-            handle.GetComponent<MeshRenderer>().enabled = HandleSide != Side.Full;
-        }
-
-        public new void OnDestroy()
-        {
-            base.OnDestroy();
-            VRPointerEnabledPatch.PointerEnabled -= OnPointerCreated;
-        }
-
-        public enum Side
-        {
-            Left,
-            Right,
-            Bottom,
-            Top,
-            Full,
-        }
-    }
-
-    public struct FloatingScreenHandleEventArgs
-    {
-        public FloatingScreenHandleEventArgs(VRPointer vrPointer, Vector3 position, Quaternion rotation)
-        {
-            Pointer = vrPointer;
-            Position = position;
-            Rotation = rotation;
-        }
-
-        public readonly VRPointer Pointer;
-        public readonly Vector3 Position;
-        public readonly Quaternion Rotation;
-
-        public override bool Equals(object obj)
-        {
-            if (obj is FloatingScreenHandleEventArgs posRot)
-            {
-                return Position == posRot.Position && Rotation == posRot.Rotation;
-            }
-
-            return false;
-        }
-
-        public override int GetHashCode()
-        {
-            return Position.GetHashCode() ^ Rotation.GetHashCode();
-        }
-
-        public static bool operator ==(FloatingScreenHandleEventArgs left, FloatingScreenHandleEventArgs right)
-        {
-            return left.Position == right.Position && left.Rotation == right.Rotation;
-        }
-
-        public static bool operator !=(FloatingScreenHandleEventArgs left, FloatingScreenHandleEventArgs right)
-        {
-            return !(left == right);
         }
     }
 }

@@ -2,7 +2,6 @@
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using BeatSaberMarkupLanguage.Animations;
 using HMUI;
@@ -26,6 +25,10 @@ namespace BeatSaberMarkupLanguage
     public static class BeatSaberUI
     {
         private static DiContainer diContainer;
+        private static BasicUIAudioManager basicUIAudioManager;
+        private static Canvas canvasTemplate;
+        private static TMP_FontAsset mainTextFont;
+        private static Material mainUIFontMaterial;
 
         public static DiContainer DiContainer
         {
@@ -49,8 +52,6 @@ namespace BeatSaberMarkupLanguage
 
         public static HoverHintController HoverHintController => DiContainer.Resolve<HoverHintController>();
 
-        private static BasicUIAudioManager basicUIAudioManager;
-
         public static BasicUIAudioManager BasicUIAudioManager
         {
             get
@@ -64,7 +65,34 @@ namespace BeatSaberMarkupLanguage
             }
         }
 
-        private static Canvas canvasTemplate;
+        /// <summary>
+        /// Gets the main font used by the game for UI text.
+        /// </summary>
+        public static TMP_FontAsset MainTextFont
+        {
+            get
+            {
+                if (mainTextFont == null)
+                {
+                    mainTextFont = Resources.FindObjectsOfTypeAll<TMP_FontAsset>().Where(t => t.name == "Teko-Medium SDF").FirstOrDefault();
+                }
+
+                return mainTextFont;
+            }
+        }
+
+        internal static Material MainUIFontMaterial
+        {
+            get
+            {
+                if (mainUIFontMaterial == null)
+                {
+                    mainUIFontMaterial = Resources.FindObjectsOfTypeAll<Material>().Where(m => m.name == "Teko-Medium SDF Curved Softer").First();
+                }
+
+                return mainUIFontMaterial;
+            }
+        }
 
         /// <summary>
         /// Creates a ViewController of type T, and marks it to not be destroyed.
@@ -100,39 +128,6 @@ namespace BeatSaberMarkupLanguage
         /// <returns>The newly created <see cref="FlowCoordinator"/> of type <typeparamref name="T"/>.</returns>
         public static T CreateFlowCoordinator<T>()
             where T : FlowCoordinator => DiContainer.InstantiateComponentOnNewGameObject<T>(typeof(T).Name);
-
-        private static TMP_FontAsset mainTextFont = null;
-
-        /// <summary>
-        /// Gets the main font used by the game for UI text.
-        /// </summary>
-        public static TMP_FontAsset MainTextFont
-        {
-            get
-            {
-                if (mainTextFont == null)
-                {
-                    mainTextFont = Resources.FindObjectsOfTypeAll<TMP_FontAsset>().Where(t => t.name == "Teko-Medium SDF").FirstOrDefault();
-                }
-
-                return mainTextFont;
-            }
-        }
-
-        private static Material mainUIFontMaterial = null;
-
-        internal static Material MainUIFontMaterial
-        {
-            get
-            {
-                if (mainUIFontMaterial == null)
-                {
-                    mainUIFontMaterial = Resources.FindObjectsOfTypeAll<Material>().Where(m => m.name == "Teko-Medium SDF Curved Softer").First();
-                }
-
-                return mainUIFontMaterial;
-            }
-        }
 
         /// <summary>
         /// Creates a clone of the given font, with its material fixed to be a no-glow material suitable for use on UI elements.
@@ -435,14 +430,6 @@ namespace BeatSaberMarkupLanguage
             callback?.Invoke();
         }
 
-        public struct ScaleOptions
-        {
-            public bool ShouldScale;
-            public bool MaintainRatio;
-            public int Width;
-            public int Height;
-        }
-
         /// <summary>
         /// Downscale the image in <paramref name="data"/> to the specified size.
         ///
@@ -490,51 +477,23 @@ namespace BeatSaberMarkupLanguage
             }
         }
 
+        public static void PresentFlowCoordinator(this FlowCoordinator current, FlowCoordinator flowCoordinator, Action finishedCallback = null, ViewController.AnimationDirection animationDirection = ViewController.AnimationDirection.Horizontal, bool immediately = false, bool replaceTopViewController = false)
+            => current.PresentFlowCoordinator(flowCoordinator, finishedCallback, animationDirection, immediately, replaceTopViewController);
+
+        public static void DismissFlowCoordinator(this FlowCoordinator current, FlowCoordinator flowCoordinator, Action finishedCallback = null, ViewController.AnimationDirection animationDirection = ViewController.AnimationDirection.Horizontal, bool immediately = false)
+            => current.DismissFlowCoordinator(flowCoordinator, animationDirection, finishedCallback, immediately);
+
         private static bool IsAnimated(string str)
         {
             return str.EndsWith(".gif", StringComparison.OrdinalIgnoreCase) || str.EndsWith(".apng", StringComparison.OrdinalIgnoreCase);
         }
 
-        public static void PresentFlowCoordinator(this FlowCoordinator current, FlowCoordinator flowCoordinator, Action finishedCallback = null, ViewController.AnimationDirection animationDirection = ViewController.AnimationDirection.Horizontal, bool immediately = false, bool replaceTopViewController = false)
+        public struct ScaleOptions
         {
-            PresentFlowCoordinatorDelegate(current, flowCoordinator, finishedCallback, animationDirection, immediately, replaceTopViewController);
-        }
-
-        public static void DismissFlowCoordinator(this FlowCoordinator current, FlowCoordinator flowCoordinator, Action finishedCallback = null, ViewController.AnimationDirection animationDirection = ViewController.AnimationDirection.Horizontal, bool immediately = false)
-        {
-            DismissFlowCoordinatorDelegate(current, flowCoordinator, animationDirection, finishedCallback, immediately);
-        }
-
-        private static PresentFlowCoordinatorDelegate presentFlowCoordinatorDelegate;
-
-        private static PresentFlowCoordinatorDelegate PresentFlowCoordinatorDelegate
-        {
-            get
-            {
-                if (presentFlowCoordinatorDelegate == null)
-                {
-                    MethodInfo presentMethod = typeof(FlowCoordinator).GetMethod("PresentFlowCoordinator", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-                    presentFlowCoordinatorDelegate = (PresentFlowCoordinatorDelegate)Delegate.CreateDelegate(typeof(PresentFlowCoordinatorDelegate), presentMethod);
-                }
-
-                return presentFlowCoordinatorDelegate;
-            }
-        }
-
-        private static DismissFlowCoordinatorDelegate dismissFlowCoordinatorDelegate;
-
-        private static DismissFlowCoordinatorDelegate DismissFlowCoordinatorDelegate
-        {
-            get
-            {
-                if (dismissFlowCoordinatorDelegate == null)
-                {
-                    MethodInfo dismissMethod = typeof(FlowCoordinator).GetMethod("DismissFlowCoordinator", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-                    dismissFlowCoordinatorDelegate = (DismissFlowCoordinatorDelegate)Delegate.CreateDelegate(typeof(DismissFlowCoordinatorDelegate), dismissMethod);
-                }
-
-                return dismissFlowCoordinatorDelegate;
-            }
+            public bool ShouldScale;
+            public bool MaintainRatio;
+            public int Width;
+            public int Height;
         }
     }
 }

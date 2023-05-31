@@ -11,14 +11,21 @@ namespace BeatSaberMarkupLanguage.ViewControllers
 {
     public abstract class BSMLAutomaticViewController : BSMLViewController, WatcherGroup.IHotReloadableController
     {
-        private static string GetDefaultResourceName(Type type)
-        {
-            string ns = type.Namespace;
-            string name = type.Name;
-            string resourceNoExtension = (ns.Length > 0 ? ns + "." : string.Empty) + name;
+        private string resourceName;
+        private string content;
 
-            // First we check with no extension in case DependentUpon is being used on the embedded resource
-            return type.Assembly.GetManifestResourceNames().Contains(resourceNoExtension) ? resourceNoExtension : $"{resourceNoExtension}.bsml";
+        protected BSMLAutomaticViewController()
+            : base()
+        {
+            HotReloadAttribute hotReloadAttr = GetType().GetCustomAttribute<HotReloadAttribute>();
+            if (hotReloadAttr == null)
+            {
+                ContentFilePath = null;
+            }
+            else
+            {
+                ContentFilePath = Path.ChangeExtension(hotReloadAttr.Path, ".bsml");
+            }
         }
 
         public virtual string FallbackContent => @"<bg>
@@ -29,9 +36,6 @@ namespace BeatSaberMarkupLanguage.ViewControllers
                                                      </vertical>
                                                      <text-page text='{0}' anchor-min-x='0.1' anchor-max-x='0.9' anchor-max-y='0.8'/>
                                                    </bg>";
-
-        private string resourceName;
-        private string content;
 
         public override string Content
         {
@@ -88,17 +92,39 @@ namespace BeatSaberMarkupLanguage.ViewControllers
 
         string WatcherGroup.IHotReloadableController.Name => name;
 
-        protected BSMLAutomaticViewController()
-            : base()
+        void WatcherGroup.IHotReloadableController.MarkDirty()
         {
-            HotReloadAttribute hotReloadAttr = GetType().GetCustomAttribute<HotReloadAttribute>();
-            if (hotReloadAttr == null)
+            ContentChanged = true;
+            content = null;
+        }
+
+        void WatcherGroup.IHotReloadableController.Refresh(bool forceReload)
+        {
+            if (!isActiveAndEnabled)
             {
-                ContentFilePath = null;
+#if HRVC_DEBUG
+                Logger.Log.Warn($"Trying to refresh {GetInstanceID()}:{name} when it isn't ActiveAndEnabled.");
+#endif
+                return;
             }
-            else
+
+            if (ContentChanged || forceReload)
             {
-                ContentFilePath = Path.ChangeExtension(hotReloadAttr.Path, ".bsml");
+                try
+                {
+                    __Deactivate(false, false, false);
+
+                    for (int i = 0; i < transform.childCount; i++)
+                    {
+                        Destroy(transform.GetChild(i).gameObject);
+                    }
+
+                    __Activate(false, false);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Log?.Error(ex);
+                }
             }
         }
 
@@ -155,6 +181,16 @@ namespace BeatSaberMarkupLanguage.ViewControllers
             base.DidDeactivate(removedFromHierarchy, screenSystemDisabling);
         }
 
+        private static string GetDefaultResourceName(Type type)
+        {
+            string ns = type.Namespace;
+            string name = type.Name;
+            string resourceNoExtension = (ns.Length > 0 ? ns + "." : string.Empty) + name;
+
+            // First we check with no extension in case DependentUpon is being used on the embedded resource
+            return type.Assembly.GetManifestResourceNames().Contains(resourceNoExtension) ? resourceNoExtension : $"{resourceNoExtension}.bsml";
+        }
+
         private void ParseWithFallback()
         {
             try
@@ -166,42 +202,6 @@ namespace BeatSaberMarkupLanguage.ViewControllers
                 Logger.Log.Error($"Error parsing BSML: {ex.Message}");
                 Logger.Log.Debug(ex);
                 BSMLParser.instance.Parse(string.Format(FallbackContent, Utilities.EscapeXml(ex.Message)), gameObject, null);
-            }
-        }
-
-        void WatcherGroup.IHotReloadableController.MarkDirty()
-        {
-            ContentChanged = true;
-            content = null;
-        }
-
-        void WatcherGroup.IHotReloadableController.Refresh(bool forceReload)
-        {
-            if (!isActiveAndEnabled)
-            {
-#if HRVC_DEBUG
-                Logger.Log.Warn($"Trying to refresh {GetInstanceID()}:{name} when it isn't ActiveAndEnabled.");
-#endif
-                return;
-            }
-
-            if (ContentChanged || forceReload)
-            {
-                try
-                {
-                    __Deactivate(false, false, false);
-
-                    for (int i = 0; i < transform.childCount; i++)
-                    {
-                        Destroy(transform.GetChild(i).gameObject);
-                    }
-
-                    __Activate(false, false);
-                }
-                catch (Exception ex)
-                {
-                    Logger.Log?.Error(ex);
-                }
             }
         }
     }

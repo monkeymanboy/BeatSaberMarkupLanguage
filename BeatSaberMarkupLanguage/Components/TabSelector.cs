@@ -18,6 +18,12 @@ namespace BeatSaberMarkupLanguage.Components
         private readonly List<Tab> tabs = new List<Tab>();
 
         private int pageCount = -1;
+        private int currentPage = 0;
+
+        private Button leftButton;
+        private Button rightButton;
+
+        private bool shouldRefresh;
 
         public int PageCount
         {
@@ -31,13 +37,6 @@ namespace BeatSaberMarkupLanguage.Components
                 }
             }
         }
-
-        private int currentPage = 0;
-
-        private Button leftButton;
-        private Button rightButton;
-
-        private bool shouldRefresh;
 
         public void Setup()
         {
@@ -74,26 +73,6 @@ namespace BeatSaberMarkupLanguage.Components
             textSegmentedControl.didSelectCellEvent += TabSelected;
             textSegmentedControl.SelectCellWithNumber(0);
             TabSelected(textSegmentedControl, 0);
-        }
-
-        private void TabSelected(SegmentedControl segmentedControl, int index)
-        {
-            if (PageCount != -1)
-            {
-                index += PageCount * currentPage;
-            }
-
-            for (int i = 0; i < tabs.Count; i++)
-            {
-                tabs[i].gameObject.SetActive(false);
-            }
-
-            if (index >= tabs.Where(x => x.IsVisible).Count())
-            {
-                return;
-            }
-
-            tabs.Where(x => x.IsVisible).ElementAt(index).gameObject.SetActive(true);
         }
 
         public void Refresh()
@@ -135,6 +114,26 @@ namespace BeatSaberMarkupLanguage.Components
 
                 TabSelected(null, 0);
             }
+        }
+
+        private void TabSelected(SegmentedControl segmentedControl, int index)
+        {
+            if (PageCount != -1)
+            {
+                index += PageCount * currentPage;
+            }
+
+            for (int i = 0; i < tabs.Count; i++)
+            {
+                tabs[i].gameObject.SetActive(false);
+            }
+
+            if (index >= tabs.Where(x => x.IsVisible).Count())
+            {
+                return;
+            }
+
+            tabs.Where(x => x.IsVisible).ElementAt(index).gameObject.SetActive(true);
         }
 
         private void SetSegmentedControlTexts(List<Tab> tabs)

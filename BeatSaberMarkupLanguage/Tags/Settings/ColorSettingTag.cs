@@ -11,10 +11,10 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
 {
     public class ColorSettingTag : ModalColorPickerTag
     {
-        public override string[] Aliases => new[] { "color-setting" };
-
         private static FormattedFloatListSettingsValueController baseSettings;
         private static Image colorImage;
+
+        public override string[] Aliases => new[] { "color-setting" };
 
         public override GameObject CreateObject(Transform parent)
         {

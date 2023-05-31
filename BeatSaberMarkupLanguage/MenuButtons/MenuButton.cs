@@ -7,9 +7,30 @@ namespace BeatSaberMarkupLanguage.MenuButtons
 {
     public class MenuButton : INotifyPropertyChanged
     {
-        public virtual Action OnClick { get; protected set; }
-
         private string text;
+        private string hoverHint;
+        private bool interactable;
+
+        public MenuButton(string text, string hoverHint, Action onClick, bool interactable = true)
+        {
+            Text = text;
+            HoverHint = hoverHint ?? string.Empty;
+            OnClick = onClick;
+            Interactable = interactable;
+        }
+
+        public MenuButton(string text, Action onClick)
+            : this(text, string.Empty, onClick)
+        {
+        }
+
+        protected MenuButton()
+        {
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public virtual Action OnClick { get; protected set; }
 
         [UIValue("text")]
         public virtual string Text
@@ -22,8 +43,6 @@ namespace BeatSaberMarkupLanguage.MenuButtons
             }
         }
 
-        private string hoverHint;
-
         [UIValue("hover-hint")]
         public virtual string HoverHint
         {
@@ -34,8 +53,6 @@ namespace BeatSaberMarkupLanguage.MenuButtons
                 NotifyPropertyChanged();
             }
         }
-
-        private bool interactable;
 
         [UIValue("interactable")]
         public virtual bool Interactable
@@ -53,25 +70,6 @@ namespace BeatSaberMarkupLanguage.MenuButtons
         {
             OnClick?.Invoke();
         }
-
-        protected MenuButton()
-        {
-        }
-
-        public MenuButton(string text, string hoverHint, Action onClick, bool interactable = true)
-        {
-            Text = text;
-            HoverHint = hoverHint ?? string.Empty;
-            OnClick = onClick;
-            Interactable = interactable;
-        }
-
-        public MenuButton(string text, Action onClick)
-            : this(text, string.Empty, onClick)
-        {
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {

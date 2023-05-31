@@ -9,6 +9,10 @@ namespace BeatSaberMarkupLanguage.Attributes
     [Conditional("USE_HOT_RELOAD")]
     public sealed class HotReloadAttribute : Attribute
     {
+        private string path = null;
+
+        public HotReloadAttribute([CallerFilePath] string basePath = null) => GivenPath = basePath;
+
         public string GivenPath { get; }
 
         /// <summary>
@@ -20,8 +24,6 @@ namespace BeatSaberMarkupLanguage.Attributes
         /// Gets or sets the path to the layout (BSML) file relative to the path of class in which the attribute is being used.
         /// </summary>
         public string RelativePathToLayout { get; set; }
-
-        private string path = null;
 
         public string Path
         {
@@ -54,8 +56,5 @@ namespace BeatSaberMarkupLanguage.Attributes
                 return path;
             }
         }
-
-        public HotReloadAttribute([CallerFilePath] string basePath = null)
-            => GivenPath = basePath;
     }
 }

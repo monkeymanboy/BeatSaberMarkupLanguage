@@ -34,6 +34,24 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             StartCoroutine(SetInitialText());
         }
 
+        public override void ApplyValue()
+        {
+            associatedValue?.SetValue(Value);
+        }
+
+        public override void ReceiveValue()
+        {
+            if (associatedValue != null)
+            {
+                Value = associatedValue.GetValue();
+            }
+        }
+
+        protected string TextForValue(object value)
+        {
+            return formatter == null ? value.ToString() : (formatter.Invoke(value) as string);
+        }
+
         private void OnEnable()
         {
             StartCoroutine(SetInitialText());
@@ -56,24 +74,6 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             {
                 ApplyValue();
             }
-        }
-
-        public override void ApplyValue()
-        {
-            associatedValue?.SetValue(Value);
-        }
-
-        public override void ReceiveValue()
-        {
-            if (associatedValue != null)
-            {
-                Value = associatedValue.GetValue();
-            }
-        }
-
-        protected string TextForValue(object value)
-        {
-            return formatter == null ? value.ToString() : (formatter.Invoke(value) as string);
         }
     }
 }

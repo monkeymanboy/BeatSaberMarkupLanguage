@@ -19,19 +19,6 @@ namespace BeatSaberMarkupLanguage.Components
         public BSMLAction onEnter;
         public bool clearOnOpen;
 
-        private void OnEnable()
-        {
-            if (associatedValue != null)
-            {
-                SetText(associatedValue.GetValue() as string);
-            }
-
-            if (clearOnOpen)
-            {
-                SetText(string.Empty);
-            }
-        }
-
         public void OnEnter(string value)
         {
             associatedValue?.SetValue(value);
@@ -44,31 +31,24 @@ namespace BeatSaberMarkupLanguage.Components
             keyboard.KeyboardText.text = text;
             keyboard.DrawCursor();
         }
+
+        private void OnEnable()
+        {
+            if (associatedValue != null)
+            {
+                SetText(associatedValue.GetValue() as string);
+            }
+
+            if (clearOnOpen)
+            {
+                SetText(string.Empty);
+            }
+        }
     }
 
     // Experimental chat console
     public class KEYBOARD
     {
-        public List<KEY> keys = new List<KEY>();
-
-        private readonly KEY dummy = new KEY(); // This allows for some lazy programming, since unfound key searches will point to this instead of null. It still logs an error though
-
-        private readonly bool enableInputField = true;
-        private bool shift = false;
-        private bool caps = false;
-        private readonly RectTransform container;
-        private Vector2 currentPosition;
-        private Vector2 basePosition;
-        private float scale = 0.5f; // BUG: Effect of changing this has NOT been tested. assume changing it doesn't work.
-        private readonly float padding = 0.5f;
-        private readonly float buttonWidth = 12f;
-
-        public TextMeshProUGUI KeyboardText;
-        public TextMeshProUGUI KeyboardCursor;
-        public Button BaseButton;
-
-        public event Action<string> EnterPressed;
-
         // Keyboard spaces and CR/LF are significant.
         // A slash following a space or CR/LF alters the width of the space
         // CR on an empty line results in a half life advance
@@ -101,6 +81,65 @@ namespace BeatSaberMarkupLanguage.Components
 [CAPS]/20 (aA) (oO) (eE) (uU) (iI) (dD) (hH) (tT) (nN) (sS) (-_) [ENTER]/20
 [SHIFT] (;:) (qQ) (jJ) (kK) (xX) (bB) (mM) (wW) (vV) (zZ) [CLEAR]/28
 /23 (!!) (@@) [SPACE]/40 (##) (__)";
+
+        public List<KEY> keys = new List<KEY>();
+
+        public TextMeshProUGUI KeyboardText;
+        public TextMeshProUGUI KeyboardCursor;
+        public Button BaseButton;
+
+        private readonly KEY dummy = new KEY(); // This allows for some lazy programming, since unfound key searches will point to this instead of null. It still logs an error though
+
+        private readonly RectTransform container;
+        private readonly bool enableInputField = true;
+        private readonly float padding = 0.5f;
+        private readonly float buttonWidth = 12f;
+        private bool shift = false;
+        private bool caps = false;
+        private Vector2 currentPosition;
+        private Vector2 basePosition;
+        private float scale = 0.5f; // BUG: Effect of changing this has NOT been tested. assume changing it doesn't work.
+
+        public KEYBOARD(RectTransform container, string defaultKeyboard = QWERTY, bool enableInputField = true, float x = 0, float y = 0)
+        {
+            this.enableInputField = enableInputField;
+            this.container = container;
+            basePosition = new Vector2(-50 + x, 23 + y);
+            currentPosition = basePosition;
+
+            SetButtonType();
+
+            // BUG: Make this an input field maybe
+            KeyboardText = BeatSaberUI.CreateText(container, string.Empty, new Vector2(0, 15f));
+            KeyboardText.fontSize = 6f;
+            KeyboardText.color = Color.white;
+            KeyboardText.alignment = TextAlignmentOptions.Center;
+            KeyboardText.enableWordWrapping = false;
+            KeyboardText.text = string.Empty;
+            KeyboardText.enabled = this.enableInputField;
+
+            KeyboardCursor = BeatSaberUI.CreateText(container, "|", new Vector2(0, 0));
+            KeyboardCursor.fontSize = 6f;
+            KeyboardCursor.color = new Color(0.60f, 0.80f, 1);
+            KeyboardCursor.alignment = TextAlignmentOptions.Left;
+            KeyboardCursor.enableWordWrapping = false;
+            KeyboardCursor.enabled = this.enableInputField;
+
+            DrawCursor(); // BUG: Doesn't handle trailing spaces.. seriously, wtf.
+
+            // We protect this since setting nonexistent keys will throw.
+
+            // BUG: These are here on a temporary basis, they will be moving out as soon as API is finished
+            if (!string.IsNullOrEmpty(defaultKeyboard))
+            {
+                AddKeys(defaultKeyboard);
+                DefaultActions();
+            }
+
+            return;
+        }
+
+        public event Action<string> EnterPressed;
 
         public KEY this[string index]
         {
@@ -147,82 +186,6 @@ namespace BeatSaberMarkupLanguage.Components
                     key.keyaction = action;
                 }
             }
-        }
-
-        private KEY AddKey(string keylabel, float width = 12, float height = 10, int color = 0xffffff)
-        {
-            Vector2 position = currentPosition;
-
-            Color co = Color.white;
-            co.r = (float)(color & 0xff) / 255;
-            co.g = (float)((color >> 8) & 0xff) / 255;
-            co.b = (float)((color >> 16) & 0xff) / 255;
-
-            KEY key = new KEY(this, position, keylabel, width, height, co);
-            keys.Add(key);
-
-            return key;
-        }
-
-        private KEY AddKey(string keylabel, string shifted, float width = 12, float height = 10)
-        {
-            KEY key = AddKey(keylabel, width);
-            key.shifted = shifted;
-            return key;
-        }
-
-        // BUG: Refactor this within a keyboard parser subclass once everything works.
-        private void EmitKey(ref float spacing, ref float width, ref string label, ref string key, ref bool space, ref string newvalue, ref float height, ref int color)
-        {
-            currentPosition.x += spacing;
-
-            if (!string.IsNullOrEmpty(label))
-            {
-                AddKey(label, width, height, color).Set(newvalue);
-            }
-            else if (!string.IsNullOrEmpty(key))
-            {
-                AddKey(key[0].ToString(), key[1].ToString()).Set(newvalue);
-            }
-
-            spacing = 0;
-            width = buttonWidth;
-            height = 10f;
-            label = string.Empty;
-            key = string.Empty;
-            newvalue = string.Empty;
-            color = 0xffffff;
-            space = false;
-
-            return;
-        }
-
-        private bool ReadFloat(ref string data, ref int position, ref float result)
-        {
-            if (position >= data.Length)
-            {
-                return false;
-            }
-
-            int start = position;
-            while (position < data.Length)
-            {
-                char c = data[position];
-                if (!((c >= '0' && c <= '9') || c == '+' || c == '-' || c == '.'))
-                {
-                    break;
-                }
-
-                position++;
-            }
-
-            if (float.TryParse(data.Substring(start, position - start), out result))
-            {
-                return true;
-            }
-
-            position = start;
-            return false;
         }
 
         // Very basic parser for the keyboard grammar - no doubt can be improved. Tricky to implement because of special characters.
@@ -380,45 +343,6 @@ namespace BeatSaberMarkupLanguage.Components
             return this;
         }
 
-        public KEYBOARD(RectTransform container, string defaultKeyboard = QWERTY, bool enableInputField = true, float x = 0, float y = 0)
-        {
-            this.enableInputField = enableInputField;
-            this.container = container;
-            basePosition = new Vector2(-50 + x, 23 + y);
-            currentPosition = basePosition;
-
-            SetButtonType();
-
-            // BUG: Make this an input field maybe
-            KeyboardText = BeatSaberUI.CreateText(container, string.Empty, new Vector2(0, 15f));
-            KeyboardText.fontSize = 6f;
-            KeyboardText.color = Color.white;
-            KeyboardText.alignment = TextAlignmentOptions.Center;
-            KeyboardText.enableWordWrapping = false;
-            KeyboardText.text = string.Empty;
-            KeyboardText.enabled = this.enableInputField;
-
-            KeyboardCursor = BeatSaberUI.CreateText(container, "|", new Vector2(0, 0));
-            KeyboardCursor.fontSize = 6f;
-            KeyboardCursor.color = new Color(0.60f, 0.80f, 1);
-            KeyboardCursor.alignment = TextAlignmentOptions.Left;
-            KeyboardCursor.enableWordWrapping = false;
-            KeyboardCursor.enabled = this.enableInputField;
-
-            DrawCursor(); // BUG: Doesn't handle trailing spaces.. seriously, wtf.
-
-            // We protect this since setting nonexistent keys will throw.
-
-            // BUG: These are here on a temporary basis, they will be moving out as soon as API is finished
-            if (!string.IsNullOrEmpty(defaultKeyboard))
-            {
-                AddKeys(defaultKeyboard);
-                DefaultActions();
-            }
-
-            return;
-        }
-
         public KEYBOARD NextRow(float adjustx = 0)
         {
             currentPosition.y -= currentPosition.x == basePosition.x ? 3 : 6; // Next row on an empty row only results in a half row advance
@@ -442,6 +366,100 @@ namespace BeatSaberMarkupLanguage.Components
             string typedtext = key.kb.KeyboardText.text;
             EnterPressed?.Invoke(typedtext);
             key.kb.KeyboardText.text = string.Empty;
+        }
+
+        public void DrawCursor()
+        {
+            if (!enableInputField)
+            {
+                return;
+            }
+
+            Vector2 v = KeyboardText.GetPreferredValues(KeyboardText.text + "|");
+
+            // BUG: This needs to be derived from the text position
+            v.y = 15f;
+
+            // BUG: I do not know why that 30f is here, It makes things work, but I can't understand WHY! Me stupid.
+            // BUG: The .5 gets rid of the trailing |, but technically, we need to calculate its width and store it
+            v.x = (v.x / 2) + 30f - 0.5f;
+            (KeyboardCursor.transform as RectTransform).anchoredPosition = v;
+        }
+
+        private KEY AddKey(string keylabel, float width = 12, float height = 10, int color = 0xffffff)
+        {
+            Vector2 position = currentPosition;
+
+            Color co = Color.white;
+            co.r = (float)(color & 0xff) / 255;
+            co.g = (float)((color >> 8) & 0xff) / 255;
+            co.b = (float)((color >> 16) & 0xff) / 255;
+
+            KEY key = new KEY(this, position, keylabel, width, height, co);
+            keys.Add(key);
+
+            return key;
+        }
+
+        private KEY AddKey(string keylabel, string shifted, float width = 12, float height = 10)
+        {
+            KEY key = AddKey(keylabel, width, height);
+            key.shifted = shifted;
+            return key;
+        }
+
+        // BUG: Refactor this within a keyboard parser subclass once everything works.
+        private void EmitKey(ref float spacing, ref float width, ref string label, ref string key, ref bool space, ref string newvalue, ref float height, ref int color)
+        {
+            currentPosition.x += spacing;
+
+            if (!string.IsNullOrEmpty(label))
+            {
+                AddKey(label, width, height, color).Set(newvalue);
+            }
+            else if (!string.IsNullOrEmpty(key))
+            {
+                AddKey(key[0].ToString(), key[1].ToString()).Set(newvalue);
+            }
+
+            spacing = 0;
+            width = buttonWidth;
+            height = 10f;
+            label = string.Empty;
+            key = string.Empty;
+            newvalue = string.Empty;
+            color = 0xffffff;
+            space = false;
+
+            return;
+        }
+
+        private bool ReadFloat(ref string data, ref int position, ref float result)
+        {
+            if (position >= data.Length)
+            {
+                return false;
+            }
+
+            int start = position;
+            while (position < data.Length)
+            {
+                char c = data[position];
+                if (!((c >= '0' && c <= '9') || c == '+' || c == '-' || c == '.'))
+                {
+                    break;
+                }
+
+                position++;
+            }
+
+            if (float.TryParse(data.Substring(start, position - start), out result))
+            {
+                return true;
+            }
+
+            position = start;
+            return false;
         }
 
         private void Backspace(KEY key)
@@ -479,24 +497,6 @@ namespace BeatSaberMarkupLanguage.Components
             key.mybutton.GetComponentInChildren<Image>().color = key.kb.caps ? Color.green : Color.white;
         }
 
-        public void DrawCursor()
-        {
-            if (!enableInputField)
-            {
-                return;
-            }
-
-            Vector2 v = KeyboardText.GetPreferredValues(KeyboardText.text + "|");
-
-            // BUG: This needs to be derived from the text position
-            v.y = 15f;
-
-            // BUG: I do not know why that 30f is here, It makes things work, but I can't understand WHY! Me stupid.
-            // BUG: The .5 gets rid of the trailing |, but technically, we need to calculate its width and store it
-            v.x = (v.x / 2) + 30f - 0.5f;
-            (KeyboardCursor.transform as RectTransform).anchoredPosition = v;
-        }
-
         public class KEY
         {
             public string name = string.Empty;
@@ -505,16 +505,6 @@ namespace BeatSaberMarkupLanguage.Components
             public Button mybutton;
             public KEYBOARD kb;
             public Action<KEY> keyaction = null;
-
-            public KEY Set(string value)
-            {
-                if (!string.IsNullOrEmpty(value))
-                {
-                    this.value = value;
-                }
-
-                return this;
-            }
 
             public KEY()
             {
@@ -603,6 +593,16 @@ namespace BeatSaberMarkupLanguage.Components
 
                 HoverHint myHintText = BeatSaberUI.DiContainer.InstantiateComponent<HoverHint>(mybutton.gameObject);
                 myHintText.text = value;
+            }
+
+            public KEY Set(string value)
+            {
+                if (!string.IsNullOrEmpty(value))
+                {
+                    this.value = value;
+                }
+
+                return this;
             }
         }
     }

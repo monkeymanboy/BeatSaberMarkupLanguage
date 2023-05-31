@@ -12,6 +12,9 @@ namespace BeatSaberMarkupLanguage
 {
     public static class Utilities
     {
+        public static Dictionary<string, Sprite> spriteCache = new Dictionary<string, Sprite>();
+        public static Dictionary<string, Texture> textureCache = new Dictionary<string, Texture>();
+
         private static Sprite editIcon = null;
 
         public static Sprite EditIcon
@@ -111,53 +114,6 @@ namespace BeatSaberMarkupLanguage
                 .Replace("'", "&apos;")
                 .Replace("<", "&lt;")
                 .Replace(">", "&gt;");
-        }
-
-        public static class ImageResources
-        {
-            private static Material noGlowMat;
-            private static Sprite blankSprite;
-            private static Sprite whitePixel;
-
-            public static Material NoGlowMat
-            {
-                get
-                {
-                    if (noGlowMat == null)
-                    {
-                        noGlowMat = new Material(Resources.FindObjectsOfTypeAll<Material>().Where(m => m.name == "UINoGlow").First());
-                        noGlowMat.name = "UINoGlowCustom";
-                    }
-
-                    return noGlowMat;
-                }
-            }
-
-            public static Sprite BlankSprite
-            {
-                get
-                {
-                    if (!blankSprite)
-                    {
-                        blankSprite = Sprite.Create(Texture2D.blackTexture, default, Vector2.zero);
-                    }
-
-                    return blankSprite;
-                }
-            }
-
-            public static Sprite WhitePixel
-            {
-                get
-                {
-                    if (!whitePixel)
-                    {
-                        whitePixel = Resources.FindObjectsOfTypeAll<Image>().Where(i => i.sprite != null).First(i => i.sprite.name == "WhitePixel").sprite;
-                    }
-
-                    return whitePixel;
-                }
-            }
         }
 
         public static Texture2D FindTextureInAssembly(string path)
@@ -291,23 +247,6 @@ namespace BeatSaberMarkupLanguage
             }
         }
 
-        private static IEnumerator GetWebDataCoroutine(string url, Action<byte[]> callback)
-        {
-            UnityWebRequest www = UnityWebRequest.Get(url);
-            yield return www.SendWebRequest();
-
-            if (www.result != UnityWebRequest.Result.Success)
-            {
-                Logger.Log.Debug($"Error getting data from {url}, Message:{www.error}");
-            }
-            else
-            {
-                callback?.Invoke(www.downloadHandler.data);
-            }
-        }
-
-        public static Dictionary<string, Sprite> spriteCache = new Dictionary<string, Sprite>();
-
         internal static Sprite FindSpriteCached(string name)
         {
             if (spriteCache.TryGetValue(name, out var sprite) && sprite != null)
@@ -336,8 +275,6 @@ namespace BeatSaberMarkupLanguage
             return sprite;
         }
 
-        public static Dictionary<string, Texture> textureCache = new Dictionary<string, Texture>();
-
         internal static Texture FindTextureCached(string name)
         {
             if (textureCache.TryGetValue(name, out var texture) && texture != null)
@@ -364,6 +301,68 @@ namespace BeatSaberMarkupLanguage
             }
 
             return texture;
+        }
+
+        private static IEnumerator GetWebDataCoroutine(string url, Action<byte[]> callback)
+        {
+            UnityWebRequest www = UnityWebRequest.Get(url);
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Logger.Log.Debug($"Error getting data from {url}, Message:{www.error}");
+            }
+            else
+            {
+                callback?.Invoke(www.downloadHandler.data);
+            }
+        }
+
+        public static class ImageResources
+        {
+            private static Material noGlowMat;
+            private static Sprite blankSprite;
+            private static Sprite whitePixel;
+
+            public static Material NoGlowMat
+            {
+                get
+                {
+                    if (noGlowMat == null)
+                    {
+                        noGlowMat = new Material(Resources.FindObjectsOfTypeAll<Material>().Where(m => m.name == "UINoGlow").First());
+                        noGlowMat.name = "UINoGlowCustom";
+                    }
+
+                    return noGlowMat;
+                }
+            }
+
+            public static Sprite BlankSprite
+            {
+                get
+                {
+                    if (!blankSprite)
+                    {
+                        blankSprite = Sprite.Create(Texture2D.blackTexture, default, Vector2.zero);
+                    }
+
+                    return blankSprite;
+                }
+            }
+
+            public static Sprite WhitePixel
+            {
+                get
+                {
+                    if (!whitePixel)
+                    {
+                        whitePixel = Resources.FindObjectsOfTypeAll<Image>().Where(i => i.sprite != null).First(i => i.sprite.name == "WhitePixel").sprite;
+                    }
+
+                    return whitePixel;
+                }
+            }
         }
     }
 }

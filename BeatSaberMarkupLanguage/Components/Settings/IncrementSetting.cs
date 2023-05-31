@@ -4,12 +4,12 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 {
     public class IncrementSetting : IncDecSetting
     {
-        private float currentValue;
-
         public bool isInt;
         public float minValue = float.MinValue;
         public float maxValue = float.MaxValue;
         public float increments = 1;
+
+        private float currentValue;
 
         public float Value
         {
@@ -58,24 +58,6 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             EitherPressed();
         }
 
-        private void EitherPressed()
-        {
-            UpdateState();
-            if (isInt)
-            {
-                onChange?.Invoke(Convert.ToInt32(Value));
-            }
-            else
-            {
-                onChange?.Invoke(Value);
-            }
-
-            if (updateOnChange)
-            {
-                ApplyValue();
-            }
-        }
-
         public override void ApplyValue()
         {
             if (associatedValue != null)
@@ -99,6 +81,36 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             }
         }
 
+        protected string TextForValue(float value)
+        {
+            if (isInt)
+            {
+                return formatter == null ? ConvertToInt(value).ToString() : (formatter.Invoke(ConvertToInt(value)) as string);
+            }
+            else
+            {
+                return formatter == null ? value.ToString("N2") : (formatter.Invoke(value) as string);
+            }
+        }
+
+        private void EitherPressed()
+        {
+            UpdateState();
+            if (isInt)
+            {
+                onChange?.Invoke(Convert.ToInt32(Value));
+            }
+            else
+            {
+                onChange?.Invoke(Value);
+            }
+
+            if (updateOnChange)
+            {
+                ApplyValue();
+            }
+        }
+
         private void ValidateRange()
         {
             if (currentValue < minValue)
@@ -118,18 +130,6 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             EnableDec = currentValue > minValue;
             EnableInc = currentValue < maxValue;
             Text = TextForValue(currentValue);
-        }
-
-        protected string TextForValue(float value)
-        {
-            if (isInt)
-            {
-                return formatter == null ? ConvertToInt(value).ToString() : (formatter.Invoke(ConvertToInt(value)) as string);
-            }
-            else
-            {
-                return formatter == null ? value.ToString("N2") : (formatter.Invoke(value) as string);
-            }
         }
 
         private int ConvertToInt(float value)

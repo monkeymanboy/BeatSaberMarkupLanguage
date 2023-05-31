@@ -6,11 +6,10 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 {
     public class DropDownListSetting : GenericInteractableSetting
     {
-        private int index;
-
         public List<object> values;
-
         public SimpleTextDropdown dropdown;
+
+        private int index;
 
         public object Value
         {
@@ -53,18 +52,6 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             dropdown.SetTexts(values.Select(x => formatter == null ? x.ToString() : (formatter.Invoke(x) as string)).ToList());
         }
 
-        private void OnSelectIndex(DropdownWithTableView tableView, int index)
-        {
-            this.index = index;
-            UpdateState();
-            onChange?.Invoke(Value);
-
-            if (updateOnChange)
-            {
-                ApplyValue();
-            }
-        }
-
         public override void ApplyValue()
         {
             associatedValue?.SetValue(Value);
@@ -75,6 +62,18 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             if (associatedValue != null)
             {
                 Value = associatedValue.GetValue();
+            }
+        }
+
+        private void OnSelectIndex(DropdownWithTableView tableView, int index)
+        {
+            this.index = index;
+            UpdateState();
+            onChange?.Invoke(Value);
+
+            if (updateOnChange)
+            {
+                ApplyValue();
             }
         }
 

@@ -18,6 +18,35 @@ namespace BeatSaberMarkupLanguage.Animations
         public static byte[] Signature = { 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A };
 
         /// <summary>
+        /// Gets the frame rate.
+        /// </summary>
+        /// <value>The frame rate in milliseconds.</value>
+        /// <remarks>Should not be less than 10 ms or animation will not occur.</remarks>
+        public int FrameRate
+        {
+            get
+            {
+                int frameRate = fcTLChunk.DelayNumerator;
+                double denominatorOffset = 1000 / fcTLChunk.DelayDenominator;
+
+                // If not millisecond based make it so for easier processing
+                if ((int)Math.Round(denominatorOffset) != 1)
+                {
+                    frameRate = (int)(fcTLChunk.DelayNumerator * denominatorOffset);
+                }
+
+                return frameRate;
+            }
+
+            internal set
+            {
+                // Standardize to milliseconds.
+                fcTLChunk.DelayNumerator = (ushort)value;
+                fcTLChunk.DelayDenominator = 1000;
+            }
+        }
+
+        /// <summary>
         /// Gets or sets the acTL chunk.
         /// </summary>
         internal IHDRChunk IHDRChunk { get; set; }
@@ -41,22 +70,6 @@ namespace BeatSaberMarkupLanguage.Animations
         /// Gets or sets the IDAT chunks.
         /// </summary>
         internal List<IDATChunk> IDATChunks { get; set; } = new List<IDATChunk>();
-
-        /// <summary>
-        /// Add an Chunk to end end of existing list.
-        /// </summary>
-        internal void AddOtherChunk(OtherChunk chunk)
-        {
-            OtherChunks.Add(chunk);
-        }
-
-        /// <summary>
-        /// Add an IDAT Chunk to end end of existing list.
-        /// </summary>
-        internal void AddIDATChunk(IDATChunk chunk)
-        {
-            IDATChunks.Add(chunk);
-        }
 
         /// <summary>
         /// Gets the frame as PNG FileStream.
@@ -105,32 +118,19 @@ namespace BeatSaberMarkupLanguage.Animations
         }
 
         /// <summary>
-        /// Gets the frame rate.
+        /// Add an Chunk to end end of existing list.
         /// </summary>
-        /// <value>The frame rate in milliseconds.</value>
-        /// <remarks>Should not be less than 10 ms or animation will not occur.</remarks>
-        public int FrameRate
+        internal void AddOtherChunk(OtherChunk chunk)
         {
-            get
-            {
-                int frameRate = fcTLChunk.DelayNumerator;
-                double denominatorOffset = 1000 / fcTLChunk.DelayDenominator;
+            OtherChunks.Add(chunk);
+        }
 
-                // If not millisecond based make it so for easier processing
-                if ((int)Math.Round(denominatorOffset) != 1)
-                {
-                    frameRate = (int)(fcTLChunk.DelayNumerator * denominatorOffset);
-                }
-
-                return frameRate;
-            }
-
-            internal set
-            {
-                // Standardize to milliseconds.
-                fcTLChunk.DelayNumerator = (ushort)value;
-                fcTLChunk.DelayDenominator = 1000;
-            }
+        /// <summary>
+        /// Add an IDAT Chunk to end end of existing list.
+        /// </summary>
+        internal void AddIDATChunk(IDATChunk chunk)
+        {
+            IDATChunks.Add(chunk);
         }
     }
 }

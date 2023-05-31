@@ -9,25 +9,24 @@ namespace BeatSaberMarkupLanguage.Components
 {
     public class CustomListTableData : MonoBehaviour, TableView.IDataSource
     {
-        public enum ListStyle
-        {
-            List,
-            Box,
-            Simple,
-        }
-
-        private ListStyle listStyle = ListStyle.List;
-
-        private LevelListTableCell songListTableCellInstance;
-        private LevelPackCell levelPackTableCellInstance;
-        private SimpleTextTableCell simpleTextTableCellInstance;
-
         public List<CustomCellInfo> data = new List<CustomCellInfo>();
         public float cellSize = 8.5f;
         public string reuseIdentifier = "BSMLListTableCell";
         public TableView tableView;
 
         public bool expandCell = false;
+
+        private LevelListTableCell songListTableCellInstance;
+        private LevelPackCell levelPackTableCellInstance;
+        private SimpleTextTableCell simpleTextTableCellInstance;
+        private ListStyle listStyle = ListStyle.List;
+
+        public enum ListStyle
+        {
+            List,
+            Box,
+            Simple,
+        }
 
         public ListStyle Style
         {

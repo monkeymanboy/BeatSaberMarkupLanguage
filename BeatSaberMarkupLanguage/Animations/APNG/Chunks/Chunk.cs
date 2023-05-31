@@ -137,14 +137,6 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         }
 
         /// <summary>
-        /// Parses the data.
-        /// </summary>
-        /// <param name="ms">Memory Stream of chunk data.</param>
-        protected virtual void ParseData(MemoryStream ms)
-        {
-        }
-
-        /// <summary>
         /// Determines whether the specified <see cref="object"/> is equal to the current <see cref="Chunk"/>.
         /// </summary>
         /// <param name="obj">The <see cref="object"/> to compare with the current <see cref="Chunk"/>.</param>
@@ -179,6 +171,14 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         {
             // TODO: Build a better hash code. Perhaps for equality where chunktype bytes XOR'd with crc.
             return base.GetHashCode();
+        }
+
+        /// <summary>
+        /// Parses the data.
+        /// </summary>
+        /// <param name="ms">Memory Stream of chunk data.</param>
+        protected virtual void ParseData(MemoryStream ms)
+        {
         }
     }
 }

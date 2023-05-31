@@ -30,23 +30,6 @@ namespace BeatSaberMarkupLanguage.Components
             }
         }
 
-        private void NotifyHost_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            // OnDestroy is not called for disabled objects so this will make sure it is called if it gets called while destroyed
-            if (this == null)
-            {
-                OnDestroy();
-                return;
-            }
-
-            PropertyInfo prop = sender.GetType().GetProperty(e.PropertyName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-
-            if (ActionDict.TryGetValue(e.PropertyName, out Action<object> action))
-            {
-                action?.Invoke(prop.GetValue(sender));
-            }
-        }
-
         private Dictionary<string, Action<object>> ActionDict { get; set; } = new Dictionary<string, Action<object>>();
 
         public bool AddAction(string propertyName, Action<object> action)
@@ -63,6 +46,23 @@ namespace BeatSaberMarkupLanguage.Components
             }
 
             return false;
+        }
+
+        private void NotifyHost_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            // OnDestroy is not called for disabled objects so this will make sure it is called if it gets called while destroyed
+            if (this == null)
+            {
+                OnDestroy();
+                return;
+            }
+
+            PropertyInfo prop = sender.GetType().GetProperty(e.PropertyName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+
+            if (ActionDict.TryGetValue(e.PropertyName, out Action<object> action))
+            {
+                action?.Invoke(prop.GetValue(sender));
+            }
         }
 
         private void OnDestroy()

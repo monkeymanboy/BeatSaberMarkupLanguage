@@ -8,6 +8,10 @@ namespace BeatSaberMarkupLanguage.Components
 {
     public class Backgroundable : MonoBehaviour
     {
+        public Image background;
+
+        private static readonly Dictionary<string, ImageView> BackgroundCache = new Dictionary<string, ImageView>();
+
         private static Dictionary<string, string> Backgrounds => new Dictionary<string, string>()
         {
             { "round-rect-panel", "RoundRect10" },
@@ -31,10 +35,6 @@ namespace BeatSaberMarkupLanguage.Components
             { "panel-fade-gradient", "LevelListTableCell" },
             { "panel-top-gradient", "ActionButton" },
         };
-
-        public Image background;
-
-        private static readonly Dictionary<string, ImageView> BackgroundCache = new Dictionary<string, ImageView>();
 
         public void ApplyBackground(string name)
         {

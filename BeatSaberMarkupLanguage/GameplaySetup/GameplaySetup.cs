@@ -12,11 +12,12 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
 {
     public class GameplaySetup : NotifiableSingleton<GameplaySetup>, TableView.IDataSource
     {
-        public event Action TabsCreatedEvent;
+        public const string ReuseIdentifier = "GameplaySetupCell";
 
         private GameplaySetupViewController gameplaySetupViewController;
         private LayoutGroup layoutGroup;
         private bool listParsed;
+        private bool loaded;
 
         [UIComponent("new-tab-selector")]
         private TabSelector tabSelector;
@@ -39,7 +40,7 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
         [UIValue("mod-menus")]
         private List<object> menus = new List<object>();
 
-        private bool loaded;
+        public event Action TabsCreatedEvent;
 
         [UIValue("is-loading")]
         public bool IsLoading => !Loaded;
@@ -55,6 +56,51 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
                 NotifyPropertyChanged(nameof(IsLoading));
             }
         }
+
+        public void AddTab(string name, string resource, object host)
+        {
+            AddTab(Assembly.GetCallingAssembly(), name, resource, host, MenuType.All);
+        }
+
+        public void AddTab(string name, string resource, object host, MenuType menuType)
+        {
+            AddTab(Assembly.GetCallingAssembly(), name, resource, host, menuType);
+        }
+
+        /// <summary>
+        /// Allows tab to dynamically disappear and reappear.
+        /// </summary>
+        /// <param name="name">The name of the tab.</param>
+        /// <param name="isVisible">Whether or not the tab should be visible.</param>
+        public void SetTabVisibility(string name, bool isVisible)
+        {
+            if (!gameplaySetupViewController.isActiveAndEnabled)
+            {
+                return;
+            }
+
+            GameplaySetupMenu menu = menus.OfType<GameplaySetupMenu>().Where(x => x.name == name).FirstOrDefault();
+            menu?.SetVisible(isVisible);
+        }
+
+        /// <summary>
+        /// Warning, for now it will not be removed until fresh menu scene reload.
+        /// </summary>
+        /// <param name="name">The name of the tab.</param>
+        public void RemoveTab(string name)
+        {
+            IEnumerable<object> menu = menus.Where(x => (x as GameplaySetupMenu).name == name);
+            if (menu.Count() > 0)
+            {
+                menus.Remove(menu.FirstOrDefault());
+            }
+        }
+
+        public float CellSize() => 8f;
+
+        public int NumberOfCells() => menus.Count;
+
+        public TableCell CellForIdx(TableView tableView, int idx) => GetCell().PopulateCell((GameplaySetupMenu)menus[idx]);
 
         internal void Setup()
         {
@@ -83,6 +129,37 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
             gameplaySetupViewController.didActivateEvent += GameplaySetupDidActivate;
             gameplaySetupViewController.didDeactivateEvent += GameplaySetupDidDeactivate;
             listModal.blockerClickedEvent += ClickedOffModal;
+        }
+
+        private void AddTab(Assembly assembly, string name, string resource, object host, MenuType menuType)
+        {
+            if (menus.Any(x => (x as GameplaySetupMenu).name == name))
+            {
+                return;
+            }
+
+            menus.Add(new GameplaySetupMenu(name, resource, host, assembly, menuType));
+        }
+
+        private GameplaySetupCell GetCell()
+        {
+            TableCell tableCell = modsList.tableView.DequeueReusableCellForIdentifier(ReuseIdentifier);
+
+            if (tableCell == null)
+            {
+                tableCell = new GameObject(nameof(GameplaySetupCell)).AddComponent<GameplaySetupCell>();
+                tableCell.interactable = true;
+
+                tableCell.reuseIdentifier = ReuseIdentifier;
+                BSMLParser.instance.Parse(
+                Utilities.GetResourceContent(
+                    Assembly.GetExecutingAssembly(),
+                    "BeatSaberMarkupLanguage.Views.gameplay-setup-cell.bsml"),
+                tableCell.gameObject,
+                tableCell);
+            }
+
+            return (GameplaySetupCell)tableCell;
         }
 
         private void GameplaySetupDidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
@@ -133,83 +210,5 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
                 Loaded = true;
             });
         }
-
-        public void AddTab(string name, string resource, object host)
-        {
-            AddTab(Assembly.GetCallingAssembly(), name, resource, host, MenuType.All);
-        }
-
-        public void AddTab(string name, string resource, object host, MenuType menuType)
-        {
-            AddTab(Assembly.GetCallingAssembly(), name, resource, host, menuType);
-        }
-
-        private void AddTab(Assembly assembly, string name, string resource, object host, MenuType menuType)
-        {
-            if (menus.Any(x => (x as GameplaySetupMenu).name == name))
-            {
-                return;
-            }
-
-            menus.Add(new GameplaySetupMenu(name, resource, host, assembly, menuType));
-        }
-
-        /// <summary>
-        /// Allows tab to dynamically disappear and reappear.
-        /// </summary>
-        /// <param name="name">The name of the tab.</param>
-        /// <param name="isVisible">Whether or not the tab should be visible.</param>
-        public void SetTabVisibility(string name, bool isVisible)
-        {
-            if (!gameplaySetupViewController.isActiveAndEnabled)
-            {
-                return;
-            }
-
-            GameplaySetupMenu menu = menus.OfType<GameplaySetupMenu>().Where(x => x.name == name).FirstOrDefault();
-            menu?.SetVisible(isVisible);
-        }
-
-        /// <summary>
-        /// Warning, for now it will not be removed until fresh menu scene reload.
-        /// </summary>
-        /// <param name="name">The name of the tab.</param>
-        public void RemoveTab(string name)
-        {
-            IEnumerable<object> menu = menus.Where(x => (x as GameplaySetupMenu).name == name);
-            if (menu.Count() > 0)
-            {
-                menus.Remove(menu.FirstOrDefault());
-            }
-        }
-
-        public const string ReuseIdentifier = "GameplaySetupCell";
-
-        private GameplaySetupCell GetCell()
-        {
-            TableCell tableCell = modsList.tableView.DequeueReusableCellForIdentifier(ReuseIdentifier);
-
-            if (tableCell == null)
-            {
-                tableCell = new GameObject(nameof(GameplaySetupCell)).AddComponent<GameplaySetupCell>();
-                tableCell.interactable = true;
-
-                tableCell.reuseIdentifier = ReuseIdentifier;
-                BSMLParser.instance.Parse(
-                Utilities.GetResourceContent(
-                    Assembly.GetExecutingAssembly(),
-                    "BeatSaberMarkupLanguage.Views.gameplay-setup-cell.bsml"),
-                tableCell.gameObject,
-                tableCell);
-            }
-
-            return (GameplaySetupCell)tableCell;
-        }
-
-        public float CellSize() => 8f;
-
-        public int NumberOfCells() => menus.Count;
-
-        public TableCell CellForIdx(TableView tableView, int idx) => GetCell().PopulateCell((GameplaySetupMenu)menus[idx]);
     }
 }

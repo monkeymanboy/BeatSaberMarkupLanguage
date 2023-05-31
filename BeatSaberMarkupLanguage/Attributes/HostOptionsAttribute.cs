@@ -2,23 +2,6 @@
 
 namespace BeatSaberMarkupLanguage.Attributes
 {
-    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
-    public sealed class HostOptionsAttribute : Attribute
-    {
-        public FieldAccessOption FieldAccessOption { get; }
-
-        public PropertyAccessOption PropertyAccessOption { get; }
-
-        public MethodAccessOption MethodAccessOption { get; }
-
-        public HostOptionsAttribute(FieldAccessOption fieldAccessOption = FieldAccessOption.Auto, PropertyAccessOption propertyAccessOption = PropertyAccessOption.Auto, MethodAccessOption methodAccessOption = MethodAccessOption.Auto)
-        {
-            FieldAccessOption = fieldAccessOption;
-            PropertyAccessOption = propertyAccessOption;
-            MethodAccessOption = methodAccessOption;
-        }
-    }
-
     public enum FieldAccessOption
     {
         /// <summary>
@@ -74,5 +57,22 @@ namespace BeatSaberMarkupLanguage.Attributes
         /// Methods marked with <see cref="UIAction"/> can be accessed by both the <see cref="UIAction.id"/> and their method name.
         /// </summary>
         AllowBoth = 2,
+    }
+
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
+    public sealed class HostOptionsAttribute : Attribute
+    {
+        public HostOptionsAttribute(FieldAccessOption fieldAccessOption = FieldAccessOption.Auto, PropertyAccessOption propertyAccessOption = PropertyAccessOption.Auto, MethodAccessOption methodAccessOption = MethodAccessOption.Auto)
+        {
+            FieldAccessOption = fieldAccessOption;
+            PropertyAccessOption = propertyAccessOption;
+            MethodAccessOption = methodAccessOption;
+        }
+
+        public FieldAccessOption FieldAccessOption { get; }
+
+        public PropertyAccessOption PropertyAccessOption { get; }
+
+        public MethodAccessOption MethodAccessOption { get; }
     }
 }

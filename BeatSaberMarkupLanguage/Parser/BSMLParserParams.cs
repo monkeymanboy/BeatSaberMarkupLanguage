@@ -66,6 +66,14 @@ namespace BeatSaberMarkupLanguage.Parser
             }
         }
 
+        public void PassTaggedObjects(BSMLParserParams parserParams)
+        {
+            foreach (KeyValuePair<string, List<GameObject>> pair in objectsWithTag)
+            {
+                parserParams.AddObjectsToTag(pair.Key, pair.Value);
+            }
+        }
+
         private void AddObjectsToTag(string tag, List<GameObject> gameObjects)
         {
             if (objectsWithTag.TryGetValue(tag, out List<GameObject> list))
@@ -75,14 +83,6 @@ namespace BeatSaberMarkupLanguage.Parser
             else
             {
                 objectsWithTag.Add(tag, gameObjects);
-            }
-        }
-
-        public void PassTaggedObjects(BSMLParserParams parserParams)
-        {
-            foreach (KeyValuePair<string, List<GameObject>> pair in objectsWithTag)
-            {
-                parserParams.AddObjectsToTag(pair.Key, pair.Value);
             }
         }
     }

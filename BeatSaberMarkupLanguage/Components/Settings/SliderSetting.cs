@@ -10,6 +10,8 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         public bool isInt = false;
         public float increments;
 
+        private float lastValue = float.NegativeInfinity;
+
         public float Value
         {
             get => slider.value;
@@ -26,37 +28,6 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             slider.numberOfSteps = (int)Math.Round((slider.maxValue - slider.minValue) / increments) + 1;
             ReceiveValue();
             slider.valueDidChangeEvent += OnChange;
-        }
-
-        private float lastValue = float.NegativeInfinity;
-
-        private void OnChange(TextSlider textSlider, float val)
-        {
-            if (isInt)
-            {
-                val = (int)Math.Round(val);
-            }
-
-            if (lastValue == val)
-            {
-                return;
-            }
-
-            lastValue = val;
-
-            if (isInt)
-            {
-                onChange?.Invoke((int)val);
-            }
-            else
-            {
-                onChange?.Invoke(val);
-            }
-
-            if (updateOnChange)
-            {
-                ApplyValue();
-            }
         }
 
         public override void ApplyValue()
@@ -91,6 +62,35 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             else
             {
                 return formatter == null ? value.ToString("N2") : (formatter.Invoke(value) as string);
+            }
+        }
+
+        private void OnChange(TextSlider textSlider, float val)
+        {
+            if (isInt)
+            {
+                val = (int)Math.Round(val);
+            }
+
+            if (lastValue == val)
+            {
+                return;
+            }
+
+            lastValue = val;
+
+            if (isInt)
+            {
+                onChange?.Invoke((int)val);
+            }
+            else
+            {
+                onChange?.Invoke(val);
+            }
+
+            if (updateOnChange)
+            {
+                ApplyValue();
             }
         }
     }

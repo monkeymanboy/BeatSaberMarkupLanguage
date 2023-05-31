@@ -22,10 +22,6 @@ namespace BeatSaberMarkupLanguage
 
     public class BSMLResourceException : BSMLException
     {
-        public Assembly Assembly { get; }
-
-        public string ResourcePath { get; }
-
         public BSMLResourceException()
         {
         }
@@ -57,5 +53,9 @@ namespace BeatSaberMarkupLanguage
             Assembly = assembly;
             ResourcePath = resourcePath;
         }
+
+        public Assembly Assembly { get; }
+
+        public string ResourcePath { get; }
     }
 }
