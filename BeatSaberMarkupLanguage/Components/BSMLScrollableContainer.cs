@@ -48,6 +48,12 @@ namespace BeatSaberMarkupLanguage.Components
             }
         }
 
+        private bool scrollToBottomOnUpdate = false;
+        public bool OnUpdateToBottom
+        {
+            get => scrollToBottomOnUpdate;
+            set => scrollToBottomOnUpdate = value;
+        }
 
         private bool maskOverflow = true;
         public bool MaskOverflow 
@@ -105,7 +111,7 @@ namespace BeatSaberMarkupLanguage.Components
         {
             RefreshContent();
             RefreshButtons();
-            ScrollTo(0f, false);
+            ScrollTo(OnUpdateToBottom ? float.MaxValue : 0f, false);
         }
 
         private bool runScrollAnim = false;
