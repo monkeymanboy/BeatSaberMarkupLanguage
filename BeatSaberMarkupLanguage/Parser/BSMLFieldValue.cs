@@ -23,6 +23,11 @@ namespace BeatSaberMarkupLanguage.Parser
 
         public override void SetValue(object value)
         {
+            if (fieldInfo.Attributes.HasFlag(FieldAttributes.InitOnly))
+            {
+                Logger.Log.Warn($"Trying to set value of field '{fieldInfo.Name}' on type '{fieldInfo.DeclaringType.FullName}' which is marked as read-only. This is unsupported behavior and may be removed in a future release.");
+            }
+
             fieldInfo.SetValue(host, value);
         }
     }
