@@ -7,13 +7,13 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
     [ComponentHandler(typeof(LocalizedTextMeshProUGUI))]
     public class LocalizedTextMeshProUGUIHandler : TypeHandler<LocalizedTextMeshProUGUI>
     {
-        public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
+        public override Dictionary<string, string[]> Props => new()
         {
             { "textKey", new[] { "text-key" } },
             { "maintainTextAlignment", new[] { "maintain-text-alignment" } },
         };
 
-        public override Dictionary<string, Action<LocalizedTextMeshProUGUI, string>> Setters => new Dictionary<string, Action<LocalizedTextMeshProUGUI, string>>()
+        public override Dictionary<string, Action<LocalizedTextMeshProUGUI, string>> Setters => new()
         {
             {
                 "textKey", new Action<LocalizedTextMeshProUGUI, string>((localizedText, value) =>

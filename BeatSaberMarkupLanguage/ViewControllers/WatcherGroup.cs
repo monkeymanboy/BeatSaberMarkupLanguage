@@ -11,10 +11,10 @@ namespace BeatSaberMarkupLanguage.ViewControllers
 {
     internal class WatcherGroup
     {
-        private static readonly Dictionary<string, WatcherGroup> WatcherDictionary = new Dictionary<string, WatcherGroup>();
+        private static readonly Dictionary<string, WatcherGroup> WatcherDictionary = new();
 
-        private readonly WaitForSeconds hotReloadDelay = new WaitForSeconds(.5f);
-        private readonly Dictionary<int, WeakReference<IHotReloadableController>> boundControllers = new Dictionary<int, WeakReference<IHotReloadableController>>();
+        private readonly WaitForSeconds hotReloadDelay = new(0.5f);
+        private readonly Dictionary<int, WeakReference<IHotReloadableController>> boundControllers = new();
 
         internal WatcherGroup(string directory)
         {

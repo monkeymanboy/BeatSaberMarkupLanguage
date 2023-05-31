@@ -22,7 +22,7 @@ namespace BeatSaberMarkupLanguage.OpenType
         }
 
         public OffsetTable ReadOffsetTable()
-            => new OffsetTable()
+            => new()
             {
                 SFNTVersion = ReadUInt32(),
                 NumTables = ReadUInt16(),
@@ -62,7 +62,7 @@ namespace BeatSaberMarkupLanguage.OpenType
         }
 
         protected TableRecord ReadTableRecord()
-            => new TableRecord()
+            => new()
             {
                 TableTag = ReadTag(),
                 Checksum = ReadUInt32(),

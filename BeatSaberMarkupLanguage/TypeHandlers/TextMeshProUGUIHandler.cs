@@ -8,7 +8,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
     [ComponentHandler(typeof(TextMeshProUGUI))]
     public class TextMeshProUGUIHandler : TypeHandler<TextMeshProUGUI>
     {
-        public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
+        public override Dictionary<string, string[]> Props => new()
         {
             { "text", new[] { "text" } },
             { "fontSize", new[] { "font-size" } },
@@ -28,7 +28,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "allUppercase", new[] { "all-uppercase" } },
         };
 
-        public override Dictionary<string, Action<TextMeshProUGUI, string>> Setters => new Dictionary<string, Action<TextMeshProUGUI, string>>()
+        public override Dictionary<string, Action<TextMeshProUGUI, string>> Setters => new()
         {
             { "text", new Action<TextMeshProUGUI, string>((textMesh, value) => textMesh.text = value) },
             { "fontSize", new Action<TextMeshProUGUI, string>((textMesh, value) => textMesh.fontSize = Parse.Float(value)) },

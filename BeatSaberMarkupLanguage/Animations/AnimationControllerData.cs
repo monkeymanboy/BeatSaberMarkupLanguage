@@ -15,7 +15,7 @@ namespace BeatSaberMarkupLanguage.Animations
         public float[] delays;
         public Sprite[] sprites;
         public Material animMaterial;
-        public List<Image> activeImages = new List<Image>();
+        public List<Image> activeImages = new();
 
         private readonly bool isDelayConsistent = true;
 

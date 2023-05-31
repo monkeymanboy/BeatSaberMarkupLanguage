@@ -45,7 +45,7 @@ namespace BeatSaberMarkupLanguage.OpenType
                 CollectionHeader.TTCTagBEInt => new OpenTypeCollectionReader(stream, enc, leaveOpen),
                 OffsetTable.OpenTypeCFFVersion => new OpenTypeFontReader(stream, enc, leaveOpen),
                 OffsetTable.TrueTypeOnlyVersion => new OpenTypeFontReader(stream, enc, leaveOpen),
-                _ => null
+                _ => null,
             };
         }
 
@@ -76,7 +76,7 @@ namespace BeatSaberMarkupLanguage.OpenType
         public long ReadLongDateTime()
             => BitConverter.ToInt64(FromBigEndian(ReadBytes(8)), 0);
 
-        public OpenTypeTag ReadTag() => new OpenTypeTag(ReadBytes(4));
+        public OpenTypeTag ReadTag() => new(ReadBytes(4));
 
         public ushort ReadOffset16() => ReadUInt16();
 

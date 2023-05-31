@@ -16,7 +16,7 @@ namespace BeatSaberMarkupLanguage
     public static class FontManager
     {
         // path → loaded font object
-        private static readonly Dictionary<string, Font> LoadedFontsCache = new Dictionary<string, Font>();
+        private static readonly Dictionary<string, Font> LoadedFontsCache = new();
 
         // family → list of fonts in family
         private static Dictionary<string, List<FontInfo>> fontInfoLookup;
@@ -63,8 +63,8 @@ namespace BeatSaberMarkupLanguage
                 t =>
                 {
                     Logger.Log.Debug("Font loading complete");
-                    Interlocked.CompareExchange(ref fontInfoLookupFullName, t.Result.fulls, null);
-                    Interlocked.CompareExchange(ref fontInfoLookup, t.Result.families, null);
+                    Interlocked.CompareExchange(ref fontInfoLookupFullName, t.Result.Fulls, null);
+                    Interlocked.CompareExchange(ref fontInfoLookup, t.Result.Families, null);
                     return Task.CompletedTask;
                 },
                 TaskContinuationOptions.ExecuteSynchronously | TaskContinuationOptions.OnlyOnRanToCompletion).Unwrap();
@@ -233,7 +233,7 @@ namespace BeatSaberMarkupLanguage
             }
         }
 
-        private static async Task<(Dictionary<string, List<FontInfo>> families, Dictionary<string, FontInfo> fulls)> LoadSystemFonts()
+        private static async Task<(Dictionary<string, List<FontInfo>> Families, Dictionary<string, FontInfo> Fulls)> LoadSystemFonts()
         {
             // This should be on the main thread.
             var paths = await UnityMainThreadTaskScheduler.Factory.StartNew(() => Font.GetPathsToOSFonts());

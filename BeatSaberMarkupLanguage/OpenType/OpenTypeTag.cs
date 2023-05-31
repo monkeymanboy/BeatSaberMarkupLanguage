@@ -20,13 +20,13 @@ namespace BeatSaberMarkupLanguage.OpenType
             => !(left == right);
 
         public static OpenTypeTag FromChars(char[] chrs)
-            => new OpenTypeTag(chrs.Select(c => (byte)c).ToArray());
+            => new(chrs.Select(c => (byte)c).ToArray());
 
         public static OpenTypeTag FromString(string str)
             => FromChars(str.ToCharArray(0, 4));
 
         public bool Validate()
-            => Value.Length == 4 && Value.All(b => b >= 0x20 && b <= 0x7E);
+            => Value.Length == 4 && Value.All(b => b is >= 0x20 and <= 0x7E);
 
         public override bool Equals(object obj)
             => obj is OpenTypeTag tag && IntValue == tag.IntValue;

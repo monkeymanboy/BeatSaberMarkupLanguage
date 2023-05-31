@@ -11,7 +11,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
     [ComponentHandler(typeof(TextSegmentedControl))]
     public class TextSegmentedControlHandler : TypeHandler
     {
-        public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
+        public override Dictionary<string, string[]> Props => new()
         {
             { "selectCell", new[] { "select-cell" } },
             { "data", new[] { "contents", "data" } },

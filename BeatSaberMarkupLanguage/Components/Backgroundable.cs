@@ -10,9 +10,9 @@ namespace BeatSaberMarkupLanguage.Components
     {
         public Image background;
 
-        private static readonly Dictionary<string, ImageView> BackgroundCache = new Dictionary<string, ImageView>();
+        private static readonly Dictionary<string, ImageView> BackgroundCache = new();
 
-        private static Dictionary<string, string> Backgrounds => new Dictionary<string, string>()
+        private static Dictionary<string, string> Backgrounds => new()
         {
             { "round-rect-panel", "RoundRect10" },
             { "panel-top", "RoundRect10" },
@@ -20,7 +20,7 @@ namespace BeatSaberMarkupLanguage.Components
             { "panel-top-gradient", "RoundRect10" },
         };
 
-        private static Dictionary<string, string> ObjectNames => new Dictionary<string, string>()
+        private static Dictionary<string, string> ObjectNames => new()
         {
             { "round-rect-panel", "KeyboardWrapper" },
             { "panel-top", "BG" },
@@ -28,7 +28,7 @@ namespace BeatSaberMarkupLanguage.Components
             { "panel-top-gradient", "BG" },
         };
 
-        private static Dictionary<string, string> ObjectParentNames => new Dictionary<string, string>()
+        private static Dictionary<string, string> ObjectParentNames => new()
         {
             { "round-rect-panel", "Wrapper" },
             { "panel-top", "PracticeButton" },
@@ -90,8 +90,7 @@ namespace BeatSaberMarkupLanguage.Components
                     continue;
                 }
 
-                string goName = image.gameObject?.name;
-                if (goName != objectName)
+                if (image.gameObject == null || image.gameObject.name != objectName)
                 {
                     continue;
                 }

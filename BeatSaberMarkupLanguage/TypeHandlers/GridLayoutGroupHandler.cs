@@ -8,7 +8,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
     [ComponentHandler(typeof(GridLayoutGroup))]
     public class GridLayoutGroupHandler : TypeHandler<GridLayoutGroup>
     {
-        public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
+        public override Dictionary<string, string[]> Props => new()
         {
             { "cellSizeX", new[] { "cell-size-x" } },
             { "cellSizeY", new[] { "cell-size-y" } },
@@ -16,7 +16,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "spacingY", new[] { "spacing-y" } },
         };
 
-        public override Dictionary<string, Action<GridLayoutGroup, string>> Setters => new Dictionary<string, Action<GridLayoutGroup, string>>()
+        public override Dictionary<string, Action<GridLayoutGroup, string>> Setters => new()
         {
             { "cellSizeX", new Action<GridLayoutGroup, string>((component, value) => component.cellSize = new Vector2(Parse.Float(value), component.cellSize.y)) },
             { "cellSizeY", new Action<GridLayoutGroup, string>((component, value) => component.cellSize = new Vector2(component.cellSize.x, Parse.Float(value))) },

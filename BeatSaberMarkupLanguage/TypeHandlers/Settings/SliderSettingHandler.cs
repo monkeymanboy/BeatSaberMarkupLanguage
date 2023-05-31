@@ -8,7 +8,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
     [ComponentHandler(typeof(SliderSetting))]
     public class SliderSettingHandler : TypeHandler
     {
-        public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
+        public override Dictionary<string, string[]> Props => new()
         {
             { "increment", new[] { "increment" } },
             { "minValue", new[] { "min" } },

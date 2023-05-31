@@ -6,7 +6,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
     public class LocalizationTestViewController : BSMLResourceViewController
     {
         [UIValue("contents")]
-        public List<object> contents = new List<object>(new[] { "one", "two", "three" });
+        public List<object> contents = new(new[] { "one", "two", "three" });
 
         public override string ResourceName => "BeatSaberMarkupLanguage.Views.localization-test.bsml";
     }

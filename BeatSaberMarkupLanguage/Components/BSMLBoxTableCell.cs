@@ -9,13 +9,13 @@ namespace BeatSaberMarkupLanguage.Components
 
         private ImageView selectionImage;
 
-        private Color selectedColor0 = new Color(0f, 64f / 85f, 1f, 1f);
+        private Color selectedColor0 = new(0f, 64f / 85f, 1f, 1f);
 
-        private Color selectedColor1 = new Color(0f, 64f / 85f, 1f, 0f);
+        private Color selectedColor1 = new(0f, 64f / 85f, 1f, 0f);
 
-        private Color highlightedColor0 = new Color(0f, 64f / 85f, 1f, 1f);
+        private Color highlightedColor0 = new(0f, 64f / 85f, 1f, 1f);
 
-        private Color highlightedColor1 = new Color(0f, 64f / 85f, 1f, 0f);
+        private Color highlightedColor1 = new(0f, 64f / 85f, 1f, 0f);
 
         public void SetData(Sprite coverSprite)
         {

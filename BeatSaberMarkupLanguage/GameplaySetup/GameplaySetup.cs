@@ -35,10 +35,10 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
         private CustomListTableData modsList;
 
         [UIValue("vanilla-items")]
-        private List<Transform> vanillaItems = new List<Transform>();
+        private List<Transform> vanillaItems = new();
 
         [UIValue("mod-menus")]
-        private List<object> menus = new List<object>();
+        private List<object> menus = new();
 
         public event Action TabsCreatedEvent;
 
@@ -168,9 +168,9 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
 
             var menuType = BeatSaberUI.MainFlowCoordinator.YoungestChildFlowCoordinatorOrSelf() switch
             {
-                CampaignFlowCoordinator _ => MenuType.Campaign,
-                SinglePlayerLevelSelectionFlowCoordinator _ => MenuType.Solo,
-                GameServerLobbyFlowCoordinator _ => MenuType.Online,
+                CampaignFlowCoordinator => MenuType.Campaign,
+                SinglePlayerLevelSelectionFlowCoordinator => MenuType.Solo,
+                GameServerLobbyFlowCoordinator => MenuType.Online,
                 _ => MenuType.Custom,
             };
 

@@ -9,7 +9,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
     [ComponentHandler(typeof(ListSliderSetting))]
     public class ListSliderSettingHandler : TypeHandler
     {
-        public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
+        public override Dictionary<string, string[]> Props => new()
         {
             { "options", new[] { "options", "choices" } },
             { "showButtons", new[] { "show-buttons" } },

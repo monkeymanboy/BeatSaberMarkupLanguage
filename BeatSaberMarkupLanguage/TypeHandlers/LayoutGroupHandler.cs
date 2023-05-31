@@ -10,7 +10,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
     [ComponentHandler(typeof(LayoutGroup))]
     public class LayoutGroupHandler : TypeHandler
     {
-        public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
+        public override Dictionary<string, string[]> Props => new()
         {
             { "padTop", new[] { "pad-top" } },
             { "padBottom", new[] { "pad-bottom" } },

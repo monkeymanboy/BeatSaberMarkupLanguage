@@ -15,7 +15,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
     [ComponentHandler(typeof(CustomListTableData))]
     public class CustomListTableDataHandler : TypeHandler
     {
-        public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
+        public override Dictionary<string, string[]> Props => new()
         {
             { "selectCell", new[] { "select-cell" } },
             { "visibleCells", new[] { "visible-cells" } },
@@ -113,7 +113,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 }
 
                 var tableDataValue = contents.GetValue();
-                if (!(tableDataValue is List<CustomCellInfo> tableDataList))
+                if (tableDataValue is not List<CustomCellInfo> tableDataList)
                 {
                     throw new Exception($"Value '{value}' is not a List<CustomCellInfo>, which is required for custom-list");
                 }

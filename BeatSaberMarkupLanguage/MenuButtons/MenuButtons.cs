@@ -8,10 +8,10 @@ namespace BeatSaberMarkupLanguage.MenuButtons
     public class MenuButtons : PersistentSingleton<MenuButtons>
     {
         [UIValue("pin-buttons")]
-        internal List<object> pinButtons = new List<object>();
+        internal List<object> pinButtons = new();
 
         [UIValue("buttons")]
-        private List<object> buttons = new List<object>();
+        private List<object> buttons = new();
 
         /*
         [UIParams]

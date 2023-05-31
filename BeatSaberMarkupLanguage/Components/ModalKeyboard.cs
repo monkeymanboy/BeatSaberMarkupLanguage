@@ -82,13 +82,13 @@ namespace BeatSaberMarkupLanguage.Components
 [SHIFT] (;:) (qQ) (jJ) (kK) (xX) (bB) (mM) (wW) (vV) (zZ) [CLEAR]/28
 /23 (!!) (@@) [SPACE]/40 (##) (__)";
 
-        public List<KEY> keys = new List<KEY>();
+        public List<KEY> keys = new();
 
         public TextMeshProUGUI KeyboardText;
         public TextMeshProUGUI KeyboardCursor;
         public Button BaseButton;
 
-        private readonly KEY dummy = new KEY(); // This allows for some lazy programming, since unfound key searches will point to this instead of null. It still logs an error though
+        private readonly KEY dummy = new(); // This allows for some lazy programming, since unfound key searches will point to this instead of null. It still logs an error though
 
         private readonly RectTransform container;
         private readonly bool enableInputField = true;
@@ -445,7 +445,7 @@ namespace BeatSaberMarkupLanguage.Components
             while (position < data.Length)
             {
                 char c = data[position];
-                if (!((c >= '0' && c <= '9') || c == '+' || c == '-' || c == '.'))
+                if (c is not (>= '0' and <= '9' or '+' or '-' or '.'))
                 {
                     break;
                 }

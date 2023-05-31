@@ -8,7 +8,7 @@ namespace BeatSaberMarkupLanguage.Components
 {
     public class CustomCellListTableData : MonoBehaviour, TableView.IDataSource
     {
-        public List<object> data = new List<object>();
+        public List<object> data = new();
         public string cellTemplate;
         public float cellSize = 8.5f;
         public TableView tableView;

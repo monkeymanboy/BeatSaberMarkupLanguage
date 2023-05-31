@@ -9,7 +9,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
     [ComponentHandler(typeof(RectTransform))]
     public class RectTransformHandler : TypeHandler<RectTransform>
     {
-        public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
+        public override Dictionary<string, string[]> Props => new()
         {
             { "anchorMinX", new[] { "anchor-min-x" } },
             { "anchorMinY", new[] { "anchor-min-y" } },
@@ -26,7 +26,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "active", new[] { "active" } },
         };
 
-        public override Dictionary<string, Action<RectTransform, string>> Setters => new Dictionary<string, Action<RectTransform, string>>()
+        public override Dictionary<string, Action<RectTransform, string>> Setters => new()
         {
             { "anchorMinX", new Action<RectTransform, string>((component, value) => component.anchorMin = new Vector2(Parse.Float(value), component.anchorMin.y)) },
             { "anchorMinY", new Action<RectTransform, string>((component, value) => component.anchorMin = new Vector2(component.anchorMin.x, Parse.Float(value))) },

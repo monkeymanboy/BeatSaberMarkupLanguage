@@ -57,7 +57,7 @@ namespace BeatSaberMarkupLanguage.OpenType
                 var nameBytes = reader.ReadBytes(name.Length);
 
                 // TODO: maybe know how to identify more platforms and encodings?
-                if (name.PlatformID == NameRecord.Platform.Windows || name.PlatformID == NameRecord.Platform.Unicode)
+                if (name.PlatformID is NameRecord.Platform.Windows or NameRecord.Platform.Unicode)
                 {
                     name.Value = Encoding.BigEndianUnicode.GetString(nameBytes);
                 }

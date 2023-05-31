@@ -9,7 +9,7 @@ namespace BeatSaberMarkupLanguage.MenuButtons
     internal class MenuButtonsViewController : BSMLAutomaticViewController
     {
         [UIValue("buttons")]
-        public List<object> buttons = new List<object>();
+        public List<object> buttons = new();
 
         [UIObject("root-object")]
         private GameObject rootObject;

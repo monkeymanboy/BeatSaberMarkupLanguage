@@ -8,14 +8,14 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
     [ComponentHandler(typeof(FormattableText))]
     public class FormattableTextHandler : TypeHandler<FormattableText>
     {
-        public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
+        public override Dictionary<string, string[]> Props => new()
         {
             { "data", new[] { "data" } },
             { "dataFormat", new[] { "data-format" } },
             { "dataFormatter", new[] { "data-formatter" } },
         };
 
-        public override Dictionary<string, Action<FormattableText, string>> Setters { get; } = new Dictionary<string, Action<FormattableText, string>>()
+        public override Dictionary<string, Action<FormattableText, string>> Setters { get; } = new()
         {
             { "dataFormat", new Action<FormattableText, string>((formattableText, value) => formattableText.TextFormat = value) },
         };

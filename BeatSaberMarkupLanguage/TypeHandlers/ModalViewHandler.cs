@@ -10,7 +10,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
     [ComponentHandler(typeof(ModalView))]
     public class ModalViewHandler : TypeHandler
     {
-        public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
+        public override Dictionary<string, string[]> Props => new()
         {
             { "showEvent", new[] { "show-event" } },
             { "hideEvent", new[] { "hide-event" } },

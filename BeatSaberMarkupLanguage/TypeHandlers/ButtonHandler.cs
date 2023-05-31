@@ -9,13 +9,13 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
     [ComponentHandler(typeof(Button))]
     public class ButtonHandler : TypeHandler<Button>
     {
-        public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
+        public override Dictionary<string, string[]> Props => new()
         {
             { "onClick", new[] { "on-click" } },
             { "clickEvent", new[] { "click-event", "event-click" } },
         };
 
-        public override Dictionary<string, Action<Button, string>> Setters => new Dictionary<string, Action<Button, string>>();
+        public override Dictionary<string, Action<Button, string>> Setters => new();
 
         public static void SetInteractable(Button button, string flag)
         {

@@ -7,7 +7,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
     [ComponentHandler(typeof(HorizontalOrVerticalLayoutGroup))]
     public class HorizontalOrVerticalLayoutGroupHandler : TypeHandler<HorizontalOrVerticalLayoutGroup>
     {
-        public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
+        public override Dictionary<string, string[]> Props => new()
         {
             { "spacing", new[] { "spacing" } },
             { "childForceExpandWidth", new[] { "child-expand-width" } },
@@ -16,7 +16,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "childControlHeight", new[] { "child-control-height" } },
         };
 
-        public override Dictionary<string, Action<HorizontalOrVerticalLayoutGroup, string>> Setters => new Dictionary<string, Action<HorizontalOrVerticalLayoutGroup, string>>()
+        public override Dictionary<string, Action<HorizontalOrVerticalLayoutGroup, string>> Setters => new()
         {
             { "spacing", new Action<HorizontalOrVerticalLayoutGroup, string>((component, value) => component.spacing = Parse.Float(value)) },
             { "childForceExpandWidth", new Action<HorizontalOrVerticalLayoutGroup, string>((component, value) => component.childForceExpandWidth = Parse.Bool(value)) },

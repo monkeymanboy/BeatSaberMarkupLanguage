@@ -8,14 +8,14 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
     [ComponentHandler(typeof(Image))]
     internal class ImageHandler : TypeHandler<Image>
     {
-        public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
+        public override Dictionary<string, string[]> Props => new()
         {
             { "image", new[] { "source", "src" } },
             { "preserveAspect", new[] { "preserve-aspect" } },
             { "imageColor", new[] { "image-color", "img-color" } },
         };
 
-        public override Dictionary<string, Action<Image, string>> Setters => new Dictionary<string, Action<Image, string>>()
+        public override Dictionary<string, Action<Image, string>> Setters => new()
         {
             { "image", new Action<Image, string>((image, path) => image.SetImage(path)) },
             { "preserveAspect", new Action<Image, string>((image, preserveAspect) => image.preserveAspect = bool.Parse(preserveAspect)) },

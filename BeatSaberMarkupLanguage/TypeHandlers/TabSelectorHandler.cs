@@ -9,7 +9,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
     [ComponentHandler(typeof(TabSelector))]
     public class TabSelectorHandler : TypeHandler<TabSelector>
     {
-        public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
+        public override Dictionary<string, string[]> Props => new()
         {
             { "tabTag", new[] { "tab-tag" } },
             { "pageCount", new[] { "page-count" } },
@@ -17,7 +17,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "rightButtonTag", new[] { "right-button-tag" } },
         };
 
-        public override Dictionary<string, Action<TabSelector, string>> Setters => new Dictionary<string, Action<TabSelector, string>>()
+        public override Dictionary<string, Action<TabSelector, string>> Setters => new()
         {
             { "pageCount", new Action<TabSelector, string>((component, value) => component.PageCount = Parse.Int(value)) },
             { "leftButtonTag", new Action<TabSelector, string>((component, value) => component.leftButtonTag = value) },

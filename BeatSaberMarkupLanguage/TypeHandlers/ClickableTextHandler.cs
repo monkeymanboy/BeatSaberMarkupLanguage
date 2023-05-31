@@ -10,7 +10,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
     [ComponentHandler(typeof(ClickableText))]
     public class ClickableTextHandler : TypeHandler<ClickableText>
     {
-        public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
+        public override Dictionary<string, string[]> Props => new()
         {
             { "onClick", new[] { "on-click" } },
             { "clickEvent", new[] { "click-event", "event-click" } },
@@ -18,7 +18,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "defaultColor", new[] { "default-color" } },
         };
 
-        public override Dictionary<string, Action<ClickableText, string>> Setters => new Dictionary<string, Action<ClickableText, string>>()
+        public override Dictionary<string, Action<ClickableText, string>> Setters => new()
         {
             { "highlightColor", new Action<ClickableText, string>((text, color) => text.HighlightColor = GetColor(color)) },
             { "defaultColor", new Action<ClickableText, string>((text, color) => text.DefaultColor = GetColor(color)) },

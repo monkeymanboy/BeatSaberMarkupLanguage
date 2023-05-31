@@ -16,7 +16,7 @@ namespace BeatSaberMarkupLanguage.Settings
         protected NavigationController navigationController;
         protected ViewController activeController;
 
-        private readonly Stack<ViewController> submenuStack = new Stack<ViewController>();
+        private readonly Stack<ViewController> submenuStack = new();
         private bool isPresenting;
 
         [UIComponent("bottom-buttons")]

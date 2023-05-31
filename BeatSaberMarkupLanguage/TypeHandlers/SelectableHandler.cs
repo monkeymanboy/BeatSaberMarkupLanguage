@@ -7,12 +7,12 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
     [ComponentHandler(typeof(Selectable))]
     public class SelectableHandler : TypeHandler<Selectable>
     {
-        public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
+        public override Dictionary<string, string[]> Props => new()
         {
             { "interactable", new[] { "interactable" } },
         };
 
-        public override Dictionary<string, Action<Selectable, string>> Setters => new Dictionary<string, Action<Selectable, string>>()
+        public override Dictionary<string, Action<Selectable, string>> Setters => new()
         {
             { "interactable", new Action<Selectable, string>(SetInteractable) },
         };

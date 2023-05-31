@@ -7,12 +7,12 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
     [ComponentHandler(typeof(GenericInteractableSetting))]
     public class GenericInteractableSettingHandler : TypeHandler<GenericInteractableSetting>
     {
-        public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
+        public override Dictionary<string, string[]> Props => new()
         {
             { "interactable", new[] { "interactable" } },
         };
 
-        public override Dictionary<string, Action<GenericInteractableSetting, string>> Setters => new Dictionary<string, Action<GenericInteractableSetting, string>>()
+        public override Dictionary<string, Action<GenericInteractableSetting, string>> Setters => new()
         {
             { "interactable", new Action<GenericInteractableSetting, string>(SetInteractable) },
         };

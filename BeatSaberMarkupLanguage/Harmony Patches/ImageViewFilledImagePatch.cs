@@ -24,7 +24,7 @@ namespace BeatSaberMarkupLanguage.Harmony_Patches
         private static readonly MethodInfo CorrectQuadOverload = SymbolExtensions.GetMethodInfo(() => AddQuad(null, null, new Color32(0, 0, 0, 0), null, 0));
 
         // This code loads the "curvedUIRadius" field, and then calls the correct AddQuad method.
-        private static readonly List<CodeInstruction> ReplacementCodeInstructions = new List<CodeInstruction>()
+        private static readonly List<CodeInstruction> ReplacementCodeInstructions = new()
         {
             new CodeInstruction(OpCodes.Ldarg_3),
             new CodeInstruction(OpCodes.Call, CorrectQuadOverload),
@@ -32,7 +32,7 @@ namespace BeatSaberMarkupLanguage.Harmony_Patches
 
         public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
-            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
+            List<CodeInstruction> codes = new(instructions);
             for (int i = 0; i < codes.Count; i++)
             {
                 // Did we find an instance of the old, incorrect method?

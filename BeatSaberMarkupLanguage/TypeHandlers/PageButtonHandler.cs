@@ -17,12 +17,12 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             Right,
         }
 
-        public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
+        public override Dictionary<string, string[]> Props => new()
         {
             { "direction", new[] { "dir", "direction" } },
         };
 
-        public override Dictionary<string, Action<PageButton, string>> Setters => new Dictionary<string, Action<PageButton, string>>()
+        public override Dictionary<string, Action<PageButton, string>> Setters => new()
         {
             { "direction", new Action<PageButton, string>(SetButtonDirection) },
         };

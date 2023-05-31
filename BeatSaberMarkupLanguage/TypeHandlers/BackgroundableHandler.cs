@@ -8,13 +8,13 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
     [ComponentHandler(typeof(Backgroundable))]
     public class BackgroundableHandler : TypeHandler<Backgroundable>
     {
-        public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
+        public override Dictionary<string, string[]> Props => new()
         {
             { "background", new[] { "bg", "background" } },
             { "backgroundColor", new[] { "bg-color", "background-color" } },
         };
 
-        public override Dictionary<string, Action<Backgroundable, string>> Setters => new Dictionary<string, Action<Backgroundable, string>>()
+        public override Dictionary<string, Action<Backgroundable, string>> Setters => new()
         {
             { "background", new Action<Backgroundable, string>((component, value) => component.ApplyBackground(value)) },
             { "backgroundColor", new Action<Backgroundable, string>(TrySetBackgroundColor) },

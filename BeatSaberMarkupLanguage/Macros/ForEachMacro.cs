@@ -12,7 +12,7 @@ namespace BeatSaberMarkupLanguage.Macros
     {
         public override string[] Aliases => new[] { "for-each" };
 
-        public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
+        public override Dictionary<string, string[]> Props => new()
         {
             { "hosts", new[] { "hosts", "items" } },
             { "passTags", new[] { "pass-back-tags" } },

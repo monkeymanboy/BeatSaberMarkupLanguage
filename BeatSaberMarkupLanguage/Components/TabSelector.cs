@@ -15,7 +15,7 @@ namespace BeatSaberMarkupLanguage.Components
         public string tabTag;
         public string leftButtonTag;
         public string rightButtonTag;
-        private readonly List<Tab> tabs = new List<Tab>();
+        private readonly List<Tab> tabs = new();
 
         private int pageCount = -1;
         private int currentPage = 0;

@@ -9,7 +9,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
     [ComponentHandler(typeof(ModalKeyboard))]
     public class ModalKeyboardHandler : TypeHandler
     {
-        public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
+        public override Dictionary<string, string[]> Props => new()
         {
             { "value", new[] { "value" } },
             { "onEnter", new[] { "on-enter" } },

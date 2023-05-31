@@ -20,11 +20,11 @@ namespace BeatSaberMarkupLanguage
         internal static readonly string RetrieveValuePrefix = "~";
         internal static readonly string SubscribeEventActionPrefix = "#";
 
-        private readonly Dictionary<string, BSMLTag> tags = new Dictionary<string, BSMLTag>();
-        private readonly Dictionary<string, BSMLMacro> macros = new Dictionary<string, BSMLMacro>();
+        private readonly Dictionary<string, BSMLTag> tags = new();
+        private readonly Dictionary<string, BSMLMacro> macros = new();
 
-        private readonly XmlDocument document = new XmlDocument();
-        private readonly XmlReaderSettings readerSettings = new XmlReaderSettings();
+        private readonly XmlDocument document = new();
+        private readonly XmlReaderSettings readerSettings = new();
 
         private List<TypeHandler> typeHandlers;
 
@@ -116,8 +116,11 @@ namespace BeatSaberMarkupLanguage
 
         public BSMLParserParams Parse(XmlNode parentNode, GameObject parent, object host = null)
         {
-            BSMLParserParams parserParams = new BSMLParserParams();
-            parserParams.host = host;
+            BSMLParserParams parserParams = new()
+            {
+                host = host,
+            };
+
             FieldAccessOption fieldAccessOptions = FieldAccessOption.Auto;
             PropertyAccessOption propertyAccessOptions = PropertyAccessOption.Auto;
             MethodAccessOption methodAccessOptions = MethodAccessOption.Auto;
@@ -133,10 +136,9 @@ namespace BeatSaberMarkupLanguage
             {
                 foreach (MethodInfo methodInfo in host.GetType().GetMethods(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic))
                 {
-                    UIAction uiaction = methodInfo.GetCustomAttributes(typeof(UIAction), true).FirstOrDefault() as UIAction;
                     string methodName = methodInfo.Name;
                     string uiActionName = null;
-                    if (uiaction != null)
+                    if (methodInfo.GetCustomAttributes(typeof(UIAction), true).FirstOrDefault() is UIAction uiaction)
                     {
                         uiActionName = uiaction.id;
                         if (parserParams.actions.TryGetValue(uiActionName, out BSMLAction existing))
@@ -170,10 +172,9 @@ namespace BeatSaberMarkupLanguage
 
                 foreach (FieldInfo fieldInfo in host.GetType().GetFields(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic))
                 {
-                    UIValue uivalue = fieldInfo.GetCustomAttributes(typeof(UIValue), true).FirstOrDefault() as UIValue;
                     string fieldName = fieldInfo.Name;
                     string uiValueName = null;
-                    if (uivalue != null)
+                    if (fieldInfo.GetCustomAttributes(typeof(UIValue), true).FirstOrDefault() is UIValue uivalue)
                     {
                         uiValueName = uivalue.id;
                         if (parserParams.values.TryGetValue(uiValueName, out BSMLValue existing))
@@ -204,8 +205,7 @@ namespace BeatSaberMarkupLanguage
                         parserParams.values.Add(fieldName, new BSMLFieldValue(host, fieldInfo, false));
                     }
 
-                    UIParams uiParams = fieldInfo.GetCustomAttributes(typeof(UIParams), true).FirstOrDefault() as UIParams;
-                    if (uiParams != null)
+                    if (fieldInfo.GetCustomAttributes(typeof(UIParams), true).FirstOrDefault() is UIParams uiParams)
                     {
                         fieldInfo.SetValue(host, parserParams);
                     }
@@ -213,10 +213,9 @@ namespace BeatSaberMarkupLanguage
 
                 foreach (PropertyInfo propertyInfo in host.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic))
                 {
-                    UIValue uivalue = Attribute.GetCustomAttributes(propertyInfo, typeof(UIValue), true).FirstOrDefault() as UIValue;
                     string propName = propertyInfo.Name;
                     string uiValueName = null;
-                    if (uivalue != null)
+                    if (propertyInfo.GetCustomAttributes(typeof(UIValue), true).FirstOrDefault() is UIValue uivalue)
                     {
                         uiValueName = uivalue.id;
                         if (parserParams.values.TryGetValue(uiValueName, out BSMLValue existing))
@@ -292,7 +291,7 @@ namespace BeatSaberMarkupLanguage
 
             GameObject currentNode = currentTag.CreateObject(parent.transform);
 
-            List<ComponentTypeWithData> componentTypes = new List<ComponentTypeWithData>();
+            List<ComponentTypeWithData> componentTypes = new();
             foreach (TypeHandler typeHandler in typeHandlers)
             {
                 Type type = (typeHandler.GetType().GetCustomAttributes(typeof(ComponentHandler), true).FirstOrDefault() as ComponentHandler)?.type;
@@ -323,14 +322,12 @@ namespace BeatSaberMarkupLanguage
             {
                 foreach (FieldInfo fieldInfo in host.GetType().GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public))
                 {
-                    UIComponent uiComponent = fieldInfo.GetCustomAttributes(typeof(UIComponent), true).FirstOrDefault() as UIComponent;
-                    if (uiComponent != null && uiComponent.id == node.Attributes["id"].Value)
+                    if (fieldInfo.GetCustomAttributes(typeof(UIComponent), true).FirstOrDefault() is UIComponent uiComponent && uiComponent.id == node.Attributes["id"].Value)
                     {
                         fieldInfo.SetValue(host, GetExternalComponent(currentNode, fieldInfo.FieldType));
                     }
 
-                    UIObject uiObject = fieldInfo.GetCustomAttributes(typeof(UIObject), true).FirstOrDefault() as UIObject;
-                    if (uiObject != null && uiObject.id == node.Attributes["id"].Value)
+                    if (fieldInfo.GetCustomAttributes(typeof(UIObject), true).FirstOrDefault() is UIObject uiObject && uiObject.id == node.Attributes["id"].Value)
                     {
                         fieldInfo.SetValue(host, currentNode);
                     }
@@ -364,8 +361,8 @@ namespace BeatSaberMarkupLanguage
         private Component GetExternalComponent(GameObject gameObject, Type type)
         {
             Component component = null;
-            ExternalComponents externalComponents = gameObject.GetComponent<ExternalComponents>();
-            if (externalComponents != null)
+
+            if (gameObject.TryGetComponent(out ExternalComponents externalComponents))
             {
                 foreach (Component externalComponent in externalComponents.components)
                 {
@@ -397,11 +394,11 @@ namespace BeatSaberMarkupLanguage
 
         private Dictionary<string, string> GetParameters(XmlNode node, Dictionary<string, string[]> properties, BSMLParserParams parserParams, out Dictionary<string, BSMLValue> valueMap)
         {
-            Dictionary<string, string> parameters = new Dictionary<string, string>();
+            Dictionary<string, string> parameters = new();
             valueMap = new Dictionary<string, BSMLValue>();
             foreach (KeyValuePair<string, string[]> propertyAliases in properties)
             {
-                List<string> aliasList = new List<string>(propertyAliases.Value);
+                List<string> aliasList = new(propertyAliases.Value);
                 if (!aliasList.Contains(propertyAliases.Key))
                 {
                     aliasList.Add(propertyAliases.Key);

@@ -7,12 +7,12 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
     [ComponentHandler(typeof(RawImage))]
     internal class RawImageHandler : TypeHandler<RawImage>
     {
-        public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
+        public override Dictionary<string, string[]> Props => new()
         {
             { "image", new[] { "source", "src" } },
         };
 
-        public override Dictionary<string, Action<RawImage, string>> Setters => new Dictionary<string, Action<RawImage, string>>()
+        public override Dictionary<string, Action<RawImage, string>> Setters => new()
         {
             { "image", new Action<RawImage, string>(SetImage) },
         };

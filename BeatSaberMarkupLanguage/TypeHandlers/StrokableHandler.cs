@@ -8,13 +8,13 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
     [ComponentHandler(typeof(Strokable))]
     public class StrokableHandler : TypeHandler<Strokable>
     {
-        public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
+        public override Dictionary<string, string[]> Props => new()
         {
             { "strokeColor", new[] { "stroke-color" } },
             { "strokeType", new[] { "stroke-type" } },
         };
 
-        public override Dictionary<string, Action<Strokable, string>> Setters => new Dictionary<string, Action<Strokable, string>>()
+        public override Dictionary<string, Action<Strokable, string>> Setters => new()
         {
             { "strokeColor", new Action<Strokable, string>(SetColor) },
             { "strokeType", new Action<Strokable, string>(SetType) },

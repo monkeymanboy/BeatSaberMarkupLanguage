@@ -12,7 +12,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG
     /// </summary>
     public class APNG : IAnimatedImage
     {
-        private readonly List<Frame> frames = new List<Frame>();
+        private readonly List<Frame> frames = new();
         private MemoryStream ms;
         private Size viewSize;
 
@@ -81,7 +81,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG
         /// <value>The actual size.</value>
         public Size ActualSize
         {
-            get => new Size(this.IHDRChunk.Width, this.IHDRChunk.Height);
+            get => new(this.IHDRChunk.Width, this.IHDRChunk.Height);
             set
             {
                 this.IHDRChunk.Width = value.Width;

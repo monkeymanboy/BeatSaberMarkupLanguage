@@ -11,7 +11,7 @@ namespace BeatSaberMarkupLanguage.Animations
         public ReadOnlyDictionary<string, AnimationControllerData> RegisteredAnimations;
         public AnimationControllerData loadingAnimation;
 
-        private readonly Dictionary<string, AnimationControllerData> registeredAnimations = new Dictionary<string, AnimationControllerData>();
+        private readonly Dictionary<string, AnimationControllerData> registeredAnimations = new();
 
         public AnimationControllerData Register(string identifier, Texture2D tex, Rect[] uvs, float[] delays)
         {

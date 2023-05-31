@@ -3,9 +3,9 @@
   <PropertyGroup>
     <TargetFramework>net472</TargetFramework>
     <OutputType>Library</OutputType>
-    <LangVersion>8</LangVersion>
+    <LangVersion>11</LangVersion>
     <Nullable>disable</Nullable>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <AssemblyName>BSML</AssemblyName>
     <RootNamespace>BeatSaberMarkupLanguage</RootNamespace>
     <LocalRefsDir Condition="Exists('..\Refs')">..\Refs</LocalRefsDir>
@@ -140,11 +140,11 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Unity.Analyzers" Version="1.16.1">
+    <PackageReference Include="Microsoft.Unity.Analyzers" Version="1.17.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
+    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.435">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>

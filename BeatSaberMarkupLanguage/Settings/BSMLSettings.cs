@@ -14,7 +14,7 @@ namespace BeatSaberMarkupLanguage.Settings
 {
     public class BSMLSettings : MonoBehaviour
     {
-        public List<CustomCellInfo> settingsMenus = new List<CustomCellInfo>();
+        public List<CustomCellInfo> settingsMenus = new();
 
         private static BSMLSettings _instance = null;
         private bool isInitialized;

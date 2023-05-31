@@ -11,7 +11,7 @@ namespace BeatSaberMarkupLanguage.Macros
     {
         public override string[] Aliases => new[] { "as-host" };
 
-        public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
+        public override Dictionary<string, string[]> Props => new()
         {
             { "host", new[] { "host" } },
         };

@@ -9,7 +9,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
     [ComponentHandler(typeof(GenericSetting))]
     public class GenericSettingHandler : TypeHandler<GenericSetting>
     {
-        public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
+        public override Dictionary<string, string[]> Props => new()
         {
             { "onChange", new[] { "on-change" } },
             { "value", new[] { "value" } },
@@ -20,7 +20,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
             { "bindValue", new[] { "bind-value" } },
         };
 
-        public override Dictionary<string, Action<GenericSetting, string>> Setters => new Dictionary<string, Action<GenericSetting, string>>();
+        public override Dictionary<string, Action<GenericSetting, string>> Setters => new();
 
         public override void HandleType(ComponentTypeWithData componentType, BSMLParserParams parserParams)
         {

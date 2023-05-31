@@ -9,7 +9,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
     [ComponentHandler(typeof(ListSetting))]
     public class ListSettingHandler : TypeHandler
     {
-        public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
+        public override Dictionary<string, string[]> Props => new()
         {
             { "options", new[] { "options", "choices" } },
         };

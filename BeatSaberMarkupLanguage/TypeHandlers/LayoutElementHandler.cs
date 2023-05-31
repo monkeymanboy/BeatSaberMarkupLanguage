@@ -7,7 +7,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
     [ComponentHandler(typeof(LayoutElement))]
     public class LayoutElementHandler : TypeHandler<LayoutElement>
     {
-        public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
+        public override Dictionary<string, string[]> Props => new()
         {
             { "ignoreLayout", new[] { "ignore-layout" } },
             { "preferredWidth", new[] { "preferred-width", "pref-width" } },
@@ -16,7 +16,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "minWidth", new[] { "min-width" } },
         };
 
-        public override Dictionary<string, Action<LayoutElement, string>> Setters => new Dictionary<string, Action<LayoutElement, string>>()
+        public override Dictionary<string, Action<LayoutElement, string>> Setters => new()
         {
             { "ignoreLayout", new Action<LayoutElement, string>((layoutElement, value) => layoutElement.ignoreLayout = Parse.Bool(value)) },
             { "preferredWidth", new Action<LayoutElement, string>((layoutElement, value) => layoutElement.preferredWidth = Parse.Float(value)) },

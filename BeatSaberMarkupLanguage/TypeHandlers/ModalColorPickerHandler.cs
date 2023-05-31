@@ -9,7 +9,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
     [ComponentHandler(typeof(ModalColorPicker))]
     public class ModalColorPickerHandler : TypeHandler
     {
-        public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
+        public override Dictionary<string, string[]> Props => new()
         {
             { "value", new[] { "value" } },
             { "onCancel", new[] { "on-cancel" } },

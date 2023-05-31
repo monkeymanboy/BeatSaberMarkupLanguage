@@ -12,8 +12,8 @@ namespace BeatSaberMarkupLanguage
 {
     public static class Utilities
     {
-        public static Dictionary<string, Sprite> spriteCache = new Dictionary<string, Sprite>();
-        public static Dictionary<string, Texture> textureCache = new Dictionary<string, Texture>();
+        public static Dictionary<string, Sprite> spriteCache = new();
+        public static Dictionary<string, Texture> textureCache = new();
 
         private static Sprite editIcon = null;
 

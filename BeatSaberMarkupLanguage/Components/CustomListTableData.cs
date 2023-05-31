@@ -9,7 +9,7 @@ namespace BeatSaberMarkupLanguage.Components
 {
     public class CustomListTableData : MonoBehaviour, TableView.IDataSource
     {
-        public List<CustomCellInfo> data = new List<CustomCellInfo>();
+        public List<CustomCellInfo> data = new();
         public float cellSize = 8.5f;
         public string reuseIdentifier = "BSMLListTableCell";
         public TableView tableView;

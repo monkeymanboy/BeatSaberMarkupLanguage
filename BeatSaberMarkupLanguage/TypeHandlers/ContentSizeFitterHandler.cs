@@ -8,13 +8,13 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
     [ComponentHandler(typeof(ContentSizeFitter))]
     public class ContentSizeFitterHandler : TypeHandler<ContentSizeFitter>
     {
-        public override Dictionary<string, string[]> Props => new Dictionary<string, string[]>()
+        public override Dictionary<string, string[]> Props => new()
         {
             { "horizontalFit", new[] { "horizontal-fit" } },
             { "verticalFit", new[] { "vertical-fit" } },
         };
 
-        public override Dictionary<string, Action<ContentSizeFitter, string>> Setters => new Dictionary<string, Action<ContentSizeFitter, string>>()
+        public override Dictionary<string, Action<ContentSizeFitter, string>> Setters => new()
         {
             { "horizontalFit", new Action<ContentSizeFitter, string>((component, value) => component.horizontalFit = (FitMode)Enum.Parse(typeof(FitMode), value)) },
             { "verticalFit", new Action<ContentSizeFitter, string>((component, value) => component.verticalFit = (FitMode)Enum.Parse(typeof(FitMode), value)) },
