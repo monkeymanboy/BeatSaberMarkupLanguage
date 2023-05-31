@@ -146,7 +146,7 @@ namespace BeatSaberMarkupLanguage
                                 throw new InvalidOperationException($"UIAction '{uiActionName}' is already used by member '{existing.MemberName}'.");
                             }
 
-                            existing.methodInfo = methodInfo;
+                            existing.MethodInfo = methodInfo;
                             existing.FromUIAction = true;
                         }
                         else
@@ -185,7 +185,7 @@ namespace BeatSaberMarkupLanguage
 
                             if (existing is BSMLFieldValue existingField)
                             {
-                                existingField.fieldInfo = fieldInfo;
+                                existingField.FieldInfo = fieldInfo;
                                 existingField.FromUIValue = true;
                             }
                         }
@@ -228,7 +228,7 @@ namespace BeatSaberMarkupLanguage
 
                             if (existing is BSMLPropertyValue existingProp)
                             {
-                                existingProp.propertyInfo = propertyInfo;
+                                existingProp.PropertyInfo = propertyInfo;
                                 existingProp.FromUIValue = true;
                             }
                         }

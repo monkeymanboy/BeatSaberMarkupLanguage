@@ -84,7 +84,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                     notifyUpdater = GetOrCreateNotifyUpdater(componentType, parserParams);
                 }
 
-                notifyUpdater?.AddAction(prop.propertyInfo.Name, onChange);
+                notifyUpdater?.AddAction(prop.PropertyInfo.Name, onChange);
             }
 
             return notifyUpdater;

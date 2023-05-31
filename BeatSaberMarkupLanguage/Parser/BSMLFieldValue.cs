@@ -4,31 +4,32 @@ namespace BeatSaberMarkupLanguage.Parser
 {
     public class BSMLFieldValue : BSMLValue
     {
-        internal FieldInfo fieldInfo;
         private readonly object host;
 
         public BSMLFieldValue(object host, FieldInfo fieldInfo, bool fromUiValue = true)
         {
             this.host = host;
-            this.fieldInfo = fieldInfo;
+            this.FieldInfo = fieldInfo;
             FromUIValue = fromUiValue;
         }
 
-        public override string MemberName => fieldInfo?.Name;
+        public override string MemberName => FieldInfo?.Name;
+
+        internal FieldInfo FieldInfo { get; set; }
 
         public override object GetValue()
         {
-            return fieldInfo.GetValue(host);
+            return FieldInfo.GetValue(host);
         }
 
         public override void SetValue(object value)
         {
-            if (fieldInfo.Attributes.HasFlag(FieldAttributes.InitOnly))
+            if (FieldInfo.Attributes.HasFlag(FieldAttributes.InitOnly))
             {
-                Logger.Log.Warn($"Trying to set value of field '{fieldInfo.Name}' on type '{fieldInfo.DeclaringType.FullName}' which is marked as read-only. This is unsupported behavior and may be removed in a future release.");
+                Logger.Log.Warn($"Trying to set value of field '{FieldInfo.Name}' on type '{FieldInfo.DeclaringType.FullName}' which is marked as read-only. This is unsupported behavior and may be removed in a future release.");
             }
 
-            fieldInfo.SetValue(host, value);
+            FieldInfo.SetValue(host, value);
         }
     }
 }
