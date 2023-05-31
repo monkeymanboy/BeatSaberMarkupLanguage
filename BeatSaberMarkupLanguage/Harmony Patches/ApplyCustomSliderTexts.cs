@@ -20,10 +20,5 @@ namespace BeatSaberMarkupLanguage.Harmony_Patches
             __result = sliderSetting.TextForValue(value);
             return false;
         }
-
-        [HarmonyReversePatch]
-        private static void Butts()
-        {
-        }
     }
 }
