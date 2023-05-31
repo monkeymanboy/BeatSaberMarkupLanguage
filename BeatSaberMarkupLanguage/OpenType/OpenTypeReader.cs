@@ -31,6 +31,24 @@ namespace BeatSaberMarkupLanguage.OpenType
             return bytes;
         }
 
+        public static OpenTypeReader For(Stream stream, Encoding enc = null, bool leaveOpen = false)
+        {
+            enc ??= Encoding.Default;
+
+            var start = stream.Position;
+            using var reader = new BinaryReader(stream, enc, true);
+            var tag = BitConverter.ToUInt32(FromBigEndian(reader.ReadBytes(4)), 0);
+            stream.Position = start;
+
+            return tag switch
+            {
+                CollectionHeader.TTCTagBEInt => new OpenTypeCollectionReader(stream, enc, leaveOpen),
+                OffsetTable.OpenTypeCFFVersion => new OpenTypeFontReader(stream, enc, leaveOpen),
+                OffsetTable.TrueTypeOnlyVersion => new OpenTypeFontReader(stream, enc, leaveOpen),
+                _ => null
+            };
+        }
+
         public byte ReadUInt8() => ReadByte();
 
         public sbyte ReadInt8() => ReadSByte();
@@ -63,23 +81,5 @@ namespace BeatSaberMarkupLanguage.OpenType
         public ushort ReadOffset16() => ReadUInt16();
 
         public uint ReadOffset32() => ReadUInt32();
-
-        public static OpenTypeReader For(Stream stream, Encoding enc = null, bool leaveOpen = false)
-        {
-            enc ??= Encoding.Default;
-
-            var start = stream.Position;
-            using var reader = new BinaryReader(stream, enc, true);
-            var tag = BitConverter.ToUInt32(FromBigEndian(reader.ReadBytes(4)), 0);
-            stream.Position = start;
-
-            return tag switch
-            {
-                CollectionHeader.TTCTagBEInt => new OpenTypeCollectionReader(stream, enc, leaveOpen),
-                OffsetTable.OpenTypeCFFVersion => new OpenTypeFontReader(stream, enc, leaveOpen),
-                OffsetTable.TrueTypeOnlyVersion => new OpenTypeFontReader(stream, enc, leaveOpen),
-                _ => null
-            };
-        }
     }
 }

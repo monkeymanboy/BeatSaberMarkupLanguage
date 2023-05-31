@@ -17,18 +17,18 @@ namespace BeatSaberMarkupLanguage.Components
 
         private Color highlightedColor1 = new Color(0f, 64f / 85f, 1f, 0f);
 
-        internal void SetComponents(ImageView coverImage, ImageView selectionImage)
-        {
-            this.coverImage = coverImage;
-            this.selectionImage = selectionImage;
-        }
-
         public void SetData(Sprite coverSprite)
         {
             if (coverImage != null)
             {
                 coverImage.sprite = coverSprite;
             }
+        }
+
+        internal void SetComponents(ImageView coverImage, ImageView selectionImage)
+        {
+            this.coverImage = coverImage;
+            this.selectionImage = selectionImage;
         }
 
         protected override void SelectionDidChange(TransitionType transitionType)

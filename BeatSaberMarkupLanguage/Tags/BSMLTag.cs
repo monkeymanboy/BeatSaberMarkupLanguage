@@ -9,13 +9,13 @@ namespace BeatSaberMarkupLanguage.Tags
 {
     public abstract class BSMLTag
     {
-        protected DiContainer DiContainer => BeatSaberUI.DiContainer;
-
         public bool isInitialized = false;
 
         public abstract string[] Aliases { get; }
 
         public virtual bool AddChildren { get => true; }
+
+        protected DiContainer DiContainer => BeatSaberUI.DiContainer;
 
         public abstract GameObject CreateObject(Transform parent);
 

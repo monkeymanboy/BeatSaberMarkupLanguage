@@ -8,6 +8,11 @@ namespace BeatSaberMarkupLanguage.Components
     // at this point this is a pseudo-reimplementation
     public class BSMLScrollableContainer : ScrollView
     {
+        private bool alignBottom = false;
+        private bool maskOverflow = true;
+        private float contentHeight;
+        private bool runScrollAnim = false;
+
         public Button PageUpButton
         {
             get => _pageUpButton;
@@ -38,8 +43,6 @@ namespace BeatSaberMarkupLanguage.Components
             set => _verticalScrollIndicator = value;
         }
 
-        private bool alignBottom = false;
-
         public bool AlignBottom
         {
             get => alignBottom;
@@ -49,8 +52,6 @@ namespace BeatSaberMarkupLanguage.Components
                 ScrollTo(_destinationPos, true);
             }
         }
-
-        private bool maskOverflow = true;
 
         public bool MaskOverflow
         {
@@ -62,27 +63,7 @@ namespace BeatSaberMarkupLanguage.Components
             }
         }
 
-        private float contentHeight;
-
         private float ScrollPageHeight => _viewport.rect.height;
-
-        private void UpdateViewportMask()
-        {
-            var img = Viewport.GetComponent<Image>();
-            if (img != null)
-            {
-                img.enabled = MaskOverflow;
-            }
-        }
-
-        public new void Awake()
-        {
-            _buttonBinder = new ButtonBinder();
-
-            RefreshContent();
-            RefreshButtons();
-            runScrollAnim = false;
-        }
 
         public void RefreshBindings()
         {
@@ -117,29 +98,6 @@ namespace BeatSaberMarkupLanguage.Components
             RefreshContent();
             RefreshButtons();
             ScrollTo(0f, false);
-        }
-
-        private bool runScrollAnim = false;
-
-        public new void Update()
-        {
-            if (contentHeight != _contentRectTransform.rect.height && _contentRectTransform.rect.height > 0f)
-            {
-                ContentSizeUpdated();
-            }
-
-            if (runScrollAnim)
-            {
-                float num = Mathf.Lerp(_contentRectTransform.anchoredPosition.y, _destinationPos, Time.deltaTime * _smooth);
-                if (Mathf.Abs(num - _destinationPos) < 0.01f)
-                {
-                    num = _destinationPos;
-                    runScrollAnim = false;
-                }
-
-                _contentRectTransform.anchoredPosition = new Vector2(0f, num);
-                UpdateVerticalScrollIndicator(_contentRectTransform.anchoredPosition.y);
-            }
         }
 
         public new void RefreshButtons()
@@ -277,6 +235,45 @@ namespace BeatSaberMarkupLanguage.Components
             }
 
             _destinationPos = Mathf.Min(maxPosition, Mathf.Max(0f, value));
+        }
+
+        private new void Awake()
+        {
+            _buttonBinder = new ButtonBinder();
+
+            RefreshContent();
+            RefreshButtons();
+            runScrollAnim = false;
+        }
+
+        private new void Update()
+        {
+            if (contentHeight != _contentRectTransform.rect.height && _contentRectTransform.rect.height > 0f)
+            {
+                ContentSizeUpdated();
+            }
+
+            if (runScrollAnim)
+            {
+                float num = Mathf.Lerp(_contentRectTransform.anchoredPosition.y, _destinationPos, Time.deltaTime * _smooth);
+                if (Mathf.Abs(num - _destinationPos) < 0.01f)
+                {
+                    num = _destinationPos;
+                    runScrollAnim = false;
+                }
+
+                _contentRectTransform.anchoredPosition = new Vector2(0f, num);
+                UpdateVerticalScrollIndicator(_contentRectTransform.anchoredPosition.y);
+            }
+        }
+
+        private void UpdateViewportMask()
+        {
+            var img = Viewport.GetComponent<Image>();
+            if (img != null)
+            {
+                img.enabled = MaskOverflow;
+            }
         }
     }
 }

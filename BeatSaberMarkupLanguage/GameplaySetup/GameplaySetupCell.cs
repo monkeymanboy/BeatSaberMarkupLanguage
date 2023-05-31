@@ -8,6 +8,8 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
     {
         private GameplaySetupMenu tab;
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
         [UIValue("tab-name")]
         private string Name => tab?.name;
 
@@ -24,8 +26,6 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
                 }
             }
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         public GameplaySetupCell PopulateCell(GameplaySetupMenu tab)
         {

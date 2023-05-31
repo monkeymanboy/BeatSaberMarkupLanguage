@@ -10,32 +10,17 @@ namespace BeatSaberMarkupLanguage.Settings
 {
     internal class ModSettingsFlowCoordinator : FlowCoordinator
     {
+        public bool isAnimating;
+
         protected SettingsMenuListViewController settingsMenuListViewController;
         protected NavigationController navigationController;
-
         protected ViewController activeController;
 
         private readonly Stack<ViewController> submenuStack = new Stack<ViewController>();
         private bool isPresenting;
-        public bool isAnimating;
 
         [UIComponent("bottom-buttons")]
         private Transform bottomButtons;
-
-        protected override void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
-        {
-            if (firstActivation)
-            {
-                this._title = "Mod Settings";
-                navigationController = BeatSaberUI.CreateViewController<NavigationController>();
-                BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), "BeatSaberMarkupLanguage.Views.settings-buttons.bsml"), navigationController.gameObject, this);
-
-                settingsMenuListViewController = BeatSaberUI.CreateViewController<SettingsMenuListViewController>();
-                settingsMenuListViewController.clickedMenu += OpenMenu;
-                SetViewControllerToNavigationController(navigationController, settingsMenuListViewController);
-                ProvideInitialViewControllers(navigationController);
-            }
-        }
 
         public void OpenMenu(SettingsMenu menu)
         {
@@ -96,6 +81,21 @@ namespace BeatSaberMarkupLanguage.Settings
             settingsMenuListViewController.list.tableView.SelectCellWithIdx(0);
             OpenMenu(BSMLSettings.instance.settingsMenus.First() as SettingsMenu);
             isPresenting = true;
+        }
+
+        protected override void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
+        {
+            if (firstActivation)
+            {
+                this._title = "Mod Settings";
+                navigationController = BeatSaberUI.CreateViewController<NavigationController>();
+                BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), "BeatSaberMarkupLanguage.Views.settings-buttons.bsml"), navigationController.gameObject, this);
+
+                settingsMenuListViewController = BeatSaberUI.CreateViewController<SettingsMenuListViewController>();
+                settingsMenuListViewController.clickedMenu += OpenMenu;
+                SetViewControllerToNavigationController(navigationController, settingsMenuListViewController);
+                ProvideInitialViewControllers(navigationController);
+            }
         }
 
         [UIAction("ok-click")]

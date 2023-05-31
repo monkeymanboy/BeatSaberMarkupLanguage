@@ -15,11 +15,9 @@ namespace BeatSaberMarkupLanguage.Animations
         public float[] delays;
         public Sprite[] sprites;
         public Material animMaterial;
-        private readonly bool isDelayConsistent = true;
-
-        public bool IsPlaying { get; set; } = true;
-
         public List<Image> activeImages = new List<Image>();
+
+        private readonly bool isDelayConsistent = true;
 
         public AnimationControllerData(Texture2D tex, Rect[] uvs, float[] delays)
         {
@@ -44,6 +42,8 @@ namespace BeatSaberMarkupLanguage.Animations
             this.uvs = uvs;
             this.delays = delays;
         }
+
+        public bool IsPlaying { get; set; } = true;
 
         internal void CheckFrame(DateTime now)
         {

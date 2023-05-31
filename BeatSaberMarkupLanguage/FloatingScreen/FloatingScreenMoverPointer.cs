@@ -8,6 +8,12 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
     // yoinked from https://github.com/Kylemc1413/CameraPlus/blob/master/CameraPlus/CameraMoverPointer.cs
     public class FloatingScreenMoverPointer : MonoBehaviour
     {
+        [Obsolete("Use FloatingScreen.HandleGrabbed event")]
+        public Action<Vector3, Quaternion> OnGrab;
+
+        [Obsolete("Use FloatingScreen.HandleReleased event")]
+        public Action<Vector3, Quaternion> OnRelease;
+
         protected const float MinScrollDistance = 0.25f;
         protected const float MaxLaserDistance = 50;
 
@@ -21,10 +27,7 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
         protected Quaternion _realRot;
         protected FirstPersonFlyingController _fpfc;
 
-        [Obsolete("Use FloatingScreen.HandleGrabbed event")]
-        public Action<Vector3, Quaternion> OnGrab;
-        [Obsolete("Use FloatingScreen.HandleReleased event")]
-        public Action<Vector3, Quaternion> OnRelease;
+        private bool IsFpfc => _fpfc != null && _fpfc.enabled;
 
         public virtual void Init(FloatingScreen floatingScreen, VRPointer pointer)
         {
@@ -41,8 +44,6 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
             VRPointer vrPointer = GetComponent<VRPointer>();
             Init(floatingScreen, vrPointer);
         }
-
-        private bool IsFpfc => _fpfc != null && _fpfc.enabled;
 
 #pragma warning disable CS0618
         protected virtual void Update()

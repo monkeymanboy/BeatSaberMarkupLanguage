@@ -8,7 +8,10 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         public TextMeshProUGUI text;
         public Button decButton;
         public Button incButton;
+
         private bool _interactable = true;
+        private bool decEnabled;
+        private bool incEnabled;
 
         public override bool interactable
         {
@@ -25,9 +28,6 @@ namespace BeatSaberMarkupLanguage.Components.Settings
                 EnableInc = incEnabled;
             }
         }
-
-        private bool decEnabled;
-        private bool incEnabled;
 
         public bool EnableDec
         {
@@ -52,6 +52,10 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             set => text.text = value;
         }
 
+        public abstract void IncButtonPressed();
+
+        public abstract void DecButtonPressed();
+
         protected virtual void OnEnable()
         {
             incButton.onClick.AddListener(IncButtonPressed);
@@ -63,9 +67,5 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             incButton.onClick.RemoveListener(IncButtonPressed);
             decButton.onClick.RemoveListener(DecButtonPressed);
         }
-
-        public abstract void IncButtonPressed();
-
-        public abstract void DecButtonPressed();
     }
 }

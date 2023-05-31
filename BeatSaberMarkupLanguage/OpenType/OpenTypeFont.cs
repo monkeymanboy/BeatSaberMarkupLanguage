@@ -11,7 +11,13 @@ namespace BeatSaberMarkupLanguage.OpenType
         private readonly TableRecord[] tables;
         private readonly TableRecord? nameTableRecord;
 
-        public OpenTypeFontReader Reader { get; }
+        private OpenTypeNameTable nameTable = null;
+        private string uniqueId = null;
+        private string family = null;
+        private string subfamily = null;
+        private string fullName = null;
+
+        private bool disposedValue = false;
 
         public OpenTypeFont(OpenTypeFontReader reader, bool lazyLoad = true)
             : this(reader.ReadOffsetTable(), reader, lazyLoad)
@@ -35,36 +41,45 @@ namespace BeatSaberMarkupLanguage.OpenType
             }
         }
 
+        public OpenTypeFontReader Reader { get; }
+
+        public OpenTypeNameTable NameTable
+            => nameTable ??= ReadNameTable(Reader);
+
+        public IEnumerable<TableRecord> Tables => tables;
+
+        public string UniqueId
+            => uniqueId ??= FindBestNameRecord(OpenTypeNameTable.NameRecord.NameType.UniqueId)?.Value;
+
+        public string Family
+            => family ??= FindBestNameRecord(OpenTypeNameTable.NameRecord.NameType.FontFamily)?.Value;
+
+        public string Subfamily
+            => subfamily ??= FindBestNameRecord(OpenTypeNameTable.NameRecord.NameType.FontSubfamily)?.Value;
+
+        public string FullName
+            => fullName ??= FindBestNameRecord(OpenTypeNameTable.NameRecord.NameType.FullFontName)?.Value;
+
+        public void Dispose() => Dispose(true);
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    Reader?.Dispose();
+                }
+
+                disposedValue = true;
+            }
+        }
+
         private void LoadAllTables(OpenTypeFontReader reader)
         {
             // TODO: do something with this
             nameTable = ReadNameTable(reader);
         }
-
-        private OpenTypeNameTable nameTable = null;
-
-        public OpenTypeNameTable NameTable
-            => nameTable ??= ReadNameTable(Reader);
-
-        private string uniqueId = null;
-
-        public string UniqueId
-            => uniqueId ??= FindBestNameRecord(OpenTypeNameTable.NameRecord.NameType.UniqueId)?.Value;
-
-        private string family = null;
-
-        public string Family
-            => family ??= FindBestNameRecord(OpenTypeNameTable.NameRecord.NameType.FontFamily)?.Value;
-
-        private string subfamily = null;
-
-        public string Subfamily
-            => subfamily ??= FindBestNameRecord(OpenTypeNameTable.NameRecord.NameType.FontSubfamily)?.Value;
-
-        private string fullName = null;
-
-        public string FullName
-            => fullName ??= FindBestNameRecord(OpenTypeNameTable.NameRecord.NameType.FullFontName)?.Value;
 
         private OpenTypeNameTable ReadNameTable(OpenTypeFontReader reader)
             => reader.TryReadTable(nameTableRecord.Value) as OpenTypeNameTable;
@@ -91,24 +106,5 @@ namespace BeatSaberMarkupLanguage.OpenType
                 .OrderByDescending(r => RankPlatform(r) + RankLanguage(r))
                 .FirstOrDefault();
         }
-
-        public IEnumerable<TableRecord> Tables => tables;
-
-        private bool disposedValue = false;
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    Reader?.Dispose();
-                }
-
-                disposedValue = true;
-            }
-        }
-
-        public void Dispose() => Dispose(true);
     }
 }

@@ -44,16 +44,6 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             ReceiveValue();
         }
 
-        protected virtual void OnEnable()
-        {
-            editButton.onClick.AddListener(EditButtonPressed);
-        }
-
-        protected void OnDisable()
-        {
-            editButton.onClick.RemoveListener(EditButtonPressed);
-        }
-
         public void EditButtonPressed()
         {
             modalColorPicker.CurrentColor = CurrentColor;
@@ -82,6 +72,16 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         public override void ReceiveValue()
         {
             CurrentColor = (Color)associatedValue?.GetValue();
+        }
+
+        protected virtual void OnEnable()
+        {
+            editButton.onClick.AddListener(EditButtonPressed);
+        }
+
+        protected void OnDisable()
+        {
+            editButton.onClick.RemoveListener(EditButtonPressed);
         }
     }
 }

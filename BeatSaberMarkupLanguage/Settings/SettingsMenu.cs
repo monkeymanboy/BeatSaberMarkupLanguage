@@ -9,7 +9,6 @@ namespace BeatSaberMarkupLanguage.Settings
 {
     internal class SettingsMenu : CustomCellInfo
     {
-        private const string SettingsErrorViewResourcePath = "BeatSaberMarkupLanguage.Views.settings-error.bsml";
         public ViewController viewController;
         public BSMLParserParams parserParams;
         public bool didSetup;
@@ -18,12 +17,21 @@ namespace BeatSaberMarkupLanguage.Settings
         public object host;
         public Assembly assembly;
 
+        private const string SettingsErrorViewResourcePath = "BeatSaberMarkupLanguage.Views.settings-error.bsml";
+
         public SettingsMenu(string name, string resource, object host, Assembly assembly)
             : base(name)
         {
             this.resource = resource;
             this.host = host;
             this.assembly = assembly;
+        }
+
+        public static void SetupViewControllerTransform(ViewController viewController)
+        {
+            viewController.rectTransform.sizeDelta = new Vector2(110, 0);
+            viewController.rectTransform.anchorMin = new Vector2(0.5f, 0);
+            viewController.rectTransform.anchorMax = new Vector2(0.5f, 1);
         }
 
         public void Setup()
@@ -52,13 +60,6 @@ namespace BeatSaberMarkupLanguage.Settings
                     parserParams = BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), SettingsErrorViewResourcePath), viewController.gameObject);
                 }
             }
-        }
-
-        public static void SetupViewControllerTransform(ViewController viewController)
-        {
-            viewController.rectTransform.sizeDelta = new Vector2(110, 0);
-            viewController.rectTransform.anchorMin = new Vector2(0.5f, 0);
-            viewController.rectTransform.anchorMax = new Vector2(0.5f, 1);
         }
     }
 }

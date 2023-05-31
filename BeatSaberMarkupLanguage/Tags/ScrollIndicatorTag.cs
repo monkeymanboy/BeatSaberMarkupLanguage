@@ -8,8 +8,6 @@ namespace BeatSaberMarkupLanguage.Tags
 {
     public class ScrollIndicatorTag : BSMLTag
     {
-        public override string[] Aliases { get; } = new[] { "vertical-scroll-indicator", "scroll-indicator" };
-
         private static GameObject verticalScrollTemplate = null;
 
         public static GameObject VerticalScrollTemplate
@@ -24,6 +22,8 @@ namespace BeatSaberMarkupLanguage.Tags
                 return verticalScrollTemplate;
             }
         }
+
+        public override string[] Aliases { get; } = new[] { "vertical-scroll-indicator", "scroll-indicator" };
 
         public override GameObject CreateObject(Transform parent)
         {

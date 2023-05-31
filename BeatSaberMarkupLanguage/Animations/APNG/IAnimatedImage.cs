@@ -9,15 +9,6 @@ namespace BeatSaberMarkupLanguage.Animations
     public interface IAnimatedImage
     {
         /// <summary>
-        /// Gets the bitmap at the specified index.
-        /// </summary>
-        /// <param name="index">Index of the animation frame.</param>
-        Bitmap this[int index]
-        {
-            get;
-        }
-
-        /// <summary>
         /// Gets or sets the frame rate.
         /// </summary>
         /// <value>The frame rate.</value>
@@ -44,6 +35,35 @@ namespace BeatSaberMarkupLanguage.Animations
         {
             get;
             set;
+        }
+
+        /// <summary>
+        /// Gets or sets the size.
+        /// </summary>
+        /// <value>The size of the displayed animated image.</value>
+        Size ViewSize
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Gets or sets the actual size.
+        /// </summary>
+        /// <value>The actual size.</value>
+        Size ActualSize
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Gets the bitmap at the specified index.
+        /// </summary>
+        /// <param name="index">Index of the animation frame.</param>
+        Bitmap this[int index]
+        {
+            get;
         }
 
         /// <summary>
@@ -79,25 +99,5 @@ namespace BeatSaberMarkupLanguage.Animations
         /// </summary>
         /// <returns>The default image.</returns>
         Bitmap GetDefaultImage();
-
-        /// <summary>
-        /// Gets or sets the size.
-        /// </summary>
-        /// <value>The size of the displayed animated image.</value>
-        Size ViewSize
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// Gets or sets the actual size.
-        /// </summary>
-        /// <value>The actual size.</value>
-        Size ActualSize
-        {
-            get;
-            set;
-        }
     }
 }

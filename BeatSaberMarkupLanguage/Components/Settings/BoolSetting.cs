@@ -35,15 +35,6 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             EitherPressed();
         }
 
-        private void EitherPressed()
-        {
-            onChange?.Invoke(Value);
-            if (updateOnChange)
-            {
-                ApplyValue();
-            }
-        }
-
         public override void ApplyValue()
         {
             associatedValue?.SetValue(Value);
@@ -54,6 +45,15 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             if (associatedValue != null)
             {
                 Value = (bool)associatedValue.GetValue();
+            }
+        }
+
+        private void EitherPressed()
+        {
+            onChange?.Invoke(Value);
+            if (updateOnChange)
+            {
+                ApplyValue();
             }
         }
 

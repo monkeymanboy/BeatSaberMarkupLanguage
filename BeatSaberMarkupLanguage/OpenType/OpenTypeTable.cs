@@ -98,6 +98,22 @@ namespace BeatSaberMarkupLanguage.OpenType
             return list;
         }
 
+        // uses LangTagCount to read them
+        private IReadOnlyList<LangTagRecord> ReadLangTagRecords(OpenTypeReader reader)
+        {
+            var list = new List<LangTagRecord>();
+            for (int i = 0; i < LangTagCount; i++)
+            {
+                list.Add(new LangTagRecord
+                {
+                    Length = reader.ReadUInt16(),
+                    Offset = reader.ReadOffset16(),
+                });
+            }
+
+            return list;
+        }
+
         public class NameRecord
         {
             public const uint Size = 12;
@@ -111,12 +127,6 @@ namespace BeatSaberMarkupLanguage.OpenType
                 Windows = 3,
                 Custom = 4,
             }
-
-            public Platform PlatformID { get; set; }
-
-            public ushort EncodingID { get; set; }
-
-            public ushort LanguageID { get; set; }
 
             public enum NameType : ushort
             {
@@ -152,6 +162,12 @@ namespace BeatSaberMarkupLanguage.OpenType
                 VariationsPostScriptPrefix = 25,
             }
 
+            public Platform PlatformID { get; set; }
+
+            public ushort EncodingID { get; set; }
+
+            public ushort LanguageID { get; set; }
+
             public NameType NameID { get; set; }
 
             public ushort Length { get; set; }
@@ -159,22 +175,6 @@ namespace BeatSaberMarkupLanguage.OpenType
             public ushort Offset { get; set; }
 
             public string Value { get; set; }
-        }
-
-        // uses LangTagCount to read them
-        private IReadOnlyList<LangTagRecord> ReadLangTagRecords(OpenTypeReader reader)
-        {
-            var list = new List<LangTagRecord>();
-            for (int i = 0; i < LangTagCount; i++)
-            {
-                list.Add(new LangTagRecord
-                {
-                    Length = reader.ReadUInt16(),
-                    Offset = reader.ReadOffset16(),
-                });
-            }
-
-            return list;
         }
 
         public class LangTagRecord

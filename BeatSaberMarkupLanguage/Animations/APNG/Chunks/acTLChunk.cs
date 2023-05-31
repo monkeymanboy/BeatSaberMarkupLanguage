@@ -13,16 +13,6 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         /// <summary>
         /// Initializes a new instance of the <see cref="acTLChunk"/> class.
         /// </summary>
-        internal acTLChunk()
-        {
-            Length = 8;
-            ChunkType = "acTL";
-            ChunkData = new byte[Length];
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="acTLChunk"/> class.
-        /// </summary>
         /// <param name="bytes">Byte array of chunk data.</param>
         public acTLChunk(byte[] bytes)
             : base(bytes)
@@ -45,6 +35,16 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         public acTLChunk(Chunk chunk)
             : base(chunk)
         {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="acTLChunk"/> class.
+        /// </summary>
+        internal acTLChunk()
+        {
+            Length = 8;
+            ChunkType = "acTL";
+            ChunkData = new byte[Length];
         }
 
         /// <summary>

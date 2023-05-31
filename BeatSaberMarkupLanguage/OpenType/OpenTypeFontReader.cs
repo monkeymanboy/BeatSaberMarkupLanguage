@@ -32,15 +32,6 @@ namespace BeatSaberMarkupLanguage.OpenType
                 TablesStart = BaseStream.Position,
             };
 
-        protected TableRecord ReadTableRecord()
-            => new TableRecord()
-            {
-                TableTag = ReadTag(),
-                Checksum = ReadUInt32(),
-                Offset = ReadOffset32(),
-                Length = ReadUInt32(),
-            };
-
         public TableRecord[] ReadTableRecords(OffsetTable offsets)
         {
             BaseStream.Position = offsets.TablesStart;
@@ -69,5 +60,14 @@ namespace BeatSaberMarkupLanguage.OpenType
 
             return result;
         }
+
+        protected TableRecord ReadTableRecord()
+            => new TableRecord()
+            {
+                TableTag = ReadTag(),
+                Checksum = ReadUInt32(),
+                Offset = ReadOffset32(),
+                Length = ReadUInt32(),
+            };
     }
 }

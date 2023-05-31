@@ -7,19 +7,42 @@ namespace BeatSaberMarkupLanguage.MenuButtons
 {
     public class MenuButtons : PersistentSingleton<MenuButtons>
     {
-        private MenuButtonsViewController menuButtonsViewController;
-        private ScreenSystem screenSystem;
+        [UIValue("pin-buttons")]
+        internal List<object> pinButtons = new List<object>();
 
         [UIValue("buttons")]
         private List<object> buttons = new List<object>();
-
-        [UIValue("pin-buttons")]
-        internal List<object> pinButtons = new List<object>();
 
         /*
         [UIParams]
         private BSMLParserParams parserParams;
         */
+
+        private MenuButtonsViewController menuButtonsViewController;
+        private ScreenSystem screenSystem;
+
+        public void RegisterButton(MenuButton menuButton)
+        {
+            if (buttons.Any(x => (x as MenuButton).Text == menuButton.Text))
+            {
+                return;
+            }
+
+            buttons.Add(menuButton);
+
+            /* pinButtons.Add(new PinnedMod(menuButton)); */
+
+            Refresh();
+        }
+
+        public void UnregisterButton(MenuButton menuButton)
+        {
+            buttons.Remove(menuButton);
+
+            /* pinButtons.RemoveAll(x => (x as PinnedMod).menuButton == menuButton); */
+
+            Refresh();
+        }
 
         internal void Setup()
         {
@@ -54,29 +77,6 @@ namespace BeatSaberMarkupLanguage.MenuButtons
             }
 
             menuButtonsViewController.RefreshView();
-        }
-
-        public void RegisterButton(MenuButton menuButton)
-        {
-            if (buttons.Any(x => (x as MenuButton).Text == menuButton.Text))
-            {
-                return;
-            }
-
-            buttons.Add(menuButton);
-
-            /* pinButtons.Add(new PinnedMod(menuButton)); */
-
-            Refresh();
-        }
-
-        public void UnregisterButton(MenuButton menuButton)
-        {
-            buttons.Remove(menuButton);
-
-            /* pinButtons.RemoveAll(x => (x as PinnedMod).menuButton == menuButton); */
-
-            Refresh();
         }
     }
 

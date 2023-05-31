@@ -7,6 +7,13 @@ namespace BeatSaberMarkupLanguage.Components
     {
         public Image image;
 
+        public enum StrokeType
+        {
+            None,
+            Clean,
+            Regular,
+        }
+
         public void SetType(StrokeType strokeType)
         {
             if (image == null)
@@ -44,13 +51,6 @@ namespace BeatSaberMarkupLanguage.Components
 
             image.color = color;
             image.enabled = true;
-        }
-
-        public enum StrokeType
-        {
-            None,
-            Clean,
-            Regular,
         }
     }
 }

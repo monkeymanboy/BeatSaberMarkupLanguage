@@ -13,6 +13,8 @@ namespace BeatSaberMarkupLanguage.Animations
 
     public class AnimationLoader
     {
+        private static readonly int AtlasSizeLimit = Mathf.Min(SystemInfo.maxTextureSize, 4096);
+
         public static void Process(AnimationType type, byte[] data, Action<Texture2D, Rect[], float[], int, int> callback)
         {
             switch (type)
@@ -25,8 +27,6 @@ namespace BeatSaberMarkupLanguage.Animations
                     break;
             }
         }
-
-        private static readonly int AtlasSizeLimit = Mathf.Min(SystemInfo.maxTextureSize, 4096);
 
         public static IEnumerator ProcessAnimationInfo(AnimationInfo animationInfo, Action<Texture2D, Rect[], float[], int, int> callback)
         {

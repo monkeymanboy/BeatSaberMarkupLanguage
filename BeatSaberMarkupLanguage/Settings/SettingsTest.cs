@@ -12,6 +12,17 @@ namespace BeatSaberMarkupLanguage.Settings
         [UIParams]
         private BSMLParserParams parserParams;
 
+        private bool boolTest = true;
+
+        [UIValue("slider-value")]
+        private int sliderValue = 5;
+
+        [UIValue("string-value")]
+        private string testString = "Shazam";
+
+        [UIValue("color-value")]
+        private Color testColor = Color.yellow;
+
         [UIValue("list-options")]
         private List<object> options = new object[] { "1", "Something", "Kapow", "Yeet" }.ToList();
 
@@ -28,17 +39,6 @@ namespace BeatSaberMarkupLanguage.Settings
                 NotifyPropertyChanged();
             }
         }
-
-        private bool boolTest = true;
-
-        [UIValue("slider-value")]
-        private int sliderValue = 5;
-
-        [UIValue("string-value")]
-        private string testString = "Shazam";
-
-        [UIValue("color-value")]
-        private Color testColor = Color.yellow;
 
         [UIAction("#apply")]
         public void OnApply()
@@ -59,14 +59,6 @@ namespace BeatSaberMarkupLanguage.Settings
         public void ChangeBool()
         {
             BoolTest = !BoolTest;
-        }
-
-        public void Update()
-        {
-            // Logger.log.Info($"{sliderValue}");
-            // Logger.log.Info($"{testString}");
-            // Logger.log.Info($"Bool Test: {boolTest}");
-            // Logger.log.Info($"List Test: {listChoice}");
         }
     }
 }

@@ -67,43 +67,6 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         }
 
         /// <summary>
-        /// Parses the data.
-        /// </summary>
-        /// <param name="ms">Memory Stream of chunk data.</param>
-        protected override void ParseData(MemoryStream ms)
-        {
-            sequenceNumber = Helper.ConvertEndian(ms.ReadUInt32());
-            frameData = ms.ReadBytes((int)Length - 4);
-        }
-
-        /// <summary>
-        /// Converts an FDAT Chunk to an IDAT Chunk.
-        /// </summary>
-        /// <returns>The IDAT chunk.</returns>
-        public IDATChunk ToIDATChunk()
-        {
-            uint newCrc;
-            using (var msCrc = new MemoryStream())
-            {
-                msCrc.WriteBytes(new[] { (byte)'I', (byte)'D', (byte)'A', (byte)'T' });
-                msCrc.WriteBytes(FrameData);
-
-                newCrc = CrcHelper.Calculate(msCrc.ToArray());
-            }
-
-            using (var ms = new MemoryStream())
-            {
-                ms.WriteUInt32(Helper.ConvertEndian(Length - 4));
-                ms.WriteBytes(new[] { (byte)'I', (byte)'D', (byte)'A', (byte)'T' });
-                ms.WriteBytes(FrameData);
-                ms.WriteUInt32(Helper.ConvertEndian(newCrc));
-                ms.Position = 0;
-
-                return new IDATChunk(ms);
-            }
-        }
-
-        /// <summary>
         /// Creates an FDAT Chunk from an IDAT Chunk.
         /// </summary>
         /// <returns>The FDAT chunk.</returns>
@@ -139,6 +102,43 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
             }
 
             return fdat;
+        }
+
+        /// <summary>
+        /// Converts an FDAT Chunk to an IDAT Chunk.
+        /// </summary>
+        /// <returns>The IDAT chunk.</returns>
+        public IDATChunk ToIDATChunk()
+        {
+            uint newCrc;
+            using (var msCrc = new MemoryStream())
+            {
+                msCrc.WriteBytes(new[] { (byte)'I', (byte)'D', (byte)'A', (byte)'T' });
+                msCrc.WriteBytes(FrameData);
+
+                newCrc = CrcHelper.Calculate(msCrc.ToArray());
+            }
+
+            using (var ms = new MemoryStream())
+            {
+                ms.WriteUInt32(Helper.ConvertEndian(Length - 4));
+                ms.WriteBytes(new[] { (byte)'I', (byte)'D', (byte)'A', (byte)'T' });
+                ms.WriteBytes(FrameData);
+                ms.WriteUInt32(Helper.ConvertEndian(newCrc));
+                ms.Position = 0;
+
+                return new IDATChunk(ms);
+            }
+        }
+
+        /// <summary>
+        /// Parses the data.
+        /// </summary>
+        /// <param name="ms">Memory Stream of chunk data.</param>
+        protected override void ParseData(MemoryStream ms)
+        {
+            sequenceNumber = Helper.ConvertEndian(ms.ReadUInt32());
+            frameData = ms.ReadBytes((int)Length - 4);
         }
     }
 }

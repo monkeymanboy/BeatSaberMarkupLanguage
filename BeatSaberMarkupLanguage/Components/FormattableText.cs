@@ -9,6 +9,8 @@ namespace BeatSaberMarkupLanguage.Components
         private ICustomFormatter textFormatter;
         private object data;
 
+        public event EventHandler Destroyed;
+
         public object Data
         {
             get => data;
@@ -17,32 +19,6 @@ namespace BeatSaberMarkupLanguage.Components
                 data = value;
                 RefreshText();
             }
-        }
-
-        public void RefreshText()
-        {
-            if (data == null)
-            {
-                return;
-            }
-
-            string val;
-
-            object o = data;
-            if (TextFormatter != null)
-            {
-                val = TextFormatter.Format(TextFormat, o, null);
-            }
-            else if (o is IFormattable formattable && !string.IsNullOrEmpty(TextFormat))
-            {
-                val = formattable.ToString(TextFormat, null); // TODO: Will this cause problems for certain types if formatProvider is null?
-            }
-            else
-            {
-                val = o?.ToString() ?? string.Empty;
-            }
-
-            text = val;
         }
 
         public ICustomFormatter TextFormatter
@@ -75,6 +51,32 @@ namespace BeatSaberMarkupLanguage.Components
             }
         }
 
+        public void RefreshText()
+        {
+            if (data == null)
+            {
+                return;
+            }
+
+            string val;
+
+            object o = data;
+            if (TextFormatter != null)
+            {
+                val = TextFormatter.Format(TextFormat, o, null);
+            }
+            else if (o is IFormattable formattable && !string.IsNullOrEmpty(TextFormat))
+            {
+                val = formattable.ToString(TextFormat, null); // TODO: Will this cause problems for certain types if formatProvider is null?
+            }
+            else
+            {
+                val = o?.ToString() ?? string.Empty;
+            }
+
+            text = val;
+        }
+
         public void SetFormatter(object formatter)
         {
             if (formatter == null)
@@ -98,7 +100,5 @@ namespace BeatSaberMarkupLanguage.Components
             Destroyed?.Invoke(this, null);
             base.OnDestroy();
         }
-
-        public event EventHandler Destroyed;
     }
 }

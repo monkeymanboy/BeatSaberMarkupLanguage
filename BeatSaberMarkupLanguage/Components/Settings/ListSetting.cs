@@ -4,9 +4,9 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 {
     public class ListSetting : IncDecSetting
     {
-        private int index;
-
         public List<object> values;
+
+        private int index;
 
         public object Value
         {
@@ -45,16 +45,6 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             EitherPressed();
         }
 
-        private void EitherPressed()
-        {
-            UpdateState();
-            onChange?.Invoke(Value);
-            if (updateOnChange)
-            {
-                ApplyValue();
-            }
-        }
-
         public override void ApplyValue()
         {
             associatedValue?.SetValue(Value);
@@ -65,6 +55,16 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             if (associatedValue != null)
             {
                 Value = associatedValue.GetValue();
+            }
+        }
+
+        private void EitherPressed()
+        {
+            UpdateState();
+            onChange?.Invoke(Value);
+            if (updateOnChange)
+            {
+                ApplyValue();
             }
         }
 

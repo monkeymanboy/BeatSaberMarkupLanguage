@@ -9,17 +9,17 @@ namespace BeatSaberMarkupLanguage.Tags
 {
     public class ButtonTag : BSMLTag
     {
+        private Button buttonPrefab;
+
         public override string[] Aliases => new[] { "button" };
 
         public virtual string PrefabButton => "PracticeButton";
-
-        private Button buttonPrefab;
 
         public override GameObject CreateObject(Transform parent)
         {
             if (buttonPrefab == null)
             {
-                buttonPrefab = Resources.FindObjectsOfTypeAll<Button>().Last(x => (x.name == PrefabButton));
+                buttonPrefab = Resources.FindObjectsOfTypeAll<Button>().Last(x => x.name == PrefabButton);
             }
 
             Button button = Object.Instantiate(buttonPrefab, parent, false);
@@ -51,23 +51,6 @@ namespace BeatSaberMarkupLanguage.Tags
             {
                 externalComponents.components.Add(stackLayoutGroup);
             }
-
-            /*
-            Image glowImage = gameObject.GetComponentsInChildren<Image>(true).Where(x => x.gameObject.name == "Glow").FirstOrDefault();
-            if (glowImage != null)
-            {
-                Glowable glowable = gameObject.AddComponent<Glowable>();
-                glowable.image = glowImage;
-                glowable.SetGlow("none");
-            }
-
-            Image strokeImage = gameObject.GetComponentsInChildren<Image>(true).Where(x => x.gameObject.name == "Stroke").FirstOrDefault();
-            if (strokeImage != null)
-            {
-                Strokable strokable = gameObject.AddComponent<Strokable>();
-                strokable.image = strokeImage;
-                strokable.SetType(StrokeType.Regular);
-            }*/
 
             return gameObject;
         }

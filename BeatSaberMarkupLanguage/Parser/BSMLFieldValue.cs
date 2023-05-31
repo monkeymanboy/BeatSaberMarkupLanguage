@@ -4,10 +4,8 @@ namespace BeatSaberMarkupLanguage.Parser
 {
     public class BSMLFieldValue : BSMLValue
     {
-        private readonly object host;
         internal FieldInfo fieldInfo;
-
-        public override string MemberName => fieldInfo?.Name;
+        private readonly object host;
 
         public BSMLFieldValue(object host, FieldInfo fieldInfo, bool fromUiValue = true)
         {
@@ -15,6 +13,8 @@ namespace BeatSaberMarkupLanguage.Parser
             this.fieldInfo = fieldInfo;
             FromUIValue = fromUiValue;
         }
+
+        public override string MemberName => fieldInfo?.Name;
 
         public override object GetValue()
         {

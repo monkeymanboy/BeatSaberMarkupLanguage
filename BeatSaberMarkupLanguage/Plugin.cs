@@ -26,9 +26,10 @@ namespace BeatSaberMarkupLanguage
     [Plugin(RuntimeOptions.SingleStartInit)]
     public class Plugin
     {
+        public static Config config;
+
         private static readonly string[] FontNamesToRemove = { "NotoSansJP-Medium SDF", "NotoSansKR-Medium SDF", "SourceHanSansCN-Bold-SDF-Common-1(2k)", "SourceHanSansCN-Bold-SDF-Common-2(2k)", "SourceHanSansCN-Bold-SDF-Uncommon(2k)" };
 
-        public static Config config;
         private static bool hasInited = false;
 
         private GameScenesManager gameScenesManager;
@@ -111,6 +112,11 @@ namespace BeatSaberMarkupLanguage
                 TaskContinuationOptions.NotOnRanToCompletion);
         }
 
+        [OnExit]
+        public void OnExit()
+        {
+        }
+
         public void MenuLoadFresh(ScenesTransitionSetupDataSO scenesTransitionSetupData, DiContainer diContainer)
         {
             // GameplaySetup.GameplaySetup.instance.AddTab("Test", "BeatSaberMarkupLanguage.Views.gameplay-setup-test.bsml", GameplaySetupTest.instance);
@@ -163,10 +169,5 @@ namespace BeatSaberMarkupLanguage
             floatingScreen.SetRootViewController(testViewController, ViewController.AnimationType.None);
             Resources.FindObjectsOfTypeAll<MainFlowCoordinator>().First().PresentViewController(testViewController, null, ViewController.AnimationDirection.Horizontal, false);
         }*/
-
-        [OnExit]
-        public void AppeaseAuros()
-        {
-        }
     }
 }

@@ -7,10 +7,10 @@ namespace BeatSaberMarkupLanguage.OpenType
     public class OpenTypeCollection : IEnumerable<OpenTypeFont>, IDisposable
     {
         private readonly CollectionHeader header;
-        private OpenTypeFont[] fonts;
         private readonly bool lazy;
+        private OpenTypeFont[] fonts;
 
-        public OpenTypeCollectionReader Reader { get; }
+        private bool disposedValue = false;
 
         public OpenTypeCollection(OpenTypeCollectionReader reader, bool lazyLoad = true)
             : this(reader.ReadCollectionHeader(), reader, lazyLoad)
@@ -31,16 +31,10 @@ namespace BeatSaberMarkupLanguage.OpenType
             }
         }
 
-        private void LoadAll(OpenTypeCollectionReader reader)
-        {
-            fonts = ReadFonts(reader);
-        }
+        public OpenTypeCollectionReader Reader { get; }
 
         public IEnumerable<OpenTypeFont> Fonts
             => fonts ??= ReadFonts(Reader);
-
-        private OpenTypeFont[] ReadFonts(OpenTypeCollectionReader reader)
-            => reader.ReadFonts(header, lazy);
 
         public IEnumerator<OpenTypeFont> GetEnumerator()
             => Fonts.GetEnumerator();
@@ -48,7 +42,7 @@ namespace BeatSaberMarkupLanguage.OpenType
         IEnumerator IEnumerable.GetEnumerator()
             => Fonts.GetEnumerator();
 
-        private bool disposedValue = false;
+        public void Dispose() => Dispose(true);
 
         protected virtual void Dispose(bool disposing)
         {
@@ -58,6 +52,12 @@ namespace BeatSaberMarkupLanguage.OpenType
             }
         }
 
-        public void Dispose() => Dispose(true);
+        private void LoadAll(OpenTypeCollectionReader reader)
+        {
+            fonts = ReadFonts(reader);
+        }
+
+        private OpenTypeFont[] ReadFonts(OpenTypeCollectionReader reader)
+            => reader.ReadFonts(header, lazy);
     }
 }

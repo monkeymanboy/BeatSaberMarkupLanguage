@@ -12,16 +12,15 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
     public class DropdownListSettingTag : BSMLTag
     {
         private GameObject dropdownTemplate;
+        private GameObject safePrefab;
 
         public override string[] Aliases => new[] { "dropdown-list-setting" };
-
-        private GameObject safePrefab;
 
         public override void Setup()
         {
             if (dropdownTemplate == null)
             {
-                dropdownTemplate = Resources.FindObjectsOfTypeAll<SimpleTextDropdown>().First(x => x.transform?.parent?.name == "NormalLevels").transform.parent.gameObject;
+                dropdownTemplate = Resources.FindObjectsOfTypeAll<SimpleTextDropdown>().Where(td => td.transform.parent != null).First(td => td.transform.parent.name == "NormalLevels").transform.parent.gameObject;
             }
 
             safePrefab = Object.Instantiate(dropdownTemplate, BSMLParser.instance.transform, false);

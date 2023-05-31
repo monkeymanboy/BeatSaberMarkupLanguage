@@ -7,9 +7,11 @@ namespace BeatSaberMarkupLanguage.ViewControllers
 {
     public abstract class BSMLViewController : ViewController, INotifyPropertyChanged
     {
-        public abstract string Content { get; }
-
         public Action<bool, bool, bool> didActivate;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public abstract string Content { get; }
 
         protected override void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
         {
@@ -20,8 +22,6 @@ namespace BeatSaberMarkupLanguage.ViewControllers
 
             didActivate?.Invoke(firstActivation, addedToHierarchy, screenSystemEnabling);
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {

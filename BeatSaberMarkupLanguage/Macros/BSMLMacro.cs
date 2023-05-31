@@ -7,9 +7,9 @@ namespace BeatSaberMarkupLanguage.Macros
 {
     public abstract class BSMLMacro
     {
-        public abstract string[] Aliases { get; }
-
         private Dictionary<string, string[]> cachedProps;
+
+        public abstract string[] Aliases { get; }
 
         public Dictionary<string, string[]> CachedProps => cachedProps ??= Props;
 

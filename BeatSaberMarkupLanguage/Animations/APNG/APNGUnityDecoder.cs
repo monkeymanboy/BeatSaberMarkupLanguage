@@ -10,6 +10,8 @@ namespace BeatSaberMarkupLanguage.Animations
 {
     public class APNGUnityDecoder
     {
+        private const float ByteInverse = 1f / 255f;
+
         public static IEnumerator Process(byte[] apngData, Action<AnimationInfo> callback)
         {
             AnimationInfo animationInfo = new AnimationInfo();
@@ -17,8 +19,6 @@ namespace BeatSaberMarkupLanguage.Animations
             yield return new WaitUntil(() => { return animationInfo.initialized; });
             callback?.Invoke(animationInfo);
         }
-
-        private const float ByteInverse = 1f / 255f;
 
         private static void ProcessingThread(byte[] apngData, AnimationInfo animationInfo)
         {

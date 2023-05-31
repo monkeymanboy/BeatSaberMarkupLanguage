@@ -22,10 +22,11 @@ namespace BeatSaberMarkupLanguage
 
         private readonly Dictionary<string, BSMLTag> tags = new Dictionary<string, BSMLTag>();
         private readonly Dictionary<string, BSMLMacro> macros = new Dictionary<string, BSMLMacro>();
-        private List<TypeHandler> typeHandlers;
 
         private readonly XmlDocument document = new XmlDocument();
         private readonly XmlReaderSettings readerSettings = new XmlReaderSettings();
+
+        private List<TypeHandler> typeHandlers;
 
         public void Awake()
         {

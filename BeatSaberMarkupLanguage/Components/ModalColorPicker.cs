@@ -48,14 +48,6 @@ namespace BeatSaberMarkupLanguage.Components
             }
         }
 
-        private void OnEnable()
-        {
-            if (associatedValue != null)
-            {
-                CurrentColor = (Color)associatedValue.GetValue();
-            }
-        }
-
         [UIAction("cancel")]
         public void CancelPressed()
         {
@@ -77,6 +69,14 @@ namespace BeatSaberMarkupLanguage.Components
         {
             onChange?.Invoke(color);
             CurrentColor = color;
+        }
+
+        private void OnEnable()
+        {
+            if (associatedValue != null)
+            {
+                CurrentColor = (Color)associatedValue.GetValue();
+            }
         }
     }
 }

@@ -11,6 +11,17 @@ namespace BeatSaberMarkupLanguage.ViewControllers
 {
     internal class WatcherGroup
     {
+        private static readonly Dictionary<string, WatcherGroup> WatcherDictionary = new Dictionary<string, WatcherGroup>();
+
+        private readonly WaitForSeconds hotReloadDelay = new WaitForSeconds(.5f);
+        private readonly Dictionary<int, WeakReference<IHotReloadableController>> boundControllers = new Dictionary<int, WeakReference<IHotReloadableController>>();
+
+        internal WatcherGroup(string directory)
+        {
+            ContentDirectory = directory;
+            CreateWatcher();
+        }
+
         internal interface IHotReloadableController
         {
             bool ContentChanged { get; }
@@ -32,14 +43,125 @@ namespace BeatSaberMarkupLanguage.ViewControllers
 
         internal bool IsReloading { get; private set; }
 
-        private readonly WaitForSeconds hotReloadDelay = new WaitForSeconds(.5f);
-
-        private readonly Dictionary<int, WeakReference<IHotReloadableController>> boundControllers = new Dictionary<int, WeakReference<IHotReloadableController>>();
-
-        internal WatcherGroup(string directory)
+        public static bool RegisterViewController(IHotReloadableController controller)
         {
-            ContentDirectory = directory;
+            string contentFile = controller.ContentFilePath;
+            if (string.IsNullOrEmpty(contentFile))
+            {
+                return false;
+            }
+
+            string contentDirectory = Path.GetDirectoryName(contentFile);
+            if (!Directory.Exists(contentDirectory))
+            {
+                return false;
+            }
+
+            if (!WatcherDictionary.TryGetValue(contentDirectory, out WatcherGroup watcherGroup))
+            {
+                watcherGroup = new WatcherGroup(contentDirectory);
+                WatcherDictionary.Add(contentDirectory, watcherGroup);
+            }
+
+            watcherGroup.BindController(controller);
+
+            return true;
+        }
+
+        public static bool UnregisterViewController(IHotReloadableController controller)
+        {
+            string contentFile = controller.ContentFilePath;
+            if (string.IsNullOrEmpty(contentFile))
+            {
+#if HRVC_DEBUG
+                Logger.Log.Critical($"Skipping registration for {controller.GetInstanceID()}:{controller.Name}, it has not content file defined.");
+#endif
+                return false;
+            }
+
+            bool successful = false;
+            string contentDirectory = Path.GetDirectoryName(contentFile);
+            if (WatcherDictionary.TryGetValue(contentDirectory, out WatcherGroup watcherGroup))
+            {
+                successful = watcherGroup.UnbindController(controller);
+            }
+#if HRVC_DEBUG
+            else
+            {
+                Logger.Log.Warn($"Unable to get WatcherGroup for {contentDirectory}");
+            }
+
+            if (successful)
+            {
+                Logger.Log.Info($"Successfully unregistered {controller.GetInstanceID()}:{controller.Name}");
+            }
+            else
+            {
+                Logger.Log.Warn($"Failed to Unregister {controller.GetInstanceID()}:{controller.Name}");
+            }
+#endif
+            return successful;
+        }
+
+        internal bool BindController(IHotReloadableController controller)
+        {
+            if (boundControllers.ContainsKey(controller.GetInstanceID()))
+            {
+#if HRVC_DEBUG
+                Logger.Log.Critical($"Failed to register controller, already exists. {controller.GetInstanceID()}:{controller.Name}");
+#endif
+                return false;
+            }
+
+            boundControllers.Add(controller.GetInstanceID(), new WeakReference<IHotReloadableController>(controller));
             CreateWatcher();
+            Watcher.EnableRaisingEvents = true;
+#if HRVC_DEBUG
+            Logger.Log.Info($"Registering controller {controller.GetInstanceID()}:{controller.Name}");
+#endif
+            return true;
+        }
+
+        internal bool UnbindController(int instanceId)
+        {
+#if HRVC_DEBUG
+            if (boundControllers.TryGetValue(instanceId, out WeakReference<IHotReloadableController> controllerRef))
+            {
+                if (!controllerRef.TryGetTarget(out IHotReloadableController controller))
+                {
+                    Logger.Log.Warn($"Unbinding garbage collected controller {instanceId}");
+                }
+                else
+                {
+                    Logger.Log.Warn($"Unbinding existing controller {instanceId}:{controller.Name}");
+                }
+            }
+            else
+            {
+                Logger.Log.Warn($"Trying to unbind controller that isn't in the dictionary");
+            }
+#endif
+            bool remove = boundControllers.Remove(instanceId);
+
+            if (boundControllers.Count == 0)
+            {
+                DestroyWatcher();
+            }
+
+            return remove;
+        }
+
+        internal bool UnbindController(IHotReloadableController controller)
+        {
+            if (controller == null)
+            {
+#if HRVC_DEBUG
+                Logger.Log.Critical($"Unable to unbind controller, it is null.");
+#endif
+                return false;
+            }
+
+            return UnbindController(controller.GetInstanceID());
         }
 
         private void CreateWatcher()
@@ -133,129 +255,6 @@ namespace BeatSaberMarkupLanguage.ViewControllers
             }
 
             IsReloading = false;
-        }
-
-        internal bool BindController(IHotReloadableController controller)
-        {
-            if (boundControllers.ContainsKey(controller.GetInstanceID()))
-            {
-#if HRVC_DEBUG
-                Logger.Log.Critical($"Failed to register controller, already exists. {controller.GetInstanceID()}:{controller.Name}");
-#endif
-                return false;
-            }
-
-            boundControllers.Add(controller.GetInstanceID(), new WeakReference<IHotReloadableController>(controller));
-            CreateWatcher();
-            Watcher.EnableRaisingEvents = true;
-#if HRVC_DEBUG
-            Logger.Log.Info($"Registering controller {controller.GetInstanceID()}:{controller.Name}");
-#endif
-            return true;
-        }
-
-        internal bool UnbindController(int instanceId)
-        {
-#if HRVC_DEBUG
-            if (boundControllers.TryGetValue(instanceId, out WeakReference<IHotReloadableController> controllerRef))
-            {
-                if (!controllerRef.TryGetTarget(out IHotReloadableController controller))
-                {
-                    Logger.Log.Warn($"Unbinding garbage collected controller {instanceId}");
-                }
-                else
-                {
-                    Logger.Log.Warn($"Unbinding existing controller {instanceId}:{controller.Name}");
-                }
-            }
-            else
-            {
-                Logger.Log.Warn($"Trying to unbind controller that isn't in the dictionary");
-            }
-#endif
-            bool remove = boundControllers.Remove(instanceId);
-
-            if (boundControllers.Count == 0)
-            {
-                DestroyWatcher();
-            }
-
-            return remove;
-        }
-
-        internal bool UnbindController(IHotReloadableController controller)
-        {
-            if (controller == null)
-            {
-#if HRVC_DEBUG
-                Logger.Log.Critical($"Unable to unbind controller, it is null.");
-#endif
-                return false;
-            }
-
-            return UnbindController(controller.GetInstanceID());
-        }
-
-        private static readonly Dictionary<string, WatcherGroup> WatcherDictionary = new Dictionary<string, WatcherGroup>();
-
-        public static bool RegisterViewController(IHotReloadableController controller)
-        {
-            string contentFile = controller.ContentFilePath;
-            if (string.IsNullOrEmpty(contentFile))
-            {
-                return false;
-            }
-
-            string contentDirectory = Path.GetDirectoryName(contentFile);
-            if (!Directory.Exists(contentDirectory))
-            {
-                return false;
-            }
-
-            if (!WatcherDictionary.TryGetValue(contentDirectory, out WatcherGroup watcherGroup))
-            {
-                watcherGroup = new WatcherGroup(contentDirectory);
-                WatcherDictionary.Add(contentDirectory, watcherGroup);
-            }
-
-            watcherGroup.BindController(controller);
-
-            return true;
-        }
-
-        public static bool UnregisterViewController(IHotReloadableController controller)
-        {
-            string contentFile = controller.ContentFilePath;
-            if (string.IsNullOrEmpty(contentFile))
-            {
-#if HRVC_DEBUG
-                Logger.Log.Critical($"Skipping registration for {controller.GetInstanceID()}:{controller.Name}, it has not content file defined.");
-#endif
-                return false;
-            }
-
-            bool successful = false;
-            string contentDirectory = Path.GetDirectoryName(contentFile);
-            if (WatcherDictionary.TryGetValue(contentDirectory, out WatcherGroup watcherGroup))
-            {
-                successful = watcherGroup.UnbindController(controller);
-            }
-#if HRVC_DEBUG
-            else
-            {
-                Logger.Log.Warn($"Unable to get WatcherGroup for {contentDirectory}");
-            }
-
-            if (successful)
-            {
-                Logger.Log.Info($"Successfully unregistered {controller.GetInstanceID()}:{controller.Name}");
-            }
-            else
-            {
-                Logger.Log.Warn($"Failed to Unregister {controller.GetInstanceID()}:{controller.Name}");
-            }
-#endif
-            return successful;
         }
     }
 }

@@ -6,9 +6,9 @@ namespace BeatSaberMarkupLanguage.Tags
 {
     public class VerticalIconSegmentedControlTag : BSMLTag
     {
-        public override string[] Aliases => new[] { "vertical-icon-segments" };
-
         private static IconSegmentedControl prefab;
+
+        public override string[] Aliases => new[] { "vertical-icon-segments" };
 
         public override GameObject CreateObject(Transform parent)
         {

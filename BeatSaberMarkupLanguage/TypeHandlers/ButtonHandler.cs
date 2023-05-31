@@ -17,6 +17,11 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 
         public override Dictionary<string, Action<Button, string>> Setters => new Dictionary<string, Action<Button, string>>();
 
+        public static void SetInteractable(Button button, string flag)
+        {
+            button.interactable = Parse.Bool(flag);
+        }
+
         public override void HandleType(ComponentTypeWithData componentType, BSMLParserParams parserParams)
         {
             try
@@ -50,11 +55,6 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             {
                 Logger.Log?.Error(ex);
             }
-        }
-
-        public static void SetInteractable(Button button, string flag)
-        {
-            button.interactable = Parse.Bool(flag);
         }
     }
 }
