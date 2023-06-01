@@ -5,7 +5,6 @@
     <OutputType>Library</OutputType>
     <LangVersion>11</LangVersion>
     <Nullable>disable</Nullable>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <AssemblyName>BSML</AssemblyName>
     <RootNamespace>BeatSaberMarkupLanguage</RootNamespace>
     <LocalRefsDir Condition="Exists('..\Refs')">..\Refs</LocalRefsDir>
@@ -23,6 +22,10 @@
   <PropertyGroup Condition="'$(NCrunch)' == '1'">
     <DisableCopyToPlugins>True</DisableCopyToPlugins>
     <DisableZipRelease>True</DisableZipRelease>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(ContinuousIntegrationBuild)' == 'True'">
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
   <ItemGroup>
