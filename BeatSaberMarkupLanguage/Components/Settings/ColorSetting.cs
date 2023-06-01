@@ -71,7 +71,10 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 
         public override void ReceiveValue()
         {
-            CurrentColor = (Color)associatedValue?.GetValue();
+            if (associatedValue != null)
+            {
+                CurrentColor = (Color)associatedValue.GetValue();
+            }
         }
 
         protected virtual void OnEnable()
