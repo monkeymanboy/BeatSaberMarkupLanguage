@@ -19,19 +19,21 @@ namespace BeatSaberMarkupLanguage.Tags
             GameObject gameObject = base.CreateObject(parent);
             RectTransform windowTransform = gameObject.transform as RectTransform;
             windowTransform.name = "BSMLModalColorPicker";
-            windowTransform.sizeDelta = new Vector2(135, 75);
+            windowTransform.sizeDelta = new Vector2(135, 70);
 
             ModalColorPicker colorPicker = gameObject.AddComponent<ModalColorPicker>();
             colorPicker.modalView = gameObject.GetComponent<ModalView>();
 
+            EditColorSchemeController editColorSchemeController = DiContainer.Resolve<GameplaySetupViewController>().GetComponentInChildren<EditColorSchemeController>(true);
+
             if (rgbTemplate == null)
             {
-                rgbTemplate = Resources.FindObjectsOfTypeAll<RGBPanelController>().First(x => x.name == "RGBColorPicker");
+                rgbTemplate = editColorSchemeController.GetComponentInChildren<RGBPanelController>();
             }
 
             if (hsvTemplate == null)
             {
-                hsvTemplate = Resources.FindObjectsOfTypeAll<HSVPanelController>().First(x => x.name == "HSVColorPicker");
+                hsvTemplate = editColorSchemeController.GetComponentInChildren<HSVPanelController>();
             }
 
             if (currentColorTemplate == null)
@@ -41,28 +43,32 @@ namespace BeatSaberMarkupLanguage.Tags
 
             RGBPanelController rgbController = Object.Instantiate(rgbTemplate, gameObject.transform, false);
             rgbController.name = "BSMLRGBPanel";
-            (rgbController.gameObject.transform as RectTransform).anchoredPosition = new Vector2(0, 3);
-            (rgbController.gameObject.transform as RectTransform).anchorMin = new Vector2(0, 0.25f);
-            (rgbController.gameObject.transform as RectTransform).anchorMax = new Vector2(0, 0.25f);
+            RectTransform rgbTransform = (RectTransform)rgbController.transform;
+            rgbTransform.anchoredPosition = new Vector2(0, 3);
+            rgbTransform.anchorMin = new Vector2(0, 0.25f);
+            rgbTransform.anchorMax = new Vector2(0, 0.25f);
             colorPicker.rgbPanel = rgbController;
             rgbController.colorDidChangeEvent += colorPicker.OnChange;
 
             HSVPanelController hsvController = Object.Instantiate(hsvTemplate, gameObject.transform, false);
             hsvController.name = "BSMLHSVPanel";
-            (hsvController.gameObject.transform as RectTransform).anchoredPosition = new Vector2(0, 3);
-            (hsvController.gameObject.transform as RectTransform).anchorMin = new Vector2(0.75f, 0.5f);
-            (hsvController.gameObject.transform as RectTransform).anchorMax = new Vector2(0.75f, 0.5f);
+            RectTransform hsvTransform = (RectTransform)hsvController.transform;
+            hsvTransform.anchoredPosition = new Vector2(0, 3);
+            hsvTransform.anchorMin = new Vector2(0.6f, 0.15f);
+            hsvTransform.anchorMax = new Vector2(0.6f, 0.15f);
             colorPicker.hsvPanel = hsvController;
             hsvController.colorDidChangeEvent += colorPicker.OnChange;
 
             Image colorImage = Object.Instantiate(currentColorTemplate, gameObject.transform, false);
             colorImage.name = "BSMLCurrentColor";
-            (colorImage.gameObject.transform as RectTransform).anchoredPosition = new Vector2(0, 0);
-            (colorImage.gameObject.transform as RectTransform).anchorMin = new Vector2(0.5f, 0.5f);
-            (colorImage.gameObject.transform as RectTransform).anchorMax = new Vector2(0.5f, 0.5f);
+            RectTransform imageRectTransform = (RectTransform)colorImage.transform;
+            imageRectTransform.anchoredPosition = new Vector2(0, 0);
+            imageRectTransform.anchorMin = new Vector2(0.53f, 0.53f);
+            imageRectTransform.anchorMax = new Vector2(0.53f, 0.53f);
+            imageRectTransform.sizeDelta = new Vector2(6, 6);
             colorPicker.colorImage = colorImage;
 
-            BSMLParser.instance.Parse(@"<horizontal anchor-pos-y='-30' spacing='2' horizontal-fit='PreferredSize'><button text='Cancel' on-click='cancel' pref-width='30'/><action-button text='Done' on-click='done' pref-width='30'/></horizontal>", gameObject, colorPicker);
+            BSMLParser.instance.Parse(@"<horizontal anchor-pos-y='-28' spacing='2' horizontal-fit='PreferredSize'><button text-key='BUTTON_CANCEL' on-click='cancel' pref-width='34' pref-height='10' /><action-button text-key='BUTTON_OK' on-click='done' pref-width='34' pref-height='10' /></horizontal>", gameObject, colorPicker);
 
             return gameObject;
         }
