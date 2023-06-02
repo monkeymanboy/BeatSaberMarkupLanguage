@@ -431,14 +431,12 @@ namespace BeatSaberMarkupLanguage
         }
 
         /// <summary>
-        /// Downscale the image in <paramref name="data"/> to the specified size.
-        ///
-        /// If <paramref name="maintainAspectRatio"/> is true, the image will be scaled to fit into the bounds defined by <paramref name="width"/> × <paramref name="height"/>.
+        /// Downscale the image in <paramref name="data"/> to the specified size. This method uses <see cref="System.Drawing"/> (CPU) so it can be run on a non-main thread.
         /// </summary>
         /// <param name="data">Byte array containing the image data.</param>
         /// <param name="width">The maximum width of the scaled image.</param>
         /// <param name="height">The maximum height of the scaled image.</param>
-        /// <param name="maintainAspectRatio">If true, the image will be scaled while maintaining its aspect ratio.</param>
+        /// <param name="maintainAspectRatio">If true, the image will be scaled while maintaining its original aspect ratio. The image will be scaled to fit within the bounds defined by <paramref name="width"/> × <paramref name="height"/>.</param>
         /// <returns>A byte array containing the image data.</returns>
         public static byte[] DownscaleImage(byte[] data, int width, int height, bool maintainAspectRatio = true)
         {
@@ -458,12 +456,12 @@ namespace BeatSaberMarkupLanguage
                 Bitmap resizedImage;
                 if (maintainAspectRatio)
                 {
-                    var scale = Math.Min((double)width / originalImage.Width, (double)height / originalImage.Height);
-                    resizedImage = new Bitmap(originalImage, (int)Math.Round(width * scale), (int)Math.Round(height * scale));
+                    double scale = Math.Min((double)width / originalImage.Width, (double)height / originalImage.Height);
+                    resizedImage = new Bitmap(originalImage, (int)Math.Round(originalImage.Width * scale), (int)Math.Round(originalImage.Height * scale));
                 }
                 else
                 {
-                    resizedImage = new Bitmap(originalImage, width, height);
+                    resizedImage = new Bitmap(originalImage, Mathf.Min(width, originalImage.Width), Mathf.Min(height, originalImage.Height));
                 }
 
                 using var writeMemoryStream = new MemoryStream();
