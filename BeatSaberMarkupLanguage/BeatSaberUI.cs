@@ -461,7 +461,7 @@ namespace BeatSaberMarkupLanguage
                 }
                 else
                 {
-                    resizedImage = new Bitmap(originalImage, Mathf.Min(width, originalImage.Width), Mathf.Min(height, originalImage.Height));
+                    resizedImage = new Bitmap(originalImage, Math.Min(width, originalImage.Width), Math.Min(height, originalImage.Height));
                 }
 
                 using var writeMemoryStream = new MemoryStream();
