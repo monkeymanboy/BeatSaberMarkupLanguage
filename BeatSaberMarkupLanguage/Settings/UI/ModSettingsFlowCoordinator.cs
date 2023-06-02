@@ -64,7 +64,11 @@ namespace BeatSaberMarkupLanguage.Settings
                 () =>
                 {
                     isPresenting = false;
-                    bottomButtons?.SetAsLastSibling();
+
+                    if (bottomButtons != null)
+                    {
+                        bottomButtons.SetAsLastSibling();
+                    }
                 },
                 wasActive);
 

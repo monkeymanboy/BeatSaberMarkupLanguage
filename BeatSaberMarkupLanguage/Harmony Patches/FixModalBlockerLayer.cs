@@ -10,21 +10,23 @@ namespace BeatSaberMarkupLanguage.Harmony_Patches
     {
         private static void Postfix(ModalView __instance, GameObject ____blockerGO)
         {
-            var cb = ____blockerGO.GetComponent<Canvas>();
+            Canvas blockerCanvas = ____blockerGO.GetComponent<Canvas>();
+            HMUI.Screen screen = __instance.transform.parent.GetComponentInParent<HMUI.Screen>();
+            int sortingOrder = screen != null
+                ? screen
+                    .GetComponentsInChildren<Canvas>()
+                    .Where(x => x.sortingLayerID == blockerCanvas.sortingLayerID)
+                    .Select(x => x.sortingOrder)
+                    .DefaultIfEmpty(0)
+                    .Max() + 1
+                : 1;
 
-            var h = (__instance.transform.parent.GetComponentInParent<HMUI.Screen>()
-                ?.GetComponentsInChildren<Canvas>()
-                .Where(x => x.sortingLayerID == cb.sortingLayerID)
-                .Select(x => x.sortingOrder)
-                .DefaultIfEmpty(0)
-                .Max() ?? 0) + 1;
+            blockerCanvas.overrideSorting = true;
+            blockerCanvas.sortingOrder = sortingOrder;
 
-            cb.overrideSorting = true;
-            cb.sortingOrder = h;
-
-            cb = __instance.GetComponent<Canvas>();
-            cb.overrideSorting = true;
-            cb.sortingOrder = h + 1;
+            blockerCanvas = __instance.GetComponent<Canvas>();
+            blockerCanvas.overrideSorting = true;
+            blockerCanvas.sortingOrder = sortingOrder + 1;
         }
     }
 }

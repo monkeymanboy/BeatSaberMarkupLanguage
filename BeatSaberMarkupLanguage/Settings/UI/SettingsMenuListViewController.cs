@@ -18,6 +18,7 @@ namespace BeatSaberMarkupLanguage.Settings.UI.ViewControllers
         protected override void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
         {
             base.DidActivate(firstActivation, addedToHierarchy, screenSystemEnabling);
+
             if (firstActivation)
             {
                 rectTransform.sizeDelta = new Vector2(35, 0);
@@ -26,7 +27,11 @@ namespace BeatSaberMarkupLanguage.Settings.UI.ViewControllers
             }
 
             list.data = BSMLSettings.instance.settingsMenus;
-            list.tableView?.ReloadData();
+
+            if (list.tableView != null)
+            {
+                list.tableView.ReloadData();
+            }
         }
 
         [UIAction("settings-click")]

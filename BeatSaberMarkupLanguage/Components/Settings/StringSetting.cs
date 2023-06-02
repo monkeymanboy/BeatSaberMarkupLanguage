@@ -16,7 +16,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 
         public override bool interactable
         {
-            get => editButton?.interactable ?? false;
+            get => editButton != null && editButton.interactable;
             set
             {
                 if (editButton != null)

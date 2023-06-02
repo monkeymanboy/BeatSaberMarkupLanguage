@@ -111,7 +111,7 @@ namespace BeatSaberMarkupLanguage.Components
 
             if (PageDownButton != null)
             {
-                PageDownButton.interactable = _destinationPos < contentHeight - (_viewport?.rect.height ?? 0);
+                PageDownButton.interactable = _destinationPos < contentHeight - (_viewport != null ? _viewport.rect.height : 0);
             }
         }
 

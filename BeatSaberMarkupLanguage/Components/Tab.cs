@@ -16,7 +16,7 @@ namespace BeatSaberMarkupLanguage.Components
             set
             {
                 tabName = value;
-                selector?.Refresh();
+                RefreshSelector();
             }
         }
 
@@ -26,7 +26,7 @@ namespace BeatSaberMarkupLanguage.Components
             set
             {
                 isVisible = value;
-                selector?.Refresh();
+                RefreshSelector();
             }
         }
 
@@ -36,7 +36,15 @@ namespace BeatSaberMarkupLanguage.Components
             set
             {
                 tabKey = value;
-                selector?.Refresh();
+                RefreshSelector();
+            }
+        }
+
+        private void RefreshSelector()
+        {
+            if (selector != null)
+            {
+                selector.Refresh();
             }
         }
     }

@@ -17,7 +17,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 
         public override bool interactable
         {
-            get => slider?.interactable ?? false;
+            get => slider != null && slider.interactable;
             set
             {
                 if (slider != null)

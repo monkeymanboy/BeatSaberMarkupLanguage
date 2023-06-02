@@ -9,14 +9,20 @@ namespace BeatSaberMarkupLanguage.Components
 
         private void OnEnable()
         {
-            scrollView?.SetText(scrollView._text.text);
-            scrollView?.RefreshButtons();
+            if (scrollView != null)
+            {
+                scrollView.SetText(scrollView._text.text);
+                scrollView.RefreshButtons();
+            }
         }
 
         private void OnRectTransformDimensionsChange()
         {
-            scrollView?.SetText(scrollView._text.text);
-            scrollView?.RefreshButtons();
+            if (scrollView != null)
+            {
+                scrollView.SetText(scrollView._text.text);
+                scrollView.RefreshButtons();
+            }
         }
     }
 }
