@@ -146,11 +146,11 @@ namespace BeatSaberMarkupLanguage.ViewControllers
 #if HRVC_DEBUG
                 if (registered)
                 {
-                    Logger.Log.Info($"Registered {this.name}");
+                    Logger.Log.Info($"Registered view controller {this.name} to watcher");
                 }
                 else
                 {
-                    Logger.Log.Error($"Failed to register {this.name}");
+                    Logger.Log.Error($"Failed to register view controller {this.name} to watcher");
                 }
 #endif
             }
@@ -199,8 +199,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
             }
             catch (Exception ex)
             {
-                Logger.Log.Error($"Error parsing BSML: {ex.Message}");
-                Logger.Log.Debug(ex);
+                Logger.Log.Error($"Error parsing BSML\n{ex}");
                 BSMLParser.instance.Parse(string.Format(FallbackContent, Utilities.EscapeXml(ex.Message)), gameObject, null);
             }
         }

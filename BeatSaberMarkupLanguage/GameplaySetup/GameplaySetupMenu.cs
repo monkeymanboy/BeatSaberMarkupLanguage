@@ -60,7 +60,7 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
             {
                 if (ex is BSMLResourceException resEx)
                 {
-                    Logger.Log.Error($"Cannot find bsml resource '{resEx.ResourcePath}' in '{resEx.Assembly?.GetName().Name ?? "<NULL>"}' for Gameplay Settings tab.");
+                    Logger.Log.Error($"Cannot find BSML resource '{resEx.ResourcePath}' in '{resEx.Assembly?.GetName().Name ?? "<NULL>"}' for Gameplay Settings tab.");
                 }
                 else
                 {

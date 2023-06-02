@@ -159,8 +159,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
             }
             catch (Exception ex)
             {
-                Logger.Log.Error($"Error parsing BSML: {ex.Message}");
-                Logger.Log.Debug(ex);
+                Logger.Log.Error($"Error parsing BSML\n{ex}");
                 BSMLParser.instance.Parse(string.Format(FallbackContent, Utilities.EscapeXml(ex.Message)), gameObject, this);
             }
         }

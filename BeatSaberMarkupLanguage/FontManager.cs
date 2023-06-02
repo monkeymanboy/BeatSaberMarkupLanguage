@@ -247,9 +247,9 @@ namespace BeatSaberMarkupLanguage
                 {
                     AddFontFileToCache(families, fullNames, path);
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    Logger.Log.Error(e);
+                    Logger.Log.Error($"Failed to load system fonts\n{ex}");
                 }
 
                 await Task.Yield();

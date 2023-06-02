@@ -38,14 +38,15 @@ namespace BeatSaberMarkupLanguage
         public void Init(Conf conf, IPALogger logger)
         {
             Logger.Log = logger;
+
             try
             {
                 Harmony harmony = new Harmony("com.monkeymanboy.BeatSaberMarkupLanguage");
                 harmony.PatchAll(Assembly.GetExecutingAssembly());
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Logger.Log.Error(e.Message);
+                Logger.Log.Error($"Failed to apply Harmony patches\n{ex}");
             }
 
             AnimationController.instance.InitializeLoadingAnimation();
@@ -106,10 +107,9 @@ namespace BeatSaberMarkupLanguage
             .ContinueWith(
                 t =>
                 {
-                    Logger.Log.Error("Errored while setting up fallback fonts:");
-                    Logger.Log.Error(t.Exception);
+                    Logger.Log.Error($"Failed to set up fallback fonts\n{t.Exception}");
                 },
-                TaskContinuationOptions.NotOnRanToCompletion);
+                TaskContinuationOptions.OnlyOnFaulted);
         }
 
         [OnExit]

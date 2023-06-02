@@ -243,7 +243,7 @@ namespace BeatSaberMarkupLanguage
             }
             catch
             {
-                Logger.Log.Error($"Error getting data from '{location}' either invalid path or file does not exist");
+                Logger.Log.Error($"Error getting data from '{location}'; either the path is invalid or the file does not exist");
             }
         }
 

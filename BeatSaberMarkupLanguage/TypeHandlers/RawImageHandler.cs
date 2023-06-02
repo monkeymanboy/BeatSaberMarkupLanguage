@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.TypeHandlers
@@ -26,7 +27,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 image.texture = Utilities.FindTextureCached(imgName);
                 if (image.texture == null)
                 {
-                    Logger.Log.Error($"Could not find Texture with image name {imgName}");
+                    Logger.Log.Error($"Could not find {nameof(Texture)} with image name '{imgName}'");
                 }
             }
             else
