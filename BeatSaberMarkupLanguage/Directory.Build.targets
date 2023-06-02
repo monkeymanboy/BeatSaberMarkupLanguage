@@ -38,9 +38,10 @@
     <PropertyGroup>
       <!--Build name for artifact/zip file-->
       <ArtifactName>$(AssemblyName)</ArtifactName>
-      <ArtifactName Condition="'$(PluginVersion)' != ''">$(ArtifactName)-$(PluginVersion)+</ArtifactName>
-      <ArtifactName Condition="'$(ContinuousIntegrationBuild)' != 'True'">$(ArtifactName)dev</ArtifactName>
-      <ArtifactName Condition="'$(CommitHash)' != '' AND '$(CommitHash)' != 'local'">$(ArtifactName).git.$(CommitHash)</ArtifactName>
+      <ArtifactName Condition="'$(PluginVersion)' != ''">$(ArtifactName)-$(PluginVersion)</ArtifactName>
+      <ArtifactName Condition="$(ArtifactName.Contains('+')) != 'true'">$(ArtifactName)+</ArtifactName>
+      <ArtifactName Condition="$(ArtifactName.EndsWith('+')) != 'true'">$(ArtifactName).</ArtifactName>
+      <ArtifactName Condition="'$(CommitHash)' != '' AND '$(CommitHash)' != 'local'">$(ArtifactName)git.$(CommitHash)</ArtifactName>
       <ArtifactName>$(ArtifactName)-$(Configuration.ToUpper())</ArtifactName>
     </PropertyGroup>
   </Target>
