@@ -25,9 +25,7 @@ namespace BeatSaberMarkupLanguage.Tags
 
         protected LocalizableText CreateLocalizableText(GameObject gameObject)
         {
-            TextMeshProUGUI textMesh = gameObject.GetComponent<TextMeshProUGUI>();
-
-            if (!textMesh)
+            if (!gameObject.TryGetComponent(out TextMeshProUGUI textMesh))
             {
                 throw new InvalidOperationException("CreateLocalizableText should only be called if a TextMeshProUGUI instance already exists on the GameObject");
             }
@@ -38,7 +36,7 @@ namespace BeatSaberMarkupLanguage.Tags
             LocalizableText localizableText = gameObject.AddComponent<LocalizableText>();
 
             localizableText.enabled = false;
-            localizableText.TextMesh = gameObject.GetComponent<TextMeshProUGUI>();
+            localizableText.TextMesh = textMesh;
 
             gameObject.SetActive(wasActive);
 
