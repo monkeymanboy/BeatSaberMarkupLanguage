@@ -338,8 +338,7 @@ namespace BeatSaberMarkupLanguage
         /// <param name="callback">Method to call once SetImage has finished.</param>
         public static void SetImage(this Image image, string location, bool loadingAnimation, ScaleOptions scaleOptions, Action callback)
         {
-            AnimationStateUpdater oldStateUpdater = image.GetComponent<AnimationStateUpdater>();
-            if (oldStateUpdater != null)
+            if (image.TryGetComponent(out AnimationStateUpdater oldStateUpdater))
             {
                 Object.DestroyImmediate(oldStateUpdater);
             }

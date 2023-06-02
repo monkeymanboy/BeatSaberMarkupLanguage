@@ -271,8 +271,7 @@ namespace BeatSaberMarkupLanguage.Components
 
         private void UpdateViewportMask()
         {
-            var img = Viewport.GetComponent<Image>();
-            if (img != null)
+            if (Viewport.TryGetComponent(out Image img))
             {
                 img.enabled = MaskOverflow;
             }
