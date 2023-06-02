@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,9 +10,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using VRUIControls;
 using Zenject;
-using Color = UnityEngine.Color;
-using Font = UnityEngine.Font;
-using Image = UnityEngine.UI.Image;
 using Object = UnityEngine.Object;
 
 namespace BeatSaberMarkupLanguage
@@ -442,32 +438,39 @@ namespace BeatSaberMarkupLanguage
         {
             try
             {
-                System.Drawing.Image originalImage;
-                using (var readMemoryStream = new MemoryStream(data))
-                {
-                    originalImage = System.Drawing.Image.FromStream(readMemoryStream);
-                }
+                // this memory stream needs to stay open or else GDI+ dies
+                using var workMemoryStream = new MemoryStream(data);
+                System.Drawing.Image originalImage = System.Drawing.Image.FromStream(workMemoryStream);
 
                 if (originalImage.Width <= width && originalImage.Height <= height)
                 {
                     return data;
                 }
 
-                Bitmap resizedImage;
+                System.Drawing.Size newSize;
                 if (maintainAspectRatio)
                 {
                     double scale = Math.Min((double)width / originalImage.Width, (double)height / originalImage.Height);
-                    resizedImage = new Bitmap(originalImage, (int)Math.Round(originalImage.Width * scale), (int)Math.Round(originalImage.Height * scale));
+                    newSize = new System.Drawing.Size((int)Math.Round(originalImage.Width * scale), (int)Math.Round(originalImage.Height * scale));
                 }
                 else
                 {
-                    resizedImage = new Bitmap(originalImage, Math.Min(width, originalImage.Width), Math.Min(height, originalImage.Height));
+                    newSize = new System.Drawing.Size(Math.Min(width, originalImage.Width), Math.Min(height, originalImage.Height));
                 }
 
-                using var writeMemoryStream = new MemoryStream();
-                resizedImage.Save(writeMemoryStream, originalImage.RawFormat);
+                System.Drawing.Bitmap resizedImage = new(newSize.Width, newSize.Height);
 
-                return writeMemoryStream.ToArray();
+                using (var graphics = System.Drawing.Graphics.FromImage(resizedImage))
+                {
+                    // TODO: eventually add options for low/high quality resizing
+                    graphics.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceCopy;
+                    graphics.DrawImage(originalImage, new System.Drawing.Rectangle(0, 0, newSize.Width, newSize.Height), 0, 0, originalImage.Width, originalImage.Height, System.Drawing.GraphicsUnit.Pixel);
+                }
+
+                using var saveMemoryStream = new MemoryStream();
+                resizedImage.Save(saveMemoryStream, originalImage.RawFormat);
+
+                return saveMemoryStream.ToArray();
             }
             catch (Exception ex)
             {
