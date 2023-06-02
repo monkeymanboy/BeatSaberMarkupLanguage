@@ -469,8 +469,9 @@ namespace BeatSaberMarkupLanguage
 
                 return writeMemoryStream.ToArray();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Logger.Log.Error($"Failed to downscale image; returning original\n{ex}");
                 return data;
             }
         }
