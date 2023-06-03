@@ -16,13 +16,6 @@ namespace BeatSaberMarkupLanguage.ViewControllers
 
         public abstract string ContentFilePath { get; }
 
-        public virtual string FallbackContent => @"<vertical child-control-height='false' child-control-width='true' child-align='UpperCenter' pref-width='110' pad-left='3' pad-right='3'>
-                                                      <horizontal bg='panel-top' pad-left='10' pad-right='10' horizontal-fit='PreferredSize' vertical-fit='PreferredSize'>
-                                                        <text text='Invalid BSML' font-size='10'/>
-                                                      </horizontal>
-                                                      <text text='{0}' font-size='5'/>
-                                                    </vertical>";
-
         public override string Content
         {
             get
@@ -87,12 +80,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
                 try
                 {
                     __Deactivate(false, false, false);
-
-                    for (int i = 0; i < transform.childCount; i++)
-                    {
-                        Destroy(transform.GetChild(i).gameObject);
-                    }
-
+                    ClearContents();
                     __Activate(false, false);
                 }
                 catch (Exception ex)
@@ -149,19 +137,6 @@ namespace BeatSaberMarkupLanguage.ViewControllers
             }
 
             base.DidDeactivate(removedFromHierarchy, screenSystemDisabling);
-        }
-
-        private void ParseWithFallback()
-        {
-            try
-            {
-                BSMLParser.instance.Parse(Content, gameObject, this);
-            }
-            catch (Exception ex)
-            {
-                Logger.Log.Error($"Error parsing BSML\n{ex}");
-                BSMLParser.instance.Parse(string.Format(FallbackContent, Utilities.EscapeXml(ex.Message)), gameObject, this);
-            }
         }
     }
 }

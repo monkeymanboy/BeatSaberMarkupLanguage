@@ -106,15 +106,7 @@ namespace BeatSaberMarkupLanguage
             return go.AddComponent<T>().GetCopyOf(toAdd);
         }
 
-        public static string EscapeXml(string source)
-        {
-            return source.Replace("\"", "&quot;")
-                .Replace("\"", "&quot;")
-                .Replace("&", "&amp;")
-                .Replace("'", "&apos;")
-                .Replace("<", "&lt;")
-                .Replace(">", "&gt;");
-        }
+        public static string EscapeXml(string source) => System.Security.SecurityElement.Escape(source);
 
         public static Texture2D FindTextureInAssembly(string path)
         {
