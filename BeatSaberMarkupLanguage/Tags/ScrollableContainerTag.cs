@@ -54,10 +54,6 @@ namespace BeatSaberMarkupLanguage.Tags
             layout.childControlHeight = false;
             layout.childForceExpandHeight = false;
             layout.childForceExpandWidth = false;
-            /*LayoutElement layoutElement = contentgo.AddComponent<LayoutElement>();
-            layoutElement.minWidth = -1;
-            layoutElement.preferredWidth = -1;
-            layoutElement.flexibleWidth = 0;*/
 
             go.AddComponent<Touchable>(); // Required by EventSystemListener
             go.AddComponent<EventSystemListener>(); // Required by ScrollView
