@@ -256,6 +256,11 @@ namespace BeatSaberMarkupLanguage.Components
                             }
 
                             label = keyboard.Substring(labelIndex, p - labelIndex);
+                            label = label switch
+                            {
+                                "<--" => "\u2B05",
+                                _ => label,
+                            };
 
                             break;
                         case '(':
@@ -336,7 +341,7 @@ namespace BeatSaberMarkupLanguage.Components
         {
             SetAction("CLEAR", Clear);
             SetAction("ENTER", Enter);
-            SetAction("<--", Backspace);
+            SetAction("\u2B05", Backspace);
             SetAction("SHIFT", SHIFT);
             SetAction("CAPS", CAPS);
 
@@ -592,7 +597,11 @@ namespace BeatSaberMarkupLanguage.Components
                 });
 
                 HoverHint myHintText = BeatSaberUI.DiContainer.InstantiateComponent<HoverHint>(mybutton.gameObject);
-                myHintText.text = value;
+                myHintText.text = value switch
+                {
+                    "\u2B05" => "Backspace",
+                    _ => value,
+                };
             }
 
             public KEY Set(string value)
