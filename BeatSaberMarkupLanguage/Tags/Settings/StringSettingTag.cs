@@ -2,6 +2,7 @@
 using System.Linq;
 using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.Components.Settings;
+using HMUI;
 using Polyglot;
 using TMPro;
 using UnityEngine;
@@ -32,14 +33,19 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
             StringSetting stringSetting = gameObject.AddComponent<StringSetting>();
             Transform valuePick = gameObject.transform.Find("ValuePicker");
             Object.Destroy(valuePick.GetComponent<StepValuePicker>());
-            Button decButton = valuePick.GetComponentsInChildren<Button>().First();
-            decButton.enabled = false;
-            decButton.interactable = true;
-            Object.Destroy(decButton.transform.Find("Icon").gameObject);
+            Object.Destroy(valuePick.transform.Find("DecButton").gameObject);
+
+            Transform editButtonTransform = valuePick.transform.Find("IncButton");
+            editButtonTransform.name = "EditButton";
+
+            // TODO: this button has a gradient and simply disabling the gradient breaks colors - seems to be related to button animations
+            ImageView buttonBackgroundImageView = editButtonTransform.Find("BG").GetComponent<ImageView>();
+            buttonBackgroundImageView.sprite = Utilities.FindSpriteCached("RoundRect10Thin");
+
             stringSetting.text = valuePick.GetComponentsInChildren<TextMeshProUGUI>().First();
             stringSetting.text.richText = true;
-            stringSetting.editButton = valuePick.GetComponentsInChildren<Button>().Last();
-            stringSetting.boundingBox = valuePick as RectTransform;
+            stringSetting.editButton = editButtonTransform.GetComponent<Button>();
+            stringSetting.boundingBox = (RectTransform)valuePick;
 
             GameObject nameText = gameObject.transform.Find("NameText").gameObject;
             LocalizedTextMeshProUGUI localizedText = ConfigureLocalizedText(nameText);
@@ -54,7 +60,7 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
             gameObject.GetComponent<LayoutElement>().preferredWidth = 90;
             stringSetting.text.alignment = TextAlignmentOptions.MidlineRight;
             stringSetting.text.enableWordWrapping = false;
-            RectTransform textTransform = stringSetting.text.transform as RectTransform;
+            RectTransform textTransform = (RectTransform)stringSetting.text.transform;
             textTransform.anchorMin = new Vector2(0, 0);
             textTransform.anchorMax = new Vector2(1, 1);
             textTransform.anchoredPosition = new Vector2(-6, 0);
@@ -65,7 +71,7 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
             icon.rectTransform.sizeDelta = new Vector2(4, 4);
             stringSetting.editButton.interactable = true;
 
-            (stringSetting.editButton.transform as RectTransform).anchorMin = new Vector2(0, 0);
+            ((RectTransform)stringSetting.editButton.transform).anchorMin = new Vector2(0, 0);
 
             stringSetting.modalKeyboard = base.CreateObject(gameObject.transform).GetComponent<ModalKeyboard>();
 

@@ -2,6 +2,7 @@
 using System.Linq;
 using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.Components.Settings;
+using HMUI;
 using Polyglot;
 using TMPro;
 using UnityEngine;
@@ -35,12 +36,17 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
             Transform valuePick = gameObject.transform.Find("ValuePicker");
             (valuePick.transform as RectTransform).sizeDelta = new Vector2(13, 0);
 
-            Button decButton = valuePick.GetComponentsInChildren<Button>().First();
-            decButton.enabled = false;
-            decButton.interactable = true;
-            Object.Destroy(decButton.transform.Find("Icon").gameObject);
+            Object.Destroy(valuePick.transform.Find("DecButton").gameObject);
+
+            Transform editButtonTransform = valuePick.transform.Find("IncButton");
+            editButtonTransform.name = "EditButton";
+
+            // TODO: this button has a gradient and simply disabling the gradient breaks colors - seems to be related to button animations
+            ImageView buttonBackgroundImageView = editButtonTransform.Find("BG").GetComponent<ImageView>();
+            buttonBackgroundImageView.sprite = Utilities.FindSpriteCached("RoundRect10Thin");
+
             Object.Destroy(valuePick.GetComponentsInChildren<TextMeshProUGUI>().First().gameObject);
-            colorSetting.editButton = valuePick.GetComponentsInChildren<Button>().Last();
+            colorSetting.editButton = editButtonTransform.GetComponent<Button>();
 
             GameObject nameText = gameObject.transform.Find("NameText").gameObject;
             LocalizedTextMeshProUGUI localizedText = ConfigureLocalizedText(nameText);
@@ -61,10 +67,11 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
 
             Image instance = Object.Instantiate(colorImage, valuePick, false);
             instance.name = "BSMLCurrentColor";
-            (instance.gameObject.transform as RectTransform).anchoredPosition = new Vector2(0, 0);
-            (instance.gameObject.transform as RectTransform).sizeDelta = new Vector2(5, 5);
-            (instance.gameObject.transform as RectTransform).anchorMin = new Vector2(0.2f, 0.5f);
-            (instance.gameObject.transform as RectTransform).anchorMax = new Vector2(0.2f, 0.5f);
+            RectTransform imageTransform = (RectTransform)instance.transform;
+            imageTransform.anchoredPosition = new Vector2(0, 0);
+            imageTransform.sizeDelta = new Vector2(5, 5);
+            imageTransform.anchorMin = new Vector2(0.25f, 0.5f);
+            imageTransform.anchorMax = new Vector2(0.25f, 0.5f);
             colorSetting.colorImage = instance;
 
             Image icon = colorSetting.editButton.transform.Find("Icon").GetComponent<Image>();
@@ -73,7 +80,7 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
             icon.rectTransform.sizeDelta = new Vector2(4, 4);
             colorSetting.editButton.interactable = true;
 
-            (colorSetting.editButton.transform as RectTransform).anchorMin = new Vector2(0, 0);
+            ((RectTransform)colorSetting.editButton.transform).anchorMin = new Vector2(0, 0);
 
             colorSetting.modalColorPicker = base.CreateObject(gameObject.transform).GetComponent<ModalColorPicker>();
 
