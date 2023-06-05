@@ -476,17 +476,19 @@ namespace BeatSaberMarkupLanguage.Components
             }
         }
 
-        private void SHIFT(KEY key)
+        private void SHIFT(KEY key) => SHIFT(key, !key.kb.shift);
+
+        private void SHIFT(KEY key, bool state)
         {
-            key.kb.shift = !key.kb.shift;
+            key.kb.shift = state;
 
             foreach (KEY k in key.kb.keys)
             {
-                string x = key.kb.shift ? k.shifted : k.value;
+                string keyText = key.kb.shift ? k.shifted : k.value;
 
                 if (!string.IsNullOrEmpty(k.shifted))
                 {
-                    k.mybutton.SetButtonText(x);
+                    k.mybutton.SetButtonText(keyText);
                 }
 
                 if (k.name == "SHIFT")
@@ -594,6 +596,7 @@ namespace BeatSaberMarkupLanguage.Components
 
                     kb.KeyboardText.text += x;
                     kb.DrawCursor();
+                    kb.SHIFT(this, false);
                 });
 
                 HoverHint myHintText = BeatSaberUI.DiContainer.InstantiateComponent<HoverHint>(mybutton.gameObject);
