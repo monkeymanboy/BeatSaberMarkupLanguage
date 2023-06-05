@@ -383,7 +383,7 @@ namespace BeatSaberMarkupLanguage.Components
             Vector2 v = KeyboardText.GetPreferredValues(KeyboardText.text + "|");
 
             // BUG: This needs to be derived from the text position
-            v.y = 15f;
+            v.y = 16f;
 
             // BUG: I do not know why that 30f is here, It makes things work, but I can't understand WHY! Me stupid.
             // BUG: The .5 gets rid of the trailing |, but technically, we need to calculate its width and store it
