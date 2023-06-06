@@ -493,7 +493,7 @@ namespace BeatSaberMarkupLanguage.Components
 
                 if (k.name == "SHIFT")
                 {
-                    k.mybutton.GetComponentInChildren<Image>().color = key.kb.shift ? Color.green : Color.white;
+                    k.SetHighlighted(key.kb.shift);
                 }
             }
         }
@@ -501,7 +501,7 @@ namespace BeatSaberMarkupLanguage.Components
         private void CAPS(KEY key)
         {
             key.kb.caps = !key.kb.caps;
-            key.mybutton.GetComponentInChildren<Image>().color = key.kb.caps ? Color.green : Color.white;
+            key.SetHighlighted(key.kb.caps);
         }
 
         public class KEY
@@ -512,6 +512,9 @@ namespace BeatSaberMarkupLanguage.Components
             public Button mybutton;
             public KEYBOARD kb;
             public Action<KEY> keyaction = null;
+
+            private readonly Graphic[] graphicsToColor;
+            private readonly Color[] defaultColors;
 
             public KEY()
             {
@@ -525,6 +528,13 @@ namespace BeatSaberMarkupLanguage.Components
                 name = text;
                 mybutton = Object.Instantiate(kb.BaseButton, kb.container, false);
                 Object.Destroy(mybutton.GetComponent<UIKeyboardKey>());
+                graphicsToColor = mybutton.GetComponentsInChildren<Graphic>();
+                defaultColors = new Color[graphicsToColor.Length];
+
+                for (int i = 0; i < graphicsToColor.Length; i++)
+                {
+                    defaultColors[i] = graphicsToColor[i].color;
+                }
 
                 Polyglot.LocalizedTextMeshProUGUI localizer = mybutton.GetComponentInChildren<Polyglot.LocalizedTextMeshProUGUI>(true);
                 if (localizer != null)
@@ -615,6 +625,14 @@ namespace BeatSaberMarkupLanguage.Components
                 }
 
                 return this;
+            }
+
+            internal void SetHighlighted(bool highlighted)
+            {
+                for (int i = 0; i < graphicsToColor.Length; i++)
+                {
+                    graphicsToColor[i].color = highlighted ? Color.green : defaultColors[i];
+                }
             }
         }
     }
