@@ -74,7 +74,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
             if (string.IsNullOrEmpty(contentFile))
             {
 #if HRVC_DEBUG
-                Logger.Log.Critical($"Skipping registration for {controller.GetInstanceID()}:{controller.Name}, it has not content file defined.");
+                Logger.Log.Error($"Skipping registration for {controller.GetInstanceID()}:{controller.Name}, it has not content file defined.");
 #endif
                 return false;
             }
@@ -108,7 +108,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
             if (boundControllers.ContainsKey(controller.GetInstanceID()))
             {
 #if HRVC_DEBUG
-                Logger.Log.Critical($"Failed to register controller, already exists. {controller.GetInstanceID()}:{controller.Name}");
+                Logger.Log.Error($"Failed to register controller, already exists. {controller.GetInstanceID()}:{controller.Name}");
 #endif
                 return false;
             }
@@ -156,7 +156,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
             if (controller == null)
             {
 #if HRVC_DEBUG
-                Logger.Log.Critical($"Unable to unbind controller, it is null.");
+                Logger.Log.Error($"Unable to unbind controller, it is null.");
 #endif
                 return false;
             }
@@ -176,7 +176,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
                 return;
             }
 #if HRVC_DEBUG
-            Logger.Log.Critical($"Creating FileSystemWatcher for {ContentDirectory}");
+            Logger.Log.Debug($"Creating FileSystemWatcher for {ContentDirectory}");
 #endif
             Watcher = new FileSystemWatcher(ContentDirectory, "*.bsml")
             {
@@ -188,7 +188,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
         private void DestroyWatcher()
         {
 #if HRVC_DEBUG
-            Logger.Log.Critical($"Destroying FileSystemWatcher for {ContentDirectory}");
+            Logger.Log.Debug($"Destroying FileSystemWatcher for {ContentDirectory}");
 #endif
             Watcher.Dispose();
             Watcher = null;
@@ -201,7 +201,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
                 if (!pair.Value.TryGetTarget(out IHotReloadableController controller))
                 {
 #if HRVC_DEBUG
-                    Logger.Log.Critical($"Watcher_Changed: {pair.Key} has been Garbage Collected, unbinding.");
+                    Logger.Log.Debug($"Watcher_Changed: {pair.Key} has been Garbage Collected, unbinding.");
 #endif
                     UnbindController(pair.Key);
                     continue;
@@ -217,7 +217,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
             if (boundControllers.Count == 0)
             {
 #if HRVC_DEBUG
-                Logger.Log.Critical($"BoundControllers is empty in Watcher_Changed.");
+                Logger.Log.Debug($"BoundControllers is empty in Watcher_Changed.");
 #endif
                 DestroyWatcher();
             }
@@ -239,7 +239,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
                 if (!pair.Value.TryGetTarget(out IHotReloadableController controller))
                 {
 #if HRVC_DEBUG
-                    Logger.Log.Critical($"{pair.Key} has been Garbage Collected, unbinding.");
+                    Logger.Log.Debug($"{pair.Key} has been Garbage Collected, unbinding.");
 #endif
                     UnbindController(pair.Key);
                     continue;
@@ -248,7 +248,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
                 if (controller.ContentChanged)
                 {
 #if HRVC_DEBUG
-                    Logger.Log.Critical($"{pair.Key} seems to exist and has changed content.");
+                    Logger.Log.Debug($"{pair.Key} seems to exist and has changed content.");
 #endif
                     controller?.Refresh();
                 }
