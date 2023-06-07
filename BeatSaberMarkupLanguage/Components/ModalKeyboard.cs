@@ -29,7 +29,6 @@ namespace BeatSaberMarkupLanguage.Components
         public void SetText(string text)
         {
             keyboard.KeyboardText.text = text;
-            keyboard.DrawCursor();
         }
 
         private void OnEnable()
@@ -89,6 +88,7 @@ namespace BeatSaberMarkupLanguage.Components
         public Button BaseButton;
 
         private readonly KEY dummy = new(); // This allows for some lazy programming, since unfound key searches will point to this instead of null. It still logs an error though
+        private readonly RectTransform keyboardTextContainer;
 
         private readonly RectTransform container;
         private readonly bool enableInputField = true;
@@ -109,23 +109,36 @@ namespace BeatSaberMarkupLanguage.Components
 
             SetButtonType();
 
+            GameObject textContainer = new GameObject("KeyboardText", typeof(RectTransform));
+
+            keyboardTextContainer = (RectTransform)textContainer.transform;
+            keyboardTextContainer.SetParent(container, false);
+            keyboardTextContainer.anchoredPosition = new Vector2(0, 15f);
+
+            HorizontalLayoutGroup layoutGroup = textContainer.AddComponent<HorizontalLayoutGroup>();
+            layoutGroup.childControlWidth = true;
+            layoutGroup.childControlHeight = true;
+            layoutGroup.childForceExpandWidth = false;
+            layoutGroup.childForceExpandHeight = false;
+            layoutGroup.childAlignment = TextAnchor.MiddleCenter;
+
             // BUG: Make this an input field maybe
-            KeyboardText = BeatSaberUI.CreateText(container, string.Empty, new Vector2(0, 15f));
+            KeyboardText = BeatSaberUI.CreateText<WhitespaceIncludingCurvedTextMeshPro>(keyboardTextContainer, string.Empty, new Vector2(0, 0));
+            KeyboardText.name = "KeyboardText";
             KeyboardText.fontSize = 6f;
             KeyboardText.color = Color.white;
-            KeyboardText.alignment = TextAlignmentOptions.Center;
+            KeyboardText.alignment = TextAlignmentOptions.Baseline;
             KeyboardText.enableWordWrapping = false;
             KeyboardText.text = string.Empty;
             KeyboardText.enabled = this.enableInputField;
 
-            KeyboardCursor = BeatSaberUI.CreateText(container, "|", new Vector2(0, 0));
+            KeyboardCursor = BeatSaberUI.CreateText(keyboardTextContainer, "|", new Vector2(0, 0));
+            KeyboardCursor.name = "Cursor";
             KeyboardCursor.fontSize = 6f;
             KeyboardCursor.color = new Color(0.60f, 0.80f, 1);
-            KeyboardCursor.alignment = TextAlignmentOptions.Left;
+            KeyboardCursor.alignment = TextAlignmentOptions.Baseline;
             KeyboardCursor.enableWordWrapping = false;
             KeyboardCursor.enabled = this.enableInputField;
-
-            DrawCursor(); // BUG: Doesn't handle trailing spaces.. seriously, wtf.
 
             // We protect this since setting nonexistent keys will throw.
 
@@ -373,22 +386,9 @@ namespace BeatSaberMarkupLanguage.Components
             key.kb.KeyboardText.text = string.Empty;
         }
 
+        [Obsolete("Calling this method is no longer necessary. The cursor is redrawn by Unity UI directly.")]
         public void DrawCursor()
         {
-            if (!enableInputField)
-            {
-                return;
-            }
-
-            Vector2 v = KeyboardText.GetPreferredValues(KeyboardText.text + "|");
-
-            // BUG: This needs to be derived from the text position
-            v.y = 16f;
-
-            // BUG: I do not know why that 30f is here, It makes things work, but I can't understand WHY! Me stupid.
-            // BUG: The .5 gets rid of the trailing |, but technically, we need to calculate its width and store it
-            v.x = (v.x / 2) + 30f - 0.5f;
-            (KeyboardCursor.transform as RectTransform).anchoredPosition = v;
         }
 
         private KEY AddKey(string keylabel, float width = 12, float height = 10, int color = 0xffffff)
@@ -581,7 +581,6 @@ namespace BeatSaberMarkupLanguage.Components
                     if (keyaction != null)
                     {
                         keyaction(this);
-                        kb.DrawCursor();
                         return;
                     }
 
@@ -589,7 +588,6 @@ namespace BeatSaberMarkupLanguage.Components
                     {
                         kb.KeyboardText.text += value.Substring(0, value.Length - 4);
                         kb.Enter(this);
-                        kb.DrawCursor();
                         return;
                     }
 
@@ -605,7 +603,6 @@ namespace BeatSaberMarkupLanguage.Components
                     }
 
                     kb.KeyboardText.text += x;
-                    kb.DrawCursor();
                     kb.SHIFT(this, false);
                 });
 

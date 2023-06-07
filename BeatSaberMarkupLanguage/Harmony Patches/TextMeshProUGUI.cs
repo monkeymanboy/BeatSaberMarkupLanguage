@@ -4,27 +4,14 @@ using System.Reflection.Emit;
 using BeatSaberMarkupLanguage.Components;
 using HarmonyLib;
 using TMPro;
-using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.Harmony_Patches
 {
-    /// <summary>
-    /// This patch copies the new <see cref="Material.enabledKeywords"/> since the version of TextMesh Pro that Beat Saber uses doesn't support it (yet).
-    /// </summary>
-    [HarmonyPatch(typeof(TMP_Text), "CreateMaterialInstance")]
-    internal static class TMP_Text_CreateMaterialInstance
-    {
-        public static void Postfix(Material source, ref Material __result)
-        {
-            __result.enabledKeywords = source.enabledKeywords;
-        }
-    }
-
-    [HarmonyPatch(typeof(TMP_Text), "CalculatePreferredValues")]
-    internal static class TMP_Text_CalculatePreferredValues
+    [HarmonyPatch(typeof(TextMeshProUGUI), "GenerateTextMesh")]
+    internal static class TextMeshProUGUI_GenerateTextMesh
     {
         private static readonly MethodInfo TargetMethod = AccessTools.Method(typeof(char), nameof(char.IsWhiteSpace), new[] { typeof(char) });
-        private static readonly MethodInfo OverrideMethod = AccessTools.Method(typeof(TMP_Text_CalculatePreferredValues), nameof(IsWhiteSpace));
+        private static readonly MethodInfo OverrideMethod = AccessTools.Method(typeof(TextMeshProUGUI_GenerateTextMesh), nameof(IsWhiteSpace));
 
         public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> codeInstructions)
         {

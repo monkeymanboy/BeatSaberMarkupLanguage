@@ -3,6 +3,7 @@
 # Unity-specific diagnostics
 dotnet_diagnostic.UNT0001.severity = warning
 dotnet_diagnostic.UNT0008.severity = warning
+dotnet_diagnostic.UNT0019.severity = warning
 dotnet_diagnostic.UNT0026.severity = warning
 
 # Temporarily disabled StyleCop rules that would cause a lot of noise to correct

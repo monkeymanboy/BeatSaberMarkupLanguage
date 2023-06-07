@@ -105,8 +105,8 @@ namespace BeatSaberMarkupLanguage
 
             GameObject go = new GameObject(typeof(T).Name);
             go.AddComponent(canvasTemplate);
-            DiContainer.InstantiateComponent<VRGraphicRaycaster>(go.gameObject);
-            go.gameObject.AddComponent<CanvasGroup>();
+            DiContainer.InstantiateComponent<VRGraphicRaycaster>(go);
+            go.AddComponent<CanvasGroup>();
             T vc = go.AddComponent<T>();
 
             vc.rectTransform.anchorMin = new Vector2(0f, 0f);
