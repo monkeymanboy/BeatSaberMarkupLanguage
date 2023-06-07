@@ -481,27 +481,31 @@ namespace BeatSaberMarkupLanguage.Components
         private void SHIFT(KEY key, bool state)
         {
             key.kb.shift = state;
-
-            foreach (KEY k in key.kb.keys)
-            {
-                string keyText = key.kb.shift ? k.shifted : k.value;
-
-                if (!string.IsNullOrEmpty(k.shifted))
-                {
-                    k.mybutton.SetButtonText(keyText);
-                }
-
-                if (k.name == "SHIFT")
-                {
-                    k.SetHighlighted(key.kb.shift);
-                }
-            }
+            UpdateKeyText(key.kb);
         }
 
         private void CAPS(KEY key)
         {
             key.kb.caps = !key.kb.caps;
-            key.SetHighlighted(key.kb.caps);
+            UpdateKeyText(key.kb);
+        }
+
+        private void UpdateKeyText(KEYBOARD keyboard)
+        {
+            foreach (KEY key in keyboard.keys)
+            {
+                key.UpdateText();
+
+                if (key.name == "SHIFT")
+                {
+                    key.SetHighlighted(keyboard.shift);
+                }
+
+                if (key.name == "CAPS")
+                {
+                    key.SetHighlighted(keyboard.caps);
+                }
+            }
         }
 
         public class KEY
@@ -516,6 +520,7 @@ namespace BeatSaberMarkupLanguage.Components
             private readonly Graphic[] graphicsToColor;
             private readonly Color[] defaultColors;
             private readonly Color[] highlightedColors;
+            private readonly TMP_Text buttonText;
 
             public KEY()
             {
@@ -528,6 +533,7 @@ namespace BeatSaberMarkupLanguage.Components
 
                 name = text;
                 mybutton = Object.Instantiate(kb.BaseButton, kb.container, false);
+                mybutton.name = name;
                 Object.Destroy(mybutton.GetComponent<UIKeyboardKey>());
                 graphicsToColor = mybutton.GetComponentsInChildren<Graphic>();
                 defaultColors = new Color[graphicsToColor.Length];
@@ -552,18 +558,19 @@ namespace BeatSaberMarkupLanguage.Components
                 textMesh.richText = true;
                 externalComponents.components.Add(textMesh);
 
-                (mybutton.transform as RectTransform).anchorMin = new Vector2(0.5f, 0.5f);
-                (mybutton.transform as RectTransform).anchorMax = new Vector2(0.5f, 0.5f);
+                RectTransform buttonTransform = (RectTransform)mybutton.transform;
+                buttonTransform.anchorMin = new Vector2(0.5f, 0.5f);
+                buttonTransform.anchorMax = new Vector2(0.5f, 0.5f);
+                buttonTransform.localScale = new Vector3(kb.scale, kb.scale, 1.0f);
 
-                TMP_Text txt = mybutton.GetComponentInChildren<TMP_Text>();
-                mybutton.ToggleWordWrapping(false);
-                mybutton.transform.localScale = new Vector3(kb.scale, kb.scale, 1.0f);
-                mybutton.SetButtonTextSize(5f);
-                mybutton.SetButtonText(text);
+                buttonText = mybutton.GetComponentInChildren<TMP_Text>();
+                buttonText.enableWordWrapping = false;
+                buttonText.fontSize = 5f;
+                buttonText.text = text;
 
                 if (width == 0)
                 {
-                    Vector2 v = txt.GetPreferredValues(text);
+                    Vector2 v = buttonText.GetPreferredValues(text);
                     v.x += 10f;
                     v.y += 2f;
                     width = v.x;
@@ -595,18 +602,7 @@ namespace BeatSaberMarkupLanguage.Components
                         return;
                     }
 
-                    string x = kb.shift ? shifted : value;
-                    if (string.IsNullOrEmpty(x))
-                    {
-                        x = value;
-                    }
-
-                    if (kb.caps)
-                    {
-                        x = value.ToUpper();
-                    }
-
-                    kb.KeyboardText.text += x;
+                    kb.KeyboardText.text += TextForCurrentState;
                     kb.SHIFT(this, false);
                 });
 
@@ -616,6 +612,21 @@ namespace BeatSaberMarkupLanguage.Components
                     "\u2B05" => "Backspace",
                     _ => value,
                 };
+            }
+
+            internal string TextForCurrentState
+            {
+                get
+                {
+                    if (value.ToUpper() != value)
+                    {
+                        return kb.shift ^ kb.caps ? value.ToUpper() : value;
+                    }
+                    else
+                    {
+                        return kb.shift ? shifted : value;
+                    }
+                }
             }
 
             public KEY Set(string value)
@@ -633,6 +644,18 @@ namespace BeatSaberMarkupLanguage.Components
                 for (int i = 0; i < graphicsToColor.Length; i++)
                 {
                     graphicsToColor[i].color = highlighted ? highlightedColors[i] : defaultColors[i];
+                }
+            }
+
+            internal void UpdateText()
+            {
+                if (string.IsNullOrEmpty(shifted))
+                {
+                    buttonText.text = name;
+                }
+                else
+                {
+                    buttonText.text = TextForCurrentState;
                 }
             }
         }
