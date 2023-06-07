@@ -103,7 +103,7 @@ namespace BeatSaberMarkupLanguage
                 canvasTemplate = Resources.FindObjectsOfTypeAll<Canvas>().First(x => x.name == "DropdownTableView");
             }
 
-            GameObject go = new GameObject(typeof(T).Name);
+            GameObject go = new(typeof(T).Name);
             go.AddComponent(canvasTemplate);
             DiContainer.InstantiateComponent<VRGraphicRaycaster>(go);
             go.AddComponent<CanvasGroup>();
@@ -132,8 +132,8 @@ namespace BeatSaberMarkupLanguage
         /// <returns>The fixed clone.</returns>
         public static TMP_FontAsset CreateFixedUIFontClone(TMP_FontAsset font)
         {
-            var noglowShader = MainTextFont.material.shader;
-            var newFont = Object.Instantiate(font);
+            Shader noglowShader = MainTextFont.material.shader;
+            TMP_FontAsset newFont = Object.Instantiate(font);
             newFont.material.shader = noglowShader;
             newFont.material.EnableKeyword("CURVED");
             newFont.material.EnableKeyword("UNITY_UI_CLIP_RECT");
@@ -165,7 +165,7 @@ namespace BeatSaberMarkupLanguage
         /// <returns>The new <see cref="TMP_FontAsset"/>.</returns>
         public static TMP_FontAsset CreateTMPFont(Font font, string nameOverride = null)
         {
-            var tmpFont = TMP_FontAsset.CreateFontAsset(font);
+            TMP_FontAsset tmpFont = TMP_FontAsset.CreateFontAsset(font);
             tmpFont.SetName(nameOverride ?? font.name);
             return tmpFont;
         }
@@ -223,7 +223,7 @@ namespace BeatSaberMarkupLanguage
         public static T CreateText<T>(RectTransform parent, string text, Vector2 anchoredPosition, Vector2 sizeDelta)
             where T : TMP_Text
         {
-            GameObject gameObj = new GameObject("CustomUIText");
+            GameObject gameObj = new("CustomUIText");
             gameObj.SetActive(false);
 
             T textComponent = gameObj.AddComponent<T>();
@@ -404,7 +404,7 @@ namespace BeatSaberMarkupLanguage
 
                     if (scaleOptions.ShouldScale)
                     {
-                        var imageBytes = await Task.Run(() => DownscaleImage(data, scaleOptions.Width, scaleOptions.Height, scaleOptions.MaintainRatio)).ConfigureAwait(false);
+                        byte[] imageBytes = await Task.Run(() => DownscaleImage(data, scaleOptions.Width, scaleOptions.Height, scaleOptions.MaintainRatio)).ConfigureAwait(false);
                         _ = UnityMainThreadTaskScheduler.Factory.StartNew(() =>
                         {
                             image.sprite = Utilities.LoadSpriteRaw(imageBytes);
@@ -438,7 +438,7 @@ namespace BeatSaberMarkupLanguage
             try
             {
                 // this memory stream needs to stay open or else GDI+ dies
-                using var workMemoryStream = new MemoryStream(data);
+                using MemoryStream workMemoryStream = new(data);
                 System.Drawing.Image originalImage = System.Drawing.Image.FromStream(workMemoryStream);
 
                 if (originalImage.Width <= width && originalImage.Height <= height)
@@ -459,14 +459,14 @@ namespace BeatSaberMarkupLanguage
 
                 System.Drawing.Bitmap resizedImage = new(newSize.Width, newSize.Height);
 
-                using (var graphics = System.Drawing.Graphics.FromImage(resizedImage))
+                using (System.Drawing.Graphics graphics = System.Drawing.Graphics.FromImage(resizedImage))
                 {
                     // TODO: eventually add options for low/high quality resizing
                     graphics.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceCopy;
                     graphics.DrawImage(originalImage, new System.Drawing.Rectangle(0, 0, newSize.Width, newSize.Height), 0, 0, originalImage.Width, originalImage.Height, System.Drawing.GraphicsUnit.Pixel);
                 }
 
-                using var saveMemoryStream = new MemoryStream();
+                using MemoryStream saveMemoryStream = new();
                 resizedImage.Save(saveMemoryStream, originalImage.RawFormat);
 
                 return saveMemoryStream.ToArray();

@@ -166,7 +166,7 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
         {
             layoutGroup.m_RectChildren.Clear();
 
-            var menuType = BeatSaberUI.MainFlowCoordinator.YoungestChildFlowCoordinatorOrSelf() switch
+            MenuType menuType = BeatSaberUI.MainFlowCoordinator.YoungestChildFlowCoordinatorOrSelf() switch
             {
                 CampaignFlowCoordinator => MenuType.Campaign,
                 SinglePlayerLevelSelectionFlowCoordinator => MenuType.Solo,

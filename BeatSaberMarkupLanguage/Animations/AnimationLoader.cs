@@ -35,7 +35,7 @@ namespace BeatSaberMarkupLanguage.Animations
             Texture2D[] texList = new Texture2D[animationInfo.frameCount];
             float[] delays = new float[animationInfo.frameCount];
 
-            var lastThrottleTime = Time.realtimeSinceStartup;
+            float lastThrottleTime = Time.realtimeSinceStartup;
 
             for (int i = 0; i < animationInfo.frameCount; i++)
             {
@@ -57,7 +57,7 @@ namespace BeatSaberMarkupLanguage.Animations
                 FrameInfo currentFrameInfo = animationInfo.frames[i];
                 delays[i] = currentFrameInfo.delay;
 
-                Texture2D frameTexture = new Texture2D(currentFrameInfo.width, currentFrameInfo.height, TextureFormat.BGRA32, false);
+                Texture2D frameTexture = new(currentFrameInfo.width, currentFrameInfo.height, TextureFormat.BGRA32, false);
                 frameTexture.wrapMode = TextureWrapMode.Clamp;
                 try
                 {

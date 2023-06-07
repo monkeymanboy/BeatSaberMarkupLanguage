@@ -68,7 +68,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
         {
             get
             {
-                List<object> list = new List<object>();
+                List<object> list = new();
 
                 for (int i = 0; i < 30; i++)
                 {
@@ -102,7 +102,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
         [UIAction("#post-parse")]
         private void PostParse()
         {
-            List<CustomCellInfo> test = new List<CustomCellInfo>();
+            List<CustomCellInfo> test = new();
             for (int i = 0; i < 10; i++)
             {
                 test.Add(new CustomCellInfo("test" + i, "yee haw"));

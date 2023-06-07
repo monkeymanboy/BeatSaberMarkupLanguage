@@ -42,7 +42,7 @@ namespace BeatSaberMarkupLanguage
             try
             {
                 using (Stream stream = assembly.GetManifestResourceStream(resource))
-                using (StreamReader reader = new StreamReader(stream))
+                using (StreamReader reader = new(stream))
                 {
                     return reader.ReadToEnd();
                 }
@@ -55,7 +55,7 @@ namespace BeatSaberMarkupLanguage
 
         public static List<T> GetListOfType<T>(params object[] constructorArgs)
         {
-            List<T> objects = new List<T>();
+            List<T> objects = new();
             foreach (Type type in Assembly.GetAssembly(typeof(T)).GetTypes().Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(typeof(T))))
             {
                 objects.Add((T)Activator.CreateInstance(type, constructorArgs));
@@ -166,7 +166,7 @@ namespace BeatSaberMarkupLanguage
         {
             if (file.Count() > 0)
             {
-                Texture2D tex2D = new Texture2D(2, 2, TextureFormat.RGBA32, false, false);
+                Texture2D tex2D = new(2, 2, TextureFormat.RGBA32, false, false);
                 if (tex2D.LoadImage(file))
                 {
                     return tex2D;
@@ -241,19 +241,19 @@ namespace BeatSaberMarkupLanguage
 
         internal static Sprite FindSpriteCached(string name)
         {
-            if (spriteCache.TryGetValue(name, out var sprite) && sprite != null)
+            if (spriteCache.TryGetValue(name, out Sprite sprite) && sprite != null)
             {
                 return sprite;
             }
 
-            foreach (var x in Resources.FindObjectsOfTypeAll<Sprite>())
+            foreach (Sprite x in Resources.FindObjectsOfTypeAll<Sprite>())
             {
                 if (x.name.Length == 0)
                 {
                     continue;
                 }
 
-                if (!spriteCache.TryGetValue(x.name, out var a) || a == null)
+                if (!spriteCache.TryGetValue(x.name, out Sprite a) || a == null)
                 {
                     spriteCache[x.name] = x;
                 }
@@ -269,19 +269,19 @@ namespace BeatSaberMarkupLanguage
 
         internal static Texture FindTextureCached(string name)
         {
-            if (textureCache.TryGetValue(name, out var texture) && texture != null)
+            if (textureCache.TryGetValue(name, out Texture texture) && texture != null)
             {
                 return texture;
             }
 
-            foreach (var x in Resources.FindObjectsOfTypeAll<Texture>())
+            foreach (Texture x in Resources.FindObjectsOfTypeAll<Texture>())
             {
                 if (x.name.Length == 0)
                 {
                     continue;
                 }
 
-                if (!textureCache.TryGetValue(x.name, out var a) || a == null)
+                if (!textureCache.TryGetValue(x.name, out Texture a) || a == null)
                 {
                     textureCache[x.name] = x;
                 }

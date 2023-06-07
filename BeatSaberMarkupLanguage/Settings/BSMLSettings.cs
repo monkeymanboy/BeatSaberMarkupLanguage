@@ -60,7 +60,7 @@ namespace BeatSaberMarkupLanguage.Settings
                 settingsMenus.Add(new SettingsMenu("BSML", "BeatSaberMarkupLanguage.Views.settings-about.bsml", this, Assembly.GetExecutingAssembly()));
             }
 
-            SettingsMenu settingsMenu = new SettingsMenu(name, resource, host, Assembly.GetCallingAssembly());
+            SettingsMenu settingsMenu = new(name, resource, host, Assembly.GetCallingAssembly());
             settingsMenus.Add(settingsMenu);
 
             if (isInitialized)

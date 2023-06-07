@@ -10,8 +10,7 @@ namespace BeatSaberMarkupLanguage.Tags
 
         public override GameObject CreateObject(Transform parent)
         {
-            GameObject gameObject = new GameObject();
-            gameObject.name = "BSMLBackground";
+            GameObject gameObject = new("BSMLBackground");
             gameObject.transform.SetParent(parent, false);
             gameObject.AddComponent<ContentSizeFitter>();
             gameObject.AddComponent<Backgroundable>();

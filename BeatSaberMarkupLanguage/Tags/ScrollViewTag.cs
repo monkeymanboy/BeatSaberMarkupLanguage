@@ -51,8 +51,7 @@ namespace BeatSaberMarkupLanguage.Tags
             viewport.anchorMin = new Vector2(0, 0);
             viewport.anchorMax = new Vector2(1, 1);
 
-            GameObject parentObj = new GameObject();
-            parentObj.name = "BSMLScrollViewContent";
+            GameObject parentObj = new("BSMLScrollViewContent");
             parentObj.transform.SetParent(viewport, false);
 
             ContentSizeFitter contentSizeFitter = parentObj.AddComponent<ContentSizeFitter>();
@@ -73,8 +72,7 @@ namespace BeatSaberMarkupLanguage.Tags
             rectTransform.pivot = new Vector2(0.5f, 1);
             parentObj.AddComponent<ScrollViewContent>().scrollView = scrollView;
 
-            GameObject child = new GameObject();
-            child.name = "BSMLScrollViewContentContainer";
+            GameObject child = new("BSMLScrollViewContentContainer");
             child.transform.SetParent(rectTransform, false);
 
             VerticalLayoutGroup layoutGroup = child.AddComponent<VerticalLayoutGroup>();

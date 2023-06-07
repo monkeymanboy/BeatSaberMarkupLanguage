@@ -49,12 +49,12 @@ namespace BeatSaberMarkupLanguage.OpenType
             }
 
             reader.BaseStream.Seek(seekOffset, SeekOrigin.Current);
-            var startBase = reader.BaseStream.Position;
+            long startBase = reader.BaseStream.Position;
 
-            foreach (var name in NameRecords)
+            foreach (NameRecord name in NameRecords)
             {
                 reader.BaseStream.Position = startBase + name.Offset;
-                var nameBytes = reader.ReadBytes(name.Length);
+                byte[] nameBytes = reader.ReadBytes(name.Length);
 
                 // TODO: maybe know how to identify more platforms and encodings?
                 if (name.PlatformID is NameRecord.Platform.Windows or NameRecord.Platform.Unicode)
@@ -68,10 +68,10 @@ namespace BeatSaberMarkupLanguage.OpenType
                 }
             }
 
-            foreach (var langTag in LangTagRecords)
+            foreach (LangTagRecord langTag in LangTagRecords)
             {
                 reader.BaseStream.Position = startBase + langTag.Offset;
-                var nameBytes = reader.ReadBytes(langTag.Length);
+                byte[] nameBytes = reader.ReadBytes(langTag.Length);
 
                 // hope and pray that the encoding is always UTF-8
                 langTag.Value = Encoding.UTF8.GetString(nameBytes);
@@ -81,7 +81,7 @@ namespace BeatSaberMarkupLanguage.OpenType
         // uses Count to read them
         private IReadOnlyList<NameRecord> ReadNameRecords(OpenTypeReader reader)
         {
-            var list = new List<NameRecord>();
+            List<NameRecord> list = new();
             for (int i = 0; i < Count; i++)
             {
                 list.Add(new NameRecord
@@ -101,7 +101,7 @@ namespace BeatSaberMarkupLanguage.OpenType
         // uses LangTagCount to read them
         private IReadOnlyList<LangTagRecord> ReadLangTagRecords(OpenTypeReader reader)
         {
-            var list = new List<LangTagRecord>();
+            List<LangTagRecord> list = new();
             for (int i = 0; i < LangTagCount; i++)
             {
                 list.Add(new LangTagRecord

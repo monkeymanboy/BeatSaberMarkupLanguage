@@ -35,9 +35,9 @@ namespace BeatSaberMarkupLanguage.OpenType
         {
             enc ??= Encoding.Default;
 
-            var start = stream.Position;
-            using var reader = new BinaryReader(stream, enc, true);
-            var tag = BitConverter.ToUInt32(FromBigEndian(reader.ReadBytes(4)), 0);
+            long start = stream.Position;
+            using BinaryReader reader = new(stream, enc, true);
+            uint tag = BitConverter.ToUInt32(FromBigEndian(reader.ReadBytes(4)), 0);
             stream.Position = start;
 
             return tag switch

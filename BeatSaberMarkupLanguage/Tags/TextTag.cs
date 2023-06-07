@@ -9,7 +9,7 @@ namespace BeatSaberMarkupLanguage.Tags
 
         public override GameObject CreateObject(Transform parent)
         {
-            GameObject gameObj = new GameObject("BSMLText");
+            GameObject gameObj = new("BSMLText");
             gameObj.transform.SetParent(parent, false);
 
             FormattableText textMesh = gameObj.AddComponent<FormattableText>();

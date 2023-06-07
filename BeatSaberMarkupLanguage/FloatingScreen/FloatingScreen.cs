@@ -170,7 +170,7 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
 
         public static FloatingScreen CreateFloatingScreen(Vector2 screenSize, bool createHandle, Vector3 position, Quaternion rotation, float curvatureRadius = 0f, bool hasBackground = false)
         {
-            GameObject gameObject = new GameObject("BSMLFloatingScreen", typeof(FloatingScreen), typeof(CanvasScaler), typeof(RectMask2D), typeof(VRGraphicRaycaster), typeof(CurvedCanvasSettings));
+            GameObject gameObject = new("BSMLFloatingScreen", typeof(FloatingScreen), typeof(CanvasScaler), typeof(RectMask2D), typeof(VRGraphicRaycaster), typeof(CurvedCanvasSettings));
             BeatSaberUI.DiContainer.InjectGameObject(gameObject);
 
             FloatingScreen screen = gameObject.GetComponent<FloatingScreen>();
@@ -188,7 +188,7 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
 
             if (hasBackground)
             {
-                GameObject backGroundGo = new GameObject("bg", typeof(RectTransform), typeof(ImageView));
+                GameObject backGroundGo = new("bg", typeof(RectTransform), typeof(ImageView));
                 backGroundGo.transform.SetParent(canvas.transform, false);
                 RectTransform rectTransform = backGroundGo.GetComponent<RectTransform>();
                 rectTransform.sizeDelta = screenSize;
@@ -211,9 +211,8 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
                 background.preserveAspect = true;
             }
 
-            var screenTransform = screen.transform;
-            screenTransform.position = position;
-            screenTransform.rotation = rotation;
+            Transform screenTransform = screen.transform;
+            screenTransform.SetPositionAndRotation(position, rotation);
             screenTransform.localScale = new Vector3(0.02f, 0.02f, 0.02f);
 
             screen.ScreenSize = screenSize;

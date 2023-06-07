@@ -12,7 +12,7 @@ namespace BeatSaberMarkupLanguage.Harmony_Patches
 
         private static bool Prefix(RangeValuesTextSlider __instance, float value, ref string __result)
         {
-            if (!remappers.TryGetValue(__instance, out var sliderSetting))
+            if (!remappers.TryGetValue(__instance, out SliderSetting sliderSetting))
             {
                 return true;
             }

@@ -9,8 +9,7 @@ namespace BeatSaberMarkupLanguage.Tags
 
         public override GameObject CreateObject(Transform parent)
         {
-            GameObject gameObject = new GameObject();
-            gameObject.name = "BSMLModifierContainer";
+            GameObject gameObject = new("BSMLModifierContainer");
             gameObject.transform.SetParent(parent, false);
 
             VerticalLayoutGroup vertical = gameObject.AddComponent<VerticalLayoutGroup>();

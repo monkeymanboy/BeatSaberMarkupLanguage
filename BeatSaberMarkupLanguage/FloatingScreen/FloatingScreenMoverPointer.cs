@@ -117,9 +117,9 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
                 return;
             }
 
-            _floatingScreen.transform.position = Vector3.Lerp(_floatingScreen.transform.position, _realPos, 10 * Time.unscaledDeltaTime);
-
-            _floatingScreen.transform.rotation = Quaternion.Slerp(_floatingScreen.transform.rotation, _realRot, 5 * Time.unscaledDeltaTime);
+            _floatingScreen.transform.SetPositionAndRotation(
+                Vector3.Lerp(_floatingScreen.transform.position, _realPos, 10 * Time.unscaledDeltaTime),
+                Quaternion.Slerp(_floatingScreen.transform.rotation, _realRot, 5 * Time.unscaledDeltaTime));
         }
     }
 }

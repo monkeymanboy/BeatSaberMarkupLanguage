@@ -88,7 +88,7 @@ namespace BeatSaberMarkupLanguage.Animations
 
         public static byte[] ReadBytes(this Stream ms, int count)
         {
-            var buffer = new byte[count];
+            byte[] buffer = new byte[count];
 
             if (ms.Read(buffer, 0, count) != count)
             {

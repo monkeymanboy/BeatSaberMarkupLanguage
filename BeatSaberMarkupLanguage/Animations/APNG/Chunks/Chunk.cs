@@ -26,7 +26,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         /// <param name="bytes">Byte Array of chunk data.</param>
         internal Chunk(byte[] bytes)
         {
-            var ms = new MemoryStream(bytes);
+            MemoryStream ms = new(bytes);
             Length = Helper.ConvertEndian(ms.ReadUInt32());
             ChunkType = Encoding.ASCII.GetString(ms.ReadBytes(4));
             ChunkData = ms.ReadBytes((int)Length);
@@ -104,7 +104,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         {
             get
             {
-                var ms = new MemoryStream();
+                MemoryStream ms = new();
                 ms.WriteUInt32(Helper.ConvertEndian(Length));
                 ms.WriteBytes(Encoding.ASCII.GetBytes(ChunkType));
                 ms.WriteBytes(ChunkData);
@@ -121,7 +121,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         {
             Array.Copy(newData, 0, ChunkData, position, newData.Length);
 
-            using var msCrc = new MemoryStream();
+            using MemoryStream msCrc = new();
             msCrc.WriteBytes(Encoding.ASCII.GetBytes(ChunkType));
             msCrc.WriteBytes(ChunkData);
 

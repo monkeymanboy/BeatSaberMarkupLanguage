@@ -78,7 +78,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
             byte[] frameData;
             fdATChunk fdat = null;
 
-            using (var msCrc = new MemoryStream())
+            using (MemoryStream msCrc = new())
             {
                 msCrc.WriteBytes(new[] { (byte)'f', (byte)'d', (byte)'A', (byte)'T' });
                 byte[] seqNum = BitConverter.GetBytes(Helper.ConvertEndian(sequenceNumber));
@@ -90,7 +90,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
                 newCrc = CrcHelper.Calculate(msCrc.ToArray());
             }
 
-            using (var ms = new MemoryStream())
+            using (MemoryStream ms = new())
             {
                 ms.WriteUInt32((uint)Helper.ConvertEndian(idatChunk.ChunkData.Length + 4));
                 ms.WriteBytes(new[] { (byte)'f', (byte)'d', (byte)'A', (byte)'T' });
@@ -111,7 +111,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         public IDATChunk ToIDATChunk()
         {
             uint newCrc;
-            using (var msCrc = new MemoryStream())
+            using (MemoryStream msCrc = new())
             {
                 msCrc.WriteBytes(new[] { (byte)'I', (byte)'D', (byte)'A', (byte)'T' });
                 msCrc.WriteBytes(FrameData);
@@ -119,7 +119,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
                 newCrc = CrcHelper.Calculate(msCrc.ToArray());
             }
 
-            using (var ms = new MemoryStream())
+            using (MemoryStream ms = new())
             {
                 ms.WriteUInt32(Helper.ConvertEndian(Length - 4));
                 ms.WriteBytes(new[] { (byte)'I', (byte)'D', (byte)'A', (byte)'T' });

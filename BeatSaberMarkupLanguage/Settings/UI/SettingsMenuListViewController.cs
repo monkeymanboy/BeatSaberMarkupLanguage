@@ -37,7 +37,7 @@ namespace BeatSaberMarkupLanguage.Settings.UI.ViewControllers
         [UIAction("settings-click")]
         private void SettingsClick(TableView tableView, int index)
         {
-            var settingsMenu = list.data[index] as SettingsMenu;
+            SettingsMenu settingsMenu = (SettingsMenu)list.data[index];
             clickedMenu?.Invoke(settingsMenu);
         }
     }

@@ -50,7 +50,7 @@ namespace BeatSaberMarkupLanguage.Harmony_Patches
         private static void AddQuad(VertexHelper vertexHelper, Vector3[] quadPositions, Color32 color, Vector3[] quadUVs, float curvedUIRadius)
         {
             int currentVertCount = vertexHelper.currentVertCount;
-            Vector2 uv = new Vector2(curvedUIRadius, 0f);
+            Vector2 uv = new(curvedUIRadius, 0f);
             for (int i = 0; i < 4; i++)
             {
                 vertexHelper.AddVert(quadPositions[i], color, quadUVs[i], Vector2.zero, uv, Vector2.zero, Vector3.zero, Vector4.zero);

@@ -22,7 +22,7 @@ namespace BeatSaberMarkupLanguage.OpenType
 
         public CollectionHeader ReadCollectionHeader()
         {
-            var header = new CollectionHeader
+            CollectionHeader header = new()
             {
                 TTCTag = ReadTag(),
                 MajorVersion = ReadUInt16(),
@@ -47,7 +47,7 @@ namespace BeatSaberMarkupLanguage.OpenType
 
         public OffsetTable[] ReadOffsetTables(CollectionHeader header)
         {
-            var tables = new OffsetTable[header.NumFonts];
+            OffsetTable[] tables = new OffsetTable[header.NumFonts];
             for (uint i = 0; i < header.NumFonts; i++)
             {
                 BaseStream.Position = header.OffsetTable[i];
@@ -59,7 +59,7 @@ namespace BeatSaberMarkupLanguage.OpenType
 
         public OpenTypeFont[] ReadFonts(CollectionHeader header, bool lazyLoad = true)
         {
-            var fonts = new OpenTypeFont[header.NumFonts];
+            OpenTypeFont[] fonts = new OpenTypeFont[header.NumFonts];
             for (uint i = 0; i < header.NumFonts; i++)
             {
                 BaseStream.Position = header.OffsetTable[i];

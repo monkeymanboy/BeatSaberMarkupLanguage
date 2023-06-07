@@ -138,7 +138,7 @@ namespace BeatSaberMarkupLanguage.Components
 
         private void SetSegmentedControlTexts(List<Tab> tabs)
         {
-            var texts = new string[tabs.Count];
+            string[] texts = new string[tabs.Count];
 
             for (int i = 0; i < tabs.Count; i++)
             {

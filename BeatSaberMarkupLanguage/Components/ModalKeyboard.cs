@@ -404,7 +404,7 @@ namespace BeatSaberMarkupLanguage.Components
             co.g = (float)((color >> 8) & 0xff) / 255;
             co.b = (float)((color >> 16) & 0xff) / 255;
 
-            KEY key = new KEY(this, position, keylabel, width, height, co);
+            KEY key = new(this, position, keylabel, width, height, co);
             keys.Add(key);
 
             return key;

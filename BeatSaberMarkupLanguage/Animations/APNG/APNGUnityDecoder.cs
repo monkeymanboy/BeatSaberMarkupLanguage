@@ -14,7 +14,7 @@ namespace BeatSaberMarkupLanguage.Animations
 
         public static IEnumerator Process(byte[] apngData, Action<AnimationInfo> callback)
         {
-            AnimationInfo animationInfo = new AnimationInfo();
+            AnimationInfo animationInfo = new();
             Task.Run(() => ProcessingThread(apngData, animationInfo));
             yield return new WaitUntil(() => { return animationInfo.initialized; });
             callback?.Invoke(animationInfo);
@@ -37,7 +37,7 @@ namespace BeatSaberMarkupLanguage.Animations
 
                 using (Bitmap bitmap = apngFrame.ToBitmap())
                 {
-                    FrameInfo frameInfo = new FrameInfo(bitmap.Width, bitmap.Height);
+                    FrameInfo frameInfo = new(bitmap.Width, bitmap.Height);
 
                     bitmap.MakeTransparent(System.Drawing.Color.Black);
                     bitmap.RotateFlip(RotateFlipType.Rotate180FlipX);
@@ -51,21 +51,21 @@ namespace BeatSaberMarkupLanguage.Animations
                     if (apngFrame.fcTLChunk.BlendOp == APNG.Chunks.BlendOps.APNGBlendOpOver && i > 0)
                     {
                         // BGRA
-                        var last = prevFrame.colors;
-                        var src = frameInfo.colors;
+                        byte[] last = prevFrame.colors;
+                        byte[] src = frameInfo.colors;
 
-                        for (var clri = frameInfo.colors.Length - 1; i > 2; i -= 4)
+                        for (int clri = frameInfo.colors.Length - 1; i > 2; i -= 4)
                         {
-                            var srcA = src[clri - 3] * ByteInverse;
-                            var lastA = last[clri - 3] * ByteInverse;
+                            float srcA = src[clri - 3] * ByteInverse;
+                            float lastA = last[clri - 3] * ByteInverse;
 
                             float blendedA = srcA + ((1 - srcA) * lastA);
                             src[clri - 3] = (byte)Math.Round(blendedA * 255);
 
-                            for (var c = 0; c < 3; c++)
+                            for (int c = 0; c < 3; c++)
                             {
-                                var srcC = src[clri - i] * ByteInverse;
-                                var lastC = last[clri - i] * ByteInverse;
+                                float srcC = src[clri - i] * ByteInverse;
+                                float lastC = last[clri - i] * ByteInverse;
 
                                 src[clri - i] = (byte)Math.Round(((srcA * srcC) + ((1 - srcA) * lastA * lastC * 255f)) / blendedA);
                             }

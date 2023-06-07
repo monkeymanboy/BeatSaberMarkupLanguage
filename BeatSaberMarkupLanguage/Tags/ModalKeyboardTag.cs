@@ -19,7 +19,7 @@ namespace BeatSaberMarkupLanguage.Tags
             RectTransform parentTransform = new GameObject("KeyboardParent").AddComponent<RectTransform>();
             parentTransform.SetParent(gameObject.transform, false);
 
-            KEYBOARD keyboard = new KEYBOARD(parentTransform, KEYBOARD.QWERTY, true, 4, -12);
+            KEYBOARD keyboard = new(parentTransform, KEYBOARD.QWERTY, true, 4, -12);
             parentTransform.localScale *= 1.4f;
 
             ModalKeyboard modalKeyboard = gameObject.AddComponent<ModalKeyboard>();

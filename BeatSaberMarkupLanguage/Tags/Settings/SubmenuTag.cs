@@ -15,7 +15,7 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
 
         public override GameObject CreateObject(Transform parent)
         {
-            GameObject gameObj = new GameObject("BSMLSubmenu");
+            GameObject gameObj = new("BSMLSubmenu");
             gameObj.SetActive(false);
 
             ClickableText clickableText = gameObj.AddComponent<ClickableText>();

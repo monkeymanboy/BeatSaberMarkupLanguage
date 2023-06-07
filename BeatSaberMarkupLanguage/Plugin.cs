@@ -41,7 +41,7 @@ namespace BeatSaberMarkupLanguage
 
             try
             {
-                Harmony harmony = new Harmony("com.monkeymanboy.BeatSaberMarkupLanguage");
+                Harmony harmony = new("com.monkeymanboy.BeatSaberMarkupLanguage");
                 harmony.PatchAll(Assembly.GetExecutingAssembly());
             }
             catch (Exception ex)
@@ -56,15 +56,15 @@ namespace BeatSaberMarkupLanguage
             // Old Config Migration
             Task.Run(() =>
             {
-                var folder = Path.Combine(UnityGame.UserDataPath, "BSML.ini");
+                string folder = Path.Combine(UnityGame.UserDataPath, "BSML.ini");
                 if (File.Exists(folder))
                 {
                     string[] lines = File.ReadAllLines(folder);
                     string pinnnedModsLine = lines.Where(x => x.StartsWith("Pinned Mods", StringComparison.Ordinal)).FirstOrDefault() ?? string.Empty;
-                    var splitLine = pinnnedModsLine.Split('=');
+                    string[] splitLine = pinnnedModsLine.Split('=');
                     if (splitLine.Length > 1)
                     {
-                        var mods = splitLine[1].Split(',');
+                        string[] mods = splitLine[1].Split(',');
                         config.PinnedMods.AddRange(mods.Where(x => !string.IsNullOrWhiteSpace(x) && x != " " && !config.PinnedMods.Contains(x)));
                     }
 

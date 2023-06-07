@@ -10,8 +10,7 @@ namespace BeatSaberMarkupLanguage.Tags
 
         public override GameObject CreateObject(Transform parent)
         {
-            GameObject gameObject = new GameObject();
-            gameObject.name = "BSMLGridLayoutGroup";
+            GameObject gameObject = new("BSMLGridLayoutGroup");
             gameObject.transform.SetParent(parent, false);
             gameObject.AddComponent<GridLayoutGroup>();
             gameObject.AddComponent<ContentSizeFitter>();

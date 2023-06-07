@@ -112,7 +112,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                     throw new Exception("value '" + value + "' not found");
                 }
 
-                var tableDataValue = contents.GetValue();
+                object tableDataValue = contents.GetValue();
                 if (tableDataValue is not List<CustomCellInfo> tableDataList)
                 {
                     throw new Exception($"Value '{value}' is not a List<CustomCellInfo>, which is required for custom-list");

@@ -140,7 +140,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG
         /// <param name="filename">Filename.</param>
         public static APNG FromFile(string filename)
         {
-            APNG apng = new APNG();
+            APNG apng = new();
             apng.Load(filename);
             return apng;
         }
@@ -152,7 +152,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG
         /// <param name="stream">The stream.</param>
         public static APNG FromStream(MemoryStream stream)
         {
-            APNG apng = new APNG();
+            APNG apng = new();
             apng.Load(stream);
             return apng;
         }
@@ -164,7 +164,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG
         /// <param name="image">Image.</param>
         public static APNG FromImage(Image image)
         {
-            APNG apng = new APNG();
+            APNG apng = new();
             apng.Load(ImageToStream(image));
             return apng;
         }
@@ -184,7 +184,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG
         /// <param name="fileBytes">Byte representation of the png file.</param>
         public void Load(byte[] fileBytes)
         {
-            MemoryStream stream = new MemoryStream(fileBytes);
+            MemoryStream stream = new(fileBytes);
 
             Load(stream);
         }
@@ -195,7 +195,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG
         /// <param name="filename">The filename to output to.</param>
         public void Save(string filename)
         {
-            using BinaryWriter writer = new BinaryWriter(new FileStream(filename, FileMode.OpenOrCreate, FileAccess.Write));
+            using BinaryWriter writer = new(new FileStream(filename, FileMode.OpenOrCreate, FileAccess.Write));
             int frameWriteStartIndex = 0;
 
             // Write signature
@@ -361,7 +361,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG
             uint sequenceNumber = (frames.Count == 0) ? 0 : (uint)(frames[frames.Count - 1].fcTLChunk.SequenceNumber + frames[frames.Count - 1].IDATChunks.Count);
 
             // Create fcTL Chunk
-            fcTLChunk fctl = new fcTLChunk
+            fcTLChunk fctl = new()
             {
                 SequenceNumber = sequenceNumber,
                 Width = (uint)image.Width,
@@ -495,7 +495,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG
             // Now let's loop in chunks
             Chunk chunk;
             Frame frame = null;
-            var otherChunks = new List<OtherChunk>();
+            List<OtherChunk> otherChunks = new();
             bool isIDATAlreadyParsed = false;
             do
             {
@@ -635,7 +635,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG
         /// <param name="image">Image.</param>
         private static MemoryStream ImageToStream(Image image)
         {
-            var stream = new MemoryStream();
+            MemoryStream stream = new();
             image.Save(stream, ImageFormat.Png);
             stream.Position = 0;
             return stream;

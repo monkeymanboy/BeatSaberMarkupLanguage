@@ -22,14 +22,15 @@ namespace BeatSaberMarkupLanguage.Harmony_Patches
          */
         private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> original)
         {
-            var codes = original.ToList();
+            // TODO: don't do ToList()
+            List<CodeInstruction> codes = original.ToList();
             for (int i = 0; i < codes.Count; i++)
             {
                 // We're using a bit of a cheat here, and piggy backing off the first "ret" command, which is only called
                 // on Horizontal lists.
                 if (codes[i].opcode == OpCodes.Ret)
                 {
-                    var additionalCodeInstructions = new[]
+                    CodeInstruction[] additionalCodeInstructions = new[]
                     {
                         // Loads -1f onto the stack
                         new CodeInstruction(OpCodes.Ldc_R4, -1f),

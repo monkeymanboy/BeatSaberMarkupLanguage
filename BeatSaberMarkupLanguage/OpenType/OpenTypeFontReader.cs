@@ -35,7 +35,7 @@ namespace BeatSaberMarkupLanguage.OpenType
         public TableRecord[] ReadTableRecords(OffsetTable offsets)
         {
             BaseStream.Position = offsets.TablesStart;
-            var tables = new TableRecord[offsets.NumTables];
+            TableRecord[] tables = new TableRecord[offsets.NumTables];
             for (int i = 0; i < offsets.NumTables; i++)
             {
                 tables[i] = ReadTableRecord();

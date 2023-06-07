@@ -14,7 +14,7 @@ namespace BeatSaberMarkupLanguage.Animations
     {
         public static IEnumerator Process(byte[] gifData, Action<AnimationInfo> callback)
         {
-            AnimationInfo animationInfo = new AnimationInfo();
+            AnimationInfo animationInfo = new();
             Task.Run(() => ProcessingThread(gifData, animationInfo));
             yield return new WaitUntil(() => { return animationInfo.initialized; });
             callback?.Invoke(animationInfo);
@@ -23,7 +23,7 @@ namespace BeatSaberMarkupLanguage.Animations
         private static void ProcessingThread(byte[] gifData, AnimationInfo animationInfo)
         {
             Image gifImage = Image.FromStream(new MemoryStream(gifData));
-            FrameDimension dimension = new FrameDimension(gifImage.FrameDimensionsList[0]);
+            FrameDimension dimension = new(gifImage.FrameDimensionsList[0]);
             int frameCount = gifImage.GetFrameCount(dimension);
 
             animationInfo.frameCount = frameCount;
@@ -32,19 +32,19 @@ namespace BeatSaberMarkupLanguage.Animations
 
             int firstDelayValue = -1;
 
-            var delays = gifImage.GetPropertyItem(20736).Value;
+            byte[] delays = gifImage.GetPropertyItem(20736).Value;
 
             for (int i = 0; i < frameCount; i++)
             {
                 gifImage.SelectActiveFrame(dimension, i);
 
-                using (Bitmap bitmap = new Bitmap(gifImage))
+                using (Bitmap bitmap = new(gifImage))
                 {
                     bitmap.MakeTransparent(System.Drawing.Color.Black);
                     bitmap.RotateFlip(RotateFlipType.Rotate180FlipX);
 
                     BitmapData frame = bitmap.LockBits(new Rectangle(Point.Empty, gifImage.Size), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
-                    FrameInfo currentFrame = new FrameInfo(frame.Width, frame.Height);
+                    FrameInfo currentFrame = new(frame.Width, frame.Height);
 
                     Marshal.Copy(frame.Scan0, currentFrame.colors, 0, currentFrame.colors.Length);
 

@@ -11,7 +11,7 @@ namespace BeatSaberMarkupLanguage.Tags
 
         public override GameObject CreateObject(Transform parent)
         {
-            GameObject go = new GameObject("BSMLScrollScrollableContainer");
+            GameObject go = new("BSMLScrollScrollableContainer");
             go.SetActive(false);
 
             RectTransform transform = go.AddComponent<RectTransform>();
@@ -22,7 +22,7 @@ namespace BeatSaberMarkupLanguage.Tags
             transform.anchoredPosition = Vector2.zero;
             transform.sizeDelta = Vector2.zero;
 
-            GameObject vpgo = new GameObject("Viewport");
+            GameObject vpgo = new("Viewport");
             RectTransform viewport = vpgo.AddComponent<RectTransform>();
             viewport.SetParent(transform, false);
             viewport.localPosition = Vector2.zero;
@@ -38,7 +38,7 @@ namespace BeatSaberMarkupLanguage.Tags
             vpimage.sprite = Utilities.ImageResources.WhitePixel;
             vpimage.material = Utilities.ImageResources.NoGlowMat;
 
-            GameObject contentgo = new GameObject("Content Wrapper");
+            GameObject contentgo = new("Content Wrapper");
             RectTransform content = contentgo.AddComponent<RectTransform>();
             content.SetParent(viewport, false);
             content.localPosition = Vector2.zero;

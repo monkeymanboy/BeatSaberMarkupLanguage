@@ -28,7 +28,7 @@
 
         public bool Validate()
         {
-            var powLessNumTables = NumericHelpers.NextPow2(NumTables) << 1;
+            uint powLessNumTables = NumericHelpers.NextPow2(NumTables) << 1;
             if (SearchRange != (ushort)powLessNumTables * 16)
             {
                 return false;

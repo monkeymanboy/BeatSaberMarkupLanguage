@@ -17,13 +17,12 @@ namespace BeatSaberMarkupLanguage.Tags
 
         public override GameObject CreateObject(Transform parent)
         {
-            RectTransform container = new GameObject("BSMLCustomListContainer", typeof(RectTransform)).transform as RectTransform;
+            RectTransform container = (RectTransform)new GameObject("BSMLCustomListContainer", typeof(RectTransform)).transform;
             LayoutElement layoutElement = container.gameObject.AddComponent<LayoutElement>();
             container.SetParent(parent, false);
 
-            GameObject gameObject = new GameObject();
+            GameObject gameObject = new("BSMLCustomList");
             gameObject.transform.SetParent(container, false);
-            gameObject.name = "BSMLCustomList";
             gameObject.SetActive(false);
 
             if (canvasTemplate == null)

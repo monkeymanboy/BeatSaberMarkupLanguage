@@ -77,7 +77,7 @@ namespace BeatSaberMarkupLanguage.Animations
         /// <returns>The PNG file as a <see cref="Stream"/>.</returns>
         public MemoryStream GetStream()
         {
-            var ihdrChunk = new IHDRChunk(IHDRChunk);
+            IHDRChunk ihdrChunk = new(IHDRChunk);
             if (fcTLChunk != null)
             {
                 // Fix frame size with fcTL data.
@@ -86,7 +86,7 @@ namespace BeatSaberMarkupLanguage.Animations
             }
 
             // Write image data
-            var ms = new MemoryStream();
+            MemoryStream ms = new();
             ms.WriteBytes(Signature);
             ms.WriteBytes(ihdrChunk.RawData);
             OtherChunks.ForEach(o => ms.WriteBytes(o.RawData));
@@ -106,7 +106,7 @@ namespace BeatSaberMarkupLanguage.Animations
             // Create the bitmap
             Bitmap b = (Bitmap)Image.FromStream(GetStream());
 
-            Bitmap final = new Bitmap(IHDRChunk.Width, IHDRChunk.Height);
+            Bitmap final = new(IHDRChunk.Width, IHDRChunk.Height);
 
             Graphics g = Graphics.FromImage(final);
             g.CompositingMode = CompositingMode.SourceOver;
