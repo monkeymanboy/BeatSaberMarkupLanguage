@@ -109,11 +109,12 @@ namespace BeatSaberMarkupLanguage.Components
 
             SetButtonType();
 
-            GameObject textContainer = new GameObject("KeyboardText", typeof(RectTransform));
+            GameObject textContainer = new("KeyboardText", typeof(RectTransform));
 
             keyboardTextContainer = (RectTransform)textContainer.transform;
             keyboardTextContainer.SetParent(container, false);
             keyboardTextContainer.anchoredPosition = new Vector2(0, 15f);
+            keyboardTextContainer.sizeDelta = new Vector2(88, 10);
 
             HorizontalLayoutGroup layoutGroup = textContainer.AddComponent<HorizontalLayoutGroup>();
             layoutGroup.childControlWidth = true;
@@ -125,7 +126,10 @@ namespace BeatSaberMarkupLanguage.Components
             // BUG: Make this an input field maybe
             KeyboardText = BeatSaberUI.CreateText<WhitespaceIncludingCurvedTextMeshPro>(keyboardTextContainer, string.Empty, new Vector2(0, 0));
             KeyboardText.name = "KeyboardText";
-            KeyboardText.fontSize = 6f;
+            KeyboardText.enableAutoSizing = true;
+            KeyboardText.fontSizeMax = 6f;
+            KeyboardText.fontSizeMin = 2f;
+            KeyboardText.overflowMode = TextOverflowModes.Truncate;
             KeyboardText.color = Color.white;
             KeyboardText.alignment = TextAlignmentOptions.Baseline;
             KeyboardText.enableWordWrapping = false;
