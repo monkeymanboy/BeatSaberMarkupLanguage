@@ -515,6 +515,7 @@ namespace BeatSaberMarkupLanguage.Components
 
             private readonly Graphic[] graphicsToColor;
             private readonly Color[] defaultColors;
+            private readonly Color[] highlightedColors;
 
             public KEY()
             {
@@ -530,10 +531,14 @@ namespace BeatSaberMarkupLanguage.Components
                 Object.Destroy(mybutton.GetComponent<UIKeyboardKey>());
                 graphicsToColor = mybutton.GetComponentsInChildren<Graphic>();
                 defaultColors = new Color[graphicsToColor.Length];
+                highlightedColors = new Color[graphicsToColor.Length];
 
+                // TODO: passed color isn't taken into account because of this, figure out if there's a nicer way to deal with this
                 for (int i = 0; i < graphicsToColor.Length; i++)
                 {
-                    defaultColors[i] = graphicsToColor[i].color;
+                    Color graphicColor = graphicsToColor[i].color;
+                    defaultColors[i] = graphicColor;
+                    highlightedColors[i] = new Color(0.1f, 1, 0.1f, graphicColor.a);
                 }
 
                 Polyglot.LocalizedTextMeshProUGUI localizer = mybutton.GetComponentInChildren<Polyglot.LocalizedTextMeshProUGUI>(true);
@@ -555,7 +560,6 @@ namespace BeatSaberMarkupLanguage.Components
                 mybutton.transform.localScale = new Vector3(kb.scale, kb.scale, 1.0f);
                 mybutton.SetButtonTextSize(5f);
                 mybutton.SetButtonText(text);
-                mybutton.GetComponentInChildren<Image>().color = color;
 
                 if (width == 0)
                 {
@@ -628,7 +632,7 @@ namespace BeatSaberMarkupLanguage.Components
             {
                 for (int i = 0; i < graphicsToColor.Length; i++)
                 {
-                    graphicsToColor[i].color = highlighted ? Color.green : defaultColors[i];
+                    graphicsToColor[i].color = highlighted ? highlightedColors[i] : defaultColors[i];
                 }
             }
         }
