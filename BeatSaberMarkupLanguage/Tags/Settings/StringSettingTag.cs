@@ -30,22 +30,29 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
             gameObject.SetActive(false);
 
             Object.Destroy(baseSetting);
-            StringSetting stringSetting = gameObject.AddComponent<StringSetting>();
-            Transform valuePick = gameObject.transform.Find("ValuePicker");
-            Object.Destroy(valuePick.GetComponent<StepValuePicker>());
-            Object.Destroy(valuePick.transform.Find("DecButton").gameObject);
 
-            Transform editButtonTransform = valuePick.transform.Find("IncButton");
+            Transform valuePickerTransform = gameObject.transform.Find("ValuePicker");
+            Object.Destroy(valuePickerTransform.GetComponent<StepValuePicker>());
+            Object.Destroy(valuePickerTransform.Find("DecButton").gameObject);
+
+            Transform editButtonTransform = valuePickerTransform.Find("IncButton");
             editButtonTransform.name = "EditButton";
 
             // TODO: this button has a gradient and simply disabling the gradient breaks colors - seems to be related to button animations
             ImageView buttonBackgroundImageView = editButtonTransform.Find("BG").GetComponent<ImageView>();
             buttonBackgroundImageView.sprite = Utilities.FindSpriteCached("RoundRect10Thin");
 
-            stringSetting.text = valuePick.GetComponentsInChildren<TextMeshProUGUI>().First();
-            stringSetting.text.richText = true;
+            RectTransform valueTextTransform = (RectTransform)valuePickerTransform.Find("ValueText");
+            valueTextTransform.offsetMin = new Vector2(2, 0);
+
+            TextMeshProUGUI valueText = valueTextTransform.GetComponent<TextMeshProUGUI>();
+            valueText.overflowMode = TextOverflowModes.Ellipsis;
+            valueText.richText = true;
+
+            StringSetting stringSetting = gameObject.AddComponent<StringSetting>();
+            stringSetting.text = valueText;
             stringSetting.editButton = editButtonTransform.GetComponent<Button>();
-            stringSetting.boundingBox = (RectTransform)valuePick;
+            stringSetting.boundingBox = (RectTransform)valuePickerTransform;
 
             GameObject nameText = gameObject.transform.Find("NameText").gameObject;
             LocalizedTextMeshProUGUI localizedText = ConfigureLocalizedText(nameText);
@@ -60,10 +67,6 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
             gameObject.GetComponent<LayoutElement>().preferredWidth = 90;
             stringSetting.text.alignment = TextAlignmentOptions.MidlineRight;
             stringSetting.text.enableWordWrapping = false;
-            RectTransform textTransform = (RectTransform)stringSetting.text.transform;
-            textTransform.anchorMin = new Vector2(0, 0);
-            textTransform.anchorMax = new Vector2(1, 1);
-            textTransform.anchoredPosition = new Vector2(-6, 0);
 
             Image icon = stringSetting.editButton.transform.Find("Icon").GetComponent<Image>();
             icon.name = "EditIcon";
