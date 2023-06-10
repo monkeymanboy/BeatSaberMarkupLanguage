@@ -26,7 +26,6 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 
             text = slider.GetComponentInChildren<TextMeshProUGUI>();
             slider.numberOfSteps = (int)Math.Round((slider.maxValue - slider.minValue) / increments) + 1;
-            ReceiveValue();
             slider.valueDidChangeEvent += OnChange;
         }
 
@@ -63,6 +62,11 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             {
                 return formatter == null ? value.ToString("N2") : (formatter.Invoke(value) as string);
             }
+        }
+
+        private void Awake()
+        {
+            ReceiveValue();
         }
 
         private void OnChange(TextSlider textSlider, float val)

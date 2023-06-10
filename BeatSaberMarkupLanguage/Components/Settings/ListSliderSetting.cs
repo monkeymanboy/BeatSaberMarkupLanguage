@@ -29,7 +29,6 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             slider.maxValue = values.Count() - 1;
             text = slider.GetComponentInChildren<TextMeshProUGUI>();
             slider.numberOfSteps = values.Count;
-            ReceiveValue();
             slider.valueDidChangeEvent += OnChange;
             StartCoroutine(SetInitialText());
         }
@@ -50,6 +49,11 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         protected string TextForValue(object value)
         {
             return formatter == null ? value.ToString() : (formatter.Invoke(value) as string);
+        }
+
+        private void Awake()
+        {
+            ReceiveValue();
         }
 
         private void OnEnable()
