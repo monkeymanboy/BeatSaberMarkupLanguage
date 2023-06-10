@@ -13,12 +13,10 @@ namespace BeatSaberMarkupLanguage.Harmony_Patches
     internal static class ImageViewFilledImagePatch
     {
         // This is Beat Games' incorrect AddQuad method, which completely forgets about the curvedUIRadius parameter.
-        private static readonly MethodInfo IncorrectQuadOverload = typeof(ImageView).GetMethod(
-            "AddQuad",
-            BindingFlags.Static | BindingFlags.NonPublic,
-            Type.DefaultBinder,
-            new Type[] { typeof(VertexHelper), typeof(Vector3[]), typeof(Color32), typeof(Vector3[]) },
-            Array.Empty<ParameterModifier>());
+        private static readonly MethodInfo IncorrectQuadOverload = AccessTools.Method(
+            typeof(ImageView),
+            nameof(ImageView.AddQuad),
+            new Type[] { typeof(VertexHelper), typeof(Vector3[]), typeof(Color32), typeof(Vector3[]) });
 
         // MethodInfo to our correct AddQuad method; see below for implementation
         private static readonly MethodInfo CorrectQuadOverload = SymbolExtensions.GetMethodInfo(() => AddQuad(null, null, new Color32(0, 0, 0, 0), null, 0));
@@ -32,18 +30,19 @@ namespace BeatSaberMarkupLanguage.Harmony_Patches
 
         public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
-            List<CodeInstruction> codes = new(instructions);
-            for (int i = 0; i < codes.Count; i++)
+            foreach (CodeInstruction instruction in instructions)
             {
                 // Did we find an instance of the old, incorrect method?
-                if ((codes[i].operand as MethodInfo) == IncorrectQuadOverload)
+                if ((instruction.operand as MethodInfo) == IncorrectQuadOverload)
                 {
-                    codes.RemoveAt(i); // If so, throw that sucker out
-                    codes.InsertRange(i, ReplacementCodeInstructions); // And replace it with our good one, with curvedUIRadius included.
+                    yield return new CodeInstruction(OpCodes.Ldarg_3);
+                    yield return new CodeInstruction(OpCodes.Call, CorrectQuadOverload);
+                }
+                else
+                {
+                    yield return instruction;
                 }
             }
-
-            return codes;
         }
 
         // This is our custom AddQuad method, which correctly applies curvature to the created vertices.
