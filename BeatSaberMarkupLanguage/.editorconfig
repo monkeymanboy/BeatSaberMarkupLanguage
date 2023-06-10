@@ -1,11 +1,40 @@
 [*.cs]
 
 # Unity-specific diagnostics
+# See https://github.com/microsoft/Microsoft.Unity.Analyzers/blob/main/doc/index.md for details
 dotnet_diagnostic.UNT0001.severity = warning
+dotnet_diagnostic.UNT0002.severity = warning
+dotnet_diagnostic.UNT0003.severity = warning
+dotnet_diagnostic.UNT0004.severity = warning
+dotnet_diagnostic.UNT0006.severity = warning
+dotnet_diagnostic.UNT0007.severity = warning
 dotnet_diagnostic.UNT0008.severity = warning
+dotnet_diagnostic.UNT0009.severity = warning
+dotnet_diagnostic.UNT0010.severity = warning
+dotnet_diagnostic.UNT0011.severity = warning
+dotnet_diagnostic.UNT0012.severity = warning
+dotnet_diagnostic.UNT0013.severity = warning
+dotnet_diagnostic.UNT0014.severity = warning
+dotnet_diagnostic.UNT0015.severity = warning
+dotnet_diagnostic.UNT0016.severity = warning
+dotnet_diagnostic.UNT0017.severity = warning
+dotnet_diagnostic.UNT0018.severity = warning
 dotnet_diagnostic.UNT0019.severity = warning
+dotnet_diagnostic.UNT0020.severity = warning
 dotnet_diagnostic.UNT0022.severity = warning
+dotnet_diagnostic.UNT0023.severity = warning
+dotnet_diagnostic.UNT0024.severity = warning
+dotnet_diagnostic.UNT0025.severity = warning
 dotnet_diagnostic.UNT0026.severity = warning
+dotnet_diagnostic.UNT0027.severity = warning
+dotnet_diagnostic.UNT0028.severity = warning
+dotnet_diagnostic.UNT0029.severity = warning
+dotnet_diagnostic.UNT0030.severity = warning
+dotnet_diagnostic.UNT0031.severity = warning
+dotnet_diagnostic.UNT0032.severity = warning
+dotnet_diagnostic.UNT0033.severity = warning
+dotnet_diagnostic.UNT0034.severity = warning
+dotnet_diagnostic.UNT0035.severity = warning
 
 # Temporarily disabled StyleCop rules that would cause a lot of noise to correct
 dotnet_diagnostic.SA1101.severity = silent # Prefix local calls with this

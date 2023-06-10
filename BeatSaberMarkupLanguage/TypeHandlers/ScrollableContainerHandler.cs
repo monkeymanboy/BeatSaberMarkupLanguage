@@ -70,7 +70,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                     .FirstOrDefault();
 
                 scrollView.ScrollIndicator = parserParams.GetObjectsWithTag("IndicatorFor:" + id)
-                    .Select(o => o.GetComponent<VerticalScrollIndicator>() ?? o.GetComponent<BSMLScrollIndicator>())
+                    .Select(o => o.GetComponent<VerticalScrollIndicator>())
                     .Where(i => i != null)
                     .FirstOrDefault();
             }
