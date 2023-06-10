@@ -103,14 +103,19 @@ namespace BeatSaberMarkupLanguage.Components
         public KEYBOARD(RectTransform container, string defaultKeyboard = QWERTY, bool enableInputField = true, float x = 0, float y = 0)
         {
             this.enableInputField = enableInputField;
-            this.container = container;
+
+            GameObject containerObject = new("Keys", typeof(RectTransform));
+            containerObject.SetActive(false);
+
+            this.container = (RectTransform)containerObject.transform;
+            this.container.SetParent(container, false);
+
             basePosition = new Vector2(-50 + x, 23 + y);
             currentPosition = basePosition;
 
             SetButtonType();
 
-            GameObject textContainer = new("KeyboardText", typeof(RectTransform));
-            textContainer.AddComponent<RectMask2D>();
+            GameObject textContainer = new("KeyboardText", typeof(RectTransform), typeof(RectMask2D));
 
             keyboardTextContainer = (RectTransform)textContainer.transform;
             keyboardTextContainer.SetParent(container, false);
@@ -175,7 +180,6 @@ namespace BeatSaberMarkupLanguage.Components
 
         public void SetButtonType(string buttonName = "Q")
         {
-            BaseButton = Resources.FindObjectsOfTypeAll<Button>().First(x => x.name == buttonName);
             if (BaseButton == null)
             {
                 BaseButton = Resources.FindObjectsOfTypeAll<Button>().First(x => x.name == "Q");
@@ -342,6 +346,8 @@ namespace BeatSaberMarkupLanguage.Components
                 }
 
                 EmitKey(ref spacing, ref width, ref label, ref key, ref space, ref newvalue, ref height, ref color);
+
+                this.container.gameObject.SetActive(true);
             }
             catch (Exception ex)
             {
@@ -531,13 +537,14 @@ namespace BeatSaberMarkupLanguage.Components
 
             public KEY(KEYBOARD kb, Vector2 position, string text, float width, float height, Color color)
             {
+                name = text;
                 value = text;
                 this.kb = kb;
 
-                name = text;
                 mybutton = Object.Instantiate(kb.BaseButton, kb.container, false);
                 mybutton.name = name;
-                Object.Destroy(mybutton.GetComponent<UIKeyboardKey>());
+                Object.DestroyImmediate(mybutton.GetComponent<UIKeyboardKey>());
+
                 graphicsToColor = mybutton.GetComponentsInChildren<Graphic>();
                 defaultColors = new Color[graphicsToColor.Length];
                 highlightedColors = new Color[graphicsToColor.Length];
@@ -556,20 +563,19 @@ namespace BeatSaberMarkupLanguage.Components
                     Object.Destroy(localizer);
                 }
 
+                buttonText = mybutton.GetComponentInChildren<TextMeshProUGUI>();
+                buttonText.richText = true;
+                buttonText.enableWordWrapping = false;
+                buttonText.fontSize = 5f;
+                buttonText.text = text;
+
                 ExternalComponents externalComponents = mybutton.gameObject.AddComponent<ExternalComponents>();
-                TextMeshProUGUI textMesh = mybutton.GetComponentInChildren<TextMeshProUGUI>();
-                textMesh.richText = true;
-                externalComponents.components.Add(textMesh);
+                externalComponents.components.Add(buttonText);
 
                 RectTransform buttonTransform = (RectTransform)mybutton.transform;
                 buttonTransform.anchorMin = new Vector2(0.5f, 0.5f);
                 buttonTransform.anchorMax = new Vector2(0.5f, 0.5f);
                 buttonTransform.localScale = new Vector3(kb.scale, kb.scale, 1.0f);
-
-                buttonText = mybutton.GetComponentInChildren<TMP_Text>();
-                buttonText.enableWordWrapping = false;
-                buttonText.fontSize = 5f;
-                buttonText.text = text;
 
                 if (width == 0)
                 {
