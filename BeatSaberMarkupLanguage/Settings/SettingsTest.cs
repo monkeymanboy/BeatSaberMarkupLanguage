@@ -27,7 +27,7 @@ namespace BeatSaberMarkupLanguage.Settings
         private List<object> options = new object[] { "1", "Something", "Kapow", "Yeet" }.ToList();
 
         [UIValue("list-choice")]
-        private string listChoice = "Something";
+        private string listChoice = "Kapow";
 
         [UIValue("bool-test")]
         private bool BoolTest

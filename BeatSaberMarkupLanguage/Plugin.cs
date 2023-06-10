@@ -119,10 +119,10 @@ namespace BeatSaberMarkupLanguage
 
         public void MenuLoadFresh(ScenesTransitionSetupDataSO scenesTransitionSetupData, DiContainer diContainer)
         {
-            // GameplaySetup.GameplaySetup.instance.AddTab("Test", "BeatSaberMarkupLanguage.Views.gameplay-setup-test.bsml", GameplaySetupTest.instance);
+            // GameplaySetup.GameplaySetup.instance.AddTab("Test", "BeatSaberMarkupLanguage.Views.gameplay-setup-test.bsml", GameplaySetup.GameplaySetupTest.instance);
             // BSMLSettings.instance.AddSettingsMenu("Test", "BeatSaberMarkupLanguage.Views.settings-test.bsml", SettingsTest.instance);
-            // SharedCoroutineStarter.instance.StartCoroutine(PresentTest<TestViewController>());
-            // SharedCoroutineStarter.instance.StartCoroutine(PresentTest<LocalizationTestViewController>());
+            // SharedCoroutineStarter.instance.StartCoroutine(PresentTest<ViewControllers.TestViewController>());
+            // SharedCoroutineStarter.instance.StartCoroutine(PresentTest<ViewControllers.LocalizationTestViewController>());
             // MenuButtons.MenuButtons.instance.RegisterButton(new MenuButtons.MenuButton("test", () => MenuButtons.MenuButtons.instance.RegisterButton(new MenuButtons.MenuButton("test2",null))));
             BSMLSettings.instance.Setup();
             MenuButtons.MenuButtons.instance.Setup();
@@ -161,13 +161,13 @@ namespace BeatSaberMarkupLanguage
 
         // It's just for testing so don't yell at me
         /*private IEnumerator PresentTest<T>()
-            where T : ViewController
+            where T : HMUI.ViewController
         {
             yield return new WaitForSeconds(1);
-            ViewController testViewController = BeatSaberUI.CreateViewController<T>();
+            HMUI.ViewController testViewController = BeatSaberUI.CreateViewController<T>();
             FloatingScreen.FloatingScreen floatingScreen = FloatingScreen.FloatingScreen.CreateFloatingScreen(new Vector2(400, 200), true, Vector3.zero, Quaternion.identity);
-            floatingScreen.SetRootViewController(testViewController, ViewController.AnimationType.None);
-            Resources.FindObjectsOfTypeAll<MainFlowCoordinator>().First().PresentViewController(testViewController, null, ViewController.AnimationDirection.Horizontal, false);
+            floatingScreen.SetRootViewController(testViewController, HMUI.ViewController.AnimationType.None);
+            Resources.FindObjectsOfTypeAll<MainFlowCoordinator>().First().PresentViewController(testViewController, null, HMUI.ViewController.AnimationDirection.Horizontal, false);
         }*/
     }
 }

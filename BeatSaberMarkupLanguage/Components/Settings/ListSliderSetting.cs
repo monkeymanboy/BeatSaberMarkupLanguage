@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using HMUI;
 using TMPro;
-using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.Components.Settings
 {
@@ -30,7 +28,6 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             text = slider.GetComponentInChildren<TextMeshProUGUI>();
             slider.numberOfSteps = values.Count;
             slider.valueDidChangeEvent += OnChange;
-            StartCoroutine(SetInitialText());
         }
 
         public override void ApplyValue()
@@ -54,19 +51,6 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         private void Awake()
         {
             ReceiveValue();
-        }
-
-        private void OnEnable()
-        {
-            StartCoroutine(SetInitialText());
-        }
-
-        // I don't really like this but for some reason I can't get the initial starting text any other quick way and this works perfectly fine
-        private IEnumerator SetInitialText()
-        {
-            yield return new WaitForFixedUpdate();
-            text.text = TextForValue(Value);
-            yield return new WaitForSeconds(0.1f); // If the first one is too fast, don't yell at me pls
             text.text = TextForValue(Value);
         }
 
