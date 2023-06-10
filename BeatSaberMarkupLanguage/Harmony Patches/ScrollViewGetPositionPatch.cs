@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 using System.Reflection.Emit;
 using HarmonyLib;
 using HMUI;
@@ -20,33 +20,23 @@ namespace BeatSaberMarkupLanguage.Harmony_Patches
          *
          * So to fix this, we need to simply invert the "position" property on horizontal lists.
          */
-        private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> original)
+        private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator)
         {
-            // TODO: don't do ToList()
-            List<CodeInstruction> codes = original.ToList();
-            for (int i = 0; i < codes.Count; i++)
+            CodeMatcher codeMatcher = new(instructions, generator);
+
+            // We're using a bit of a cheat here and piggy backing off the first "ret" command, which is only called on horizontal lists.
+            codeMatcher.MatchForward(false, new CodeMatch(OpCodes.Ret));
+
+            if (codeMatcher.IsInvalid)
             {
-                // We're using a bit of a cheat here, and piggy backing off the first "ret" command, which is only called
-                // on Horizontal lists.
-                if (codes[i].opcode == OpCodes.Ret)
-                {
-                    CodeInstruction[] additionalCodeInstructions = new[]
-                    {
-                        // Loads -1f onto the stack
-                        new CodeInstruction(OpCodes.Ldc_R4, -1f),
-
-                        // Multiplies the top two numbers on the stack (-1, and our anchored X coordinate)
-                        new CodeInstruction(OpCodes.Mul),
-                    };
-
-                    codes.InsertRange(i, additionalCodeInstructions);
-
-                    // We don't need to do this on the second "ret" command, which only executes on Vertical lists.
-                    break;
-                }
+                throw new InvalidOperationException("Ret code not found");
             }
 
-            return codes;
+            codeMatcher.InsertAndAdvance(
+                new CodeInstruction(OpCodes.Ldc_R4, -1f), // Loads -1f onto the stack
+                new CodeInstruction(OpCodes.Mul)); // Multiplies the top two numbers on the stack (-1, and our anchored X coordinate)
+
+            return codeMatcher.InstructionEnumeration();
         }
     }
 }
