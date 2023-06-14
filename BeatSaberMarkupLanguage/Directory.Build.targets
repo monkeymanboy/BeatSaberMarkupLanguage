@@ -28,7 +28,7 @@
     <PropertyGroup>
       <AssemblyVersion>$(BasePluginVersion)</AssemblyVersion>
       <FileVersion>$(BasePluginVersion)</FileVersion>
-      <InformationalVersion>$(BasePluginVersion)</InformationalVersion>
+      <InformationalVersion>$(PluginVersion)</InformationalVersion>
     </PropertyGroup>
     <GetCommitInfo ProjectDir="$(ProjectDir)">
       <Output TaskParameter="CommitHash" PropertyName="CommitHash" />
