@@ -8,8 +8,8 @@
     "An XML based UI system."
   ],
   "author": "monkeymanboy",
-  "gameVersion": "1.30.0",
-  "version": "1.7.2+dev",
+  "gameVersion": "1.30.2",
+  "version": "1.7.3+dev",
   "dependsOn": {
     "BSIPA": "^4.3.0"
   },
