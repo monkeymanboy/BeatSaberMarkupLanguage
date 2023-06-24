@@ -27,6 +27,15 @@ namespace BeatSaberMarkupLanguage.ViewControllers
 
         public override string ResourceName => "BeatSaberMarkupLanguage.Views.test.bsml";
 
+        [UIValue("slider-value")]
+        public float SliderValue { get; set; } = 0.5f;
+
+        [UIValue("options")]
+        public List<object> Options { get; } = new() { "option1", "option2", "option3" };
+
+        [UIValue("list-slider-value")]
+        public string ListValue { get; set; } = "option2";
+
         [UIValue("header")]
         public string HeaderText
         {

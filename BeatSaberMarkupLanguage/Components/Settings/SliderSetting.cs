@@ -27,6 +27,12 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             text = slider.GetComponentInChildren<TextMeshProUGUI>();
             slider.numberOfSteps = (int)Math.Round((slider.maxValue - slider.minValue) / increments) + 1;
             slider.valueDidChangeEvent += OnChange;
+
+            // TextSlider.UpdateVisuals doesn't work properly when disabled
+            if (slider.gameObject.activeInHierarchy)
+            {
+                ReceiveValue();
+            }
         }
 
         public override void ApplyValue()

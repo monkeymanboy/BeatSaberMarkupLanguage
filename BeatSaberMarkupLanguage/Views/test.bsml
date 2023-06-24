@@ -1,6 +1,12 @@
 <bg xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
   <macro.define id='button-text' value='Macro defined button text'></macro.define>
   <tab-selector tab-tag='new-tab'></tab-selector>
+  <tab tags='new-tab' tab-name='Settings tests'>
+    <settings-container>
+      <slider-setting min='-1' max='1' value='slider-value'/>
+      <list-slider-setting options='options' value='list-slider-value'/>
+    </settings-container>
+  </tab>
   <tab tags='new-tab' tab-name='ScrollView test'>
     <vertical vertical-fit='PreferredSize' pref-height='60' pref-width='80'>
       <text text='ScrollView test' />
