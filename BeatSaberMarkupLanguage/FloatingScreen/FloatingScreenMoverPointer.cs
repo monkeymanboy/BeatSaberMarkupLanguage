@@ -58,7 +58,7 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
                     return;
                 }
 
-                if (Physics.Raycast(vrController.position, vrController.forward, out RaycastHit hit, MaxLaserDistance))
+                if (Physics.Raycast(vrController.viewAnchorTransform.position, vrController.viewAnchorTransform.forward, out RaycastHit hit, MaxLaserDistance))
                 {
                     if (hit.transform != _screenHandle)
                     {
