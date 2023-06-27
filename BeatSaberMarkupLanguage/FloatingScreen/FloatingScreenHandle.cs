@@ -5,26 +5,34 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
 {
     internal class FloatingScreenHandle : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
-        private static Material hoverMaterial;
-        private Material originalMaterial;
+        private static readonly int ColorId = Shader.PropertyToID("_Color");
+        private static readonly Color DefaultColor = new(1, 1, 1, 0);
+        private static readonly Color HoverColor = new(1, 1, 0, 1);
 
-        private MeshRenderer renderer;
+        private static Shader shader;
+
+        private Material material;
 
         public void Awake()
         {
-            hoverMaterial = new Material(Shader.Find("Hidden/Internal-DepthNormalsTexture"));
-            renderer = GetComponent<MeshRenderer>();
-            originalMaterial = renderer.material;
+            if (shader == null)
+            {
+                shader = Shader.Find("Custom/Glowing");
+            }
+
+            material = GetComponent<MeshRenderer>().material;
+            material.shader = shader;
+            material.SetColor(ColorId, DefaultColor);
         }
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            renderer.material = hoverMaterial;
+            material.SetColor(ColorId, HoverColor);
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            renderer.material = originalMaterial;
+            material.SetColor(ColorId, DefaultColor);
         }
     }
 }
