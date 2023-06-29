@@ -19,7 +19,7 @@ namespace BeatSaberMarkupLanguage.MenuButtons
 
         public void RefreshView()
         {
-            if (rootObject == null || !BSMLParser.IsSingletonAvailable)
+            if (rootObject == null)
             {
                 return;
             }

@@ -2,7 +2,7 @@
 
 namespace BeatSaberMarkupLanguage.GameplaySetup
 {
-    internal class GameplaySetupTest : PersistentSingleton<GameplaySetupTest>
+    internal class GameplaySetupTest
     {
         [UIValue("test")]
         private bool checkbox1;

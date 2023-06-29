@@ -23,9 +23,10 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
                 dropdownTemplate = Resources.FindObjectsOfTypeAll<SimpleTextDropdown>().Where(td => td.transform.parent != null).First(td => td.transform.parent.name == "NormalLevels").transform.parent.gameObject;
             }
 
-            safePrefab = Object.Instantiate(dropdownTemplate, BSMLParser.instance.transform, false);
+            safePrefab = Object.Instantiate(dropdownTemplate);
             safePrefab.SetActive(false);
             safePrefab.name = "BSMLDropdownListPrefab";
+            Object.DontDestroyOnLoad(safePrefab);
         }
 
         public override GameObject CreateObject(Transform parent)

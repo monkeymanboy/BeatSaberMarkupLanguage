@@ -36,29 +36,26 @@ namespace BeatSaberMarkupLanguage.Settings
 
         public void Setup()
         {
-            if (BSMLParser.IsSingletonAvailable)
+            try
             {
-                try
+                viewController = BeatSaberUI.CreateViewController<ViewController>();
+                SetupViewControllerTransform(viewController);
+                parserParams = BSMLParser.instance.Parse(Utilities.GetResourceContent(assembly, resource), viewController.gameObject, host);
+                didSetup = true;
+            }
+            catch (Exception ex)
+            {
+                if (ex is BSMLResourceException resEx)
                 {
-                    viewController = BeatSaberUI.CreateViewController<ViewController>();
-                    SetupViewControllerTransform(viewController);
-                    parserParams = BSMLParser.instance.Parse(Utilities.GetResourceContent(assembly, resource), viewController.gameObject, host);
-                    didSetup = true;
+                    Logger.Log.Error($"Cannot find BSML resource '{resEx.ResourcePath}' in '{resEx.Assembly?.GetName().Name ?? "<NULL>"}' for settings menu.");
                 }
-                catch (Exception ex)
+                else
                 {
-                    if (ex is BSMLResourceException resEx)
-                    {
-                        Logger.Log.Error($"Cannot find BSML resource '{resEx.ResourcePath}' in '{resEx.Assembly?.GetName().Name ?? "<NULL>"}' for settings menu.");
-                    }
-                    else
-                    {
-                        Logger.Log.Error($"Error adding settings menu for {assembly?.GetName().Name ?? "<NULL>"} ({text}): {ex.Message}");
-                    }
+                    Logger.Log.Error($"Error adding settings menu for {assembly?.GetName().Name ?? "<NULL>"} ({text}): {ex.Message}");
+                }
 
-                    Logger.Log.Debug(ex);
-                    parserParams = BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), SettingsErrorViewResourcePath), viewController.gameObject);
-                }
+                Logger.Log.Debug(ex);
+                parserParams = BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), SettingsErrorViewResourcePath), viewController.gameObject);
             }
         }
     }

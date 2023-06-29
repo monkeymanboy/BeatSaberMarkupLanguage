@@ -210,7 +210,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
                 if (e.FullPath == Path.GetFullPath(controller.ContentFilePath))
                 {
                     controller.MarkDirty();
-                    HMMainThreadDispatcher.instance.Enqueue(HotReloadCoroutine());
+                    BeatSaberUI.CoroutineStarter.StartCoroutine(HotReloadCoroutine());
                 }
             }
 

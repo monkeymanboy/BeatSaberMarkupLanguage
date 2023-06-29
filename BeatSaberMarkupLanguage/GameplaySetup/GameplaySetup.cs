@@ -4,13 +4,15 @@ using System.Linq;
 using System.Reflection;
 using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components;
+using BeatSaberMarkupLanguage.Util;
 using HMUI;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 namespace BeatSaberMarkupLanguage.GameplaySetup
 {
-    public class GameplaySetup : NotifiableSingleton<GameplaySetup>, TableView.IDataSource
+    public class GameplaySetup : NotifiableSingleton<GameplaySetup>, TableView.IDataSource, IInitializable
     {
         public const string ReuseIdentifier = "GameplaySetupCell";
 
@@ -102,7 +104,7 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
 
         public TableCell CellForIdx(TableView tableView, int idx) => GetCell().PopulateCell((GameplaySetupMenu)menus[idx]);
 
-        internal void Setup()
+        public void Initialize()
         {
             if (menus.Count == 0)
             {

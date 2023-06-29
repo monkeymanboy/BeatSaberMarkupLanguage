@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using BeatSaberMarkupLanguage.Attributes;
+using BeatSaberMarkupLanguage.Util;
 using HMUI;
+using Zenject;
 
 namespace BeatSaberMarkupLanguage.MenuButtons
 {
-    public class MenuButtons : PersistentSingleton<MenuButtons>
+    public class MenuButtons : PersistentSingleton<MenuButtons>, IInitializable
     {
         [UIValue("pin-buttons")]
         internal List<object> pinButtons = new();
@@ -44,7 +46,7 @@ namespace BeatSaberMarkupLanguage.MenuButtons
             Refresh();
         }
 
-        internal void Setup()
+        public void Initialize()
         {
             menuButtonsViewController = BeatSaberUI.CreateViewController<MenuButtonsViewController>();
             menuButtonsViewController.buttons = buttons;

@@ -1,14 +1,11 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using BeatSaberMarkupLanguage.Util;
 
-namespace BeatSaberMarkupLanguage.Components
+namespace BeatSaberMarkupLanguage.Util
 {
-    /// <summary>
-    /// Like <see cref="NotifiableSingleton{T}"/>, but without the persistent singleton.
-    /// </summary>
-    public class NotifiableBase : INotifyPropertyChanged
+    public class NotifiableSingleton<T> : PersistentSingleton<T>
+        where T : class, new()
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -20,8 +17,7 @@ namespace BeatSaberMarkupLanguage.Components
             }
             catch (Exception ex)
             {
-                Logger.Log?.Error($"Error Invoking PropertyChanged: {ex.Message}");
-                Logger.Log?.Error(ex);
+                Logger.Log?.Error($"Error invoking PropertyChanged\n{ex}");
             }
         }
     }

@@ -4,39 +4,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using BeatSaberMarkupLanguage.Attributes;
+using BeatSaberMarkupLanguage.Util;
 using HMUI;
 using Polyglot;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 using static BeatSaberMarkupLanguage.Components.CustomListTableData;
 
 namespace BeatSaberMarkupLanguage.Settings
 {
-    public class BSMLSettings : MonoBehaviour
+    public class BSMLSettings : PersistentSingleton<BSMLSettings>, IInitializable
     {
         public List<CustomCellInfo> settingsMenus = new();
 
-        private static BSMLSettings _instance = null;
-        private bool isInitialized;
-        private Button button;
-        private Sprite normal;
-        private Sprite hover;
-
-        private ModSettingsFlowCoordinator flowCoordinator;
-
-        public static BSMLSettings instance
-        {
-            get
-            {
-                if (!_instance)
-                {
-                    _instance = new GameObject("BSMLSettings").AddComponent<BSMLSettings>();
-                }
-
-                return _instance;
-            }
-            private set => _instance = value;
-        }
+        private bool _isInitialized;
+        private Button _button;
+        private Sprite _normal;
+        private Sprite _hover;
+        private Coroutine _coroutine;
+        private ModSettingsFlowCoordinator _flowCoordinator;
 
         [UIValue("thumbstick-value")]
         private bool ThumbstickValue
@@ -63,14 +50,14 @@ namespace BeatSaberMarkupLanguage.Settings
             SettingsMenu settingsMenu = new(name, resource, host, Assembly.GetCallingAssembly());
             settingsMenus.Add(settingsMenu);
 
-            if (isInitialized)
+            if (_isInitialized)
             {
                 settingsMenu.Setup();
             }
 
-            if (button != null)
+            if (_button != null)
             {
-                button.gameObject.SetActive(true);
+                _button.gameObject.SetActive(true);
             }
         }
 
@@ -83,21 +70,24 @@ namespace BeatSaberMarkupLanguage.Settings
             }
         }
 
-        internal void Setup()
+        public void Initialize()
         {
             foreach (SettingsMenu menu in settingsMenus)
             {
                 menu.didSetup = false;
             }
 
-            StopAllCoroutines();
-
-            if (button == null)
+            if (_coroutine != null)
             {
-                StartCoroutine(AddButtonToMainScreen());
+                BeatSaberUI.CoroutineStarter.StopCoroutine(_coroutine);
             }
 
-            isInitialized = true;
+            if (_button == null)
+            {
+                _coroutine = BeatSaberUI.CoroutineStarter.StartCoroutine(AddButtonToMainScreen());
+            }
+
+            _isInitialized = true;
         }
 
         [UIAction("set-thumbstick")]
@@ -105,8 +95,6 @@ namespace BeatSaberMarkupLanguage.Settings
         {
             ThumbstickValue = value;
         }
-
-        private void Awake() => DontDestroyOnLoad(this.gameObject);
 
         private IEnumerator AddButtonToMainScreen()
         {
@@ -117,39 +105,39 @@ namespace BeatSaberMarkupLanguage.Settings
                 yield return new WaitForFixedUpdate();
             }
 
-            button = Instantiate(optionsViewController._settingsButton, optionsViewController.transform.Find("Wrapper"));
-            button.GetComponentInChildren<LocalizedTextMeshProUGUI>().Key = "Mod Settings";
-            button.onClick.RemoveAllListeners();
-            button.onClick.AddListener(PresentSettings);
+            _button = UnityEngine.Object.Instantiate(optionsViewController._settingsButton, optionsViewController.transform.Find("Wrapper"));
+            _button.GetComponentInChildren<LocalizedTextMeshProUGUI>().Key = "Mod Settings";
+            _button.onClick.RemoveAllListeners();
+            _button.onClick.AddListener(PresentSettings);
 
             if (settingsMenus.Count == 0)
             {
-                button.gameObject.SetActive(false);
+                _button.gameObject.SetActive(false);
             }
 
-            normal = Utilities.FindSpriteInAssembly("BSML:BeatSaberMarkupLanguage.Resources.mods_idle.png");
-            normal.texture.wrapMode = TextureWrapMode.Clamp;
+            _normal = Utilities.FindSpriteInAssembly("BSML:BeatSaberMarkupLanguage.Resources.mods_idle.png");
+            _normal.texture.wrapMode = TextureWrapMode.Clamp;
 
-            hover = Utilities.FindSpriteInAssembly("BSML:BeatSaberMarkupLanguage.Resources.mods_selected.png");
-            hover.texture.wrapMode = TextureWrapMode.Clamp;
+            _hover = Utilities.FindSpriteInAssembly("BSML:BeatSaberMarkupLanguage.Resources.mods_selected.png");
+            _hover.texture.wrapMode = TextureWrapMode.Clamp;
 
-            button.SetButtonStates(normal, hover);
+            _button.SetButtonStates(_normal, _hover);
         }
 
         private void PresentSettings()
         {
-            if (flowCoordinator == null)
+            if (_flowCoordinator == null)
             {
-                flowCoordinator = BeatSaberUI.CreateFlowCoordinator<ModSettingsFlowCoordinator>();
+                _flowCoordinator = BeatSaberUI.CreateFlowCoordinator<ModSettingsFlowCoordinator>();
             }
 
-            flowCoordinator.isAnimating = true;
+            _flowCoordinator.isAnimating = true;
             BeatSaberUI.MainFlowCoordinator.PresentFlowCoordinator(
-                flowCoordinator,
+                _flowCoordinator,
                 new Action(() =>
                 {
-                    flowCoordinator.ShowInitial();
-                    flowCoordinator.isAnimating = false;
+                    _flowCoordinator.ShowInitial();
+                    _flowCoordinator.isAnimating = false;
                 }),
                 ViewController.AnimationDirection.Vertical);
         }

@@ -77,6 +77,8 @@ namespace BeatSaberMarkupLanguage
             }
         }
 
+        internal static ICoroutineStarter CoroutineStarter { get; set; }
+
         internal static Material MainUIFontMaterial
         {
             get

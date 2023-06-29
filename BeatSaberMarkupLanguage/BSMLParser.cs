@@ -10,11 +10,13 @@ using BeatSaberMarkupLanguage.Macros;
 using BeatSaberMarkupLanguage.Parser;
 using BeatSaberMarkupLanguage.Tags;
 using BeatSaberMarkupLanguage.TypeHandlers;
+using BeatSaberMarkupLanguage.Util;
 using UnityEngine;
+using Zenject;
 
 namespace BeatSaberMarkupLanguage
 {
-    public class BSMLParser : PersistentSingleton<BSMLParser>
+    public class BSMLParser : PersistentSingleton<BSMLParser>, IInitializable
     {
         internal static readonly string MacroPrefix = "macro.";
         internal static readonly string RetrieveValuePrefix = "~";
@@ -22,27 +24,27 @@ namespace BeatSaberMarkupLanguage
 
         private readonly Dictionary<string, BSMLTag> tags = new();
         private readonly Dictionary<string, BSMLMacro> macros = new();
+        private readonly List<TypeHandler> typeHandlers = new();
 
         private readonly XmlDocument document = new();
-        private readonly XmlReaderSettings readerSettings = new();
-
-        private List<TypeHandler> typeHandlers;
-
-        public void Awake()
+        private readonly XmlReaderSettings readerSettings = new()
         {
-            readerSettings.IgnoreComments = true;
+            IgnoreComments = true,
+        };
 
-            foreach (BSMLTag tag in Utilities.GetListOfType<BSMLTag>())
+        public BSMLParser()
+        {
+            foreach (BSMLTag tag in Utilities.GetInstancesOfDescendants<BSMLTag>())
             {
                 RegisterTag(tag);
             }
 
-            foreach (BSMLMacro macro in Utilities.GetListOfType<BSMLMacro>())
+            foreach (BSMLMacro macro in Utilities.GetInstancesOfDescendants<BSMLMacro>())
             {
                 RegisterMacro(macro);
             }
 
-            typeHandlers = Utilities.GetListOfType<TypeHandler>();
+            typeHandlers.AddRange(Utilities.GetInstancesOfDescendants<TypeHandler>());
             foreach (TypeHandler typeHandler in typeHandlers.ToArray())
             {
                 Type type = (typeHandler.GetType().GetCustomAttributes(typeof(ComponentHandler), true).FirstOrDefault() as ComponentHandler)?.type;
@@ -54,7 +56,7 @@ namespace BeatSaberMarkupLanguage
             }
         }
 
-        public void MenuSceneLoaded()
+        public void Initialize()
         {
             foreach (BSMLTag tag in tags.Values)
             {

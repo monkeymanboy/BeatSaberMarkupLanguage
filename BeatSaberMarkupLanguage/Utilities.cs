@@ -53,6 +53,7 @@ namespace BeatSaberMarkupLanguage
             }
         }
 
+        [Obsolete]
         public static List<T> GetListOfType<T>(params object[] constructorArgs)
         {
             List<T> objects = new();
@@ -221,7 +222,7 @@ namespace BeatSaberMarkupLanguage
             {
                 if (location.StartsWith("http://", StringComparison.OrdinalIgnoreCase) || location.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
                 {
-                    SharedCoroutineStarter.instance.StartCoroutine(GetWebDataCoroutine(location, callback));
+                    BeatSaberUI.CoroutineStarter.StartCoroutine(GetWebDataCoroutine(location, callback));
                 }
                 else if (File.Exists(location))
                 {
@@ -236,6 +237,14 @@ namespace BeatSaberMarkupLanguage
             catch
             {
                 Logger.Log.Error($"Error getting data from '{location}'; either the path is invalid or the file does not exist");
+            }
+        }
+
+        internal static IEnumerable<T> GetInstancesOfDescendants<T>(params object[] constructorArgs)
+        {
+            foreach (Type type in Assembly.GetAssembly(typeof(T)).GetTypes().Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(typeof(T))))
+            {
+                yield return (T)Activator.CreateInstance(type, constructorArgs);
             }
         }
 

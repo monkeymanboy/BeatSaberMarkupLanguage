@@ -20,10 +20,10 @@ namespace BeatSaberMarkupLanguage.Animations
             switch (type)
             {
                 case AnimationType.GIF:
-                    SharedCoroutineStarter.instance.StartCoroutine(GIFUnityDecoder.Process(data, (AnimationInfo animationInfo) => SharedCoroutineStarter.instance.StartCoroutine(ProcessAnimationInfo(animationInfo, callback))));
+                    BeatSaberUI.CoroutineStarter.StartCoroutine(GIFUnityDecoder.Process(data, (AnimationInfo animationInfo) => BeatSaberUI.CoroutineStarter.StartCoroutine(ProcessAnimationInfo(animationInfo, callback))));
                     break;
                 case AnimationType.APNG:
-                    SharedCoroutineStarter.instance.StartCoroutine(APNGUnityDecoder.Process(data, (AnimationInfo animationInfo) => SharedCoroutineStarter.instance.StartCoroutine(ProcessAnimationInfo(animationInfo, callback))));
+                    BeatSaberUI.CoroutineStarter.StartCoroutine(APNGUnityDecoder.Process(data, (AnimationInfo animationInfo) => BeatSaberUI.CoroutineStarter.StartCoroutine(ProcessAnimationInfo(animationInfo, callback))));
                     break;
             }
         }
