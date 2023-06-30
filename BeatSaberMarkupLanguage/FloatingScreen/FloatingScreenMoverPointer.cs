@@ -51,7 +51,7 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
             VRPointer pointer = _vrPointer;
             VRController vrController = pointer != null ? pointer.lastSelectedVrController : null;
 
-            if ((vrController != null && vrController.triggerValue > 0.9f) || Input.GetMouseButton(0))
+            if (vrController != null && vrController.active && (vrController.triggerValue > 0.9f || Input.GetMouseButton(0)))
             {
                 if (_grabbingController != null)
                 {
