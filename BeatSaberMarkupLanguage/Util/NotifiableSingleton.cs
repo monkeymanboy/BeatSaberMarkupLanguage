@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 
 namespace BeatSaberMarkupLanguage.Util
 {
-    public class NotifiableSingleton<T> : PersistentSingleton<T>
+    public class NotifiableSingleton<T> : PersistentSingleton<T>, INotifyPropertyChanged
         where T : class, new()
     {
         public event PropertyChangedEventHandler PropertyChanged;
