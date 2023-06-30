@@ -12,6 +12,7 @@ namespace BeatSaberMarkupLanguage.Animations
     {
         private const float ByteInverse = 1f / 255f;
 
+        [Obsolete("Use ProcessAsync instead.")]
         public static IEnumerator Process(byte[] apngData, Action<AnimationInfo> callback)
         {
             AnimationInfo animationInfo = new();
@@ -20,12 +21,24 @@ namespace BeatSaberMarkupLanguage.Animations
             callback?.Invoke(animationInfo);
         }
 
+        public static Task<AnimationInfo> ProcessAsync(byte[] apngData)
+        {
+            return Task.Run(() =>
+            {
+                AnimationInfo animationInfo = new();
+                ProcessingThread(apngData, animationInfo);
+                return animationInfo;
+            });
+        }
+
         private static void ProcessingThread(byte[] apngData, AnimationInfo animationInfo)
         {
             APNG.APNG apng = APNG.APNG.FromStream(new System.IO.MemoryStream(apngData));
             int frameCount = apng.FrameCount;
+#pragma warning disable CS0612, CS0618
             animationInfo.frameCount = frameCount;
             animationInfo.initialized = true;
+#pragma warning restore CS0612, CS0618
 
             animationInfo.frames = new System.Collections.Generic.List<FrameInfo>(frameCount);
 

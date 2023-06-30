@@ -12,6 +12,7 @@ namespace BeatSaberMarkupLanguage.Animations
 {
     public class GIFUnityDecoder
     {
+        [Obsolete("Use ProcessAsync instead.")]
         public static IEnumerator Process(byte[] gifData, Action<AnimationInfo> callback)
         {
             AnimationInfo animationInfo = new();
@@ -20,14 +21,26 @@ namespace BeatSaberMarkupLanguage.Animations
             callback?.Invoke(animationInfo);
         }
 
+        public static Task<AnimationInfo> ProcessAsync(byte[] gifData)
+        {
+            return Task.Run(() =>
+            {
+                AnimationInfo animationInfo = new();
+                ProcessingThread(gifData, animationInfo);
+                return animationInfo;
+            });
+        }
+
         private static void ProcessingThread(byte[] gifData, AnimationInfo animationInfo)
         {
             Image gifImage = Image.FromStream(new MemoryStream(gifData));
             FrameDimension dimension = new(gifImage.FrameDimensionsList[0]);
             int frameCount = gifImage.GetFrameCount(dimension);
 
+#pragma warning disable CS0612, CS0618
             animationInfo.frameCount = frameCount;
             animationInfo.initialized = true;
+#pragma warning restore CS0612, CS0618
             animationInfo.frames = new List<FrameInfo>(frameCount);
 
             int firstDelayValue = -1;

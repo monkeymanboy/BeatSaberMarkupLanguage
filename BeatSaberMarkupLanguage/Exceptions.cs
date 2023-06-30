@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using UnityEngine.Networking;
 
 namespace BeatSaberMarkupLanguage
 {
@@ -57,5 +58,18 @@ namespace BeatSaberMarkupLanguage
         public Assembly Assembly { get; }
 
         public string ResourcePath { get; }
+    }
+
+    public class UnityWebRequestException : Exception
+    {
+        public UnityWebRequestException(string message, UnityWebRequest webRequest)
+            : base(message)
+        {
+            this.WebRequest = webRequest;
+        }
+
+        public override string Message => $"{base.Message}\nRequest URL: {WebRequest.url}\nResponse Code: {WebRequest.responseCode}\nError: {WebRequest.error}";
+
+        public UnityWebRequest WebRequest { get; }
     }
 }

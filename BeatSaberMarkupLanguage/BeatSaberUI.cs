@@ -77,6 +77,7 @@ namespace BeatSaberMarkupLanguage
             }
         }
 
+        [Obsolete("Use Tasks instead.")]
         internal static ICoroutineStarter CoroutineStarter { get; set; }
 
         internal static Material MainUIFontMaterial
@@ -373,18 +374,25 @@ namespace BeatSaberMarkupLanguage
                 }
                 else
                 {
-                    Utilities.GetData(location, (byte[] data) =>
+                    UnityMainThreadTaskScheduler.Factory.StartNew(async () =>
                     {
-                        AnimationLoader.Process(
-                            (location.EndsWith(".gif", StringComparison.OrdinalIgnoreCase) || (isURL && uri.LocalPath.EndsWith(".gif", StringComparison.OrdinalIgnoreCase))) ? AnimationType.GIF : AnimationType.APNG,
-                            data,
-                            (Texture2D tex, Rect[] uvs, float[] delays, int width, int height) =>
-                            {
-                                AnimationControllerData controllerData = AnimationController.instance.Register(location, tex, uvs, delays);
-                                stateUpdater.controllerData = controllerData;
-                                callback?.Invoke();
-                            });
-                    });
+                        byte[] data = await Utilities.GetDataAsync(location);
+                        AnimationData animationData;
+
+                        if (location.EndsWith(".gif", StringComparison.OrdinalIgnoreCase) || (isURL && uri.LocalPath.EndsWith(".gif", StringComparison.OrdinalIgnoreCase)))
+                        {
+                            animationData = await AnimationLoader.ProcessGifAsync(data);
+                        }
+                        else
+                        {
+                            animationData = await AnimationLoader.ProcessApngAsync(data);
+                        }
+
+                        AnimationControllerData controllerData = AnimationController.instance.Register(location, animationData);
+                        stateUpdater.controllerData = controllerData;
+                        callback?.Invoke();
+                    }).ContinueWith((task) => Logger.Log.Error($"Failed to load animation '{location}'\n{task.Exception}"), TaskContinuationOptions.OnlyOnFaulted);
+
                     return;
                 }
             }
@@ -397,8 +405,20 @@ namespace BeatSaberMarkupLanguage
                     stateUpdater.controllerData = AnimationController.instance.loadingAnimation;
                 }
 
-                Utilities.GetData(location, async (byte[] data) =>
+                UnityMainThreadTaskScheduler.Factory.StartNew(async () =>
                 {
+                    byte[] data = await Utilities.GetDataAsync(location);
+                    AnimationData animationData;
+
+                    if (location.EndsWith(".gif", StringComparison.OrdinalIgnoreCase) || (isURL && uri.LocalPath.EndsWith(".gif", StringComparison.OrdinalIgnoreCase)))
+                    {
+                        animationData = await AnimationLoader.ProcessGifAsync(data);
+                    }
+                    else
+                    {
+                        animationData = await AnimationLoader.ProcessApngAsync(data);
+                    }
+
                     if (stateUpdater != null)
                     {
                         Object.DestroyImmediate(stateUpdater);
@@ -407,11 +427,8 @@ namespace BeatSaberMarkupLanguage
                     if (scaleOptions.ShouldScale)
                     {
                         byte[] imageBytes = await Task.Run(() => DownscaleImage(data, scaleOptions.Width, scaleOptions.Height, scaleOptions.MaintainRatio)).ConfigureAwait(false);
-                        _ = UnityMainThreadTaskScheduler.Factory.StartNew(() =>
-                        {
-                            image.sprite = Utilities.LoadSpriteRaw(imageBytes);
-                            image.sprite.texture.wrapMode = TextureWrapMode.Clamp;
-                        });
+                        image.sprite = Utilities.LoadSpriteRaw(imageBytes);
+                        image.sprite.texture.wrapMode = TextureWrapMode.Clamp;
                     }
                     else
                     {
@@ -420,7 +437,8 @@ namespace BeatSaberMarkupLanguage
                     }
 
                     callback?.Invoke();
-                });
+                }).ContinueWith((task) => Logger.Log.Error($"Failed to load image '{location}'\n{task.Exception}"), TaskContinuationOptions.OnlyOnFaulted);
+
                 return;
             }
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace BeatSaberMarkupLanguage.Animations
 {
@@ -18,10 +19,14 @@ namespace BeatSaberMarkupLanguage.Animations
         }
     }
 
-    public class AnimationInfo
+    public record AnimationInfo
     {
         public List<FrameInfo> frames;
+
+        [Obsolete("Use frames.Count instead")]
         public int frameCount = 0;
+
+        [Obsolete]
         public bool initialized = false;
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using IPA.Utilities.Async;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -32,10 +33,11 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             }
             else
             {
-                Utilities.GetData(imagePath, (byte[] data) =>
+                UnityMainThreadTaskScheduler.Factory.StartNew(async () =>
                 {
+                    byte[] data = await Utilities.GetDataAsync(imagePath);
                     image.texture = Utilities.LoadTextureRaw(data);
-                });
+                }).ContinueWith((task) => Logger.Log.Error($"Failed to load image '{imagePath}'\n{task.Exception}"));
             }
         }
     }

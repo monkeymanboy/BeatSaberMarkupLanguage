@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reflection;
+using System.Threading.Tasks;
 using BeatSaberMarkupLanguage.Util;
 using UnityEngine;
 using Zenject;
@@ -20,6 +21,11 @@ namespace BeatSaberMarkupLanguage.Animations
             RegisteredAnimations = new ReadOnlyDictionary<string, AnimationControllerData>(registeredAnimations);
         }
 
+        public AnimationControllerData Register(string identifier, AnimationData animationData)
+        {
+            return Register(identifier, animationData.atlas, animationData.uvs, animationData.delays);
+        }
+
         public AnimationControllerData Register(string identifier, Texture2D tex, Rect[] uvs, float[] delays)
         {
             if (!registeredAnimations.TryGetValue(identifier, out AnimationControllerData animationData))
@@ -35,15 +41,6 @@ namespace BeatSaberMarkupLanguage.Animations
             return animationData;
         }
 
-        public void InitializeLoadingAnimation()
-        {
-            AnimationLoader.Process(AnimationType.APNG, Utilities.GetResource(Assembly.GetExecutingAssembly(), "BeatSaberMarkupLanguage.Resources.loading.apng"), (Texture2D tex, Rect[] uvs, float[] delays, int width, int height) =>
-            {
-                loadingAnimation = new AnimationControllerData(tex, uvs, delays);
-                registeredAnimations.Add("LOADING_ANIMATION", loadingAnimation);
-            });
-        }
-
         public void Tick()
         {
             DateTime now = DateTime.UtcNow;
@@ -54,6 +51,13 @@ namespace BeatSaberMarkupLanguage.Animations
                     animation.CheckFrame(now);
                 }
             }
+        }
+
+        internal async Task InitializeLoadingAnimation()
+        {
+            AnimationData animationData = await AnimationLoader.ProcessApngAsync(await Utilities.GetResourceAsync(Assembly.GetExecutingAssembly(), "BeatSaberMarkupLanguage.Resources.loading.apng"));
+            loadingAnimation = new AnimationControllerData(animationData);
+            registeredAnimations.Add("LOADING_ANIMATION", loadingAnimation);
         }
     }
 }

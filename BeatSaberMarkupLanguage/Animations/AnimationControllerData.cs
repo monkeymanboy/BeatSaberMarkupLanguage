@@ -43,6 +43,11 @@ namespace BeatSaberMarkupLanguage.Animations
             this.delays = delays;
         }
 
+        internal AnimationControllerData(AnimationData animationData)
+            : this(animationData.atlas, animationData.uvs, animationData.delays)
+        {
+        }
+
         public bool IsPlaying { get; set; } = true;
 
         internal void CheckFrame(DateTime now)

@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Util;
 using HMUI;
@@ -22,7 +22,6 @@ namespace BeatSaberMarkupLanguage.Settings
         private Button _button;
         private Sprite _normal;
         private Sprite _hover;
-        private Coroutine _coroutine;
         private ModSettingsFlowCoordinator _flowCoordinator;
 
         [UIValue("thumbstick-value")]
@@ -77,15 +76,7 @@ namespace BeatSaberMarkupLanguage.Settings
                 menu.didSetup = false;
             }
 
-            if (_coroutine != null)
-            {
-                BeatSaberUI.CoroutineStarter.StopCoroutine(_coroutine);
-            }
-
-            if (_button == null)
-            {
-                _coroutine = BeatSaberUI.CoroutineStarter.StartCoroutine(AddButtonToMainScreen());
-            }
+            AddButtonToMainScreen().ContinueWith((task) => Logger.Log.Error($"Failed to add button to main screen\n{task.Exception}"), TaskContinuationOptions.OnlyOnFaulted);
 
             _isInitialized = true;
         }
@@ -96,13 +87,13 @@ namespace BeatSaberMarkupLanguage.Settings
             ThumbstickValue = value;
         }
 
-        private IEnumerator AddButtonToMainScreen()
+        private async Task AddButtonToMainScreen()
         {
             OptionsViewController optionsViewController = null;
             while (optionsViewController == null)
             {
                 optionsViewController = Resources.FindObjectsOfTypeAll<OptionsViewController>().FirstOrDefault();
-                yield return new WaitForFixedUpdate();
+                await Task.Yield();
             }
 
             _button = UnityEngine.Object.Instantiate(optionsViewController._settingsButton, optionsViewController.transform.Find("Wrapper"));

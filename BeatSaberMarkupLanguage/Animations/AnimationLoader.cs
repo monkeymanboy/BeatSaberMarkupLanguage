@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Threading.Tasks;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -15,6 +16,7 @@ namespace BeatSaberMarkupLanguage.Animations
     {
         private static readonly int AtlasSizeLimit = Mathf.Min(SystemInfo.maxTextureSize, 4096);
 
+        [Obsolete("Use ProcessApngAsync or ProcessGifAsync instead.")]
         public static void Process(AnimationType type, byte[] data, Action<Texture2D, Rect[], float[], int, int> callback)
         {
             switch (type)
@@ -28,16 +30,17 @@ namespace BeatSaberMarkupLanguage.Animations
             }
         }
 
+        [Obsolete]
         public static IEnumerator ProcessAnimationInfo(AnimationInfo animationInfo, Action<Texture2D, Rect[], float[], int, int> callback)
         {
             int textureSize = AtlasSizeLimit, width = 0, height = 0;
             Texture2D texture = null;
-            Texture2D[] texList = new Texture2D[animationInfo.frameCount];
-            float[] delays = new float[animationInfo.frameCount];
+            Texture2D[] texList = new Texture2D[animationInfo.frames.Count];
+            float[] delays = new float[animationInfo.frames.Count];
 
             float lastThrottleTime = Time.realtimeSinceStartup;
 
-            for (int i = 0; i < animationInfo.frameCount; i++)
+            for (int i = 0; i < animationInfo.frames.Count; i++)
             {
                 if ((animationInfo.frames?.Count ?? 0) <= i)
                 {
@@ -87,6 +90,66 @@ namespace BeatSaberMarkupLanguage.Animations
             callback?.Invoke(texture, atlas, delays, width, height);
         }
 
+        public static async Task<AnimationData> ProcessApngAsync(byte[] data)
+        {
+            AnimationInfo animationInfo = await APNGUnityDecoder.ProcessAsync(data);
+            return await ProcessAnimationInfoAsync(animationInfo);
+        }
+
+        public static async Task<AnimationData> ProcessGifAsync(byte[] data)
+        {
+            AnimationInfo animationInfo = await GIFUnityDecoder.ProcessAsync(data);
+            return await ProcessAnimationInfoAsync(animationInfo);
+        }
+
+        private static async Task<AnimationData> ProcessAnimationInfoAsync(AnimationInfo animationInfo)
+        {
+            int textureSize = AtlasSizeLimit;
+            int width = 0;
+            int height = 0;
+            Texture2D texture = null;
+            Texture2D[] texList = new Texture2D[animationInfo.frames.Count];
+            float[] delays = new float[animationInfo.frames.Count];
+
+            float lastThrottleTime = Time.realtimeSinceStartup;
+
+            for (int i = 0; i < animationInfo.frames.Count; i++)
+            {
+                if (texture == null)
+                {
+                    textureSize = GetTextureSize(animationInfo, i);
+                    texture = new Texture2D(animationInfo.frames[i].width, animationInfo.frames[i].height);
+
+                    width = animationInfo.frames[i].width;
+                    height = animationInfo.frames[i].height;
+                }
+
+                FrameInfo currentFrameInfo = animationInfo.frames[i];
+                delays[i] = currentFrameInfo.delay;
+
+                Texture2D frameTexture = new(currentFrameInfo.width, currentFrameInfo.height, TextureFormat.BGRA32, false);
+                frameTexture.wrapMode = TextureWrapMode.Clamp;
+                frameTexture.LoadRawTextureData(currentFrameInfo.colors);
+
+                texList[i] = frameTexture;
+
+                // Allow up to .5ms of thread usage for loading this anim
+                if (Time.realtimeSinceStartup > lastThrottleTime + 0.0005f)
+                {
+                    await Task.Yield();
+                    lastThrottleTime = Time.realtimeSinceStartup;
+                }
+            }
+
+            Rect[] atlas = texture.PackTextures(texList, 2, textureSize, true);
+            foreach (Texture2D frameTex in texList)
+            {
+                Object.Destroy(frameTex);
+            }
+
+            return new AnimationData(texture, atlas, delays, width, height);
+        }
+
         private static int GetTextureSize(AnimationInfo frameInfo, int i)
         {
             int testNum = 2;
@@ -94,7 +157,7 @@ namespace BeatSaberMarkupLanguage.Animations
             int numFramesInColumn;
             while (true)
             {
-                int numFrames = frameInfo.frameCount;
+                int numFrames = frameInfo.frames.Count;
 
                 // Make sure the number of frames is cleanly divisible by our testNum
                 if (numFrames % testNum == 0)

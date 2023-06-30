@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
@@ -194,10 +195,22 @@ namespace BeatSaberMarkupLanguage
 
         public static byte[] GetResource(Assembly asm, string resourceName)
         {
-            Stream stream = asm.GetManifestResourceStream(resourceName);
-            byte[] data = new byte[stream.Length];
-            stream.Read(data, 0, (int)stream.Length);
-            return data;
+            using Stream resourceStream = asm.GetManifestResourceStream(resourceName);
+            using MemoryStream memoryStream = new(new byte[resourceStream.Length], true);
+
+            resourceStream.CopyTo(memoryStream);
+
+            return memoryStream.ToArray();
+        }
+
+        public static async Task<byte[]> GetResourceAsync(Assembly asm, string resourceName)
+        {
+            using Stream resourceStream = asm.GetManifestResourceStream(resourceName);
+            using MemoryStream memoryStream = new(new byte[resourceStream.Length], true);
+
+            await resourceStream.CopyToAsync(memoryStream);
+
+            return memoryStream.ToArray();
         }
 
         public static IEnumerable<T> SingleEnumerable<T>(this T item)
@@ -216,6 +229,7 @@ namespace BeatSaberMarkupLanguage
         /// </summary>
         /// <param name="location">Resource path, file path, or url. May need to prefix resource paths with 'AssemblyName:'.</param>
         /// <param name="callback">Received data.</param>
+        [Obsolete]
         public static void GetData(string location, Action<byte[]> callback)
         {
             try
@@ -237,6 +251,28 @@ namespace BeatSaberMarkupLanguage
             catch
             {
                 Logger.Log.Error($"Error getting data from '{location}'; either the path is invalid or the file does not exist");
+            }
+        }
+
+        internal static async Task<byte[]> GetDataAsync(string location)
+        {
+            if (location.StartsWith("http://", StringComparison.OrdinalIgnoreCase) || location.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
+            {
+                return await GetWebDataAsync(location);
+            }
+            else if (File.Exists(location))
+            {
+                using (FileStream fileStream = File.OpenRead(location))
+                using (MemoryStream memoryStream = new(new byte[fileStream.Length], true))
+                {
+                    await fileStream.CopyToAsync(memoryStream);
+                    return memoryStream.ToArray();
+                }
+            }
+            else
+            {
+                AssemblyFromPath(location, out Assembly asm, out string newPath);
+                return await GetResourceAsync(asm, newPath);
             }
         }
 
@@ -304,6 +340,7 @@ namespace BeatSaberMarkupLanguage
             return texture;
         }
 
+        [Obsolete]
         private static IEnumerator GetWebDataCoroutine(string url, Action<byte[]> callback)
         {
             UnityWebRequest www = UnityWebRequest.Get(url);
@@ -317,6 +354,26 @@ namespace BeatSaberMarkupLanguage
             {
                 callback?.Invoke(www.downloadHandler.data);
             }
+        }
+
+        private static Task<byte[]> GetWebDataAsync(string url)
+        {
+            TaskCompletionSource<byte[]> taskCompletionSource = new();
+            UnityWebRequest webRequest = UnityWebRequest.Get(url);
+
+            webRequest.SendWebRequest().completed += (asyncOperation) =>
+            {
+                if (webRequest.result != UnityWebRequest.Result.Success)
+                {
+                    taskCompletionSource.SetException(new UnityWebRequestException("Failed to get data", webRequest));
+                }
+                else
+                {
+                    taskCompletionSource.SetResult(webRequest.downloadHandler.data);
+                }
+            };
+
+            return taskCompletionSource.Task;
         }
 
         public static class ImageResources

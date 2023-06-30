@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using UnityEngine;
+using System.Threading.Tasks;
 
 namespace BeatSaberMarkupLanguage.ViewControllers
 {
@@ -13,7 +13,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
     {
         private static readonly Dictionary<string, WatcherGroup> WatcherDictionary = new();
 
-        private readonly WaitForSeconds hotReloadDelay = new(0.5f);
+        private readonly TimeSpan hotReloadDelay = TimeSpan.FromSeconds(0.5f);
         private readonly Dictionary<int, WeakReference<IHotReloadableController>> boundControllers = new();
 
         internal WatcherGroup(string directory)
@@ -210,7 +210,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
                 if (e.FullPath == Path.GetFullPath(controller.ContentFilePath))
                 {
                     controller.MarkDirty();
-                    BeatSaberUI.CoroutineStarter.StartCoroutine(HotReloadCoroutine());
+                    ReloadAsync().ContinueWith((task) => Logger.Log.Error($"Failed to reload controller '{controller.Name}'\n{task.Exception}"));
                 }
             }
 
@@ -223,15 +223,17 @@ namespace BeatSaberMarkupLanguage.ViewControllers
             }
         }
 
-        private IEnumerator<WaitForSeconds> HotReloadCoroutine()
+        private async Task ReloadAsync()
         {
             if (IsReloading)
             {
-                yield break;
+                return;
             }
 
             IsReloading = true;
-            yield return hotReloadDelay;
+
+            await Task.Delay(hotReloadDelay);
+
             KeyValuePair<int, WeakReference<IHotReloadableController>>[] array = boundControllers.ToArray();
             for (int i = 0; i < array.Length; i++)
             {
