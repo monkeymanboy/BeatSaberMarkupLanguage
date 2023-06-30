@@ -15,7 +15,7 @@ namespace BeatSaberMarkupLanguage.Tags
         {
             if (modalViewTemplate == null)
             {
-                modalViewTemplate = Resources.FindObjectsOfTypeAll<ModalView>().First(x => x.name == "DropdownTableView");
+                modalViewTemplate = Resources.FindObjectsOfTypeAll<ModalView>().First(mv => mv.name == "DropdownTableView" && mv.transform.parent != null && mv.transform.parent.name == "ColorSchemeDropDown");
             }
 
             ModalView modalView = DiContainer.InstantiatePrefabForComponent<ModalView>(modalViewTemplate, parent);
@@ -44,6 +44,8 @@ namespace BeatSaberMarkupLanguage.Tags
             rectTransform.anchorMin = new Vector2(0.5f, 0.5f);
             rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
             rectTransform.sizeDelta = new Vector2(0, 0);
+
+            modalView.gameObject.SetActive(false);
 
             return modalView.gameObject;
         }
