@@ -77,9 +77,6 @@ namespace BeatSaberMarkupLanguage
             }
         }
 
-        [Obsolete("Use Tasks instead.")]
-        internal static ICoroutineStarter CoroutineStarter { get; set; }
-
         internal static Material MainUIFontMaterial
         {
             get

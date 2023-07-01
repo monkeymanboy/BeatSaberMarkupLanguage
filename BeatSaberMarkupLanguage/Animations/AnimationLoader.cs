@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Threading.Tasks;
+using IPA.Utilities.Async;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -19,15 +20,22 @@ namespace BeatSaberMarkupLanguage.Animations
         [Obsolete("Use ProcessApngAsync or ProcessGifAsync instead.")]
         public static void Process(AnimationType type, byte[] data, Action<Texture2D, Rect[], float[], int, int> callback)
         {
-            switch (type)
+            UnityMainThreadTaskScheduler.Factory.StartNew(async () =>
             {
-                case AnimationType.GIF:
-                    BeatSaberUI.CoroutineStarter.StartCoroutine(GIFUnityDecoder.Process(data, (AnimationInfo animationInfo) => BeatSaberUI.CoroutineStarter.StartCoroutine(ProcessAnimationInfo(animationInfo, callback))));
-                    break;
-                case AnimationType.APNG:
-                    BeatSaberUI.CoroutineStarter.StartCoroutine(APNGUnityDecoder.Process(data, (AnimationInfo animationInfo) => BeatSaberUI.CoroutineStarter.StartCoroutine(ProcessAnimationInfo(animationInfo, callback))));
-                    break;
-            }
+                AnimationData animationData;
+
+                switch (type)
+                {
+                    case AnimationType.GIF:
+                        animationData = await ProcessGifAsync(data);
+                        callback?.Invoke(animationData.atlas, animationData.uvs, animationData.delays, animationData.width, animationData.height);
+                        break;
+                    case AnimationType.APNG:
+                        animationData = await ProcessApngAsync(data);
+                        callback?.Invoke(animationData.atlas, animationData.uvs, animationData.delays, animationData.width, animationData.height);
+                        break;
+                }
+            });
         }
 
         [Obsolete]

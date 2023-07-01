@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using IPA.Utilities.Async;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
@@ -236,7 +237,11 @@ namespace BeatSaberMarkupLanguage
             {
                 if (location.StartsWith("http://", StringComparison.OrdinalIgnoreCase) || location.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
                 {
-                    BeatSaberUI.CoroutineStarter.StartCoroutine(GetWebDataCoroutine(location, callback));
+                    UnityMainThreadTaskScheduler.Factory.StartNew(async () =>
+                    {
+                        byte[] data = await GetWebDataAsync(location);
+                        callback?.Invoke(data);
+                    });
                 }
                 else if (File.Exists(location))
                 {
