@@ -7,6 +7,7 @@ using Object = UnityEngine.Object;
 
 namespace BeatSaberMarkupLanguage.Animations
 {
+    [Obsolete]
     public enum AnimationType
     {
         GIF,

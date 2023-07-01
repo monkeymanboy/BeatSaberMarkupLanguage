@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -343,22 +342,6 @@ namespace BeatSaberMarkupLanguage
             }
 
             return texture;
-        }
-
-        [Obsolete]
-        private static IEnumerator GetWebDataCoroutine(string url, Action<byte[]> callback)
-        {
-            UnityWebRequest www = UnityWebRequest.Get(url);
-            yield return www.SendWebRequest();
-
-            if (www.result != UnityWebRequest.Result.Success)
-            {
-                Logger.Log.Debug($"Error getting data from {url}, Message:{www.error}");
-            }
-            else
-            {
-                callback?.Invoke(www.downloadHandler.data);
-            }
         }
 
         private static Task<byte[]> GetWebDataAsync(string url)
