@@ -400,6 +400,7 @@ namespace BeatSaberMarkupLanguage
             {
                 AnimationStateUpdater stateUpdater = image.gameObject.AddComponent<AnimationStateUpdater>();
                 stateUpdater.image = image;
+
                 if (loadingAnimation)
                 {
                     stateUpdater.controllerData = AnimationController.instance.loadingAnimation;
@@ -408,16 +409,6 @@ namespace BeatSaberMarkupLanguage
                 UnityMainThreadTaskScheduler.Factory.StartNew(async () =>
                 {
                     byte[] data = await Utilities.GetDataAsync(location);
-                    AnimationData animationData;
-
-                    if (location.EndsWith(".gif", StringComparison.OrdinalIgnoreCase) || (isURL && uri.LocalPath.EndsWith(".gif", StringComparison.OrdinalIgnoreCase)))
-                    {
-                        animationData = await AnimationLoader.ProcessGifAsync(data);
-                    }
-                    else
-                    {
-                        animationData = await AnimationLoader.ProcessApngAsync(data);
-                    }
 
                     if (stateUpdater != null)
                     {
@@ -426,7 +417,7 @@ namespace BeatSaberMarkupLanguage
 
                     if (scaleOptions.ShouldScale)
                     {
-                        byte[] imageBytes = await Task.Run(() => DownscaleImage(data, scaleOptions.Width, scaleOptions.Height, scaleOptions.MaintainRatio)).ConfigureAwait(false);
+                        byte[] imageBytes = await Task.Run(() => DownscaleImage(data, scaleOptions.Width, scaleOptions.Height, scaleOptions.MaintainRatio));
                         image.sprite = Utilities.LoadSpriteRaw(imageBytes);
                         image.sprite.texture.wrapMode = TextureWrapMode.Clamp;
                     }
