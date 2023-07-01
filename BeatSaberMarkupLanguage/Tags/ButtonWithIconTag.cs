@@ -1,8 +1,10 @@
 ﻿using System.Linq;
 using BeatSaberMarkupLanguage.Components;
+using BeatSaberMarkupLanguage.Util;
 using HMUI;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 namespace BeatSaberMarkupLanguage.Tags
 {
@@ -12,13 +14,14 @@ namespace BeatSaberMarkupLanguage.Tags
 
         public override string[] Aliases => new[] { "button-with-icon", "icon-button" };
 
+        public override void Setup()
+        {
+            base.Setup();
+            buttonWithIconTemplate = DiContainer.Resolve<StandardLevelDetailViewController>().GetComponentOnChild<Button>("LevelDetail/ActionButtons/PracticeButton");
+        }
+
         public override GameObject CreateObject(Transform parent)
         {
-            if (buttonWithIconTemplate == null)
-            {
-                buttonWithIconTemplate = Resources.FindObjectsOfTypeAll<Button>().Last(x => x.name == "PracticeButton");
-            }
-
             Button button = Object.Instantiate(buttonWithIconTemplate, parent, false);
             button.name = "BSMLIconButton";
             button.interactable = true;

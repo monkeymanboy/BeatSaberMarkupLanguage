@@ -1,7 +1,7 @@
-﻿using System.Linq;
-using HMUI;
+﻿using BeatSaberMarkupLanguage.Util;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 namespace BeatSaberMarkupLanguage.Tags
 {
@@ -11,13 +11,14 @@ namespace BeatSaberMarkupLanguage.Tags
 
         public override string[] Aliases => new string[] { "loading", "loading-indicator" };
 
+        public override void Setup()
+        {
+            base.Setup();
+            loadingTemplate = DiContainer.Resolve<PlatformLeaderboardViewController>().GetChildGameObject("Container/LeaderboardTableView/LoadingControl/LoadingContainer/LoadingIndicator");
+        }
+
         public override GameObject CreateObject(Transform parent)
         {
-            if (loadingTemplate == null)
-            {
-                loadingTemplate = Resources.FindObjectsOfTypeAll<ImageView>().Where(x => x.gameObject.name == "LoadingIndicator").First().gameObject;
-            }
-
             GameObject loadingIndicator = Object.Instantiate(loadingTemplate, parent, false);
             loadingIndicator.name = "BSMLLoadingIndicator";
 

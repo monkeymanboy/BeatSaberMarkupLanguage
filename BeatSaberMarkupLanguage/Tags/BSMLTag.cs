@@ -15,12 +15,18 @@ namespace BeatSaberMarkupLanguage.Tags
 
         public virtual bool AddChildren { get => true; }
 
+        // the idea here is to eventually provide the DiContainer instance through the constructor
         protected DiContainer DiContainer => BeatSaberUI.DiContainer;
 
         public abstract GameObject CreateObject(Transform parent);
 
         public virtual void Setup()
         {
+        }
+
+        internal GameObject CreateObjectInternal(Transform parent)
+        {
+            return CreateObject(parent);
         }
 
         protected LocalizableText CreateLocalizableText(GameObject gameObject)

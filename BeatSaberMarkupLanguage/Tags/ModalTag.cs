@@ -1,26 +1,28 @@
-﻿using System.Linq;
+﻿using BeatSaberMarkupLanguage.Util;
 using HMUI;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 namespace BeatSaberMarkupLanguage.Tags
 {
     public class ModalTag : BSMLTag
     {
-        private ModalView modalViewTemplate;
+        private ModalView _modalViewTemplate;
 
         public override string[] Aliases => new[] { "modal" };
 
+        public override void Setup()
+        {
+            base.Setup();
+            _modalViewTemplate = DiContainer.Resolve<GameplaySetupViewController>().GetComponentOnChild<ModalView>("ColorsOverrideSettings/Settings/Detail/ColorSchemeDropDown/DropdownTableView");
+        }
+
         public override GameObject CreateObject(Transform parent)
         {
-            if (modalViewTemplate == null)
-            {
-                modalViewTemplate = Resources.FindObjectsOfTypeAll<ModalView>().First(mv => mv.name == "DropdownTableView" && mv.transform.parent != null && mv.transform.parent.name == "ColorSchemeDropDown");
-            }
-
-            ModalView modalView = DiContainer.InstantiatePrefabForComponent<ModalView>(modalViewTemplate, parent);
-            modalView._presentPanelAnimations = modalViewTemplate._presentPanelAnimations;
-            modalView._dismissPanelAnimation = modalViewTemplate._dismissPanelAnimation;
+            ModalView modalView = DiContainer.InstantiatePrefabForComponent<ModalView>(_modalViewTemplate, parent);
+            modalView._presentPanelAnimations = _modalViewTemplate._presentPanelAnimations;
+            modalView._dismissPanelAnimation = _modalViewTemplate._dismissPanelAnimation;
 
             Object.DestroyImmediate(modalView.GetComponent<TableView>());
             Object.DestroyImmediate(modalView.GetComponent<ScrollRect>());

@@ -1,8 +1,9 @@
-﻿using System.Linq;
-using BeatSaberMarkupLanguage.Components;
+﻿using BeatSaberMarkupLanguage.Components;
+using BeatSaberMarkupLanguage.Util;
 using HMUI;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 namespace BeatSaberMarkupLanguage.Tags
 {
@@ -14,6 +15,16 @@ namespace BeatSaberMarkupLanguage.Tags
 
         public override string[] Aliases => new[] { "modal-color-picker" };
 
+        public override void Setup()
+        {
+            base.Setup();
+
+            GameplaySetupViewController gameplaySetupViewController = DiContainer.Resolve<GameplaySetupViewController>();
+            rgbTemplate = gameplaySetupViewController.GetComponentOnChild<RGBPanelController>("ColorsOverrideSettings/EditColorSchemeController/Content/RGBColorPicker");
+            hsvTemplate = gameplaySetupViewController.GetComponentOnChild<HSVPanelController>("ColorsOverrideSettings/EditColorSchemeController/Content/HSVColorPicker");
+            currentColorTemplate = gameplaySetupViewController.GetComponentOnChild<ImageView>("ColorsOverrideSettings/Settings/Detail/ColorSchemeDropDown/DropDownButton/ColorSchemeView/SaberColorA");
+        }
+
         public override GameObject CreateObject(Transform parent)
         {
             GameObject gameObject = base.CreateObject(parent);
@@ -23,23 +34,6 @@ namespace BeatSaberMarkupLanguage.Tags
 
             ModalColorPicker colorPicker = gameObject.AddComponent<ModalColorPicker>();
             colorPicker.modalView = gameObject.GetComponent<ModalView>();
-
-            EditColorSchemeController editColorSchemeController = DiContainer.Resolve<GameplaySetupViewController>().GetComponentInChildren<EditColorSchemeController>(true);
-
-            if (rgbTemplate == null)
-            {
-                rgbTemplate = editColorSchemeController.GetComponentInChildren<RGBPanelController>();
-            }
-
-            if (hsvTemplate == null)
-            {
-                hsvTemplate = editColorSchemeController.GetComponentInChildren<HSVPanelController>();
-            }
-
-            if (currentColorTemplate == null)
-            {
-                currentColorTemplate = Resources.FindObjectsOfTypeAll<ImageView>().Where(iv => iv.transform.parent != null).First(iv => iv.gameObject.name == "SaberColorA" && iv.transform.parent.name == "ColorSchemeView");
-            }
 
             RGBPanelController rgbController = Object.Instantiate(rgbTemplate, gameObject.transform, false);
             rgbController.name = "BSMLRGBPanel";

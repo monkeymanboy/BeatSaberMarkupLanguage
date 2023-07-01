@@ -1,24 +1,24 @@
-﻿using System.Linq;
-using HMUI;
+﻿using HMUI;
 using UnityEngine;
+using Zenject;
 
 namespace BeatSaberMarkupLanguage.Tags
 {
     public class VerticalIconSegmentedControlTag : BSMLTag
     {
-        private static IconSegmentedControl prefab;
+        private IconSegmentedControl _prefab;
 
         public override string[] Aliases => new[] { "vertical-icon-segments" };
 
+        public override void Setup()
+        {
+            base.Setup();
+            _prefab = DiContainer.Resolve<PlatformLeaderboardViewController>()._scopeSegmentedControl;
+        }
+
         public override GameObject CreateObject(Transform parent)
         {
-            if (prefab == null)
-            {
-                PlatformLeaderboardViewController vc = Resources.FindObjectsOfTypeAll<PlatformLeaderboardViewController>().First();
-                prefab = vc._scopeSegmentedControl;
-            }
-
-            IconSegmentedControl control = DiContainer.InstantiatePrefabForComponent<IconSegmentedControl>(prefab, parent);
+            IconSegmentedControl control = DiContainer.InstantiatePrefabForComponent<IconSegmentedControl>(_prefab, parent);
             control.name = "BSMLVerticalIconSegmentedControl";
 
             RectTransform rt = control.transform as RectTransform;

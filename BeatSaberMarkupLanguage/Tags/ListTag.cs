@@ -1,22 +1,29 @@
-﻿using System.Linq;
-using BeatSaberMarkupLanguage.Components;
+﻿using BeatSaberMarkupLanguage.Components;
+using BeatSaberMarkupLanguage.Util;
 using HMUI;
 using UnityEngine;
 using UnityEngine.UI;
 using VRUIControls;
+using Zenject;
 
 namespace BeatSaberMarkupLanguage.Tags
 {
     public class ListTag : BSMLTag
     {
-        private Canvas canvasTemplate;
+        private Canvas _canvasTemplate;
 
         public override string[] Aliases => new[] { "list" };
+
+        public override void Setup()
+        {
+            base.Setup();
+            _canvasTemplate = DiContainer.Resolve<GameplaySetupViewController>().GetComponentOnChild<Canvas>("ColorsOverrideSettings/Settings/Detail/ColorSchemeDropDown/DropdownTableView");
+        }
 
         public override GameObject CreateObject(Transform parent)
         {
             RectTransform container = new GameObject("BSMLListContainer", typeof(RectTransform)).transform as RectTransform;
-            LayoutElement layoutElement = container.gameObject.AddComponent<LayoutElement>();
+            container.gameObject.AddComponent<LayoutElement>();
             container.SetParent(parent, false);
 
             GameObject gameObject = new("BSMLList")
@@ -27,13 +34,8 @@ namespace BeatSaberMarkupLanguage.Tags
             gameObject.transform.SetParent(container, false);
             gameObject.SetActive(false);
 
-            if (canvasTemplate == null)
-            {
-                canvasTemplate = Resources.FindObjectsOfTypeAll<Canvas>().First(x => x.name == "DropdownTableView");
-            }
-
             gameObject.AddComponent<ScrollRect>();
-            gameObject.AddComponent(canvasTemplate);
+            gameObject.AddComponent(_canvasTemplate);
             DiContainer.InstantiateComponent<VRGraphicRaycaster>(gameObject);
             gameObject.AddComponent<Touchable>();
             gameObject.AddComponent<EventSystemListener>();

@@ -1,23 +1,25 @@
-﻿using System.Linq;
+﻿using BeatSaberMarkupLanguage.Util;
 using HMUI;
 using UnityEngine;
+using Zenject;
 
 namespace BeatSaberMarkupLanguage.Tags
 {
     public class IconSegmentedControlTag : BSMLTag
     {
-        private IconSegmentedControl segmentedControlTemplate;
+        private IconSegmentedControl _segmentedControlTemplate;
 
         public override string[] Aliases => new[] { "icon-segments" };
 
+        public override void Setup()
+        {
+            base.Setup();
+            _segmentedControlTemplate = DiContainer.Resolve<StandardLevelDetailViewController>().GetComponentOnChild<IconSegmentedControl>("LevelDetail/BeatmapCharacteristic/BeatmapCharacteristicSegmentedControl");
+        }
+
         public override GameObject CreateObject(Transform parent)
         {
-            if (segmentedControlTemplate == null)
-            {
-                segmentedControlTemplate = Resources.FindObjectsOfTypeAll<IconSegmentedControl>().First(x => x.name == "BeatmapCharacteristicSegmentedControl" && x._container != null);
-            }
-
-            IconSegmentedControl iconSegmentedControl = DiContainer.InstantiatePrefabForComponent<IconSegmentedControl>(segmentedControlTemplate, parent);
+            IconSegmentedControl iconSegmentedControl = DiContainer.InstantiatePrefabForComponent<IconSegmentedControl>(_segmentedControlTemplate, parent);
             iconSegmentedControl.name = "BSMLIconSegmentedControl";
             (iconSegmentedControl.transform as RectTransform).anchoredPosition = new Vector2(0, 0);
             foreach (Transform transform in iconSegmentedControl.transform)

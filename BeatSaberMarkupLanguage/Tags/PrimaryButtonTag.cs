@@ -1,5 +1,7 @@
-﻿using UnityEngine;
+﻿using BeatSaberMarkupLanguage.Util;
+using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 namespace BeatSaberMarkupLanguage.Tags
 {
@@ -7,11 +9,14 @@ namespace BeatSaberMarkupLanguage.Tags
     {
         public override string[] Aliases => new[] { "primary-button", "action-button" };
 
-        public override string PrefabButton => "PlayButton";
-
         public override GameObject CreateObject(Transform parent)
         {
             return base.CreateObject(parent).AddComponent<LayoutElement>().gameObject;
+        }
+
+        protected override Button GetButtonPrefab()
+        {
+            return DiContainer.Resolve<PracticeViewController>().GetComponentOnChild<Button>("PlayButton");
         }
     }
 }

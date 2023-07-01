@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.Components.Settings;
+using BeatSaberMarkupLanguage.Util;
 using HMUI;
 using Polyglot;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 namespace BeatSaberMarkupLanguage.Tags.Settings
 {
@@ -16,13 +17,14 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
 
         public override string[] Aliases => new[] { "string-setting" };
 
+        public override void Setup()
+        {
+            base.Setup();
+            valueControllerTemplate = DiContainer.Resolve<SettingsNavigationController>().GetComponentOnChild<FormattedFloatListSettingsValueController>("GraphicSettings/ViewPort/Content/VRRenderingScale");
+        }
+
         public override GameObject CreateObject(Transform parent)
         {
-            if (valueControllerTemplate == null)
-            {
-                valueControllerTemplate = Resources.FindObjectsOfTypeAll<FormattedFloatListSettingsValueController>().First(x => x.name == "VRRenderingScale");
-            }
-
             FormattedFloatListSettingsValueController baseSetting = Object.Instantiate(valueControllerTemplate, parent, false);
             baseSetting.name = "BSMLStringSetting";
 

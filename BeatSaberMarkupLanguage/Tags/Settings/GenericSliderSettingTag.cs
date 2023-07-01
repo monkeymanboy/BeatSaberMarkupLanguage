@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.Components.Settings;
+using BeatSaberMarkupLanguage.Util;
 using HMUI;
 using Polyglot;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 namespace BeatSaberMarkupLanguage.Tags.Settings
 {
@@ -15,13 +16,14 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
     {
         private LayoutElement controllersTransformTemplate;
 
+        public override void Setup()
+        {
+            base.Setup();
+            controllersTransformTemplate = DiContainer.Resolve<SettingsNavigationController>().GetComponentOnChild<LayoutElement>("ControllersTransformSettings/Content/PositionX");
+        }
+
         public override GameObject CreateObject(Transform parent)
         {
-            if (controllersTransformTemplate == null)
-            {
-                controllersTransformTemplate = Resources.FindObjectsOfTypeAll<LayoutElement>().First(x => x.name == "PositionX");
-            }
-
             LayoutElement baseSetting = Object.Instantiate(controllersTransformTemplate, parent, false);
             baseSetting.name = "BSMLSliderSetting";
 

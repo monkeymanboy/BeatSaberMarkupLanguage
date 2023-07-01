@@ -2,28 +2,32 @@
 using System.Linq;
 using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.Components.Settings;
+using BeatSaberMarkupLanguage.Util;
 using HMUI;
 using Polyglot;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 namespace BeatSaberMarkupLanguage.Tags.Settings
 {
     public class ColorSettingTag : ModalColorPickerTag
     {
-        private static FormattedFloatListSettingsValueController baseSettings;
-        private static Image colorImage;
+        private FormattedFloatListSettingsValueController baseSettings;
+        private ImageView colorImage;
 
         public override string[] Aliases => new[] { "color-setting" };
 
+        public override void Setup()
+        {
+            base.Setup();
+            baseSettings = DiContainer.Resolve<SettingsNavigationController>().GetComponentOnChild<FormattedFloatListSettingsValueController>("GraphicSettings/ViewPort/Content/VRRenderingScale");
+            colorImage = DiContainer.Resolve<GameplaySetupViewController>().GetComponentOnChild<ImageView>("ColorsOverrideSettings/Settings/Detail/ColorSchemeDropDown/DropDownButton/ColorSchemeView/SaberColorA");
+        }
+
         public override GameObject CreateObject(Transform parent)
         {
-            if (baseSettings == null)
-            {
-                baseSettings = Resources.FindObjectsOfTypeAll<FormattedFloatListSettingsValueController>().First(x => x.name == "VRRenderingScale");
-            }
-
             FormattedFloatListSettingsValueController baseSetting = Object.Instantiate(baseSettings, parent, false);
             baseSetting.name = "BSMLColorSetting";
 
@@ -41,10 +45,6 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
             Transform editButtonTransform = valuePick.transform.Find("IncButton");
             editButtonTransform.name = "EditButton";
 
-            // TODO: this button has a gradient and simply disabling the gradient breaks colors - seems to be related to button animations
-            ImageView buttonBackgroundImageView = editButtonTransform.Find("BG").GetComponent<ImageView>();
-            buttonBackgroundImageView.sprite = Utilities.FindSpriteCached("RoundRect10Thin");
-
             Object.Destroy(valuePick.GetComponentsInChildren<TextMeshProUGUI>().First().gameObject);
             colorSetting.editButton = editButtonTransform.GetComponent<Button>();
 
@@ -59,11 +59,6 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
             externalComponents.Add(localizedText);
 
             gameObject.GetComponent<LayoutElement>().preferredWidth = 90;
-
-            if (colorImage == null)
-            {
-                colorImage = Resources.FindObjectsOfTypeAll<Image>().Where(i => i.sprite != null).First(i => i.gameObject.name == "ColorImage" && i.sprite.name == "NoteCircle");
-            }
 
             Image instance = Object.Instantiate(colorImage, valuePick, false);
             instance.name = "BSMLCurrentColor";

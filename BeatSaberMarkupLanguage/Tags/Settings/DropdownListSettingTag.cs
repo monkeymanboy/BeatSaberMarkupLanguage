@@ -1,28 +1,26 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.Components.Settings;
+using BeatSaberMarkupLanguage.Util;
 using HMUI;
 using Polyglot;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 namespace BeatSaberMarkupLanguage.Tags.Settings
 {
     public class DropdownListSettingTag : BSMLTag
     {
-        private GameObject dropdownTemplate;
         private GameObject safePrefab;
 
         public override string[] Aliases => new[] { "dropdown-list-setting" };
 
         public override void Setup()
         {
-            if (dropdownTemplate == null)
-            {
-                dropdownTemplate = Resources.FindObjectsOfTypeAll<SimpleTextDropdown>().Where(td => td.transform.parent != null).First(td => td.transform.parent.name == "NormalLevels").transform.parent.gameObject;
-            }
+            base.Setup();
 
+            GameObject dropdownTemplate = DiContainer.Resolve<GameplaySetupViewController>().GetChildGameObject("EnvironmentOverrideSettings/Settings/Elements/NormalLevels");
             safePrefab = Object.Instantiate(dropdownTemplate);
             safePrefab.SetActive(false);
             safePrefab.name = "BSMLDropdownListPrefab";

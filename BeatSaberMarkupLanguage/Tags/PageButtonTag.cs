@@ -1,7 +1,9 @@
 ﻿using System.Linq;
 using BeatSaberMarkupLanguage.Components;
+using BeatSaberMarkupLanguage.Util;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 namespace BeatSaberMarkupLanguage.Tags
 {
@@ -11,13 +13,14 @@ namespace BeatSaberMarkupLanguage.Tags
 
         public override string[] Aliases => new[] { "page-button", "pg-button" };
 
+        public override void Setup()
+        {
+            base.Setup();
+            buttonTemplate = DiContainer.Resolve<GameplaySetupViewController>().GetComponentOnChild<Button>("PlayerOptions/ScrollBar/UpButton");
+        }
+
         public override GameObject CreateObject(Transform parent)
         {
-            if (buttonTemplate == null)
-            {
-                buttonTemplate = Resources.FindObjectsOfTypeAll<Button>().Last(x => x.name == "UpButton");
-            }
-
             Button button = Object.Instantiate(buttonTemplate, parent, false);
             button.gameObject.SetActive(false);
             button.name = "BSMLPageButton";

@@ -12,11 +12,14 @@ using BeatSaberMarkupLanguage.Tags;
 using BeatSaberMarkupLanguage.TypeHandlers;
 using BeatSaberMarkupLanguage.Util;
 using UnityEngine;
-using Zenject;
+
+#if DEBUG
+using System.Diagnostics;
+#endif
 
 namespace BeatSaberMarkupLanguage
 {
-    public class BSMLParser : PersistentSingleton<BSMLParser>, IInitializable
+    public class BSMLParser : PersistentSingleton<BSMLParser>
     {
         internal static readonly string MacroPrefix = "macro.";
         internal static readonly string RetrieveValuePrefix = "~";
@@ -31,63 +34,6 @@ namespace BeatSaberMarkupLanguage
         {
             IgnoreComments = true,
         };
-
-        public BSMLParser()
-        {
-            foreach (BSMLTag tag in Utilities.GetInstancesOfDescendants<BSMLTag>())
-            {
-                RegisterTag(tag);
-            }
-
-            foreach (BSMLMacro macro in Utilities.GetInstancesOfDescendants<BSMLMacro>())
-            {
-                RegisterMacro(macro);
-            }
-
-            typeHandlers.AddRange(Utilities.GetInstancesOfDescendants<TypeHandler>());
-            foreach (TypeHandler typeHandler in typeHandlers.ToArray())
-            {
-                Type type = (typeHandler.GetType().GetCustomAttributes(typeof(ComponentHandler), true).FirstOrDefault() as ComponentHandler)?.type;
-                if (type == null)
-                {
-                    Logger.Log.Warn($"TypeHandler {typeHandler.GetType().FullName} does not have the [ComponentHandler] attribute and will be ignored.");
-                    typeHandlers.Remove(typeHandler);
-                }
-            }
-        }
-
-        public void Initialize()
-        {
-            foreach (BSMLTag tag in tags.Values)
-            {
-                if (!tag.isInitialized)
-                {
-                    tag.Setup();
-                    tag.isInitialized = true;
-                }
-            }
-
-#if false//don't worry about this, it's for the docs
-            string contents = "";
-            foreach (BSMLTag tag in Utilities.GetListOfType<BSMLTag>())
-            {
-                tag.Setup();
-                contents += $"- type: {tag.GetType().Name}\n";
-                contents += $"  aliases:\n";
-                foreach (string alias in tag.Aliases)
-                    contents += $"  - {alias}\n";
-                contents += $"  components:\n";
-                GameObject currentNode = tag.CreateObject(transform);
-                foreach (TypeHandler typeHandler in typeHandlers)
-                {
-                    Type type = (typeHandler.GetType().GetCustomAttributes(typeof(ComponentHandler), true).FirstOrDefault() as ComponentHandler).type;
-                    if (GetExternalComponent(currentNode, type) != null)
-                        contents += $"  - {type.Name}\n";
-                }
-            }
-            File.WriteAllText(Path.Combine(Environment.CurrentDirectory, "Tags.yml"), contents);
-#endif
-        }
 
         public void RegisterTag(BSMLTag tag)
         {
@@ -286,6 +232,79 @@ namespace BeatSaberMarkupLanguage
             }
         }
 
+        internal void RegisterAssemblyTags()
+        {
+#if DEBUG
+            Stopwatch stopwatch = Stopwatch.StartNew();
+#endif
+
+            foreach (BSMLTag tag in Utilities.GetInstancesOfDescendants<BSMLTag>())
+            {
+                RegisterTag(tag);
+            }
+
+            foreach (BSMLMacro macro in Utilities.GetInstancesOfDescendants<BSMLMacro>())
+            {
+                RegisterMacro(macro);
+            }
+
+            foreach (TypeHandler typeHandler in Utilities.GetInstancesOfDescendants<TypeHandler>())
+            {
+                Type type = typeHandler.GetType().GetCustomAttribute<ComponentHandler>(true)?.type;
+
+                if (type == null)
+                {
+                    Logger.Log.Warn($"TypeHandler {typeHandler.GetType().FullName} does not have the [{nameof(ComponentHandler)}] attribute and will be ignored.");
+                }
+                else
+                {
+                    typeHandlers.Add(typeHandler);
+                }
+            }
+
+#if DEBUG
+            Logger.Log.Debug("Got all tags in " + stopwatch.Elapsed);
+#endif
+        }
+
+        internal void SetUpTags()
+        {
+#if DEBUG
+            Stopwatch stopwatch = Stopwatch.StartNew();
+#endif
+
+            foreach (BSMLTag tag in tags.Values)
+            {
+                tag.Setup();
+                tag.isInitialized = true;
+            }
+
+#if DEBUG
+            Logger.Log.Debug("Initialized all tags in " + stopwatch.Elapsed);
+#endif
+
+#if false//don't worry about this, it's for the docs
+            string contents = "";
+            foreach (BSMLTag tag in Utilities.GetListOfType<BSMLTag>())
+            {
+                tag.Setup();
+                contents += $"- type: {tag.GetType().Name}\n";
+                contents += $"  aliases:\n";
+                foreach (string alias in tag.Aliases)
+                    contents += $"  - {alias}\n";
+                contents += $"  components:\n";
+                GameObject currentNode = tag.CreateObject(transform);
+                foreach (TypeHandler typeHandler in typeHandlers)
+                {
+                    Type type = (typeHandler.GetType().GetCustomAttributes(typeof(ComponentHandler), true).FirstOrDefault() as ComponentHandler).type;
+                    if (GetExternalComponent(currentNode, type) != null)
+                        contents += $"  - {type.Name}\n";
+                }
+            }
+            File.WriteAllText(Path.Combine(Environment.CurrentDirectory, "Tags.yml"), contents);
+#endif
+        }
+
         private void HandleTagNode(XmlNode node, GameObject parent, BSMLParserParams parserParams, out IEnumerable<ComponentTypeWithData> componentInfo)
         {
             if (!tags.TryGetValue(node.Name, out BSMLTag currentTag))
@@ -293,7 +312,7 @@ namespace BeatSaberMarkupLanguage
                 throw new TagNotFoundException(node.Name);
             }
 
-            GameObject currentNode = currentTag.CreateObject(parent.transform);
+            GameObject currentNode = currentTag.CreateObjectInternal(parent.transform);
 
             List<ComponentTypeWithData> componentTypes = new();
             foreach (TypeHandler typeHandler in typeHandlers)

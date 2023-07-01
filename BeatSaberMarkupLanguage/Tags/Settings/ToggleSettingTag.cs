@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.Components.Settings;
+using BeatSaberMarkupLanguage.Util;
 using HMUI;
 using Polyglot;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 namespace BeatSaberMarkupLanguage.Tags
 {
@@ -18,13 +19,14 @@ namespace BeatSaberMarkupLanguage.Tags
 
         public virtual string PrefabToggleName => "Fullscreen";
 
+        public override void Setup()
+        {
+            base.Setup();
+            toggleTemplate = DiContainer.Resolve<SettingsNavigationController>().GetChildGameObject("GraphicSettings/ViewPort/Content/Fullscreen");
+        }
+
         public override GameObject CreateObject(Transform parent)
         {
-            if (toggleTemplate == null)
-            {
-                toggleTemplate = Resources.FindObjectsOfTypeAll<Toggle>().Select(x => x.transform.parent.gameObject).First(p => p.name == PrefabToggleName);
-            }
-
             GameObject gameObject = Object.Instantiate(toggleTemplate, parent, false);
             GameObject nameText = gameObject.transform.Find("NameText").gameObject;
             GameObject switchView = gameObject.transform.Find("SwitchView").gameObject;

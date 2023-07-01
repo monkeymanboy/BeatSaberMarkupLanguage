@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.Components.Settings;
+using BeatSaberMarkupLanguage.Util;
 using HMUI;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 namespace BeatSaberMarkupLanguage.Tags
 {
@@ -15,13 +16,14 @@ namespace BeatSaberMarkupLanguage.Tags
 
         public override string[] Aliases => new[] { "modifier" };
 
+        public override void Setup()
+        {
+            base.Setup();
+            toggleTemplate = DiContainer.Resolve<SelectModifiersViewController>().GetComponentOnChild<GameplayModifierToggle>("GameplayModifiers/Modifiers/InstaFail");
+        }
+
         public override GameObject CreateObject(Transform parent)
         {
-            if (toggleTemplate == null)
-            {
-                toggleTemplate = Resources.FindObjectsOfTypeAll<GameplayModifierToggle>().First(x => x.name == "InstaFail");
-            }
-
             GameplayModifierToggle baseModifier = Object.Instantiate(toggleTemplate, parent, false);
             baseModifier.name = "BSMLModifier";
 

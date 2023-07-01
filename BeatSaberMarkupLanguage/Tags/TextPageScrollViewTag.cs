@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using BeatSaberMarkupLanguage.Components;
+using BeatSaberMarkupLanguage.Util;
 using HMUI;
 using TMPro;
 using UnityEngine;
+using Zenject;
 
 namespace BeatSaberMarkupLanguage.Tags
 {
@@ -13,13 +14,14 @@ namespace BeatSaberMarkupLanguage.Tags
 
         public override string[] Aliases => new[] { "text-page" };
 
+        public override void Setup()
+        {
+            base.Setup();
+            pageTemplate = DiContainer.Resolve<ReleaseInfoViewController>().GetComponentOnChild<TextPageScrollView>("TextPageScrollView");
+        }
+
         public override GameObject CreateObject(Transform parent)
         {
-            if (pageTemplate == null)
-            {
-                pageTemplate = Resources.FindObjectsOfTypeAll<ReleaseInfoViewController>().First()._textPageScrollView;
-            }
-
             TextPageScrollView scrollView = DiContainer.InstantiatePrefabForComponent<TextPageScrollView>(pageTemplate, parent);
             scrollView.name = "BSMLTextPageScrollView";
             scrollView.enabled = true;

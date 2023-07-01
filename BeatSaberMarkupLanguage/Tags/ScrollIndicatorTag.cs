@@ -1,29 +1,23 @@
-﻿using System.Linq;
-using BeatSaberMarkupLanguage.Components;
+﻿using BeatSaberMarkupLanguage.Components;
+using BeatSaberMarkupLanguage.Util;
 using HMUI;
 using UnityEngine;
+using Zenject;
 using Object = UnityEngine.Object;
 
 namespace BeatSaberMarkupLanguage.Tags
 {
     public class ScrollIndicatorTag : BSMLTag
     {
-        private static GameObject verticalScrollTemplate = null;
-
-        public static GameObject VerticalScrollTemplate
-        {
-            get
-            {
-                if (verticalScrollTemplate == null)
-                {
-                    verticalScrollTemplate = Resources.FindObjectsOfTypeAll<VerticalScrollIndicator>().First().gameObject;
-                }
-
-                return verticalScrollTemplate;
-            }
-        }
+        public static GameObject VerticalScrollTemplate { get; private set; }
 
         public override string[] Aliases { get; } = new[] { "vertical-scroll-indicator", "scroll-indicator" };
+
+        public override void Setup()
+        {
+            base.Setup();
+            VerticalScrollTemplate = DiContainer.Resolve<GameplaySetupViewController>().GetChildGameObject("PlayerOptions/ScrollBar/VerticalScrollIndicator");
+        }
 
         public override GameObject CreateObject(Transform parent)
         {

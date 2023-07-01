@@ -3,7 +3,6 @@ using BeatSaberMarkupLanguage.Settings;
 using HMUI;
 using TMPro;
 using UnityEngine;
-using Zenject;
 
 namespace BeatSaberMarkupLanguage.Tags.Settings
 {
@@ -15,6 +14,7 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
 
         public override void Setup()
         {
+            base.Setup();
             modSettingsFlowCoordinator = DiContainer.Resolve<ModSettingsFlowCoordinator>();
         }
 

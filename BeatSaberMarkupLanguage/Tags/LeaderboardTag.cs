@@ -1,5 +1,6 @@
-﻿using System.Linq;
+﻿using BeatSaberMarkupLanguage.Util;
 using UnityEngine;
+using Zenject;
 
 namespace BeatSaberMarkupLanguage.Tags
 {
@@ -9,13 +10,14 @@ namespace BeatSaberMarkupLanguage.Tags
 
         public override string[] Aliases => new[] { "leaderboard" };
 
+        public override void Setup()
+        {
+            base.Setup();
+            leaderboardTemplate = DiContainer.Resolve<PlatformLeaderboardViewController>().GetComponentOnChild<LeaderboardTableView>("Container/LeaderboardTableView");
+        }
+
         public override GameObject CreateObject(Transform parent)
         {
-            if (leaderboardTemplate == null)
-            {
-                leaderboardTemplate = Resources.FindObjectsOfTypeAll<LeaderboardTableView>().First(x => x.name == "LeaderboardTableView");
-            }
-
             LeaderboardTableView table = DiContainer.InstantiatePrefabForComponent<LeaderboardTableView>(leaderboardTemplate, parent);
             table.name = "BSMLLeaderboard";
 

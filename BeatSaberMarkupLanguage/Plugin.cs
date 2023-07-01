@@ -45,6 +45,7 @@ namespace BeatSaberMarkupLanguage
         {
             LoadAndSetUpFontFallbacksAsync().ContinueWith((task) => Logger.Log.Error($"Failed to set up fallback fonts\n{task.Exception}"), TaskContinuationOptions.OnlyOnFaulted);
             AnimationController.instance.InitializeLoadingAnimation().ContinueWith((task) => Logger.Log.Error($"Failed to initialize loading animation\n{task.Exception}"), TaskContinuationOptions.OnlyOnFaulted);
+            BSMLParser.instance.RegisterAssemblyTags();
         }
 
         [OnExit]

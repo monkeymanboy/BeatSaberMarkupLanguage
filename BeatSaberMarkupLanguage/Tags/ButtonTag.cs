@@ -1,9 +1,11 @@
-﻿using System.Linq;
-using BeatSaberMarkupLanguage.Components;
+﻿using BeatSaberMarkupLanguage.Components;
+using BeatSaberMarkupLanguage.Util;
 using Polyglot;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
+using Object = UnityEngine.Object;
 
 namespace BeatSaberMarkupLanguage.Tags
 {
@@ -13,15 +15,14 @@ namespace BeatSaberMarkupLanguage.Tags
 
         public override string[] Aliases => new[] { "button" };
 
-        public virtual string PrefabButton => "PracticeButton";
+        public override void Setup()
+        {
+            base.Setup();
+            buttonPrefab = GetButtonPrefab();
+        }
 
         public override GameObject CreateObject(Transform parent)
         {
-            if (buttonPrefab == null)
-            {
-                buttonPrefab = Resources.FindObjectsOfTypeAll<Button>().Last(x => x.name == PrefabButton);
-            }
-
             Button button = Object.Instantiate(buttonPrefab, parent, false);
             button.name = "BSMLButton";
             button.interactable = true;
@@ -53,6 +54,11 @@ namespace BeatSaberMarkupLanguage.Tags
             }
 
             return gameObject;
+        }
+
+        protected virtual Button GetButtonPrefab()
+        {
+            return DiContainer.Resolve<StandardLevelDetailViewController>().GetComponentOnChild<Button>("LevelDetail/ActionButtons/PracticeButton");
         }
     }
 }

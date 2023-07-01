@@ -20,7 +20,7 @@ namespace BeatSaberMarkupLanguage.Harmony_Patches
             // instance persists across restarts (like PersistentSingleton did) so Initialize/Dispose can be called multiple times on the same instance.
             container.Bind(typeof(AnimationController), typeof(ITickable)).FromInstance(AnimationController.instance);
             container.Bind(typeof(BSMLSettings), typeof(IInitializable), typeof(ILateDisposable)).FromInstance(BSMLSettings.instance);
-            container.Bind(typeof(BSMLParser), typeof(IInitializable)).FromInstance(BSMLParser.instance);
+            container.Bind(typeof(BSMLParser)).FromInstance(BSMLParser.instance);
             container.Bind(typeof(MenuButtons.MenuButtons), typeof(ILateDisposable)).FromInstance(MenuButtons.MenuButtons.instance);
             container.Bind(typeof(GameplaySetup.GameplaySetup), typeof(IInitializable), typeof(IDisposable), typeof(ILateDisposable)).FromInstance(GameplaySetup.GameplaySetup.instance);
 
@@ -32,7 +32,6 @@ namespace BeatSaberMarkupLanguage.Harmony_Patches
 
             // initialize all our stuff late
             container.BindInitializableExecutionOrder<BSMLSettings>(1000);
-            container.BindInitializableExecutionOrder<BSMLParser>(1000);
             container.BindInitializableExecutionOrder<GameplaySetup.GameplaySetup>(1000);
 
             ModSettingsFlowCoordinator modSettingsFlowCoordinator = BeatSaberUI.CreateFlowCoordinator<ModSettingsFlowCoordinator>();

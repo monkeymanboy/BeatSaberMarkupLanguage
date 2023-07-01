@@ -1,30 +1,24 @@
-using System.Linq;
 using BeatSaberMarkupLanguage.Components;
+using BeatSaberMarkupLanguage.Util;
 using HMUI;
 using UnityEngine;
 using UnityEngine.UI;
 using VRUIControls;
+using Zenject;
 
 namespace BeatSaberMarkupLanguage.Tags
 {
     public class ScrollViewTag : BSMLTag
     {
-        private static TextPageScrollView scrollViewTemplate;
-
-        public static TextPageScrollView ScrollViewTemplate
-        {
-            get
-            {
-                if (scrollViewTemplate == null)
-                {
-                    scrollViewTemplate = Resources.FindObjectsOfTypeAll<ReleaseInfoViewController>().First()._textPageScrollView;
-                }
-
-                return scrollViewTemplate;
-            }
-        }
+        public static TextPageScrollView ScrollViewTemplate { get; private set; }
 
         public override string[] Aliases => new[] { "scroll-view" };
+
+        public override void Setup()
+        {
+            base.Setup();
+            ScrollViewTemplate = DiContainer.Resolve<ReleaseInfoViewController>().GetComponentOnChild<TextPageScrollView>("TextPageScrollView");
+        }
 
         public override GameObject CreateObject(Transform parent)
         {
