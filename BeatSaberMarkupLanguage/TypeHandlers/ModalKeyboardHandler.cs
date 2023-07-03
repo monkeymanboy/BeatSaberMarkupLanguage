@@ -11,6 +11,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
     {
         public override Dictionary<string, string[]> Props => new()
         {
+            { "showEvent", new[] { "show-event" } },
             { "value", new[] { "value" } },
             { "onEnter", new[] { "on-enter" } },
             { "clearOnOpen", new[] { "clear-on-open" } },
@@ -44,6 +45,11 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                     }
 
                     modalKeyboard.onEnter = onEnterAction;
+                }
+
+                if (componentType.data.TryGetValue("showEvent", out string showEvent))
+                {
+                    parserParams.AddEvent(showEvent, () => modalKeyboard.ReceiveValue());
                 }
             }
             catch (Exception ex)

@@ -31,7 +31,7 @@ namespace BeatSaberMarkupLanguage.Components
             keyboard.KeyboardText.text = text;
         }
 
-        private void OnEnable()
+        internal void ReceiveValue()
         {
             if (associatedValue != null)
             {
@@ -42,6 +42,11 @@ namespace BeatSaberMarkupLanguage.Components
             {
                 SetText(string.Empty);
             }
+        }
+
+        private void OnEnable()
+        {
+            ReceiveValue();
         }
     }
 
