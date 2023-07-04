@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
 using System.Linq;
 using HMUI;
 
@@ -6,7 +6,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 {
     public class DropDownListSetting : GenericInteractableSetting
     {
-        public List<object> values;
+        public IList values;
         public SimpleTextDropdown dropdown;
 
         private int index;
@@ -49,7 +49,14 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 
         public void UpdateChoices()
         {
-            dropdown.SetTexts(values.Select(x => formatter == null ? x.ToString() : (formatter.Invoke(x) as string)).ToList());
+            if (formatter != null)
+            {
+                dropdown.SetTexts(values.Cast<object>().Select(o => formatter.Invoke(o) as string).ToList());
+            }
+            else
+            {
+                dropdown.SetTexts(values.Cast<object>().Select(o => o.ToString()).ToList());
+            }
         }
 
         public override void ApplyValue()

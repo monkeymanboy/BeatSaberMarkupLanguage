@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Collections;
 using HMUI;
 using TMPro;
 
@@ -8,7 +7,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 {
     public class ListSliderSetting : GenericSliderSetting
     {
-        public List<object> values;
+        public IList values;
 
         public object Value
         {
@@ -24,7 +23,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         {
             base.Setup();
             slider.minValue = 0;
-            slider.maxValue = values.Count() - 1;
+            slider.maxValue = values.Count - 1;
             text = slider.GetComponentInChildren<TextMeshProUGUI>();
             slider.numberOfSteps = values.Count;
             slider.valueDidChangeEvent += OnChange;

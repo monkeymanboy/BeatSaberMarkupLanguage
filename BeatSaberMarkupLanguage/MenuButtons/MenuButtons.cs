@@ -9,11 +9,13 @@ namespace BeatSaberMarkupLanguage.MenuButtons
 {
     public class MenuButtons : PersistentSingleton<MenuButtons>, IInitializable
     {
+        /*
         [UIValue("pin-buttons")]
-        internal List<object> pinButtons = new();
+        internal List<PinnedMod> pinButtons = new();
+        */
 
         [UIValue("buttons")]
-        private List<object> buttons = new();
+        private List<MenuButton> buttons = new();
 
         /*
         [UIParams]
@@ -25,7 +27,7 @@ namespace BeatSaberMarkupLanguage.MenuButtons
 
         public void RegisterButton(MenuButton menuButton)
         {
-            if (buttons.Any(x => (x as MenuButton).Text == menuButton.Text))
+            if (buttons.Any(mb => mb.Text == menuButton.Text))
             {
                 return;
             }
@@ -41,7 +43,7 @@ namespace BeatSaberMarkupLanguage.MenuButtons
         {
             buttons.Remove(menuButton);
 
-            /* pinButtons.RemoveAll(x => (x as PinnedMod).menuButton == menuButton); */
+            /* pinButtons.RemoveAll(pm => pm.menuButton == menuButton); */
 
             Refresh();
         }
@@ -86,7 +88,7 @@ namespace BeatSaberMarkupLanguage.MenuButtons
     internal class MenuPins : PersistentSingleton<MenuPins>
     {
         [UIValue("pin-buttons")]
-        public List<object> pinButtons => MenuButtons.instance.pinButtons;
+        public List<PinnedMod> pinButtons => MenuButtons.instance.pinButtons;
 
         [UIObject("root-object")]
         internal GameObject rootObject;

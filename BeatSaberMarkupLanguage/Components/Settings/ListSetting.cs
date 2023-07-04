@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
 
 namespace BeatSaberMarkupLanguage.Components.Settings
 {
     public class ListSetting : IncDecSetting
     {
-        public List<object> values;
+        public IList values;
 
         private int index;
 

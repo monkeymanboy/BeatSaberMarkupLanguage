@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.Parser;
@@ -111,13 +112,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                     throw new Exception("value '" + value + "' not found");
                 }
 
-                object tableDataValue = contents.GetValue();
-                if (tableDataValue is not List<object> tableDataList)
-                {
-                    throw new Exception($"Value '{value}' is not a List<object>, which is required for custom-list");
-                }
-
-                tableData.data = tableDataList;
+                tableData.data = contents.GetValueAs<IList>();
                 tableData.tableView.ReloadData();
             }
 

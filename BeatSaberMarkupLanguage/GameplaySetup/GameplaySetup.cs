@@ -40,7 +40,7 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
         private List<Transform> vanillaItems = new();
 
         [UIValue("mod-menus")]
-        private List<object> menus = new();
+        private List<GameplaySetupMenu> menus = new();
 
         public event Action TabsCreatedEvent;
 
@@ -91,18 +91,14 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
         /// <param name="name">The name of the tab.</param>
         public void RemoveTab(string name)
         {
-            IEnumerable<object> menu = menus.Where(x => (x as GameplaySetupMenu).name == name);
-            if (menu.Count() > 0)
-            {
-                menus.Remove(menu.FirstOrDefault());
-            }
+            menus.RemoveAll(m => m.name == name);
         }
 
         public float CellSize() => 8f;
 
         public int NumberOfCells() => menus.Count;
 
-        public TableCell CellForIdx(TableView tableView, int idx) => GetCell().PopulateCell((GameplaySetupMenu)menus[idx]);
+        public TableCell CellForIdx(TableView tableView, int idx) => GetCell().PopulateCell(menus[idx]);
 
         public void Initialize()
         {
@@ -135,7 +131,7 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
 
         private void AddTab(Assembly assembly, string name, string resource, object host, MenuType menuType)
         {
-            if (menus.Any(x => (x as GameplaySetupMenu).name == name))
+            if (menus.Any(m => m.name == name))
             {
                 return;
             }

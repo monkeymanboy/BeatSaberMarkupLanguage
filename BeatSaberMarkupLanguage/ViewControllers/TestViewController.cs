@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components;
 using HMUI;
@@ -31,7 +32,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
         public float SliderValue { get; set; } = 0.5f;
 
         [UIValue("options")]
-        public List<object> Options { get; } = new() { "option1", "option2", "option3" };
+        public List<string> Options { get; } = new() { "option1", "option2", "option3" };
 
         [UIValue("list-slider-value")]
         public string ListValue { get; set; } = "option2";
@@ -59,25 +60,19 @@ namespace BeatSaberMarkupLanguage.ViewControllers
         }
 
         [UIValue("contents")]
-        public List<object> Contents
+        public IList Contents { get; } = new[]
         {
-            get
-            {
-                return new List<object>
-                {
-                    new TestListObject("first", false),
-                    new TestListObject("second", true),
-                    new TestListObject("third", true),
-                };
-            }
-        }
+            new TestListObject("first", false),
+            new TestListObject("second", true),
+            new TestListObject("third", true),
+        };
 
         [UIValue("contents2")]
-        public List<object> Contents2
+        public IList Contents2
         {
             get
             {
-                List<object> list = new();
+                List<TestListObject> list = new();
 
                 for (int i = 0; i < 30; i++)
                 {

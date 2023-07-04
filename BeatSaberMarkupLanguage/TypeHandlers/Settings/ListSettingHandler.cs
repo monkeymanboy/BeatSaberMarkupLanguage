@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using BeatSaberMarkupLanguage.Components.Settings;
 using BeatSaberMarkupLanguage.Parser;
@@ -24,7 +25,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
                     throw new Exception($"Options '{options}' not found");
                 }
 
-                listSetting.values = values.GetValue() as List<object>;
+                listSetting.values = values.GetValueAs<IList>();
             }
             else
             {

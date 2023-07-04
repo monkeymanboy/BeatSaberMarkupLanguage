@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using BeatSaberMarkupLanguage.Parser;
 using HMUI;
 using UnityEngine;
@@ -8,7 +9,7 @@ namespace BeatSaberMarkupLanguage.Components
 {
     public class CustomCellListTableData : MonoBehaviour, TableView.IDataSource
     {
-        public List<object> data = new();
+        public IList data = Array.Empty<object>();
         public string cellTemplate;
         public float cellSize = 8.5f;
         public TableView tableView;
@@ -37,7 +38,7 @@ namespace BeatSaberMarkupLanguage.Components
 
         public int NumberOfCells()
         {
-            return data.Count();
+            return data.Count;
         }
     }
 

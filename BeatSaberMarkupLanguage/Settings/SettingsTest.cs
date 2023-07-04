@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using BeatSaberMarkupLanguage.Attributes;
+﻿using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.Parser;
 using UnityEngine;
@@ -24,7 +22,7 @@ namespace BeatSaberMarkupLanguage.Settings
         private Color testColor = Color.yellow;
 
         [UIValue("list-options")]
-        private List<object> options = new object[] { "1", "Something", "Kapow", "Yeet" }.ToList();
+        private string[] options = new string[] { "1", "Something", "Kapow", "Yeet" };
 
         [UIValue("list-choice")]
         private string listChoice = "Kapow";
