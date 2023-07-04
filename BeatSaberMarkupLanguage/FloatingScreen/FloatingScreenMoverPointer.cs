@@ -6,6 +6,7 @@ using VRUIControls;
 namespace BeatSaberMarkupLanguage.FloatingScreen
 {
     // yoinked from https://github.com/Kylemc1413/CameraPlus/blob/master/CameraPlus/CameraMoverPointer.cs
+    [Obsolete]
     public class FloatingScreenMoverPointer : MonoBehaviour
     {
         [Obsolete("Use FloatingScreen.HandleGrabbed event")]
@@ -45,7 +46,6 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
             Init(floatingScreen, vrPointer);
         }
 
-#pragma warning disable CS0618
         protected virtual void Update()
         {
             VRPointer pointer = _vrPointer;
@@ -92,7 +92,6 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
             _screenHandle = null;
             _grabbingController = null;
         }
-#pragma warning restore CS0618
 
         protected virtual void LateUpdate()
         {
