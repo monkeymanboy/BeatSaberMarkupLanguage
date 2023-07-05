@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Linq;
 using HMUI;
 
@@ -6,10 +7,11 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 {
     public class DropDownListSetting : GenericInteractableSetting
     {
-        public IList values;
         public SimpleTextDropdown dropdown;
 
         private int index;
+
+        public IList values { get; set; } = Array.Empty<object>();
 
         public object Value
         {

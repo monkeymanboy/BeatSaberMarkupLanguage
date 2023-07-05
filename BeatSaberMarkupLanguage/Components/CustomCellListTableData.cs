@@ -9,11 +9,12 @@ namespace BeatSaberMarkupLanguage.Components
 {
     public class CustomCellListTableData : MonoBehaviour, TableView.IDataSource
     {
-        public IList data = Array.Empty<object>();
         public string cellTemplate;
         public float cellSize = 8.5f;
         public TableView tableView;
         public bool clickableCells = true;
+
+        public IList data { get; set; } = Array.Empty<object>();
 
         public virtual TableCell CellForIdx(TableView tableView, int idx)
         {

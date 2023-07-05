@@ -7,7 +7,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 {
     public class ListSliderSetting : GenericSliderSetting
     {
-        public IList values;
+        public IList values { get; set; } = Array.Empty<object>();
 
         public object Value
         {

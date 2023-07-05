@@ -1,12 +1,13 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 
 namespace BeatSaberMarkupLanguage.Components.Settings
 {
     public class ListSetting : IncDecSetting
     {
-        public IList values;
-
         private int index;
+
+        public IList values { get; set; } = Array.Empty<object>();
 
         public object Value
         {
