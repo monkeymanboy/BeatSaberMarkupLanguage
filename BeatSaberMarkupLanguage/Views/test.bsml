@@ -95,7 +95,7 @@
           </macro.if>
         </macro.for-each>
         <page-button click-event='list#PageDown' direction='Right'></page-button>
-        <icon-button pref-width='10' pref-height='10' icon='#InstaFailIcon' stroke-type='Clean' pad='1'/>
+        <icon-button pref-width='10' pref-height='10' icon='#OneLifeIcon' stroke-type='Clean' pad='1'/>
       </horizontal>
     </vertical>
   </tab>
@@ -126,7 +126,7 @@
           </stack>
         </custom-list>
         <page-button click-event='clist#PageDown' direction='Down'></page-button>
-        <icon-button pref-width='10' pref-height='10' icon='#InstaFailIcon' stroke-type='Clean' pad='1'/>
+        <icon-button pref-width='10' pref-height='10' icon='#OneLifeIcon' stroke-type='Clean' pad='1'/>
     </vertical>
   </tab>
   <tab tags='new-tab' tab-name='text page'>
