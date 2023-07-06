@@ -1,8 +1,6 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
 using VRUIControls;
-using Zenject;
 
 namespace BeatSaberMarkupLanguage.FloatingScreen
 {
@@ -14,7 +12,6 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
 
         private static Shader shader;
 
-        private VRInputModule _vrInputModule;
         private FloatingScreen _floatingScreen;
         private Material _material;
         private VRController _grabbingController;
@@ -44,7 +41,12 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
                 return;
             }
 
-            VRPointer vrPointer = _vrInputModule._vrPointer;
+            if (EventSystem.current == null || EventSystem.current.currentInputModule is not VRInputModule vrInputModule)
+            {
+                return;
+            }
+
+            VRPointer vrPointer = vrInputModule._vrPointer;
             VRController vrController = vrPointer.lastSelectedVrController;
             _grabbingController = vrController;
             _grabPos = vrController.transform.InverseTransformPoint(_floatingScreen.transform.position);
@@ -56,8 +58,13 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
 
         public void OnPointerUp(PointerEventData eventData)
         {
+            if (EventSystem.current == null || EventSystem.current.currentInputModule is not VRInputModule vrInputModule)
+            {
+                return;
+            }
+
             _grabbingController = null;
-            _floatingScreen.OnHandleReleased(_vrInputModule._vrPointer);
+            _floatingScreen.OnHandleReleased(vrInputModule._vrPointer);
 
             UpdateMaterial();
         }
@@ -65,13 +72,6 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
         internal void Init(FloatingScreen floatingScreen)
         {
             _floatingScreen = floatingScreen;
-        }
-
-        [Inject]
-        [SuppressMessage("CodeQuality", "IDE0051", Justification = "Used by Zenject")]
-        private void Construct(VRInputModule vrInputModule)
-        {
-            _vrInputModule = vrInputModule;
         }
 
         private void Awake()
