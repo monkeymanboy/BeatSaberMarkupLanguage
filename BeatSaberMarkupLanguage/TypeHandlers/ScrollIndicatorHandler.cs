@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using BeatSaberMarkupLanguage.Components;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,7 +21,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             = new Dictionary<string, Action<BSMLScrollIndicator, string>>
             {
                 { "handleColor", TrySetHandleColor },
-                { "handleImage", (indic, src) => GetHandleImage(indic).SetImage(src) },
+                { "handleImage", (indic, src) => GetHandleImage(indic).SetImageAsync(src).ContinueWith((task) => Logger.Log.Error($"Failed to load image\n{task.Exception}"), TaskContinuationOptions.OnlyOnFaulted) },
             };
 
         private static Image GetHandleImage(BSMLScrollIndicator indicator) => indicator.Handle.GetComponent<Image>();

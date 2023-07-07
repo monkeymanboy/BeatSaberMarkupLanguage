@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Threading.Tasks;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.Components
@@ -14,7 +15,7 @@ namespace BeatSaberMarkupLanguage.Components
                 return;
             }
 
-            image.SetImage(path);
+            image.SetImageAsync(path).ContinueWith((task) => Logger.Log.Error($"Failed to load image\n{task.Exception}"), TaskContinuationOptions.OnlyOnFaulted);
         }
     }
 }

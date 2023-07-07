@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BeatSaberMarkupLanguage.Animations;
 using HMUI;
+using IPA.Utilities;
 using IPA.Utilities.Async;
 using TMPro;
 using UnityEngine;
@@ -311,6 +312,7 @@ namespace BeatSaberMarkupLanguage
         /// </summary>
         /// <param name="image">Image component to set the image to.</param>
         /// <param name="location">Resource path, file path, or url of image. Can prefix with # to find and use a base game sprite. May need to prefix resource paths with 'AssemblyName:'.</param>
+        [Obsolete]
         public static void SetImage(this Image image, string location)
         {
             SetImage(image, location, true, default, null);
@@ -323,6 +325,7 @@ namespace BeatSaberMarkupLanguage
         /// <param name="location">Resource path, file path, or url of image. Can prefix with # to find and use a base game sprite. May need to prefix resource paths with 'AssemblyName:'.</param>
         /// <param name="loadingAnimation">Whether a loading animation is shown as a placeholder until the image is loaded.</param>
         /// <param name="scaleOptions">If the image should be downscaled and what it should be downscaled to.</param>
+        [Obsolete]
         public static void SetImage(this Image image, string location, bool loadingAnimation, ScaleOptions scaleOptions)
         {
             SetImage(image, location, loadingAnimation, scaleOptions, null);
@@ -336,6 +339,7 @@ namespace BeatSaberMarkupLanguage
         /// <param name="loadingAnimation">Whether a loading animation is shown as a placeholder until the image is loaded.</param>
         /// <param name="scaleOptions">If the image should be downscaled and what it should be downscaled to.</param>
         /// <param name="callback">Method to call once SetImage has finished.</param>
+        [Obsolete]
         public static void SetImage(this Image image, string location, bool loadingAnimation, ScaleOptions scaleOptions, Action callback)
         {
             if (image.TryGetComponent(out AnimationStateUpdater oldStateUpdater))
@@ -434,6 +438,102 @@ namespace BeatSaberMarkupLanguage
         }
 
         /// <summary>
+        /// Sets an image (PNG/JPEG/GIF/APNG/etc.) from a URL, local file, or resource path.
+        /// </summary>
+        /// <param name="image">Image component to set the image to.</param>
+        /// <param name="location">Resource path, file path, or URL of the image to load. Can prefix with # to find and use a base game sprite. May need to prefix resource paths with 'AssemblyName:'.</param>
+        /// <param name="loadingAnimation">Whether a loading animation is shown as a placeholder until the image is loaded.</param>
+        /// <param name="scaleOptions">If the image should be downscaled and what it should be downscaled to.</param>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+        public static async Task SetImageAsync(this Image image, string location, bool loadingAnimation = true, ScaleOptions scaleOptions = default)
+        {
+            ThrowIfNotOnMainThread();
+
+            if (image.TryGetComponent(out AnimationStateUpdater oldStateUpdater))
+            {
+                Object.DestroyImmediate(oldStateUpdater);
+            }
+
+            if (location.Length > 1 && location[0] == '#')
+            {
+                string imgName = location.Substring(1);
+                image.sprite = Utilities.FindSpriteCached(imgName);
+                if (image.sprite == null)
+                {
+                    Logger.Log.Error($"Could not find Sprite with image name {imgName}");
+                }
+
+                return;
+            }
+
+            bool isURL = Uri.TryCreate(location, UriKind.Absolute, out Uri uri);
+            if (IsAnimated(location) || (isURL && IsAnimated(uri.LocalPath)))
+            {
+                AnimationStateUpdater stateUpdater = image.gameObject.AddComponent<AnimationStateUpdater>();
+                stateUpdater.image = image;
+                if (loadingAnimation)
+                {
+                    stateUpdater.controllerData = AnimationController.instance.loadingAnimation;
+                }
+
+                if (AnimationController.instance.RegisteredAnimations.TryGetValue(location, out AnimationControllerData animControllerData))
+                {
+                    stateUpdater.controllerData = animControllerData;
+                }
+                else
+                {
+                    byte[] data = await Utilities.GetDataAsync(location);
+                    AnimationData animationData;
+
+                    if (location.EndsWith(".gif", StringComparison.OrdinalIgnoreCase) || (isURL && uri.LocalPath.EndsWith(".gif", StringComparison.OrdinalIgnoreCase)))
+                    {
+                        animationData = await AnimationLoader.ProcessGifAsync(data);
+                    }
+                    else
+                    {
+                        animationData = await AnimationLoader.ProcessApngAsync(data);
+                    }
+
+                    AnimationControllerData controllerData = AnimationController.instance.Register(location, animationData);
+                    stateUpdater.controllerData = controllerData;
+
+                    return;
+                }
+            }
+            else
+            {
+                AnimationStateUpdater stateUpdater = image.gameObject.AddComponent<AnimationStateUpdater>();
+                stateUpdater.image = image;
+
+                if (loadingAnimation)
+                {
+                    stateUpdater.controllerData = AnimationController.instance.loadingAnimation;
+                }
+
+                byte[] data = await Utilities.GetDataAsync(location);
+
+                if (stateUpdater != null)
+                {
+                    Object.DestroyImmediate(stateUpdater);
+                }
+
+                if (scaleOptions.ShouldScale)
+                {
+                    byte[] imageBytes = await Task.Run(() => DownscaleImage(data, scaleOptions.Width, scaleOptions.Height, scaleOptions.MaintainRatio));
+                    image.sprite = Utilities.LoadSpriteRaw(imageBytes);
+                    image.sprite.texture.wrapMode = TextureWrapMode.Clamp;
+                }
+                else
+                {
+                    image.sprite = Utilities.LoadSpriteRaw(data);
+                    image.sprite.texture.wrapMode = TextureWrapMode.Clamp;
+                }
+
+                return;
+            }
+        }
+
+        /// <summary>
         /// Downscale the image in <paramref name="data"/> to the specified size. This method uses <see cref="System.Drawing"/> (CPU) so it can be run on a non-main thread.
         /// </summary>
         /// <param name="data">Byte array containing the image data.</param>
@@ -491,6 +591,14 @@ namespace BeatSaberMarkupLanguage
 
         public static void DismissFlowCoordinator(this FlowCoordinator current, FlowCoordinator flowCoordinator, Action finishedCallback = null, ViewController.AnimationDirection animationDirection = ViewController.AnimationDirection.Horizontal, bool immediately = false)
             => current.DismissFlowCoordinator(flowCoordinator, animationDirection, finishedCallback, immediately);
+
+        internal static void ThrowIfNotOnMainThread()
+        {
+            if (!UnityGame.OnMainThread)
+            {
+                throw new InvalidOperationException("This method must be called from the main thread.");
+            }
+        }
 
         private static bool IsAnimated(string str)
         {

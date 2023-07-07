@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,7 +18,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 
         public override Dictionary<string, Action<Image, string>> Setters => new()
         {
-            { "image", new Action<Image, string>((image, path) => image.SetImage(path)) },
+            { "image", new Action<Image, string>((image, path) => image.SetImageAsync(path).ContinueWith((task) => Logger.Log.Error($"Failed to load image\n{task.Exception}"), TaskContinuationOptions.OnlyOnFaulted)) },
             { "preserveAspect", new Action<Image, string>((image, preserveAspect) => image.preserveAspect = bool.Parse(preserveAspect)) },
             { "imageColor", new Action<Image, string>((image, color) => image.color = GetColor(color)) },
         };
