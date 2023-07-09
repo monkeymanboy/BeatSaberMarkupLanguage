@@ -23,7 +23,6 @@ namespace BeatSaberMarkupLanguage.MenuButtons
         */
 
         private MenuButtonsViewController menuButtonsViewController;
-        private ScreenSystem screenSystem;
 
         public void RegisterButton(MenuButton menuButton)
         {
@@ -63,14 +62,7 @@ namespace BeatSaberMarkupLanguage.MenuButtons
 
         internal void ShowView(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
         {
-            screenSystem = BeatSaberUI.MainFlowCoordinator._screenSystem;
-
-            foreach (ModalView modalView in screenSystem.leftScreen.GetComponentsInChildren<ModalView>())
-            {
-                modalView.OnDisable();
-            }
-
-            BeatSaberUI.MainFlowCoordinator.SetLeftScreenViewController(menuButtonsViewController, ViewController.AnimationType.None);
+            BeatSaberUI.MainFlowCoordinator.SetLeftScreenViewController(menuButtonsViewController, addedToHierarchy ? ViewController.AnimationType.None : ViewController.AnimationType.In);
         }
 
         internal void Refresh()
