@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Util;
 using HMUI;
@@ -76,7 +75,7 @@ namespace BeatSaberMarkupLanguage.Settings
                 menu.didSetup = false;
             }
 
-            AddButtonToMainScreen().ContinueWith((task) => Logger.Log.Error($"Failed to add button to main screen\n{task.Exception}"), TaskContinuationOptions.OnlyOnFaulted);
+            AddButtonToMainScreen();
 
             _isInitialized = true;
         }
@@ -87,15 +86,9 @@ namespace BeatSaberMarkupLanguage.Settings
             ThumbstickValue = value;
         }
 
-        private async Task AddButtonToMainScreen()
+        private void AddButtonToMainScreen()
         {
-            OptionsViewController optionsViewController = null;
-            while (optionsViewController == null)
-            {
-                optionsViewController = Resources.FindObjectsOfTypeAll<OptionsViewController>().FirstOrDefault();
-                await Task.Yield();
-            }
-
+            OptionsViewController optionsViewController = BeatSaberUI.DiContainer.Resolve<OptionsViewController>();
             _button = UnityEngine.Object.Instantiate(optionsViewController._settingsButton, optionsViewController.transform.Find("Wrapper"));
             _button.GetComponentInChildren<LocalizedTextMeshProUGUI>().Key = "Mod Settings";
             _button.onClick.RemoveAllListeners();
