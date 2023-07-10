@@ -1,17 +1,22 @@
-﻿using System.Linq;
-using BeatSaberMarkupLanguage.Components;
+﻿using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.Settings;
 using HMUI;
 using TMPro;
 using UnityEngine;
+using Zenject;
 
 namespace BeatSaberMarkupLanguage.Tags.Settings
 {
     public class SubmenuTag : BSMLTag
     {
-        private ModSettingsFlowCoordinator flow;
+        private ModSettingsFlowCoordinator modSettingsFlowCoordinator;
 
         public override string[] Aliases => new[] { "settings-submenu" };
+
+        public override void Setup()
+        {
+            modSettingsFlowCoordinator = DiContainer.Resolve<ModSettingsFlowCoordinator>();
+        }
 
         public override GameObject CreateObject(Transform parent)
         {
@@ -35,14 +40,9 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
 
             clickableText.OnClickEvent += (eventData) =>
             {
-                if (flow == null)
+                if (modSettingsFlowCoordinator != null)
                 {
-                    flow = Resources.FindObjectsOfTypeAll<ModSettingsFlowCoordinator>().FirstOrDefault();
-                }
-
-                if (flow)
-                {
-                    flow.OpenMenu(submenuController, true, false);
+                    modSettingsFlowCoordinator.OpenMenu(submenuController, true, false);
                 }
             };
 

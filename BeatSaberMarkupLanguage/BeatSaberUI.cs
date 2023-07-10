@@ -54,7 +54,7 @@ namespace BeatSaberMarkupLanguage
             {
                 if (basicUIAudioManager == null)
                 {
-                    basicUIAudioManager = Resources.FindObjectsOfTypeAll<BasicUIAudioManager>().First();
+                    basicUIAudioManager = Object.FindObjectsOfType<BasicUIAudioManager>().FirstOrDefault();
                 }
 
                 return basicUIAudioManager;
@@ -137,7 +137,20 @@ namespace BeatSaberMarkupLanguage
         /// <typeparam name="T">The variation of FlowCoordinator you want to create.</typeparam>
         /// <returns>The newly created <see cref="FlowCoordinator"/> of type <typeparamref name="T"/>.</returns>
         public static T CreateFlowCoordinator<T>()
-            where T : FlowCoordinator => DiContainer.InstantiateComponentOnNewGameObject<T>(typeof(T).Name);
+            where T : FlowCoordinator
+        {
+            if (DiContainer.IsInstalling)
+            {
+                GameObject gameObject = new(typeof(T).Name);
+                T flowCoordinator = gameObject.AddComponent<T>();
+                DiContainer.QueueForInject(flowCoordinator);
+                return flowCoordinator;
+            }
+            else
+            {
+                return DiContainer.InstantiateComponentOnNewGameObject<T>(typeof(T).Name);
+            }
+        }
 
         /// <summary>
         /// Creates a clone of the given font, with its material fixed to be a no-glow material suitable for use on UI elements.

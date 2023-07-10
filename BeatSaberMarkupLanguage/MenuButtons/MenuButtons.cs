@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using BeatSaberMarkupLanguage.Util;
@@ -7,9 +6,9 @@ using Zenject;
 
 namespace BeatSaberMarkupLanguage.MenuButtons
 {
-    public class MenuButtons : PersistentSingleton<MenuButtons>
+    public class MenuButtons : PersistentSingleton<MenuButtons>, ILateDisposable
     {
-        private readonly WeakReference<MenuButtonsViewController> _menuButtonsViewController = new(null);
+        private MenuButtonsViewController _menuButtonsViewController;
 
         internal List<MenuButton> buttons { get; } = new();
 
@@ -30,21 +29,26 @@ namespace BeatSaberMarkupLanguage.MenuButtons
             Refresh();
         }
 
+        public void LateDispose()
+        {
+            _menuButtonsViewController = null;
+        }
+
         internal void Refresh()
         {
-            if (!_menuButtonsViewController.TryGetTarget(out MenuButtonsViewController menuButtonsViewController))
+            if (_menuButtonsViewController == null)
             {
                 return;
             }
 
-            menuButtonsViewController.RefreshView();
+            _menuButtonsViewController.RefreshView();
         }
 
         [Inject]
         [SuppressMessage("CodeQuality", "IDE0051", Justification = "Used by Zenject")]
         private void Construct(MenuButtonsViewController menuButtonsViewController)
         {
-            _menuButtonsViewController.SetTarget(menuButtonsViewController);
+            _menuButtonsViewController = menuButtonsViewController;
         }
     }
 }

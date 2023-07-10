@@ -12,11 +12,13 @@ using Zenject;
 
 namespace BeatSaberMarkupLanguage.GameplaySetup
 {
-    public class GameplaySetup : NotifiableSingleton<GameplaySetup>, TableView.IDataSource, IInitializable
+    public class GameplaySetup : NotifiableSingleton<GameplaySetup>, TableView.IDataSource, IInitializable, IDisposable, ILateDisposable
     {
         public const string ReuseIdentifier = "GameplaySetupCell";
 
-        private GameplaySetupViewController gameplaySetupViewController;
+        private MainFlowCoordinator _mainFlowCoordinator;
+        private GameplaySetupViewController _gameplaySetupViewController;
+
         private LayoutGroup layoutGroup;
         private bool listParsed;
         private bool loaded;
@@ -76,7 +78,7 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
         /// <param name="isVisible">Whether or not the tab should be visible.</param>
         public void SetTabVisibility(string name, bool isVisible)
         {
-            if (!gameplaySetupViewController.isActiveAndEnabled)
+            if (!_gameplaySetupViewController.isActiveAndEnabled)
             {
                 return;
             }
@@ -107,9 +109,8 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
                 return;
             }
 
-            gameplaySetupViewController = Resources.FindObjectsOfTypeAll<GameplaySetupViewController>().First();
             vanillaItems.Clear();
-            foreach (Transform transform in gameplaySetupViewController.transform)
+            foreach (Transform transform in _gameplaySetupViewController.transform)
             {
                 if (transform.name != "HeaderPanel")
                 {
@@ -117,16 +118,35 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
                 }
             }
 
-            RectTransform textSegmentedControl = gameplaySetupViewController.transform.Find("TextSegmentedControl") as RectTransform;
+            RectTransform textSegmentedControl = _gameplaySetupViewController.transform.Find("TextSegmentedControl") as RectTransform;
             textSegmentedControl.sizeDelta = new Vector2(0, 6);
             layoutGroup = textSegmentedControl.GetComponent<LayoutGroup>();
-            BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), "BeatSaberMarkupLanguage.Views.gameplay-setup.bsml"), gameplaySetupViewController.gameObject, this);
+            BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), "BeatSaberMarkupLanguage.Views.gameplay-setup.bsml"), _gameplaySetupViewController.gameObject, this);
 
             modsList.tableView.SetDataSource(this, false);
             listParsed = false;
-            gameplaySetupViewController.didActivateEvent += GameplaySetupDidActivate;
-            gameplaySetupViewController.didDeactivateEvent += GameplaySetupDidDeactivate;
+            _gameplaySetupViewController.didActivateEvent += GameplaySetupDidActivate;
+            _gameplaySetupViewController.didDeactivateEvent += GameplaySetupDidDeactivate;
             listModal.blockerClickedEvent += ClickedOffModal;
+        }
+
+        public void Dispose()
+        {
+            _gameplaySetupViewController.didActivateEvent -= GameplaySetupDidActivate;
+            _gameplaySetupViewController.didDeactivateEvent -= GameplaySetupDidDeactivate;
+        }
+
+        public void LateDispose()
+        {
+            _mainFlowCoordinator = null;
+            _gameplaySetupViewController = null;
+        }
+
+        [Inject]
+        private void Construct(MainFlowCoordinator mainFlowCoordinator, GameplaySetupViewController gameplaySetupViewController)
+        {
+            _mainFlowCoordinator = mainFlowCoordinator;
+            _gameplaySetupViewController = gameplaySetupViewController;
         }
 
         private void AddTab(Assembly assembly, string name, string resource, object host, MenuType menuType)
@@ -164,7 +184,7 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
         {
             layoutGroup.m_RectChildren.Clear();
 
-            MenuType menuType = BeatSaberUI.MainFlowCoordinator.YoungestChildFlowCoordinatorOrSelf() switch
+            MenuType menuType = _mainFlowCoordinator.YoungestChildFlowCoordinatorOrSelf() switch
             {
                 CampaignFlowCoordinator => MenuType.Campaign,
                 SinglePlayerLevelSelectionFlowCoordinator => MenuType.Solo,

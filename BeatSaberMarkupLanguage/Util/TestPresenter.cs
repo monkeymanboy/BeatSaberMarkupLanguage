@@ -1,5 +1,4 @@
 ﻿#if DEBUG
-using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 using Zenject;
@@ -26,7 +25,7 @@ namespace BeatSaberMarkupLanguage.Util
             HMUI.ViewController testViewController = BeatSaberUI.CreateViewController<T>();
             FloatingScreen.FloatingScreen floatingScreen = FloatingScreen.FloatingScreen.CreateFloatingScreen(new Vector2(400, 200), true, Vector3.zero, Quaternion.identity);
             floatingScreen.SetRootViewController(testViewController, HMUI.ViewController.AnimationType.None);
-            Resources.FindObjectsOfTypeAll<MainFlowCoordinator>().First().PresentViewController(testViewController, null, HMUI.ViewController.AnimationDirection.Horizontal, false);
+            BeatSaberUI.DiContainer.Resolve<MainFlowCoordinator>().PresentViewController(testViewController, null, HMUI.ViewController.AnimationDirection.Horizontal, false);
         }
     }
 }

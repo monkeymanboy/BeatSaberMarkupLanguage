@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using BeatSaberMarkupLanguage.Attributes;
@@ -13,15 +14,17 @@ using static BeatSaberMarkupLanguage.Components.CustomListTableData;
 
 namespace BeatSaberMarkupLanguage.Settings
 {
-    public class BSMLSettings : PersistentSingleton<BSMLSettings>, IInitializable
+    public class BSMLSettings : PersistentSingleton<BSMLSettings>, IInitializable, ILateDisposable
     {
         public List<CustomCellInfo> settingsMenus = new();
+
+        private MainFlowCoordinator _mainFlowCoordinator;
+        private ModSettingsFlowCoordinator _modSettingsFlowCoordinator;
 
         private bool _isInitialized;
         private Button _button;
         private Sprite _normal;
         private Sprite _hover;
-        private ModSettingsFlowCoordinator _flowCoordinator;
 
         [UIValue("thumbstick-value")]
         private bool ThumbstickValue
@@ -80,10 +83,24 @@ namespace BeatSaberMarkupLanguage.Settings
             _isInitialized = true;
         }
 
+        public void LateDispose()
+        {
+            _mainFlowCoordinator = null;
+            _modSettingsFlowCoordinator = null;
+        }
+
         [UIAction("set-thumbstick")]
         private void SetThumbstick(bool value)
         {
             ThumbstickValue = value;
+        }
+
+        [Inject]
+        [SuppressMessage("CodeQuality", "IDE0051", Justification = "Used by Zenject")]
+        private void Construct(MainFlowCoordinator mainFlowCoordinator, ModSettingsFlowCoordinator flowCoordinator)
+        {
+            _mainFlowCoordinator = mainFlowCoordinator;
+            _modSettingsFlowCoordinator = flowCoordinator;
         }
 
         private void AddButtonToMainScreen()
@@ -110,18 +127,13 @@ namespace BeatSaberMarkupLanguage.Settings
 
         private void PresentSettings()
         {
-            if (_flowCoordinator == null)
-            {
-                _flowCoordinator = BeatSaberUI.CreateFlowCoordinator<ModSettingsFlowCoordinator>();
-            }
-
-            _flowCoordinator.isAnimating = true;
-            BeatSaberUI.MainFlowCoordinator.PresentFlowCoordinator(
-                _flowCoordinator,
+            _modSettingsFlowCoordinator.isAnimating = true;
+            _mainFlowCoordinator.PresentFlowCoordinator(
+                _modSettingsFlowCoordinator,
                 new Action(() =>
                 {
-                    _flowCoordinator.ShowInitial();
-                    _flowCoordinator.isAnimating = false;
+                    _modSettingsFlowCoordinator.ShowInitial();
+                    _modSettingsFlowCoordinator.isAnimating = false;
                 }),
                 ViewController.AnimationDirection.Vertical);
         }
