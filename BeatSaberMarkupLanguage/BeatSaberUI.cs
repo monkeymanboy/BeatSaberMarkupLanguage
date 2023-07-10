@@ -23,7 +23,6 @@ namespace BeatSaberMarkupLanguage
     {
         private static DiContainer diContainer;
         private static BasicUIAudioManager basicUIAudioManager;
-        private static Canvas canvasTemplate;
         private static TMP_FontAsset mainTextFont;
         private static Material mainUIFontMaterial;
 
@@ -99,23 +98,37 @@ namespace BeatSaberMarkupLanguage
         public static T CreateViewController<T>()
             where T : ViewController
         {
-            if (canvasTemplate == null)
+            GameObject gameObject = new(typeof(T).Name)
             {
-                canvasTemplate = Resources.FindObjectsOfTypeAll<Canvas>().First(x => x.name == "DropdownTableView");
+                layer = 5,
+            };
+
+            RectTransform rectTransform = gameObject.AddComponent<RectTransform>();
+            rectTransform.anchorMin = new Vector2(0f, 0f);
+            rectTransform.anchorMax = new Vector2(1f, 1f);
+            rectTransform.sizeDelta = new Vector2(0f, 0f);
+            rectTransform.anchoredPosition = new Vector2(0f, 0f);
+
+            Canvas canvas = gameObject.AddComponent<Canvas>();
+            canvas.additionalShaderChannels |= AdditionalCanvasShaderChannels.TexCoord2;
+
+            T viewController;
+            if (DiContainer.IsInstalling)
+            {
+                DiContainer.QueueForInject(gameObject.AddComponent<VRGraphicRaycaster>());
+
+                viewController = gameObject.AddComponent<T>();
+                DiContainer.QueueForInject(viewController);
+            }
+            else
+            {
+                DiContainer.InstantiateComponent<VRGraphicRaycaster>(gameObject);
+                viewController = DiContainer.InstantiateComponent<T>(gameObject);
             }
 
-            GameObject go = new(typeof(T).Name);
-            go.AddComponent(canvasTemplate);
-            DiContainer.InstantiateComponent<VRGraphicRaycaster>(go);
-            go.AddComponent<CanvasGroup>();
-            T vc = go.AddComponent<T>();
+            gameObject.SetActive(false);
 
-            vc.rectTransform.anchorMin = new Vector2(0f, 0f);
-            vc.rectTransform.anchorMax = new Vector2(1f, 1f);
-            vc.rectTransform.sizeDelta = new Vector2(0f, 0f);
-            vc.rectTransform.anchoredPosition = new Vector2(0f, 0f);
-            vc.gameObject.SetActive(false);
-            return vc;
+            return viewController;
         }
 
         /// <summary>
