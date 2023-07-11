@@ -172,6 +172,8 @@ namespace BeatSaberMarkupLanguage
                     }
                 }
 
+                // TODO: Figure out a way to prioritize [UIValue] attributes across both fields and properties.
+                // If a field has the same name as a UIValue on a property, the field will take precedence. This is usually not the expected behavior.
                 foreach (FieldInfo fieldInfo in host.GetType().GetFields(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic))
                 {
                     string fieldName = fieldInfo.Name;

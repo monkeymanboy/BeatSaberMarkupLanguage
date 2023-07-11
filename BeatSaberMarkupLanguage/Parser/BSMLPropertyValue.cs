@@ -31,6 +31,11 @@ namespace BeatSaberMarkupLanguage.Parser
             return getMethod.Invoke(host, Array.Empty<object>());
         }
 
+        public override string ToString()
+        {
+            return $"{nameof(BSMLValue)}[{nameof(MemberName)}={MemberName}, {nameof(FromUIValue)}={FromUIValue}, {nameof(host)}={host}, {nameof(PropertyInfo)}={PropertyInfo}]";
+        }
+
         public override void SetValue(object value)
         {
             MethodInfo setMethod = PropertyInfo.GetSetMethod(true);

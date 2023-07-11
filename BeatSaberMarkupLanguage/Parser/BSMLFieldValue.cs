@@ -22,6 +22,11 @@ namespace BeatSaberMarkupLanguage.Parser
             return FieldInfo.GetValue(host);
         }
 
+        public override string ToString()
+        {
+            return $"{nameof(BSMLFieldValue)}[{nameof(MemberName)}={MemberName}, {nameof(FromUIValue)}={FromUIValue}, {nameof(host)}={host}, {nameof(FieldInfo)}={FieldInfo}]";
+        }
+
         public override void SetValue(object value)
         {
             if (FieldInfo.Attributes.HasFlag(FieldAttributes.InitOnly))

@@ -17,6 +17,11 @@
             return value;
         }
 
+        public override string ToString()
+        {
+            return $"{nameof(BSMLStringValue)}[{nameof(MemberName)}={MemberName}, {nameof(FromUIValue)}={FromUIValue}, {nameof(value)}={value}]";
+        }
+
         public override void SetValue(object value)
         {
             this.value = value.ToString();

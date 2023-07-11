@@ -12,6 +12,11 @@ namespace BeatSaberMarkupLanguage.Parser
 
         public abstract object GetValue();
 
+        public override string ToString()
+        {
+            return $"{nameof(BSMLValue)}[{nameof(MemberName)}={MemberName}, {nameof(FromUIValue)}={FromUIValue}]";
+        }
+
         internal T GetValueAs<T>()
         {
             object value = GetValue();

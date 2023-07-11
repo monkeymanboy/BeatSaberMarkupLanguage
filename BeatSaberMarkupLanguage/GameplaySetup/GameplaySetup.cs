@@ -19,30 +19,30 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
         private MainFlowCoordinator _mainFlowCoordinator;
         private GameplaySetupViewController _gameplaySetupViewController;
 
-        private LayoutGroup layoutGroup;
-        private bool listParsed;
-        private bool loaded;
+        private LayoutGroup _layoutGroup;
+        private bool _listParsed;
+        private bool _loaded;
 
         [UIComponent("new-tab-selector")]
-        private TabSelector tabSelector;
+        private TabSelector _tabSelector;
 
         [UIComponent("vanilla-tab")]
-        private Transform vanillaTab;
+        private Transform _vanillaTab;
 
         [UIComponent("mods-tab")]
-        private Transform modsTab;
+        private Transform _modsTab;
 
         [UIComponent("list-modal")]
-        private ModalView listModal;
+        private ModalView _listModal;
 
         [UIComponent("mods-list")]
-        private CustomListTableData modsList;
+        private CustomListTableData _modsList;
 
         [UIValue("vanilla-items")]
-        private List<Transform> vanillaItems = new();
+        private List<Transform> _vanillaItems = new();
 
         [UIValue("mod-menus")]
-        private List<GameplaySetupMenu> menus = new();
+        private List<GameplaySetupMenu> _menus = new();
 
         public event Action TabsCreatedEvent;
 
@@ -52,10 +52,10 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
         [UIValue("loaded")]
         public bool Loaded
         {
-            get => loaded;
+            get => _loaded;
             set
             {
-                loaded = value;
+                _loaded = value;
                 NotifyPropertyChanged();
                 NotifyPropertyChanged(nameof(IsLoading));
             }
@@ -83,7 +83,7 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
                 return;
             }
 
-            GameplaySetupMenu menu = menus.OfType<GameplaySetupMenu>().Where(x => x.name == name).FirstOrDefault();
+            GameplaySetupMenu menu = _menus.OfType<GameplaySetupMenu>().Where(x => x.name == name).FirstOrDefault();
             menu?.SetVisible(isVisible);
         }
 
@@ -93,41 +93,41 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
         /// <param name="name">The name of the tab.</param>
         public void RemoveTab(string name)
         {
-            menus.RemoveAll(m => m.name == name);
+            _menus.RemoveAll(m => m.name == name);
         }
 
         public float CellSize() => 8f;
 
-        public int NumberOfCells() => menus.Count;
+        public int NumberOfCells() => _menus.Count;
 
-        public TableCell CellForIdx(TableView tableView, int idx) => GetCell().PopulateCell(menus[idx]);
+        public TableCell CellForIdx(TableView tableView, int idx) => GetCell().PopulateCell(_menus[idx]);
 
         public void Initialize()
         {
-            if (menus.Count == 0)
+            if (_menus.Count == 0)
             {
                 return;
             }
 
-            vanillaItems.Clear();
+            _vanillaItems.Clear();
             foreach (Transform transform in _gameplaySetupViewController.transform)
             {
                 if (transform.name != "HeaderPanel")
                 {
-                    vanillaItems.Add(transform);
+                    _vanillaItems.Add(transform);
                 }
             }
 
             RectTransform textSegmentedControl = _gameplaySetupViewController.transform.Find("TextSegmentedControl") as RectTransform;
             textSegmentedControl.sizeDelta = new Vector2(0, 6);
-            layoutGroup = textSegmentedControl.GetComponent<LayoutGroup>();
+            _layoutGroup = textSegmentedControl.GetComponent<LayoutGroup>();
             BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), "BeatSaberMarkupLanguage.Views.gameplay-setup.bsml"), _gameplaySetupViewController.gameObject, this);
 
-            modsList.tableView.SetDataSource(this, false);
-            listParsed = false;
+            _modsList.tableView.SetDataSource(this, false);
+            _listParsed = false;
             _gameplaySetupViewController.didActivateEvent += GameplaySetupDidActivate;
             _gameplaySetupViewController.didDeactivateEvent += GameplaySetupDidDeactivate;
-            listModal.blockerClickedEvent += ClickedOffModal;
+            _listModal.blockerClickedEvent += ClickedOffModal;
         }
 
         public void Dispose()
@@ -151,17 +151,17 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
 
         private void AddTab(Assembly assembly, string name, string resource, object host, MenuType menuType)
         {
-            if (menus.Any(m => m.name == name))
+            if (_menus.Any(m => m.name == name))
             {
                 return;
             }
 
-            menus.Add(new GameplaySetupMenu(name, resource, host, assembly, menuType));
+            _menus.Add(new GameplaySetupMenu(name, resource, host, assembly, menuType));
         }
 
         private GameplaySetupCell GetCell()
         {
-            TableCell tableCell = modsList.tableView.DequeueReusableCellForIdentifier(ReuseIdentifier);
+            TableCell tableCell = _modsList.tableView.DequeueReusableCellForIdentifier(ReuseIdentifier);
 
             if (tableCell == null)
             {
@@ -182,7 +182,7 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
 
         private void GameplaySetupDidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
         {
-            layoutGroup.m_RectChildren.Clear();
+            _layoutGroup.m_RectChildren.Clear();
 
             MenuType menuType = _mainFlowCoordinator.YoungestChildFlowCoordinatorOrSelf() switch
             {
@@ -192,7 +192,7 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
                 _ => MenuType.Custom,
             };
 
-            foreach (GameplaySetupMenu menu in menus)
+            foreach (GameplaySetupMenu menu in _menus)
             {
                 menu.SetVisible(menu.IsMenuType(menuType));
             }
@@ -202,9 +202,9 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
 
         private void GameplaySetupDidDeactivate(bool removedFromHierarchy, bool screenSystemDisabling)
         {
-            tabSelector.textSegmentedControl.SelectCellWithNumber(0);
-            vanillaTab.gameObject.SetActive(true);
-            modsTab.gameObject.SetActive(false);
+            _tabSelector.textSegmentedControl.SelectCellWithNumber(0);
+            _vanillaTab.gameObject.SetActive(true);
+            _modsTab.gameObject.SetActive(false);
         }
 
         private void ClickedOffModal()
@@ -216,15 +216,15 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
         private void ShowModal()
         {
             Loaded = false;
-            listModal.Show(true, true, () =>
+            _listModal.Show(true, true, () =>
             {
-                if (!listParsed)
+                if (!_listParsed)
                 {
-                    modsList.tableView.ReloadData();
-                    listParsed = true;
+                    _modsList.tableView.ReloadData();
+                    _listParsed = true;
                 }
 
-                modsList.tableView.RefreshContentSize();
+                _modsList.tableView.RefreshContentSize();
                 Loaded = true;
             });
         }
