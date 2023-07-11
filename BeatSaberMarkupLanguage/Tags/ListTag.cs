@@ -19,7 +19,11 @@ namespace BeatSaberMarkupLanguage.Tags
             LayoutElement layoutElement = container.gameObject.AddComponent<LayoutElement>();
             container.SetParent(parent, false);
 
-            GameObject gameObject = new("BSMLList");
+            GameObject gameObject = new("BSMLList")
+            {
+                layer = 5,
+            };
+
             gameObject.transform.SetParent(container, false);
             gameObject.SetActive(false);
 

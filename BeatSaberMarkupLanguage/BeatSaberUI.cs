@@ -250,7 +250,11 @@ namespace BeatSaberMarkupLanguage
         public static T CreateText<T>(RectTransform parent, string text, Vector2 anchoredPosition, Vector2 sizeDelta)
             where T : TMP_Text
         {
-            GameObject gameObj = new("CustomUIText");
+            GameObject gameObj = new("CustomUIText")
+            {
+                layer = 5,
+            };
+
             gameObj.SetActive(false);
 
             T textComponent = gameObj.AddComponent<T>();

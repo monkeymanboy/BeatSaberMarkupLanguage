@@ -9,7 +9,11 @@ namespace BeatSaberMarkupLanguage.Tags
 
         public override GameObject CreateObject(Transform parent)
         {
-            GameObject gameObject = new("BSMLClickableText");
+            GameObject gameObject = new("BSMLClickableText")
+            {
+                layer = 5,
+            };
+
             gameObject.SetActive(false);
 
             ClickableText clickableText = gameObject.AddComponent<ClickableText>();

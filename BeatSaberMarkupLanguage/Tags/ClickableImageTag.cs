@@ -10,7 +10,10 @@ namespace BeatSaberMarkupLanguage.Tags
 
         public override GameObject CreateObject(Transform parent)
         {
-            GameObject gameObject = new("BSMLClickableImage");
+            GameObject gameObject = new("BSMLClickableImage")
+            {
+                layer = 5,
+            };
 
             Image image = gameObject.AddComponent<ClickableImage>();
             image.material = Utilities.ImageResources.NoGlowMat;

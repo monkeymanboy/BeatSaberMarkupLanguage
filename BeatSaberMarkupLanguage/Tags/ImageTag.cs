@@ -10,7 +10,10 @@ namespace BeatSaberMarkupLanguage.Tags
 
         public override GameObject CreateObject(Transform parent)
         {
-            GameObject gameObject = new("BSMLImage");
+            GameObject gameObject = new("BSMLImage")
+            {
+                layer = 5,
+            };
 
             Image image = gameObject.AddComponent<ImageView>();
             image.material = Utilities.ImageResources.NoGlowMat;

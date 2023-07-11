@@ -10,7 +10,11 @@ namespace BeatSaberMarkupLanguage.Tags
 
         public override GameObject CreateObject(Transform parent)
         {
-            GameObject gameObject = new("BSMLHorizontalLayoutGroup");
+            GameObject gameObject = new("BSMLHorizontalLayoutGroup")
+            {
+                layer = 5,
+            };
+
             gameObject.transform.SetParent(parent, false);
             gameObject.AddComponent<HorizontalLayoutGroup>();
 

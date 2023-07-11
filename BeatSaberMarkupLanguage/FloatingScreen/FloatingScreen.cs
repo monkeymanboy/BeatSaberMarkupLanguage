@@ -129,7 +129,11 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
 
         public static FloatingScreen CreateFloatingScreen(Vector2 screenSize, bool createHandle, Vector3 position, Quaternion rotation, float curvatureRadius = 0f, bool hasBackground = false)
         {
-            GameObject gameObject = new("BSMLFloatingScreen", typeof(FloatingScreen), typeof(CanvasScaler), typeof(RectMask2D), typeof(VRGraphicRaycaster), typeof(CurvedCanvasSettings));
+            GameObject gameObject = new("BSMLFloatingScreen", typeof(FloatingScreen), typeof(CanvasScaler), typeof(RectMask2D), typeof(VRGraphicRaycaster), typeof(CurvedCanvasSettings))
+            {
+                layer = 5,
+            };
+
             BeatSaberUI.DiContainer.InjectGameObject(gameObject);
 
             FloatingScreen screen = gameObject.GetComponent<FloatingScreen>();
@@ -147,7 +151,11 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
 
             if (hasBackground)
             {
-                GameObject backGroundGo = new("bg", typeof(RectTransform), typeof(ImageView));
+                GameObject backGroundGo = new("Background", typeof(RectTransform), typeof(ImageView))
+                {
+                    layer = 5,
+                };
+
                 backGroundGo.transform.SetParent(canvas.transform, false);
                 RectTransform rectTransform = backGroundGo.GetComponent<RectTransform>();
                 rectTransform.sizeDelta = screenSize;
@@ -176,8 +184,6 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
 
             screen.ScreenSize = screenSize;
             screen.ShowHandle = createHandle;
-
-            screen.gameObject.layer = 5;
 
             return screen;
         }
@@ -235,6 +241,7 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
 
             handle = GameObject.CreatePrimitive(PrimitiveType.Cube);
             handle.name = nameof(FloatingScreenHandle);
+            handle.layer = 5;
             handle.transform.SetParent(transform, false);
             UpdateHandle();
             FloatingScreenHandle floatingScreenHandle = BeatSaberUI.DiContainer.InstantiateComponent<FloatingScreenHandle>(handle);

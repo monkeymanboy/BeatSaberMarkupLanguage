@@ -109,7 +109,11 @@ namespace BeatSaberMarkupLanguage.Components
         {
             this.enableInputField = enableInputField;
 
-            GameObject containerObject = new("Keys", typeof(RectTransform));
+            GameObject containerObject = new("Keys", typeof(RectTransform))
+            {
+                layer = 5,
+            };
+
             containerObject.SetActive(false);
 
             this.container = (RectTransform)containerObject.transform;
@@ -120,7 +124,10 @@ namespace BeatSaberMarkupLanguage.Components
 
             SetButtonType();
 
-            GameObject textContainer = new("KeyboardText", typeof(RectTransform), typeof(RectMask2D));
+            GameObject textContainer = new("KeyboardText", typeof(RectTransform), typeof(RectMask2D))
+            {
+                layer = 5,
+            };
 
             keyboardTextContainer = (RectTransform)textContainer.transform;
             keyboardTextContainer.SetParent(container, false);
