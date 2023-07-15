@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using IPA.Utilities.Async;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
+using Bitmap = System.Drawing.Bitmap;
 
 namespace BeatSaberMarkupLanguage
 {
@@ -110,6 +113,7 @@ namespace BeatSaberMarkupLanguage
 
         public static string EscapeXml(string source) => System.Security.SecurityElement.Escape(source);
 
+        [Obsolete("LUse LoadTextureFromAssemblyAsync(Assembly, string) instead.")]
         public static Texture2D FindTextureInAssembly(string path)
         {
             try
@@ -128,6 +132,7 @@ namespace BeatSaberMarkupLanguage
             return null;
         }
 
+        [Obsolete("Use LoadSpriteFromAssemblyAsync(Assembly, string) instead.")]
         public static Sprite FindSpriteInAssembly(string path)
         {
             try
@@ -164,11 +169,12 @@ namespace BeatSaberMarkupLanguage
             }
         }
 
+        [Obsolete("Use LoadImageAsync(byte[]) instead.")]
         public static Texture2D LoadTextureRaw(byte[] file)
         {
-            if (file.Count() > 0)
+            if (file.Length > 0)
             {
-                Texture2D tex2D = new(2, 2, TextureFormat.RGBA32, false, false);
+                Texture2D tex2D = new(0, 0, TextureFormat.RGBA32, false, false);
                 if (tex2D.LoadImage(file))
                 {
                     return tex2D;
@@ -178,9 +184,139 @@ namespace BeatSaberMarkupLanguage
             return null;
         }
 
+        [Obsolete("Use LoadSpriteAsync(byte[], float) instead.")]
         public static Sprite LoadSpriteRaw(byte[] image, float pixelsPerUnit = 100.0f)
         {
             return LoadSpriteFromTexture(LoadTextureRaw(image), pixelsPerUnit);
+        }
+
+        /// <summary>
+        /// Load a texture from an embedded resource in the calling assembly.
+        /// </summary>
+        /// <param name="name">The name of the embedded resource.</param>
+        /// <returns>A <see cref="Task{TResult}"/> representing the asynchronous operation.</returns>
+        public static Task<Texture2D> LoadTextureFromAssemblyAsync(string name)
+        {
+            Assembly assembly = Assembly.GetCallingAssembly();
+            return LoadTextureFromAssemblyAsync(assembly, name);
+        }
+
+        /// <summary>
+        /// Load a texture from an embedded resource in the specified assembly.
+        /// </summary>
+        /// <param name="assembly">The assembly from which to load the embedded resource.</param>
+        /// <param name="name">The name of the embedded resource.</param>
+        /// <returns>A <see cref="Task{TResult}"/> representing the asynchronous operation.</returns>
+        public static async Task<Texture2D> LoadTextureFromAssemblyAsync(Assembly assembly, string name)
+        {
+            Stream stream = assembly.GetManifestResourceStream(name);
+
+            return stream != null
+                ? await LoadImageAsync(stream)
+                : throw new FileNotFoundException($"No embedded resource named '{name}' found in assembly '{assembly.FullName}'");
+        }
+
+        /// <summary>
+        /// Load a sprite from an embedded resource in the calling assembly.
+        /// </summary>
+        /// <param name="name">The name of the embedded resource.</param>
+        /// <returns>A <see cref="Task{TResult}"/> representing the asynchronous operation.</returns>
+        public static Task<Sprite> LoadSpriteFromAssemblyAsync(string name)
+        {
+            Assembly assembly = Assembly.GetCallingAssembly();
+            return LoadSpriteFromAssemblyAsync(assembly, name);
+        }
+
+        /// <summary>
+        /// Load a sprite from an embedded resource in the specified assembly.
+        /// </summary>
+        /// <param name="assembly">The assembly from which to load the embedded resource.</param>
+        /// <param name="name">The name of the embedded resource.</param>
+        /// <returns>A <see cref="Task{TResult}"/> representing the asynchronous operation.</returns>
+        public static async Task<Sprite> LoadSpriteFromAssemblyAsync(Assembly assembly, string name)
+        {
+            return LoadSpriteFromTexture(await LoadTextureFromAssemblyAsync(assembly, name));
+        }
+
+        /// <summary>
+        /// Similar to <see cref="ImageConversion.LoadImage(Texture2D, byte[], bool)" /> except it uses <see cref="Bitmap" /> to first load the image and convert it on a separate thread, then uploads the raw pixel data directly.
+        /// </summary>
+        /// <param name="path">The path to the image.</param>
+        /// <param name="updateMipmaps">Whether to create mipmaps for the image or not.</param>
+        /// <param name="makeNoLongerReadable">Whether the resulting texture should be made read-only or not.</param>
+        /// <returns>A <see cref="Task{TResult}"/> representing the asynchronous operation.</returns>
+        public static async Task<Texture2D> LoadImageAsync(string path, bool updateMipmaps = true, bool makeNoLongerReadable = true)
+        {
+            if (string.IsNullOrEmpty(path))
+            {
+                throw new ArgumentNullException(nameof(path));
+            }
+
+            using FileStream fileStream = File.OpenRead(path);
+            return await LoadImageAsync(fileStream, updateMipmaps, makeNoLongerReadable);
+        }
+
+        /// <summary>
+        /// Similar to <see cref="ImageConversion.LoadImage(Texture2D, byte[], bool)" /> except it uses <see cref="Bitmap" /> to first load the image and convert it on a separate thread, then uploads the raw pixel data directly.
+        /// </summary>
+        /// <param name="data">The image data as a byte array.</param>
+        /// <param name="updateMipmaps">Whether to create mipmaps for the image or not.</param>
+        /// <param name="makeNoLongerReadable">Whether the resulting texture should be made read-only or not.</param>
+        /// <returns>A <see cref="Task{TResult}"/> representing the asynchronous operation.</returns>
+        public static async Task<Texture2D> LoadImageAsync(byte[] data, bool updateMipmaps = true, bool makeNoLongerReadable = true)
+        {
+            if (data == null)
+            {
+                throw new ArgumentNullException(nameof(data));
+            }
+
+            using MemoryStream memoryStream = new(data);
+            return await LoadImageAsync(memoryStream, updateMipmaps, makeNoLongerReadable);
+        }
+
+        /// <summary>
+        /// Similar to <see cref="ImageConversion.LoadImage(Texture2D, byte[], bool)" /> except it uses <see cref="Bitmap" /> to first load the image and convert it on a separate thread, then uploads the raw pixel data directly.
+        /// </summary>
+        /// <param name="stream">The image data as a stream.</param>
+        /// <param name="updateMipmaps">Whether to create mipmaps for the image or not.</param>
+        /// <param name="makeNoLongerReadable">Whether the resulting texture should be made read-only or not.</param>
+        /// <returns>A <see cref="Task{TResult}"/> representing the asynchronous operation.</returns>
+        public static async Task<Texture2D> LoadImageAsync(Stream stream, bool updateMipmaps = true, bool makeNoLongerReadable = true)
+        {
+            if (stream == null)
+            {
+                throw new ArgumentNullException(nameof(stream));
+            }
+
+            (int width, int height, byte[] data) = await Task.Factory.StartNew(
+                () =>
+                {
+                    using Bitmap bitmap = new(stream);
+
+                    // flip it over since Unity uses OpenGL coordinates - (0, 0) is the bottom left corner instead of the top left
+                    bitmap.RotateFlip(System.Drawing.RotateFlipType.RotateNoneFlipY);
+
+                    BitmapData bitmapData = bitmap.LockBits(new System.Drawing.Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+                    byte[] data = new byte[bitmapData.Stride * bitmapData.Height];
+
+                    Marshal.Copy(bitmapData.Scan0, data, 0, bitmapData.Stride * bitmapData.Height);
+
+                    bitmap.UnlockBits(bitmapData);
+
+                    return (bitmap.Width, bitmap.Height, data);
+                },
+                TaskCreationOptions.LongRunning | TaskCreationOptions.DenyChildAttach);
+
+            // basically all processors are little endian these days so pixel format order is reversed
+            Texture2D texture = new(width, height, TextureFormat.BGRA32, false);
+            texture.LoadRawTextureData(data);
+            texture.Apply(updateMipmaps, makeNoLongerReadable);
+            return texture;
+        }
+
+        public static async Task<Sprite> LoadSpriteAsync(byte[] data, float pixelsPerUnit = 100.0f)
+        {
+            return LoadSpriteFromTexture(await LoadImageAsync(data), pixelsPerUnit);
         }
 
         public static Sprite LoadSpriteFromTexture(Texture2D spriteTexture, float pixelsPerUnit = 100.0f)
@@ -190,7 +326,9 @@ namespace BeatSaberMarkupLanguage
                 return null;
             }
 
-            return Sprite.Create(spriteTexture, new Rect(0, 0, spriteTexture.width, spriteTexture.height), new Vector2(0, 0), pixelsPerUnit);
+            Sprite sprite = Sprite.Create(spriteTexture, new Rect(0, 0, spriteTexture.width, spriteTexture.height), new Vector2(0, 0), pixelsPerUnit);
+            sprite.name = spriteTexture.name;
+            return sprite;
         }
 
         public static byte[] GetResource(Assembly asm, string resourceName)

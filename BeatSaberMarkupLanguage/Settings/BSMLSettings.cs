@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Util;
 using HMUI;
@@ -78,7 +79,7 @@ namespace BeatSaberMarkupLanguage.Settings
                 menu.didSetup = false;
             }
 
-            AddButtonToMainScreen();
+            AddButtonToMainScreen().ContinueWith(task => Logger.Log.Error($"Failed to add button to main screen\n{task.Exception}"), TaskContinuationOptions.OnlyOnFaulted);
 
             _isInitialized = true;
         }
@@ -103,7 +104,7 @@ namespace BeatSaberMarkupLanguage.Settings
             _modSettingsFlowCoordinator = flowCoordinator;
         }
 
-        private void AddButtonToMainScreen()
+        private async Task AddButtonToMainScreen()
         {
             OptionsViewController optionsViewController = BeatSaberUI.DiContainer.Resolve<OptionsViewController>();
             _button = UnityEngine.Object.Instantiate(optionsViewController._settingsButton, optionsViewController.transform.Find("Wrapper"));
@@ -116,10 +117,10 @@ namespace BeatSaberMarkupLanguage.Settings
                 _button.gameObject.SetActive(false);
             }
 
-            _normal = Utilities.FindSpriteInAssembly("BSML:BeatSaberMarkupLanguage.Resources.mods_idle.png");
+            _normal = await Utilities.LoadSpriteFromAssemblyAsync("BeatSaberMarkupLanguage.Resources.mods_idle.png");
             _normal.texture.wrapMode = TextureWrapMode.Clamp;
 
-            _hover = Utilities.FindSpriteInAssembly("BSML:BeatSaberMarkupLanguage.Resources.mods_selected.png");
+            _hover = await Utilities.LoadSpriteFromAssemblyAsync("BeatSaberMarkupLanguage.Resources.mods_selected.png");
             _hover.texture.wrapMode = TextureWrapMode.Clamp;
 
             _button.SetButtonStates(_normal, _hover);

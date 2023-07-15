@@ -549,15 +549,11 @@ namespace BeatSaberMarkupLanguage
 
                 if (scaleOptions.ShouldScale)
                 {
-                    byte[] imageBytes = await Task.Run(() => DownscaleImage(data, scaleOptions.Width, scaleOptions.Height, scaleOptions.MaintainRatio));
-                    image.sprite = Utilities.LoadSpriteRaw(imageBytes);
-                    image.sprite.texture.wrapMode = TextureWrapMode.Clamp;
+                    data = await Task.Run(() => DownscaleImage(data, scaleOptions.Width, scaleOptions.Height, scaleOptions.MaintainRatio));
                 }
-                else
-                {
-                    image.sprite = Utilities.LoadSpriteRaw(data);
-                    image.sprite.texture.wrapMode = TextureWrapMode.Clamp;
-                }
+
+                image.sprite = await Utilities.LoadSpriteAsync(data);
+                image.sprite.texture.wrapMode = TextureWrapMode.Clamp;
 
                 return;
             }

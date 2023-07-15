@@ -36,7 +36,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 UnityMainThreadTaskScheduler.Factory.StartNew(async () =>
                 {
                     byte[] data = await Utilities.GetDataAsync(imagePath);
-                    image.texture = Utilities.LoadTextureRaw(data);
+                    image.texture = await Utilities.LoadImageAsync(data);
                 }).ContinueWith((task) => Logger.Log.Error($"Failed to load image '{imagePath}'\n{task.Exception}"));
             }
         }
