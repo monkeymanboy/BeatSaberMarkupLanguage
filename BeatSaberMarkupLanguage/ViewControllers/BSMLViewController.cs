@@ -7,6 +7,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
 {
     public abstract class BSMLViewController : ViewController, INotifyPropertyChanged
     {
+        [Obsolete("Use the base class' didActivateEvent instead.")]
         public Action<bool, bool, bool> didActivate;
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -37,7 +38,9 @@ namespace BeatSaberMarkupLanguage.ViewControllers
                 ParseWithFallback();
             }
 
+#pragma warning disable CS0618
             didActivate?.Invoke(firstActivation, addedToHierarchy, screenSystemEnabling);
+#pragma warning restore CS0618
         }
 
         protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")

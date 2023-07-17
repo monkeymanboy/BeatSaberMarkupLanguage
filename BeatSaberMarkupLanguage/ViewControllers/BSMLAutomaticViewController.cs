@@ -145,7 +145,9 @@ namespace BeatSaberMarkupLanguage.ViewControllers
                 ParseWithFallback();
             }
 
+#pragma warning disable CS0618
             didActivate?.Invoke(firstActivation, addedToHierarchy, screenSystemEnabling);
+#pragma warning restore CS0618
         }
 
         protected override void DidDeactivate(bool removedFromHierarchy, bool screenSystemDisabling)
