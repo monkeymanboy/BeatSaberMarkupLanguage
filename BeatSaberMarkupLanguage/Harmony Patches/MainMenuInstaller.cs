@@ -40,7 +40,7 @@ namespace BeatSaberMarkupLanguage.Harmony_Patches
             container.Bind(typeof(ModSettingsFlowCoordinator)).FromInstance(modSettingsFlowCoordinator);
 
             MenuButtonsViewController menuButtonsViewController = BeatSaberUI.CreateViewController<MenuButtonsViewController>();
-            container.Bind(typeof(MenuButtonsViewController), typeof(IInitializable), typeof(IDisposable)).FromInstance(menuButtonsViewController);
+            container.Bind(typeof(MenuButtonsViewController)).FromInstance(menuButtonsViewController);
 
 #if DEBUG
             container.Bind(typeof(IInitializable)).To<Util.TestPresenter>().AsSingle();

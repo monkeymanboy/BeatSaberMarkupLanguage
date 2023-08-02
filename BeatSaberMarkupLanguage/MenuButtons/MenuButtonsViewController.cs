@@ -1,19 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Collections.Generic;
 using BeatSaberMarkupLanguage.Attributes;
+using BeatSaberMarkupLanguage.Harmony_Patches;
 using BeatSaberMarkupLanguage.ViewControllers;
 using UnityEngine;
-using Zenject;
 
 namespace BeatSaberMarkupLanguage.MenuButtons
 {
+    /// <summary>
+    /// This is the view controller presented to the left of the main menu.
+    /// </summary>
+    /// <remarks>
+    /// This view is presented by <see cref="MainFlowCoordinator"/> through the <see cref="MainFlowCoordinator_DidActivate"/> and <see cref="MainFlowCoordinator_TopViewControllerWillChange"/> patches.
+    /// </remarks>
     [ViewDefinition("BeatSaberMarkupLanguage.Views.main-left-screen.bsml")]
-    internal class MenuButtonsViewController : BSMLAutomaticViewController, IInitializable, IDisposable
+    internal class MenuButtonsViewController : BSMLAutomaticViewController
     {
-        private MainFlowCoordinator _mainFlowCoordinator;
-        private MainMenuViewController _mainMenuViewController;
-
         [UIObject("root-object")]
         private GameObject _rootObject;
 
@@ -22,16 +23,6 @@ namespace BeatSaberMarkupLanguage.MenuButtons
 
         [UIValue("any-buttons")]
         private bool AnyButtons => buttons.Count > 0;
-
-        public void Initialize()
-        {
-            _mainMenuViewController.didActivateEvent += OnMainMenuViewControllerActivated;
-        }
-
-        public void Dispose()
-        {
-            _mainMenuViewController.didActivateEvent -= OnMainMenuViewControllerActivated;
-        }
 
         public void RefreshView()
         {
@@ -42,19 +33,6 @@ namespace BeatSaberMarkupLanguage.MenuButtons
 
             Destroy(_rootObject);
             DidActivate(true, false, false);
-        }
-
-        [Inject]
-        [SuppressMessage("CodeQuality", "IDE0051", Justification = "Used by Zenject")]
-        private void Construct(MainFlowCoordinator mainFlowCoordinator, MainMenuViewController mainMenuViewController)
-        {
-            _mainFlowCoordinator = mainFlowCoordinator;
-            _mainMenuViewController = mainMenuViewController;
-        }
-
-        private void OnMainMenuViewControllerActivated(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
-        {
-            _mainFlowCoordinator.SetLeftScreenViewController(this, addedToHierarchy ? AnimationType.None : AnimationType.In);
         }
     }
 }
