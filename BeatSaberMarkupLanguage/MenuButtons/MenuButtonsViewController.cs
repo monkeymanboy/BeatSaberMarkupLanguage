@@ -2,7 +2,6 @@
 using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Harmony_Patches;
 using BeatSaberMarkupLanguage.ViewControllers;
-using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.MenuButtons
 {
@@ -15,9 +14,6 @@ namespace BeatSaberMarkupLanguage.MenuButtons
     [ViewDefinition("BeatSaberMarkupLanguage.Views.main-left-screen.bsml")]
     internal class MenuButtonsViewController : BSMLAutomaticViewController
     {
-        [UIObject("root-object")]
-        private GameObject _rootObject;
-
         [UIValue("buttons")]
         public List<MenuButton> buttons => MenuButtons.instance.buttons;
 
@@ -26,12 +22,7 @@ namespace BeatSaberMarkupLanguage.MenuButtons
 
         public void RefreshView()
         {
-            if (_rootObject == null)
-            {
-                return;
-            }
-
-            Destroy(_rootObject);
+            ClearContents();
             DidActivate(true, false, false);
         }
     }

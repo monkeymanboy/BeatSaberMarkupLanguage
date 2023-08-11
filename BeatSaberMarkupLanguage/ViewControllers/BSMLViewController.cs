@@ -10,6 +10,8 @@ namespace BeatSaberMarkupLanguage.ViewControllers
         [Obsolete("Use the base class' didActivateEvent instead.")]
         public Action<bool, bool, bool> didActivate;
 
+        private bool _destroyed;
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         public abstract string Content { get; }
@@ -57,6 +59,11 @@ namespace BeatSaberMarkupLanguage.ViewControllers
 
         protected void ParseWithFallback()
         {
+            if (_destroyed)
+            {
+                return;
+            }
+
             try
             {
                 BSMLParser.instance.Parse(Content, gameObject, this);
@@ -67,6 +74,12 @@ namespace BeatSaberMarkupLanguage.ViewControllers
                 ClearContents();
                 BSMLParser.instance.Parse(string.Format(FallbackContent, Utilities.EscapeXml(ex.Message)), gameObject, this);
             }
+        }
+
+        protected override void OnDestroy()
+        {
+            _destroyed = true;
+            base.OnDestroy();
         }
     }
 }
