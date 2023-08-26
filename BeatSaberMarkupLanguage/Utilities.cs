@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using IPA.Utilities;
 using IPA.Utilities.Async;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -393,6 +394,14 @@ namespace BeatSaberMarkupLanguage
             catch
             {
                 Logger.Log.Error($"Error getting data from '{location}'; either the path is invalid or the file does not exist");
+            }
+        }
+
+        internal static void EnsureRunningOnMainThread()
+        {
+            if (!UnityGame.OnMainThread)
+            {
+                throw new InvalidOperationException("This method can only be called from the main thread.");
             }
         }
 

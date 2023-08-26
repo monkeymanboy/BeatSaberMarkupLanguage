@@ -477,7 +477,7 @@ namespace BeatSaberMarkupLanguage
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         public static async Task SetImageAsync(this Image image, string location, bool loadingAnimation = true, ScaleOptions scaleOptions = default)
         {
-            ThrowIfNotOnMainThread();
+            Utilities.EnsureRunningOnMainThread();
 
             if (image.TryGetComponent(out AnimationStateUpdater oldStateUpdater))
             {
@@ -617,14 +617,6 @@ namespace BeatSaberMarkupLanguage
 
         public static void DismissFlowCoordinator(this FlowCoordinator current, FlowCoordinator flowCoordinator, Action finishedCallback = null, ViewController.AnimationDirection animationDirection = ViewController.AnimationDirection.Horizontal, bool immediately = false)
             => current.DismissFlowCoordinator(flowCoordinator, animationDirection, finishedCallback, immediately);
-
-        internal static void ThrowIfNotOnMainThread()
-        {
-            if (!UnityGame.OnMainThread)
-            {
-                throw new InvalidOperationException("This method must be called from the main thread.");
-            }
-        }
 
         private static bool IsAnimated(string str)
         {
