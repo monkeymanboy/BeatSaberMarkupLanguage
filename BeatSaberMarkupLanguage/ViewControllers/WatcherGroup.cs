@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using IPA.Utilities.Async;
 
 namespace BeatSaberMarkupLanguage.ViewControllers
 {
@@ -210,7 +211,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
                 if (e.FullPath == Path.GetFullPath(controller.ContentFilePath))
                 {
                     controller.MarkDirty();
-                    ReloadAsync().ContinueWith((task) => Logger.Log.Error($"Failed to reload controller '{controller.Name}'\n{task.Exception}"));
+                    ReloadAsync().ContinueWith((task) => Logger.Log.Error($"Failed to reload controller '{controller.Name}'\n{task.Exception}"), TaskContinuationOptions.OnlyOnFaulted);
                 }
             }
 
@@ -252,7 +253,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
 #if HRVC_DEBUG
                     Logger.Log.Debug($"{pair.Key} seems to exist and has changed content.");
 #endif
-                    controller?.Refresh();
+                    await UnityMainThreadTaskScheduler.Factory.StartNew(() => controller?.Refresh());
                 }
             }
 
