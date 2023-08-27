@@ -29,7 +29,7 @@ namespace BeatSaberMarkupLanguage.MenuButtons
 
             __Deactivate(false, false, false);
             ClearContents();
-            ContentChanged = true;
+            _wasActivatedBefore = false;
             __Activate(false, false);
         }
     }
