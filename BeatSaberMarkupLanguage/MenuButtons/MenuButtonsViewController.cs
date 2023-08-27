@@ -22,8 +22,15 @@ namespace BeatSaberMarkupLanguage.MenuButtons
 
         public void RefreshView()
         {
+            if (!isActivated)
+            {
+                return;
+            }
+
+            __Deactivate(false, false, false);
             ClearContents();
-            DidActivate(true, false, false);
+            ContentChanged = true;
+            __Activate(false, false);
         }
     }
 }

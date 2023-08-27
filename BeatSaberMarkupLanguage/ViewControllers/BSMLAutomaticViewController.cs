@@ -118,6 +118,10 @@ namespace BeatSaberMarkupLanguage.ViewControllers
         {
             if (!string.IsNullOrEmpty(ContentFilePath))
             {
+#if HRVC_DEBUG
+                Logger.Log.Notice($"DidActivate: {GetInstanceID()}:{name}");
+#endif
+
                 if (ContentChanged && !firstActivation)
                 {
                     ContentChanged = false;
@@ -156,7 +160,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
             {
                 content = null;
 #if HRVC_DEBUG
-                Logger.Log.Warn($"DidDeactive: {GetInstanceID()}:{name}");
+                Logger.Log.Notice($"DidDeactivate: {GetInstanceID()}:{name}");
 #endif
                 if (!WatcherGroup.UnregisterViewController(this))
                 {

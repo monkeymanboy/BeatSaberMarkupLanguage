@@ -134,7 +134,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
                 }
                 else
                 {
-                    Logger.Log.Warn($"Unbinding existing controller {instanceId}:{controller.Name}");
+                    Logger.Log.Info($"Unbinding existing controller {instanceId}:{controller.Name}");
                 }
             }
             else
