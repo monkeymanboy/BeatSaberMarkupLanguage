@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using BeatSaberMarkupLanguage.Animations;
 using HMUI;
-using IPA.Utilities;
 using IPA.Utilities.Async;
 using TMPro;
 using UnityEngine;
