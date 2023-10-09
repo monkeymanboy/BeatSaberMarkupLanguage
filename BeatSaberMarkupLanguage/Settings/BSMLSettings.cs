@@ -17,8 +17,9 @@ namespace BeatSaberMarkupLanguage.Settings
 {
     public class BSMLSettings : PersistentSingleton<BSMLSettings>, IInitializable, ILateDisposable
     {
-        public List<CustomCellInfo> settingsMenus = new();
+        public readonly IList<CustomCellInfo> settingsMenus;
 
+        private SettingsMenu _settingsMenu;
         private MainFlowCoordinator _mainFlowCoordinator;
         private ModSettingsFlowCoordinator _modSettingsFlowCoordinator;
 
@@ -26,6 +27,11 @@ namespace BeatSaberMarkupLanguage.Settings
         private Button _button;
         private Sprite _normal;
         private Sprite _hover;
+
+        public BSMLSettings()
+        {
+            settingsMenus = new SortedList<CustomCellInfo>(Comparer<CustomCellInfo>.Create(CompareSettingsMenu));
+        }
 
         [UIValue("thumbstick-value")]
         private bool ThumbstickValue
@@ -46,7 +52,8 @@ namespace BeatSaberMarkupLanguage.Settings
 
             if (settingsMenus.Count == 0)
             {
-                settingsMenus.Add(new SettingsMenu("BSML", "BeatSaberMarkupLanguage.Views.settings-about.bsml", this, Assembly.GetExecutingAssembly()));
+                _settingsMenu = new SettingsMenu("BSML", "BeatSaberMarkupLanguage.Views.settings-about.bsml", this, Assembly.GetExecutingAssembly());
+                settingsMenus.Add(_settingsMenu);
             }
 
             SettingsMenu settingsMenu = new(name, resource, host, Assembly.GetCallingAssembly());
@@ -65,10 +72,10 @@ namespace BeatSaberMarkupLanguage.Settings
 
         public void RemoveSettingsMenu(object host)
         {
-            IEnumerable<CustomCellInfo> menu = settingsMenus.Where(x => (x as SettingsMenu).host == host);
-            if (menu.Count() > 0)
+            CustomCellInfo menu = settingsMenus.FirstOrDefault(x => (x as SettingsMenu).host == host);
+            if (menu != null)
             {
-                settingsMenus.Remove(menu.FirstOrDefault());
+                settingsMenus.Remove(menu);
             }
         }
 
@@ -88,6 +95,25 @@ namespace BeatSaberMarkupLanguage.Settings
         {
             _mainFlowCoordinator = null;
             _modSettingsFlowCoordinator = null;
+
+            _isInitialized = false;
+        }
+
+        private int CompareSettingsMenu(CustomCellInfo a, CustomCellInfo b)
+        {
+            // BSML's menu should always be at the top
+            if (a == _settingsMenu)
+            {
+                return int.MinValue;
+            }
+            else if (b == _settingsMenu)
+            {
+                return int.MaxValue;
+            }
+            else
+            {
+                return a.text.CompareTo(b.text);
+            }
         }
 
         [UIAction("set-thumbstick")]

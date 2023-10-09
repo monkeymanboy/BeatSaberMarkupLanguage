@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
 using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Harmony_Patches;
 using BeatSaberMarkupLanguage.ViewControllers;
@@ -15,7 +15,7 @@ namespace BeatSaberMarkupLanguage.MenuButtons
     internal class MenuButtonsViewController : BSMLAutomaticViewController
     {
         [UIValue("buttons")]
-        public List<MenuButton> buttons => MenuButtons.instance.buttons;
+        public IList buttons { get; } = MenuButtons.instance.buttons;
 
         [UIValue("any-buttons")]
         private bool AnyButtons => buttons.Count > 0;
