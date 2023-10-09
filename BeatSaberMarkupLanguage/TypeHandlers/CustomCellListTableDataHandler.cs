@@ -43,7 +43,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 {
                     if (!parserParams.actions.TryGetValue(selectCell, out BSMLAction action))
                     {
-                        throw new Exception("select-cell action '" + componentType.data["selectCell"] + "' not found");
+                        throw new BSMLException($"select-cell action '{selectCell}' not found");
                     }
 
                     action.Invoke(table, (table.dataSource as CustomCellListTableData).data[index]);
@@ -56,7 +56,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             {
                 tableData.tableView._tableType = (TableView.TableType)Enum.Parse(typeof(TableView.TableType), listDirection);
                 scrollView._scrollViewDirection = (ScrollView.ScrollViewDirection)Enum.Parse(typeof(ScrollView.ScrollViewDirection), listDirection);
-                verticalList = listDirection.ToLower() != "horizontal";
+                verticalList = !listDirection.Equals("horizontal", StringComparison.OrdinalIgnoreCase);
             }
 
             if (componentType.data.TryGetValue("cellSize", out string cellSize))
@@ -109,25 +109,28 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             {
                 if (!parserParams.values.TryGetValue(value, out BSMLValue contents))
                 {
-                    throw new Exception("value '" + value + "' not found");
+                    throw new BSMLException($"value '{value}' not found");
                 }
 
                 tableData.data = contents.GetValueAs<IList>();
                 tableData.tableView.ReloadData();
             }
 
+            RectTransform rectTransform = (RectTransform)componentType.component.transform;
+
             switch (tableData.tableView.tableType)
             {
                 case TableView.TableType.Vertical:
-                    (componentType.component.gameObject.transform as RectTransform).sizeDelta = new Vector2(componentType.data.TryGetValue("listWidth", out string vListWidth) ? Parse.Float(vListWidth) : 60, tableData.cellSize * (componentType.data.TryGetValue("visibleCells", out string vVisibleCells) ? Parse.Float(vVisibleCells) : 7));
+                    rectTransform.sizeDelta = new Vector2(componentType.data.TryGetValue("listWidth", out string vListWidth) ? Parse.Float(vListWidth) : 60, tableData.cellSize * (componentType.data.TryGetValue("visibleCells", out string vVisibleCells) ? Parse.Float(vVisibleCells) : 7));
                     break;
                 case TableView.TableType.Horizontal:
-                    (componentType.component.gameObject.transform as RectTransform).sizeDelta = new Vector2(tableData.cellSize * (componentType.data.TryGetValue("visibleCells", out string hVisibleCells) ? Parse.Float(hVisibleCells) : 4), componentType.data.TryGetValue("listHeight", out string hListHeight) ? Parse.Float(hListHeight) : 40);
+                    rectTransform.sizeDelta = new Vector2(tableData.cellSize * (componentType.data.TryGetValue("visibleCells", out string hVisibleCells) ? Parse.Float(hVisibleCells) : 4), componentType.data.TryGetValue("listHeight", out string hListHeight) ? Parse.Float(hListHeight) : 40);
                     break;
             }
 
-            componentType.component.gameObject.GetComponent<LayoutElement>().preferredHeight = (componentType.component.gameObject.transform as RectTransform).sizeDelta.y;
-            componentType.component.gameObject.GetComponent<LayoutElement>().preferredWidth = (componentType.component.gameObject.transform as RectTransform).sizeDelta.x;
+            LayoutElement layoutElement = componentType.component.GetComponent<LayoutElement>();
+            layoutElement.preferredHeight = rectTransform.sizeDelta.y;
+            layoutElement.preferredWidth = rectTransform.sizeDelta.x;
 
             tableData.tableView.gameObject.SetActive(true);
             tableData.tableView.LazyInit();
