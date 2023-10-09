@@ -15,7 +15,6 @@ namespace BeatSaberMarkupLanguage.Harmony_Patches
             DiContainer container = __instance.Container;
 
             BeatSaberUI.DiContainer = container;
-            BeatSaberUI.MainTextFont.boldSpacing = 2.2f; // default bold spacing is rather  w i d e
 
             // Eventually this should go in an installer & not use static instances but for now this is good enough. This is kind of janky since the
             // instance persists across restarts (like PersistentSingleton did) so Initialize/Dispose can be called multiple times on the same instance.
@@ -41,6 +40,8 @@ namespace BeatSaberMarkupLanguage.Harmony_Patches
 
             MenuButtonsViewController menuButtonsViewController = BeatSaberUI.CreateViewController<MenuButtonsViewController>();
             container.Bind(typeof(MenuButtonsViewController)).FromInstance(menuButtonsViewController);
+
+            container.Bind(typeof(IInitializable), typeof(IDisposable)).To<MenuInitAwaiter>().AsSingle();
 
 #if DEBUG
             container.Bind(typeof(IInitializable)).To<Util.TestPresenter>().AsSingle();

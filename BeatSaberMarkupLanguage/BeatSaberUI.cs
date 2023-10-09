@@ -67,14 +67,18 @@ namespace BeatSaberMarkupLanguage
         {
             get
             {
-                if (mainTextFont == null)
+                Transform soloButton = SoloButton;
+
+                if (mainTextFont == null && soloButton != null)
                 {
-                    mainTextFont = Resources.FindObjectsOfTypeAll<TMP_FontAsset>().Where(t => t.name == "Teko-Medium SDF").FirstOrDefault();
+                    mainTextFont = soloButton.Find("Text").GetComponent<TextMeshProUGUI>().font;
                 }
 
                 return mainTextFont;
             }
         }
+
+        internal static Transform SoloButton => DiContainer?.Resolve<MainMenuViewController>()._soloButton.transform;
 
         internal static Material MainUIFontMaterial
         {

@@ -43,7 +43,7 @@ namespace BeatSaberMarkupLanguage
         [OnStart]
         public void OnStart()
         {
-            LoadAndSetUpFontFallbacks().ContinueWith((task) => Logger.Log.Error($"Failed to set up fallback fonts\n{task.Exception}"), TaskContinuationOptions.OnlyOnFaulted);
+            LoadAndSetUpFontFallbacksAsync().ContinueWith((task) => Logger.Log.Error($"Failed to set up fallback fonts\n{task.Exception}"), TaskContinuationOptions.OnlyOnFaulted);
             AnimationController.instance.InitializeLoadingAnimation().ContinueWith((task) => Logger.Log.Error($"Failed to initialize loading animation\n{task.Exception}"), TaskContinuationOptions.OnlyOnFaulted);
         }
 
@@ -52,7 +52,7 @@ namespace BeatSaberMarkupLanguage
         {
         }
 
-        private async Task LoadAndSetUpFontFallbacks()
+        private async Task LoadAndSetUpFontFallbacksAsync()
         {
             await FontManager.AsyncLoadSystemFonts();
 
@@ -65,17 +65,16 @@ namespace BeatSaberMarkupLanguage
 
             Logger.Log.Debug("Waiting for default font presence");
 
-            while (BeatSaberUI.MainTextFont == null)
-            {
-                await Task.Yield();
-            }
+            await MenuInitAwaiter.WaitForMainMenuAsync();
 
             Logger.Log.Debug("Setting up default font fallbacks");
 
             // remove built-in fallback fonts to avoid inconsistencies between CJK characters
-            BeatSaberUI.MainTextFont.fallbackFontAssets.RemoveAll((asset) => FontNamesToRemove.Contains(asset.name));
-            BeatSaberUI.MainTextFont.fallbackFontAssetTable.RemoveAll((asset) => FontNamesToRemove.Contains(asset.name));
-            BeatSaberUI.MainTextFont.fallbackFontAssetTable.Add(fallback);
+            TMP_FontAsset mainTextFont = BeatSaberUI.MainTextFont;
+            mainTextFont.fallbackFontAssets.RemoveAll((asset) => FontNamesToRemove.Contains(asset.name));
+            mainTextFont.fallbackFontAssetTable.RemoveAll((asset) => FontNamesToRemove.Contains(asset.name));
+            mainTextFont.fallbackFontAssetTable.Add(fallback);
+            mainTextFont.boldSpacing = 2.2f; // default bold spacing is rather  w i d e
         }
     }
 }

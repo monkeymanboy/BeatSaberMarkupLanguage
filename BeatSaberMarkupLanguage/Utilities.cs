@@ -521,9 +521,11 @@ namespace BeatSaberMarkupLanguage
             {
                 get
                 {
-                    if (noGlowMat == null)
+                    Transform soloButton = BeatSaberUI.SoloButton;
+
+                    if (noGlowMat == null && soloButton != null)
                     {
-                        noGlowMat = new Material(Resources.FindObjectsOfTypeAll<Material>().Where(m => m.name == "UINoGlow").First());
+                        noGlowMat = new Material(soloButton.Find("Image/Image0").GetComponent<Image>().material);
                         noGlowMat.name = "UINoGlowCustom";
                     }
 
