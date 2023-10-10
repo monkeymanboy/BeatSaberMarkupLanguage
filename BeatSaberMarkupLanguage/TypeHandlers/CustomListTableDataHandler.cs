@@ -109,16 +109,10 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             {
                 if (!parserParams.values.TryGetValue(value, out BSMLValue contents))
                 {
-                    throw new Exception("value '" + value + "' not found");
+                    throw new BSMLException($"Value '{value}' not found");
                 }
 
-                object tableDataValue = contents.GetValue();
-                if (tableDataValue is not List<CustomCellInfo> tableDataList)
-                {
-                    throw new Exception($"Value '{value}' is not a List<CustomCellInfo>, which is required for custom-list");
-                }
-
-                tableData.data = tableDataList;
+                tableData.data = contents.GetValueAs<IList<CustomCellInfo>>();
                 tableData.tableView.ReloadData();
             }
 
