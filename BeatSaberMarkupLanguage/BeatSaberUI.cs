@@ -67,26 +67,22 @@ namespace BeatSaberMarkupLanguage
         {
             get
             {
-                Transform soloButton = SoloButton;
-
-                if (mainTextFont == null && soloButton != null)
+                if (mainTextFont == null && TryGetUITextTemplate(out TextMeshProUGUI textMesh))
                 {
-                    mainTextFont = soloButton.Find("Text").GetComponent<TextMeshProUGUI>().font;
+                    mainTextFont = textMesh.font;
                 }
 
                 return mainTextFont;
             }
         }
 
-        internal static Transform SoloButton => DiContainer?.Resolve<MainMenuViewController>()._soloButton.transform;
-
         internal static Material MainUIFontMaterial
         {
             get
             {
-                if (mainUIFontMaterial == null)
+                if (mainUIFontMaterial == null && TryGetUITextTemplate(out TextMeshProUGUI textMesh))
                 {
-                    mainUIFontMaterial = Resources.FindObjectsOfTypeAll<Material>().Where(m => m.name == "Teko-Medium SDF Curved Softer").First();
+                    mainUIFontMaterial = textMesh.fontSharedMaterial;
                 }
 
                 return mainUIFontMaterial;
@@ -620,6 +616,30 @@ namespace BeatSaberMarkupLanguage
 
         public static void DismissFlowCoordinator(this FlowCoordinator current, FlowCoordinator flowCoordinator, Action finishedCallback = null, ViewController.AnimationDirection animationDirection = ViewController.AnimationDirection.Horizontal, bool immediately = false)
             => current.DismissFlowCoordinator(flowCoordinator, animationDirection, finishedCallback, immediately);
+
+        internal static bool TryGetSoloButton(out Button soloButton)
+        {
+            if (DiContainer == null)
+            {
+                soloButton = null;
+                return false;
+            }
+
+            soloButton = DiContainer.Resolve<MainMenuViewController>()._soloButton;
+            return soloButton != null;
+        }
+
+        internal static bool TryGetUITextTemplate(out TextMeshProUGUI textMesh)
+        {
+            if (!TryGetSoloButton(out Button soloButton))
+            {
+                textMesh = null;
+                return false;
+            }
+
+            textMesh = soloButton.transform.Find("Text").GetComponent<TextMeshProUGUI>();
+            return textMesh != null;
+        }
 
         private static bool IsAnimated(string str)
         {
