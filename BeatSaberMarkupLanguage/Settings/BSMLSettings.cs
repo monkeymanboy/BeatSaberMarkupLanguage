@@ -17,8 +17,6 @@ namespace BeatSaberMarkupLanguage.Settings
 {
     public class BSMLSettings : PersistentSingleton<BSMLSettings>, IInitializable, ILateDisposable
     {
-        public readonly IList<CustomCellInfo> settingsMenus;
-
         private SettingsMenu _settingsMenu;
         private MainFlowCoordinator _mainFlowCoordinator;
         private ModSettingsFlowCoordinator _modSettingsFlowCoordinator;
@@ -32,6 +30,8 @@ namespace BeatSaberMarkupLanguage.Settings
         {
             settingsMenus = new SortedList<CustomCellInfo>(Comparer<CustomCellInfo>.Create(CompareSettingsMenu));
         }
+
+        public IList<CustomCellInfo> settingsMenus { get; }
 
         [UIValue("thumbstick-value")]
         private bool ThumbstickValue
