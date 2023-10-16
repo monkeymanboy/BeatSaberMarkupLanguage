@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
@@ -25,7 +24,7 @@ namespace BeatSaberMarkupLanguage.Macros
             {
                 if (!parserParams.values.TryGetValue(hosts, out BSMLValue values))
                 {
-                    throw new Exception("host list '" + hosts + "' not found");
+                    throw new ValueNotFoundException(hosts, parserParams.host);
                 }
 
                 bool passTags = false;

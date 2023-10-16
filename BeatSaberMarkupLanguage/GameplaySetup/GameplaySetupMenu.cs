@@ -58,16 +58,7 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
             }
             catch (Exception ex)
             {
-                if (ex is BSMLResourceException resEx)
-                {
-                    Logger.Log.Error($"Cannot find BSML resource '{resEx.ResourcePath}' in '{resEx.Assembly?.GetName().Name ?? "<NULL>"}' for Gameplay Settings tab.");
-                }
-                else
-                {
-                    Logger.Log.Error($"Error adding gameplay settings tab for {assembly?.GetName().Name ?? "<NULL>"} ({name}): {ex.Message}");
-                }
-
-                Logger.Log.Debug(ex);
+                Logger.Log.Error($"Error adding gameplay settings tab for {assembly?.GetName().Name ?? "<NULL>"} ({name})\n{ex}");
                 BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), ErrorViewResourcePath), tabObject);
             }
         }

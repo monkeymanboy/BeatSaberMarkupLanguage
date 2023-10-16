@@ -45,16 +45,7 @@ namespace BeatSaberMarkupLanguage.Settings
             }
             catch (Exception ex)
             {
-                if (ex is BSMLResourceException resEx)
-                {
-                    Logger.Log.Error($"Cannot find BSML resource '{resEx.ResourcePath}' in '{resEx.Assembly?.GetName().Name ?? "<NULL>"}' for settings menu.");
-                }
-                else
-                {
-                    Logger.Log.Error($"Error adding settings menu for {assembly?.GetName().Name ?? "<NULL>"} ({text}): {ex.Message}");
-                }
-
-                Logger.Log.Debug(ex);
+                Logger.Log.Error($"Error adding settings menu for {assembly?.GetName().Name ?? "<NULL>"} ({text})\n{ex}");
                 parserParams = BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), SettingsErrorViewResourcePath), viewController.gameObject);
             }
         }

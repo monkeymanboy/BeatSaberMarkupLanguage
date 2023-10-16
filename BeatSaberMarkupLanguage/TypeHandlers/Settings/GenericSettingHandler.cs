@@ -30,7 +30,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
             {
                 if (!parserParams.actions.TryGetValue(formatterId, out BSMLAction formatter))
                 {
-                    throw new Exception("formatter action '" + formatter + "' not found");
+                    throw new ActionNotFoundException(formatterId, parserParams.host);
                 }
 
                 genericSetting.formatter = formatter;
@@ -45,7 +45,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
             {
                 if (!parserParams.actions.TryGetValue(onChange, out BSMLAction onChangeAction))
                 {
-                    throw new Exception("on-change action '" + onChange + "' not found");
+                    throw new ActionNotFoundException(onChange, parserParams.host);
                 }
 
                 genericSetting.onChange = onChangeAction;
@@ -55,7 +55,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
             {
                 if (!parserParams.values.TryGetValue(value, out BSMLValue associatedValue))
                 {
-                    throw new Exception("value '" + value + "' not found");
+                    throw new ValueNotFoundException(value, parserParams.host);
                 }
 
                 genericSetting.associatedValue = associatedValue;

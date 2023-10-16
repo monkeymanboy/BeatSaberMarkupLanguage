@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -480,14 +479,14 @@ namespace BeatSaberMarkupLanguage.Animations.APNG
             // check file signature.
             if (!Helper.IsBytesEqual(ms.ReadBytes(Frame.Signature.Length), Frame.Signature))
             {
-                throw new Exception("File signature incorrect.");
+                throw new APNGException("File signature incorrect.");
             }
 
             // Read IHDR chunk.
             IHDRChunk = new IHDRChunk(ms);
             if (IHDRChunk.ChunkType != "IHDR")
             {
-                throw new Exception("IHDR chunk must located before any other chunks.");
+                throw new APNGException("IHDR chunk must located before any other chunks.");
             }
 
             viewSize = new Size(IHDRChunk.Width, IHDRChunk.Height);
@@ -501,7 +500,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG
             {
                 if (ms.Position == ms.Length)
                 {
-                    throw new Exception("IEND chunk expected.");
+                    throw new APNGException("IEND chunk expected.");
                 }
 
                 chunk = new Chunk(ms);
@@ -509,12 +508,12 @@ namespace BeatSaberMarkupLanguage.Animations.APNG
                 switch (chunk.ChunkType)
                 {
                     case "IHDR":
-                        throw new Exception("Only single IHDR is allowed.");
+                        throw new APNGException("Only single IHDR is allowed.");
 
                     case "acTL":
                         if (IsSimplePNG)
                         {
-                            throw new Exception("acTL chunk must located before any IDAT and fdAT");
+                            throw new APNGException("acTL chunk must located before any IDAT and fdAT");
                         }
 
                         acTLChunk = new acTLChunk(chunk);
@@ -542,7 +541,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG
 
                         if (frame != null && frame.IDATChunks.Count == 0)
                         {
-                            throw new Exception("One frame must have only one fcTL chunk.");
+                            throw new APNGException("One frame must have only one fcTL chunk.");
                         }
 
                         // IDAT already parsed means this fcTL is used by FRAME IMAGE.
@@ -578,7 +577,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG
                         // fdAT is only used by frame image.
                         if (frame == null || frame.fcTLChunk == null)
                         {
-                            throw new Exception("fcTL chunk expected.");
+                            throw new APNGException("fcTL chunk expected.");
                         }
 
                         frame.AddIDATChunk(new fdATChunk(chunk).ToIDATChunk());

@@ -26,7 +26,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 {
                     if (!parserParams.values.TryGetValue(value, out BSMLValue associatedValue))
                     {
-                        throw new Exception("value '" + value + "' not found");
+                        throw new ValueNotFoundException(value, parserParams.host);
                     }
 
                     colorPicker.associatedValue = associatedValue;
@@ -36,7 +36,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 {
                     if (!parserParams.actions.TryGetValue(onCancel, out BSMLAction action))
                     {
-                        throw new Exception("on-cancel action '" + onCancel + "' not found");
+                        throw new ActionNotFoundException(onCancel, parserParams.host);
                     }
 
                     colorPicker.onCancel = action;
@@ -46,7 +46,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 {
                     if (!parserParams.actions.TryGetValue(onDone, out BSMLAction action))
                     {
-                        throw new Exception("on-done action '" + onDone + "' not found");
+                        throw new ActionNotFoundException(onDone, parserParams.host);
                     }
 
                     colorPicker.onDone = action;
@@ -56,7 +56,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 {
                     if (!parserParams.actions.TryGetValue(onChange, out BSMLAction action))
                     {
-                        throw new Exception("color-change action '" + onChange + "' not found");
+                        throw new ActionNotFoundException(onChange, parserParams.host);
                     }
 
                     colorPicker.onChange = action;

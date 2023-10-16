@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using BeatSaberMarkupLanguage.Animations.APNG;
 
 namespace BeatSaberMarkupLanguage.Animations
 {
@@ -92,7 +93,7 @@ namespace BeatSaberMarkupLanguage.Animations
 
             if (ms.Read(buffer, 0, count) != count)
             {
-                throw new Exception("End reached.");
+                throw new APNGException("End reached.");
             }
 
             return buffer;

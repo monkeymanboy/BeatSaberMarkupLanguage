@@ -290,7 +290,7 @@ namespace BeatSaberMarkupLanguage
         {
             if (!tags.TryGetValue(node.Name, out BSMLTag currentTag))
             {
-                throw new Exception("Tag type '" + node.Name + "' not found");
+                throw new TagNotFoundException(node.Name);
             }
 
             GameObject currentNode = currentTag.CreateObject(parent.transform);
@@ -389,7 +389,7 @@ namespace BeatSaberMarkupLanguage
         {
             if (!macros.TryGetValue(node.Name, out BSMLMacro currentMacro))
             {
-                throw new Exception("Macro type '" + node.Name + "' not found");
+                throw new MacroNotFoundException(node.Name);
             }
 
             Dictionary<string, string> properties = GetParameters(node, currentMacro.CachedProps, parserParams, out _);
@@ -420,7 +420,7 @@ namespace BeatSaberMarkupLanguage
                                 string valueID = value.Substring(1);
                                 if (!parserParams.values.TryGetValue(valueID, out BSMLValue uiValue) || uiValue == null)
                                 {
-                                    throw new Exception("No UIValue exists with the id '" + valueID + "'");
+                                    throw new ValueNotFoundException(valueID, parserParams.host);
                                 }
 
                                 parameters.Add(propertyAliases.Key, uiValue.GetValue()?.InvariantToString());

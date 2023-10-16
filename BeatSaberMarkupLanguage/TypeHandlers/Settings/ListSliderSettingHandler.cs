@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using BeatSaberMarkupLanguage.Components.Settings;
 using BeatSaberMarkupLanguage.Parser;
@@ -24,14 +23,14 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
             {
                 if (!parserParams.values.TryGetValue(options, out BSMLValue values))
                 {
-                    throw new Exception("options '" + options + "' not found");
+                    throw new ValueNotFoundException(options, parserParams.host);
                 }
 
                 listSetting.values = values.GetValueAs<IList>();
             }
             else
             {
-                throw new Exception("list must have associated options");
+                throw new MissingAttributeException(this, "options");
             }
 
             if (componentType.data.TryGetValue("showButtons", out string showButtons))

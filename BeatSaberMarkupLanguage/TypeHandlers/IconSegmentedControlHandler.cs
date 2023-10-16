@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using BeatSaberMarkupLanguage.Parser;
 using HMUI;
 using static BeatSaberMarkupLanguage.BSMLParser;
@@ -23,7 +22,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             {
                 if (!parserParams.values.TryGetValue(value, out BSMLValue contents))
                 {
-                    throw new Exception("value '" + value + "' not found");
+                    throw new ValueNotFoundException(value, parserParams.host);
                 }
 
                 iconControl.SetData((contents.GetValue() as List<IconSegmentedControl.DataItem>).ToArray());
@@ -35,7 +34,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 {
                     if (!parserParams.actions.TryGetValue(selectCell, out BSMLAction action))
                     {
-                        throw new Exception("select-cell action '" + componentType.data["selectCell"] + "' not found");
+                        throw new ActionNotFoundException(selectCell, parserParams.host);
                     }
 
                     action.Invoke(control, index);

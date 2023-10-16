@@ -31,7 +31,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 {
                     if (!parserParams.values.TryGetValue(value, out BSMLValue associatedValue))
                     {
-                        throw new Exception("value '" + value + "' not found");
+                        throw new ValueNotFoundException(value, parserParams.host);
                     }
 
                     modalKeyboard.associatedValue = associatedValue;
@@ -41,7 +41,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 {
                     if (!parserParams.actions.TryGetValue(onEnter, out BSMLAction onEnterAction))
                     {
-                        throw new Exception("on-enter action '" + onEnter + "' not found");
+                        throw new ActionNotFoundException(onEnter, parserParams.host);
                     }
 
                     modalKeyboard.onEnter = onEnterAction;

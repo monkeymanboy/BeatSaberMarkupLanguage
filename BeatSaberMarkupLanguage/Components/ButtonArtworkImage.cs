@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,7 +18,7 @@ namespace BeatSaberMarkupLanguage.Components
 
             if (image == null)
             {
-                throw new Exception("Unable to find BG artwork image!");
+                throw new BSMLException("Unable to find BG artwork image!");
             }
 
             image.SetImageAsync(path).ContinueWith((task) => Logger.Log.Error($"Failed to load image\n{task.Exception}"), TaskContinuationOptions.OnlyOnFaulted);

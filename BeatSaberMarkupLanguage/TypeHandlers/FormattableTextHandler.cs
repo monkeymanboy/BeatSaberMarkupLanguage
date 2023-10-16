@@ -34,7 +34,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 }
                 else
                 {
-                    throw new Exception($"data value '{dataStr}' not found");
+                    throw new ValueNotFoundException(dataStr, parserParams.host);
                 }
             }
 
@@ -47,7 +47,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 }
                 else
                 {
-                    throw new Exception($"data-formatter value '{formatterStr}' not found");
+                    throw new ValueNotFoundException(formatterStr, parserParams.host);
                 }
             }
         }

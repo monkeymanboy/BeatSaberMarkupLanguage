@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
 using BeatSaberMarkupLanguage.Parser;
@@ -24,7 +23,7 @@ namespace BeatSaberMarkupLanguage.Macros
             {
                 if (!parserParams.values.TryGetValue(transformId, out BSMLValue value))
                 {
-                    throw new Exception("transform '" + transformId + "' not found");
+                    throw new ValueNotFoundException(transformId, parserParams.host);
                 }
 
                 ((Transform)value.GetValue()).SetParent(parent.transform, false);
@@ -34,7 +33,7 @@ namespace BeatSaberMarkupLanguage.Macros
             {
                 if (!parserParams.values.TryGetValue(transformsId, out BSMLValue value))
                 {
-                    throw new Exception("transform list '" + transformsId + "' not found");
+                    throw new ValueNotFoundException(transformsId, parserParams.host);
                 }
 
                 foreach (Transform transform in value.GetValue() as List<Transform>)

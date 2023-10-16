@@ -1,5 +1,4 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 
 namespace BeatSaberMarkupLanguage
 {
@@ -13,7 +12,7 @@ namespace BeatSaberMarkupLanguage
             }
             catch
             {
-                throw new Exception("Could not parse float: " + s);
+                throw new ParseException("Could not parse float: " + s);
             }
         }
 
@@ -25,7 +24,7 @@ namespace BeatSaberMarkupLanguage
             }
             catch
             {
-                throw new Exception("Could not parse bool: " + s);
+                throw new ParseException("Could not parse bool: " + s);
             }
         }
 
@@ -37,7 +36,7 @@ namespace BeatSaberMarkupLanguage
             }
             catch
             {
-                throw new Exception("Could not parse int: " + s);
+                throw new ParseException("Could not parse int: " + s);
             }
         }
 
@@ -48,18 +47,13 @@ namespace BeatSaberMarkupLanguage
         /// <returns>The string representation of the value.</returns>
         public static string InvariantToString(this object obj)
         {
-            if (obj is float floatValue)
+            return obj switch
             {
-                return floatValue.ToString(CultureInfo.InvariantCulture);
-            }
-            else if (obj is double doubleValue)
-            {
-                return doubleValue.ToString(CultureInfo.InvariantCulture);
-            }
-            else
-            {
-                return obj?.ToString();
-            }
+                float floatValue => floatValue.ToString(CultureInfo.InvariantCulture),
+                double doubleValue => doubleValue.ToString(CultureInfo.InvariantCulture),
+                decimal decimalValue => decimalValue.ToString(CultureInfo.InvariantCulture),
+                _ => obj?.ToString(),
+            };
         }
     }
 }

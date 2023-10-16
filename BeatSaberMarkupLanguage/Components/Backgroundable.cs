@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using HMUI;
 using UnityEngine;
 using UnityEngine.UI;
@@ -40,12 +39,12 @@ namespace BeatSaberMarkupLanguage.Components
         {
             if (background != null)
             {
-                throw new Exception("Cannot add multiple backgrounds");
+                throw new BSMLException("Cannot add multiple backgrounds");
             }
 
             if (!Backgrounds.TryGetValue(name, out string backgroundName))
             {
-                throw new Exception($"Background type '{name}' not found");
+                throw new BSMLException($"Background type '{name}' not found");
             }
 
             try

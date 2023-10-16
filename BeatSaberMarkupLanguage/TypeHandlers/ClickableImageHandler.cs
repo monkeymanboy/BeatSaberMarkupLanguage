@@ -34,7 +34,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 {
                     if (!parserParams.actions.TryGetValue(onClick, out BSMLAction onClickAction))
                     {
-                        throw new Exception("on-click action '" + onClick + "' not found");
+                        throw new ActionNotFoundException(onClick, parserParams.host);
                     }
 
                     onClickAction.Invoke();

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
 using BeatSaberMarkupLanguage.Parser;
@@ -23,12 +22,12 @@ namespace BeatSaberMarkupLanguage.Macros
 
             if (!data.TryGetValue("name", out string name))
             {
-                throw new Exception("define macro must have an id");
+                throw new MissingAttributeException(this, "name");
             }
 
             if (!data.TryGetValue("value", out string value))
             {
-                throw new Exception("define macro must have a value");
+                throw new MissingAttributeException(this, "value");
             }
 
             if (parserParams.values.TryGetValue(name, out BSMLValue existingValue))

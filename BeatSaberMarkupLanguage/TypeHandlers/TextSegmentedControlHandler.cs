@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using BeatSaberMarkupLanguage.Parser;
@@ -25,7 +24,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             {
                 if (!parserParams.values.TryGetValue(value, out BSMLValue contents))
                 {
-                    throw new Exception("value '" + value + "' not found");
+                    throw new ValueNotFoundException(value, parserParams.host);
                 }
 
                 textControl.SetTexts((contents.GetValue() as IEnumerable).Cast<object>().Select(x => x.ToString()).ToArray());
@@ -37,7 +36,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 {
                     if (!parserParams.actions.TryGetValue(selectCell, out BSMLAction action))
                     {
-                        throw new Exception("select-cell action '" + componentType.data["selectCell"] + "' not found");
+                        throw new ActionNotFoundException(selectCell, parserParams.host);
                     }
 
                     action.Invoke(control, index);

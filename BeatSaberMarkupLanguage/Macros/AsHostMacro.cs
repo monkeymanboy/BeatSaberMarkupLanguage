@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
 using BeatSaberMarkupLanguage.Parser;
@@ -23,7 +22,7 @@ namespace BeatSaberMarkupLanguage.Macros
             {
                 if (!parserParams.values.TryGetValue(host, out BSMLValue value))
                 {
-                    throw new Exception("host '" + host + "' not found");
+                    throw new ValueNotFoundException(host, parserParams.host);
                 }
 
                 BSMLParser.instance.Parse(node, parent, value.GetValue());

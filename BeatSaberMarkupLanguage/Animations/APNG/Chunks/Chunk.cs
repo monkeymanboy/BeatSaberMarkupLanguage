@@ -34,12 +34,12 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
 
             if (ms.Position != ms.Length)
             {
-                throw new Exception("Chunk length not correct.");
+                throw new APNGException("Chunk length not correct.");
             }
 
             if (Length != ChunkData.Length)
             {
-                throw new Exception("Chunk data length not correct.");
+                throw new APNGException("Chunk data length not correct.");
             }
 
             ParseData(new MemoryStream(ChunkData));

@@ -41,21 +41,12 @@ namespace BeatSaberMarkupLanguage
         /// <param name="assembly">Assembly containing the resource.</param>
         /// <param name="resource">Full path to the resource.</param>
         /// <returns>The contents of the resource as a string.</returns>
-        /// <exception cref="BSMLResourceException">Thrown if any exception occurs while loading the resource.</exception>
+        /// <exception cref="FileNotFoundException">Thrown if the resource specified by <paramref name="resource"/> cannot be found in <paramref name="assembly"/>.</exception>
         public static string GetResourceContent(Assembly assembly, string resource)
         {
-            try
-            {
-                using (Stream stream = assembly.GetManifestResourceStream(resource))
-                using (StreamReader reader = new(stream))
-                {
-                    return reader.ReadToEnd();
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new BSMLResourceException(assembly, resource, ex);
-            }
+            using Stream stream = assembly.GetManifestResourceStream(resource) ?? throw new ResourceNotFoundException(assembly, resource);
+            using StreamReader reader = new(stream);
+            return reader.ReadToEnd();
         }
 
         [Obsolete]
@@ -166,7 +157,7 @@ namespace BeatSaberMarkupLanguage
                     assembly = Assembly.Load(parameters[0]);
                     break;
                 default:
-                    throw new Exception($"Could not process resource path {inputPath}");
+                    throw new BSMLException($"Could not process resource path {inputPath}");
             }
         }
 

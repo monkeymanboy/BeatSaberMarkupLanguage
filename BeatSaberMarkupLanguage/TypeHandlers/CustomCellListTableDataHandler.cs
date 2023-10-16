@@ -43,7 +43,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 {
                     if (!parserParams.actions.TryGetValue(selectCell, out BSMLAction action))
                     {
-                        throw new BSMLException($"select-cell action '{selectCell}' not found");
+                        throw new ActionNotFoundException(selectCell, parserParams.host);
                     }
 
                     action.Invoke(table, (table.dataSource as CustomCellListTableData).data[index]);
@@ -109,7 +109,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             {
                 if (!parserParams.values.TryGetValue(value, out BSMLValue contents))
                 {
-                    throw new BSMLException($"value '{value}' not found");
+                    throw new ValueNotFoundException(value, parserParams.host);
                 }
 
                 tableData.data = contents.GetValueAs<IList>();

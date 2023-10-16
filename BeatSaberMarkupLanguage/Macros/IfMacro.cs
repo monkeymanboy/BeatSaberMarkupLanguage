@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
 using BeatSaberMarkupLanguage.Parser;
@@ -29,7 +28,7 @@ namespace BeatSaberMarkupLanguage.Macros
 
                 if (!parserParams.values.TryGetValue(valueId, out BSMLValue value))
                 {
-                    throw new Exception("value '" + valueId + "' not found");
+                    throw new ValueNotFoundException(valueId, parserParams.host);
                 }
 
                 bool boolValue = (bool)value.GetValue();

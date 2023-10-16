@@ -27,7 +27,7 @@ namespace BeatSaberMarkupLanguage.Tags
         {
             if (!gameObject.TryGetComponent(out TextMeshProUGUI textMesh))
             {
-                throw new InvalidOperationException("CreateLocalizableText should only be called if a TextMeshProUGUI instance already exists on the GameObject");
+                throw new InvalidOperationException($"{nameof(CreateLocalizableText)} should only be called if a {nameof(TextMeshProUGUI)} instance already exists on the {nameof(GameObject)}");
             }
 
             bool wasActive = gameObject.activeSelf;

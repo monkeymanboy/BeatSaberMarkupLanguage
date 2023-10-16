@@ -31,7 +31,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             tabSelector.parserParams = parserParams;
             if (!componentType.data.TryGetValue("tabTag", out string tabTag))
             {
-                throw new Exception("Tab Selector must have a tab-tag");
+                throw new MissingAttributeException(this, "tab-tag");
             }
 
             tabSelector.tabTag = tabTag;
