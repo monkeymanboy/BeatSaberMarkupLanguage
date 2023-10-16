@@ -128,7 +128,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="D:\Users\Nicolas\Source\Repos\BeatSaberMarkupLanguage\BeatSaberMarkupLanguage\.editorconfig" />
+    <None Include=".editorconfig" />
     <None Include="Directory.Build.props" Condition="Exists('Directory.Build.props')" />
     <None Include="Directory.Build.targets" Condition="Exists('Directory.Build.targets')" />
     <None Include="BeatSaberMarkupLanguage.csproj.user" Condition="Exists('BeatSaberMarkupLanguage.csproj.user')" />
