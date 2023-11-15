@@ -4,10 +4,14 @@ using System.Reflection.Emit;
 using BeatSaberMarkupLanguage.Components;
 using HarmonyLib;
 using TMPro;
+
+#if !GAME_VERSION_1_29_0
 using UnityEngine;
+#endif
 
 namespace BeatSaberMarkupLanguage.Harmony_Patches
 {
+#if !GAME_VERSION_1_29_0
     /// <summary>
     /// This patch copies the new <see cref="Material.enabledKeywords"/> since the version of TextMesh Pro that Beat Saber uses doesn't support it (yet).
     /// </summary>
@@ -19,6 +23,7 @@ namespace BeatSaberMarkupLanguage.Harmony_Patches
             __result.enabledKeywords = source.enabledKeywords;
         }
     }
+#endif // !GAME_VERSION_1_29_0
 
     [HarmonyPatch(typeof(TMP_Text), "CalculatePreferredValues")]
     internal static class TMP_Text_CalculatePreferredValues

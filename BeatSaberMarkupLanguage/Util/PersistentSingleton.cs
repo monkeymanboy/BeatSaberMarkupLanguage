@@ -1,4 +1,5 @@
-﻿namespace BeatSaberMarkupLanguage.Util
+﻿#if !GAME_VERSION_1_29_0
+namespace BeatSaberMarkupLanguage.Util
 {
     // Created this for compatibility's sake after PersistentSingleton was removed from the game
     // but the idea is to eventually get rid of this and do everything through Zenject. This class
@@ -9,3 +10,4 @@
         public static T instance { get; } = new();
     }
 }
+#endif

@@ -5,6 +5,10 @@ using BeatSaberMarkupLanguage.ViewControllers;
 using HMUI;
 using UnityEngine;
 
+#if GAME_VERSION_1_29_0
+using BeatSaberMarkupLanguage.Util;
+#endif
+
 namespace BeatSaberMarkupLanguage.Settings.UI.ViewControllers
 {
     [ViewDefinition("BeatSaberMarkupLanguage.Views.settings-list.bsml")]
@@ -26,7 +30,11 @@ namespace BeatSaberMarkupLanguage.Settings.UI.ViewControllers
                 rectTransform.anchorMax = new Vector2(0.5f, 1);
             }
 
+#if GAME_VERSION_1_29_0
+            list.data = (SortedList<CustomListTableData.CustomCellInfo>)BSMLSettings.instance.settingsMenus;
+#else
             list.data = BSMLSettings.instance.settingsMenus;
+#endif
 
             if (list.tableView != null)
             {

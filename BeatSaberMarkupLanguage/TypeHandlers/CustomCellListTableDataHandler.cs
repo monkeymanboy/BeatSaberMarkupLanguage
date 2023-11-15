@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.Parser;
@@ -9,6 +8,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using static BeatSaberMarkupLanguage.BSMLParser;
 using Object = UnityEngine.Object;
+
+#if !GAME_VERSION_1_29_0
+using System.Collections;
+#endif
 
 namespace BeatSaberMarkupLanguage.TypeHandlers
 {
@@ -112,7 +115,11 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                     throw new ValueNotFoundException(value, parserParams.host);
                 }
 
+#if GAME_VERSION_1_29_0
+                tableData.data = contents.GetValueAs<List<object>>();
+#else
                 tableData.data = contents.GetValueAs<IList>();
+#endif
                 tableData.tableView.ReloadData();
             }
 

@@ -1,8 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using BeatSaberMarkupLanguage.Components.Settings;
 using BeatSaberMarkupLanguage.Parser;
 using static BeatSaberMarkupLanguage.BSMLParser;
+
+#if !GAME_VERSION_1_29_0
+using System.Collections;
+#endif
 
 namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
 {
@@ -26,7 +29,11 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
                     throw new ValueNotFoundException(options, parserParams.host);
                 }
 
+#if GAME_VERSION_1_29_0
+                listSetting.values = values.GetValueAs<List<object>>();
+#else
                 listSetting.values = values.GetValueAs<IList>();
+#endif
             }
             else
             {

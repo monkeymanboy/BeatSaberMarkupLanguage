@@ -112,7 +112,11 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                     throw new ValueNotFoundException(value, parserParams.host);
                 }
 
+#if GAME_VERSION_1_29_0
+                tableData.data = contents.GetValueAs<List<CustomCellInfo>>();
+#else
                 tableData.data = contents.GetValueAs<IList<CustomCellInfo>>();
+#endif
                 tableData.tableView.ReloadData();
             }
 

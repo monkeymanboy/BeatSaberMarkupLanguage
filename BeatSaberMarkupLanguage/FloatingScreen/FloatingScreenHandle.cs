@@ -47,7 +47,11 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
             }
 
             VRPointer vrPointer = vrInputModule._vrPointer;
+#if GAME_VERSION_1_29_0
+            VRController vrController = vrPointer.vrController;
+#else
             VRController vrController = vrPointer.lastSelectedVrController;
+#endif
             _grabbingController = vrController;
             _grabPos = vrController.transform.InverseTransformPoint(_floatingScreen.transform.position);
             _grabRot = Quaternion.Inverse(vrController.transform.rotation) * _floatingScreen.transform.rotation;
@@ -93,7 +97,13 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
                 return;
             }
 
-            _grabPos -= Vector3.forward * (_grabbingController.thumbstick.y * Time.unscaledDeltaTime);
+#if GAME_VERSION_1_29_0
+            float thumbstickValue = _grabbingController.verticalAxisValue;
+#else
+            float thumbstickValue = _grabbingController.thumbstick.y;
+#endif
+
+            _grabPos -= Vector3.forward * (thumbstickValue * Time.unscaledDeltaTime);
 
             Vector3 targetPosition = _grabbingController.transform.TransformPoint(_grabPos);
             Quaternion targetRotation = _grabbingController.transform.rotation * _grabRot;

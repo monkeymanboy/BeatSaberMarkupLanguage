@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reflection;
 using System.Threading.Tasks;
-using BeatSaberMarkupLanguage.Util;
 using UnityEngine;
 using Zenject;
+
+#if !GAME_VERSION_1_29_0
+using BeatSaberMarkupLanguage.Util;
+#endif
 
 namespace BeatSaberMarkupLanguage.Animations
 {

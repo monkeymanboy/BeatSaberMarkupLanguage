@@ -4,12 +4,15 @@ using System.Linq;
 using System.Reflection;
 using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components;
-using BeatSaberMarkupLanguage.Util;
 using HMUI;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 using Object = UnityEngine.Object;
+
+#if !GAME_VERSION_1_29_0
+using BeatSaberMarkupLanguage.Util;
+#endif
 
 namespace BeatSaberMarkupLanguage.GameplaySetup
 {

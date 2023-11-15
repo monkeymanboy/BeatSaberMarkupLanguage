@@ -13,6 +13,18 @@
     <PathMap>$(MSBuildProjectDirectory)\$(IntermediateOutputPath)=$(MSBuildProjectName)</PathMap>
     <DebugType>portable</DebugType>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <Configurations>Debug Latest;Release Latest;Debug 1.29.0;Release 1.29.0</Configurations>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="$(Configuration.EndsWith('Latest'))">
+    <ManifestPath>manifest-latest.json</ManifestPath>
+    <GameVersion>latest</GameVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="$(Configuration.EndsWith('1.29.0'))">
+    <DefineConstants>$(DefineConstants);GAME_VERSION_1_29_0</DefineConstants>
+    <ManifestPath>manifest-1.29.0.json</ManifestPath>
+    <GameVersion>1.29.0</GameVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="$(DefineConstants.Contains('CIBuild')) OR '$(NCrunch)' == '1'">
@@ -49,7 +61,11 @@
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="UnityEngine.TextCoreFontEngineModule">
+    <Reference Include="UnityEngine.TextCoreModule" Condition="$(GameVersion) == '1.29.0'">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.TextCoreModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.TextCoreFontEngineModule" Condition="$(GameVersion) == 'latest'">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.TextCoreFontEngineModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
@@ -89,11 +105,11 @@
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\HMUI.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Menu.ColorSettings">
+    <Reference Include="Menu.ColorSettings" Condition="$(GameVersion) == 'latest'">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\Menu.ColorSettings.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Menu.CommonLib">
+    <Reference Include="Menu.CommonLib" Condition="$(GameVersion) == 'latest'">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\Menu.CommonLib.dll</HintPath>
       <Private>False</Private>
     </Reference>
@@ -135,13 +151,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="manifest.json" />
+    <EmbeddedResource Include="manifest-latest.json" Link="manifest.json" Condition="'$(GameVersion)' == 'latest'" />
+    <EmbeddedResource Include="manifest-1.29.0.json" Link="manifest.json" Condition="'$(GameVersion)' == '1.29.0'" />
     <EmbeddedResource Include="Resources\*.apng" />
     <EmbeddedResource Include="Resources\*.png" />
     <EmbeddedResource Include="Resources\description.md" />
     <EmbeddedResource Include="Views\*.bsml" />
   </ItemGroup>
-
+  
   <ItemGroup>
     <PackageReference Include="BeatSaberModdingTools.Tasks" Version="1.4.3">
       <PrivateAssets>all</PrivateAssets>

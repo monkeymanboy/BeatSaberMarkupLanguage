@@ -49,7 +49,11 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
         protected virtual void Update()
         {
             VRPointer pointer = _vrPointer;
+#if GAME_VERSION_1_29_0
+            VRController vrController = pointer != null ? pointer.vrController : null;
+#else
             VRController vrController = pointer != null ? pointer.lastSelectedVrController : null;
+#endif
 
             if (vrController != null && vrController.active && (vrController.triggerValue > 0.9f || Input.GetMouseButton(0)))
             {
@@ -58,7 +62,11 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
                     return;
                 }
 
+#if GAME_VERSION_1_29_0
+                if (Physics.Raycast(vrController.position, vrController.forward, out RaycastHit hit, MaxLaserDistance))
+#else
                 if (Physics.Raycast(vrController.viewAnchorTransform.position, vrController.viewAnchorTransform.forward, out RaycastHit hit, MaxLaserDistance))
+#endif
                 {
                     if (hit.transform != _screenHandle)
                     {
@@ -97,7 +105,13 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
         {
             if (_grabbingController != null)
             {
-                float diff = _grabbingController.thumbstick.y * Time.unscaledDeltaTime;
+#if GAME_VERSION_1_29_0
+                float thumbstickValue = _grabbingController.verticalAxisValue;
+#else
+                float thumbstickValue = _grabbingController.thumbstick.y;
+#endif
+
+                float diff = thumbstickValue * Time.unscaledDeltaTime;
 
                 if (_grabPos.magnitude > MinScrollDistance)
                 {

@@ -489,7 +489,11 @@ namespace BeatSaberMarkupLanguage
 
             webRequest.SendWebRequest().completed += (asyncOperation) =>
             {
+#if GAME_VERSION_1_29_0
+                if (webRequest.isNetworkError || webRequest.isHttpError)
+#else
                 if (webRequest.result != UnityWebRequest.Result.Success)
+#endif
                 {
                     taskCompletionSource.SetException(new UnityWebRequestException("Failed to get data", webRequest));
                 }

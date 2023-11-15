@@ -1,7 +1,12 @@
-﻿using System;
-using System.Collections;
-using System.Linq;
+﻿using System.Linq;
 using HMUI;
+
+#if GAME_VERSION_1_29_0
+using System.Collections.Generic;
+#else
+using System;
+using System.Collections;
+#endif
 
 namespace BeatSaberMarkupLanguage.Components.Settings
 {
@@ -9,9 +14,15 @@ namespace BeatSaberMarkupLanguage.Components.Settings
     {
         public SimpleTextDropdown dropdown;
 
+#if GAME_VERSION_1_29_0
+        public List<object> values = new();
+#endif
+
         private int index;
 
+#if !GAME_VERSION_1_29_0
         public IList values { get; set; } = Array.Empty<object>();
+#endif
 
         public object Value
         {

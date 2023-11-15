@@ -54,7 +54,7 @@ namespace BeatSaberMarkupLanguage.MenuButtons
             }
         }
 
-        [UIValue("interactable")]
+        [UIValue("is-interactable")]
         public virtual bool Interactable
         {
             get => interactable;

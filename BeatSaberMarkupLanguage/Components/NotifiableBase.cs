@@ -1,7 +1,10 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+
+#if !GAME_VERSION_1_29_0
 using BeatSaberMarkupLanguage.Util;
+#endif
 
 namespace BeatSaberMarkupLanguage.Components
 {

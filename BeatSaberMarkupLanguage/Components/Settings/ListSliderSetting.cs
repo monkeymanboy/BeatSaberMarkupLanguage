@@ -1,13 +1,24 @@
 ﻿using System;
-using System.Collections;
 using HMUI;
 using TMPro;
+
+#if GAME_VERSION_1_29_0
+using System.Collections.Generic;
+#else
+using System.Collections;
+#endif
 
 namespace BeatSaberMarkupLanguage.Components.Settings
 {
     public class ListSliderSetting : GenericSliderSetting
     {
+#if GAME_VERSION_1_29_0
+        public List<object> values = new();
+#endif
+
+#if !GAME_VERSION_1_29_0
         public IList values { get; set; } = Array.Empty<object>();
+#endif
 
         public object Value
         {

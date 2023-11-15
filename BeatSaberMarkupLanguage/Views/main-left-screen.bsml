@@ -8,7 +8,7 @@
         <scroll-view horizontal-fit='PreferredSize' vertical-fit='PreferredSize' pref-width='143' pref-height='59' child-control-height='true' child-control-width='false'>
           <grid horizontal-fit='Unconstrained' size-delta-x='124' cell-size-y='9' cell-size-x='40' spacing-x='2' spacing-y='2' align='Center'>
             <macro.for-each items='buttons'>
-              <button id='menu-button' pref-width='40' pref-height='9' text='~text' hover-hint='~hover-hint' interactable='~interactable' on-click='button-click' pad='0'></button>
+              <button id='menu-button' pref-width='40' pref-height='9' text='~text' hover-hint='~hover-hint' interactable='~is-interactable' on-click='button-click' pad='0'></button>
             </macro.for-each>
           </grid>
         </scroll-view>

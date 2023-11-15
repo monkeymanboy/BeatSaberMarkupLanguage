@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components;
 using HMUI;
@@ -60,7 +59,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
         }
 
         [UIValue("contents")]
-        public IList Contents { get; } = new[]
+        public List<object> Contents { get; } = new List<object>()
         {
             new TestListObject("first", false),
             new TestListObject("second", true),
@@ -68,11 +67,11 @@ namespace BeatSaberMarkupLanguage.ViewControllers
         };
 
         [UIValue("contents2")]
-        public IList Contents2
+        public List<object> Contents2
         {
             get
             {
-                List<TestListObject> list = new();
+                List<object> list = new();
 
                 for (int i = 0; i < 30; i++)
                 {

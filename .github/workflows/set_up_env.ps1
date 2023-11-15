@@ -1,19 +1,21 @@
+param(
+    [parameter(Position = 0)] $ProjectDir,
+    [parameter(Position = 1)] $Configuration
+)
+
 $ErrorActionPreference = "Stop"
 
 $check = [char]0x2713
 $cross = [char]0x2717
 
-if ($args.Length -ne 1) {
-    Write-Host "Invalid number of arguments" -ForegroundColor Red
+$manifest_path = "$ProjectDir\manifest-$($Configuration.ToLower()).json"
+
+if (!(Test-Path $manifest_path)) {
+    Write-Host "File '$manifest_path' does not exist" -ForegroundColor Red
     exit(-1)
 }
 
-if ($args[0] -eq "" -or !(Test-Path $args[0])) {
-    Write-Host "File '$($args[0])' does not exist" -ForegroundColor Red
-    exit(-1)
-}
-
-$manifest_content = Get-Content $args[0] | ConvertFrom-Json
+$manifest_content = Get-Content $manifest_path | ConvertFrom-Json
 
 $manifest_version_str = $manifest_content.version
 $semver = [regex]::Match($manifest_version_str, '^(?<prerelease>(?<version>(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*))(?:-(?:(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?)(?:\+(?:[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$')
@@ -21,9 +23,9 @@ $semver = [regex]::Match($manifest_version_str, '^(?<prerelease>(?<version>(?:0|
 $version_with_prerelease = $semver.groups['prerelease'].value
 
 $git_hash = (git log -n 1 --pretty=%h).Trim()
-$git_tag = git tag -l --points-at HEAD
 
-if ($git_tag -ne "" -and $git_tag.Length -gt 0) {
+if ($env:GITHUB_REF -match '^refs/tags/(.+)$') {
+    $git_tag = $Matches[1]
     if ($git_tag -ne "v$version_with_prerelease") {
         Write-Host "$cross Git tag '$git_tag' does not match manifest version '$version_with_prerelease'" -ForegroundColor Red
         exit(-1)
@@ -41,7 +43,8 @@ if ($git_tag -ne "" -and $git_tag.Length -gt 0) {
     exit(-1)
 }
 
+Add-Content "$env:GITHUB_ENV" "MANIFEST_PATH=$manifest_path"
 Add-Content "$env:GITHUB_ENV" "ZIP_VERSION=$zip_version"
 Add-Content "$env:GITHUB_ENV" "GAME_VERSION=$($manifest_content.gameVersion)"
 
-$manifest_content | ConvertTo-Json | Set-Content $args[0]
+$manifest_content | ConvertTo-Json | Set-Content $manifest_path

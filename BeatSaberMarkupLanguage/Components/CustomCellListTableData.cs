@@ -1,9 +1,12 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using BeatSaberMarkupLanguage.Parser;
 using HMUI;
 using UnityEngine;
+
+#if !GAME_VERSION_1_29_0
+using System;
+using System.Collections;
+#endif
 
 namespace BeatSaberMarkupLanguage.Components
 {
@@ -14,7 +17,11 @@ namespace BeatSaberMarkupLanguage.Components
         public TableView tableView;
         public bool clickableCells = true;
 
+#if GAME_VERSION_1_29_0
+        public List<object> data = new();
+#else
         public IList data { get; set; } = Array.Empty<object>();
+#endif
 
         public virtual TableCell CellForIdx(TableView tableView, int idx)
         {

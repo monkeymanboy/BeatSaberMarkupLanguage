@@ -15,6 +15,10 @@ namespace BeatSaberMarkupLanguage.Components
 
         public bool expandCell = false;
 
+#if GAME_VERSION_1_29_0
+        public List<CustomCellInfo> data = new();
+#endif
+
         private LevelListTableCell songListTableCellInstance;
         private LevelPackCell levelPackTableCellInstance;
         private SimpleTextTableCell simpleTextTableCellInstance;
@@ -50,7 +54,9 @@ namespace BeatSaberMarkupLanguage.Components
             }
         }
 
+#if !GAME_VERSION_1_29_0
         public IList<CustomCellInfo> data { get; set; } = new List<CustomCellInfo>();
+#endif
 
         public LevelListTableCell GetTableCell()
         {

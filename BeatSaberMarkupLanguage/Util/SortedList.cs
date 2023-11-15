@@ -33,6 +33,10 @@ namespace BeatSaberMarkupLanguage.Util
 
         public T this[int index] { get => _list[index]; set => _list[index] = value; }
 
+#if GAME_VERSION_1_29_0
+        public static implicit operator List<T>(SortedList<T> list) => list._list;
+#endif
+
         public void Add(T item) => AddInternal(item);
 
         public void Clear() => _list.Clear();
