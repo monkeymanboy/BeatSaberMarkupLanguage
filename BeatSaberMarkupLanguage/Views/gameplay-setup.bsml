@@ -1,4 +1,4 @@
-﻿<bg xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
+﻿<bg id='root-object' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
   <tab-selector id='new-tab-selector' tab-tag='new-tab' anchor-pos-y='0' size-delta-y='6' size-delta-x='-20' child-expand-width='true' child-control-width='true' has-separator='false'/>
   <tab id='vanilla-tab' tags='new-tab' tab-name='Vanilla' anchor-pos-y='-8'>
     <macro.reparent transforms='vanilla-items'/>

@@ -9,6 +9,7 @@ using HMUI;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
+using Object = UnityEngine.Object;
 
 namespace BeatSaberMarkupLanguage.GameplaySetup
 {
@@ -22,6 +23,9 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
         private LayoutGroup _layoutGroup;
         private bool _listParsed;
         private bool _loaded;
+
+        [UIObject("root-object")]
+        private GameObject _rootObject;
 
         [UIComponent("new-tab-selector")]
         private TabSelector _tabSelector;
@@ -94,6 +98,11 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
         public void RemoveTab(string name)
         {
             _menus.RemoveAll(m => m.name == name);
+
+            if (_rootObject != null)
+            {
+                RefreshView();
+            }
         }
 
         public float CellSize() => 8f;
@@ -121,10 +130,9 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
             RectTransform textSegmentedControl = _gameplaySetupViewController.transform.Find("TextSegmentedControl") as RectTransform;
             textSegmentedControl.sizeDelta = new Vector2(0, 6);
             _layoutGroup = textSegmentedControl.GetComponent<LayoutGroup>();
-            BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), "BeatSaberMarkupLanguage.Views.gameplay-setup.bsml"), _gameplaySetupViewController.gameObject, this);
+            RefreshView();
 
             _modsList.tableView.SetDataSource(this, false);
-            _listParsed = false;
             _gameplaySetupViewController.didActivateEvent += GameplaySetupDidActivate;
             _gameplaySetupViewController.didDeactivateEvent += GameplaySetupDidDeactivate;
             _listModal.blockerClickedEvent += ClickedOffModal;
@@ -134,6 +142,9 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
         {
             _gameplaySetupViewController.didActivateEvent -= GameplaySetupDidActivate;
             _gameplaySetupViewController.didDeactivateEvent -= GameplaySetupDidDeactivate;
+            _listModal.blockerClickedEvent -= ClickedOffModal;
+
+            Object.Destroy(_rootObject);
         }
 
         public void LateDispose()
@@ -149,6 +160,20 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
             _gameplaySetupViewController = gameplaySetupViewController;
         }
 
+        private void RefreshView()
+        {
+            if (_gameplaySetupViewController == null)
+            {
+                return;
+            }
+
+            Object.Destroy(_rootObject);
+
+            BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), "BeatSaberMarkupLanguage.Views.gameplay-setup.bsml"), _gameplaySetupViewController.gameObject, this);
+
+            _listParsed = false;
+        }
+
         private void AddTab(Assembly assembly, string name, string resource, object host, MenuType menuType)
         {
             if (_menus.Any(m => m.name == name))
@@ -156,7 +181,13 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
                 return;
             }
 
-            _menus.Add(new GameplaySetupMenu(name, resource, host, assembly, menuType));
+            GameplaySetupMenu menu = new(name, resource, host, assembly, menuType);
+            _menus.Add(menu);
+
+            if (_rootObject != null)
+            {
+                RefreshView();
+            }
         }
 
         private GameplaySetupCell GetCell()
