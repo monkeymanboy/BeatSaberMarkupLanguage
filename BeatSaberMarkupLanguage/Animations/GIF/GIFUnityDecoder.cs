@@ -12,6 +12,13 @@ namespace BeatSaberMarkupLanguage.Animations
 {
     public class GIFUnityDecoder
     {
+        // https://learn.microsoft.com/en-us/dotnet/api/system.drawing.imaging.propertyitem.id?view=netframework-4.7.2
+        private const int PropertyTagFrameDelay = 0x5100;
+
+        // frame delay is in 100ths of a second; we want milliseconds
+        // https://www.w3.org/Graphics/GIF/spec-gif89a.txt (section 23, point vii)
+        private const int FrameDelayToMillisecondsRatio = 10;
+
         [Obsolete("Use ProcessAsync instead.")]
         public static IEnumerator Process(byte[] gifData, Action<AnimationInfo> callback)
         {
@@ -43,7 +50,9 @@ namespace BeatSaberMarkupLanguage.Animations
 #pragma warning restore CS0612, CS0618
             animationInfo.frames = new List<FrameInfo>(frameCount);
 
-            byte[] delays = gifImage.GetPropertyItem(20736).Value;
+            // TODO: detect static GIFs earlier so we don't create all the animation stuff for no reason
+            // FF FF FF 7F is int.MaxValue (little endian)
+            byte[] delays = frameCount > 1 ? gifImage.GetPropertyItem(PropertyTagFrameDelay).Value : new byte[] { 0xFF, 0xFF, 0xFF, 0x7F };
             Rectangle rect = new(Point.Empty, gifImage.Size);
 
             for (int i = 0; i < frameCount; i++)
@@ -60,7 +69,7 @@ namespace BeatSaberMarkupLanguage.Animations
                     Marshal.Copy(frame.Scan0, currentFrame.colors, 0, currentFrame.colors.Length);
 
                     int delayPropertyValue = BitConverter.ToInt32(delays, i * 4);
-                    currentFrame.delay = delayPropertyValue * 10;
+                    currentFrame.delay = delayPropertyValue * FrameDelayToMillisecondsRatio;
                     animationInfo.frames.Add(currentFrame);
                 }
             }

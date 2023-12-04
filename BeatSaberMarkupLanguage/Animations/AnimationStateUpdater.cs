@@ -30,7 +30,11 @@ namespace BeatSaberMarkupLanguage.Animations
 
         private void OnEnable()
         {
-            controllerData?.activeImages.Add(image);
+            if (controllerData != null)
+            {
+                controllerData.activeImages.Add(image);
+                image.sprite = controllerData.sprites[controllerData.uvIndex];
+            }
         }
 
         private void OnDisable()
