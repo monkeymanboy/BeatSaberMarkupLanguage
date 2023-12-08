@@ -19,6 +19,7 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
 
         private MainFlowCoordinator _mainFlowCoordinator;
         private GameplaySetupViewController _gameplaySetupViewController;
+        private HierarchyManager _hierarchyManager;
 
         private LayoutGroup _layoutGroup;
         private bool _listParsed;
@@ -142,7 +143,11 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
         {
             _gameplaySetupViewController.didActivateEvent -= GameplaySetupDidActivate;
             _gameplaySetupViewController.didDeactivateEvent -= GameplaySetupDidDeactivate;
-            _listModal.blockerClickedEvent -= ClickedOffModal;
+
+            if (_listModal != null)
+            {
+                _listModal.blockerClickedEvent -= ClickedOffModal;
+            }
 
             Object.Destroy(_rootObject);
         }
@@ -151,18 +156,21 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
         {
             _mainFlowCoordinator = null;
             _gameplaySetupViewController = null;
+            _hierarchyManager = null;
         }
 
         [Inject]
-        private void Construct(MainFlowCoordinator mainFlowCoordinator, GameplaySetupViewController gameplaySetupViewController)
+        private void Construct(MainFlowCoordinator mainFlowCoordinator, GameplaySetupViewController gameplaySetupViewController, HierarchyManager hierarchyManager)
         {
             _mainFlowCoordinator = mainFlowCoordinator;
             _gameplaySetupViewController = gameplaySetupViewController;
+            _hierarchyManager = hierarchyManager;
         }
 
         private void RefreshView()
         {
-            if (_gameplaySetupViewController == null)
+            // the isBeingDestroyed check is kind of a hack but it works
+            if (_gameplaySetupViewController == null || _hierarchyManager._screenSystem.mainScreen.isBeingDestroyed)
             {
                 return;
             }
