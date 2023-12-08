@@ -13,13 +13,10 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
 
         public override string[] Aliases => new[] { "settings-submenu" };
 
-        public override void Setup()
-        {
-            modSettingsFlowCoordinator = DiContainer.Resolve<ModSettingsFlowCoordinator>();
-        }
-
         public override GameObject CreateObject(Transform parent)
         {
+            modSettingsFlowCoordinator = DiContainer.Resolve<ModSettingsFlowCoordinator>();
+
             GameObject gameObj = new("BSMLSubmenu")
             {
                 layer = 5,
