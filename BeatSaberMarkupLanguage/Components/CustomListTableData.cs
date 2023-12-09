@@ -94,6 +94,10 @@ namespace BeatSaberMarkupLanguage.Components
             ImageView coverImage = levelPackTableCell._coverImage;
             ImageView selectionImage = levelPackTableCell._selectionImage;
 
+            // the cover image isn't perfectly square
+            coverImage.rectTransform.sizeDelta = new Vector2(0, -1);
+            selectionImage.rectTransform.sizeDelta = new Vector2(9, 9);
+
             foreach (Transform child in coverImage.transform)
             {
                 Destroy(child.gameObject);

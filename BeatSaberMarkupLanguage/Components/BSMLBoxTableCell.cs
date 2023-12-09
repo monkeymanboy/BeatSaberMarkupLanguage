@@ -15,7 +15,7 @@ namespace BeatSaberMarkupLanguage.Components
 
         private Color highlightedColor0 = new(0f, 64f / 85f, 1f, 1f);
 
-        private Color highlightedColor1 = new(0f, 64f / 85f, 1f, 0f);
+        private Color highlightedColor1 = new(0f, 64f / 85f, 1f, 1f);
 
         public void SetData(Sprite coverSprite)
         {
