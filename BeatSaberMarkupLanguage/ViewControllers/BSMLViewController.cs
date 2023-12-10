@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using HMUI;
+using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.ViewControllers
 {
@@ -10,7 +11,8 @@ namespace BeatSaberMarkupLanguage.ViewControllers
         [Obsolete("Use the base class' didActivateEvent instead.")]
         public Action<bool, bool, bool> didActivate;
 
-        private bool _destroyed;
+        private GameObject contentObject;
+        private bool destroyed;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -27,10 +29,7 @@ namespace BeatSaberMarkupLanguage.ViewControllers
 
         protected internal void ClearContents()
         {
-            for (int i = 0; i < transform.childCount; i++)
-            {
-                Destroy(transform.GetChild(i).gameObject);
-            }
+            Destroy(contentObject);
         }
 
         protected override void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
@@ -59,26 +58,37 @@ namespace BeatSaberMarkupLanguage.ViewControllers
 
         protected void ParseWithFallback()
         {
-            if (_destroyed)
+            if (destroyed)
             {
                 return;
             }
 
+            ClearContents();
+
+            contentObject = new GameObject("Contents");
+            contentObject.transform.SetParent(transform, false);
+
+            RectTransform rectTransform = contentObject.AddComponent<RectTransform>();
+            rectTransform.anchorMin = Vector2.zero;
+            rectTransform.anchorMax = Vector2.one;
+            rectTransform.sizeDelta = Vector2.zero;
+            rectTransform.anchoredPosition = Vector2.zero;
+
             try
             {
-                BSMLParser.instance.Parse(Content, gameObject, this);
+                BSMLParser.instance.Parse(Content, contentObject, this);
             }
             catch (Exception ex)
             {
                 Logger.Log.Error($"Error parsing BSML\n{ex}");
                 ClearContents();
-                BSMLParser.instance.Parse(string.Format(FallbackContent, Utilities.EscapeXml(ex.Message)), gameObject, this);
+                BSMLParser.instance.Parse(string.Format(FallbackContent, Utilities.EscapeXml(ex.Message)), contentObject, this);
             }
         }
 
         protected override void OnDestroy()
         {
-            _destroyed = true;
+            destroyed = true;
             base.OnDestroy();
         }
     }
