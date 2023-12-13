@@ -1,4 +1,5 @@
-﻿using HMUI;
+﻿using System.Collections;
+using HMUI;
 using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.Components
@@ -6,6 +7,8 @@ namespace BeatSaberMarkupLanguage.Components
     internal class TextPageScrollViewRefresher : MonoBehaviour
     {
         public TextPageScrollView scrollView;
+
+        private Coroutine coroutine;
 
         private void OnEnable()
         {
@@ -18,11 +21,19 @@ namespace BeatSaberMarkupLanguage.Components
 
         private void OnRectTransformDimensionsChange()
         {
-            if (scrollView != null)
+            if (isActiveAndEnabled && scrollView != null && coroutine == null)
             {
-                scrollView.SetText(scrollView._text.text);
-                scrollView.RefreshButtons();
+                // SetText can eventually enable/disable GameObjects which isn't allowed at this point (UI rebuild) so we delay our update
+                coroutine = StartCoroutine(UpdateLayoutCoroutine());
             }
+        }
+
+        private IEnumerator UpdateLayoutCoroutine()
+        {
+            yield return null;
+            scrollView.SetText(scrollView._text.text);
+            scrollView.RefreshButtons();
+            coroutine = null;
         }
     }
 }
