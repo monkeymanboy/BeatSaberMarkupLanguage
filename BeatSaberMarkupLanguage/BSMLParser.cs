@@ -428,7 +428,7 @@ namespace BeatSaberMarkupLanguage
                             }
                             catch (Exception)
                             {
-                                Logger.Log?.Error($"Error parsing '{propertyAliases.Key}'='{value}' in {parserParams.host?.GetType().FullName}");
+                                Logger.Log?.Error($"Error parsing '{propertyAliases.Key}'='{value}' in {parserParams.host.GetTypeFullNameSafe()}");
                                 throw;
                             }
                         }
