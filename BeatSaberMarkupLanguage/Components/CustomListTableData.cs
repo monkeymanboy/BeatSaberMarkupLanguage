@@ -94,9 +94,11 @@ namespace BeatSaberMarkupLanguage.Components
             ImageView coverImage = levelPackTableCell._coverImage;
             ImageView selectionImage = levelPackTableCell._selectionImage;
 
-            // the cover image isn't perfectly square
-            coverImage.rectTransform.sizeDelta = new Vector2(0, -1);
-            selectionImage.rectTransform.sizeDelta = new Vector2(9, 9);
+            // sizeDelta doesn't work properly when cell size changes
+            RectTransform selectionRectTransform = selectionImage.rectTransform;
+            selectionRectTransform.sizeDelta = Vector2.zero;
+            selectionRectTransform.anchorMin = new Vector2(-0.25f, -0.25f);
+            selectionRectTransform.anchorMax = new Vector2(1.25f, 1.25f);
 
             foreach (Transform child in coverImage.transform)
             {
