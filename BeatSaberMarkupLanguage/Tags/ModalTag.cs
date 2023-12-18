@@ -19,6 +19,7 @@ namespace BeatSaberMarkupLanguage.Tags
             }
 
             ModalView modalView = DiContainer.InstantiatePrefabForComponent<ModalView>(modalViewTemplate, parent);
+            modalView.name = "BSMLModal";
             modalView._presentPanelAnimations = modalViewTemplate._presentPanelAnimations;
             modalView._dismissPanelAnimation = modalViewTemplate._dismissPanelAnimation;
 

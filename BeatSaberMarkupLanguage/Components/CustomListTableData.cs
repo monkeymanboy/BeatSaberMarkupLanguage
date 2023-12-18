@@ -66,7 +66,7 @@ namespace BeatSaberMarkupLanguage.Components
             }
 
             tableCell._notOwned = false;
-
+            tableCell.name = $"BSML{nameof(LevelListTableCell)}";
             tableCell.reuseIdentifier = reuseIdentifier;
             return tableCell;
         }
@@ -84,6 +84,7 @@ namespace BeatSaberMarkupLanguage.Components
                 tableCell = InstantiateBoxTableCell(levelPackTableCellInstance);
             }
 
+            tableCell.name = nameof(BSMLBoxTableCell);
             tableCell.reuseIdentifier = reuseIdentifier;
             return tableCell;
         }
@@ -125,6 +126,7 @@ namespace BeatSaberMarkupLanguage.Components
                 tableCell = Instantiate(simpleTextTableCellInstance);
             }
 
+            tableCell.name = $"BSML{nameof(SimpleTextTableCell)}";
             tableCell.reuseIdentifier = reuseIdentifier;
             return tableCell;
         }
