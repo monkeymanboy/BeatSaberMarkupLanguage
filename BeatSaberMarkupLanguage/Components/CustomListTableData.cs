@@ -154,12 +154,12 @@ namespace BeatSaberMarkupLanguage.Components
 
                     nameText.text = data[idx].text;
                     authorText.text = data[idx].subtext;
-                    tableCell._coverImage.sprite = data[idx].icon == null ? Utilities.LoadSpriteFromTexture(Texture2D.blackTexture) : data[idx].icon;
+                    tableCell._coverImage.sprite = data[idx].icon == null ? Utilities.ImageResources.BlankSprite : data[idx].icon;
 
                     return tableCell;
                 case ListStyle.Box:
                     BSMLBoxTableCell cell = GetBoxTableCell();
-                    cell.SetData(data[idx].icon == null ? Utilities.LoadSpriteFromTexture(Texture2D.blackTexture) : data[idx].icon);
+                    cell.SetData(data[idx].icon == null ? Utilities.ImageResources.BlankSprite : data[idx].icon);
 
                     return cell;
                 case ListStyle.Simple:
