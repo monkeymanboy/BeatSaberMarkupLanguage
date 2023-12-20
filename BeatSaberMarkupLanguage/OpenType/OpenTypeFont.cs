@@ -29,7 +29,7 @@ namespace BeatSaberMarkupLanguage.OpenType
             offsetTable = offsets;
             tables = reader.ReadTableRecords(offsetTable);
             nameTableRecord = tables.Select(t => new TableRecord?(t))
-                .Where(t => t.Value.TableTag == OpenTypeTag.NAME).FirstOrDefault();
+                .FirstOrDefault(t => t.Value.TableTag == OpenTypeTag.NAME);
 
             if (lazyLoad)
             {

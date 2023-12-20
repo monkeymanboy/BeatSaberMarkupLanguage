@@ -28,7 +28,7 @@ namespace BeatSaberMarkupLanguage
             {
                 if (editIcon == null)
                 {
-                    editIcon = Resources.FindObjectsOfTypeAll<Image>().Where(x => x.sprite != null).First(x => x.sprite.name == "EditIcon").sprite;
+                    editIcon = Resources.FindObjectsOfTypeAll<Image>().First(x => x.sprite != null && x.sprite.name == "EditIcon").sprite;
                 }
 
                 return editIcon;
@@ -541,7 +541,7 @@ namespace BeatSaberMarkupLanguage
                 {
                     if (!whitePixel)
                     {
-                        whitePixel = Resources.FindObjectsOfTypeAll<Image>().Where(i => i.sprite != null).First(i => i.sprite.name == "WhitePixel").sprite;
+                        whitePixel = Resources.FindObjectsOfTypeAll<Image>().First(i => i.sprite != null && i.sprite.name == "WhitePixel").sprite;
                     }
 
                     return whitePixel;
