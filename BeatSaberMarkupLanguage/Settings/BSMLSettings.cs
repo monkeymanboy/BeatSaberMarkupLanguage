@@ -134,7 +134,7 @@ namespace BeatSaberMarkupLanguage.Settings
         {
             OptionsViewController optionsViewController = BeatSaberUI.DiContainer.Resolve<OptionsViewController>();
             _button = UnityEngine.Object.Instantiate(optionsViewController._settingsButton, optionsViewController.transform.Find("Wrapper"));
-            _button.GetComponentInChildren<LocalizedTextMeshProUGUI>().Key = "Mod Settings";
+            _button.GetComponentInChildren<LocalizedTextMeshProUGUI>().Key = "BSML_MOD_SETTINGS_BUTTON";
             _button.onClick.RemoveAllListeners();
             _button.onClick.AddListener(PresentSettings);
 

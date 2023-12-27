@@ -4,6 +4,7 @@ using System.Reflection;
 using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Settings.UI.ViewControllers;
 using HMUI;
+using Polyglot;
 using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.Settings
@@ -91,7 +92,7 @@ namespace BeatSaberMarkupLanguage.Settings
         {
             if (firstActivation)
             {
-                this._title = "Mod Settings";
+                SetTitle(Localization.Get("BSML_MOD_SETTINGS_TITLE"));
                 navigationController = BeatSaberUI.CreateViewController<NavigationController>();
                 BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), "BeatSaberMarkupLanguage.Views.settings-buttons.bsml"), navigationController.gameObject, this);
 

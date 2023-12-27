@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -7,7 +8,9 @@ using BeatSaberMarkupLanguage.Animations;
 using HarmonyLib;
 using IPA;
 using IPA.Config.Stores;
+using Polyglot;
 using TMPro;
+using UnityEngine;
 using Conf = IPA.Config.Config;
 using IPALogger = IPA.Logging.Logger;
 
@@ -43,6 +46,7 @@ namespace BeatSaberMarkupLanguage
         [OnStart]
         public void OnStart()
         {
+            AddLocalizationAsync().ContinueWith((task) => Logger.Log.Error($"Failed to add localization\n{task.Exception}"), TaskContinuationOptions.OnlyOnFaulted);
             LoadAndSetUpFontFallbacksAsync().ContinueWith((task) => Logger.Log.Error($"Failed to set up fallback fonts\n{task.Exception}"), TaskContinuationOptions.OnlyOnFaulted);
             AnimationController.instance.InitializeLoadingAnimation().ContinueWith((task) => Logger.Log.Error($"Failed to initialize loading animation\n{task.Exception}"), TaskContinuationOptions.OnlyOnFaulted);
         }
@@ -50,6 +54,16 @@ namespace BeatSaberMarkupLanguage
         [OnExit]
         public void OnExit()
         {
+        }
+
+        private async Task AddLocalizationAsync()
+        {
+            using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("BeatSaberMarkupLanguage.Resources.beat-saber-markup-language.csv"))
+            using (StreamReader reader = new(stream))
+            {
+                string content = await reader.ReadToEndAsync();
+                Localization.Instance.InputFiles.Add(new LocalizationAsset { Format = GoogleDriveDownloadFormat.CSV, TextAsset = new TextAsset(content) });
+            }
         }
 
         private async Task LoadAndSetUpFontFallbacksAsync()

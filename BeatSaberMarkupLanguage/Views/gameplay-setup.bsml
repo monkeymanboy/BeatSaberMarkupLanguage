@@ -1,15 +1,15 @@
 ﻿<bg id='root-object' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
   <tab-selector id='new-tab-selector' tab-tag='new-tab' anchor-pos-y='0' size-delta-y='6' size-delta-x='-20' child-expand-width='true' child-control-width='true' has-separator='false'/>
-  <tab id='vanilla-tab' tags='new-tab' tab-name='Vanilla' anchor-pos-y='-8'>
+  <tab id='vanilla-tab' tags='new-tab' tab-name-key='BSML_GAMEPLAY_SETUP_BASE_GAME_TAB' anchor-pos-y='-8'>
     <macro.reparent transforms='vanilla-items'/>
   </tab>
-  <tab id='mods-tab' tags='new-tab' tab-name='Mods'>
+  <tab id='mods-tab' tags='new-tab' tab-name-key='BSML_GAMEPLAY_SETUP_MODS_TAB'>
     <horizontal child-expand-width='false' pref-height='6' anchor-pos-y='28' size-delta-x='-16'>
       <page-button direction='Left' pref-width='6' pref-height='6' tags='left-button'/>
       <tab-selector tab-tag='mod-tab' child-expand-width='true' child-control-width='true' has-separator='false' page-count='3' left-button-tag='left-button' right-button-tag='right-button'/>
       <page-button direction='Right' pref-width='6' pref-height='6' tags='right-button'/>
     </horizontal>
-    <clickable-text text='👁' hover-hint='Edit Tab Visibility' on-click='show-modal' anchor-pos-x='97' anchor-pos-y='28' />
+    <clickable-text text='👁' hover-hint-key='BSML_GAMEPLAY_SETUP_EDIT_VISIBLE_TABS_HINT' on-click='show-modal' anchor-pos-x='97' anchor-pos-y='28' />
     <macro.for-each items='mod-menus' pass-back-tags='true'>
       <tab tags='mod-tab' tab-name='~tab-name' id='root-tab' anchor-max-y='0.75'/>
     </macro.for-each>

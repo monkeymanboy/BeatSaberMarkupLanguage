@@ -17,5 +17,11 @@
     "project-home": "https://github.com/monkeymanboy/BeatSaberMarkupLanguage",
     "project-source": "https://github.com/monkeymanboy/BeatSaberMarkupLanguage/tree/master/BeatSaberMarkupLanguage",
     "donate": "https://ko-fi.com/monkeymanboy"
+  },
+  "features": {
+    "SiraLocalizer.LocalizedPlugin": {
+      "id": "beat-saber-markup-language",
+      "resourcePath": "BeatSaberMarkupLanguage.Resources.beat-saber-markup-language.csv"
+    }
   }
 }

@@ -3,6 +3,6 @@
   <horizontal preferred-width="90">
     <text align="Center"
           word-wrapping="true"
-          text="Error loading settings."/>
+          text-key="BSML_MOD_SETTINGS_LOAD_ERROR"/>
   </horizontal>
 </settings-container>

@@ -137,6 +137,7 @@
   <ItemGroup>
     <EmbeddedResource Include="manifest.json" />
     <EmbeddedResource Include="Resources\*.apng" />
+    <EmbeddedResource Include="Resources\*.csv" />
     <EmbeddedResource Include="Resources\*.png" />
     <EmbeddedResource Include="Resources\description.md" />
     <EmbeddedResource Include="Views\*.bsml" />

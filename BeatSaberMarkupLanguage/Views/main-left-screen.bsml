@@ -1,7 +1,7 @@
 <bg xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd' id='root-object' size-delta-x='-50' anchor-pos-x='-10'>
   <vertical child-control-height='false'>
     <horizontal bg='panel-top' pad-left='10' pad-right='10' horizontal-fit='PreferredSize'>
-      <text text='Mods' align='Center' font-size='10'></text>
+      <text text-key='BSML_MODS_PANE_TITLE' align='Center' font-size='10'></text>
     </horizontal>
     <macro.if value='any-buttons'>
       <horizontal>
@@ -16,7 +16,7 @@
     </macro.if>
   </vertical>
   <macro.if value='!any-buttons'>
-    <text anchor-pos-y='6' size-delta-x='82' text='None of your currently installed mods add any buttons to this part of the menu!' font-align='Center' font-size='5'/>
+    <text anchor-pos-y='6' size-delta-x='82' text-key='BSML_NO_MODS' font-align='Center' font-size='5'/>
   </macro.if>
   <!--<modal show-event='show-pins' hide-event='close-modals' size-delta-x='35' size-delta-y='65' click-off-closes='true'>
     <vertical>
