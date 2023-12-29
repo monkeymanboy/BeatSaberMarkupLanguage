@@ -15,7 +15,7 @@ namespace BeatSaberMarkupLanguage.Tags
         {
             if (modalViewTemplate == null)
             {
-                modalViewTemplate = Resources.FindObjectsOfTypeAll<ModalView>().First(mv => mv.name == "DropdownTableView" && mv.transform.parent != null && mv.transform.parent.name == "ColorSchemeDropDown");
+                modalViewTemplate = Resources.FindObjectsOfTypeAll<ModalView>().Where(mv => mv.name == "DropdownTableView" && mv.transform.parent != null && mv.transform.parent.name == "ColorSchemeDropDown").First();
             }
 
             ModalView modalView = DiContainer.InstantiatePrefabForComponent<ModalView>(modalViewTemplate, parent);

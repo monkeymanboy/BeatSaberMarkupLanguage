@@ -72,7 +72,7 @@ namespace BeatSaberMarkupLanguage.Settings
 
         public void RemoveSettingsMenu(object host)
         {
-            CustomCellInfo menu = settingsMenus.FirstOrDefault(x => (x as SettingsMenu).host == host);
+            CustomCellInfo menu = settingsMenus.Cast<SettingsMenu>().Where(x => x.host == host).FirstOrDefault();
             if (menu != null)
             {
                 settingsMenus.Remove(menu);

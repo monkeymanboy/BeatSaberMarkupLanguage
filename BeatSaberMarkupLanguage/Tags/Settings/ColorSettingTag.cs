@@ -21,7 +21,7 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
         {
             if (baseSettings == null)
             {
-                baseSettings = Resources.FindObjectsOfTypeAll<FormattedFloatListSettingsValueController>().First(x => x.name == "VRRenderingScale");
+                baseSettings = Resources.FindObjectsOfTypeAll<FormattedFloatListSettingsValueController>().Where(x => x.name == "VRRenderingScale").First();
             }
 
             FormattedFloatListSettingsValueController baseSetting = Object.Instantiate(baseSettings, parent, false);
@@ -62,7 +62,7 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
 
             if (colorImage == null)
             {
-                colorImage = Resources.FindObjectsOfTypeAll<Image>().Where(i => i.sprite != null).First(i => i.gameObject.name == "ColorImage" && i.sprite.name == "NoteCircle");
+                colorImage = Resources.FindObjectsOfTypeAll<Image>().Where(i => i.sprite != null && i.gameObject.name == "ColorImage" && i.sprite.name == "NoteCircle").First();
             }
 
             Image instance = Object.Instantiate(colorImage, valuePick, false);

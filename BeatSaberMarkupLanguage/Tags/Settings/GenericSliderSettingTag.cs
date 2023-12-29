@@ -19,7 +19,7 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
         {
             if (controllersTransformTemplate == null)
             {
-                controllersTransformTemplate = Resources.FindObjectsOfTypeAll<LayoutElement>().First(x => x.name == "PositionX");
+                controllersTransformTemplate = Resources.FindObjectsOfTypeAll<LayoutElement>().Where(x => x.name == "PositionX").First();
             }
 
             LayoutElement baseSetting = Object.Instantiate(controllersTransformTemplate, parent, false);

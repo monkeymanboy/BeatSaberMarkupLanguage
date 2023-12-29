@@ -59,7 +59,7 @@ namespace BeatSaberMarkupLanguage.Components
             {
                 if (songListTableCellInstance == null)
                 {
-                    songListTableCellInstance = Resources.FindObjectsOfTypeAll<LevelListTableCell>().First(x => (x.name == "LevelListTableCell"));
+                    songListTableCellInstance = Resources.FindObjectsOfTypeAll<LevelListTableCell>().Where(x => x.name == "LevelListTableCell").First();
                 }
 
                 tableCell = Instantiate(songListTableCellInstance);
@@ -78,7 +78,7 @@ namespace BeatSaberMarkupLanguage.Components
             {
                 if (levelPackTableCellInstance == null)
                 {
-                    levelPackTableCellInstance = Resources.FindObjectsOfTypeAll<LevelPackCell>().First(x => x.name == "AnnotatedBeatmapLevelCollectionCell");
+                    levelPackTableCellInstance = Resources.FindObjectsOfTypeAll<LevelPackCell>().Where(x => x.name == "AnnotatedBeatmapLevelCollectionCell").First();
                 }
 
                 tableCell = InstantiateBoxTableCell(levelPackTableCellInstance);
@@ -120,7 +120,7 @@ namespace BeatSaberMarkupLanguage.Components
             {
                 if (simpleTextTableCellInstance == null)
                 {
-                    simpleTextTableCellInstance = Resources.FindObjectsOfTypeAll<SimpleTextTableCell>().First(x => x.name == "SimpleTextTableCell");
+                    simpleTextTableCellInstance = Resources.FindObjectsOfTypeAll<SimpleTextTableCell>().Where(x => x.name == "SimpleTextTableCell").First();
                 }
 
                 tableCell = Instantiate(simpleTextTableCellInstance);

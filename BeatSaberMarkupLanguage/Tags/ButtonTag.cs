@@ -19,7 +19,7 @@ namespace BeatSaberMarkupLanguage.Tags
         {
             if (buttonPrefab == null)
             {
-                buttonPrefab = Resources.FindObjectsOfTypeAll<Button>().Last(x => x.name == PrefabButton);
+                buttonPrefab = Resources.FindObjectsOfTypeAll<Button>().Where(x => x.name == PrefabButton).Last();
             }
 
             Button button = Object.Instantiate(buttonPrefab, parent, false);

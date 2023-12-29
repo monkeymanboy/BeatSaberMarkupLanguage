@@ -171,7 +171,7 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
 
                 if (fogMaterial == null)
                 {
-                    fogMaterial = Resources.FindObjectsOfTypeAll<Material>().First(x => x.name == "UIFogBG");
+                    fogMaterial = Resources.FindObjectsOfTypeAll<Material>().Where(x => x.name == "UIFogBG").First();
                 }
 
                 background.material = fogMaterial;

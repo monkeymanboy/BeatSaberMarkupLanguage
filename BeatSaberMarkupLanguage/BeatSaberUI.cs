@@ -53,7 +53,7 @@ namespace BeatSaberMarkupLanguage
             {
                 if (basicUIAudioManager == null)
                 {
-                    basicUIAudioManager = Object.FindObjectsOfType<BasicUIAudioManager>().FirstOrDefault();
+                    basicUIAudioManager = Object.FindObjectOfType<BasicUIAudioManager>();
                 }
 
                 return basicUIAudioManager;
@@ -308,7 +308,7 @@ namespace BeatSaberMarkupLanguage
 
         public static void SetButtonIcon(this Button button, Sprite icon)
         {
-            Image image = button.GetComponentsInChildren<Image>().First(x => x.name == "Icon");
+            Image image = button.GetComponentsInChildren<Image>().Where(x => x.name == "Icon").First();
             if (image != null)
             {
                 image.sprite = icon;

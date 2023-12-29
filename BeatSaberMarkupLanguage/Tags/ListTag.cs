@@ -29,7 +29,7 @@ namespace BeatSaberMarkupLanguage.Tags
 
             if (canvasTemplate == null)
             {
-                canvasTemplate = Resources.FindObjectsOfTypeAll<Canvas>().First(x => x.name == "DropdownTableView");
+                canvasTemplate = Resources.FindObjectsOfTypeAll<Canvas>().Where(x => x.name == "DropdownTableView").First();
             }
 
             gameObject.AddComponent<ScrollRect>();

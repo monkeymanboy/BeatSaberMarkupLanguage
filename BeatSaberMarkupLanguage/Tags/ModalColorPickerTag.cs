@@ -38,7 +38,7 @@ namespace BeatSaberMarkupLanguage.Tags
 
             if (currentColorTemplate == null)
             {
-                currentColorTemplate = Resources.FindObjectsOfTypeAll<ImageView>().Where(iv => iv.transform.parent != null).First(iv => iv.gameObject.name == "SaberColorA" && iv.transform.parent.name == "ColorSchemeView");
+                currentColorTemplate = Resources.FindObjectsOfTypeAll<ImageView>().Where(iv => iv.transform.parent != null && iv.gameObject.name == "SaberColorA" && iv.transform.parent.name == "ColorSchemeView").First();
             }
 
             RGBPanelController rgbController = Object.Instantiate(rgbTemplate, gameObject.transform, false);

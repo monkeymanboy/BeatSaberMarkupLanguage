@@ -22,7 +22,7 @@ namespace BeatSaberMarkupLanguage.Tags
         {
             if (toggleTemplate == null)
             {
-                toggleTemplate = Resources.FindObjectsOfTypeAll<Toggle>().Select(x => x.transform.parent.gameObject).First(p => p.name == PrefabToggleName);
+                toggleTemplate = Resources.FindObjectsOfTypeAll<Toggle>().Select(x => x.transform.parent.gameObject).Where(p => p.name == PrefabToggleName).First();
             }
 
             GameObject gameObject = Object.Instantiate(toggleTemplate, parent, false);

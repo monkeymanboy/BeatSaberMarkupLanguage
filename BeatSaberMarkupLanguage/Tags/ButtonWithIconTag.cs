@@ -16,7 +16,7 @@ namespace BeatSaberMarkupLanguage.Tags
         {
             if (buttonWithIconTemplate == null)
             {
-                buttonWithIconTemplate = Resources.FindObjectsOfTypeAll<Button>().Last(x => x.name == "PracticeButton");
+                buttonWithIconTemplate = Resources.FindObjectsOfTypeAll<Button>().Where(x => x.name == "PracticeButton").Last();
             }
 
             Button button = Object.Instantiate(buttonWithIconTemplate, parent, false);
@@ -25,7 +25,7 @@ namespace BeatSaberMarkupLanguage.Tags
 
             Object.Destroy(button.GetComponent<HoverHint>());
             Object.Destroy(button.GetComponent<LocalizedHoverHint>());
-            button.gameObject.AddComponent<ExternalComponents>().components.Add(button.GetComponentsInChildren<LayoutGroup>().First(x => x.name == "Content"));
+            button.gameObject.AddComponent<ExternalComponents>().components.Add(button.GetComponentsInChildren<LayoutGroup>().Where(x => x.name == "Content").First());
 
             Transform contentTransform = button.transform.Find("Content");
             Object.Destroy(contentTransform.Find("Text").gameObject);

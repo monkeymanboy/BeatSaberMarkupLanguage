@@ -18,7 +18,7 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
         {
             if (valueControllerTemplate == null)
             {
-                valueControllerTemplate = Resources.FindObjectsOfTypeAll<FormattedFloatListSettingsValueController>().First(x => x.name == "VRRenderingScale");
+                valueControllerTemplate = Resources.FindObjectsOfTypeAll<FormattedFloatListSettingsValueController>().Where(x => x.name == "VRRenderingScale").First();
             }
 
             FormattedFloatListSettingsValueController baseSetting = Object.Instantiate(valueControllerTemplate, parent, false);

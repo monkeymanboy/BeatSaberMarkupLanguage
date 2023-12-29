@@ -14,7 +14,7 @@ namespace BeatSaberMarkupLanguage.Tags
         {
             if (segmentedControlTemplate == null)
             {
-                segmentedControlTemplate = Resources.FindObjectsOfTypeAll<IconSegmentedControl>().First(x => x.name == "BeatmapCharacteristicSegmentedControl" && x._container != null);
+                segmentedControlTemplate = Resources.FindObjectsOfTypeAll<IconSegmentedControl>().Where(x => x.name == "BeatmapCharacteristicSegmentedControl" && x._container != null).First();
             }
 
             IconSegmentedControl iconSegmentedControl = DiContainer.InstantiatePrefabForComponent<IconSegmentedControl>(segmentedControlTemplate, parent);

@@ -13,7 +13,7 @@ namespace BeatSaberMarkupLanguage.Tags
         {
             if (leaderboardTemplate == null)
             {
-                leaderboardTemplate = Resources.FindObjectsOfTypeAll<LeaderboardTableView>().First(x => x.name == "LeaderboardTableView");
+                leaderboardTemplate = Resources.FindObjectsOfTypeAll<LeaderboardTableView>().Where(x => x.name == "LeaderboardTableView").First();
             }
 
             LeaderboardTableView table = DiContainer.InstantiatePrefabForComponent<LeaderboardTableView>(leaderboardTemplate, parent);

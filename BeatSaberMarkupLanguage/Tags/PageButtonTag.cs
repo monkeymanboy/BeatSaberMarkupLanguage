@@ -15,7 +15,7 @@ namespace BeatSaberMarkupLanguage.Tags
         {
             if (buttonTemplate == null)
             {
-                buttonTemplate = Resources.FindObjectsOfTypeAll<Button>().Last(x => x.name == "UpButton");
+                buttonTemplate = Resources.FindObjectsOfTypeAll<Button>().Where(x => x.name == "UpButton").Last();
             }
 
             Button button = Object.Instantiate(buttonTemplate, parent, false);

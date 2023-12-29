@@ -194,7 +194,7 @@ namespace BeatSaberMarkupLanguage.Components
         {
             if (BaseButton == null)
             {
-                BaseButton = Resources.FindObjectsOfTypeAll<Button>().First(x => x.name == "Q");
+                BaseButton = Resources.FindObjectsOfTypeAll<Button>().Where(x => x.name == "Q").First();
             }
         }
 
