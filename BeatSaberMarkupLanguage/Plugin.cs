@@ -46,9 +46,9 @@ namespace BeatSaberMarkupLanguage
         [OnStart]
         public void OnStart()
         {
-            AddLocalizationAsync().ContinueWith((task) => Logger.Log.Error($"Failed to add localization\n{task.Exception}"), TaskContinuationOptions.OnlyOnFaulted);
             LoadAndSetUpFontFallbacksAsync().ContinueWith((task) => Logger.Log.Error($"Failed to set up fallback fonts\n{task.Exception}"), TaskContinuationOptions.OnlyOnFaulted);
             AnimationController.instance.InitializeLoadingAnimation().ContinueWith((task) => Logger.Log.Error($"Failed to initialize loading animation\n{task.Exception}"), TaskContinuationOptions.OnlyOnFaulted);
+            AddLocalization();
         }
 
         [OnExit]
@@ -56,12 +56,12 @@ namespace BeatSaberMarkupLanguage
         {
         }
 
-        private async Task AddLocalizationAsync()
+        private void AddLocalization()
         {
             using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("BeatSaberMarkupLanguage.Resources.beat-saber-markup-language.csv"))
             using (StreamReader reader = new(stream))
             {
-                string content = await reader.ReadToEndAsync();
+                string content = reader.ReadToEnd();
                 Localization.Instance.InputFiles.Add(new LocalizationAsset { Format = GoogleDriveDownloadFormat.CSV, TextAsset = new TextAsset(content) });
             }
         }
