@@ -41,7 +41,7 @@ namespace BeatSaberMarkupLanguage.Tags
             (button.transform as RectTransform).pivot = new Vector2(.5f, .5f);
 
             ButtonIconImage btnIcon = button.gameObject.AddComponent<ButtonIconImage>();
-            btnIcon.image = button.gameObject.GetComponentsInChildren<Image>(true).FirstOrDefault(x => x.gameObject.name == "Icon");
+            btnIcon.image = button.gameObject.GetComponentsInChildren<Image>(true).Where(x => x.gameObject.name == "Icon").FirstOrDefault();
 
             button.gameObject.SetActive(true);
             return button.gameObject;

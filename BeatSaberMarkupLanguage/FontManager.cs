@@ -327,7 +327,7 @@ namespace BeatSaberMarkupLanguage
             {
                 if (fontInfoLookup.TryGetValue(family, out List<FontInfo> fonts))
                 {
-                    info = fonts.FirstOrDefault(p => p?.Info.Subfamily == subfamily);
+                    info = fonts.Where(p => p?.Info.Subfamily == subfamily).FirstOrDefault();
                     if (info == null)
                     {
                         if (!fallbackIfNoSubfamily)

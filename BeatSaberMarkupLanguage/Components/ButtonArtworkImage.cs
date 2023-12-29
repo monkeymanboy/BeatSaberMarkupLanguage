@@ -13,7 +13,7 @@ namespace BeatSaberMarkupLanguage.Components
         {
             if (image == null)
             {
-                image = GetComponentsInChildren<Image>().FirstOrDefault(x => x.name == "BGArtwork");
+                image = GetComponentsInChildren<Image>().Where(x => x.name == "BGArtwork").FirstOrDefault();
             }
 
             if (image == null)

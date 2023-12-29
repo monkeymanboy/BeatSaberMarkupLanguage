@@ -88,7 +88,7 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
                 return;
             }
 
-            GameplaySetupMenu menu = _menus.OfType<GameplaySetupMenu>().FirstOrDefault(x => x.name == name);
+            GameplaySetupMenu menu = _menus.OfType<GameplaySetupMenu>().Where(x => x.name == name).FirstOrDefault();
             menu?.SetVisible(isVisible);
         }
 

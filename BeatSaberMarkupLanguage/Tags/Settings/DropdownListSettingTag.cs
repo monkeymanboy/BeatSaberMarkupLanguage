@@ -20,7 +20,7 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
         {
             if (dropdownTemplate == null)
             {
-                dropdownTemplate = Resources.FindObjectsOfTypeAll<SimpleTextDropdown>().First(td => td.transform.parent != null && td.transform.parent.name == "NormalLevels").transform.parent.gameObject;
+                dropdownTemplate = Resources.FindObjectsOfTypeAll<SimpleTextDropdown>().Where(td => td.transform.parent != null).First(td => td.transform.parent.name == "NormalLevels").transform.parent.gameObject;
             }
 
             safePrefab = Object.Instantiate(dropdownTemplate);

@@ -62,7 +62,7 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
 
             if (colorImage == null)
             {
-                colorImage = Resources.FindObjectsOfTypeAll<Image>().First(i => i.sprite != null && i.gameObject.name == "ColorImage" && i.sprite.name == "NoteCircle");
+                colorImage = Resources.FindObjectsOfTypeAll<Image>().Where(i => i.sprite != null).First(i => i.gameObject.name == "ColorImage" && i.sprite.name == "NoteCircle");
             }
 
             Image instance = Object.Instantiate(colorImage, valuePick, false);
