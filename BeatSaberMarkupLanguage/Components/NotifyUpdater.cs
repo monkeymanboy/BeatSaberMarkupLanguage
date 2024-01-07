@@ -67,7 +67,6 @@ namespace BeatSaberMarkupLanguage.Components
 
         private void OnDestroy()
         {
-            Logger.Log?.Debug($"NotifyUpdater destroyed.");
             ActionDict.Clear();
             NotifyHost = null;
         }
