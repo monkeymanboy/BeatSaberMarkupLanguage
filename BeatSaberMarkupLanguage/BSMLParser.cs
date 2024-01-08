@@ -288,7 +288,7 @@ namespace BeatSaberMarkupLanguage
 
         private void HandleTagNode(XmlNode node, GameObject parent, BSMLParserParams parserParams, out IEnumerable<ComponentTypeWithData> componentInfo)
         {
-            if (!tags.TryGetValue(node.Name, out BSMLTag currentTag))
+            if (!this.tags.TryGetValue(node.Name, out BSMLTag currentTag))
             {
                 throw new TagNotFoundException(node.Name);
             }
@@ -322,25 +322,27 @@ namespace BeatSaberMarkupLanguage
             }
 
             object host = parserParams.host;
-            if (host != null && node.Attributes["id"] != null)
+            XmlAttribute id = node.Attributes["id"];
+            if (host != null && id != null)
             {
                 foreach (FieldInfo fieldInfo in host.GetType().GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public))
                 {
-                    if (fieldInfo.GetCustomAttribute<UIComponent>(true)?.id == node.Attributes["id"].Value)
+                    if (fieldInfo.GetCustomAttribute<UIComponent>(true)?.id == id.Value)
                     {
                         fieldInfo.SetValue(host, GetExternalComponent(currentNode, fieldInfo.FieldType));
                     }
 
-                    if (fieldInfo.GetCustomAttribute<UIObject>(true)?.id == node.Attributes["id"].Value)
+                    if (fieldInfo.GetCustomAttribute<UIObject>(true)?.id == id.Value)
                     {
                         fieldInfo.SetValue(host, currentNode);
                     }
                 }
             }
 
-            if (node.Attributes["tags"] != null)
+            XmlAttribute tags = node.Attributes["tags"];
+            if (tags != null)
             {
-                parserParams.AddObjectTags(currentNode, node.Attributes["tags"].Value.Split(','));
+                parserParams.AddObjectTags(currentNode, tags.Value.Split(','));
             }
 
             IEnumerable<ComponentTypeWithData> childrenComponents = Enumerable.Empty<ComponentTypeWithData>();
@@ -410,9 +412,10 @@ namespace BeatSaberMarkupLanguage
 
                 foreach (string alias in aliasList)
                 {
-                    if (node.Attributes[alias] != null)
+                    XmlAttribute attribute = node.Attributes[alias];
+                    if (attribute != null)
                     {
-                        string value = node.Attributes[alias].Value;
+                        string value = attribute.Value;
                         if (value.StartsWith(RetrieveValuePrefix, StringComparison.Ordinal))
                         {
                             try
