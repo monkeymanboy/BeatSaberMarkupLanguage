@@ -47,7 +47,7 @@ namespace BeatSaberMarkupLanguage
             typeHandlers.AddRange(Utilities.GetInstancesOfDescendants<TypeHandler>());
             foreach (TypeHandler typeHandler in typeHandlers.ToArray())
             {
-                Type type = (typeHandler.GetType().GetCustomAttributes(typeof(ComponentHandler), true).FirstOrDefault() as ComponentHandler)?.type;
+                Type type = typeHandler.GetType().GetCustomAttribute<ComponentHandler>(true)?.type;
                 if (type == null)
                 {
                     Logger.Log.Warn($"TypeHandler {typeHandler.GetType().FullName} does not have the [ComponentHandler] attribute and will be ignored.");
@@ -80,7 +80,7 @@ namespace BeatSaberMarkupLanguage
                 GameObject currentNode = tag.CreateObject(transform);
                 foreach (TypeHandler typeHandler in typeHandlers)
                 {
-                    Type type = (typeHandler.GetType().GetCustomAttributes(typeof(ComponentHandler), true).FirstOrDefault() as ComponentHandler).type;
+                    Type type = typeHandler.GetType().GetCustomAttribute<ComponentHandler>(true).type;
                     if (GetExternalComponent(currentNode, type) != null)
                         contents += $"  - {type.Name}\n";
                 }
@@ -140,7 +140,7 @@ namespace BeatSaberMarkupLanguage
                 {
                     string methodName = methodInfo.Name;
                     string uiActionName = null;
-                    if (methodInfo.GetCustomAttributes(typeof(UIAction), true).FirstOrDefault() is UIAction uiaction)
+                    if (methodInfo.GetCustomAttribute<UIAction>(true) is UIAction uiaction)
                     {
                         uiActionName = uiaction.id;
                         if (parserParams.actions.TryGetValue(uiActionName, out BSMLAction existing))
@@ -178,7 +178,7 @@ namespace BeatSaberMarkupLanguage
                 {
                     string fieldName = fieldInfo.Name;
                     string uiValueName = null;
-                    if (fieldInfo.GetCustomAttributes(typeof(UIValue), true).FirstOrDefault() is UIValue uivalue)
+                    if (fieldInfo.GetCustomAttribute<UIValue>(true) is UIValue uivalue)
                     {
                         uiValueName = uivalue.id;
                         if (parserParams.values.TryGetValue(uiValueName, out BSMLValue existing))
@@ -209,7 +209,7 @@ namespace BeatSaberMarkupLanguage
                         parserParams.values.Add(fieldName, new BSMLFieldValue(host, fieldInfo, false));
                     }
 
-                    if (fieldInfo.GetCustomAttributes(typeof(UIParams), true).FirstOrDefault() is UIParams uiParams)
+                    if (fieldInfo.GetCustomAttribute<UIParams>(true) != null)
                     {
                         fieldInfo.SetValue(host, parserParams);
                     }
@@ -219,7 +219,7 @@ namespace BeatSaberMarkupLanguage
                 {
                     string propName = propertyInfo.Name;
                     string uiValueName = null;
-                    if (propertyInfo.GetCustomAttributes(typeof(UIValue), true).FirstOrDefault() is UIValue uivalue)
+                    if (propertyInfo.GetCustomAttribute<UIValue>(true) is UIValue uivalue)
                     {
                         uiValueName = uivalue.id;
                         if (parserParams.values.TryGetValue(uiValueName, out BSMLValue existing))
@@ -298,7 +298,7 @@ namespace BeatSaberMarkupLanguage
             List<ComponentTypeWithData> componentTypes = new();
             foreach (TypeHandler typeHandler in typeHandlers)
             {
-                Type type = (typeHandler.GetType().GetCustomAttributes(typeof(ComponentHandler), true).FirstOrDefault() as ComponentHandler)?.type;
+                Type type = typeHandler.GetType().GetCustomAttribute<ComponentHandler>(true)?.type;
                 if (type == null)
                 {
                     continue;
@@ -326,12 +326,12 @@ namespace BeatSaberMarkupLanguage
             {
                 foreach (FieldInfo fieldInfo in host.GetType().GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public))
                 {
-                    if (fieldInfo.GetCustomAttributes(typeof(UIComponent), true).FirstOrDefault() is UIComponent uiComponent && uiComponent.id == node.Attributes["id"].Value)
+                    if (fieldInfo.GetCustomAttribute<UIComponent>(true)?.id == node.Attributes["id"].Value)
                     {
                         fieldInfo.SetValue(host, GetExternalComponent(currentNode, fieldInfo.FieldType));
                     }
 
-                    if (fieldInfo.GetCustomAttributes(typeof(UIObject), true).FirstOrDefault() is UIObject uiObject && uiObject.id == node.Attributes["id"].Value)
+                    if (fieldInfo.GetCustomAttribute<UIObject>(true)?.id == node.Attributes["id"].Value)
                     {
                         fieldInfo.SetValue(host, currentNode);
                     }
