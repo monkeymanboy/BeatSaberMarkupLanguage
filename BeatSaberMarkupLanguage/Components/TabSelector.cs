@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using BeatSaberMarkupLanguage.Parser;
+using BGLib.Polyglot;
 using HMUI;
-using Polyglot;
 using UnityEngine;
 using UnityEngine.UI;
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using BeatSaberMarkupLanguage.Parser;
+using BGLib.Polyglot;
 using HMUI;
 using TMPro;
 using UnityEngine;
@@ -569,7 +570,7 @@ namespace BeatSaberMarkupLanguage.Components
                     highlightedColors[i] = new Color(0.1f, 1, 0.1f, graphicColor.a);
                 }
 
-                Polyglot.LocalizedTextMeshProUGUI localizer = mybutton.GetComponentInChildren<Polyglot.LocalizedTextMeshProUGUI>(true);
+                LocalizedTextMeshProUGUI localizer = mybutton.GetComponentInChildren<LocalizedTextMeshProUGUI>(true);
                 if (localizer != null)
                 {
                     Object.Destroy(localizer);

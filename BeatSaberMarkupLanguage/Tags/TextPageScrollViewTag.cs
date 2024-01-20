@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using BeatSaberMarkupLanguage.Components;
+using BGLib.Polyglot;
 using HMUI;
 using TMPro;
 using UnityEngine;
@@ -17,7 +17,7 @@ namespace BeatSaberMarkupLanguage.Tags
         {
             if (pageTemplate == null)
             {
-                pageTemplate = Resources.FindObjectsOfTypeAll<ReleaseInfoViewController>().First()._textPageScrollView;
+                pageTemplate = Object.FindObjectOfType<EulaDisplayViewController>(true)._textPageScrollView;
             }
 
             TextPageScrollView scrollView = DiContainer.InstantiatePrefabForComponent<TextPageScrollView>(pageTemplate, parent);
@@ -27,7 +27,7 @@ namespace BeatSaberMarkupLanguage.Tags
             TextMeshProUGUI textMesh = scrollView._text;
             textMesh.text = "Default Text";
 
-            LocalizableText localizedText = CreateLocalizableText(textMesh.gameObject);
+            LocalizedTextMeshProUGUI localizedText = CreateLocalizableText(textMesh.gameObject);
 
             textMesh.gameObject.AddComponent<TextPageScrollViewRefresher>().scrollView = scrollView;
 

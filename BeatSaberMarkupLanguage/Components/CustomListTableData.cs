@@ -184,6 +184,13 @@ namespace BeatSaberMarkupLanguage.Components
             return data.Count();
         }
 
+        private void OnDestroy()
+        {
+            Destroy(songListTableCellInstance);
+            Destroy(levelPackTableCellInstance);
+            Destroy(simpleTextTableCellInstance);
+        }
+
         public class CustomCellInfo
         {
             public string text;

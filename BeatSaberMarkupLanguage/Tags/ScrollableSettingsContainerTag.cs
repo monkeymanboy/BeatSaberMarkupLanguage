@@ -12,6 +12,8 @@ namespace BeatSaberMarkupLanguage.Tags
             GameObject content = base.CreateObject(parent);
             ExternalComponents externalComponents = content.GetComponent<ExternalComponents>();
             RectTransform scrollTransform = externalComponents.Get<RectTransform>();
+            scrollTransform.anchorMin = Vector2.zero;
+            scrollTransform.anchorMax = Vector2.one;
             scrollTransform.anchoredPosition = new Vector2(2, 6);
             scrollTransform.sizeDelta = new Vector2(0, -20);
             scrollTransform.gameObject.name = "BSMLScrollableSettingsContainer";

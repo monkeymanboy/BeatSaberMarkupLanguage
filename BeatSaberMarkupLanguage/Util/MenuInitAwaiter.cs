@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Zenject;
 
-namespace BeatSaberMarkupLanguage
+namespace BeatSaberMarkupLanguage.Util
 {
     internal class MenuInitAwaiter : IInitializable, IDisposable
     {
@@ -19,9 +19,5 @@ namespace BeatSaberMarkupLanguage
         }
 
         internal static Task WaitForMainMenuAsync() => _taskCompletionSource.Task;
-
-        private struct VoidResult
-        {
-        }
     }
 }

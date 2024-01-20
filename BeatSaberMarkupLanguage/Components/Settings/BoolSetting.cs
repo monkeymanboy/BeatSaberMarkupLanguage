@@ -1,5 +1,5 @@
 ﻿using System;
-using Polyglot;
+using BGLib.Polyglot;
 
 namespace BeatSaberMarkupLanguage.Components.Settings
 {

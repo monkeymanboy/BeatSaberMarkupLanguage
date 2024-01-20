@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Polyglot;
+using BGLib.Polyglot;
 
 namespace BeatSaberMarkupLanguage.TypeHandlers
 {
@@ -22,7 +22,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                     localizedText.enabled = true;
                 })
             },
-            { "maintainTextAlignment", new Action<LocalizedTextMeshProUGUI, string>((localizedText, value) => localizedText.MaintainTextAlignment = Parse.Bool(value)) },
+            { "maintainTextAlignment", new Action<LocalizedTextMeshProUGUI, string>((localizedText, value) => localizedText.maintainTextAlignment = Parse.Bool(value)) },
         };
     }
 }

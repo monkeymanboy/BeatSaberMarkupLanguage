@@ -1,4 +1,3 @@
-using System.Linq;
 using BeatSaberMarkupLanguage.Components;
 using HMUI;
 using UnityEngine;
@@ -17,7 +16,7 @@ namespace BeatSaberMarkupLanguage.Tags
             {
                 if (scrollViewTemplate == null)
                 {
-                    scrollViewTemplate = Resources.FindObjectsOfTypeAll<ReleaseInfoViewController>().First()._textPageScrollView;
+                    scrollViewTemplate = Object.FindObjectOfType<EulaDisplayViewController>(true)._textPageScrollView;
                 }
 
                 return scrollViewTemplate;

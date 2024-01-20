@@ -14,6 +14,7 @@ namespace BeatSaberMarkupLanguage.Tags
                 layer = 5,
             };
 
+            gameObj.SetActive(false);
             gameObj.transform.SetParent(parent, false);
 
             FormattableText textMesh = gameObj.AddComponent<FormattableText>();
@@ -27,6 +28,9 @@ namespace BeatSaberMarkupLanguage.Tags
             textMesh.rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
 
             CreateLocalizableText(gameObj);
+
+            gameObj.SetActive(true);
+
             return gameObj;
         }
     }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using BGLib.Polyglot;
 using HMUI;
-using Polyglot;
 using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.TypeHandlers

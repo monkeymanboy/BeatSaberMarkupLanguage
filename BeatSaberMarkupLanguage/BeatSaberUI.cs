@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using BeatSaberMarkupLanguage.Animations;
+using BGLib.Polyglot;
 using HMUI;
 using IPA.Utilities.Async;
 using TMPro;
@@ -275,7 +276,7 @@ namespace BeatSaberMarkupLanguage
 
         public static void SetButtonText(this Button button, string text)
         {
-            Polyglot.LocalizedTextMeshProUGUI localizer = button.GetComponentInChildren<Polyglot.LocalizedTextMeshProUGUI>(true);
+            LocalizedTextMeshProUGUI localizer = button.GetComponentInChildren<LocalizedTextMeshProUGUI>(true);
             if (localizer != null)
             {
                 Object.Destroy(localizer);

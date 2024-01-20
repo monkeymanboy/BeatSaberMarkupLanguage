@@ -2,7 +2,7 @@
 using System.Linq;
 using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.Components.Settings;
-using Polyglot;
+using BGLib.Polyglot;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;

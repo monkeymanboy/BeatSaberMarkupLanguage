@@ -2,6 +2,7 @@
 using System.Linq;
 using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.Components.Settings;
+using BGLib.Polyglot;
 using HMUI;
 using TMPro;
 using UnityEngine;
@@ -36,8 +37,8 @@ namespace BeatSaberMarkupLanguage.Tags
             TextMeshProUGUI text = nameText.GetComponent<TextMeshProUGUI>();
             text.text = "Default Text";
 
-            LocalizableText localizedText = CreateLocalizableText(nameText);
-            localizedText.MaintainTextAlignment = true;
+            LocalizedTextMeshProUGUI localizedText = CreateLocalizableText(nameText);
+            localizedText.maintainTextAlignment = true;
 
             List<Component> externalComponents = gameObject.AddComponent<ExternalComponents>().components;
             externalComponents.Add(text);

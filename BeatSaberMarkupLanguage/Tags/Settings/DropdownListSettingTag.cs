@@ -2,8 +2,8 @@
 using System.Linq;
 using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.Components.Settings;
+using BGLib.Polyglot;
 using HMUI;
-using Polyglot;
 using UnityEngine;
 using UnityEngine.UI;
 

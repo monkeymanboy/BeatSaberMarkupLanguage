@@ -1,6 +1,6 @@
 ﻿using System;
-using BeatSaberMarkupLanguage.Components;
-using Polyglot;
+using BeatSaberMarkupLanguage.Util;
+using BGLib.Polyglot;
 using TMPro;
 using UnityEngine;
 using Zenject;
@@ -23,7 +23,7 @@ namespace BeatSaberMarkupLanguage.Tags
         {
         }
 
-        protected LocalizableText CreateLocalizableText(GameObject gameObject)
+        protected LocalizedTextMeshProUGUI CreateLocalizableText(GameObject gameObject)
         {
             if (!gameObject.TryGetComponent(out TextMeshProUGUI textMesh))
             {
@@ -33,14 +33,14 @@ namespace BeatSaberMarkupLanguage.Tags
             bool wasActive = gameObject.activeSelf;
             gameObject.SetActive(false);
 
-            LocalizableText localizableText = gameObject.AddComponent<LocalizableText>();
+            LocalizedTextMeshProUGUI localizedText = gameObject.AddComponent<LocalizedTextMeshProUGUI>();
 
-            localizableText.enabled = false;
-            localizableText.TextMesh = textMesh;
+            localizedText.enabled = false;
+            localizedText.localizedComponent = textMesh;
 
             gameObject.SetActive(wasActive);
 
-            return localizableText;
+            return localizedText;
         }
 
         protected LocalizedTextMeshProUGUI ConfigureLocalizedText(GameObject gameObject)
@@ -48,7 +48,7 @@ namespace BeatSaberMarkupLanguage.Tags
             LocalizedTextMeshProUGUI localizedText = gameObject.GetComponent<LocalizedTextMeshProUGUI>();
 
             localizedText.enabled = false;
-            localizedText.Key = string.Empty;
+            localizedText.key = string.Empty;
             Localization.Instance.RemoveOnLocalizeEvent(localizedText);
 
             return localizedText;

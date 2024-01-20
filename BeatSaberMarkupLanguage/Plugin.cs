@@ -1,16 +1,15 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using BeatSaberMarkupLanguage.Animations;
+using BeatSaberMarkupLanguage.Harmony_Patches;
+using BeatSaberMarkupLanguage.Util;
 using HarmonyLib;
 using IPA;
 using IPA.Config.Stores;
-using Polyglot;
 using TMPro;
-using UnityEngine;
 using Conf = IPA.Config.Config;
 using IPALogger = IPA.Logging.Logger;
 
@@ -48,7 +47,6 @@ namespace BeatSaberMarkupLanguage
         {
             LoadAndSetUpFontFallbacksAsync().ContinueWith((task) => Logger.Log.Error($"Failed to set up fallback fonts\n{task.Exception}"), TaskContinuationOptions.OnlyOnFaulted);
             AnimationController.instance.InitializeLoadingAnimation().ContinueWith((task) => Logger.Log.Error($"Failed to initialize loading animation\n{task.Exception}"), TaskContinuationOptions.OnlyOnFaulted);
-            AddLocalization();
         }
 
         [OnExit]
@@ -56,19 +54,10 @@ namespace BeatSaberMarkupLanguage
         {
         }
 
-        private void AddLocalization()
-        {
-            using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("BeatSaberMarkupLanguage.Resources.beat-saber-markup-language.csv"))
-            using (StreamReader reader = new(stream))
-            {
-                string content = reader.ReadToEnd();
-                Localization.Instance.InputFiles.Add(new LocalizationAsset { Format = GoogleDriveDownloadFormat.CSV, TextAsset = new TextAsset(content) });
-            }
-        }
-
         private async Task LoadAndSetUpFontFallbacksAsync()
         {
             await FontManager.AsyncLoadSystemFonts();
+            await MainSystemInitAwaiter.WaitForMainSystemInitAsync();
 
             if (!FontManager.TryGetTMPFontByFullName("Segoe UI", out TMP_FontAsset fallback) &&
                 !FontManager.TryGetTMPFontByFamily("Arial", out fallback))

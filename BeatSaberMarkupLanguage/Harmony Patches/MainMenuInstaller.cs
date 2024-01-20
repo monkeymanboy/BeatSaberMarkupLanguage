@@ -2,6 +2,7 @@
 using BeatSaberMarkupLanguage.Animations;
 using BeatSaberMarkupLanguage.MenuButtons;
 using BeatSaberMarkupLanguage.Settings;
+using BeatSaberMarkupLanguage.Util;
 using HarmonyLib;
 using Zenject;
 
@@ -44,7 +45,7 @@ namespace BeatSaberMarkupLanguage.Harmony_Patches
             container.Bind(typeof(IInitializable), typeof(IDisposable)).To<MenuInitAwaiter>().AsSingle();
 
 #if DEBUG
-            container.Bind(typeof(IInitializable)).To<Util.TestPresenter>().AsSingle();
+            container.Bind(typeof(IInitializable)).To<TestPresenter>().AsSingle();
 #endif
         }
     }

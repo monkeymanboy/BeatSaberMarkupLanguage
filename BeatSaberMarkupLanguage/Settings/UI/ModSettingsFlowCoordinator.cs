@@ -3,8 +3,8 @@ using System.Linq;
 using System.Reflection;
 using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Settings.UI.ViewControllers;
+using BGLib.Polyglot;
 using HMUI;
-using Polyglot;
 using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.Settings

@@ -1,5 +1,6 @@
 ﻿using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.Settings;
+using BGLib.Polyglot;
 using HMUI;
 using TMPro;
 using UnityEngine;
@@ -34,7 +35,7 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
             clickableText.color = Color.white;
             clickableText.rectTransform.sizeDelta = new Vector2(90, 8);
 
-            LocalizableText localizedText = CreateLocalizableText(gameObj);
+            LocalizedTextMeshProUGUI localizedText = CreateLocalizableText(gameObj);
 
             ViewController submenuController = BeatSaberUI.CreateViewController<ViewController>();
             SettingsMenu.SetupViewControllerTransform(submenuController);
