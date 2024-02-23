@@ -15,9 +15,9 @@ namespace BeatSaberMarkupLanguage.Components
 
         public bool expandCell = false;
 
-        private LevelListTableCell songListTableCellInstance;
-        private LevelPackCell levelPackTableCellInstance;
-        private SimpleTextTableCell simpleTextTableCellInstance;
+        private LevelListTableCell songListTableCellPrefab;
+        private LevelPackCell levelPackTableCellPrefab;
+        private SimpleTextTableCell simpleTextTableCellPrefab;
         private ListStyle listStyle = ListStyle.List;
 
         public enum ListStyle
@@ -57,12 +57,12 @@ namespace BeatSaberMarkupLanguage.Components
             LevelListTableCell tableCell = (LevelListTableCell)tableView.DequeueReusableCellForIdentifier(reuseIdentifier);
             if (!tableCell)
             {
-                if (songListTableCellInstance == null)
+                if (songListTableCellPrefab == null)
                 {
-                    songListTableCellInstance = Resources.FindObjectsOfTypeAll<LevelListTableCell>().Where(x => x.name == "LevelListTableCell").First();
+                    songListTableCellPrefab = BeatSaberUI.DiContainer.Resolve<LevelCollectionViewController>().GetComponentInChildren<LevelCollectionTableView>()._levelCellPrefab;
                 }
 
-                tableCell = Instantiate(songListTableCellInstance);
+                tableCell = Instantiate(songListTableCellPrefab);
             }
 
             tableCell._notOwned = false;
@@ -76,12 +76,12 @@ namespace BeatSaberMarkupLanguage.Components
             BSMLBoxTableCell tableCell = (BSMLBoxTableCell)tableView.DequeueReusableCellForIdentifier(reuseIdentifier);
             if (!tableCell)
             {
-                if (levelPackTableCellInstance == null)
+                if (levelPackTableCellPrefab == null)
                 {
-                    levelPackTableCellInstance = Resources.FindObjectsOfTypeAll<LevelPackCell>().Where(x => x.name == "AnnotatedBeatmapLevelCollectionCell").First();
+                    levelPackTableCellPrefab = BeatSaberUI.DiContainer.Resolve<AnnotatedBeatmapLevelCollectionsViewController>().GetComponentInChildren<AnnotatedBeatmapLevelCollectionsGridView>()._cellPrefab;
                 }
 
-                tableCell = InstantiateBoxTableCell(levelPackTableCellInstance);
+                tableCell = InstantiateBoxTableCell(levelPackTableCellPrefab);
             }
 
             tableCell.name = nameof(BSMLBoxTableCell);
@@ -118,12 +118,12 @@ namespace BeatSaberMarkupLanguage.Components
             SimpleTextTableCell tableCell = (SimpleTextTableCell)tableView.DequeueReusableCellForIdentifier(reuseIdentifier);
             if (!tableCell)
             {
-                if (simpleTextTableCellInstance == null)
+                if (simpleTextTableCellPrefab == null)
                 {
-                    simpleTextTableCellInstance = Resources.FindObjectsOfTypeAll<SimpleTextTableCell>().Where(x => x.name == "SimpleTextTableCell").First();
+                    simpleTextTableCellPrefab = BeatSaberUI.DiContainer.Resolve<PlayerOptionsViewController>().GetComponentInChildren<SimpleTextDropdown>()._cellPrefab;
                 }
 
-                tableCell = Instantiate(simpleTextTableCellInstance);
+                tableCell = Instantiate(simpleTextTableCellPrefab);
             }
 
             tableCell.name = $"BSML{nameof(SimpleTextTableCell)}";
@@ -182,13 +182,6 @@ namespace BeatSaberMarkupLanguage.Components
         public int NumberOfCells()
         {
             return data.Count();
-        }
-
-        private void OnDestroy()
-        {
-            Destroy(songListTableCellInstance);
-            Destroy(levelPackTableCellInstance);
-            Destroy(simpleTextTableCellInstance);
         }
 
         public class CustomCellInfo
