@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using UnityEngine;
 using UnityEngine.EventSystems;
 using VRUIControls;
 
@@ -78,7 +79,7 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
         {
             if (shader == null)
             {
-                shader = Shader.Find("Custom/Glowing");
+                shader = Resources.FindObjectsOfTypeAll<Shader>().First(s => s.name == "Custom/Glowing");
             }
 
             _material = GetComponent<MeshRenderer>().material;
