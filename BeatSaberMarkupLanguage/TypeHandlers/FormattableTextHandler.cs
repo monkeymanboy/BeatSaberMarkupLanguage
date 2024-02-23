@@ -24,13 +24,13 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
         {
             base.HandleType(componentType, parserParams);
             FormattableText formattableText = componentType.component as FormattableText;
-            NotifyUpdater updater = null;
+
             if (componentType.data.TryGetValue("data", out string dataStr))
             {
                 if (parserParams.values.TryGetValue(dataStr, out BSMLValue dataValue))
                 {
                     formattableText.Data = dataValue.GetValue();
-                    BindValue(componentType, parserParams, dataValue, val => formattableText.Data = val, updater);
+                    BindValue(componentType, parserParams, dataValue, val => formattableText.Data = val);
                 }
                 else
                 {
@@ -43,7 +43,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 if (parserParams.values.TryGetValue(formatterStr, out BSMLValue formatterValue))
                 {
                     formattableText.SetFormatter(formatterValue.GetValue());
-                    updater = BindValue(componentType, parserParams, formatterValue, val => formattableText.SetFormatter(val), updater);
+                    BindValue(componentType, parserParams, formatterValue, val => formattableText.SetFormatter(val));
                 }
                 else
                 {

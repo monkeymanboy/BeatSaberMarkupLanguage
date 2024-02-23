@@ -118,10 +118,7 @@ namespace BeatSaberMarkupLanguage
 
         public BSMLParserParams Parse(XmlNode parentNode, GameObject parent, object host = null)
         {
-            BSMLParserParams parserParams = new()
-            {
-                host = host,
-            };
+            BSMLParserParams parserParams = new(host);
 
             FieldAccessOption fieldAccessOptions = FieldAccessOption.Auto;
             PropertyAccessOption propertyAccessOptions = PropertyAccessOption.Auto;

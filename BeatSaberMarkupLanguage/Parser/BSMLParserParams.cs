@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using BeatSaberMarkupLanguage.Components;
 using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.Parser
@@ -12,6 +14,14 @@ namespace BeatSaberMarkupLanguage.Parser
 
         private readonly Dictionary<string, Action> events = new();
         private readonly Dictionary<string, List<GameObject>> objectsWithTag = new();
+
+        internal BSMLParserParams(object host)
+        {
+            this.host = host;
+            this.NotifyUpdater = host is INotifyPropertyChanged notifyHost ? new NotifyUpdater(notifyHost) : null;
+        }
+
+        internal NotifyUpdater NotifyUpdater { get; }
 
         public void AddEvent(string ids, Action action)
         {

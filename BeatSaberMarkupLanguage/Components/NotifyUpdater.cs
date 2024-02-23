@@ -2,73 +2,89 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
-using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.Components
 {
-    public class NotifyUpdater : MonoBehaviour
+    internal class NotifyUpdater
     {
-        private INotifyPropertyChanged notifyHost;
+        private readonly Dictionary<string, PropertyAction> actionDict = new();
+        private readonly INotifyPropertyChanged notifyHost;
 
-        public INotifyPropertyChanged NotifyHost
+        internal NotifyUpdater(INotifyPropertyChanged notifyHost)
         {
-            get => notifyHost;
-            set
-            {
-                if (notifyHost != null)
-                {
-                    notifyHost.PropertyChanged -= NotifyHost_PropertyChanged;
-                }
-
-                notifyHost = value;
-
-                if (notifyHost != null)
-                {
-                    notifyHost.PropertyChanged -= NotifyHost_PropertyChanged;
-                    notifyHost.PropertyChanged += NotifyHost_PropertyChanged;
-                }
-            }
+            this.notifyHost = notifyHost;
+            this.notifyHost.PropertyChanged += NotifyHost_PropertyChanged;
         }
 
-        private Dictionary<string, Action<object>> ActionDict { get; set; } = new Dictionary<string, Action<object>>();
-
-        public bool AddAction(string propertyName, Action<object> action)
+        internal bool AddAction(string propertyName, Action<object> action)
         {
-            ActionDict.Add(propertyName, action);
+            if (actionDict.TryGetValue(propertyName, out PropertyAction notify))
+            {
+                notify.AddAction(action);
+            }
+            else
+            {
+                PropertyInfo prop = notifyHost.GetType().GetProperty(propertyName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+
+                if (prop == null)
+                {
+                    Logger.Log.Error($"No property '{propertyName}' on object of type '{notifyHost.GetType().FullName}'");
+                    return false;
+                }
+
+                if (prop.GetMethod == null)
+                {
+                    Logger.Log.Error($"Property '{propertyName}' on object of type '{notifyHost.GetType().FullName}' does not have a getter");
+                    return false;
+                }
+
+                actionDict.Add(propertyName, new PropertyAction(prop, action));
+            }
+
             return true;
-        }
-
-        public bool RemoveAction(string propertyName)
-        {
-            if (ActionDict != null)
-            {
-                return ActionDict.Remove(propertyName);
-            }
-
-            return false;
         }
 
         private void NotifyHost_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            // OnDestroy is not called for disabled objects so this will make sure it is called if it gets called while destroyed
-            if (this == null)
+            // https://learn.microsoft.com/en-us/dotnet/api/system.componentmodel.propertychangedeventargs.propertyname?view=netframework-4.7.2#remarks
+            if (string.IsNullOrEmpty(e.PropertyName))
             {
-                OnDestroy();
-                return;
+                foreach (PropertyAction propertyAction in actionDict.Values)
+                {
+                    propertyAction.Invoke(sender);
+                }
             }
-
-            PropertyInfo prop = sender.GetType().GetProperty(e.PropertyName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-
-            if (ActionDict.TryGetValue(e.PropertyName, out Action<object> action))
+            else if (actionDict.TryGetValue(e.PropertyName, out PropertyAction propertyAction))
             {
-                action?.Invoke(prop.GetValue(sender));
+                propertyAction.Invoke(sender);
+            }
+            else
+            {
+                Logger.Log.Warn($"PropertyChanged invoked for '{e.PropertyName}' on object of type '{sender.GetType().FullName}' but no such property is registered!");
             }
         }
 
-        private void OnDestroy()
+        private class PropertyAction
         {
-            ActionDict.Clear();
-            NotifyHost = null;
+            private readonly PropertyInfo property;
+
+            private Action<object> action;
+
+            internal PropertyAction(PropertyInfo property, Action<object> action)
+            {
+                this.property = property;
+                this.action = action;
+            }
+
+            internal void AddAction(Action<object> newAction)
+            {
+                action += newAction;
+            }
+
+            internal void Invoke(object sender)
+            {
+                action.Invoke(property.GetValue(sender));
+            }
         }
     }
 }
