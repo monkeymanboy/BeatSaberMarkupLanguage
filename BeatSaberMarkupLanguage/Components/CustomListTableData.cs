@@ -59,7 +59,7 @@ namespace BeatSaberMarkupLanguage.Components
             {
                 if (songListTableCellPrefab == null)
                 {
-                    songListTableCellPrefab = BeatSaberUI.DiContainer.Resolve<LevelCollectionViewController>().GetComponentInChildren<LevelCollectionTableView>()._levelCellPrefab;
+                    songListTableCellPrefab = BeatSaberUI.DiContainer.Resolve<LevelCollectionViewController>().GetComponentInChildren<LevelCollectionTableView>(true)._levelCellPrefab;
                 }
 
                 tableCell = Instantiate(songListTableCellPrefab);
@@ -78,7 +78,7 @@ namespace BeatSaberMarkupLanguage.Components
             {
                 if (levelPackTableCellPrefab == null)
                 {
-                    levelPackTableCellPrefab = BeatSaberUI.DiContainer.Resolve<AnnotatedBeatmapLevelCollectionsViewController>().GetComponentInChildren<AnnotatedBeatmapLevelCollectionsGridView>()._cellPrefab;
+                    levelPackTableCellPrefab = BeatSaberUI.DiContainer.Resolve<AnnotatedBeatmapLevelCollectionsViewController>().GetComponentInChildren<AnnotatedBeatmapLevelCollectionsGridView>(true)._cellPrefab;
                 }
 
                 tableCell = InstantiateBoxTableCell(levelPackTableCellPrefab);
@@ -120,7 +120,7 @@ namespace BeatSaberMarkupLanguage.Components
             {
                 if (simpleTextTableCellPrefab == null)
                 {
-                    simpleTextTableCellPrefab = BeatSaberUI.DiContainer.Resolve<PlayerOptionsViewController>().GetComponentInChildren<SimpleTextDropdown>()._cellPrefab;
+                    simpleTextTableCellPrefab = BeatSaberUI.DiContainer.Resolve<PlayerOptionsViewController>().GetComponentInChildren<SimpleTextDropdown>(true)._cellPrefab;
                 }
 
                 tableCell = Instantiate(simpleTextTableCellPrefab);
