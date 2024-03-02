@@ -17,7 +17,7 @@ namespace BeatSaberMarkupLanguage.Util
             }
             catch (Exception ex)
             {
-                Logger.Log?.Error($"Error invoking PropertyChanged\n{ex}");
+                Logger.Log?.Error($"Error invoking PropertyChanged for property '{propertyName}' on {GetType().FullName}\n{ex}");
             }
         }
     }
