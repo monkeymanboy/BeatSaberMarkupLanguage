@@ -105,7 +105,7 @@ namespace BeatSaberMarkupLanguage
 
         public static string EscapeXml(string source) => System.Security.SecurityElement.Escape(source);
 
-        [Obsolete("LUse LoadTextureFromAssemblyAsync(Assembly, string) instead.")]
+        [Obsolete("Use LoadTextureFromAssemblyAsync(Assembly, string) instead.")]
         public static Texture2D FindTextureInAssembly(string path)
         {
             try
