@@ -2,19 +2,15 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
+using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.Components
 {
-    internal class NotifyUpdater
+    public class NotifyUpdater : MonoBehaviour
     {
-        private readonly Dictionary<string, PropertyAction> actionDict = new();
-        private readonly INotifyPropertyChanged notifyHost;
+        internal INotifyPropertyChanged NotifyHost;
 
-        internal NotifyUpdater(INotifyPropertyChanged notifyHost)
-        {
-            this.notifyHost = notifyHost;
-            this.notifyHost.PropertyChanged += NotifyHost_PropertyChanged;
-        }
+        private readonly Dictionary<string, PropertyAction> actionDict = new();
 
         internal bool AddAction(string propertyName, Action<object> action)
         {
@@ -24,17 +20,17 @@ namespace BeatSaberMarkupLanguage.Components
             }
             else
             {
-                PropertyInfo prop = notifyHost.GetType().GetProperty(propertyName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                PropertyInfo prop = NotifyHost.GetType().GetProperty(propertyName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 
                 if (prop == null)
                 {
-                    Logger.Log.Error($"No property '{propertyName}' on object of type '{notifyHost.GetType().FullName}'");
+                    Logger.Log.Error($"No property '{propertyName}' on object of type '{NotifyHost.GetType().FullName}'");
                     return false;
                 }
 
                 if (prop.GetMethod == null)
                 {
-                    Logger.Log.Error($"Property '{propertyName}' on object of type '{notifyHost.GetType().FullName}' does not have a getter");
+                    Logger.Log.Error($"Property '{propertyName}' on object of type '{NotifyHost.GetType().FullName}' does not have a getter");
                     return false;
                 }
 
@@ -42,6 +38,25 @@ namespace BeatSaberMarkupLanguage.Components
             }
 
             return true;
+        }
+
+        private void Start()
+        {
+            if (NotifyHost != null)
+            {
+                this.NotifyHost.PropertyChanged += NotifyHost_PropertyChanged;
+            }
+        }
+
+        private void OnDestroy()
+        {
+            if (NotifyHost != null)
+            {
+                this.NotifyHost.PropertyChanged -= NotifyHost_PropertyChanged;
+            }
+
+            actionDict.Clear();
+            NotifyHost = null;
         }
 
         private void NotifyHost_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -57,10 +72,6 @@ namespace BeatSaberMarkupLanguage.Components
             else if (actionDict.TryGetValue(e.PropertyName, out PropertyAction propertyAction))
             {
                 propertyAction.Invoke(sender);
-            }
-            else
-            {
-                Logger.Log.Warn($"PropertyChanged invoked for '{e.PropertyName}' on object of type '{sender.GetType().FullName}' but no such property is registered!");
             }
         }
 

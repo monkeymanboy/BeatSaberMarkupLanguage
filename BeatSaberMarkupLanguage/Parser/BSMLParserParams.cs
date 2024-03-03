@@ -1,27 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using BeatSaberMarkupLanguage.Components;
 using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.Parser
 {
     public class BSMLParserParams
     {
-        public object host;
-        public Dictionary<string, BSMLAction> actions = new();
-        public Dictionary<string, BSMLValue> values = new();
-
         private readonly Dictionary<string, Action> events = new();
         private readonly Dictionary<string, List<GameObject>> objectsWithTag = new();
 
         internal BSMLParserParams(object host)
         {
             this.host = host;
-            this.NotifyUpdater = host is INotifyPropertyChanged notifyHost ? new NotifyUpdater(notifyHost) : null;
         }
 
-        internal NotifyUpdater NotifyUpdater { get; }
+        public object host { get; }
+
+        public Dictionary<string, BSMLAction> actions { get; } = new();
+
+        public Dictionary<string, BSMLValue> values { get; } = new();
 
         public void AddEvent(string ids, Action action)
         {
