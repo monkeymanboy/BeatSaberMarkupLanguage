@@ -1,4 +1,7 @@
 # Beat Saber Markup Language
+[![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/monkeymanboy/BeatSaberMarkupLanguage/build.yml?style=flat-square)](https://github.com/monkeymanboy/BeatSaberMarkupLanguage/actions/workflows/build.yml)
+[![Latest Release](https://img.shields.io/github/v/release/monkeymanboy/BeatSaberMarkupLanguage?style=flat-square)](https://github.com/monkeymanboy/BeatSaberMarkupLanguage/releases/latest)
+
 An easy way to set up your UI in Beat Saber without manually creating new objects and parenting them.
 
 More info on the [docs](https://monkeymanboy.github.io/BSML-Docs/).
