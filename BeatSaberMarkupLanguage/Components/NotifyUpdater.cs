@@ -8,9 +8,27 @@ namespace BeatSaberMarkupLanguage.Components
 {
     public class NotifyUpdater : MonoBehaviour
     {
-        internal INotifyPropertyChanged NotifyHost;
-
         private readonly Dictionary<string, PropertyAction> actionDict = new();
+        private INotifyPropertyChanged notifyHost;
+
+        internal INotifyPropertyChanged NotifyHost
+        {
+            get => notifyHost;
+            set
+            {
+                if (notifyHost != null)
+                {
+                    this.notifyHost.PropertyChanged -= NotifyHost_PropertyChanged;
+                }
+
+                notifyHost = value;
+
+                if (notifyHost != null)
+                {
+                    this.notifyHost.PropertyChanged += NotifyHost_PropertyChanged;
+                }
+            }
+        }
 
         internal bool AddAction(string propertyName, Action<object> action)
         {
@@ -20,17 +38,17 @@ namespace BeatSaberMarkupLanguage.Components
             }
             else
             {
-                PropertyInfo prop = NotifyHost.GetType().GetProperty(propertyName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                PropertyInfo prop = notifyHost.GetType().GetProperty(propertyName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 
                 if (prop == null)
                 {
-                    Logger.Log.Error($"No property '{propertyName}' on object of type '{NotifyHost.GetType().FullName}'");
+                    Logger.Log.Error($"No property '{propertyName}' on object of type '{notifyHost.GetType().FullName}'");
                     return false;
                 }
 
                 if (prop.GetMethod == null)
                 {
-                    Logger.Log.Error($"Property '{propertyName}' on object of type '{NotifyHost.GetType().FullName}' does not have a getter");
+                    Logger.Log.Error($"Property '{propertyName}' on object of type '{notifyHost.GetType().FullName}' does not have a getter");
                     return false;
                 }
 
@@ -40,27 +58,14 @@ namespace BeatSaberMarkupLanguage.Components
             return true;
         }
 
-        private void Start()
-        {
-            if (NotifyHost != null)
-            {
-                this.NotifyHost.PropertyChanged += NotifyHost_PropertyChanged;
-            }
-        }
-
-        private void OnDestroy()
-        {
-            if (NotifyHost != null)
-            {
-                this.NotifyHost.PropertyChanged -= NotifyHost_PropertyChanged;
-            }
-
-            actionDict.Clear();
-            NotifyHost = null;
-        }
-
         private void NotifyHost_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
+            if (this == null)
+            {
+                this.notifyHost.PropertyChanged -= NotifyHost_PropertyChanged;
+                return;
+            }
+
             // https://learn.microsoft.com/en-us/dotnet/api/system.componentmodel.propertychangedeventargs.propertyname?view=netframework-4.7.2#remarks
             if (string.IsNullOrEmpty(e.PropertyName))
             {
