@@ -30,6 +30,15 @@ namespace BeatSaberMarkupLanguage.ViewControllers
         protected internal void ClearContents()
         {
             Destroy(contentObject);
+
+            contentObject = new GameObject("Contents");
+            contentObject.transform.SetParent(transform, false);
+
+            RectTransform rectTransform = contentObject.AddComponent<RectTransform>();
+            rectTransform.anchorMin = Vector2.zero;
+            rectTransform.anchorMax = Vector2.one;
+            rectTransform.sizeDelta = Vector2.zero;
+            rectTransform.anchoredPosition = Vector2.zero;
         }
 
         protected override void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
@@ -64,15 +73,6 @@ namespace BeatSaberMarkupLanguage.ViewControllers
             }
 
             ClearContents();
-
-            contentObject = new GameObject("Contents");
-            contentObject.transform.SetParent(transform, false);
-
-            RectTransform rectTransform = contentObject.AddComponent<RectTransform>();
-            rectTransform.anchorMin = Vector2.zero;
-            rectTransform.anchorMax = Vector2.one;
-            rectTransform.sizeDelta = Vector2.zero;
-            rectTransform.anchoredPosition = Vector2.zero;
 
             try
             {
