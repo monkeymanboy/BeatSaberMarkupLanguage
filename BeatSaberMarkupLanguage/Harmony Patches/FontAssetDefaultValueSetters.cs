@@ -12,7 +12,7 @@ namespace BeatSaberMarkupLanguage.Harmony_Patches
         {
             if (ShaderUtilities.k_ShaderRef_MobileSDF == null)
             {
-                ShaderUtilities.k_ShaderRef_MobileSDF = Resources.FindObjectsOfTypeAll<Shader>().First(s => s.name == "TextMeshPro/Mobile/Distance Field");
+                ShaderUtilities.k_ShaderRef_MobileSDF = Resources.FindObjectsOfTypeAll<Shader>().FirstOrDefault(s => s.name == "TextMeshPro/Mobile/Distance Field");
             }
 
             __result = ShaderUtilities.k_ShaderRef_MobileSDF;
@@ -28,7 +28,7 @@ namespace BeatSaberMarkupLanguage.Harmony_Patches
         {
             if (TMP_Settings.s_Instance.m_defaultFontAsset == null)
             {
-                TMP_Settings.s_Instance.m_defaultFontAsset = Resources.FindObjectsOfTypeAll<TMP_FontAsset>().First(f => f.name == "Teko-Medium SDF");
+                TMP_Settings.s_Instance.m_defaultFontAsset = Resources.FindObjectsOfTypeAll<TMP_FontAsset>().FirstOrDefault(f => f.name == "Teko-Medium SDF");
             }
         }
     }
