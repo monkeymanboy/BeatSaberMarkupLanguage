@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.Tags
 {
@@ -13,7 +12,7 @@ namespace BeatSaberMarkupLanguage.Tags
         {
             if (leaderboardTemplate == null)
             {
-                leaderboardTemplate = Resources.FindObjectsOfTypeAll<LeaderboardTableView>().Where(x => x.name == "LeaderboardTableView").First();
+                leaderboardTemplate = DiContainer.Resolve<PlatformLeaderboardViewController>()._leaderboardTableView;
             }
 
             LeaderboardTableView table = DiContainer.InstantiatePrefabForComponent<LeaderboardTableView>(leaderboardTemplate, parent);

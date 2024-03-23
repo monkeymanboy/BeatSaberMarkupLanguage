@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using HMUI;
+﻿using HMUI;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,7 +14,7 @@ namespace BeatSaberMarkupLanguage.Tags
         {
             if (modalViewTemplate == null)
             {
-                modalViewTemplate = Resources.FindObjectsOfTypeAll<ModalView>().Where(mv => mv.name == "DropdownTableView" && mv.transform.parent != null && mv.transform.parent.name == "ColorSchemeDropDown").First();
+                modalViewTemplate = DiContainer.Resolve<GameplaySetupViewController>()._colorsOverrideSettingsPanelController._colorSchemeDropDown._modalView;
             }
 
             ModalView modalView = DiContainer.InstantiatePrefabForComponent<ModalView>(modalViewTemplate, parent);

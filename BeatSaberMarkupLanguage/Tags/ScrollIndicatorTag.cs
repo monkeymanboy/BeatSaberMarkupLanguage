@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using BeatSaberMarkupLanguage.Components;
+﻿using BeatSaberMarkupLanguage.Components;
 using HMUI;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -16,7 +15,7 @@ namespace BeatSaberMarkupLanguage.Tags
             {
                 if (verticalScrollTemplate == null)
                 {
-                    verticalScrollTemplate = Resources.FindObjectsOfTypeAll<VerticalScrollIndicator>().First().gameObject;
+                    verticalScrollTemplate = BeatSaberUI.DiContainer.Resolve<LevelCollectionNavigationController>()._levelCollectionViewController._levelCollectionTableView.GetComponent<ScrollView>()._verticalScrollIndicator.gameObject;
                 }
 
                 return verticalScrollTemplate;

@@ -7,7 +7,7 @@ namespace BeatSaberMarkupLanguage.Tags
     {
         public override string[] Aliases => new[] { "primary-button", "action-button" };
 
-        public override string PrefabButton => "PlayButton";
+        public override Button PrefabButton => BeatSaberUI.DiContainer.Resolve<PracticeViewController>()._playButton;
 
         public override GameObject CreateObject(Transform parent)
         {

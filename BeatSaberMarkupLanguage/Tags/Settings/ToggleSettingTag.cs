@@ -16,13 +16,11 @@ namespace BeatSaberMarkupLanguage.Tags
 
         public override string[] Aliases => new[] { "toggle-setting", "bool-setting", "checkbox-setting", "checkbox" };
 
-        public virtual string PrefabToggleName => "Fullscreen";
-
         public override GameObject CreateObject(Transform parent)
         {
             if (toggleTemplate == null)
             {
-                toggleTemplate = Resources.FindObjectsOfTypeAll<Toggle>().Select(x => x.transform.parent.gameObject).Where(p => p.name == PrefabToggleName).First();
+                toggleTemplate = DiContainer.Resolve<MainSettingsMenuViewController>()._settingsSubMenuInfos.Select(m => m.viewController).First(vc => vc.name == "GraphicSettings").transform.Find("ViewPort/Content/Fullscreen").gameObject;
             }
 
             GameObject gameObject = Object.Instantiate(toggleTemplate, parent, false);

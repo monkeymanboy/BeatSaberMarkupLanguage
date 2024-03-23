@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using BeatSaberMarkupLanguage.Components;
+using HMUI;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,7 +16,7 @@ namespace BeatSaberMarkupLanguage.Tags
         {
             if (buttonTemplate == null)
             {
-                buttonTemplate = Resources.FindObjectsOfTypeAll<Button>().Where(x => x.name == "UpButton").Last();
+                buttonTemplate = DiContainer.Resolve<PlayerOptionsViewController>()._playerSettingsPanelController.GetComponent<ScrollView>()._pageUpButton;
             }
 
             Button button = Object.Instantiate(buttonTemplate, parent, false);

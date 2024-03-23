@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using HMUI;
+﻿using HMUI;
 using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.Tags
@@ -14,7 +13,7 @@ namespace BeatSaberMarkupLanguage.Tags
         {
             if (segmentControlTemplate == null)
             {
-                segmentControlTemplate = Resources.FindObjectsOfTypeAll<TextSegmentedControl>().Where(x => x.name == "BeatmapDifficultySegmentedControl" && x._container != null).First();
+                segmentControlTemplate = DiContainer.Resolve<StandardLevelDetailViewController>()._standardLevelDetailView._beatmapDifficultySegmentedControlController.GetComponent<TextSegmentedControl>();
             }
 
             TextSegmentedControl textSegmentedControl = DiContainer.InstantiatePrefabForComponent<TextSegmentedControl>(segmentControlTemplate, parent);

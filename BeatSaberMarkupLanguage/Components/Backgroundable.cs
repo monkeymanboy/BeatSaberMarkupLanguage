@@ -73,7 +73,7 @@ namespace BeatSaberMarkupLanguage.Components
         {
             string objectName = ObjectNames[name];
             string parentName = ObjectParentNames[name];
-            ImageView[] images = Resources.FindObjectsOfTypeAll<ImageView>();
+            ImageView[] images = FindObjectsOfType<ImageView>(true);
             for (int i = 0; i < images.Length; i++)
             {
                 ImageView image = images[i];

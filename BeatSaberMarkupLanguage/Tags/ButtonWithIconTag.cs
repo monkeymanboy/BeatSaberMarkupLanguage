@@ -16,7 +16,7 @@ namespace BeatSaberMarkupLanguage.Tags
         {
             if (buttonWithIconTemplate == null)
             {
-                buttonWithIconTemplate = Resources.FindObjectsOfTypeAll<Button>().Where(x => x.name == "PracticeButton").Last();
+                buttonWithIconTemplate = BeatSaberUI.DiContainer.Resolve<StandardLevelDetailViewController>()._standardLevelDetailView.practiceButton;
             }
 
             Button button = Object.Instantiate(buttonWithIconTemplate, parent, false);

@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using HMUI;
+﻿using HMUI;
 using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.Tags
@@ -14,8 +13,7 @@ namespace BeatSaberMarkupLanguage.Tags
         {
             if (prefab == null)
             {
-                PlatformLeaderboardViewController vc = Resources.FindObjectsOfTypeAll<PlatformLeaderboardViewController>().First();
-                prefab = vc._scopeSegmentedControl;
+                prefab = DiContainer.Resolve<PlatformLeaderboardViewController>()._scopeSegmentedControl;
             }
 
             IconSegmentedControl control = DiContainer.InstantiatePrefabForComponent<IconSegmentedControl>(prefab, parent);
