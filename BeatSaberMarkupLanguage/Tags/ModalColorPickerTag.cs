@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using BeatSaberMarkupLanguage.Components;
+﻿using BeatSaberMarkupLanguage.Components;
 using HMUI;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,7 +9,7 @@ namespace BeatSaberMarkupLanguage.Tags
     {
         private RGBPanelController rgbTemplate;
         private HSVPanelController hsvTemplate;
-        private ImageView currentColorTemplate;
+        private Image currentColorTemplate;
 
         public override string[] Aliases => new[] { "modal-color-picker" };
 
@@ -38,7 +37,7 @@ namespace BeatSaberMarkupLanguage.Tags
 
             if (currentColorTemplate == null)
             {
-                currentColorTemplate = Resources.FindObjectsOfTypeAll<ImageView>().Where(iv => iv.transform.parent != null && iv.gameObject.name == "SaberColorA" && iv.transform.parent.name == "ColorSchemeView").First();
+                currentColorTemplate = DiContainer.Resolve<GameplaySetupViewController>()._colorsOverrideSettingsPanelController._colorSchemeDropDown._cellPrefab._colorSchemeView._saberAColorImage;
             }
 
             RGBPanelController rgbController = Object.Instantiate(rgbTemplate, gameObject.transform, false);

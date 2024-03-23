@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.Components.Settings;
 using BGLib.Polyglot;
@@ -20,7 +19,7 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
         {
             if (dropdownTemplate == null)
             {
-                dropdownTemplate = Resources.FindObjectsOfTypeAll<SimpleTextDropdown>().Where(td => td.transform.parent != null && td.transform.parent.name == "NormalLevels").First().transform.parent.gameObject;
+                dropdownTemplate = DiContainer.Resolve<GameplaySetupViewController>()._environmentOverrideSettingsPanelController._elementsGO.transform.Find("NormalLevels").gameObject;
             }
 
             safePrefab = Object.Instantiate(dropdownTemplate);

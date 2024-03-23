@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using HMUI;
+﻿using HMUI;
 using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.Tags
@@ -14,7 +13,7 @@ namespace BeatSaberMarkupLanguage.Tags
         {
             if (segmentedControlTemplate == null)
             {
-                segmentedControlTemplate = Resources.FindObjectsOfTypeAll<IconSegmentedControl>().Where(x => x.name == "BeatmapCharacteristicSegmentedControl" && x._container != null).First();
+                segmentedControlTemplate = DiContainer.Resolve<StandardLevelDetailViewController>()._standardLevelDetailView._beatmapCharacteristicSegmentedControlController.GetComponent<IconSegmentedControl>();
             }
 
             IconSegmentedControl iconSegmentedControl = DiContainer.InstantiatePrefabForComponent<IconSegmentedControl>(segmentedControlTemplate, parent);

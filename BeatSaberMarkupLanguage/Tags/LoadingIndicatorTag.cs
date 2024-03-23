@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using HMUI;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.Tags
@@ -15,7 +13,7 @@ namespace BeatSaberMarkupLanguage.Tags
         {
             if (loadingTemplate == null)
             {
-                loadingTemplate = Resources.FindObjectsOfTypeAll<ImageView>().Where(x => x.gameObject.name == "LoadingIndicator").First().gameObject;
+                loadingTemplate = DiContainer.Resolve<LevelCollectionNavigationController>()._loadingControl._loadingContainer.transform.Find("LoadingIndicator").gameObject;
             }
 
             GameObject loadingIndicator = Object.Instantiate(loadingTemplate, parent, false);

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using BeatSaberMarkupLanguage.Parser;
 using BGLib.Polyglot;
 using HMUI;
@@ -195,7 +194,7 @@ namespace BeatSaberMarkupLanguage.Components
         {
             if (BaseButton == null)
             {
-                BaseButton = Resources.FindObjectsOfTypeAll<Button>().Where(x => x.name == "Q").First();
+                BaseButton = BeatSaberUI.DiContainer.Resolve<UIKeyboardManager>().transform.Find("KeyboardWrapper/Keyboard/Letters/Row/Q").GetComponent<Button>();
             }
         }
 

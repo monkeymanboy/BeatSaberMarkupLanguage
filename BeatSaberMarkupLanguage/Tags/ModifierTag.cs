@@ -20,7 +20,7 @@ namespace BeatSaberMarkupLanguage.Tags
         {
             if (toggleTemplate == null)
             {
-                toggleTemplate = Resources.FindObjectsOfTypeAll<GameplayModifierToggle>().Where(x => x.name == "InstaFail").First();
+                toggleTemplate = DiContainer.Resolve<GameplaySetupViewController>()._gameplayModifiersPanelController.GetComponentsInChildren<GameplayModifierToggle>().First(gmt => gmt.name == "InstaFail");
             }
 
             GameplayModifierToggle baseModifier = Object.Instantiate(toggleTemplate, parent, false);

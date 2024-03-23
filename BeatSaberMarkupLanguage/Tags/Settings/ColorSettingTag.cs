@@ -21,7 +21,7 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
         {
             if (baseSettings == null)
             {
-                baseSettings = Resources.FindObjectsOfTypeAll<FormattedFloatListSettingsValueController>().Where(x => x.name == "VRRenderingScale").First();
+                baseSettings = DiContainer.Resolve<MainSettingsMenuViewController>()._settingsSubMenuInfos.Select(m => m.viewController).First(vc => vc.name == "GraphicSettings").transform.Find("ViewPort/Content/VRRenderingScale").GetComponent<FormattedFloatListSettingsValueController>();
             }
 
             FormattedFloatListSettingsValueController baseSetting = Object.Instantiate(baseSettings, parent, false);
@@ -62,7 +62,7 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
 
             if (colorImage == null)
             {
-                colorImage = Resources.FindObjectsOfTypeAll<Image>().Where(i => i.sprite != null && i.gameObject.name == "ColorImage" && i.sprite.name == "NoteCircle").First();
+                colorImage = (ImageView)DiContainer.Resolve<GameplaySetupViewController>()._colorsOverrideSettingsPanelController._editColorSchemeController._previousColorPanelController._graphics.First(g => g.name == "ColorImage");
             }
 
             Image instance = Object.Instantiate(colorImage, valuePick, false);

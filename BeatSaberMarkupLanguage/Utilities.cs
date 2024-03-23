@@ -514,8 +514,10 @@ namespace BeatSaberMarkupLanguage
                 {
                     if (noGlowMat == null && BeatSaberUI.TryGetSoloButton(out Button soloButton))
                     {
-                        noGlowMat = new Material(soloButton.transform.Find("Image/Image0").GetComponent<Image>().material);
-                        noGlowMat.name = "UINoGlowCustom";
+                        noGlowMat = new Material(soloButton.transform.Find("Image/Image0").GetComponent<Image>().material)
+                        {
+                            name = "UINoGlowCustom",
+                        };
                     }
 
                     return noGlowMat;
@@ -541,7 +543,7 @@ namespace BeatSaberMarkupLanguage
                 {
                     if (!whitePixel)
                     {
-                        whitePixel = Resources.FindObjectsOfTypeAll<Image>().Where(i => i.sprite != null && i.sprite.name == "WhitePixel").First().sprite;
+                        whitePixel = Resources.FindObjectsOfTypeAll<Sprite>().Where(s => s.name == "WhitePixel").First();
                     }
 
                     return whitePixel;

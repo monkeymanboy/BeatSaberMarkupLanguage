@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using BeatSaberMarkupLanguage.Components;
+﻿using BeatSaberMarkupLanguage.Components;
 using BGLib.Polyglot;
 using TMPro;
 using UnityEngine;
@@ -13,13 +12,13 @@ namespace BeatSaberMarkupLanguage.Tags
 
         public override string[] Aliases => new[] { "button" };
 
-        public virtual string PrefabButton => "PracticeButton";
+        public virtual Button PrefabButton => BeatSaberUI.DiContainer.Resolve<StandardLevelDetailViewController>()._standardLevelDetailView.practiceButton;
 
         public override GameObject CreateObject(Transform parent)
         {
             if (buttonPrefab == null)
             {
-                buttonPrefab = Resources.FindObjectsOfTypeAll<Button>().Where(x => x.name == PrefabButton).Last();
+                buttonPrefab = PrefabButton;
             }
 
             Button button = Object.Instantiate(buttonPrefab, parent, false);

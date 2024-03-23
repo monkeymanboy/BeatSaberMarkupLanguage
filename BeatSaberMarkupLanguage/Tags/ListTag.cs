@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using BeatSaberMarkupLanguage.Components;
+﻿using BeatSaberMarkupLanguage.Components;
 using HMUI;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,8 +14,12 @@ namespace BeatSaberMarkupLanguage.Tags
 
         public override GameObject CreateObject(Transform parent)
         {
-            RectTransform container = new GameObject("BSMLListContainer", typeof(RectTransform)).transform as RectTransform;
-            LayoutElement layoutElement = container.gameObject.AddComponent<LayoutElement>();
+            GameObject containerObject = new("BSMLListContainer", typeof(RectTransform), typeof(LayoutElement))
+            {
+                layer = 5,
+            };
+
+            RectTransform container = (RectTransform)containerObject.transform;
             container.SetParent(parent, false);
 
             GameObject gameObject = new("BSMLList")
@@ -29,7 +32,7 @@ namespace BeatSaberMarkupLanguage.Tags
 
             if (canvasTemplate == null)
             {
-                canvasTemplate = Resources.FindObjectsOfTypeAll<Canvas>().Where(x => x.name == "DropdownTableView").First();
+                canvasTemplate = DiContainer.Resolve<GameplaySetupViewController>()._playerSettingsPanelController._noteJumpStartBeatOffsetDropdown._simpleTextDropdown._tableView.GetComponent<Canvas>();
             }
 
             gameObject.AddComponent<ScrollRect>();
