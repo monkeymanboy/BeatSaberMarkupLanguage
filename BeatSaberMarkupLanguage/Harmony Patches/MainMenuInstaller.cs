@@ -17,11 +17,15 @@ namespace BeatSaberMarkupLanguage.Harmony_Patches
 
             BeatSaberUI.DiContainer = container;
 
+            // some mods call Parse() in/around Construct (BAD) so we need to run our stuff early
+            container.Resolve<SceneContext>().PreResolve += () => container.Resolve<BSMLParser>().SceneContext_PreResolve();
+            container.Resolve<SceneContext>().PostResolve += () => container.Resolve<BSMLParser>().SceneContext_PostResolve();
+
             // Eventually this should go in an installer & not use static instances but for now this is good enough. This is kind of janky since the
             // instance persists across restarts (like PersistentSingleton did) so Initialize/Dispose can be called multiple times on the same instance.
             container.Bind(typeof(AnimationController), typeof(ITickable)).FromInstance(AnimationController.instance);
             container.Bind(typeof(BSMLSettings), typeof(IInitializable), typeof(ILateDisposable)).FromInstance(BSMLSettings.instance);
-            container.Bind(typeof(BSMLParser), typeof(IInitializable)).FromInstance(BSMLParser.instance);
+            container.Bind(typeof(BSMLParser), typeof(ILateDisposable)).FromInstance(BSMLParser.instance);
             container.Bind(typeof(MenuButtons.MenuButtons), typeof(ILateDisposable)).FromInstance(MenuButtons.MenuButtons.instance);
             container.Bind(typeof(GameplaySetup.GameplaySetup), typeof(IInitializable), typeof(IDisposable), typeof(ILateDisposable)).FromInstance(GameplaySetup.GameplaySetup.instance);
 
@@ -31,9 +35,11 @@ namespace BeatSaberMarkupLanguage.Harmony_Patches
             container.QueueForInject(MenuButtons.MenuButtons.instance);
             container.QueueForInject(GameplaySetup.GameplaySetup.instance);
 
+            // LateDispose later
+            container.BindLateDisposableExecutionOrder<BSMLParser>(-1000);
+
             // initialize all our stuff late
             container.BindInitializableExecutionOrder<BSMLSettings>(1000);
-            container.BindInitializableExecutionOrder<BSMLParser>(1000);
             container.BindInitializableExecutionOrder<GameplaySetup.GameplaySetup>(1000);
 
             ModSettingsFlowCoordinator modSettingsFlowCoordinator = BeatSaberUI.CreateFlowCoordinator<ModSettingsFlowCoordinator>();

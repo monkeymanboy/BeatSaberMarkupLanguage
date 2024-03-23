@@ -23,7 +23,7 @@ namespace BeatSaberMarkupLanguage.Tags
             ModalColorPicker colorPicker = gameObject.AddComponent<ModalColorPicker>();
             colorPicker.modalView = gameObject.GetComponent<ModalView>();
 
-            EditColorSchemeController editColorSchemeController = DiContainer.Resolve<GameplaySetupViewController>().GetComponentInChildren<EditColorSchemeController>(true);
+            EditColorSchemeController editColorSchemeController = BeatSaberUI.DiContainer.Resolve<GameplaySetupViewController>().GetComponentInChildren<EditColorSchemeController>(true);
 
             if (rgbTemplate == null)
             {
@@ -37,7 +37,7 @@ namespace BeatSaberMarkupLanguage.Tags
 
             if (currentColorTemplate == null)
             {
-                currentColorTemplate = DiContainer.Resolve<GameplaySetupViewController>()._colorsOverrideSettingsPanelController._colorSchemeDropDown._cellPrefab._colorSchemeView._saberAColorImage;
+                currentColorTemplate = BeatSaberUI.DiContainer.Resolve<GameplaySetupViewController>()._colorsOverrideSettingsPanelController._colorSchemeDropDown._cellPrefab._colorSchemeView._saberAColorImage;
             }
 
             RGBPanelController rgbController = Object.Instantiate(rgbTemplate, gameObject.transform, false);

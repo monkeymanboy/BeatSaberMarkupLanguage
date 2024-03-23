@@ -3,11 +3,11 @@ using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.Tags
 {
-    public class RawImageTag : BSMLTag
+    public class RawImageTag : PrefabBSMLTag
     {
         public override string[] Aliases => new[] { "raw-image" };
 
-        public override GameObject CreateObject(Transform parent)
+        protected override PrefabParams CreatePrefab()
         {
             GameObject gameObject = new("BSMLRawImage")
             {
@@ -16,12 +16,11 @@ namespace BeatSaberMarkupLanguage.Tags
 
             RawImage rawImage = gameObject.AddComponent<RawImage>();
             rawImage.material = Utilities.ImageResources.NoGlowMat;
-            rawImage.rectTransform.SetParent(parent, false);
             rawImage.rectTransform.sizeDelta = new Vector2(20f, 20f);
             rawImage.texture = Utilities.ImageResources.BlankSprite.texture;
 
             gameObject.AddComponent<LayoutElement>();
-            return gameObject;
+            return new PrefabParams(gameObject);
         }
     }
 }

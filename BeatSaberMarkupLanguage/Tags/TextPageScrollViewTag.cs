@@ -7,20 +7,13 @@ using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.Tags
 {
-    public class TextPageScrollViewTag : BSMLTag
+    public class TextPageScrollViewTag : PrefabBSMLTag
     {
-        private TextPageScrollView pageTemplate;
-
         public override string[] Aliases => new[] { "text-page" };
 
-        public override GameObject CreateObject(Transform parent)
+        protected override PrefabParams CreatePrefab()
         {
-            if (pageTemplate == null)
-            {
-                pageTemplate = Object.FindObjectOfType<EulaDisplayViewController>(true)._textPageScrollView;
-            }
-
-            TextPageScrollView scrollView = DiContainer.InstantiatePrefabForComponent<TextPageScrollView>(pageTemplate, parent);
+            TextPageScrollView scrollView = BeatSaberUI.DiContainer.InstantiatePrefabForComponent<TextPageScrollView>(ScrollViewTag.ScrollViewTemplate);
             scrollView.name = "BSMLTextPageScrollView";
             scrollView.enabled = true;
 
@@ -35,7 +28,7 @@ namespace BeatSaberMarkupLanguage.Tags
             components.Add(textMesh);
             components.Add(localizedText);
 
-            return scrollView.gameObject;
+            return new PrefabParams(scrollView.gameObject);
         }
     }
 }

@@ -9,19 +9,12 @@ using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.Tags.Settings
 {
-    public abstract class IncDecSettingTag<T> : BSMLTag
+    public abstract class IncDecSettingTag<T> : PrefabBSMLTag
         where T : IncDecSetting
     {
-        private FormattedFloatListSettingsValueController valueControllerTemplate;
-
-        public override GameObject CreateObject(Transform parent)
+        protected override PrefabParams CreatePrefab()
         {
-            if (valueControllerTemplate == null)
-            {
-                valueControllerTemplate = DiContainer.Resolve<MainSettingsMenuViewController>()._settingsSubMenuInfos.Select(m => m.viewController).First(vc => vc.name == "GraphicSettings").transform.Find("ViewPort/Content/VRRenderingScale").GetComponent<FormattedFloatListSettingsValueController>();
-            }
-
-            FormattedFloatListSettingsValueController baseSetting = Object.Instantiate(valueControllerTemplate, parent, false);
+            FormattedFloatListSettingsValueController baseSetting = Object.Instantiate(BeatSaberUI.DiContainer.Resolve<MainSettingsMenuViewController>()._settingsSubMenuInfos.Select(m => m.viewController).First(vc => vc.name == "GraphicSettings").transform.Find("ViewPort/Content/VRRenderingScale").GetComponent<FormattedFloatListSettingsValueController>());
             baseSetting.name = "BSMLIncDecSetting";
 
             GameObject gameObject = baseSetting.gameObject;
@@ -49,8 +42,7 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
 
             gameObject.GetComponent<LayoutElement>().preferredWidth = 90;
 
-            gameObject.SetActive(true);
-            return gameObject;
+            return new PrefabParams(gameObject);
         }
     }
 }

@@ -10,19 +10,12 @@ using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.Tags.Settings
 {
-    public abstract class GenericSliderSettingTag<T> : BSMLTag
+    public abstract class GenericSliderSettingTag<T> : PrefabBSMLTag
         where T : GenericSliderSetting
     {
-        private LayoutElement controllersTransformTemplate;
-
-        public override GameObject CreateObject(Transform parent)
+        protected override PrefabParams CreatePrefab()
         {
-            if (controllersTransformTemplate == null)
-            {
-                controllersTransformTemplate = DiContainer.Resolve<MainSettingsMenuViewController>()._settingsSubMenuInfos.First(m => m.viewController is ControllersTransformSettingsViewController).viewController.transform.Find("Content/PositionX").GetComponent<LayoutElement>();
-            }
-
-            LayoutElement baseSetting = Object.Instantiate(controllersTransformTemplate, parent, false);
+            LayoutElement baseSetting = Object.Instantiate(BeatSaberUI.DiContainer.Resolve<MainSettingsMenuViewController>()._settingsSubMenuInfos.First(m => m.viewController is ControllersTransformSettingsViewController).viewController.transform.Find("Content/PositionX").GetComponent<LayoutElement>());
             baseSetting.name = "BSMLSliderSetting";
 
             GameObject gameObject = baseSetting.gameObject;
@@ -54,8 +47,7 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
 
             baseSetting.preferredWidth = 90;
 
-            gameObject.SetActive(true);
-            return gameObject;
+            return new PrefabParams(gameObject);
         }
     }
 }

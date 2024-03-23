@@ -6,7 +6,7 @@ using VRUIControls;
 
 namespace BeatSaberMarkupLanguage.Tags
 {
-    public class ScrollViewTag : BSMLTag
+    public class ScrollViewTag : PrefabBSMLTag
     {
         private static TextPageScrollView scrollViewTemplate;
 
@@ -16,7 +16,7 @@ namespace BeatSaberMarkupLanguage.Tags
             {
                 if (scrollViewTemplate == null)
                 {
-                    scrollViewTemplate = Object.FindObjectOfType<EulaDisplayViewController>(true)._textPageScrollView;
+                    scrollViewTemplate = BeatSaberUI.DiContainer.Resolve<EulaDisplayViewController>()._textPageScrollView;
                 }
 
                 return scrollViewTemplate;
@@ -25,23 +25,23 @@ namespace BeatSaberMarkupLanguage.Tags
 
         public override string[] Aliases => new[] { "scroll-view" };
 
-        public override GameObject CreateObject(Transform parent)
+        protected override PrefabParams CreatePrefab()
         {
-            TextPageScrollView textScrollView = Object.Instantiate(ScrollViewTemplate, parent);
+            TextPageScrollView textScrollView = Object.Instantiate(ScrollViewTemplate);
             textScrollView.name = "BSMLScrollView";
             Button pageUpButton = textScrollView._pageUpButton;
             Button pageDownButton = textScrollView._pageDownButton;
             VerticalScrollIndicator verticalScrollIndicator = textScrollView._verticalScrollIndicator;
 
             RectTransform viewport = textScrollView._viewport;
-            DiContainer.InstantiateComponent<VRGraphicRaycaster>(viewport.gameObject);
+            BeatSaberUI.DiContainer.InstantiateComponent<VRGraphicRaycaster>(viewport.gameObject);
 
             Object.Destroy(textScrollView._text.gameObject);
             GameObject gameObject = textScrollView.gameObject;
             Object.Destroy(textScrollView);
             gameObject.SetActive(false);
 
-            BSMLScrollView scrollView = DiContainer.InstantiateComponent<BSMLScrollView>(gameObject);
+            BSMLScrollView scrollView = BeatSaberUI.DiContainer.InstantiateComponent<BSMLScrollView>(gameObject);
             scrollView._pageUpButton = pageUpButton;
             scrollView._pageDownButton = pageDownButton;
             scrollView._verticalScrollIndicator = verticalScrollIndicator;
@@ -96,8 +96,8 @@ namespace BeatSaberMarkupLanguage.Tags
             (child.transform as RectTransform).sizeDelta = new Vector2(0, -1);
 
             scrollView._contentRectTransform = parentObj.transform as RectTransform;
-            gameObject.SetActive(true);
-            return child;
+
+            return new PrefabParams(gameObject, child);
         }
     }
 }

@@ -3,20 +3,20 @@ using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.Tags
 {
-    public class VerticalIconSegmentedControlTag : BSMLTag
+    public class VerticalIconSegmentedControlTag : PrefabBSMLTag
     {
         private static IconSegmentedControl prefab;
 
         public override string[] Aliases => new[] { "vertical-icon-segments" };
 
-        public override GameObject CreateObject(Transform parent)
+        protected override PrefabParams CreatePrefab()
         {
             if (prefab == null)
             {
-                prefab = DiContainer.Resolve<PlatformLeaderboardViewController>()._scopeSegmentedControl;
+                prefab = BeatSaberUI.DiContainer.Resolve<PlatformLeaderboardViewController>()._scopeSegmentedControl;
             }
 
-            IconSegmentedControl control = DiContainer.InstantiatePrefabForComponent<IconSegmentedControl>(prefab, parent);
+            IconSegmentedControl control = BeatSaberUI.DiContainer.InstantiatePrefabForComponent<IconSegmentedControl>(prefab);
             control.name = "BSMLVerticalIconSegmentedControl";
 
             RectTransform rt = control.transform as RectTransform;
@@ -30,7 +30,7 @@ namespace BeatSaberMarkupLanguage.Tags
                 Object.Destroy(transform.gameObject);
             }
 
-            return control.gameObject;
+            return new PrefabParams(control.gameObject);
         }
     }
 }

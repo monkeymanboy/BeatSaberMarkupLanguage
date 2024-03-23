@@ -2,20 +2,14 @@
 
 namespace BeatSaberMarkupLanguage.Tags
 {
-    public class LeaderboardTag : BSMLTag
+    public class LeaderboardTag : PrefabBSMLTag
     {
-        private LeaderboardTableView leaderboardTemplate;
-
         public override string[] Aliases => new[] { "leaderboard" };
 
-        public override GameObject CreateObject(Transform parent)
+        protected override PrefabParams CreatePrefab()
         {
-            if (leaderboardTemplate == null)
-            {
-                leaderboardTemplate = DiContainer.Resolve<PlatformLeaderboardViewController>()._leaderboardTableView;
-            }
-
-            LeaderboardTableView table = DiContainer.InstantiatePrefabForComponent<LeaderboardTableView>(leaderboardTemplate, parent);
+            LeaderboardTableView leaderboardTemplate = BeatSaberUI.DiContainer.Resolve<PlatformLeaderboardViewController>()._leaderboardTableView;
+            LeaderboardTableView table = BeatSaberUI.DiContainer.InstantiatePrefabForComponent<LeaderboardTableView>(leaderboardTemplate);
             table.name = "BSMLLeaderboard";
 
             // This is to ensure if a leaderboard with scores already on it gets cloned that old scores are cleared off
@@ -24,7 +18,7 @@ namespace BeatSaberMarkupLanguage.Tags
                 Object.Destroy(tableCell.gameObject);
             }
 
-            return table.gameObject;
+            return new PrefabParams(table.gameObject);
         }
     }
 }

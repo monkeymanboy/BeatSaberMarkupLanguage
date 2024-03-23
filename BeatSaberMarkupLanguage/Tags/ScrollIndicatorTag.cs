@@ -5,40 +5,25 @@ using Object = UnityEngine.Object;
 
 namespace BeatSaberMarkupLanguage.Tags
 {
-    public class ScrollIndicatorTag : BSMLTag
+    public class ScrollIndicatorTag : PrefabBSMLTag
     {
-        private static GameObject verticalScrollTemplate = null;
-
-        public static GameObject VerticalScrollTemplate
-        {
-            get
-            {
-                if (verticalScrollTemplate == null)
-                {
-                    verticalScrollTemplate = BeatSaberUI.DiContainer.Resolve<LevelCollectionNavigationController>()._levelCollectionViewController._levelCollectionTableView.GetComponent<ScrollView>()._verticalScrollIndicator.gameObject;
-                }
-
-                return verticalScrollTemplate;
-            }
-        }
+        public static GameObject VerticalScrollTemplate => ScrollViewTag.ScrollViewTemplate._verticalScrollIndicator.gameObject;
 
         public override string[] Aliases { get; } = new[] { "vertical-scroll-indicator", "scroll-indicator" };
 
-        public override GameObject CreateObject(Transform parent)
+        protected override PrefabParams CreatePrefab()
         {
             GameObject gameObject = Object.Instantiate(VerticalScrollTemplate);
             gameObject.SetActive(false);
             gameObject.name = "BSMLScrollIndicator";
 
-            RectTransform transform = gameObject.GetComponent<RectTransform>();
-            transform.SetParent(parent, false);
+            RectTransform transform = (RectTransform)gameObject.transform;
 
             Object.DestroyImmediate(gameObject.GetComponent<VerticalScrollIndicator>());
             BSMLScrollIndicator indicator = gameObject.AddComponent<BSMLScrollIndicator>();
-            indicator.Handle = transform.GetChild(0).GetComponent<RectTransform>();
+            indicator.Handle = (RectTransform)transform.GetChild(0);
 
-            gameObject.SetActive(true);
-            return gameObject;
+            return new PrefabParams(gameObject);
         }
     }
 }

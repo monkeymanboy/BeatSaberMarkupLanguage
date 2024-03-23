@@ -3,18 +3,16 @@ using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.Tags
 {
-    public class ModifierContainerTag : BSMLTag
+    public class ModifierContainerTag : PrefabBSMLTag
     {
         public override string[] Aliases => new[] { "modifier-container" };
 
-        public override GameObject CreateObject(Transform parent)
+        protected override PrefabParams CreatePrefab()
         {
             GameObject gameObject = new("BSMLModifierContainer")
             {
                 layer = 5,
             };
-
-            gameObject.transform.SetParent(parent, false);
 
             VerticalLayoutGroup vertical = gameObject.AddComponent<VerticalLayoutGroup>();
             vertical.padding = new RectOffset(3, 3, 2, 2);
@@ -30,7 +28,7 @@ namespace BeatSaberMarkupLanguage.Tags
             rectTransform.sizeDelta = new Vector2(54, 0);
 
             gameObject.AddComponent<LayoutElement>();
-            return gameObject;
+            return new PrefabParams(gameObject);
         }
     }
 }

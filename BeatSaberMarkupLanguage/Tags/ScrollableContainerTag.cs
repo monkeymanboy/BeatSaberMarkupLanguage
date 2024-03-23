@@ -5,21 +5,20 @@ using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.Tags
 {
-    public class ScrollableContainerTag : BSMLTag
+    public class ScrollableContainerTag : PrefabBSMLTag
     {
         public override string[] Aliases { get; } = new[] { "scrollable-container" };
 
-        public override GameObject CreateObject(Transform parent)
+        protected override PrefabParams CreatePrefab()
         {
-            GameObject go = new("BSMLScrollScrollableContainer")
+            GameObject gameObject = new("BSMLScrollScrollableContainer")
             {
                 layer = 5,
             };
 
-            go.SetActive(false);
+            gameObject.SetActive(false);
 
-            RectTransform transform = go.AddComponent<RectTransform>();
-            transform.SetParent(parent, false);
+            RectTransform transform = gameObject.AddComponent<RectTransform>();
             transform.localPosition = Vector2.zero;
             transform.anchorMin = Vector2.zero;
             transform.anchorMax = Vector2.one;
@@ -46,12 +45,12 @@ namespace BeatSaberMarkupLanguage.Tags
             vpimage.sprite = Utilities.ImageResources.WhitePixel;
             vpimage.material = Utilities.ImageResources.NoGlowMat;
 
-            GameObject contentgo = new("Content Wrapper")
+            GameObject contentGameObject = new("Content Wrapper")
             {
                 layer = 5,
             };
 
-            RectTransform content = contentgo.AddComponent<RectTransform>();
+            RectTransform content = contentGameObject.AddComponent<RectTransform>();
             content.SetParent(viewport, false);
             content.localPosition = Vector2.zero;
             content.anchorMin = new Vector2(0f, 1f);
@@ -59,24 +58,23 @@ namespace BeatSaberMarkupLanguage.Tags
             content.anchoredPosition = Vector2.zero;
             content.pivot = new Vector2(0.5f, 1f);
 
-            ContentSizeFitter contentFitter = contentgo.AddComponent<ContentSizeFitter>();
+            ContentSizeFitter contentFitter = contentGameObject.AddComponent<ContentSizeFitter>();
             contentFitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
             contentFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
-            VerticalLayoutGroup layout = contentgo.AddComponent<VerticalLayoutGroup>();
+            VerticalLayoutGroup layout = contentGameObject.AddComponent<VerticalLayoutGroup>();
             layout.childControlHeight = false;
             layout.childForceExpandHeight = false;
             layout.childForceExpandWidth = false;
 
-            go.AddComponent<Touchable>(); // Required by EventSystemListener
-            go.AddComponent<EventSystemListener>(); // Required by ScrollView
-            BSMLScrollableContainer scrollView = DiContainer.InstantiateComponent<BSMLScrollableContainer>(go);
+            gameObject.AddComponent<Touchable>(); // Required by EventSystemListener
+            gameObject.AddComponent<EventSystemListener>(); // Required by ScrollView
+            BSMLScrollableContainer scrollView = BeatSaberUI.DiContainer.InstantiateComponent<BSMLScrollableContainer>(gameObject);
             scrollView.ContentRect = content;
             scrollView.Viewport = viewport;
 
-            contentgo.AddComponent<ExternalComponents>().components.Add(scrollView);
+            contentGameObject.AddComponent<ExternalComponents>().components.Add(scrollView);
 
-            go.SetActive(true);
-            return contentgo;
+            return new PrefabParams(gameObject, contentGameObject);
         }
     }
 }

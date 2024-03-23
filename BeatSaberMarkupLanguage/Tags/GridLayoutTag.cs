@@ -4,18 +4,17 @@ using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.Tags
 {
-    public class GridLayoutTag : BSMLTag
+    public class GridLayoutTag : PrefabBSMLTag
     {
         public override string[] Aliases => new[] { "grid" };
 
-        public override GameObject CreateObject(Transform parent)
+        protected override PrefabParams CreatePrefab()
         {
             GameObject gameObject = new("BSMLGridLayoutGroup")
             {
                 layer = 5,
             };
 
-            gameObject.transform.SetParent(parent, false);
             gameObject.AddComponent<GridLayoutGroup>();
             gameObject.AddComponent<ContentSizeFitter>();
             gameObject.AddComponent<Backgroundable>();
@@ -25,7 +24,7 @@ namespace BeatSaberMarkupLanguage.Tags
             rectTransform.anchorMax = new Vector2(1, 1);
             rectTransform.sizeDelta = new Vector2(0, 0);
 
-            return gameObject;
+            return new PrefabParams(gameObject);
         }
     }
 }

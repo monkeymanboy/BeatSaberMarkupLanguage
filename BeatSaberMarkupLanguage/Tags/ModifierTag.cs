@@ -10,20 +10,14 @@ using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.Tags
 {
-    public class ModifierTag : BSMLTag
+    public class ModifierTag : PrefabBSMLTag
     {
-        private GameplayModifierToggle toggleTemplate;
-
         public override string[] Aliases => new[] { "modifier" };
 
-        public override GameObject CreateObject(Transform parent)
+        protected override PrefabParams CreatePrefab()
         {
-            if (toggleTemplate == null)
-            {
-                toggleTemplate = DiContainer.Resolve<GameplaySetupViewController>()._gameplayModifiersPanelController.GetComponentsInChildren<GameplayModifierToggle>().First(gmt => gmt.name == "InstaFail");
-            }
-
-            GameplayModifierToggle baseModifier = Object.Instantiate(toggleTemplate, parent, false);
+            GameplayModifierToggle toggleTemplate = BeatSaberUI.DiContainer.Resolve<GameplaySetupViewController>()._gameplayModifiersPanelController.GetComponentsInChildren<GameplayModifierToggle>().First(gmt => gmt.name == "InstaFail");
+            GameplayModifierToggle baseModifier = Object.Instantiate(toggleTemplate);
             baseModifier.name = "BSMLModifier";
 
             GameObject gameObject = baseModifier.gameObject;
@@ -49,9 +43,7 @@ namespace BeatSaberMarkupLanguage.Tags
             toggleSetting.toggle = gameObject.GetComponent<Toggle>();
             toggleSetting.toggle.onValueChanged.RemoveAllListeners();
 
-            gameObject.SetActive(true);
-
-            return gameObject;
+            return new PrefabParams(gameObject);
         }
     }
 }

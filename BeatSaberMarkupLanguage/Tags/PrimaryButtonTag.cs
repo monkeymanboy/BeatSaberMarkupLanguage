@@ -1,5 +1,4 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.Tags
 {
@@ -9,9 +8,11 @@ namespace BeatSaberMarkupLanguage.Tags
 
         public override Button PrefabButton => BeatSaberUI.DiContainer.Resolve<PracticeViewController>()._playButton;
 
-        public override GameObject CreateObject(Transform parent)
+        protected override PrefabParams CreatePrefab()
         {
-            return base.CreateObject(parent).AddComponent<LayoutElement>().gameObject;
+            PrefabParams prefab = base.CreatePrefab();
+            prefab.ContainerObject.AddComponent<LayoutElement>();
+            return prefab;
         }
     }
 }

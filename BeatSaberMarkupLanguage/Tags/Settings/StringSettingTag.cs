@@ -20,7 +20,7 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
         {
             if (valueControllerTemplate == null)
             {
-                valueControllerTemplate = DiContainer.Resolve<MainSettingsMenuViewController>()._settingsSubMenuInfos.Select(m => m.viewController).First(vc => vc.name == "GraphicSettings").transform.Find("ViewPort/Content/VRRenderingScale").GetComponent<FormattedFloatListSettingsValueController>();
+                valueControllerTemplate = BeatSaberUI.DiContainer.Resolve<MainSettingsMenuViewController>()._settingsSubMenuInfos.Select(m => m.viewController).First(vc => vc.name == "GraphicSettings").transform.Find("ViewPort/Content/VRRenderingScale").GetComponent<FormattedFloatListSettingsValueController>();
             }
 
             FormattedFloatListSettingsValueController baseSetting = Object.Instantiate(valueControllerTemplate, parent, false);
@@ -78,7 +78,6 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
 
             stringSetting.modalKeyboard = base.CreateObject(gameObject.transform).GetComponent<ModalKeyboard>();
 
-            gameObject.SetActive(true);
             return gameObject;
         }
     }

@@ -3,19 +3,14 @@ using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.Tags
 {
-    public class TextTag : BSMLTag
+    public class TextTag : PrefabBSMLTag
     {
         public override string[] Aliases => new[] { "text", "label" };
 
-        public override GameObject CreateObject(Transform parent)
+        protected override PrefabParams CreatePrefab()
         {
-            GameObject gameObj = new("BSMLText")
-            {
-                layer = 5,
-            };
-
+            GameObject gameObj = new("BSMLText");
             gameObj.SetActive(false);
-            gameObj.transform.SetParent(parent, false);
 
             FormattableText textMesh = gameObj.AddComponent<FormattableText>();
             textMesh.font = BeatSaberUI.MainTextFont;
@@ -28,10 +23,7 @@ namespace BeatSaberMarkupLanguage.Tags
             textMesh.rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
 
             CreateLocalizableText(gameObj);
-
-            gameObj.SetActive(true);
-
-            return gameObj;
+            return new PrefabParams(gameObj);
         }
     }
 }

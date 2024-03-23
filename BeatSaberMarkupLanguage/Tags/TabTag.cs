@@ -1,5 +1,4 @@
 ﻿using BeatSaberMarkupLanguage.Components;
-using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.Tags
 {
@@ -7,12 +6,12 @@ namespace BeatSaberMarkupLanguage.Tags
     {
         public override string[] Aliases => new[] { "tab" };
 
-        public override GameObject CreateObject(Transform parent)
+        protected override PrefabParams CreatePrefab()
         {
-            GameObject gameObject = base.CreateObject(parent);
-            gameObject.name = "BSMLTab";
-            gameObject.AddComponent<Tab>();
-            return gameObject;
+            PrefabParams prefab = base.CreatePrefab();
+            prefab.RootObject.name = "BSMLTab";
+            prefab.ContainerObject.AddComponent<Tab>();
+            return prefab;
         }
     }
 }

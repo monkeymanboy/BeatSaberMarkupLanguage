@@ -4,27 +4,22 @@ using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.Tags
 {
-    public class BackgroundTag : BSMLTag
+    public class BackgroundTag : PrefabBSMLTag
     {
         public override string[] Aliases => new[] { "bg", "background", "div" };
 
-        public override GameObject CreateObject(Transform parent)
+        protected override PrefabParams CreatePrefab()
         {
-            GameObject gameObject = new("BSMLBackground")
-            {
-                layer = 5,
-            };
-
-            gameObject.transform.SetParent(parent, false);
+            GameObject gameObject = new("BSMLBackground");
             gameObject.AddComponent<ContentSizeFitter>();
             gameObject.AddComponent<Backgroundable>();
 
-            RectTransform rectTransform = gameObject.transform as RectTransform;
+            RectTransform rectTransform = (RectTransform)gameObject.transform;
             rectTransform.anchorMin = new Vector2(0, 0);
             rectTransform.anchorMax = new Vector2(1, 1);
             rectTransform.sizeDelta = new Vector2(0, 0);
 
-            return gameObject;
+            return new PrefabParams(gameObject);
         }
     }
 }

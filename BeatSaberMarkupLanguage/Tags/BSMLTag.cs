@@ -9,17 +9,24 @@ namespace BeatSaberMarkupLanguage.Tags
 {
     public abstract class BSMLTag
     {
+        [Obsolete]
         public bool isInitialized = false;
 
         public abstract string[] Aliases { get; }
 
         public virtual bool AddChildren { get => true; }
 
+        [Obsolete("Use BeatSaberUI.DiContainer instead")]
         protected DiContainer DiContainer => BeatSaberUI.DiContainer;
 
         public abstract GameObject CreateObject(Transform parent);
 
+        [Obsolete("This method is only called once in the entire lifetime of the application. Please use SetUp instead, which is called on internal restarts as well.")]
         public virtual void Setup()
+        {
+        }
+
+        public virtual void SetUp()
         {
         }
 

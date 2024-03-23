@@ -5,18 +5,17 @@ using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.Tags
 {
-    public class StackLayoutTag : BSMLTag
+    public class StackLayoutTag : PrefabBSMLTag
     {
         public override string[] Aliases => new[] { "stack" };
 
-        public override GameObject CreateObject(Transform parent)
+        protected override PrefabParams CreatePrefab()
         {
             GameObject gameObject = new("BSMLStackLayoutGroup")
             {
                 layer = 5,
             };
 
-            gameObject.transform.SetParent(parent, false);
             gameObject.AddComponent<StackLayoutGroup>();
             gameObject.AddComponent<ContentSizeFitter>();
             gameObject.AddComponent<Backgroundable>();
@@ -27,7 +26,7 @@ namespace BeatSaberMarkupLanguage.Tags
             rectTransform.sizeDelta = new Vector2(0, 0);
 
             gameObject.AddComponent<LayoutElement>();
-            return gameObject;
+            return new PrefabParams(gameObject);
         }
     }
 }

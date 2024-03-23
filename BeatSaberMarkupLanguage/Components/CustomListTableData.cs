@@ -184,6 +184,14 @@ namespace BeatSaberMarkupLanguage.Components
             return data.Count();
         }
 
+        private void Awake()
+        {
+            if (tableView != null)
+            {
+                tableView.SetDataSource(this, false);
+            }
+        }
+
         public class CustomCellInfo
         {
             public string text;

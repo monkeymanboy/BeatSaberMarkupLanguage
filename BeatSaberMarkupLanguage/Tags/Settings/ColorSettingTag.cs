@@ -21,7 +21,7 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
         {
             if (baseSettings == null)
             {
-                baseSettings = DiContainer.Resolve<MainSettingsMenuViewController>()._settingsSubMenuInfos.Select(m => m.viewController).First(vc => vc.name == "GraphicSettings").transform.Find("ViewPort/Content/VRRenderingScale").GetComponent<FormattedFloatListSettingsValueController>();
+                baseSettings = BeatSaberUI.DiContainer.Resolve<MainSettingsMenuViewController>()._settingsSubMenuInfos.Select(m => m.viewController).First(vc => vc.name == "GraphicSettings").transform.Find("ViewPort/Content/VRRenderingScale").GetComponent<FormattedFloatListSettingsValueController>();
             }
 
             FormattedFloatListSettingsValueController baseSetting = Object.Instantiate(baseSettings, parent, false);
@@ -62,7 +62,7 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
 
             if (colorImage == null)
             {
-                colorImage = (ImageView)DiContainer.Resolve<GameplaySetupViewController>()._colorsOverrideSettingsPanelController._editColorSchemeController._previousColorPanelController._graphics.First(g => g.name == "ColorImage");
+                colorImage = (ImageView)BeatSaberUI.DiContainer.Resolve<GameplaySetupViewController>()._colorsOverrideSettingsPanelController._editColorSchemeController._previousColorPanelController._graphics.First(g => g.name == "ColorImage");
             }
 
             Image instance = Object.Instantiate(colorImage, valuePick, false);
@@ -84,7 +84,6 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
 
             colorSetting.modalColorPicker = base.CreateObject(gameObject.transform).GetComponent<ModalColorPicker>();
 
-            gameObject.SetActive(true);
             return gameObject;
         }
     }

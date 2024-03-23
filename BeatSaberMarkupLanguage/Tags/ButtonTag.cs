@@ -6,27 +6,19 @@ using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.Tags
 {
-    public class ButtonTag : BSMLTag
+    public class ButtonTag : PrefabBSMLTag
     {
-        private Button buttonPrefab;
-
         public override string[] Aliases => new[] { "button" };
 
         public virtual Button PrefabButton => BeatSaberUI.DiContainer.Resolve<StandardLevelDetailViewController>()._standardLevelDetailView.practiceButton;
 
-        public override GameObject CreateObject(Transform parent)
+        protected override PrefabParams CreatePrefab()
         {
-            if (buttonPrefab == null)
-            {
-                buttonPrefab = PrefabButton;
-            }
-
-            Button button = Object.Instantiate(buttonPrefab, parent, false);
+            Button button = Object.Instantiate(PrefabButton);
             button.name = "BSMLButton";
             button.interactable = true;
 
             GameObject gameObject = button.gameObject;
-            gameObject.SetActive(true);
 
             ExternalComponents externalComponents = gameObject.AddComponent<ExternalComponents>();
             GameObject textObject = button.transform.Find("Content/Text").gameObject;
@@ -51,7 +43,7 @@ namespace BeatSaberMarkupLanguage.Tags
                 externalComponents.components.Add(stackLayoutGroup);
             }
 
-            return gameObject;
+            return new PrefabParams(gameObject);
         }
     }
 }

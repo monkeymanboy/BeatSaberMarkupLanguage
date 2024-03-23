@@ -7,17 +7,17 @@ namespace BeatSaberMarkupLanguage.Tags
     {
         public override string[] Aliases => new[] { "settings-scroll-view", "scrollable-settings-container", "settings-container" };
 
-        public override GameObject CreateObject(Transform parent)
+        protected override PrefabParams CreatePrefab()
         {
-            GameObject content = base.CreateObject(parent);
-            ExternalComponents externalComponents = content.GetComponent<ExternalComponents>();
+            PrefabParams prefab = base.CreatePrefab();
+            ExternalComponents externalComponents = prefab.ContainerObject.GetComponent<ExternalComponents>();
             RectTransform scrollTransform = externalComponents.Get<RectTransform>();
             scrollTransform.anchorMin = Vector2.zero;
             scrollTransform.anchorMax = Vector2.one;
             scrollTransform.anchoredPosition = new Vector2(2, 6);
             scrollTransform.sizeDelta = new Vector2(0, -20);
             scrollTransform.gameObject.name = "BSMLScrollableSettingsContainer";
-            return content;
+            return prefab;
         }
     }
 }

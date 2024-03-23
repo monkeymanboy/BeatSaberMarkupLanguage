@@ -4,23 +4,16 @@ using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.Tags
 {
-    public class ModalTag : BSMLTag
+    public class ModalTag : PrefabBSMLTag
     {
-        private ModalView modalViewTemplate;
-
         public override string[] Aliases => new[] { "modal" };
 
-        public override GameObject CreateObject(Transform parent)
+        protected override PrefabParams CreatePrefab()
         {
-            if (modalViewTemplate == null)
-            {
-                modalViewTemplate = DiContainer.Resolve<GameplaySetupViewController>()._colorsOverrideSettingsPanelController._colorSchemeDropDown._modalView;
-            }
-
-            ModalView modalView = DiContainer.InstantiatePrefabForComponent<ModalView>(modalViewTemplate, parent);
+            ModalView modalViewTemplate = BeatSaberUI.DiContainer.Resolve<GameplaySetupViewController>()._colorsOverrideSettingsPanelController._colorSchemeDropDown._modalView;
+            ModalView modalView = BeatSaberUI.DiContainer.InstantiatePrefabForComponent<ModalView>(modalViewTemplate);
             modalView.name = "BSMLModal";
-            modalView._presentPanelAnimations = modalViewTemplate._presentPanelAnimations;
-            modalView._dismissPanelAnimation = modalViewTemplate._dismissPanelAnimation;
+            modalView.gameObject.SetActive(false);
 
             Object.DestroyImmediate(modalView.GetComponent<TableView>());
             Object.DestroyImmediate(modalView.GetComponent<ScrollRect>());
@@ -40,14 +33,12 @@ namespace BeatSaberMarkupLanguage.Tags
                 }
             }
 
-            RectTransform rectTransform = modalView.transform as RectTransform;
+            RectTransform rectTransform = (RectTransform)modalView.transform;
             rectTransform.anchorMin = new Vector2(0.5f, 0.5f);
             rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
             rectTransform.sizeDelta = new Vector2(0, 0);
 
-            modalView.gameObject.SetActive(false);
-
-            return modalView.gameObject;
+            return new PrefabParams(modalView.gameObject, false);
         }
     }
 }

@@ -48,7 +48,7 @@ namespace BeatSaberMarkupLanguage.Components
                 tab.selector = this;
             }
 
-            if (leftButtonTag != null)
+            if (!string.IsNullOrEmpty(leftButtonTag))
             {
                 leftButton = parserParams.GetObjectsWithTag(leftButtonTag).FirstOrDefault().GetComponent<Button>();
             }
@@ -58,7 +58,7 @@ namespace BeatSaberMarkupLanguage.Components
                 leftButton.onClick.AddListener(PageLeft);
             }
 
-            if (rightButtonTag != null)
+            if (!string.IsNullOrEmpty(rightButtonTag))
             {
                 rightButton = parserParams.GetObjectsWithTag(rightButtonTag).FirstOrDefault().GetComponent<Button>();
             }

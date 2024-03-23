@@ -41,6 +41,14 @@ namespace BeatSaberMarkupLanguage.Components
         {
             return data.Count;
         }
+
+        private void Awake()
+        {
+            if (tableView != null)
+            {
+                tableView.SetDataSource(this, false);
+            }
+        }
     }
 
     public class CustomCellTableCell : TableCell

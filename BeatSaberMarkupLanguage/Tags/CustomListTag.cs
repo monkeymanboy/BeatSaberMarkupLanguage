@@ -6,7 +6,7 @@ using VRUIControls;
 
 namespace BeatSaberMarkupLanguage.Tags
 {
-    public class CustomListTag : BSMLTag
+    public class CustomListTag : PrefabBSMLTag
     {
         private Canvas canvasTemplate;
 
@@ -14,38 +14,35 @@ namespace BeatSaberMarkupLanguage.Tags
 
         public override bool AddChildren { get => false; }
 
-        public override GameObject CreateObject(Transform parent)
+        protected override PrefabParams CreatePrefab()
         {
             GameObject containerObject = new("BSMLCustomListContainer", typeof(RectTransform), typeof(LayoutElement))
             {
                 layer = 5,
             };
 
-            RectTransform container = (RectTransform)containerObject.transform;
-            container.SetParent(parent, false);
-
             GameObject gameObject = new("BSMLCustomList")
             {
                 layer = 5,
             };
 
-            gameObject.transform.SetParent(container, false);
+            gameObject.transform.SetParent(containerObject.transform, false);
             gameObject.SetActive(false);
 
             if (canvasTemplate == null)
             {
-                canvasTemplate = DiContainer.Resolve<GameplaySetupViewController>()._playerSettingsPanelController._noteJumpStartBeatOffsetDropdown._simpleTextDropdown._tableView.GetComponent<Canvas>();
+                canvasTemplate = BeatSaberUI.DiContainer.Resolve<GameplaySetupViewController>()._playerSettingsPanelController._noteJumpStartBeatOffsetDropdown._simpleTextDropdown._tableView.GetComponent<Canvas>();
             }
 
             gameObject.AddComponent<ScrollRect>();
             gameObject.AddComponent(canvasTemplate);
-            DiContainer.InstantiateComponent<VRGraphicRaycaster>(gameObject);
+            BeatSaberUI.DiContainer.InstantiateComponent<VRGraphicRaycaster>(gameObject);
             gameObject.AddComponent<Touchable>();
             gameObject.AddComponent<EventSystemListener>();
-            ScrollView scrollView = DiContainer.InstantiateComponent<ScrollView>(gameObject);
+            ScrollView scrollView = BeatSaberUI.DiContainer.InstantiateComponent<ScrollView>(gameObject);
 
             TableView tableView = gameObject.AddComponent<BSMLTableView>();
-            CustomCellListTableData tableData = container.gameObject.AddComponent<CustomCellListTableData>();
+            CustomCellListTableData tableData = containerObject.AddComponent<CustomCellListTableData>();
             tableData.tableView = tableView;
 
             tableView._preallocatedCells = new TableView.CellsGroup[0];
@@ -73,9 +70,7 @@ namespace BeatSaberMarkupLanguage.Tags
             (tableView.transform as RectTransform).sizeDelta = new Vector2(0f, 0f);
             (tableView.transform as RectTransform).anchoredPosition = new Vector3(0f, 0f);
 
-            // Changed the bool param to "false", as it would otherwise trigger LazyInit earlier than we want it to
-            tableView.SetDataSource(tableData, false);
-            return container.gameObject;
+            return new PrefabParams(containerObject);
         }
     }
 }

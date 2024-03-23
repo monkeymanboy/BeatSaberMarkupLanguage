@@ -10,20 +10,15 @@ using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.Tags
 {
-    public class ToggleSettingTag : BSMLTag
+    public class ToggleSettingTag : PrefabBSMLTag
     {
-        private GameObject toggleTemplate;
-
         public override string[] Aliases => new[] { "toggle-setting", "bool-setting", "checkbox-setting", "checkbox" };
 
-        public override GameObject CreateObject(Transform parent)
-        {
-            if (toggleTemplate == null)
-            {
-                toggleTemplate = DiContainer.Resolve<MainSettingsMenuViewController>()._settingsSubMenuInfos.Select(m => m.viewController).First(vc => vc.name == "GraphicSettings").transform.Find("ViewPort/Content/Fullscreen").gameObject;
-            }
+        public virtual string PrefabToggleName => "Fullscreen";
 
-            GameObject gameObject = Object.Instantiate(toggleTemplate, parent, false);
+        protected override PrefabParams CreatePrefab()
+        {
+            GameObject gameObject = Object.Instantiate(BeatSaberUI.DiContainer.Resolve<MainSettingsMenuViewController>()._settingsSubMenuInfos.Select(m => m.viewController).First(vc => vc.name == "GraphicSettings").transform.Find("ViewPort/Content/Fullscreen").gameObject);
             GameObject nameText = gameObject.transform.Find("NameText").gameObject;
             GameObject switchView = gameObject.transform.Find("SwitchView").gameObject;
             Object.Destroy(gameObject.GetComponent<BoolSettingsController>());
@@ -54,9 +49,7 @@ namespace BeatSaberMarkupLanguage.Tags
 
             gameObject.GetComponent<LayoutElement>().preferredWidth = 90;
 
-            gameObject.SetActive(true);
-
-            return gameObject;
+            return new PrefabParams(gameObject);
         }
     }
 }

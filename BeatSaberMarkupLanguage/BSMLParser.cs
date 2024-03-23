@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -19,7 +20,7 @@ using Zenject;
 
 namespace BeatSaberMarkupLanguage
 {
-    public class BSMLParser : PersistentSingleton<BSMLParser>, IInitializable
+    public class BSMLParser : PersistentSingleton<BSMLParser>, ILateDisposable
     {
         internal static readonly string MacroPrefix = "macro.";
         internal static readonly string RetrieveValuePrefix = "~";
@@ -34,6 +35,8 @@ namespace BeatSaberMarkupLanguage
         {
             IgnoreComments = true,
         };
+
+        private bool sceneContextResolved;
 
         public BSMLParser()
         {
@@ -59,37 +62,9 @@ namespace BeatSaberMarkupLanguage
             }
         }
 
-        public void Initialize()
+        public void LateDispose()
         {
-            foreach (BSMLTag tag in tags.Values)
-            {
-                if (!tag.isInitialized)
-                {
-                    tag.Setup();
-                    tag.isInitialized = true;
-                }
-            }
-
-#if false//don't worry about this, it's for the docs
-            string contents = "";
-            foreach (BSMLTag tag in Utilities.GetListOfType<BSMLTag>())
-            {
-                tag.Setup();
-                contents += $"- type: {tag.GetType().Name}\n";
-                contents += $"  aliases:\n";
-                foreach (string alias in tag.Aliases)
-                    contents += $"  - {alias}\n";
-                contents += $"  components:\n";
-                GameObject currentNode = tag.CreateObject(transform);
-                foreach (TypeHandler typeHandler in typeHandlers)
-                {
-                    Type type = typeHandler.GetType().GetCustomAttribute<ComponentHandler>(true).type;
-                    if (GetExternalComponent(currentNode, type) != null)
-                        contents += $"  - {type.Name}\n";
-                }
-            }
-            File.WriteAllText(Path.Combine(Environment.CurrentDirectory, "Tags.yml"), contents);
-#endif
+            sceneContextResolved = false;
         }
 
         public void RegisterTag(BSMLTag tag)
@@ -124,6 +99,12 @@ namespace BeatSaberMarkupLanguage
             if (!IsMainMenuSceneLoaded())
             {
                 return null;
+            }
+
+            // Only warn if we're at the root of the document (i.e. not a macro or something else already inside a Parse call)
+            if (!sceneContextResolved && parentNode.ParentNode == null)
+            {
+                Logger.Log.Warn($"{nameof(BSMLParser)}.{nameof(Parse)} called before Zenject initialization was completed! This may lead to unexpected results and will throw an exception in a future release. Consider moving the call to an {nameof(IInitializable.Initialize)} ({nameof(Zenject)}.{nameof(IInitializable)}) or {nameof(MonoBehaviour)} Start method.\n{new StackTrace(3)}");
             }
 
             BSMLParserParams parserParams = new(host);
@@ -289,6 +270,55 @@ namespace BeatSaberMarkupLanguage
             {
                 HandleTagNode(node, parent, parserParams, out componentInfo);
             }
+        }
+
+        internal void SceneContext_PreResolve()
+        {
+#if DEBUG
+            Stopwatch stopwatch = Stopwatch.StartNew();
+#endif
+            foreach (BSMLTag tag in tags.Values.Distinct())
+            {
+#pragma warning disable CS0612, CS0618
+                if (!tag.isInitialized)
+                {
+                    tag.Setup();
+                    tag.isInitialized = true;
+                }
+#pragma warning restore CS0612, CS0618
+
+                tag.SetUp();
+            }
+
+#if DEBUG
+            Logger.Log.Debug("Setup completed in " + stopwatch.Elapsed);
+#endif
+
+#if false//don't worry about this, it's for the docs
+            string contents = "";
+            foreach (BSMLTag tag in Utilities.GetListOfType<BSMLTag>())
+            {
+                tag.Setup();
+                contents += $"- type: {tag.GetType().Name}\n";
+                contents += $"  aliases:\n";
+                foreach (string alias in tag.Aliases)
+                    contents += $"  - {alias}\n";
+                contents += $"  components:\n";
+                GameObject currentNode = tag.CreateObject(transform);
+                foreach (TypeHandler typeHandler in typeHandlers)
+                {
+                    Type type = typeHandler.GetType().GetCustomAttribute<ComponentHandler>(true).type;
+                    if (GetExternalComponent(currentNode, type) != null)
+                        contents += $"  - {type.Name}\n";
+                }
+            }
+            File.WriteAllText(Path.Combine(Environment.CurrentDirectory, "Tags.yml"), contents);
+#endif
+        }
+
+        internal void SceneContext_PostResolve()
+        {
+            sceneContextResolved = true;
         }
 
         private void HandleTagNode(XmlNode node, GameObject parent, BSMLParserParams parserParams, out IEnumerable<ComponentTypeWithData> componentInfo)

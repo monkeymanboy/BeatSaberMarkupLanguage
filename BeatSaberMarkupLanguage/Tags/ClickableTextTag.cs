@@ -3,11 +3,11 @@ using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.Tags
 {
-    public class ClickableTextTag : BSMLTag
+    public class ClickableTextTag : PrefabBSMLTag
     {
         public override string[] Aliases => new[] { "clickable-text" };
 
-        public override GameObject CreateObject(Transform parent)
+        protected override PrefabParams CreatePrefab()
         {
             GameObject gameObject = new("BSMLClickableText")
             {
@@ -19,7 +19,6 @@ namespace BeatSaberMarkupLanguage.Tags
             ClickableText clickableText = gameObject.AddComponent<ClickableText>();
             clickableText.font = BeatSaberUI.MainTextFont;
             clickableText.fontSharedMaterial = BeatSaberUI.MainUIFontMaterial;
-            clickableText.rectTransform.SetParent(parent, false);
             clickableText.text = "Default Text";
             clickableText.fontSize = 5;
             clickableText.color = Color.white;
@@ -27,8 +26,7 @@ namespace BeatSaberMarkupLanguage.Tags
 
             CreateLocalizableText(gameObject);
 
-            gameObject.SetActive(true);
-            return gameObject;
+            return new PrefabParams(gameObject);
         }
     }
 }

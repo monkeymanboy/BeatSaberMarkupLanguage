@@ -6,46 +6,39 @@ using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.Tags
 {
-    public class PageButtonTag : BSMLTag
+    public class PageButtonTag : PrefabBSMLTag
     {
-        private Button buttonTemplate;
-
         public override string[] Aliases => new[] { "page-button", "pg-button" };
 
-        public override GameObject CreateObject(Transform parent)
+        protected override PrefabParams CreatePrefab()
         {
-            if (buttonTemplate == null)
-            {
-                buttonTemplate = DiContainer.Resolve<PlayerOptionsViewController>()._playerSettingsPanelController.GetComponent<ScrollView>()._pageUpButton;
-            }
-
-            Button button = Object.Instantiate(buttonTemplate, parent, false);
-            button.gameObject.SetActive(false);
+            Button button = Object.Instantiate(BeatSaberUI.DiContainer.Resolve<PlayerOptionsViewController>()._playerSettingsPanelController.GetComponent<ScrollView>()._pageUpButton);
+            GameObject buttonObject = button.gameObject;
+            buttonObject.SetActive(false);
             button.name = "BSMLPageButton";
             button.interactable = true;
-            button.gameObject.AddComponent<PageButton>();
-            LayoutElement layoutElement = button.gameObject.AddComponent<LayoutElement>();
+            buttonObject.AddComponent<PageButton>();
+            LayoutElement layoutElement = buttonObject.AddComponent<LayoutElement>();
             layoutElement.preferredWidth = -1;
             layoutElement.preferredHeight = -1;
             layoutElement.flexibleHeight = 0;
             layoutElement.flexibleWidth = 0;
 
-            ContentSizeFitter sizeFitter = button.gameObject.AddComponent<ContentSizeFitter>();
+            ContentSizeFitter sizeFitter = buttonObject.AddComponent<ContentSizeFitter>();
             sizeFitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
             sizeFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
-            RectTransform buttonTransform = button.transform.GetChild(0) as RectTransform;
+            RectTransform buttonTransform = (RectTransform)button.transform.GetChild(0);
             buttonTransform.anchorMin = new Vector2(0, 0);
             buttonTransform.anchorMax = new Vector2(1, 1);
             buttonTransform.sizeDelta = new Vector2(0, 0);
 
-            (button.transform as RectTransform).pivot = new Vector2(.5f, .5f);
+            ((RectTransform)button.transform).pivot = new Vector2(.5f, .5f);
 
-            ButtonIconImage btnIcon = button.gameObject.AddComponent<ButtonIconImage>();
-            btnIcon.image = button.gameObject.GetComponentsInChildren<Image>(true).Where(x => x.gameObject.name == "Icon").FirstOrDefault();
+            ButtonIconImage btnIcon = buttonObject.AddComponent<ButtonIconImage>();
+            btnIcon.image = buttonObject.GetComponentsInChildren<Image>(true).Where(x => x.gameObject.name == "Icon").FirstOrDefault();
 
-            button.gameObject.SetActive(true);
-            return button.gameObject;
+            return new PrefabParams(buttonObject);
         }
     }
 }

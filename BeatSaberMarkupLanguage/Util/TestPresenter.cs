@@ -11,11 +11,11 @@ namespace BeatSaberMarkupLanguage.Util
     {
         public void Initialize()
         {
-            // GameplaySetup.GameplaySetup.instance.AddTab("Test", "BeatSaberMarkupLanguage.Views.gameplay-setup-test.bsml", new GameplaySetup.GameplaySetupTest());
-            // Settings.BSMLSettings.instance.AddSettingsMenu("Test", "BeatSaberMarkupLanguage.Views.settings-test.bsml", new Settings.SettingsTest());
+            GameplaySetup.GameplaySetup.instance.AddTab("Test", "BeatSaberMarkupLanguage.Views.gameplay-setup-test.bsml", new GameplaySetup.GameplaySetupTest());
+            Settings.BSMLSettings.instance.AddSettingsMenu("Test", "BeatSaberMarkupLanguage.Views.settings-test.bsml", new Settings.SettingsTest());
             // _ = PresentTest<ViewControllers.TestViewController>();
             // _ = PresentTest<ViewControllers.LocalizationTestViewController>();
-            // MenuButtons.MenuButtons.instance.RegisterButton(new MenuButtons.MenuButton("test", () => MenuButtons.MenuButtons.instance.RegisterButton(new MenuButtons.MenuButton("test2", null))));
+            MenuButtons.MenuButtons.instance.RegisterButton(new MenuButtons.MenuButton("test", () => MenuButtons.MenuButtons.instance.RegisterButton(new MenuButtons.MenuButton("test2", null))));
         }
 
         private async Task PresentTest<T>()
