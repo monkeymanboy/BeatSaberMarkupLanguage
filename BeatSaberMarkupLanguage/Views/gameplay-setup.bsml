@@ -15,8 +15,8 @@
     </macro.for-each>
     <modal id='list-modal' clickerino-offerino-closerino='true' size-delta-x='65' size-delta-y='35'>
       <loading-indicator active='~is-loading' preserve-aspect='true' pref-width='20' pref-height='20' />
-      <horizontal anchor-pos-x='-2' horizontal-fit='PreferredSize' vertical-fit='PreferredSize'>
-        <list id='mods-list' active='~loaded' show-scrollbar='true' stick-scrolling='true' size-delta-y='32' pref-width='55' pref-height='32' />
+      <horizontal horizontal-fit='PreferredSize' vertical-fit='PreferredSize'>
+        <list id='mods-list' active='~loaded' show-scrollbar='true' size-delta-y='32' pref-width='60' pref-height='32' />
       </horizontal>
     </modal>
   </tab>

@@ -15,17 +15,21 @@ namespace BeatSaberMarkupLanguage.Tags
 
         public override GameObject CreateObject(Transform parent)
         {
-            RectTransform container = new GameObject("BSMLListContainer", typeof(RectTransform)).transform as RectTransform;
-            LayoutElement layoutElement = container.gameObject.AddComponent<LayoutElement>();
+            RectTransform container = (RectTransform)new GameObject("BSMLListContainer", typeof(LayoutElement)).transform;
             container.SetParent(parent, false);
 
             GameObject gameObject = new("BSMLList")
             {
                 layer = 5,
             };
-
-            gameObject.transform.SetParent(container, false);
             gameObject.SetActive(false);
+
+            RectTransform rectTransform = gameObject.AddComponent<RectTransform>();
+            rectTransform.SetParent(container, false);
+            rectTransform.anchorMin = Vector2.zero;
+            rectTransform.anchorMax = Vector2.one;
+            rectTransform.sizeDelta = Vector2.zero;
+            rectTransform.anchoredPosition = Vector2.zero;
 
             if (canvasTemplate == null)
             {
@@ -58,15 +62,10 @@ namespace BeatSaberMarkupLanguage.Tags
             scrollView._contentRectTransform = content;
             scrollView._viewport = viewport;
 
-            (viewport.transform as RectTransform).anchorMin = new Vector2(0f, 0f);
-            (viewport.transform as RectTransform).anchorMax = new Vector2(1f, 1f);
-            (viewport.transform as RectTransform).sizeDelta = new Vector2(0f, 0f);
-            (viewport.transform as RectTransform).anchoredPosition = new Vector3(0f, 0f);
-
-            (tableView.transform as RectTransform).anchorMin = new Vector2(0f, 0f);
-            (tableView.transform as RectTransform).anchorMax = new Vector2(1f, 1f);
-            (tableView.transform as RectTransform).sizeDelta = new Vector2(0f, 0f);
-            (tableView.transform as RectTransform).anchoredPosition = new Vector3(0f, 0f);
+            viewport.anchorMin = Vector2.zero;
+            viewport.anchorMax = Vector2.one;
+            viewport.sizeDelta = Vector2.zero;
+            viewport.anchoredPosition = Vector2.zero;
 
             tableView.SetDataSource(tableData, false);
             return container.gameObject;

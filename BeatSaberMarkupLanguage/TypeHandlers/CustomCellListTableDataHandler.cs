@@ -28,7 +28,6 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "cellClickable", new[] { "clickable-cells" } },
             { "cellTemplate", new[] { "_children" } },
             { "alignCenter", new[] { "align-to-center" } },
-            { "stickScrolling", new[] { "stick-scrolling" } },
             { "showScrollbar", new[] { "show-scrollbar" } },
         };
 
@@ -80,29 +79,29 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             }
 
             // We can only show the scroll bar for vertical lists
-            if (verticalList && componentType.data.TryGetValue("showScrollbar", out string showScrollbar))
+            if (verticalList && componentType.data.TryGetValue("showScrollbar", out string showScrollbar) && Parse.Bool(showScrollbar))
             {
-                if (Parse.Bool(showScrollbar))
-                {
-                    TextPageScrollView textScrollView = Object.Instantiate(ScrollViewTag.ScrollViewTemplate, componentType.component.transform);
+                TextPageScrollView textScrollView = Object.Instantiate(ScrollViewTag.ScrollViewTemplate);
 
-                    Button pageUpButton = textScrollView._pageUpButton;
-                    Button pageDownButton = textScrollView._pageDownButton;
-                    VerticalScrollIndicator verticalScrollIndicator = textScrollView._verticalScrollIndicator;
-                    RectTransform scrollBar = verticalScrollIndicator.transform.parent as RectTransform;
+                Button pageUpButton = textScrollView._pageUpButton;
+                Button pageDownButton = textScrollView._pageDownButton;
+                VerticalScrollIndicator verticalScrollIndicator = textScrollView._verticalScrollIndicator;
+                RectTransform scrollBar = (RectTransform)verticalScrollIndicator.transform.parent;
 
-                    scrollView._pageUpButton = pageUpButton;
-                    scrollView._pageDownButton = pageDownButton;
-                    scrollView._verticalScrollIndicator = verticalScrollIndicator;
-                    scrollBar.SetParent(componentType.component.transform);
-                    Object.Destroy(textScrollView.gameObject);
+                // Make scrollbar have less padding on the right
+                scrollBar.offsetMin = new Vector2(-6, 0);
+                ((RectTransform)verticalScrollIndicator.transform).anchoredPosition = new Vector2(1, -8);
+                ((RectTransform)pageUpButton.transform.Find("Icon")).anchoredPosition = new Vector2(-2, -4);
+                ((RectTransform)pageDownButton.transform.Find("Icon")).anchoredPosition = new Vector2(-2, 4);
 
-                    // Need to adjust scroll bar positioning
-                    scrollBar.anchorMin = new Vector2(1, 0);
-                    scrollBar.anchorMax = Vector2.one;
-                    scrollBar.offsetMin = Vector2.zero;
-                    scrollBar.offsetMax = new Vector2(8, 0);
-                }
+                scrollView._pageUpButton = pageUpButton;
+                scrollView._pageDownButton = pageDownButton;
+                scrollView._verticalScrollIndicator = verticalScrollIndicator;
+                scrollBar.SetParent(scrollView.viewportTransform.parent, false);
+                Object.Destroy(textScrollView.gameObject);
+
+                // Resize viewport so it doesn't overlap with scroll bar
+                scrollView.viewportTransform.offsetMax = new Vector2(-6, 0);
             }
 
             if (componentType.data.TryGetValue("data", out string value))

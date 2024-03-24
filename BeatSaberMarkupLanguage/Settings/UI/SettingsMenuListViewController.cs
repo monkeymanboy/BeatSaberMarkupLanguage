@@ -21,7 +21,7 @@ namespace BeatSaberMarkupLanguage.Settings.UI.ViewControllers
 
             if (firstActivation)
             {
-                rectTransform.sizeDelta = new Vector2(35, 0);
+                rectTransform.sizeDelta = new Vector2(40, 0);
                 rectTransform.anchorMin = new Vector2(0.5f, 0);
                 rectTransform.anchorMax = new Vector2(0.5f, 1);
             }

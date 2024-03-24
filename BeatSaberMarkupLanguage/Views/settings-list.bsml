@@ -1,5 +1,3 @@
-<vertical child-expand-height='false' spacing='2' pad-top='2'>
-  <page-button click-event='list#PageUp' direction='Up' pref-width='30' pref-height='5'></page-button>
-  <list id='list' select-cell='settings-click' list-style='Simple' list-width='30' visible-cells='6' anchor-pos-y='8'></list>
-  <page-button click-event='list#PageDown' direction='Down' pref-width='30' pref-height='5'></page-button>
-</vertical>
+<bg>
+  <list id='list' select-cell='settings-click' list-style='Simple' list-width='40' visible-cells='7' show-scrollbar='true' />
+</bg>
