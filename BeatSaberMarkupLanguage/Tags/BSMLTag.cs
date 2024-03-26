@@ -9,6 +9,7 @@ namespace BeatSaberMarkupLanguage.Tags
 {
     public abstract class BSMLTag
     {
+        [Obsolete]
         public bool isInitialized = false;
 
         public abstract string[] Aliases { get; }
@@ -19,7 +20,18 @@ namespace BeatSaberMarkupLanguage.Tags
 
         public abstract GameObject CreateObject(Transform parent);
 
+        [Obsolete("This method is only called once when the game first loads. Use Initialize instead, which is called after internal game restarts as well.")]
         public virtual void Setup()
+        {
+        }
+
+        /// <summary>
+        /// Initialize the tag.
+        /// </summary>
+        /// <remarks>
+        /// This method is called when the menu scene is first loaded, both when the game starts and after internal game restarts.
+        /// </remarks>
+        public virtual void Initialize()
         {
         }
 
