@@ -33,4 +33,4 @@ If you plan on adding any new dependencies which are located in the Beat Saber d
 ```
 
 ### GitHub Packages
-This project currently uses [a fork](github.com/nicoco007/BepInEx.AssemblyPublicizer) of [BepInEx.AssemblyPublicizer](github.com/BepInEx/BepInEx.AssemblyPublicizer). You will need to add `https://nuget.pkg.github.com/nicoco007/index.json` as a package source for NuGet to download it. Take a look at GitHub's [Working with the NuGet Registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-nuget-registry#authenticating-to-github-packages) for details.
+This project currently uses [a fork](https://github.com/nicoco007/BepInEx.AssemblyPublicizer) of [BepInEx.AssemblyPublicizer](https://github.com/BepInEx/BepInEx.AssemblyPublicizer). You will need to add `https://nuget.pkg.github.com/nicoco007/index.json` as a package source for NuGet to download it. Take a look at GitHub's [Working with the NuGet Registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-nuget-registry#authenticating-to-github-packages) for details.
