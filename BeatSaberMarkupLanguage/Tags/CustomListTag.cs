@@ -39,7 +39,7 @@ namespace BeatSaberMarkupLanguage.Tags
             DiContainer.InstantiateComponent<VRGraphicRaycaster>(gameObject);
             gameObject.AddComponent<Touchable>();
             gameObject.AddComponent<EventSystemListener>();
-            ScrollView scrollView = DiContainer.InstantiateComponent<ScrollView>(gameObject);
+            ScrollView scrollView = DiContainer.InstantiateComponent<BSMLScrollView>(gameObject);
 
             TableView tableView = gameObject.AddComponent<BSMLTableView>();
             CustomCellListTableData tableData = gameObject.AddComponent<CustomCellListTableData>();
