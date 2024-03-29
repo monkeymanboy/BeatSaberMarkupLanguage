@@ -88,20 +88,14 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 VerticalScrollIndicator verticalScrollIndicator = textScrollView._verticalScrollIndicator;
                 RectTransform scrollBar = (RectTransform)verticalScrollIndicator.transform.parent;
 
-                // Make scrollbar have less padding on the right
-                scrollBar.offsetMin = new Vector2(-6, 0);
-                ((RectTransform)verticalScrollIndicator.transform).anchoredPosition = new Vector2(1, -8);
-                ((RectTransform)pageUpButton.transform.Find("Icon")).anchoredPosition = new Vector2(-2, -4);
-                ((RectTransform)pageDownButton.transform.Find("Icon")).anchoredPosition = new Vector2(-2, 4);
+                scrollBar.offsetMin = Vector2.zero;
+                scrollBar.offsetMax = new Vector2(8, 0);
 
                 scrollView._pageUpButton = pageUpButton;
                 scrollView._pageDownButton = pageDownButton;
                 scrollView._verticalScrollIndicator = verticalScrollIndicator;
-                scrollBar.SetParent(scrollView.viewportTransform.parent, false);
+                scrollBar.SetParent(componentType.component.transform, false);
                 Object.Destroy(textScrollView.gameObject);
-
-                // Resize viewport so it doesn't overlap with scroll bar
-                scrollView.viewportTransform.offsetMax = new Vector2(-6, 0);
             }
 
             if (componentType.data.TryGetValue("data", out string value))

@@ -14,14 +14,26 @@ namespace BeatSaberMarkupLanguage.Tags
 
         public override GameObject CreateObject(Transform parent)
         {
-            GameObject gameObject = new("BSMLList", typeof(LayoutElement))
+            GameObject containerObject = new("BSMLListContainer", typeof(LayoutElement))
+            {
+                layer = 5,
+            };
+
+            RectTransform container = (RectTransform)containerObject.transform;
+            container.SetParent(parent, false);
+            container.anchorMin = Vector2.zero;
+            container.anchorMax = Vector2.one;
+            container.sizeDelta = Vector2.zero;
+            container.anchoredPosition = Vector2.zero;
+
+            GameObject gameObject = new("BSMLList")
             {
                 layer = 5,
             };
             gameObject.SetActive(false);
 
-            RectTransform rectTransform = (RectTransform)gameObject.transform;
-            rectTransform.SetParent(parent, false);
+            RectTransform rectTransform = gameObject.AddComponent<RectTransform>();
+            rectTransform.SetParent(container, false);
             rectTransform.anchorMin = Vector2.zero;
             rectTransform.anchorMax = Vector2.one;
             rectTransform.sizeDelta = Vector2.zero;
@@ -40,7 +52,7 @@ namespace BeatSaberMarkupLanguage.Tags
             ScrollView scrollView = DiContainer.InstantiateComponent<BSMLScrollView>(gameObject);
 
             TableView tableView = gameObject.AddComponent<BSMLTableView>();
-            CustomListTableData tableData = gameObject.AddComponent<CustomListTableData>();
+            CustomListTableData tableData = containerObject.AddComponent<CustomListTableData>();
             tableData.tableView = tableView;
 
             tableView._preallocatedCells = new TableView.CellsGroup[0];
@@ -64,7 +76,7 @@ namespace BeatSaberMarkupLanguage.Tags
             viewport.anchoredPosition = Vector2.zero;
 
             tableView.SetDataSource(tableData, false);
-            return gameObject;
+            return containerObject;
         }
     }
 }

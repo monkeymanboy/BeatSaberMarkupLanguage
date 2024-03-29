@@ -1,3 +1,3 @@
-<bg>
+<bg size-delta-x='-6' anchor-pos-x='-3'>
   <list id='list' select-cell='settings-click' list-style='Simple' visible-cells='7' show-scrollbar='true' />
 </bg>

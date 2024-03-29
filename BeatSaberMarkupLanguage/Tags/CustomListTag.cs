@@ -6,7 +6,7 @@ using VRUIControls;
 
 namespace BeatSaberMarkupLanguage.Tags
 {
-    public class CustomListTag : BSMLTag
+    public class CustomListTag : ListTag
     {
         private Canvas canvasTemplate;
 
@@ -16,14 +16,26 @@ namespace BeatSaberMarkupLanguage.Tags
 
         public override GameObject CreateObject(Transform parent)
         {
-            GameObject gameObject = new("BSMLCustomList", typeof(LayoutElement))
+            GameObject containerObject = new("BSMLCustomListContainer", typeof(LayoutElement))
+            {
+                layer = 5,
+            };
+
+            RectTransform container = (RectTransform)containerObject.transform;
+            container.SetParent(parent, false);
+            container.anchorMin = Vector2.zero;
+            container.anchorMax = Vector2.one;
+            container.sizeDelta = Vector2.zero;
+            container.anchoredPosition = Vector2.zero;
+
+            GameObject gameObject = new("BSMLCustomList")
             {
                 layer = 5,
             };
             gameObject.SetActive(false);
 
-            RectTransform rectTransform = (RectTransform)gameObject.transform;
-            rectTransform.SetParent(parent, false);
+            RectTransform rectTransform = gameObject.AddComponent<RectTransform>();
+            rectTransform.SetParent(container, false);
             rectTransform.anchorMin = Vector2.zero;
             rectTransform.anchorMax = Vector2.one;
             rectTransform.sizeDelta = Vector2.zero;
@@ -42,7 +54,7 @@ namespace BeatSaberMarkupLanguage.Tags
             ScrollView scrollView = DiContainer.InstantiateComponent<BSMLScrollView>(gameObject);
 
             TableView tableView = gameObject.AddComponent<BSMLTableView>();
-            CustomCellListTableData tableData = gameObject.AddComponent<CustomCellListTableData>();
+            CustomCellListTableData tableData = containerObject.AddComponent<CustomCellListTableData>();
             tableData.tableView = tableView;
 
             tableView._preallocatedCells = new TableView.CellsGroup[0];
@@ -67,7 +79,7 @@ namespace BeatSaberMarkupLanguage.Tags
 
             // Changed the bool param to "false", as it would otherwise trigger LazyInit earlier than we want it to
             tableView.SetDataSource(tableData, false);
-            return gameObject;
+            return containerObject;
         }
     }
 }
