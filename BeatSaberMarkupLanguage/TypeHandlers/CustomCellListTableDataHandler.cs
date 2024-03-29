@@ -99,9 +99,6 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 scrollView._verticalScrollIndicator = verticalScrollIndicator;
                 scrollBar.SetParent(scrollView.viewportTransform.parent, false);
                 Object.Destroy(textScrollView.gameObject);
-
-                // Resize viewport so it doesn't overlap with scroll bar
-                scrollView.viewportTransform.offsetMax = new Vector2(-6, 0);
             }
 
             if (componentType.data.TryGetValue("data", out string value))
