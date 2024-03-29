@@ -16,7 +16,7 @@ namespace BeatSaberMarkupLanguage.Tags
 
         public override GameObject CreateObject(Transform parent)
         {
-            GameObject containerObject = new("BSMLCustomListContainer", typeof(RectTransform), typeof(LayoutElement))
+            GameObject containerObject = new("BSMLCustomListContainer", typeof(LayoutElement))
             {
                 layer = 5,
             };
@@ -30,7 +30,7 @@ namespace BeatSaberMarkupLanguage.Tags
             };
             gameObject.SetActive(false);
 
-            RectTransform rectTransform = (RectTransform)gameObject.transform;
+            RectTransform rectTransform = gameObject.AddComponent<RectTransform>();
             rectTransform.SetParent(container, false);
             rectTransform.anchorMin = Vector2.zero;
             rectTransform.anchorMax = Vector2.one;
