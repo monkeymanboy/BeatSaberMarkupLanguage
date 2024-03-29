@@ -14,8 +14,8 @@ namespace BeatSaberMarkupLanguage.Tags
             RectTransform scrollTransform = externalComponents.Get<RectTransform>();
             scrollTransform.anchorMin = Vector2.zero;
             scrollTransform.anchorMax = Vector2.one;
-            scrollTransform.anchoredPosition = new Vector2(2, 6);
-            scrollTransform.sizeDelta = new Vector2(0, -20);
+            scrollTransform.anchoredPosition = Vector2.zero;
+            scrollTransform.sizeDelta = Vector2.zero;
             scrollTransform.gameObject.name = "BSMLScrollableSettingsContainer";
             return content;
         }

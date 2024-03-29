@@ -1,3 +1,3 @@
 <bg>
-  <list id='list' select-cell='settings-click' list-style='Simple' list-width='40' visible-cells='7' show-scrollbar='true' />
+  <list id='list' select-cell='settings-click' list-style='Simple' visible-cells='7' show-scrollbar='true' />
 </bg>

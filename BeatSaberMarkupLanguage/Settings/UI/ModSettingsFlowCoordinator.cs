@@ -96,8 +96,21 @@ namespace BeatSaberMarkupLanguage.Settings
                 navigationController = BeatSaberUI.CreateViewController<NavigationController>();
                 BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), "BeatSaberMarkupLanguage.Views.settings-buttons.bsml"), navigationController.gameObject, this);
 
+                RectTransform container = new GameObject("Container").AddComponent<RectTransform>();
+                container.SetParent(navigationController.transform, false);
+                container.anchorMin = Vector2.zero;
+                container.anchorMax = Vector2.one;
+                container.sizeDelta = new Vector2(0, -12);
+                container.anchoredPosition = new Vector2(0, 6);
+                navigationController._controllersContainer = container;
+
                 settingsMenuListViewController = BeatSaberUI.CreateViewController<SettingsMenuListViewController>();
                 settingsMenuListViewController.clickedMenu += OpenMenu;
+
+                RectTransform viewControllerTransform = (RectTransform)settingsMenuListViewController.transform;
+                viewControllerTransform.sizeDelta = new Vector2(0, -12);
+                viewControllerTransform.anchoredPosition = new Vector2(0, 6);
+
                 SetViewControllerToNavigationController(navigationController, settingsMenuListViewController);
                 ProvideInitialViewControllers(navigationController);
             }
