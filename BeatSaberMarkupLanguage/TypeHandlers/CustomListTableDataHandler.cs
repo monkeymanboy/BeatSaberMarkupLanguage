@@ -115,21 +115,16 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 tableData.tableView.ReloadData();
             }
 
-            RectTransform rectTransform = (RectTransform)componentType.component.transform;
-
-            switch (tableData.tableView.tableType)
+            Vector2 preferredSize = tableData.tableView.tableType switch
             {
-                case TableView.TableType.Vertical:
-                    rectTransform.sizeDelta = new Vector2(componentType.data.TryGetValue("listWidth", out string vListWidth) ? Parse.Float(vListWidth) : 60, tableData.cellSize * (componentType.data.TryGetValue("visibleCells", out string vVisibleCells) ? Parse.Float(vVisibleCells) : 7));
-                    break;
-                case TableView.TableType.Horizontal:
-                    rectTransform.sizeDelta = new Vector2(tableData.cellSize * (componentType.data.TryGetValue("visibleCells", out string hVisibleCells) ? Parse.Float(hVisibleCells) : 4), componentType.data.TryGetValue("listHeight", out string hListHeight) ? Parse.Float(hListHeight) : 40);
-                    break;
-            }
+                TableView.TableType.Vertical => new Vector2(componentType.data.TryGetValue("listWidth", out string vListWidth) ? Parse.Float(vListWidth) : 60, tableData.cellSize * (componentType.data.TryGetValue("visibleCells", out string vVisibleCells) ? Parse.Float(vVisibleCells) : 7)),
+                TableView.TableType.Horizontal => new Vector2(tableData.cellSize * (componentType.data.TryGetValue("visibleCells", out string hVisibleCells) ? Parse.Float(hVisibleCells) : 4), componentType.data.TryGetValue("listHeight", out string hListHeight) ? Parse.Float(hListHeight) : 40),
+                _ => throw new ArgumentException("Unexpected table type " + tableData.tableView.tableType),
+            };
 
             LayoutElement layoutElement = componentType.component.GetComponent<LayoutElement>();
-            layoutElement.preferredHeight = rectTransform.sizeDelta.y;
-            layoutElement.preferredWidth = rectTransform.sizeDelta.x;
+            layoutElement.preferredHeight = preferredSize.y;
+            layoutElement.preferredWidth = preferredSize.x;
 
             tableData.tableView.gameObject.SetActive(true);
             tableData.tableView.LazyInit();

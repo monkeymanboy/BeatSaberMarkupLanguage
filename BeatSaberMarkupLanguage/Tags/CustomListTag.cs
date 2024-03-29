@@ -16,22 +16,14 @@ namespace BeatSaberMarkupLanguage.Tags
 
         public override GameObject CreateObject(Transform parent)
         {
-            GameObject containerObject = new("BSMLCustomListContainer", typeof(LayoutElement))
-            {
-                layer = 5,
-            };
-
-            RectTransform container = (RectTransform)containerObject.transform;
-            container.SetParent(parent, false);
-
-            GameObject gameObject = new("BSMLCustomList")
+            GameObject gameObject = new("BSMLCustomList", typeof(LayoutElement))
             {
                 layer = 5,
             };
             gameObject.SetActive(false);
 
-            RectTransform rectTransform = gameObject.AddComponent<RectTransform>();
-            rectTransform.SetParent(container, false);
+            RectTransform rectTransform = (RectTransform)gameObject.transform;
+            rectTransform.SetParent(parent, false);
             rectTransform.anchorMin = Vector2.zero;
             rectTransform.anchorMax = Vector2.one;
             rectTransform.sizeDelta = Vector2.zero;
@@ -50,7 +42,7 @@ namespace BeatSaberMarkupLanguage.Tags
             ScrollView scrollView = DiContainer.InstantiateComponent<ScrollView>(gameObject);
 
             TableView tableView = gameObject.AddComponent<BSMLTableView>();
-            CustomCellListTableData tableData = container.gameObject.AddComponent<CustomCellListTableData>();
+            CustomCellListTableData tableData = gameObject.AddComponent<CustomCellListTableData>();
             tableData.tableView = tableView;
 
             tableView._preallocatedCells = new TableView.CellsGroup[0];
@@ -75,7 +67,7 @@ namespace BeatSaberMarkupLanguage.Tags
 
             // Changed the bool param to "false", as it would otherwise trigger LazyInit earlier than we want it to
             tableView.SetDataSource(tableData, false);
-            return container.gameObject;
+            return gameObject;
         }
     }
 }

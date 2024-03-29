@@ -14,22 +14,14 @@ namespace BeatSaberMarkupLanguage.Tags
 
         public override GameObject CreateObject(Transform parent)
         {
-            GameObject containerObject = new("BSMLListContainer", typeof(LayoutElement))
-            {
-                layer = 5,
-            };
-
-            RectTransform container = (RectTransform)containerObject.transform;
-            container.SetParent(parent, false);
-
-            GameObject gameObject = new("BSMLList")
+            GameObject gameObject = new("BSMLList", typeof(LayoutElement))
             {
                 layer = 5,
             };
             gameObject.SetActive(false);
 
-            RectTransform rectTransform = gameObject.AddComponent<RectTransform>();
-            rectTransform.SetParent(container, false);
+            RectTransform rectTransform = (RectTransform)gameObject.transform;
+            rectTransform.SetParent(parent, false);
             rectTransform.anchorMin = Vector2.zero;
             rectTransform.anchorMax = Vector2.one;
             rectTransform.sizeDelta = Vector2.zero;
@@ -48,7 +40,7 @@ namespace BeatSaberMarkupLanguage.Tags
             ScrollView scrollView = DiContainer.InstantiateComponent<ScrollView>(gameObject);
 
             TableView tableView = gameObject.AddComponent<BSMLTableView>();
-            CustomListTableData tableData = container.gameObject.AddComponent<CustomListTableData>();
+            CustomListTableData tableData = gameObject.AddComponent<CustomListTableData>();
             tableData.tableView = tableView;
 
             tableView._preallocatedCells = new TableView.CellsGroup[0];
@@ -72,7 +64,7 @@ namespace BeatSaberMarkupLanguage.Tags
             viewport.anchoredPosition = Vector2.zero;
 
             tableView.SetDataSource(tableData, false);
-            return container.gameObject;
+            return gameObject;
         }
     }
 }
