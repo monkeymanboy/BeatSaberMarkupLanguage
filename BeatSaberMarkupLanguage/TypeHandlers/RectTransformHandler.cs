@@ -24,6 +24,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "hoverHint", new[] { "hover-hint" } },
             { "hoverHintKey", new[] { "hover-hint-key" } },
             { "active", new[] { "active" } },
+            { "localScale", new[] { "local-scale", "scale" } },
         };
 
         public override Dictionary<string, Action<RectTransform, string>> Setters => new()
@@ -41,6 +42,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "hoverHint", new Action<RectTransform, string>(AddHoverHint) },
             { "hoverHintKey", new Action<RectTransform, string>(AddHoverHintKey) },
             { "active", new Action<RectTransform, string>((component, value) => component.gameObject.SetActive(Parse.Bool(value))) },
+            { "localScale", new Action<RectTransform, string>((component, value) => component.localScale = Vector3.one * Parse.Float(value)) },
         };
 
         private void AddHoverHint(RectTransform rectTransform, string text)
