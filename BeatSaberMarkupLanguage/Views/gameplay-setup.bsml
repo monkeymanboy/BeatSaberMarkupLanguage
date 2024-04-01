@@ -4,10 +4,10 @@
     <macro.reparent transforms='vanilla-items'/>
   </tab>
   <tab id='mods-tab' tags='new-tab' tab-name-key='BSML_GAMEPLAY_SETUP_MODS_TAB'>
-    <horizontal child-expand-width='false' pref-height='6' anchor-pos-y='28' size-delta-x='-16'>
-      <page-button direction='Left' pref-width='6' pref-height='6' tags='left-button'/>
+    <horizontal child-expand-width='false' pref-height='6' anchor-pos-y='28' size-delta-x='-16' spacing='1'>
+      <page-button direction='Left' pref-width='4' pref-height='4' tags='left-button'/>
       <tab-selector tab-tag='mod-tab' child-expand-width='true' child-control-width='true' has-separator='false' page-count='3' left-button-tag='left-button' right-button-tag='right-button'/>
-      <page-button direction='Right' pref-width='6' pref-height='6' tags='right-button'/>
+      <page-button direction='Right' pref-width='4' pref-height='4' tags='right-button'/>
     </horizontal>
     <clickable-text text='👁' hover-hint-key='BSML_GAMEPLAY_SETUP_EDIT_VISIBLE_TABS_HINT' on-click='show-modal' anchored-position='98 27.2' />
     <macro.for-each items='mod-menus' pass-back-tags='true'>
