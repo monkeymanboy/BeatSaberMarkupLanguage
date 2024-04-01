@@ -9,6 +9,8 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
     {
         public override Dictionary<string, string[]> Props => new()
         {
+            { "flexibleHeight", new[] { "flexible-height" } },
+            { "flexibleWidth", new[] { "flexible-width" } },
             { "ignoreLayout", new[] { "ignore-layout" } },
             { "preferredWidth", new[] { "preferred-width", "pref-width" } },
             { "preferredHeight", new[] { "preferred-height", "pref-height" } },
@@ -18,6 +20,8 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 
         public override Dictionary<string, Action<LayoutElement, string>> Setters => new()
         {
+            { "flexibleHeight", new Action<LayoutElement, string>((layoutElement, value) => layoutElement.flexibleHeight = Parse.Float(value)) },
+            { "flexibleWidth", new Action<LayoutElement, string>((layoutElement, value) => layoutElement.flexibleWidth = Parse.Float(value)) },
             { "ignoreLayout", new Action<LayoutElement, string>((layoutElement, value) => layoutElement.ignoreLayout = Parse.Bool(value)) },
             { "preferredWidth", new Action<LayoutElement, string>((layoutElement, value) => layoutElement.preferredWidth = Parse.Float(value)) },
             { "preferredHeight", new Action<LayoutElement, string>((layoutElement, value) => layoutElement.preferredHeight = Parse.Float(value)) },
