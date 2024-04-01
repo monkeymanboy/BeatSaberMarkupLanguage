@@ -24,7 +24,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "hoverHint", new[] { "hover-hint" } },
             { "hoverHintKey", new[] { "hover-hint-key" } },
             { "active", new[] { "active" } },
-            { "localScale", new[] { "local-scale", "scale", "size" } },
+            { "localScale", new[] { "local-scale", "scale" } },
         };
 
         public override Dictionary<string, Action<RectTransform, string>> Setters => new()
