@@ -1,43 +1,124 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
+using UnityEngine;
 
 namespace BeatSaberMarkupLanguage
 {
+    /// <summary>
+    /// String parsing utilities.
+    /// </summary>
     public static class Parse
     {
+        /// <summary>
+        /// Parse a string as an <see cref="float"/>.
+        /// </summary>
+        /// <param name="s">String to parse.</param>
+        /// <returns>A <see cref="float"/> representation of the string.</returns>
+        /// <exception cref="ParseException">Thrown if the string cannot be parsed.</exception>
         public static float Float(string s)
         {
-            try
+            if (!float.TryParse(s, NumberStyles.Float, CultureInfo.InvariantCulture, out float result))
             {
-                return float.Parse(s, CultureInfo.InvariantCulture);
+                throw new ParseException($"Could not parse '{s}' as a float");
             }
-            catch
-            {
-                throw new ParseException("Could not parse float: " + s);
-            }
+
+            return result;
         }
 
+        /// <summary>
+        /// Parse a string as an <see cref="bool"/>.
+        /// </summary>
+        /// <param name="s">String to parse.</param>
+        /// <returns>A <see cref="bool"/> representation of the string.</returns>
+        /// <exception cref="ParseException">Thrown if the string cannot be parsed.</exception>
         public static bool Bool(string s)
         {
-            try
+            if (!bool.TryParse(s, out bool result))
             {
-                return bool.Parse(s);
+                throw new ParseException($"Could not parse '{s}' as a bool");
             }
-            catch
-            {
-                throw new ParseException("Could not parse bool: " + s);
-            }
+
+            return result;
         }
 
+        /// <summary>
+        /// Parse a string as an <see cref="int"/>.
+        /// </summary>
+        /// <param name="s">String to parse.</param>
+        /// <returns>A <see cref="int"/> representation of the string.</returns>
+        /// <exception cref="ParseException">Thrown if the string cannot be parsed.</exception>
         public static int Int(string s)
         {
-            try
+            if (!int.TryParse(s, NumberStyles.Integer, CultureInfo.InvariantCulture, out int result))
             {
-                return int.Parse(s, CultureInfo.InvariantCulture);
+                throw new ParseException($"Could not parse '{s}' as an integer");
             }
-            catch
+
+            return result;
+        }
+
+        /// <summary>
+        /// Parse a string as a <see cref="UnityEngine.Vector2"/>.
+        /// </summary>
+        /// <param name="s">String to parse.</param>
+        /// <returns>A <see cref="UnityEngine.Vector2"/> representation of the string.</returns>
+        /// <exception cref="ParseException">Thrown if the string cannot be parsed.</exception>
+        public static Vector2 Vector2(string s)
+        {
+            string[] parts = s.Split([' '], StringSplitOptions.RemoveEmptyEntries);
+            float x;
+            float y;
+
+            switch (parts.Length)
             {
-                throw new ParseException("Could not parse int: " + s);
+                case 1:
+                    x = y = Float(parts[0]);
+                    break;
+                case 2:
+                    x = Float(parts[0]);
+                    y = Float(parts[1]);
+                    break;
+                default:
+                    throw new ParseException("Unexpected number of components");
             }
+
+            return new Vector2(x, y);
+        }
+
+        /// <summary>
+        /// Parse a string as a <see cref="UnityEngine.Vector3"/>.
+        /// </summary>
+        /// <param name="s">String to parse.</param>
+        /// <param name="defaultZ">Z value used if the string only has two components.</param>
+        /// <returns>A <see cref="UnityEngine.Vector3"/> representation of the string.</returns>
+        /// <exception cref="ParseException">Thrown if the string cannot be parsed.</exception>
+        public static Vector3 Vector3(string s, float defaultZ = 0)
+        {
+            string[] parts = s.Split([' '], StringSplitOptions.RemoveEmptyEntries);
+            float x;
+            float y;
+            float z;
+
+            switch (parts.Length)
+            {
+                case 1:
+                    x = y = z = Float(parts[0]);
+                    break;
+                case 2:
+                    x = Float(parts[0]);
+                    y = Float(parts[1]);
+                    z = defaultZ;
+                    break;
+                case 3:
+                    x = Float(parts[0]);
+                    y = Float(parts[1]);
+                    z = Float(parts[2]);
+                    break;
+                default:
+                    throw new ParseException("Unexpected number of components");
+            }
+
+            return new Vector3(x, y, z);
         }
 
         /// <summary>
@@ -49,9 +130,7 @@ namespace BeatSaberMarkupLanguage
         {
             return obj switch
             {
-                float floatValue => floatValue.ToString(CultureInfo.InvariantCulture),
-                double doubleValue => doubleValue.ToString(CultureInfo.InvariantCulture),
-                decimal decimalValue => decimalValue.ToString(CultureInfo.InvariantCulture),
+                IConvertible convertible => convertible.ToString(CultureInfo.InvariantCulture),
                 _ => obj?.ToString(),
             };
         }
