@@ -44,12 +44,7 @@ namespace BeatSaberMarkupLanguage.Components
                 return;
             }
 
-            if (!ColorUtility.TryParseHtmlString(strokeColor, out Color color))
-            {
-                Logger.Log.Warn($"Invalid color: {strokeColor}");
-            }
-
-            image.color = color;
+            image.color = Parse.Color(strokeColor);
             image.enabled = true;
         }
     }

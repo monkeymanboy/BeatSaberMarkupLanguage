@@ -158,6 +158,24 @@ namespace BeatSaberMarkupLanguage
         }
 
         /// <summary>
+        /// Parse a string as a <see cref="UnityEngine.Color"/>.
+        /// </summary>
+        /// <param name="s">String to parse.</param>
+        /// <returns>A <see cref="UnityEngine.Color"/> representation of the string.</returns>
+        /// <exception cref="ParseException">Thrown if the string cannot be parsed.</exception>
+        public static Color Color(string s)
+        {
+            if (ColorUtility.TryParseHtmlString(s, out Color color))
+            {
+                return color;
+            }
+            else
+            {
+                throw new ParseException($"Invalid color '{s}'");
+            }
+        }
+
+        /// <summary>
         /// Culture Invariant ToString for BSML values.
         /// </summary>
         /// <param name="obj">The object to stringify.</param>

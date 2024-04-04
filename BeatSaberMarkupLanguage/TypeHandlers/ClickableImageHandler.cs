@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.Parser;
-using UnityEngine;
 using static BeatSaberMarkupLanguage.BSMLParser;
 
 namespace BeatSaberMarkupLanguage.TypeHandlers
@@ -20,8 +19,8 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 
         public override Dictionary<string, Action<ClickableImage, string>> Setters => new()
         {
-            { "highlightColor", new Action<ClickableImage, string>((image, color) => image.HighlightColor = GetColor(color)) },
-            { "defaultColor", new Action<ClickableImage, string>((image, color) => image.DefaultColor = GetColor(color)) },
+            { "highlightColor", new Action<ClickableImage, string>((image, color) => image.HighlightColor = Parse.Color(color)) },
+            { "defaultColor", new Action<ClickableImage, string>((image, color) => image.DefaultColor = Parse.Color(color)) },
         };
 
         public override void HandleType(ComponentTypeWithData componentType, BSMLParserParams parserParams)
@@ -48,17 +47,6 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                     parserParams.EmitEvent(clickEvent);
                 };
             }
-        }
-
-        private static Color GetColor(string colorStr)
-        {
-            if (ColorUtility.TryParseHtmlString(colorStr, out Color color))
-            {
-                return color;
-            }
-
-            Logger.Log?.Warn($"Color {colorStr}, is not a valid color.");
-            return Color.white;
         }
     }
 }

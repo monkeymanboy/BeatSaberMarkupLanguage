@@ -16,12 +16,7 @@ namespace BeatSaberMarkupLanguage.Components
 
             if (colorString != "none")
             {
-                if (!ColorUtility.TryParseHtmlString(colorString, out Color color))
-                {
-                    Logger.Log.Warn($"Invalid color: {colorString}");
-                }
-
-                image.color = color;
+                image.color = Parse.Color(colorString);
                 image.gameObject.SetActive(true);
             }
             else

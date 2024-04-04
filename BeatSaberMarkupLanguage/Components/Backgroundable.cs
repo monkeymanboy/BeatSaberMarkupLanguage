@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using HMUI;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.Components
 {
@@ -79,8 +78,8 @@ namespace BeatSaberMarkupLanguage.Components
                 throw new BSMLException("Can't set color on null background!");
             }
 
-            Color color0 = new Color(1, 1, 1, background.color0.a);
-            Color color1 = new Color(1, 1, 1, background.color1.a);
+            Color color0 = new(1, 1, 1, background.color0.a);
+            Color color1 = new(1, 1, 1, background.color1.a);
             color.a = background.color.a;
 
             background.gradient = false;
@@ -96,7 +95,7 @@ namespace BeatSaberMarkupLanguage.Components
                 throw new BSMLException("Can't set gradient on null background!");
             }
 
-            Color color = new Color(1, 1, 1, background.color.a);
+            Color color = new(1, 1, 1, background.color.a);
 
             background.gradient = true;
             background.color = color;

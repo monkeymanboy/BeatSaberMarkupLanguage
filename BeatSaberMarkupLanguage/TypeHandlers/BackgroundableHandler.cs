@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using BeatSaberMarkupLanguage.Components;
-using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.TypeHandlers
 {
@@ -20,12 +19,10 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
         public override Dictionary<string, Action<Backgroundable, string>> Setters => new()
         {
             { "background", new Action<Backgroundable, string>((component, value) => component.ApplyBackground(value)) },
-            { "backgroundColor", new Action<Backgroundable, string>((component, value) => component.ApplyColor(ParseColor(value))) },
-            { "backgroundColor0", new Action<Backgroundable, string>((component, value) => component.ApplyColor0(ParseColor(value))) },
-            { "backgroundColor1", new Action<Backgroundable, string>((component, value) => component.ApplyColor1(ParseColor(value))) },
+            { "backgroundColor", new Action<Backgroundable, string>((component, value) => component.ApplyColor(Parse.Color(value))) },
+            { "backgroundColor0", new Action<Backgroundable, string>((component, value) => component.ApplyColor0(Parse.Color(value))) },
+            { "backgroundColor1", new Action<Backgroundable, string>((component, value) => component.ApplyColor1(Parse.Color(value))) },
             { "backgroundAlpha", new Action<Backgroundable, string>((component, value) => component.ApplyAlpha(float.Parse(value))) },
         };
-
-        public static Color ParseColor(string colorStr) => ColorUtility.TryParseHtmlString(colorStr, out Color color) ? color : Color.white;
     }
 }

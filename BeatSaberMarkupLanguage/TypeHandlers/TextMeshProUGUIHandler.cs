@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using TMPro;
-using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.TypeHandlers
 {
@@ -32,9 +31,9 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
         {
             { "text", new Action<TextMeshProUGUI, string>((textMesh, value) => textMesh.text = value) },
             { "fontSize", new Action<TextMeshProUGUI, string>((textMesh, value) => textMesh.fontSize = Parse.Float(value)) },
-            { "color", new Action<TextMeshProUGUI, string>((textMesh, value) => textMesh.color = GetColor(value)) },
-            { "faceColor", new Action<TextMeshProUGUI, string>((textMesh, value) => textMesh.faceColor = GetColor(value)) },
-            { "outlineColor", new Action<TextMeshProUGUI, string>((textMesh, value) => textMesh.outlineColor = GetColor(value)) },
+            { "color", new Action<TextMeshProUGUI, string>((textMesh, value) => textMesh.color = Parse.Color(value)) },
+            { "faceColor", new Action<TextMeshProUGUI, string>((textMesh, value) => textMesh.faceColor = Parse.Color(value)) },
+            { "outlineColor", new Action<TextMeshProUGUI, string>((textMesh, value) => textMesh.outlineColor = Parse.Color(value)) },
             { "outlineWidth", new Action<TextMeshProUGUI, string>((textMesh, value) => textMesh.outlineWidth = Parse.Float(value)) },
             { "richText", new Action<TextMeshProUGUI, string>((textMesh, value) => textMesh.richText = Parse.Bool(value)) },
             { "alignment", new Action<TextMeshProUGUI, string>((textMesh, value) => textMesh.alignment = (TextAlignmentOptions)Enum.Parse(typeof(TextAlignmentOptions), value)) },
@@ -58,17 +57,6 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             {
                 return existing &= ~modifyStyle;
             }
-        }
-
-        private static Color GetColor(string colorStr)
-        {
-            if (ColorUtility.TryParseHtmlString(colorStr, out Color color))
-            {
-                return color;
-            }
-
-            Logger.Log?.Warn($"Color {colorStr}, is not a valid color.");
-            return Color.white;
         }
     }
 }
