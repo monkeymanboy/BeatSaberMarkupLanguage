@@ -122,6 +122,42 @@ namespace BeatSaberMarkupLanguage
         }
 
         /// <summary>
+        /// Parse a string as a <see cref="UnityEngine.Vector4"/>.
+        /// </summary>
+        /// <param name="s">String to parse.</param>
+        /// <returns>A <see cref="UnityEngine.Vector4"/> representation of the string.</returns>
+        /// <exception cref="ParseException">Thrown if the string cannot be parsed.</exception>
+        public static Vector4 Vector4(string s)
+        {
+            string[] parts = s.Split([' '], StringSplitOptions.RemoveEmptyEntries);
+            float x;
+            float y;
+            float z;
+            float w;
+
+            switch (parts.Length)
+            {
+                case 1:
+                    x = y = z = w = Float(parts[0]);
+                    break;
+                case 2:
+                    x = z = Float(parts[0]);
+                    y = w = Float(parts[1]);
+                    break;
+                case 4:
+                    x = Float(parts[0]);
+                    y = Float(parts[1]);
+                    z = Float(parts[2]);
+                    w = Float(parts[3]);
+                    break;
+                default:
+                    throw new ParseException("Unexpected number of components");
+            }
+
+            return new Vector4(x, y, z, w);
+        }
+
+        /// <summary>
         /// Culture Invariant ToString for BSML values.
         /// </summary>
         /// <param name="obj">The object to stringify.</param>
