@@ -1,5 +1,6 @@
-﻿<bg>
-  <tab-selector tab-tag='localization'></tab-selector>
+﻿<bg xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://monkeymanboy.github.io/BSML-Docs/BSMLSchema.xsd'>
+  <tab-selector tab-tag='localization' />
   <tab tags='localization' tab-name-key='LANGUAGE_EN'>
     <settings-container>
       <color-setting/>

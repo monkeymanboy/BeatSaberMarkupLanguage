@@ -1,15 +1,16 @@
-<scrollable-settings-container>
-  <color-setting text='color test' value='color-value'></color-setting>
-  <string-setting text='string test' value='string-value'></string-setting>
-  <slider-setting text='slider test' min='-10' max='50' increment='1' value='slider-value' integer-only='true' formatter='format'></slider-setting>
-  <dropdown-list-setting text='Dropdown Test' value='list-choice' choices='list-options'></dropdown-list-setting>
-  <list-slider-setting text='List Slider Test' value='list-choice' choices='list-options'></list-slider-setting>
-  <bool-setting text='bool test' value='bool-test' bind-value='true'></bool-setting>
-  <clickable-text text='Test change value' on-click='change-bool'></clickable-text>
+<scrollable-settings-container xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+                               xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://monkeymanboy.github.io/BSML-Docs/BSMLSchema.xsd'>
+  <color-setting text='color test' value='color-value' />
+  <string-setting text='string test' value='string-value' />
+  <slider-setting text='slider test' min='-10' max='50' increment='1' value='slider-value' integer-only='true' formatter='format' />
+  <dropdown-list-setting text='Dropdown Test' value='list-choice' choices='list-options' />
+  <list-slider-setting text='List Slider Test' value='list-choice' choices='list-options' />
+  <bool-setting text='bool test' value='bool-test' bind-value='true' />
+  <clickable-text text='Test change value' on-click='change-bool' />
   <settings-submenu text='Open Submenu' hover-hint='we got hover hints boi'>
     <settings-container>
-      <clickable-text text='Back' click-event='back'></clickable-text>
+      <clickable-text text='Back' click-event='back' />
     </settings-container>
   </settings-submenu>
-  <string-setting text='string 3' value='string-value'></string-setting>
+  <string-setting text='string 3' value='string-value' />
 </scrollable-settings-container>

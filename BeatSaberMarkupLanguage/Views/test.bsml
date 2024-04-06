@@ -1,6 +1,7 @@
-<bg xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
-  <macro.define id='button-text' value='Macro defined button text'></macro.define>
-  <tab-selector tab-tag='new-tab'></tab-selector>
+<bg xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://monkeymanboy.github.io/BSML-Docs/BSMLSchema.xsd'>
+  <macro.define id='button-text' value='Macro defined button text' />
+  <tab-selector tab-tag='new-tab' />
   <tab tags='new-tab' tab-name='Settings tests'>
     <settings-container>
       <slider-setting min='-1' max='1' value='slider-value'/>
@@ -64,19 +65,19 @@
         </vertical>
       </horizontal>
       <horizontal bg='round-rect-panel' pad='6' spacing='10'>
-        <button id='test-external' on-click='click' glow-color='green' text='~button-text'></button>
+        <button id='test-external' on-click='click' text='~button-text' />
         <vertical spacing='6'>
-          <page-button click-event='open-modal' direction='Up' glow-color='red'>
+          <page-button click-event='open-modal' direction='Up'>
             <modal show-event='open-modal' hide-event='close-modal' size-delta-x='40' size-delta-y='30' move-to-center='false'>
               <vertical horizontal-fit='PreferredSize' vertical-fit='PreferredSize'>
-                <text text='Modal works yee haw'></text>
+                <text text='Modal works yee haw' />
                 <text text='lèts gét sóme wierd letters ñ ╥ Ê' />
-                <button text='yee' click-event='close-modal'></button>
+                <button text='yee' click-event='close-modal' />
               </vertical>
             </modal>
           </page-button>
-          <page-button click-event='open-keyboard' direction='Down' glow-color='green'>
-            <modal-keyboard show-event='open-keyboard' click-off-closes='true' clear-on-open='true' on-enter='keyboard-enter'></modal-keyboard>
+          <page-button click-event='open-keyboard' direction='Down'>
+            <modal-keyboard show-event='open-keyboard' click-off-closes='true' clear-on-open='true' on-enter='keyboard-enter' />
           </page-button>
         </vertical>
       </horizontal>
@@ -85,32 +86,32 @@
   <tab tags='new-tab' tab-name='Buttons'>
     <vertical>
       <horizontal bg='round-rect-panel' pad='8'>
-        <page-button click-event='list#PageUp' direction='Left' glow-color='red'></page-button>
+        <page-button click-event='list#PageUp' direction='Left' />
         <macro.for-each hosts='contents'>
           <macro.if value='should-glow'>
-            <button text='~title' on-click='button-click' glow-color='red'></button>
+            <button text='~title' on-click='button-click' />
           </macro.if>
           <macro.if value='!should-glow'>
-            <button text='~title' on-click='button-click'></button>
+            <button text='~title' on-click='button-click' />
           </macro.if>
         </macro.for-each>
-        <page-button click-event='list#PageDown' direction='Right'></page-button>
-        <icon-button pref-width='10' pref-height='10' icon='#OneLifeIcon' stroke-type='Clean' pad='1'/>
+        <page-button click-event='list#PageDown' direction='Right' />
+        <icon-button pref-width='10' pref-height='10' icon='#OneLifeIcon' pad='1'/>
       </horizontal>
     </vertical>
   </tab>
   <tab tags='new-tab' tab-name='List'>
-    <list id='list' visible-cells='5'></list>
+    <list id='list' visible-cells='5' />
     <horizontal>
-      <page-button click-event='list#PageUp' direction='Left'></page-button>
-      <page-button click-event='list#PageDown' direction='Right'></page-button>
+      <page-button click-event='list#PageUp' direction='Left' />
+      <page-button click-event='list#PageDown' direction='Right' />
     </horizontal>
-    <button text='?' anchor-pos-x='28' anchor-pos-y='57' pref-width='16' pref-height='8'></button>
+    <button text='?' anchor-pos-x='28' anchor-pos-y='57' pref-width='16' pref-height='8' />
   </tab>
   <tab tags='new-tab' tab-name='custom list'>
     <vertical>
-        <page-button click-event='clist#PageUp' direction='Up' glow-color='red'></page-button>
-        <custom-list id='clist' visible-cells='5' cell-size='10' list-width='60' contents='contents2'>
+        <page-button click-event='clist#PageUp' direction='Up' />
+        <custom-list id='clist' visible-cells='5' cell-size='10' list-width='60' data='contents2'>
           <stack bg='panel-fade-gradient' vertical-fit='Unconstrained' pad='1'>
             <horizontal child-expand-width='false' vertical-fit='Unconstrained' pad-left='1' pad-right='1'>
               <image id='follower-image' pref-width='10' />
@@ -121,12 +122,12 @@
                 </horizontal>
               </vertical>
 
-              <icon-button min-width='10' max-width='10' pref-width='10' pref-height='10' />
+              <icon-button min-width='10' pref-width='10' pref-height='10' />
             </horizontal>
           </stack>
         </custom-list>
-        <page-button click-event='clist#PageDown' direction='Down'></page-button>
-        <icon-button pref-width='10' pref-height='10' icon='#OneLifeIcon' stroke-type='Clean' pad='1'/>
+        <page-button click-event='clist#PageDown' direction='Down' />
+        <icon-button pref-width='10' pref-height='10' icon='#OneLifeIcon' pad='1'/>
     </vertical>
   </tab>
   <tab tags='new-tab' tab-name='text page'>

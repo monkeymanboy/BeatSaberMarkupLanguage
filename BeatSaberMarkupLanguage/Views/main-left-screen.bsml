@@ -1,14 +1,18 @@
-<bg xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd' id='root-object' size-delta-x='-50' anchor-pos-x='-10'>
+<bg id='root-object'
+    size-delta-x='-50'
+    anchor-pos-x='-10'
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://monkeymanboy.github.io/BSML-Docs/BSMLSchema.xsd'>
   <vertical child-control-height='false'>
     <horizontal bg='panel-top' pad-left='10' pad-right='10' horizontal-fit='PreferredSize'>
-      <text text-key='BSML_MODS_PANE_TITLE' align='Center' font-size='10'></text>
+      <text text-key='BSML_MODS_PANE_TITLE' align='Center' font-size='10' />
     </horizontal>
     <macro.if value='any-buttons'>
       <horizontal>
-        <scroll-view horizontal-fit='PreferredSize' vertical-fit='PreferredSize' pref-width='143' pref-height='59' child-control-height='true' child-control-width='false'>
-          <grid horizontal-fit='Unconstrained' size-delta-x='124' cell-size-y='9' cell-size-x='40' spacing-x='2' spacing-y='2' align='Center'>
+        <scroll-view pref-width='143' pref-height='59' child-control-height='true' child-control-width='false'>
+          <grid horizontal-fit='Unconstrained' size-delta-x='124' cell-size='40 9' spacing='2 2'>
             <macro.for-each items='buttons'>
-              <button id='menu-button' pref-width='40' pref-height='9' text='~text' hover-hint='~hover-hint' interactable='~interactable' on-click='button-click' pad='0'></button>
+              <button id='menu-button' pref-width='40' pref-height='9' text='~text' hover-hint='~hover-hint' interactable='~interactable' on-click='button-click' pad='0' />
             </macro.for-each>
           </grid>
         </scroll-view>
@@ -20,18 +24,18 @@
   </macro.if>
   <!--<modal show-event='show-pins' hide-event='close-modals' size-delta-x='35' size-delta-y='65' click-off-closes='true'>
     <vertical>
-      <page-button click-event='pin-list#PageUp' direction='Up' pref-width='30' pref-height='5'></page-button>
+      <page-button click-event='pin-list#PageUp' direction='Up' pref-width='30' pref-height='5' />
       <custom-list id='pin-list' contents='pin-buttons' clickable-cells='false' list-width='30' visible-cells='5' cell-size='9'>
         <horizontal vertical-fit='Unconstrained' child-expand-width='false'>
           <macro.as-host host='menu-button'>
             <vertical pref-width='20'>
-              <text text='~text' font-align='Left' font-size='4' overflow-mode='Ellipsis'></text>
+              <text text='~text' font-align='Left' font-size='4' overflow-mode='Ellipsis' />
             </vertical>
           </macro.as-host>
-          <button text='~pin-button-text' pad='0' on-click='pin-button-click' all-uppercase='false' pref-width='7' pref-height='7' stroke-type='Clean' stroke-color='~pin-button-stroke-color'></button>
+          <button text='~pin-button-text' pad='0' on-click='pin-button-click' all-uppercase='false' pref-width='7' pref-height='7' stroke-type='Clean' stroke-color='~pin-button-stroke-color' />
         </horizontal>
       </custom-list>
-      <page-button click-event='pin-list#PageDown' direction='Down' pref-width='30' pref-height='5'></page-button>
+      <page-button click-event='pin-list#PageDown' direction='Down' pref-width='30' pref-height='5' />
     </vertical>
   </modal>-->
 </bg>

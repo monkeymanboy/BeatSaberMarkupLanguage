@@ -1,3 +1,6 @@
-<bg size-delta-x='-6' anchor-pos-x='-3'>
+<bg size-delta-x='-6'
+    anchor-pos-x='-3'
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://monkeymanboy.github.io/BSML-Docs/BSMLSchema.xsd'>
   <list id='list' select-cell='settings-click' list-style='Simple' visible-cells='7' show-scrollbar='true' />
 </bg>

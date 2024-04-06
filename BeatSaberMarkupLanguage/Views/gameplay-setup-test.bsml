@@ -1,8 +1,9 @@
-﻿<bg xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
+﻿<bg xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://monkeymanboy.github.io/BSML-Docs/BSMLSchema.xsd'>
   <modifier-container>
-    <modifier source='#SlowerSongIcon' text='ding' value='test' apply-on-change='true'></modifier>
-    <modifier source='#FourLivesIcon' text='dong' value='test2' apply-on-change='true'></modifier>
-    <modifier source='#NoBombsIcon' text='bing' value='test3' apply-on-change='true'></modifier>
-    <modifier source='#FasterSongIcon' text='bong' value='test4' apply-on-change='true'></modifier>
+    <modifier source='#SlowerSongIcon' text='ding' value='test' apply-on-change='true' />
+    <modifier source='#FourLivesIcon' text='dong' value='test2' apply-on-change='true' />
+    <modifier source='#NoBombsIcon' text='bing' value='test3' apply-on-change='true' />
+    <modifier source='#FasterSongIcon' text='bong' value='test4' apply-on-change='true' />
   </modifier-container>
 </bg>

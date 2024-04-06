@@ -1,3 +1,8 @@
-﻿<horizontal vertical-fit='PreferredSize' size-delta-x='-1' anchor-pos-x='1' pref-height='8' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
+﻿<horizontal vertical-fit='PreferredSize'
+            size-delta-x='-1'
+            anchor-pos-x='1'
+            pref-height='8'
+            xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+            xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://monkeymanboy.github.io/BSML-Docs/BSMLSchema.xsd'>
     <checkbox-setting text='~tab-name' value='tab-visible' bind-value='true' apply-on-change='true' />
 </horizontal>
