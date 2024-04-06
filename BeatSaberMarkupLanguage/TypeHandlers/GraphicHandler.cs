@@ -10,7 +10,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
         public override Dictionary<string, string[]> Props => new()
         {
             { "raycastPadding", new[] { "raycast-padding" } },
-            { "raycastTarget", new[] { "raycast-target" } },
+            { "raycastTarget", new[] { "raycast-target", "raycast" } },
         };
 
         public override Dictionary<string, Action<Graphic, string>> Setters => new()
