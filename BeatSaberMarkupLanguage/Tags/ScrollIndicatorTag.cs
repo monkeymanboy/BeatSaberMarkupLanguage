@@ -15,7 +15,7 @@ namespace BeatSaberMarkupLanguage.Tags
             {
                 if (verticalScrollTemplate == null)
                 {
-                    verticalScrollTemplate = BeatSaberUI.DiContainer.Resolve<LevelCollectionNavigationController>()._levelCollectionViewController._levelCollectionTableView.GetComponent<ScrollView>()._verticalScrollIndicator.gameObject;
+                    verticalScrollTemplate = BeatSaberUI.DiContainer.Resolve<LevelCollectionNavigationController>()._levelCollectionViewController._levelCollectionTableView._tableView.scrollView._verticalScrollIndicator.gameObject;
                 }
 
                 return verticalScrollTemplate;
