@@ -17,6 +17,15 @@
       "environmentVariables": {
         "SteamAppId": "620980"
       }
+    },
+    "Beat Saber (generate docs data)": {
+      "commandName": "Executable",
+      "executablePath": "$(BeatSaberDir)\\Beat Saber.exe",
+      "commandLineArgs": "fpfc --verbose --debug --bsml-generate-documentation",
+      "workingDirectory": "$(BeatSaberDir)",
+      "environmentVariables": {
+        "SteamAppId": "620980"
+      }
     }
   }
 }

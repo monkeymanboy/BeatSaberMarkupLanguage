@@ -74,25 +74,12 @@ namespace BeatSaberMarkupLanguage
                 tag.Initialize();
             }
 
-#if false//don't worry about this, it's for the docs
-            string contents = "";
-            foreach (BSMLTag tag in Utilities.GetListOfType<BSMLTag>())
+#if DEBUG
+            if (Environment.GetCommandLineArgs().Contains("--bsml-generate-documentation"))
             {
-                tag.Setup();
-                contents += $"- type: {tag.GetType().Name}\n";
-                contents += $"  aliases:\n";
-                foreach (string alias in tag.Aliases)
-                    contents += $"  - {alias}\n";
-                contents += $"  components:\n";
-                GameObject currentNode = tag.CreateObject(transform);
-                foreach (TypeHandler typeHandler in typeHandlers)
-                {
-                    Type type = typeHandler.GetType().GetCustomAttribute<ComponentHandler>(true).type;
-                    if (GetExternalComponent(currentNode, type) != null)
-                        contents += $"  - {type.Name}\n";
-                }
+                IEnumerable<Type> typeHandlers = Assembly.GetExecutingAssembly().GetTypes().Where(t => t.IsClass && !t.IsAbstract && t.IsSubclassOf(typeof(TypeHandler)));
+                new DocumentationDataGenerator(typeHandlers).Generate();
             }
-            File.WriteAllText(Path.Combine(Environment.CurrentDirectory, "Tags.yml"), contents);
 #endif
         }
 
@@ -295,6 +282,29 @@ namespace BeatSaberMarkupLanguage
             }
         }
 
+        internal static Component GetExternalComponent(GameObject gameObject, Type type)
+        {
+            Component component = null;
+
+            if (gameObject.TryGetComponent(out ExternalComponents externalComponents))
+            {
+                foreach (Component externalComponent in externalComponents.components)
+                {
+                    if (type.IsAssignableFrom(externalComponent.GetType()))
+                    {
+                        component = externalComponent;
+                    }
+                }
+            }
+
+            if (component == null)
+            {
+                component = gameObject.GetComponent(type);
+            }
+
+            return component;
+        }
+
         private void HandleTagNode(XmlNode node, GameObject parent, BSMLParserParams parserParams, out IEnumerable<ComponentTypeWithData> componentInfo)
         {
             if (!this.tags.TryGetValue(node.Name, out BSMLTag currentTag))
@@ -371,29 +381,6 @@ namespace BeatSaberMarkupLanguage
             }
 
             componentInfo = componentTypes.Concat(childrenComponents);
-        }
-
-        private Component GetExternalComponent(GameObject gameObject, Type type)
-        {
-            Component component = null;
-
-            if (gameObject.TryGetComponent(out ExternalComponents externalComponents))
-            {
-                foreach (Component externalComponent in externalComponents.components)
-                {
-                    if (type.IsAssignableFrom(externalComponent.GetType()))
-                    {
-                        component = externalComponent;
-                    }
-                }
-            }
-
-            if (component == null)
-            {
-                component = gameObject.GetComponent(type);
-            }
-
-            return component;
         }
 
         private void HandleMacroNode(XmlNode node, GameObject parent, BSMLParserParams parserParams, out IEnumerable<ComponentTypeWithData> components)
