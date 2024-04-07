@@ -1,12 +1,14 @@
 ﻿using System.Collections.Generic;
 using HMUI;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.Components
 {
     public class Backgroundable : MonoBehaviour
     {
-        public ImageView background;
+        // TODO: this should be an ImageView
+        public Image background;
 
         private static readonly Dictionary<string, ImageView> BackgroundCache = new();
 
@@ -78,49 +80,53 @@ namespace BeatSaberMarkupLanguage.Components
                 throw new BSMLException("Can't set color on null background!");
             }
 
-            Color color0 = new(1, 1, 1, background.color0.a);
-            Color color1 = new(1, 1, 1, background.color1.a);
             color.a = background.color.a;
-
-            background.gradient = false;
-            background.color0 = color0;
-            background.color1 = color1;
             background.color = color;
+
+            if (background is ImageView imageView)
+            {
+                Color color0 = new(1, 1, 1, imageView.color0.a);
+                Color color1 = new(1, 1, 1, imageView.color1.a);
+
+                imageView.gradient = false;
+                imageView.color0 = color0;
+                imageView.color1 = color1;
+            }
         }
 
         public void ApplyGradient(Color color0, Color color1)
         {
-            if (background == null)
+            if (background is not ImageView imageView)
             {
                 throw new BSMLException("Can't set gradient on null background!");
             }
 
             Color color = new(1, 1, 1, background.color.a);
 
-            background.gradient = true;
-            background.color = color;
-            background.color0 = color0;
-            background.color1 = color1;
+            imageView.gradient = true;
+            imageView.color = color;
+            imageView.color0 = color0;
+            imageView.color1 = color1;
         }
 
         public void ApplyColor0(Color color0)
         {
-            if (background == null)
+            if (background is not ImageView imageView)
             {
                 throw new BSMLException("Can't set gradient on null background!");
             }
 
-            ApplyGradient(color0, background.color1);
+            ApplyGradient(color0, imageView.color1);
         }
 
         public void ApplyColor1(Color color1)
         {
-            if (background == null)
+            if (background is not ImageView imageView)
             {
                 throw new BSMLException("Can't set gradient on null background!");
             }
 
-            ApplyGradient(background.color0, color1);
+            ApplyGradient(imageView.color0, color1);
         }
 
         public void ApplyAlpha(float alpha)
