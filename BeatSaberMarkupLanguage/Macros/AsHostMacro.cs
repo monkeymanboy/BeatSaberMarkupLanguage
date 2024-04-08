@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Xml;
+using System.Xml.Linq;
 using BeatSaberMarkupLanguage.Parser;
 using UnityEngine;
 
@@ -15,7 +15,7 @@ namespace BeatSaberMarkupLanguage.Macros
             { "host", new[] { "host" } },
         };
 
-        public override void Execute(XmlNode node, GameObject parent, Dictionary<string, string> data, BSMLParserParams parserParams, out IEnumerable<BSMLParser.ComponentTypeWithData> components)
+        public override void Execute(XElement element, GameObject parent, Dictionary<string, string> data, BSMLParserParams parserParams, out IEnumerable<BSMLParser.ComponentTypeWithData> components)
         {
             components = Enumerable.Empty<BSMLParser.ComponentTypeWithData>();
             if (data.TryGetValue("host", out string host))
@@ -25,7 +25,7 @@ namespace BeatSaberMarkupLanguage.Macros
                     throw new ValueNotFoundException(host, parserParams.host);
                 }
 
-                BSMLParser.instance.Parse(node, parent, value.GetValue());
+                BSMLParser.instance.Parse(element, parent, value.GetValue());
             }
         }
     }

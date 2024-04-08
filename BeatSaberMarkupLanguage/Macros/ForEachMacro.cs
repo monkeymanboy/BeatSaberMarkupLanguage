@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml;
+using System.Xml.Linq;
 using BeatSaberMarkupLanguage.Parser;
 using UnityEngine;
 
@@ -17,7 +17,7 @@ namespace BeatSaberMarkupLanguage.Macros
             { "passTags", new[] { "pass-back-tags" } },
         };
 
-        public override void Execute(XmlNode node, GameObject parent, Dictionary<string, string> data, BSMLParserParams parserParams, out IEnumerable<BSMLParser.ComponentTypeWithData> components)
+        public override void Execute(XElement element, GameObject parent, Dictionary<string, string> data, BSMLParserParams parserParams, out IEnumerable<BSMLParser.ComponentTypeWithData> components)
         {
             components = Enumerable.Empty<BSMLParser.ComponentTypeWithData>();
             if (data.TryGetValue("hosts", out string hosts))
@@ -35,7 +35,7 @@ namespace BeatSaberMarkupLanguage.Macros
 
                 foreach (object host in values.GetValue() as IEnumerable)
                 {
-                    BSMLParserParams nodeParams = BSMLParser.instance.Parse(node, parent, host);
+                    BSMLParserParams nodeParams = BSMLParser.instance.Parse(element, parent, host);
                     if (passTags)
                     {
                         nodeParams.PassTaggedObjects(parserParams);

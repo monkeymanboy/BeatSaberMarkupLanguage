@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Xml;
+using System.Xml.Linq;
 using BeatSaberMarkupLanguage.Parser;
 using UnityEngine;
 
@@ -15,6 +15,6 @@ namespace BeatSaberMarkupLanguage.Macros
 
         public abstract Dictionary<string, string[]> Props { get; }
 
-        public abstract void Execute(XmlNode node, GameObject parent, Dictionary<string, string> data, BSMLParserParams parserParams, out IEnumerable<BSMLParser.ComponentTypeWithData> childComponentTypes);
+        public abstract void Execute(XElement element, GameObject parent, Dictionary<string, string> data, BSMLParserParams parserParams, out IEnumerable<BSMLParser.ComponentTypeWithData> childComponentTypes);
     }
 }

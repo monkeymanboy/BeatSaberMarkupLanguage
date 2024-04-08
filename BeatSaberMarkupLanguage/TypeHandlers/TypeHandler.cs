@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using BeatSaberMarkupLanguage.Components;
+using BeatSaberMarkupLanguage.Exceptions;
 using BeatSaberMarkupLanguage.Parser;
 using UnityEngine;
 using static BeatSaberMarkupLanguage.BSMLParser;
@@ -37,19 +38,32 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 
         public override void HandleType(ComponentTypeWithData componentType, BSMLParserParams parserParams)
         {
-            if (componentType.component is T obj)
+            if (componentType.component is not T obj)
             {
-                NotifyUpdater updater = null;
-                foreach (KeyValuePair<string, string> pair in componentType.data)
+                return;
+            }
+
+            NotifyUpdater updater = null;
+
+            foreach (KeyValuePair<string, string> pair in componentType.data)
+            {
+                if (!CachedSetters.TryGetValue(pair.Key, out Action<T, string> action))
                 {
-                    if (CachedSetters.TryGetValue(pair.Key, out Action<T, string> action))
-                    {
-                        action.Invoke(obj, pair.Value);
-                        if (componentType.valueMap.TryGetValue(pair.Key, out BSMLValue value))
-                        {
-                            updater = BindValue(componentType, parserParams, value, val => action.Invoke(obj, val.InvariantToString()), updater);
-                        }
-                    }
+                    continue;
+                }
+
+                try
+                {
+                    action.Invoke(obj, pair.Value);
+                }
+                catch (Exception ex)
+                {
+                    throw new TypeHandlerException(this, pair.Key, ex);
+                }
+
+                if (componentType.valueMap.TryGetValue(pair.Key, out BSMLValue value))
+                {
+                    updater = BindValue(componentType, parserParams, value, val => action.Invoke(obj, val.InvariantToString()), updater);
                 }
             }
         }

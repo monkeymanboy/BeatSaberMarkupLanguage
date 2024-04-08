@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Xml;
+using System.Xml.Linq;
 using BeatSaberMarkupLanguage.Parser;
 using UnityEngine;
 
@@ -16,7 +16,7 @@ namespace BeatSaberMarkupLanguage.Macros
             { "value", new[] { "value" } },
         };
 
-        public override void Execute(XmlNode node, GameObject parent, Dictionary<string, string> data, BSMLParserParams parserParams, out IEnumerable<BSMLParser.ComponentTypeWithData> components)
+        public override void Execute(XElement element, GameObject parent, Dictionary<string, string> data, BSMLParserParams parserParams, out IEnumerable<BSMLParser.ComponentTypeWithData> components)
         {
             components = Enumerable.Empty<BSMLParser.ComponentTypeWithData>();
 

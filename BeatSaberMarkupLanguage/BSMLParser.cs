@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Xml;
+using System.Xml.Linq;
 using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components;
+using BeatSaberMarkupLanguage.Exceptions;
 using BeatSaberMarkupLanguage.Macros;
 using BeatSaberMarkupLanguage.Parser;
 using BeatSaberMarkupLanguage.Tags;
@@ -28,12 +29,6 @@ namespace BeatSaberMarkupLanguage
         private readonly Dictionary<string, BSMLTag> tags = new();
         private readonly Dictionary<string, BSMLMacro> macros = new();
         private readonly List<TypeHandler> typeHandlers = new();
-
-        private readonly XmlDocument document = new();
-        private readonly XmlReaderSettings readerSettings = new()
-        {
-            IgnoreComments = true,
-        };
 
         public BSMLParser()
         {
@@ -134,11 +129,11 @@ namespace BeatSaberMarkupLanguage
 
         public BSMLParserParams Parse(string content, GameObject parent, object host = null)
         {
-            document.Load(XmlReader.Create(new StringReader(content), readerSettings));
+            XDocument document = XDocument.Parse(content, LoadOptions.SetLineInfo);
             return Parse(document, parent, host);
         }
 
-        public BSMLParserParams Parse(XmlNode parentNode, GameObject parent, object host = null)
+        public BSMLParserParams Parse(XContainer container, GameObject parent, object host = null)
         {
             if (!IsMainMenuSceneLoaded())
             {
@@ -277,9 +272,9 @@ namespace BeatSaberMarkupLanguage
             }
 
             IEnumerable<ComponentTypeWithData> componentInfo = Enumerable.Empty<ComponentTypeWithData>();
-            foreach (XmlNode node in parentNode.ChildNodes)
+            foreach (XElement element in container.Elements())
             {
-                HandleNode(node, parent, parserParams, out IEnumerable<ComponentTypeWithData> components);
+                HandleNode(element, parent, parserParams, out IEnumerable<ComponentTypeWithData> components);
                 componentInfo = componentInfo.Concat(components);
             }
 
@@ -290,7 +285,14 @@ namespace BeatSaberMarkupLanguage
 
             foreach (ComponentTypeWithData component in componentInfo)
             {
-                component.typeHandler.HandleTypeAfterParse(component, parserParams);
+                try
+                {
+                    component.typeHandler.HandleTypeAfterParse(component, parserParams);
+                }
+                catch (Exception ex)
+                {
+                    throw new TypeHandlerException(component.typeHandler, ex);
+                }
             }
 
             parserParams.EmitEvent("post-parse");
@@ -298,15 +300,22 @@ namespace BeatSaberMarkupLanguage
             return parserParams;
         }
 
-        public void HandleNode(XmlNode node, GameObject parent, BSMLParserParams parserParams, out IEnumerable<ComponentTypeWithData> componentInfo)
+        public void HandleNode(XElement element, GameObject parent, BSMLParserParams parserParams, out IEnumerable<ComponentTypeWithData> componentInfo)
         {
-            if (node.Name.StartsWith(MacroPrefix, StringComparison.Ordinal))
+            try
             {
-                HandleMacroNode(node, parent, parserParams, out componentInfo);
+                if (element.Name.LocalName.StartsWith(MacroPrefix, StringComparison.Ordinal))
+                {
+                    HandleMacroNode(element, parent, parserParams, out componentInfo);
+                }
+                else
+                {
+                    HandleTagNode(element, parent, parserParams, out componentInfo);
+                }
             }
-            else
+            catch (Exception ex) when (ex is not BSMLParserException)
             {
-                HandleTagNode(node, parent, parserParams, out componentInfo);
+                throw new BSMLParserException(element, ex);
             }
         }
 
@@ -333,11 +342,11 @@ namespace BeatSaberMarkupLanguage
             return component;
         }
 
-        private void HandleTagNode(XmlNode node, GameObject parent, BSMLParserParams parserParams, out IEnumerable<ComponentTypeWithData> componentInfo)
+        private void HandleTagNode(XElement element, GameObject parent, BSMLParserParams parserParams, out IEnumerable<ComponentTypeWithData> componentInfo)
         {
-            if (!this.tags.TryGetValue(node.Name, out BSMLTag currentTag))
+            if (!this.tags.TryGetValue(element.Name.LocalName, out BSMLTag currentTag))
             {
-                throw new TagNotFoundException(node.Name);
+                throw new TagNotFoundException(element.Name.LocalName);
             }
 
             GameObject currentNode = currentTag.CreateObject(parent.transform);
@@ -355,7 +364,7 @@ namespace BeatSaberMarkupLanguage
                 if (component != null)
                 {
                     ComponentTypeWithData componentType;
-                    componentType.data = GetParameters(node, typeHandler.CachedProps, parserParams, out Dictionary<string, BSMLValue> valueMap);
+                    componentType.data = GetParameters(element, typeHandler.CachedProps, parserParams, out Dictionary<string, BSMLValue> valueMap);
                     componentType.valueMap = valueMap;
                     componentType.typeHandler = typeHandler;
                     componentType.component = component;
@@ -365,11 +374,18 @@ namespace BeatSaberMarkupLanguage
 
             foreach (ComponentTypeWithData componentType in componentTypes)
             {
-                componentType.typeHandler.HandleType(componentType, parserParams);
+                try
+                {
+                    componentType.typeHandler.HandleType(componentType, parserParams);
+                }
+                catch (Exception ex) when (ex is not TypeHandlerException)
+                {
+                    throw new TypeHandlerException(componentType.typeHandler, ex);
+                }
             }
 
             object host = parserParams.host;
-            XmlAttribute id = node.Attributes["id"];
+            XAttribute id = element.Attribute("id");
             if (host != null && id != null)
             {
                 foreach (FieldInfo fieldInfo in host.GetType().GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public))
@@ -386,7 +402,7 @@ namespace BeatSaberMarkupLanguage
                 }
             }
 
-            XmlAttribute tags = node.Attributes["tags"];
+            XAttribute tags = element.Attribute("tags");
             if (tags != null)
             {
                 parserParams.AddObjectTags(currentNode, tags.Value.Split(','));
@@ -396,33 +412,40 @@ namespace BeatSaberMarkupLanguage
 
             if (currentTag.AddChildren)
             {
-                foreach (XmlNode childNode in node.ChildNodes)
+                foreach (XElement childElement in element.Elements())
                 {
-                    HandleNode(childNode, currentNode, parserParams, out IEnumerable<ComponentTypeWithData> children);
+                    HandleNode(childElement, currentNode, parserParams, out IEnumerable<ComponentTypeWithData> children);
                     childrenComponents = childrenComponents.Concat(children);
                 }
             }
 
             foreach (ComponentTypeWithData componentType in componentTypes)
             {
-                componentType.typeHandler.HandleTypeAfterChildren(componentType, parserParams);
+                try
+                {
+                    componentType.typeHandler.HandleTypeAfterChildren(componentType, parserParams);
+                }
+                catch (Exception ex)
+                {
+                    throw new TypeHandlerException(componentType.typeHandler, ex);
+                }
             }
 
             componentInfo = componentTypes.Concat(childrenComponents);
         }
 
-        private void HandleMacroNode(XmlNode node, GameObject parent, BSMLParserParams parserParams, out IEnumerable<ComponentTypeWithData> components)
+        private void HandleMacroNode(XElement element, GameObject parent, BSMLParserParams parserParams, out IEnumerable<ComponentTypeWithData> components)
         {
-            if (!macros.TryGetValue(node.Name, out BSMLMacro currentMacro))
+            if (!macros.TryGetValue(element.Name.LocalName, out BSMLMacro currentMacro))
             {
-                throw new MacroNotFoundException(node.Name);
+                throw new MacroNotFoundException(element.Name.LocalName);
             }
 
-            Dictionary<string, string> properties = GetParameters(node, currentMacro.CachedProps, parserParams, out _);
-            currentMacro.Execute(node, parent, properties, parserParams, out components);
+            Dictionary<string, string> properties = GetParameters(element, currentMacro.CachedProps, parserParams, out _);
+            currentMacro.Execute(element, parent, properties, parserParams, out components);
         }
 
-        private Dictionary<string, string> GetParameters(XmlNode node, Dictionary<string, string[]> properties, BSMLParserParams parserParams, out Dictionary<string, BSMLValue> valueMap)
+        private Dictionary<string, string> GetParameters(XElement element, Dictionary<string, string[]> properties, BSMLParserParams parserParams, out Dictionary<string, BSMLValue> valueMap)
         {
             Dictionary<string, string> parameters = new();
             valueMap = new Dictionary<string, BSMLValue>();
@@ -436,28 +459,20 @@ namespace BeatSaberMarkupLanguage
 
                 foreach (string alias in aliasList)
                 {
-                    XmlAttribute attribute = node.Attributes[alias];
+                    XAttribute attribute = element.Attribute(alias);
                     if (attribute != null)
                     {
                         string value = attribute.Value;
                         if (value.StartsWith(RetrieveValuePrefix, StringComparison.Ordinal))
                         {
-                            try
+                            string valueID = value.Substring(1);
+                            if (!parserParams.values.TryGetValue(valueID, out BSMLValue uiValue) || uiValue == null)
                             {
-                                string valueID = value.Substring(1);
-                                if (!parserParams.values.TryGetValue(valueID, out BSMLValue uiValue) || uiValue == null)
-                                {
-                                    throw new ValueNotFoundException(valueID, parserParams.host);
-                                }
+                                throw new ValueNotFoundException(valueID, parserParams.host);
+                            }
 
-                                parameters.Add(propertyAliases.Key, uiValue.GetValue()?.InvariantToString());
-                                valueMap.Add(propertyAliases.Key, uiValue);
-                            }
-                            catch (Exception)
-                            {
-                                Logger.Log?.Error($"Error parsing '{propertyAliases.Key}'='{value}' in {parserParams.host.GetTypeFullNameSafe()}");
-                                throw;
-                            }
+                            parameters.Add(propertyAliases.Key, uiValue.GetValue()?.InvariantToString());
+                            valueMap.Add(propertyAliases.Key, uiValue);
                         }
                         else
                         {
@@ -469,7 +484,9 @@ namespace BeatSaberMarkupLanguage
 
                     if (alias == "_children")
                     {
-                        parameters.Add(propertyAliases.Key, node.InnerXml);
+                        using XmlReader reader = element.CreateReader();
+                        reader.MoveToContent();
+                        parameters.Add(propertyAliases.Key, reader.ReadInnerXml());
                     }
                 }
             }
