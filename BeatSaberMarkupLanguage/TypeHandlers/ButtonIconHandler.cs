@@ -11,12 +11,14 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
         {
             { "icon", new[] { "icon" } },
             { "iconSkew", new[] { "icon-skew" } },
+            { "showUnderline", new[] { "show-underline" } },
         };
 
         public override Dictionary<string, Action<ButtonIconImage, string>> Setters => new()
         {
             { "icon", new Action<ButtonIconImage, string>((image, value) => image.SetIcon(value)) },
             { "iconSkew", new Action<ButtonIconImage, string>((image, value) => image.SetSkew(Parse.Float(value))) },
+            { "showUnderline", new Action<ButtonIconImage, string>((image, value) => image.SetUnderlineActive(Parse.Bool(value))) },
         };
     }
 }

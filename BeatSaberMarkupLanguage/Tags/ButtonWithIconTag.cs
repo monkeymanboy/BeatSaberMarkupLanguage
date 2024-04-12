@@ -42,6 +42,7 @@ namespace BeatSaberMarkupLanguage.Tags
             ButtonIconImage btnIcon = gameObject.AddComponent<ButtonIconImage>();
             btnIcon.button = button;
             btnIcon.image = iconImage;
+            btnIcon.underline = button.transform.Find("Underline").gameObject;
             btnIcon.SetSkew(button.transform.Find("BG").GetComponent<ImageView>().skew);
 
             Object.Destroy(button.transform.Find("Content").GetComponent<LayoutElement>());

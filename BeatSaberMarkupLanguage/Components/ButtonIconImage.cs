@@ -10,6 +10,7 @@ namespace BeatSaberMarkupLanguage.Components
         public Image image;
 
         internal NoTransitionsButton button;
+        internal GameObject underline;
 
         public void SetIcon(string path)
         {
@@ -30,6 +31,14 @@ namespace BeatSaberMarkupLanguage.Components
 
             imageView._skew = value;
             imageView.SetVerticesDirty();
+        }
+
+        internal void SetUnderlineActive(bool active)
+        {
+            if (underline != null)
+            {
+                underline.SetActive(active);
+            }
         }
 
         private void OnEnable()
