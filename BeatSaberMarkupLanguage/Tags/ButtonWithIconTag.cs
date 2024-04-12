@@ -8,7 +8,7 @@ namespace BeatSaberMarkupLanguage.Tags
 {
     public class ButtonWithIconTag : BSMLTag
     {
-        private Button buttonWithIconTemplate;
+        private NoTransitionsButton buttonWithIconTemplate;
 
         public override string[] Aliases => new[] { "button-with-icon", "icon-button" };
 
@@ -16,16 +16,19 @@ namespace BeatSaberMarkupLanguage.Tags
         {
             if (buttonWithIconTemplate == null)
             {
-                buttonWithIconTemplate = BeatSaberUI.DiContainer.Resolve<StandardLevelDetailViewController>()._standardLevelDetailView.practiceButton;
+                buttonWithIconTemplate = (NoTransitionsButton)BeatSaberUI.DiContainer.Resolve<StandardLevelDetailViewController>()._standardLevelDetailView.practiceButton;
             }
 
-            Button button = Object.Instantiate(buttonWithIconTemplate, parent, false);
+            NoTransitionsButton button = Object.Instantiate(buttonWithIconTemplate, parent, false);
             button.name = "BSMLIconButton";
             button.interactable = true;
 
+            GameObject gameObject = button.gameObject;
+            gameObject.SetActive(false);
+
             Object.Destroy(button.GetComponent<HoverHint>());
             Object.Destroy(button.GetComponent<LocalizedHoverHint>());
-            button.gameObject.AddComponent<ExternalComponents>().components.Add(button.GetComponentsInChildren<LayoutGroup>().Where(x => x.name == "Content").First());
+            gameObject.AddComponent<ExternalComponents>().components.Add(button.GetComponentsInChildren<LayoutGroup>().Where(x => x.name == "Content").First());
 
             Transform contentTransform = button.transform.Find("Content");
             Object.Destroy(contentTransform.Find("Text").gameObject);
@@ -35,19 +38,20 @@ namespace BeatSaberMarkupLanguage.Tags
             iconImage.rectTransform.sizeDelta = new Vector2(20f, 20f);
             iconImage.sprite = Utilities.ImageResources.BlankSprite;
             iconImage.preserveAspect = true;
-            if (iconImage != null)
-            {
-                ButtonIconImage btnIcon = button.gameObject.AddComponent<ButtonIconImage>();
-                btnIcon.image = iconImage;
-            }
+
+            ButtonIconImage btnIcon = gameObject.AddComponent<ButtonIconImage>();
+            btnIcon.button = button;
+            btnIcon.defaultSkew = button.transform.Find("BG").GetComponent<ImageView>().skew;
+            btnIcon.image = iconImage;
 
             Object.Destroy(button.transform.Find("Content").GetComponent<LayoutElement>());
 
-            ContentSizeFitter buttonSizeFitter = button.gameObject.AddComponent<ContentSizeFitter>();
+            ContentSizeFitter buttonSizeFitter = gameObject.AddComponent<ContentSizeFitter>();
             buttonSizeFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
             buttonSizeFitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
 
-            return button.gameObject;
+            gameObject.SetActive(true);
+            return gameObject;
         }
     }
 }

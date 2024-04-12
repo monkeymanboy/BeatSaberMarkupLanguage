@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using BeatSaberMarkupLanguage.Components;
+﻿using BeatSaberMarkupLanguage.Components;
 using HMUI;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,7 +7,7 @@ namespace BeatSaberMarkupLanguage.Tags
 {
     public class PageButtonTag : BSMLTag
     {
-        private Button buttonTemplate;
+        private NoTransitionsButton buttonTemplate;
 
         public override string[] Aliases => new[] { "page-button", "pg-button" };
 
@@ -16,21 +15,24 @@ namespace BeatSaberMarkupLanguage.Tags
         {
             if (buttonTemplate == null)
             {
-                buttonTemplate = DiContainer.Resolve<PlayerOptionsViewController>()._playerSettingsPanelController.GetComponent<ScrollView>()._pageUpButton;
+                buttonTemplate = (NoTransitionsButton)DiContainer.Resolve<PlayerOptionsViewController>()._playerSettingsPanelController.GetComponent<ScrollView>()._pageUpButton;
             }
 
-            Button button = Object.Instantiate(buttonTemplate, parent, false);
-            button.gameObject.SetActive(false);
+            NoTransitionsButton button = Object.Instantiate(buttonTemplate, parent, false);
             button.name = "BSMLPageButton";
             button.interactable = true;
-            button.gameObject.AddComponent<PageButton>();
-            LayoutElement layoutElement = button.gameObject.AddComponent<LayoutElement>();
+
+            GameObject gameObject = button.gameObject;
+            gameObject.SetActive(false);
+
+            gameObject.AddComponent<PageButton>();
+            LayoutElement layoutElement = gameObject.AddComponent<LayoutElement>();
             layoutElement.preferredWidth = -1;
             layoutElement.preferredHeight = -1;
             layoutElement.flexibleHeight = 0;
             layoutElement.flexibleWidth = 0;
 
-            ContentSizeFitter sizeFitter = button.gameObject.AddComponent<ContentSizeFitter>();
+            ContentSizeFitter sizeFitter = gameObject.AddComponent<ContentSizeFitter>();
             sizeFitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
             sizeFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
@@ -41,11 +43,15 @@ namespace BeatSaberMarkupLanguage.Tags
 
             (button.transform as RectTransform).pivot = new Vector2(.5f, .5f);
 
-            ButtonIconImage btnIcon = button.gameObject.AddComponent<ButtonIconImage>();
-            btnIcon.image = button.gameObject.GetComponentsInChildren<Image>(true).Where(x => x.gameObject.name == "Icon").FirstOrDefault();
+            ImageView image = button.transform.Find("Icon").GetComponent<ImageView>();
 
-            button.gameObject.SetActive(true);
-            return button.gameObject;
+            ButtonIconImage btnIcon = gameObject.AddComponent<ButtonIconImage>();
+            btnIcon.button = button;
+            btnIcon.defaultSkew = image.skew;
+            btnIcon.image = image;
+
+            gameObject.SetActive(true);
+            return gameObject;
         }
     }
 }

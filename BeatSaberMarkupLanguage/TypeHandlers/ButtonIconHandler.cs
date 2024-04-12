@@ -10,11 +10,13 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
         public override Dictionary<string, string[]> Props => new()
         {
             { "icon", new[] { "icon" } },
+            { "iconSkew", new[] { "icon-skew" } },
         };
 
         public override Dictionary<string, Action<ButtonIconImage, string>> Setters => new()
         {
-            { "icon", new Action<ButtonIconImage, string>((images, iconPath) => images.SetIcon(iconPath)) },
+            { "icon", new Action<ButtonIconImage, string>((image, value) => image.SetIcon(value)) },
+            { "iconSkew", new Action<ButtonIconImage, string>((image, value) => image.SetSkew(value)) },
         };
     }
 }
