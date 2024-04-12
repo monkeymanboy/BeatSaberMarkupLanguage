@@ -16,7 +16,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
         public override Dictionary<string, Action<ButtonIconImage, string>> Setters => new()
         {
             { "icon", new Action<ButtonIconImage, string>((image, value) => image.SetIcon(value)) },
-            { "iconSkew", new Action<ButtonIconImage, string>((image, value) => image.SetSkew(value)) },
+            { "iconSkew", new Action<ButtonIconImage, string>((image, value) => image.SetSkew(Parse.Float(value))) },
         };
     }
 }

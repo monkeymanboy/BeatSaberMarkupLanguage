@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using HMUI;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,7 +9,6 @@ namespace BeatSaberMarkupLanguage.Components
     {
         public Image image;
 
-        internal float defaultSkew;
         internal NoTransitionsButton button;
 
         public void SetIcon(string path)
@@ -23,22 +21,14 @@ namespace BeatSaberMarkupLanguage.Components
             image.SetImageAsync(path).ContinueWith((task) => Logger.Log.Error($"Failed to load image\n{task.Exception}"), TaskContinuationOptions.OnlyOnFaulted);
         }
 
-        internal void SetSkew(string value)
+        internal void SetSkew(float value)
         {
             if (image is not ImageView imageView)
             {
                 return;
             }
 
-            if (float.TryParse(value, NumberStyles.Float, CultureInfo.InvariantCulture, out float num))
-            {
-                imageView._skew = num;
-            }
-            else if (bool.TryParse(value, out bool result) && result)
-            {
-                imageView._skew = defaultSkew;
-            }
-
+            imageView._skew = value;
             imageView.SetVerticesDirty();
         }
 
