@@ -115,11 +115,18 @@ namespace BeatSaberMarkupLanguage
                 return;
             }
 
-            Type otherTypeHandler = typeHandlers.Select(th => th.GetType()).FirstOrDefault(th => th.GetCustomAttribute<ComponentHandler>().type == targetType);
-
-            if (otherTypeHandler != null)
+            foreach (TypeHandler otherTypeHandler in typeHandlers.Where(th => th.GetType().GetCustomAttribute<ComponentHandler>().type == targetType))
             {
-                Logger.Log.Warn($"Registering {typeHandlerType.FullName} for type {targetType.Name} that is already handled by {otherTypeHandler.FullName}! This can lead to unexpected behaviour if type handlers share attributes with the same name.");
+                List<string> conflictingProps = typeHandler.Props.Keys.Intersect(otherTypeHandler.Props.Keys).ToList();
+
+                if (conflictingProps.Count > 0)
+                {
+                    Logger.Log.Warn($"Registering type handler {typeHandlerType.FullName} for type {targetType.FullName} that has conflicting properties [{string.Join(", ", conflictingProps)}] with {otherTypeHandler.GetType().FullName}! This may lead to unexpected behaviour.");
+                }
+                else
+                {
+                    Logger.Log.Warn($"Registering type handler {typeHandlerType.FullName} for type {targetType.FullName} that is already handled by {otherTypeHandler.GetType().FullName}! This may lead to unexpected behaviour in the future if type handlers share attributes with the same name.");
+                }
             }
 
             typeHandlers.Add(typeHandler);
