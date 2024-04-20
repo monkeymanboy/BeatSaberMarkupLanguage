@@ -89,10 +89,10 @@ namespace BeatSaberMarkupLanguage
         /// Parse a string as a <see cref="UnityEngine.Vector3"/>.
         /// </summary>
         /// <param name="s">String to parse.</param>
-        /// <param name="defaultZ">Z value used if the string only has two components.</param>
+        /// <param name="defaultZ">Z value used if the string only has two components. Defaults to the same behaviour as when casting a <see cref="UnityEngine.Vector2"/> to a <see cref="UnityEngine.Vector3"/> (Z = 0).</param>
         /// <returns>A <see cref="UnityEngine.Vector3"/> representation of the string.</returns>
         /// <exception cref="ParseException">Thrown if the string cannot be parsed.</exception>
-        public static Vector3 Vector3(string s, float? defaultZ = null)
+        public static Vector3 Vector3(string s, float defaultZ = 0)
         {
             string[] parts = s.Split([' '], StringSplitOptions.RemoveEmptyEntries);
             float x;
@@ -107,7 +107,7 @@ namespace BeatSaberMarkupLanguage
                 case 2:
                     x = Float(parts[0]);
                     y = Float(parts[1]);
-                    z = defaultZ ?? x;
+                    z = defaultZ;
                     break;
                 case 3:
                     x = Float(parts[0]);
