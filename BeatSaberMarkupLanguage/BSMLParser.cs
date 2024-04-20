@@ -101,6 +101,27 @@ namespace BeatSaberMarkupLanguage
 
         public void RegisterTypeHandler(TypeHandler typeHandler)
         {
+            if (typeHandler == null)
+            {
+                throw new ArgumentNullException(nameof(typeHandler));
+            }
+
+            Type typeHandlerType = typeHandler.GetType();
+            Type targetType = typeHandlerType.GetCustomAttribute<ComponentHandler>()?.type;
+
+            if (targetType == null)
+            {
+                Logger.Log.Warn($"TypeHandler {typeHandlerType.FullName} does not have the [{nameof(ComponentHandler)}] attribute and will be ignored.");
+                return;
+            }
+
+            Type otherTypeHandler = typeHandlers.Select(th => th.GetType()).FirstOrDefault(th => th.GetCustomAttribute<ComponentHandler>().type == targetType);
+
+            if (otherTypeHandler != null)
+            {
+                Logger.Log.Warn($"Registering {typeHandlerType.FullName} for type {targetType.Name} that is already handled by {otherTypeHandler.FullName}! This can lead to unexpected behaviour if type handlers share attributes with the same name.");
+            }
+
             typeHandlers.Add(typeHandler);
         }
 
