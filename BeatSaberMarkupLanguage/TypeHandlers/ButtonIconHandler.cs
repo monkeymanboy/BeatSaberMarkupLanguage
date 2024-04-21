@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using BeatSaberMarkupLanguage.Components;
+using BeatSaberMarkupLanguage.Parser;
+using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.TypeHandlers
 {
@@ -16,9 +18,35 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 
         public override Dictionary<string, Action<ButtonIconImage, string>> Setters => new()
         {
-            { "icon", new Action<ButtonIconImage, string>((image, value) => image.SetIcon(value)) },
             { "iconSkew", new Action<ButtonIconImage, string>((image, value) => image.SetSkew(Parse.Float(value))) },
             { "showUnderline", new Action<ButtonIconImage, string>((image, value) => image.SetUnderlineActive(Parse.Bool(value))) },
         };
+
+        public override void HandleType(BSMLParser.ComponentTypeWithData componentType, BSMLParserParams parserParams)
+        {
+            ButtonIconImage buttonIconImage = (ButtonIconImage)componentType.component;
+
+            if (componentType.valueMap.TryGetValue("icon", out BSMLValue value))
+            {
+                SetIcon(buttonIconImage, value.GetValue());
+                BindValue(componentType, parserParams, value, val => SetIcon(buttonIconImage, val));
+            }
+            else if (componentType.data.TryGetValue("icon", out string str))
+            {
+                buttonIconImage.SetIcon(str);
+            }
+        }
+
+        private static void SetIcon(ButtonIconImage buttonIconImage, object value)
+        {
+            if (value is Sprite sprite)
+            {
+                buttonIconImage.image.sprite = sprite;
+            }
+            else
+            {
+                buttonIconImage.SetIcon(value.InvariantToString());
+            }
+        }
     }
 }
