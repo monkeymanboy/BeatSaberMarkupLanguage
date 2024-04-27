@@ -24,7 +24,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 ModalKeyboard modalKeyboard = componentType.component as ModalKeyboard;
                 if (componentType.data.TryGetValue("clearOnOpen", out string clearOnOpen))
                 {
-                    modalKeyboard.clearOnOpen = bool.Parse(clearOnOpen);
+                    modalKeyboard.clearOnOpen = Parse.Bool(clearOnOpen);
                 }
 
                 if (componentType.data.TryGetValue("value", out string value))

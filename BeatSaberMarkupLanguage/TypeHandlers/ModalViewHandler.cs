@@ -27,7 +27,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 bool moveToCenter = true;
                 if (componentType.data.TryGetValue("moveToCenter", out string moveToCenterString))
                 {
-                    moveToCenter = bool.Parse(moveToCenterString);
+                    moveToCenter = Parse.Bool(moveToCenterString);
                 }
 
                 if (componentType.data.TryGetValue("showEvent", out string showEvent))

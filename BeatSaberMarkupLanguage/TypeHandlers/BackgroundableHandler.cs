@@ -22,7 +22,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "backgroundColor", new Action<Backgroundable, string>((component, value) => component.ApplyColor(Parse.Color(value))) },
             { "backgroundColor0", new Action<Backgroundable, string>((component, value) => component.ApplyColor0(Parse.Color(value))) },
             { "backgroundColor1", new Action<Backgroundable, string>((component, value) => component.ApplyColor1(Parse.Color(value))) },
-            { "backgroundAlpha", new Action<Backgroundable, string>((component, value) => component.ApplyAlpha(float.Parse(value))) },
+            { "backgroundAlpha", new Action<Backgroundable, string>((component, value) => component.ApplyAlpha(Parse.Float(value))) },
         };
     }
 }
