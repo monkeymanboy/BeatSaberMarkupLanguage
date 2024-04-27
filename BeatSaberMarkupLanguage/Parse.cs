@@ -210,10 +210,25 @@ namespace BeatSaberMarkupLanguage
         /// <param name="s">String to parse.</param>
         /// <returns>A <see cref="UnityEngine.Color"/> representation of the string.</returns>
         /// <exception cref="ParseException">Thrown if the string cannot be parsed.</exception>
-        public static Color Color(string s)
+        public static Color Color(string s) => Color(s, 1);
+
+        /// <summary>
+        /// Parse a string as a <see cref="UnityEngine.Color"/>.
+        /// </summary>
+        /// <param name="s">String to parse.</param>
+        /// <param name="defaultAlpha">The default value to use for alpha if not specified.</param>
+        /// <returns>A <see cref="UnityEngine.Color"/> representation of the string.</returns>
+        /// <exception cref="ParseException">Thrown if the string cannot be parsed.</exception>
+        public static Color Color(string s, float defaultAlpha)
         {
             if (ColorUtility.TryParseHtmlString(s, out Color color))
             {
+                // color name or #123 or #123456
+                if (s[0] != '#' || s.Length is 4 or 7)
+                {
+                    color.a = defaultAlpha;
+                }
+
                 return color;
             }
             else
