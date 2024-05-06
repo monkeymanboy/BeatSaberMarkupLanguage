@@ -12,7 +12,7 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
 {
     public class StringSettingTag : ModalKeyboardTag
     {
-        private FormattedFloatListSettingsValueController valueControllerTemplate;
+        private FormattedFloatListSettingsController valueControllerTemplate;
 
         public override string[] Aliases => new[] { "string-setting" };
 
@@ -20,10 +20,10 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
         {
             if (valueControllerTemplate == null)
             {
-                valueControllerTemplate = DiContainer.Resolve<MainSettingsMenuViewController>()._settingsSubMenuInfos.Select(m => m.viewController).First(vc => vc.name == "GraphicSettings").transform.Find("ViewPort/Content/VRRenderingScale").GetComponent<FormattedFloatListSettingsValueController>();
+                valueControllerTemplate = DiContainer.Resolve<MainSettingsMenuViewController>()._settingsSubMenuInfos.Select(m => m.viewController).First(vc => vc.name == "GraphicSettings").transform.Find("ViewPort/Content/VRRenderingScale").GetComponent<FormattedFloatListSettingsController>();
             }
 
-            FormattedFloatListSettingsValueController baseSetting = Object.Instantiate(valueControllerTemplate, parent, false);
+            FormattedFloatListSettingsController baseSetting = Object.Instantiate(valueControllerTemplate, parent, false);
             baseSetting.name = "BSMLStringSetting";
 
             GameObject gameObject = baseSetting.gameObject;

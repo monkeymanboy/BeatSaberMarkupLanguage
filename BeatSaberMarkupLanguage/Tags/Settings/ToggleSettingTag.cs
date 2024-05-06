@@ -26,7 +26,7 @@ namespace BeatSaberMarkupLanguage.Tags
             GameObject gameObject = Object.Instantiate(toggleTemplate, parent, false);
             GameObject nameText = gameObject.transform.Find("NameText").gameObject;
             GameObject switchView = gameObject.transform.Find("SwitchView").gameObject;
-            Object.Destroy(gameObject.GetComponent<BoolSettingsController>());
+            Object.Destroy(gameObject.GetComponent<SwitchSettingsController>());
 
             gameObject.name = "BSMLToggle";
             gameObject.SetActive(false);

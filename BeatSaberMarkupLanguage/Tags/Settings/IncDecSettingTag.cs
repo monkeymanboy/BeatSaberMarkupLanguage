@@ -12,16 +12,16 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
     public abstract class IncDecSettingTag<T> : BSMLTag
         where T : IncDecSetting
     {
-        private FormattedFloatListSettingsValueController valueControllerTemplate;
+        private FormattedFloatListSettingsController valueControllerTemplate;
 
         public override GameObject CreateObject(Transform parent)
         {
             if (valueControllerTemplate == null)
             {
-                valueControllerTemplate = DiContainer.Resolve<MainSettingsMenuViewController>()._settingsSubMenuInfos.Select(m => m.viewController).First(vc => vc.name == "GraphicSettings").transform.Find("ViewPort/Content/VRRenderingScale").GetComponent<FormattedFloatListSettingsValueController>();
+                valueControllerTemplate = DiContainer.Resolve<MainSettingsMenuViewController>()._settingsSubMenuInfos.Select(m => m.viewController).First(vc => vc.name == "GraphicSettings").transform.Find("ViewPort/Content/VRRenderingScale").GetComponent<FormattedFloatListSettingsController>();
             }
 
-            FormattedFloatListSettingsValueController baseSetting = Object.Instantiate(valueControllerTemplate, parent, false);
+            FormattedFloatListSettingsController baseSetting = Object.Instantiate(valueControllerTemplate, parent, false);
             baseSetting.name = "BSMLIncDecSetting";
 
             GameObject gameObject = baseSetting.gameObject;

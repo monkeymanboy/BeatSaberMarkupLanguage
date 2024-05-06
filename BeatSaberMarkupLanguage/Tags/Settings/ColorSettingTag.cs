@@ -12,7 +12,7 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
 {
     public class ColorSettingTag : ModalColorPickerTag
     {
-        private static FormattedFloatListSettingsValueController baseSettings;
+        private static FormattedFloatListSettingsController baseSettings;
         private static Image colorImage;
 
         public override string[] Aliases => new[] { "color-setting" };
@@ -21,10 +21,10 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
         {
             if (baseSettings == null)
             {
-                baseSettings = DiContainer.Resolve<MainSettingsMenuViewController>()._settingsSubMenuInfos.Select(m => m.viewController).First(vc => vc.name == "GraphicSettings").transform.Find("ViewPort/Content/VRRenderingScale").GetComponent<FormattedFloatListSettingsValueController>();
+                baseSettings = DiContainer.Resolve<MainSettingsMenuViewController>()._settingsSubMenuInfos.Select(m => m.viewController).First(vc => vc.name == "GraphicSettings").transform.Find("ViewPort/Content/VRRenderingScale").GetComponent<FormattedFloatListSettingsController>();
             }
 
-            FormattedFloatListSettingsValueController baseSetting = Object.Instantiate(baseSettings, parent, false);
+            FormattedFloatListSettingsController baseSetting = Object.Instantiate(baseSettings, parent, false);
             baseSetting.name = "BSMLColorSetting";
 
             GameObject gameObject = baseSetting.gameObject;
