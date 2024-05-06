@@ -27,14 +27,12 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             {
                 layoutGroup.padding = Parse.RectOffset(pad);
             }
-            else
-            {
-                layoutGroup.padding = new RectOffset(
-                    componentType.data.TryGetValue("padLeft", out string padLeft) ? Parse.Int(padLeft) : layoutGroup.padding.left,
-                    componentType.data.TryGetValue("padRight", out string padRight) ? Parse.Int(padRight) : layoutGroup.padding.right,
-                    componentType.data.TryGetValue("padTop", out string padTop) ? Parse.Int(padTop) : layoutGroup.padding.top,
-                    componentType.data.TryGetValue("padBottom", out string padBottom) ? Parse.Int(padBottom) : layoutGroup.padding.bottom);
-            }
+
+            layoutGroup.padding = new RectOffset(
+                componentType.data.TryGetValue("padLeft", out string padLeft) ? Parse.Int(padLeft) : layoutGroup.padding.left,
+                componentType.data.TryGetValue("padRight", out string padRight) ? Parse.Int(padRight) : layoutGroup.padding.right,
+                componentType.data.TryGetValue("padTop", out string padTop) ? Parse.Int(padTop) : layoutGroup.padding.top,
+                componentType.data.TryGetValue("padBottom", out string padBottom) ? Parse.Int(padBottom) : layoutGroup.padding.bottom);
 
             if (componentType.data.TryGetValue("childAlign", out string childAlign))
             {
