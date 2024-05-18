@@ -15,25 +15,24 @@ namespace BeatSaberMarkupLanguage.Util
 {
     internal class DocumentationDataGenerator
     {
-        private readonly ISerializer serializer;
-        private readonly IDeserializer deserializer;
         private readonly IReadOnlyList<Type> typeHandlerTypes;
 
         internal DocumentationDataGenerator(IEnumerable<Type> typeHandlers)
         {
-            this.serializer = new SerializerBuilder().WithNamingConvention(CamelCaseNamingConvention.Instance).Build();
-            this.deserializer = new DeserializerBuilder().WithNamingConvention(CamelCaseNamingConvention.Instance).Build();
             this.typeHandlerTypes = typeHandlers.Select(t => t.GetCustomAttribute<ComponentHandler>(true).type).OrderBy(t => t.Name).ToList();
         }
 
         internal void Generate()
         {
-            GenerateTags();
-            GenerateMacros();
-            GenerateTypeHandlers();
+            IDeserializer deserializer = new DeserializerBuilder().WithNamingConvention(CamelCaseNamingConvention.Instance).Build();
+            ISerializer serializer = new SerializerBuilder().WithNamingConvention(CamelCaseNamingConvention.Instance).Build();
+
+            GenerateTags(serializer);
+            GenerateMacros(deserializer, serializer);
+            GenerateTypeHandlers(deserializer, serializer);
         }
 
-        private void GenerateTags()
+        private void GenerateTags(ISerializer serializer)
         {
             GameObject dummy = new();
             List<TagDefinition> tags = new();
@@ -59,7 +58,7 @@ namespace BeatSaberMarkupLanguage.Util
             UnityEngine.Object.Destroy(dummy);
         }
 
-        private void GenerateMacros()
+        private void GenerateMacros(IDeserializer deserializer, ISerializer serializer)
         {
             GameObject dummy = new();
             List<MacroDefinition> macros = deserializer.Deserialize<List<MacroDefinition>>(File.ReadAllText("Macros.yml"));
@@ -99,7 +98,7 @@ namespace BeatSaberMarkupLanguage.Util
             UnityEngine.Object.Destroy(dummy);
         }
 
-        private void GenerateTypeHandlers()
+        private void GenerateTypeHandlers(IDeserializer deserializer, ISerializer serializer)
         {
             GameObject dummy = new();
             List<TypeHandlerDefinition> typeHandlers = deserializer.Deserialize<List<TypeHandlerDefinition>>(File.ReadAllText("TypeHandlers.yml"));
