@@ -70,6 +70,7 @@
     </ItemGroup>
 
     <Copy SourceFiles="@(FilesToCopy)" DestinationFolder="$(BeatSaberDir)\%(RecursiveDir)" />
+    <Copy SourceFiles="$(TargetDir)YamlDotNet.dll" DestinationFolder="$(BeatSaberDir)Libs" Condition="'$(Configuration)' == 'Debug' AND !Exists('$(BeatSaberDir)Libs\YamlDotNet.dll')" />
   </Target>
 
   <!-- Clean up artifact files -->
