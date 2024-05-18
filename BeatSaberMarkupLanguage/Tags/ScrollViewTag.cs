@@ -16,7 +16,9 @@ namespace BeatSaberMarkupLanguage.Tags
             {
                 if (scrollViewTemplate == null)
                 {
-                    scrollViewTemplate = Object.FindObjectOfType<EulaDisplayViewController>(true)._textPageScrollView;
+                    scrollViewTemplate = Object.Instantiate(BeatSaberUI.DiContainer.Resolve<EulaDisplayViewController>()._textPageScrollView);
+                    scrollViewTemplate.name = "BSMLScrollViewTemplate";
+                    scrollViewTemplate.SetText(null);
 
                     RectTransform rectTransform = (RectTransform)scrollViewTemplate.transform;
                     rectTransform.anchorMin = Vector2.zero;
