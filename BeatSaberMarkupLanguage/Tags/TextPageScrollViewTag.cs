@@ -9,18 +9,11 @@ namespace BeatSaberMarkupLanguage.Tags
 {
     public class TextPageScrollViewTag : BSMLTag
     {
-        private TextPageScrollView pageTemplate;
-
         public override string[] Aliases => new[] { "text-page" };
 
         public override GameObject CreateObject(Transform parent)
         {
-            if (pageTemplate == null)
-            {
-                pageTemplate = Object.FindObjectOfType<EulaDisplayViewController>(true)._textPageScrollView;
-            }
-
-            TextPageScrollView scrollView = DiContainer.InstantiatePrefabForComponent<TextPageScrollView>(pageTemplate, parent);
+            TextPageScrollView scrollView = DiContainer.InstantiatePrefabForComponent<TextPageScrollView>(ScrollViewTag.ScrollViewTemplate, parent);
             scrollView.name = "BSMLTextPageScrollView";
             scrollView.enabled = true;
 

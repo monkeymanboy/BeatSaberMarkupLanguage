@@ -17,6 +17,10 @@ namespace BeatSaberMarkupLanguage.Tags
                 if (scrollViewTemplate == null)
                 {
                     scrollViewTemplate = Object.FindObjectOfType<EulaDisplayViewController>(true)._textPageScrollView;
+
+                    RectTransform rectTransform = (RectTransform)scrollViewTemplate.transform;
+                    rectTransform.anchorMin = Vector2.zero;
+                    rectTransform.anchorMax = Vector2.one;
                 }
 
                 return scrollViewTemplate;
