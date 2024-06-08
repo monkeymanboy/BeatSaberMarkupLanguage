@@ -12,7 +12,7 @@
         <scroll-view pref-width='143' pref-height='59' child-control-height='true' child-control-width='false'>
           <grid horizontal-fit='Unconstrained' size-delta-x='124' cell-size='40 9' spacing='2 2'>
             <macro.for-each items='buttons'>
-              <button id='menu-button' pref-width='40' pref-height='9' text='~text' hover-hint='~hover-hint' interactable='~interactable' on-click='button-click' pad='0' />
+              <button id='menu-button' pref-width='40' pref-height='9' text='~text' hover-hint='~hover-hint' interactable='~interactable' on-click='button-click' pad='0' enable-auto-sizing='true' font-size-min='2' font-size-max='4' />
             </macro.for-each>
           </grid>
         </scroll-view>

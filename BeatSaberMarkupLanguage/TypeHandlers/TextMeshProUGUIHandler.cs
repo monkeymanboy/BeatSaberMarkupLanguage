@@ -9,8 +9,11 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
     {
         public override Dictionary<string, string[]> Props => new()
         {
+            { "enableAutoSizing", new[] { "enable-auto-sizing" } },
             { "text", new[] { "text" } },
             { "fontSize", new[] { "font-size" } },
+            { "fontSizeMin", new[] { "font-size-min" } },
+            { "fontSizeMax", new[] { "font-size-max" } },
             { "color", new[] { "font-color", "color" } },
             { "faceColor", new[] { "face-color" } },
             { "outlineColor", new[] { "outline-color" } }, // Outline not supported for Teko fonts
@@ -28,8 +31,11 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 
         public override Dictionary<string, Action<TextMeshProUGUI, string>> Setters => new()
         {
+            { "enableAutoSizing", new Action<TextMeshProUGUI, string>((textMesh, value) => textMesh.enableAutoSizing = Parse.Bool(value)) },
             { "text", new Action<TextMeshProUGUI, string>((textMesh, value) => textMesh.text = value) },
             { "fontSize", new Action<TextMeshProUGUI, string>((textMesh, value) => textMesh.fontSize = Parse.Float(value)) },
+            { "fontSizeMin", new Action<TextMeshProUGUI, string>((textMesh, value) => textMesh.fontSizeMin = Parse.Float(value)) },
+            { "fontSizeMax", new Action<TextMeshProUGUI, string>((textMesh, value) => textMesh.fontSizeMax = Parse.Float(value)) },
             { "color", new Action<TextMeshProUGUI, string>((textMesh, value) => textMesh.color = Parse.Color(value)) },
             { "faceColor", new Action<TextMeshProUGUI, string>((textMesh, value) => textMesh.faceColor = Parse.Color(value)) },
             { "outlineColor", new Action<TextMeshProUGUI, string>((textMesh, value) => textMesh.outlineColor = Parse.Color(value)) },
