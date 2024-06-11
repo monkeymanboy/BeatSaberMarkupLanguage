@@ -66,13 +66,13 @@ namespace BeatSaberMarkupLanguage.MenuButtons
             }
         }
 
+        internal string StrippedText { get; private set; }
+
         [UIAction("button-click")]
         public void ButtonClicked()
         {
             OnClick?.Invoke();
         }
-
-        internal string StrippedText { get; private set; }
 
         protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
