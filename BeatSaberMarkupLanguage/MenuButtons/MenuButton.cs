@@ -39,6 +39,7 @@ namespace BeatSaberMarkupLanguage.MenuButtons
             set
             {
                 text = value;
+                StrippedText = Utilities.StripHtmlTags(text);
                 NotifyPropertyChanged();
             }
         }
@@ -70,6 +71,8 @@ namespace BeatSaberMarkupLanguage.MenuButtons
         {
             OnClick?.Invoke();
         }
+
+        internal string StrippedText { get; private set; }
 
         protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {

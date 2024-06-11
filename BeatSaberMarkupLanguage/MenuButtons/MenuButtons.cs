@@ -8,7 +8,7 @@ namespace BeatSaberMarkupLanguage.MenuButtons
 {
     public class MenuButtons : PersistentSingleton<MenuButtons>, ILateDisposable
     {
-        private static readonly IComparer<MenuButton> _menuButtonComparer = Comparer<MenuButton>.Create((a, b) => a.Text.CompareTo(b.Text));
+        private static readonly IComparer<MenuButton> _menuButtonComparer = Comparer<MenuButton>.Create((a, b) => a.StrippedText.CompareTo(b.StrippedText));
 
         private MenuButtonsViewController _menuButtonsViewController;
 

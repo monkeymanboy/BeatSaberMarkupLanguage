@@ -112,7 +112,7 @@ namespace BeatSaberMarkupLanguage.Settings
             }
             else
             {
-                return a.text.CompareTo(b.text);
+                return Utilities.StripHtmlTags(a.text).CompareTo(Utilities.StripHtmlTags(b.text));
             }
         }
 
