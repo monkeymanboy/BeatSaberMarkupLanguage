@@ -7,9 +7,9 @@ namespace BeatSaberMarkupLanguage.MenuButtons
 {
     public class MenuButton : INotifyPropertyChanged
     {
-        private string text;
-        private string hoverHint;
-        private bool interactable;
+        private string _text;
+        private string _hoverHint;
+        private bool _interactable;
 
         public MenuButton(string text, string hoverHint, Action onClick, bool interactable = true)
         {
@@ -35,11 +35,11 @@ namespace BeatSaberMarkupLanguage.MenuButtons
         [UIValue("text")]
         public virtual string Text
         {
-            get => text;
+            get => _text;
             set
             {
-                text = value;
-                StrippedText = Utilities.StripHtmlTags(text);
+                _text = value;
+                StrippedText = Utilities.StripHtmlTags(_text);
                 NotifyPropertyChanged();
             }
         }
@@ -47,10 +47,10 @@ namespace BeatSaberMarkupLanguage.MenuButtons
         [UIValue("hover-hint")]
         public virtual string HoverHint
         {
-            get => hoverHint;
+            get => _hoverHint;
             set
             {
-                hoverHint = value;
+                _hoverHint = value;
                 NotifyPropertyChanged();
             }
         }
@@ -58,10 +58,10 @@ namespace BeatSaberMarkupLanguage.MenuButtons
         [UIValue("interactable")]
         public virtual bool Interactable
         {
-            get => interactable;
+            get => _interactable;
             set
             {
-                interactable = value;
+                _interactable = value;
                 NotifyPropertyChanged();
             }
         }
