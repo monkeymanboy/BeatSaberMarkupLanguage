@@ -1,9 +1,11 @@
 <bg xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
-    xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://monkeymanboy.github.io/BSML-Docs/BSMLSchema.xsd'>
+    xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://monkeymanboy.github.io/BSML-Docs/BSMLSchema.xsd'
+    size-delta='0 -10'
+    anchored-position='0 -5'>
   <macro.define id='button-text' value='Macro defined button text' />
-  <tab-selector tab-tag='new-tab' />
+  <tab-selector tab-tag='new-tab' anchored-position='0 10' />
   <tab tags='new-tab' tab-name='Settings tests'>
-    <settings-container>
+    <settings-container anchor-min='0 0' anchor-max='1 1' size-delta='0 0' anchored-position='0 0'>
       <slider-setting min='-1' max='1' value='slider-value'/>
       <list-slider-setting options='options' value='list-slider-value'/>
     </settings-container>

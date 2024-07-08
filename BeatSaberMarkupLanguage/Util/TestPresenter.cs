@@ -23,8 +23,7 @@ namespace BeatSaberMarkupLanguage.Util
         {
             await Task.Delay(1000);
             HMUI.ViewController testViewController = BeatSaberUI.CreateViewController<T>();
-            FloatingScreen.FloatingScreen floatingScreen = FloatingScreen.FloatingScreen.CreateFloatingScreen(new Vector2(400, 200), true, Vector3.zero, Quaternion.identity);
-            floatingScreen.SetRootViewController(testViewController, HMUI.ViewController.AnimationType.None);
+            testViewController.rectTransform.sizeDelta = new Vector2(50, 0);
             BeatSaberUI.DiContainer.Resolve<MainFlowCoordinator>().PresentViewController(testViewController, null, HMUI.ViewController.AnimationDirection.Horizontal, false);
         }
     }
