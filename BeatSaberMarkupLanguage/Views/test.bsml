@@ -130,6 +130,7 @@
         </custom-list>
         <page-button click-event='clist#PageDown' direction='Down' />
         <icon-button pref-width='10' pref-height='10' icon='#OneLifeIcon' pad='1'/>
+        <clickable-image src='#OneLifeIcon' />
     </vertical>
   </tab>
   <tab tags='new-tab' tab-name='text page'>
