@@ -1,19 +1,21 @@
 ﻿<bg id='root-object'
     xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
-    xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://monkeymanboy.github.io/BSML-Docs/BSMLSchema.xsd'>
-  <tab-selector id='new-tab-selector' tab-tag='new-tab' anchor-pos-y='0' size-delta='-20 6' child-expand-width='true' child-control-width='true' />
-  <tab id='vanilla-tab' tags='new-tab' tab-name-key='BSML_GAMEPLAY_SETUP_BASE_GAME_TAB' anchor-pos-y='-8'>
+    xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://monkeymanboy.github.io/BSML-Docs/BSMLSchema.xsd'
+    anchored-position-y='-4'
+    size-delta-y='-8'>
+  <tab-selector id='new-tab-selector' tab-tag='new-tab' anchor-pos-y='8' size-delta='-20 6' child-expand-width='true' child-control-width='true' />
+  <tab id='vanilla-tab' tags='new-tab' tab-name-key='BSML_GAMEPLAY_SETUP_BASE_GAME_TAB'>
     <macro.reparent transforms='vanilla-items'/>
   </tab>
-  <tab id='mods-tab' tags='new-tab' tab-name-key='BSML_GAMEPLAY_SETUP_MODS_TAB'>
-    <horizontal child-expand-width='false' pref-height='6' anchor-pos-y='28' size-delta-x='-16' spacing='1'>
+  <tab id='mods-tab' tags='new-tab' tab-name-key='BSML_GAMEPLAY_SETUP_MODS_TAB' anchored-position-y='-5' size-delta-y='-10'>
+    <horizontal vertical-fit='Unconstrained' child-expand-width='false' anchor-min='0 1' anchor-max='1 1' anchored-position='0 10' pivot='0.5 1' size-delta='-6 6' spacing='1'>
       <page-button direction='Left' pref-width='4' pref-height='4' tags='left-button'/>
       <tab-selector tab-tag='mod-tab' child-expand-width='true' child-control-width='true' page-count='3' left-button-tag='left-button' right-button-tag='right-button' />
       <page-button direction='Right' pref-width='4' pref-height='4' tags='right-button'/>
+      <clickable-text text='👁' align='Midline' hover-hint-key='BSML_GAMEPLAY_SETUP_EDIT_VISIBLE_TABS_HINT' on-click='show-modal' />
     </horizontal>
-    <clickable-text text='👁' hover-hint-key='BSML_GAMEPLAY_SETUP_EDIT_VISIBLE_TABS_HINT' on-click='show-modal' anchored-position='98 27.2' />
     <macro.for-each items='mod-menus' pass-back-tags='true'>
-      <tab tags='mod-tab' tab-name='~tab-name' id='root-tab' anchor-max-y='0.75'/>
+      <tab tags='mod-tab' tab-name='~tab-name' id='root-tab' />
     </macro.for-each>
     <modal id='list-modal' clickerino-offerino-closerino='true' size-delta='65 35'>
       <loading-indicator active='~is-loading' preserve-aspect='true' />
