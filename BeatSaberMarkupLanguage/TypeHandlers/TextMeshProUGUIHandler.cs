@@ -27,6 +27,9 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "underlined", new[] { "underlined" } },
             { "strikethrough", new[] { "strikethrough" } },
             { "allUppercase", new[] { "all-uppercase" } },
+            { "lineSpacing", new[] { "line-spacing" } },
+            { "lineSpacingAdjustment", new[] { "line-spacing-adjustment" } },
+            { "paragraphSpacing", new[] { "paragraph-spacing" } },
         };
 
         public override Dictionary<string, Action<TextMeshProUGUI, string>> Setters => new()
@@ -49,6 +52,9 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "underlined", new Action<TextMeshProUGUI, string>((textMesh, value) => textMesh.fontStyle = SetStyle(textMesh.fontStyle, FontStyles.Underline, value)) },
             { "strikethrough", new Action<TextMeshProUGUI, string>((textMesh, value) => textMesh.fontStyle = SetStyle(textMesh.fontStyle, FontStyles.Strikethrough, value)) },
             { "allUppercase", new Action<TextMeshProUGUI, string>((textMesh, value) => textMesh.fontStyle = SetStyle(textMesh.fontStyle, FontStyles.UpperCase, value)) },
+            { "lineSpacing", new Action<TextMeshProUGUI, string>((textMesh, value) => textMesh.lineSpacing = Parse.Float(value)) },
+            { "lineSpacingAdjustment", new Action<TextMeshProUGUI, string>((textMesh, value) => textMesh.lineSpacingAdjustment = Parse.Float(value)) },
+            { "paragraphSpacing", new Action<TextMeshProUGUI, string>((textMesh, value) => textMesh.paragraphSpacing = Parse.Float(value)) },
         };
 
         private static FontStyles SetStyle(FontStyles existing, FontStyles modifyStyle, string flag)
