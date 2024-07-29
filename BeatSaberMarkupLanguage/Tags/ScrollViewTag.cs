@@ -23,6 +23,7 @@ namespace BeatSaberMarkupLanguage.Tags
                     RectTransform rectTransform = (RectTransform)scrollViewTemplate.transform;
                     rectTransform.anchorMin = Vector2.zero;
                     rectTransform.anchorMax = Vector2.one;
+                    rectTransform.sizeDelta = Vector3.zero;
                 }
 
                 return scrollViewTemplate;
