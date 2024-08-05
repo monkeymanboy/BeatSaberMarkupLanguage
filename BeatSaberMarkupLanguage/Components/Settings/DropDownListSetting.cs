@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Linq;
 using HMUI;
+using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.Components.Settings
 {
@@ -17,8 +18,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         {
             get
             {
-                ValidateRange();
-                return values[index];
+                return values.Count > 0 ? values[Mathf.Clamp(index, 0, values.Count - 1)] : null;
             }
 
             set
@@ -86,22 +86,9 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             }
         }
 
-        private void ValidateRange()
-        {
-            if (index >= values.Count)
-            {
-                index = values.Count - 1;
-            }
-
-            if (index < 0)
-            {
-                index = 0;
-            }
-        }
-
         private void UpdateState()
         {
-            dropdown._text.text = formatter == null ? Value.ToString() : (formatter.Invoke(Value) as string);
+            dropdown._text.text = Value != null ? (formatter == null ? Value?.ToString() : (formatter.Invoke(Value) as string)) : string.Empty;
         }
     }
 }

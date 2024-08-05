@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.Components.Settings
 {
@@ -13,8 +14,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         {
             get
             {
-                ValidateRange();
-                return values[index];
+                return values.Count > 0 ? values[Mathf.Clamp(index, 0, values.Count - 1)] : null;
             }
 
             set
@@ -69,24 +69,11 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             }
         }
 
-        private void ValidateRange()
-        {
-            if (index >= values.Count)
-            {
-                index = values.Count - 1;
-            }
-
-            if (index < 0)
-            {
-                index = 0;
-            }
-        }
-
         private void UpdateState()
         {
             EnableDec = index > 0;
             EnableInc = index < values.Count - 1;
-            Text = formatter == null ? Value.ToString() : (formatter.Invoke(Value) as string);
+            Text = Value != null ? (formatter == null ? Value?.ToString() : (formatter.Invoke(Value) as string)) : string.Empty;
         }
     }
 }
