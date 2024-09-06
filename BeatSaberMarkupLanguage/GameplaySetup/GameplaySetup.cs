@@ -106,7 +106,7 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
             }
         }
 
-        public float CellSize() => 8f;
+        public float CellSize(int idx) => 8f;
 
         public int NumberOfCells() => _menus.Count;
 

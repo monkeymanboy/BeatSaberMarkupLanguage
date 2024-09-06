@@ -32,7 +32,7 @@ namespace BeatSaberMarkupLanguage.Components
             return tableCell;
         }
 
-        public float CellSize()
+        public float CellSize(int idx)
         {
             return cellSize;
         }

@@ -14,7 +14,7 @@ namespace BeatSaberMarkupLanguage.Tags
         {
             if (modalViewTemplate == null)
             {
-                modalViewTemplate = DiContainer.Resolve<GameplaySetupViewController>()._colorsOverrideSettingsPanelController._colorSchemeDropDown._modalView;
+                modalViewTemplate = (ModalView)DiContainer.Resolve<GameplaySetupViewController>()._colorsOverrideSettingsPanelController._colorSchemeDropDown._modalView;
             }
 
             ModalView modalView = DiContainer.InstantiatePrefabForComponent<ModalView>(modalViewTemplate, parent);

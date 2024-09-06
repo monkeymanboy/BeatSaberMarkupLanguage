@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using HMUI;
 using TMPro;
 using UnityEngine;
@@ -174,14 +173,14 @@ namespace BeatSaberMarkupLanguage.Components
             return null;
         }
 
-        public float CellSize()
+        public float CellSize(int idx)
         {
             return cellSize;
         }
 
         public int NumberOfCells()
         {
-            return data.Count();
+            return data.Count;
         }
 
         public class CustomCellInfo
