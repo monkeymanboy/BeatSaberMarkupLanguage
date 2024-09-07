@@ -157,11 +157,11 @@ namespace BeatSaberMarkupLanguage.Settings
             modSettingsFlowCoordinator.IsAnimating = true;
             mainFlowCoordinator.PresentFlowCoordinator(
                 modSettingsFlowCoordinator,
-                new Action(() =>
+                () =>
                 {
                     modSettingsFlowCoordinator.ShowInitial();
                     modSettingsFlowCoordinator.IsAnimating = false;
-                }),
+                },
                 ViewController.AnimationDirection.Vertical);
         }
     }

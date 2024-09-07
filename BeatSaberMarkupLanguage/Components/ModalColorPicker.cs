@@ -19,10 +19,11 @@ namespace BeatSaberMarkupLanguage.Components
         public BSMLAction OnDone;
         public BSMLAction OnChange;
 
-        public Action<Color> DoneEvent;
-        public Action CancelEvent;
-
         private Color currentColor;
+
+        public event Action<Color> DoneEvent;
+
+        public event Action CancelEvent;
 
         public Color CurrentColor
         {

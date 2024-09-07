@@ -13,7 +13,7 @@ namespace BeatSaberMarkupLanguage.Settings.UI.ViewControllers
         [UIComponent("list")]
         public CustomListTableData List;
 
-        public Action<SettingsMenu> ClickedMenu;
+        public event Action<SettingsMenu> ClickedMenu;
 
         protected override void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
         {

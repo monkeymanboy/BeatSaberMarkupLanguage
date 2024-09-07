@@ -30,7 +30,7 @@ namespace BeatSaberMarkupLanguage.MenuButtons
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public virtual Action OnClick { get; protected set; }
+        public event Action OnClick;
 
         [UIValue("text")]
         public virtual string Text
