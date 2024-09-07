@@ -10,24 +10,24 @@ namespace BeatSaberMarkupLanguage.Components
         public ScrollView ScrollView;
         private bool dirty = false;
 
-        private void Start()
+        protected void Start()
         {
             LayoutRebuilder.ForceRebuildLayoutImmediate(transform as RectTransform);
             StopAllCoroutines();
             StartCoroutine(SetupScrollView());
         }
 
-        private void OnEnable()
+        protected void OnEnable()
         {
             UpdateScrollView();
         }
 
-        private void OnRectTransformDimensionsChange()
+        protected void OnRectTransformDimensionsChange()
         {
             dirty = true; // Need to delay the update such that it doesn't run during the rebuild loop
         }
 
-        private void Update()
+        protected void Update()
         {
             if (dirty)
             {

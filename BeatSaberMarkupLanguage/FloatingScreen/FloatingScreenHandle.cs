@@ -75,7 +75,7 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
             this.floatingScreen = floatingScreen;
         }
 
-        private void Awake()
+        protected void Awake()
         {
             if (shader == null)
             {
@@ -87,7 +87,7 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
             material.SetColor(ColorId, DefaultColor);
         }
 
-        private void Update()
+        protected void Update()
         {
             if (grabbingController == null)
             {

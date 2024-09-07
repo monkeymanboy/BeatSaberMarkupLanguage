@@ -41,12 +41,12 @@ namespace BeatSaberMarkupLanguage.Components
             }
         }
 
-        private void OnEnable()
+        protected void OnEnable()
         {
             Button.selectionStateDidChangeEvent += OnSelectionStateDidChange;
         }
 
-        private void OnDisable()
+        protected void OnDisable()
         {
             Button.selectionStateDidChangeEvent -= OnSelectionStateDidChange;
         }

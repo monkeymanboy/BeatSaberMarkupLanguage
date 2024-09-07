@@ -8,7 +8,7 @@ namespace BeatSaberMarkupLanguage.Components
     {
         private Coroutine updateLayoutCoroutine;
 
-        private void OnRectTransformDimensionsChange()
+        protected void OnRectTransformDimensionsChange()
         {
             if (isActiveAndEnabled && updateLayoutCoroutine == null)
             {

@@ -44,7 +44,7 @@ namespace BeatSaberMarkupLanguage.Components
             }
         }
 
-        private void OnEnable()
+        protected void OnEnable()
         {
             ReceiveValue();
         }

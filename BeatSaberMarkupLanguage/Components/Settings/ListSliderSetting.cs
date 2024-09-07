@@ -53,7 +53,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             return Formatter == null ? value.ToString() : (Formatter.Invoke(value) as string);
         }
 
-        private void Awake()
+        protected void Awake()
         {
             ReceiveValue();
         }

@@ -28,7 +28,7 @@ namespace BeatSaberMarkupLanguage.Animations
             }
         }
 
-        private void OnEnable()
+        protected void OnEnable()
         {
             if (ControllerData != null)
             {
@@ -37,12 +37,12 @@ namespace BeatSaberMarkupLanguage.Animations
             }
         }
 
-        private void OnDisable()
+        protected void OnDisable()
         {
             ControllerData?.ActiveImages.Remove(Image);
         }
 
-        private void OnDestroy()
+        protected void OnDestroy()
         {
             ControllerData?.ActiveImages.Remove(Image);
         }

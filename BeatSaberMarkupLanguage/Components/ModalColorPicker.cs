@@ -71,7 +71,7 @@ namespace BeatSaberMarkupLanguage.Components
             CurrentColor = color;
         }
 
-        private void OnEnable()
+        protected void OnEnable()
         {
             if (AssociatedValue != null)
             {

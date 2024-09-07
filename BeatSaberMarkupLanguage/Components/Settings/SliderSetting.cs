@@ -70,7 +70,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             }
         }
 
-        private void Awake()
+        protected void Awake()
         {
             ReceiveValue();
         }

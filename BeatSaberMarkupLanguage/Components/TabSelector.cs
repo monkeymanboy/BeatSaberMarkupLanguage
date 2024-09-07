@@ -116,6 +116,14 @@ namespace BeatSaberMarkupLanguage.Components
             }
         }
 
+        protected void OnEnable()
+        {
+            if (shouldRefresh)
+            {
+                Refresh();
+            }
+        }
+
         private void TabSelected(SegmentedControl segmentedControl, int index)
         {
             if (PageCount != -1)
@@ -167,14 +175,6 @@ namespace BeatSaberMarkupLanguage.Components
         {
             currentPage++;
             Refresh();
-        }
-
-        private void OnEnable()
-        {
-            if (shouldRefresh)
-            {
-                Refresh();
-            }
         }
     }
 }

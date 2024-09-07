@@ -239,7 +239,7 @@ namespace BeatSaberMarkupLanguage.Components
             _destinationPos = Mathf.Min(maxPosition, Mathf.Max(0f, value));
         }
 
-        private new void Awake()
+        protected new void Awake()
         {
             _buttonBinder = new ButtonBinder();
 
@@ -248,7 +248,7 @@ namespace BeatSaberMarkupLanguage.Components
             runScrollAnim = false;
         }
 
-        private new void Update()
+        protected new void Update()
         {
             if (contentHeight != _contentRectTransform.rect.height && _contentRectTransform.rect.height > 0f)
             {

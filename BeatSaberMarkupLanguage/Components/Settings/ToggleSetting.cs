@@ -50,13 +50,13 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             }
         }
 
-        private void OnEnable()
+        protected void OnEnable()
         {
             Toggle.onValueChanged.AddListener(OnValueChanged);
             Toggle.isOn = currentValue;
         }
 
-        private void OnDisable()
+        protected void OnDisable()
         {
             Toggle.onValueChanged.RemoveListener(OnValueChanged);
         }

@@ -10,7 +10,7 @@ namespace BeatSaberMarkupLanguage.Components
 
         private Coroutine coroutine;
 
-        private void OnEnable()
+        protected void OnEnable()
         {
             if (ScrollView != null)
             {
@@ -19,7 +19,7 @@ namespace BeatSaberMarkupLanguage.Components
             }
         }
 
-        private void OnRectTransformDimensionsChange()
+        protected void OnRectTransformDimensionsChange()
         {
             if (isActiveAndEnabled && ScrollView != null && coroutine == null)
             {
