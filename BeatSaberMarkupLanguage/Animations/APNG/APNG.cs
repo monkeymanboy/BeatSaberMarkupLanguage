@@ -357,7 +357,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG
                 AcTLChunk.PlayCount = 0;
             }
 
-            uint sequenceNumber = (frames.Count == 0) ? 0 : (uint)(frames[frames.Count - 1].FcTLChunk.SequenceNumber + frames[frames.Count - 1].IDATChunks.Count);
+            uint sequenceNumber = (frames.Count == 0) ? 0 : (uint)(frames[^1].FcTLChunk.SequenceNumber + frames[^1].IDATChunks.Count);
 
             // Create fcTL Chunk
             FcTLChunk fctl = new()
