@@ -30,6 +30,8 @@ namespace BeatSaberMarkupLanguage
         private readonly Dictionary<string, BSMLMacro> macros = new();
         private readonly List<TypeHandler> typeHandlers = new();
 
+        private bool isInitialized;
+
         private BSMLParser(List<BSMLTag> tags, List<BSMLMacro> macros, List<TypeHandler> typeHandlers)
         {
             foreach (BSMLTag tag in tags)
@@ -62,6 +64,8 @@ namespace BeatSaberMarkupLanguage
                 new DocumentationDataGenerator(typeHandlers).Generate();
             }
 #endif
+
+            isInitialized = true;
         }
 
         public void RegisterTag(BSMLTag tag)
@@ -121,9 +125,14 @@ namespace BeatSaberMarkupLanguage
 
         public BSMLParserParams Parse(XContainer container, GameObject parent, object host = null)
         {
+            if (!isInitialized)
+            {
+                throw new InvalidOperationException($"{nameof(BSMLParser)} has not initialized.");
+            }
+
             if (!IsMainMenuSceneLoaded())
             {
-                return null;
+                throw new InvalidOperationException($"MainMenu scene is not loaded.");
             }
 
             BSMLParserParams parserParams = new(host);
