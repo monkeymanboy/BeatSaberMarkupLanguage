@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.Animations
 {
@@ -12,35 +11,17 @@ namespace BeatSaberMarkupLanguage.Animations
     {
         private const float ByteInverse = 1f / 255f;
 
-        [Obsolete("Use ProcessAsync instead.")]
-        public static IEnumerator Process(byte[] apngData, Action<AnimationInfo> callback)
-        {
-            AnimationInfo animationInfo = new();
-            Task.Run(() => ProcessingThread(apngData, animationInfo));
-            yield return new WaitUntil(() => { return animationInfo.Initialized; });
-            callback?.Invoke(animationInfo);
-        }
-
         public static Task<AnimationInfo> ProcessAsync(byte[] apngData)
         {
-            return Task.Run(() =>
-            {
-                AnimationInfo animationInfo = new();
-                ProcessingThread(apngData, animationInfo);
-                return animationInfo;
-            });
+            return Task.Run(() => ProcessingThread(apngData));
         }
 
-        private static void ProcessingThread(byte[] apngData, AnimationInfo animationInfo)
+        private static AnimationInfo ProcessingThread(byte[] apngData)
         {
             APNG.APNG apng = APNG.APNG.FromStream(new System.IO.MemoryStream(apngData));
             int frameCount = apng.FrameCount;
-#pragma warning disable CS0612, CS0618
-            animationInfo.FrameCount = frameCount;
-            animationInfo.Initialized = true;
-#pragma warning restore CS0612, CS0618
 
-            animationInfo.Frames = new System.Collections.Generic.List<FrameInfo>(frameCount);
+            List<FrameInfo> frames = new(frameCount);
 
             FrameInfo prevFrame = default;
 
@@ -52,7 +33,7 @@ namespace BeatSaberMarkupLanguage.Animations
                 {
                     FrameInfo frameInfo = new(bitmap.Width, bitmap.Height);
 
-                    bitmap.MakeTransparent(System.Drawing.Color.Black);
+                    bitmap.MakeTransparent(Color.Black);
                     bitmap.RotateFlip(RotateFlipType.Rotate180FlipX);
 
                     BitmapData frame = bitmap.LockBits(new Rectangle(Point.Empty, apng.ActualSize), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
@@ -86,10 +67,12 @@ namespace BeatSaberMarkupLanguage.Animations
                     }
 
                     frameInfo.Delay = apngFrame.FrameRate;
-                    animationInfo.Frames.Add(frameInfo);
+                    frames.Add(frameInfo);
                     prevFrame = frameInfo;
                 }
             }
+
+            return new AnimationInfo(frames);
         }
     }
 }

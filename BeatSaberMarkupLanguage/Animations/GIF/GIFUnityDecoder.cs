@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.Animations
 {
@@ -19,40 +17,22 @@ namespace BeatSaberMarkupLanguage.Animations
         // https://www.w3.org/Graphics/GIF/spec-gif89a.txt (section 23, point vii)
         private const int FrameDelayToMillisecondsRatio = 10;
 
-        [Obsolete("Use ProcessAsync instead.")]
-        public static IEnumerator Process(byte[] gifData, Action<AnimationInfo> callback)
-        {
-            AnimationInfo animationInfo = new();
-            Task.Run(() => ProcessingThread(gifData, animationInfo));
-            yield return new WaitUntil(() => { return animationInfo.Initialized; });
-            callback?.Invoke(animationInfo);
-        }
-
         public static Task<AnimationInfo> ProcessAsync(byte[] gifData)
         {
-            return Task.Run(() =>
-            {
-                AnimationInfo animationInfo = new();
-                ProcessingThread(gifData, animationInfo);
-                return animationInfo;
-            });
+            return Task.Run(() => ProcessingThread(gifData));
         }
 
-        private static void ProcessingThread(byte[] gifData, AnimationInfo animationInfo)
+        private static AnimationInfo ProcessingThread(byte[] gifData)
         {
             Image gifImage = Image.FromStream(new MemoryStream(gifData));
             FrameDimension dimension = new(gifImage.FrameDimensionsList[0]);
             int frameCount = gifImage.GetFrameCount(dimension);
 
-#pragma warning disable CS0612, CS0618
-            animationInfo.FrameCount = frameCount;
-            animationInfo.Initialized = true;
-#pragma warning restore CS0612, CS0618
-            animationInfo.Frames = new List<FrameInfo>(frameCount);
+            List<FrameInfo> frames = new(frameCount);
 
             // TODO: detect static GIFs earlier so we don't create all the animation stuff for no reason
             // FF FF FF 7F is int.MaxValue (little endian)
-            byte[] delays = frameCount > 1 ? gifImage.GetPropertyItem(PropertyTagFrameDelay).Value : new byte[] { 0xFF, 0xFF, 0xFF, 0x7F };
+            byte[] delays = frameCount > 1 ? gifImage.GetPropertyItem(PropertyTagFrameDelay).Value : [0xFF, 0xFF, 0xFF, 0x7F];
             Rectangle rect = new(Point.Empty, gifImage.Size);
 
             for (int i = 0; i < frameCount; i++)
@@ -70,9 +50,11 @@ namespace BeatSaberMarkupLanguage.Animations
 
                     int delayPropertyValue = BitConverter.ToInt32(delays, i * 4);
                     currentFrame.Delay = delayPropertyValue * FrameDelayToMillisecondsRatio;
-                    animationInfo.Frames.Add(currentFrame);
+                    frames.Add(currentFrame);
                 }
             }
+
+            return new AnimationInfo(frames);
         }
     }
 }
