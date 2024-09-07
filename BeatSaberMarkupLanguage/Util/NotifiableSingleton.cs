@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 
 namespace BeatSaberMarkupLanguage.Util
 {
+    [Obsolete("Avoid using singletons.")]
     public class NotifiableSingleton<T> : PersistentSingleton<T>, INotifyPropertyChanged
         where T : class, new()
     {

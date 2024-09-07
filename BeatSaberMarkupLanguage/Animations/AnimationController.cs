@@ -9,14 +9,14 @@ using Zenject;
 
 namespace BeatSaberMarkupLanguage.Animations
 {
-    public class AnimationController : PersistentSingleton<AnimationController>, ITickable
+    public class AnimationController : ZenjectSingleton<AnimationController>, IInitializable, ITickable
     {
         public ReadOnlyDictionary<string, AnimationControllerData> RegisteredAnimations;
         public AnimationControllerData LoadingAnimation;
 
         private readonly Dictionary<string, AnimationControllerData> registeredAnimations = new();
 
-        public AnimationController()
+        private AnimationController()
         {
             RegisteredAnimations = new ReadOnlyDictionary<string, AnimationControllerData>(registeredAnimations);
         }
@@ -41,6 +41,11 @@ namespace BeatSaberMarkupLanguage.Animations
             return animationData;
         }
 
+        public void Initialize()
+        {
+            InitializeLoadingAnimation().ContinueWith((task) => Logger.Log.Error($"Failed to initialize loading animation\n{task.Exception}"), TaskContinuationOptions.OnlyOnFaulted);
+        }
+
         public void Tick()
         {
             DateTime now = DateTime.UtcNow;
@@ -53,7 +58,7 @@ namespace BeatSaberMarkupLanguage.Animations
             }
         }
 
-        internal async Task InitializeLoadingAnimation()
+        private async Task InitializeLoadingAnimation()
         {
             AnimationData animationData = await AnimationLoader.ProcessApngAsync(await Utilities.GetResourceAsync(Assembly.GetExecutingAssembly(), "BeatSaberMarkupLanguage.Resources.loading.apng"));
             LoadingAnimation = new AnimationControllerData(animationData);

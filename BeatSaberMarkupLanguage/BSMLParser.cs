@@ -20,7 +20,7 @@ using Zenject;
 
 namespace BeatSaberMarkupLanguage
 {
-    public class BSMLParser : PersistentSingleton<BSMLParser>, IInitializable
+    public class BSMLParser : ZenjectSingleton<BSMLParser>, IInitializable
     {
         internal static readonly string MacroPrefix = "macro.";
         internal static readonly string RetrieveValuePrefix = "~";
@@ -30,27 +30,21 @@ namespace BeatSaberMarkupLanguage
         private readonly Dictionary<string, BSMLMacro> macros = new();
         private readonly List<TypeHandler> typeHandlers = new();
 
-        public BSMLParser()
+        private BSMLParser(List<BSMLTag> tags, List<BSMLMacro> macros, List<TypeHandler> typeHandlers)
         {
-            foreach (BSMLTag tag in Utilities.GetInstancesOfDescendants<BSMLTag>())
+            foreach (BSMLTag tag in tags)
             {
                 RegisterTag(tag);
             }
 
-            foreach (BSMLMacro macro in Utilities.GetInstancesOfDescendants<BSMLMacro>())
+            foreach (BSMLMacro macro in macros)
             {
                 RegisterMacro(macro);
             }
 
-            typeHandlers.AddRange(Utilities.GetInstancesOfDescendants<TypeHandler>());
-            foreach (TypeHandler typeHandler in typeHandlers.ToArray())
+            foreach (TypeHandler typeHandler in typeHandlers)
             {
-                Type type = typeHandler.GetType().GetCustomAttribute<ComponentHandler>(true)?.Type;
-                if (type == null)
-                {
-                    Logger.Log.Warn($"TypeHandler {typeHandler.GetType().FullName} does not have the [ComponentHandler] attribute and will be ignored.");
-                    typeHandlers.Remove(typeHandler);
-                }
+                RegisterTypeHandler(typeHandler);
             }
         }
 

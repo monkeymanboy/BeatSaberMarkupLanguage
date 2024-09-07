@@ -84,7 +84,7 @@ namespace BeatSaberMarkupLanguage.Settings
             }
 
             settingsMenuListViewController.List.TableView.SelectCellWithIdx(0);
-            OpenMenu(BSMLSettings.instance.SettingsMenus.First() as SettingsMenu);
+            OpenMenu(BSMLSettings.Instance.SettingsMenus.First() as SettingsMenu);
             isPresenting = true;
         }
 
@@ -94,7 +94,7 @@ namespace BeatSaberMarkupLanguage.Settings
             {
                 SetTitle(Localization.Get("BSML_MOD_SETTINGS_TITLE"));
                 navigationController = BeatSaberUI.CreateViewController<NavigationController>();
-                BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), "BeatSaberMarkupLanguage.Views.settings-buttons.bsml"), navigationController.gameObject, this);
+                BSMLParser.Instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), "BeatSaberMarkupLanguage.Views.settings-buttons.bsml"), navigationController.gameObject, this);
 
                 RectTransform container = new GameObject("Container").AddComponent<RectTransform>();
                 container.SetParent(navigationController.transform, false);
@@ -145,7 +145,7 @@ namespace BeatSaberMarkupLanguage.Settings
 
         private void EmitEventToAll(string ev)
         {
-            foreach (SettingsMenu menu in BSMLSettings.instance.SettingsMenus)
+            foreach (SettingsMenu menu in BSMLSettings.Instance.SettingsMenus)
             {
                 if (menu.DidSetup)
                 {

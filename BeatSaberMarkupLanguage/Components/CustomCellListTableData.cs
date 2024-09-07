@@ -27,7 +27,7 @@ namespace BeatSaberMarkupLanguage.Components
 
             tableCell.reuseIdentifier = "BSMLCustomCellListCell";
             tableCell.name = "BSMLCustomTableCell";
-            tableCell.ParserParams = BSMLParser.instance.Parse(CellTemplate, tableCell.gameObject, Data[idx]);
+            tableCell.ParserParams = BSMLParser.Instance.Parse(CellTemplate, tableCell.gameObject, Data[idx]);
             tableCell.SetupPostParse();
             return tableCell;
         }

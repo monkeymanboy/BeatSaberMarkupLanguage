@@ -25,7 +25,7 @@ namespace BeatSaberMarkupLanguage.Macros
                     throw new ValueNotFoundException(host, parserParams.Host);
                 }
 
-                BSMLParser.instance.Parse(element, parent, value.GetValue());
+                BSMLParser.Instance.Parse(element, parent, value.GetValue());
             }
         }
     }

@@ -26,7 +26,7 @@ namespace BeatSaberMarkupLanguage.Settings.UI.ViewControllers
                 rectTransform.anchorMax = new Vector2(0.5f, 1);
             }
 
-            List.Data = BSMLSettings.instance.SettingsMenus;
+            List.Data = BSMLSettings.Instance.SettingsMenus;
 
             if (List.TableView != null)
             {

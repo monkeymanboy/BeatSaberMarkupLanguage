@@ -410,9 +410,14 @@ namespace BeatSaberMarkupLanguage
             }
         }
 
+        internal static IEnumerable<Type> GetDescendants<T>(params object[] constructorArgs)
+        {
+            return Assembly.GetAssembly(typeof(T)).GetTypes().Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(typeof(T)));
+        }
+
         internal static IEnumerable<T> GetInstancesOfDescendants<T>(params object[] constructorArgs)
         {
-            foreach (Type type in Assembly.GetAssembly(typeof(T)).GetTypes().Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(typeof(T))))
+            foreach (Type type in GetDescendants<T>())
             {
                 yield return (T)Activator.CreateInstance(type, constructorArgs);
             }

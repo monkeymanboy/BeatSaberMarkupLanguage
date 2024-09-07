@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -14,23 +13,33 @@ using static BeatSaberMarkupLanguage.Components.CustomListTableData;
 
 namespace BeatSaberMarkupLanguage.Settings
 {
-    public class BSMLSettings : PersistentSingleton<BSMLSettings>, IInitializable, ILateDisposable
+    public class BSMLSettings : ZenjectSingleton<BSMLSettings>, IInitializable
     {
-        private SettingsMenu settingsMenu;
-        private MainFlowCoordinator mainFlowCoordinator;
-        private ModSettingsFlowCoordinator modSettingsFlowCoordinator;
+        private readonly OptionsViewController optionsViewController;
+        private readonly MainFlowCoordinator mainFlowCoordinator;
+        private readonly ModSettingsFlowCoordinator modSettingsFlowCoordinator;
+
+        private readonly SettingsMenu settingsMenu;
 
         private bool isInitialized;
         private Button button;
         private Sprite normal;
         private Sprite hover;
 
-        public BSMLSettings()
+        [Inject]
+        private BSMLSettings(OptionsViewController optionsViewController, MainFlowCoordinator mainFlowCoordinator, ModSettingsFlowCoordinator modSettingsFlowCoordinator)
         {
             SettingsMenus = new SortedList<CustomCellInfo>(Comparer<CustomCellInfo>.Create(CompareSettingsMenu));
+
+            this.settingsMenu = new SettingsMenu("BSML", "BeatSaberMarkupLanguage.Views.settings-about.bsml", this, Assembly.GetExecutingAssembly());
+            SettingsMenus.Add(this.settingsMenu);
+
+            this.optionsViewController = optionsViewController;
+            this.mainFlowCoordinator = mainFlowCoordinator;
+            this.modSettingsFlowCoordinator = modSettingsFlowCoordinator;
         }
 
-        public IList<CustomCellInfo> SettingsMenus { get; }
+        internal IList<CustomCellInfo> SettingsMenus { get; }
 
         [UIValue("thumbstick-value")]
         private bool ThumbstickValue
@@ -47,12 +56,6 @@ namespace BeatSaberMarkupLanguage.Settings
             if (SettingsMenus.Any(x => x.Text == name))
             {
                 return;
-            }
-
-            if (SettingsMenus.Count == 0)
-            {
-                this.settingsMenu = new SettingsMenu("BSML", "BeatSaberMarkupLanguage.Views.settings-about.bsml", this, Assembly.GetExecutingAssembly());
-                SettingsMenus.Add(this.settingsMenu);
             }
 
             SettingsMenu settingsMenu = new(name, resource, host, Assembly.GetCallingAssembly());
@@ -90,14 +93,6 @@ namespace BeatSaberMarkupLanguage.Settings
             isInitialized = true;
         }
 
-        public void LateDispose()
-        {
-            mainFlowCoordinator = null;
-            modSettingsFlowCoordinator = null;
-
-            isInitialized = false;
-        }
-
         private int CompareSettingsMenu(CustomCellInfo a, CustomCellInfo b)
         {
             // BSML's menu should always be at the top
@@ -121,18 +116,9 @@ namespace BeatSaberMarkupLanguage.Settings
             ThumbstickValue = value;
         }
 
-        [Inject]
-        [SuppressMessage("CodeQuality", "IDE0051", Justification = "Used by Zenject")]
-        private void Construct(MainFlowCoordinator mainFlowCoordinator, ModSettingsFlowCoordinator flowCoordinator)
-        {
-            this.mainFlowCoordinator = mainFlowCoordinator;
-            modSettingsFlowCoordinator = flowCoordinator;
-        }
-
         private async Task AddButtonToMainScreen()
         {
-            OptionsViewController optionsViewController = BeatSaberUI.DiContainer.Resolve<OptionsViewController>();
-            button = UnityEngine.Object.Instantiate(optionsViewController._settingsButton, optionsViewController.transform.Find("Wrapper"));
+            button = Object.Instantiate(optionsViewController._settingsButton, optionsViewController.transform.Find("Wrapper"));
             button.GetComponentInChildren<LocalizedTextMeshProUGUI>().Key = "BSML_MOD_SETTINGS_BUTTON";
             button.onClick.RemoveAllListeners();
             button.onClick.AddListener(PresentSettings);

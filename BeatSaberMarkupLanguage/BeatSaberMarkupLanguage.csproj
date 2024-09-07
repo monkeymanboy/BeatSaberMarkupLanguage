@@ -42,6 +42,10 @@
       <HintPath>$(BeatSaberDir)\Libs\0Harmony.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="BeatSaber.Init">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\BeatSaber.Init.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="BeatSaber.ViewSystem">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\BeatSaber.ViewSystem.dll</HintPath>
       <Private>False</Private>

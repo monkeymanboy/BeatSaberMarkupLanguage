@@ -54,12 +54,12 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
         {
             try
             {
-                BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly, Resource), tabObject, Host);
+                BSMLParser.Instance.Parse(Utilities.GetResourceContent(Assembly, Resource), tabObject, Host);
             }
             catch (Exception ex)
             {
                 Logger.Log.Error($"Error adding gameplay settings tab for {Assembly?.GetName().Name ?? "<NULL>"} ({Name})\n{ex}");
-                BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), ErrorViewResourcePath), tabObject);
+                BSMLParser.Instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), ErrorViewResourcePath), tabObject);
             }
         }
 

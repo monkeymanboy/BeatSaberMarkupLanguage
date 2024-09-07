@@ -1,15 +1,28 @@
 ﻿using System;
 using BeatSaberMarkupLanguage.Animations;
+using BeatSaberMarkupLanguage.Macros;
 using BeatSaberMarkupLanguage.MenuButtons;
 using BeatSaberMarkupLanguage.Settings;
+using BeatSaberMarkupLanguage.Tags;
+using BeatSaberMarkupLanguage.TypeHandlers;
 using BeatSaberMarkupLanguage.Util;
 using HarmonyLib;
 using Zenject;
 
 namespace BeatSaberMarkupLanguage.Harmony_Patches
 {
+    [HarmonyPatch(typeof(PCAppInit), nameof(PCAppInit.InstallBindings))]
+    internal static class PCAppInit_InstallBindings
+    {
+        private static void Prefix(PCAppInit __instance)
+        {
+            DiContainer container = __instance.Container;
+            container.Bind(typeof(AnimationController), typeof(ITickable)).To<AnimationController>().AsSingle();
+        }
+    }
+
     [HarmonyPatch(typeof(MainSettingsMenuViewControllersInstaller), nameof(MainSettingsMenuViewControllersInstaller.InstallBindings))]
-    internal static class MainSettingsMenuViewControllersInstaller_InstallBindings
+    internal static class Context_InstallInstallers
     {
         private static void Prefix(MainSettingsMenuViewControllersInstaller __instance)
         {
@@ -17,30 +30,35 @@ namespace BeatSaberMarkupLanguage.Harmony_Patches
 
             BeatSaberUI.DiContainer = container;
 
-            // Eventually this should go in an installer & not use static instances but for now this is good enough. This is kind of janky since the
-            // instance persists across restarts (like PersistentSingleton did) so Initialize/Dispose can be called multiple times on the same instance.
-            container.Bind(typeof(AnimationController), typeof(ITickable)).FromInstance(AnimationController.instance);
-            container.Bind(typeof(BSMLSettings), typeof(IInitializable), typeof(ILateDisposable)).FromInstance(BSMLSettings.instance);
-            container.Bind(typeof(BSMLParser), typeof(IInitializable)).FromInstance(BSMLParser.instance);
-            container.Bind(typeof(MenuButtons.MenuButtons), typeof(ILateDisposable)).FromInstance(MenuButtons.MenuButtons.instance);
-            container.Bind(typeof(GameplaySetup.GameplaySetup), typeof(IInitializable), typeof(IDisposable), typeof(ILateDisposable)).FromInstance(GameplaySetup.GameplaySetup.instance);
+            container.Bind(typeof(AnimationController), typeof(IInitializable), typeof(ITickable)).To<AnimationController>().AsSingle().NonLazy();
+            container.Bind(typeof(BSMLSettings), typeof(IInitializable)).To<BSMLSettings>().AsSingle().NonLazy();
+            container.Bind(typeof(BSMLParser), typeof(IInitializable)).To<BSMLParser>().AsSingle().NonLazy();
+            container.Bind(typeof(MenuButtons.MenuButtons)).To<MenuButtons.MenuButtons>().AsSingle().NonLazy();
+            container.Bind(typeof(GameplaySetup.GameplaySetup), typeof(IInitializable), typeof(IDisposable)).To<GameplaySetup.GameplaySetup>().AsSingle().NonLazy();
 
-            // Again, this is rather gross since [Inject] methods can be called multiple times on the same object, but it bridges the gap for now.
-            // To avoid too much weirdness, injected stuff should be cleaned up in LateDisposable.
-            container.QueueForInject(BSMLSettings.instance);
-            container.QueueForInject(MenuButtons.MenuButtons.instance);
-            container.QueueForInject(GameplaySetup.GameplaySetup.instance);
+            // initialize early & dispose late
+            container.BindExecutionOrder<AnimationController>(-1000);
+            container.BindExecutionOrder<BSMLSettings>(-1000);
+            container.BindExecutionOrder<BSMLParser>(-1000);
+            container.BindExecutionOrder<GameplaySetup.GameplaySetup>(-1000);
 
-            // initialize all our stuff late
-            container.BindInitializableExecutionOrder<BSMLSettings>(1000);
-            container.BindInitializableExecutionOrder<BSMLParser>(1000);
-            container.BindInitializableExecutionOrder<GameplaySetup.GameplaySetup>(1000);
+            container.Bind(typeof(ModSettingsFlowCoordinator)).FromInstance(BeatSaberUI.CreateFlowCoordinator<ModSettingsFlowCoordinator>());
+            container.Bind(typeof(MenuButtonsViewController)).FromInstance(BeatSaberUI.CreateViewController<MenuButtonsViewController>());
 
-            ModSettingsFlowCoordinator modSettingsFlowCoordinator = BeatSaberUI.CreateFlowCoordinator<ModSettingsFlowCoordinator>();
-            container.Bind(typeof(ModSettingsFlowCoordinator)).FromInstance(modSettingsFlowCoordinator);
+            foreach (Type type in Utilities.GetDescendants<BSMLTag>())
+            {
+                container.Bind<BSMLTag>().To(type).AsSingle();
+            }
 
-            MenuButtonsViewController menuButtonsViewController = BeatSaberUI.CreateViewController<MenuButtonsViewController>();
-            container.Bind(typeof(MenuButtonsViewController)).FromInstance(menuButtonsViewController);
+            foreach (Type type in Utilities.GetDescendants<BSMLMacro>())
+            {
+                container.Bind<BSMLMacro>().To(type).AsSingle();
+            }
+
+            foreach (Type type in Utilities.GetDescendants<TypeHandler>())
+            {
+                container.Bind<TypeHandler>().To(type).AsSingle();
+            }
 
             container.Bind(typeof(IInitializable), typeof(IDisposable)).To<MenuInitAwaiter>().AsSingle();
 

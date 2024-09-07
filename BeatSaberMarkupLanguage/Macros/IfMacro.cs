@@ -36,7 +36,7 @@ namespace BeatSaberMarkupLanguage.Macros
                 {
                     foreach (XElement childElement in element.Elements())
                     {
-                        BSMLParser.instance.HandleNode(childElement, parent, parserParams, out IEnumerable<BSMLParser.ComponentTypeWithData> children);
+                        BSMLParser.Instance.HandleNode(childElement, parent, parserParams, out IEnumerable<BSMLParser.ComponentTypeWithData> children);
                         components = components.Concat(children);
                     }
                 }

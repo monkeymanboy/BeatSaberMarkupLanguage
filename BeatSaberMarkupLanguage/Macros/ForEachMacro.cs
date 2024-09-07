@@ -35,7 +35,7 @@ namespace BeatSaberMarkupLanguage.Macros
 
                 foreach (object host in values.GetValue() as IEnumerable)
                 {
-                    BSMLParserParams nodeParams = BSMLParser.instance.Parse(element, parent, host);
+                    BSMLParserParams nodeParams = BSMLParser.Instance.Parse(element, parent, host);
                     if (passTags)
                     {
                         nodeParams.PassTaggedObjects(parserParams);

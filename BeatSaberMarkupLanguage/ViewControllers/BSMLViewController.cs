@@ -69,13 +69,13 @@ namespace BeatSaberMarkupLanguage.ViewControllers
 
             try
             {
-                BSMLParser.instance.Parse(Content, contentObject, this);
+                BSMLParser.Instance.Parse(Content, contentObject, this);
             }
             catch (Exception ex)
             {
                 Logger.Log.Error($"Error parsing BSML\n{ex}");
                 ClearContents();
-                BSMLParser.instance.Parse(string.Format(FallbackContent, Utilities.EscapeXml(ex.Message)), contentObject, this);
+                BSMLParser.Instance.Parse(string.Format(FallbackContent, Utilities.EscapeXml(ex.Message)), contentObject, this);
             }
         }
 

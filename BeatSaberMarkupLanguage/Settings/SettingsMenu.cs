@@ -40,13 +40,13 @@ namespace BeatSaberMarkupLanguage.Settings
             {
                 ViewController = BeatSaberUI.CreateViewController<ViewController>();
                 SetupViewControllerTransform(ViewController);
-                ParserParams = BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly, Resource), ViewController.gameObject, Host);
+                ParserParams = BSMLParser.Instance.Parse(Utilities.GetResourceContent(Assembly, Resource), ViewController.gameObject, Host);
                 DidSetup = true;
             }
             catch (Exception ex)
             {
                 Logger.Log.Error($"Error adding settings menu for {Assembly?.GetName().Name ?? "<NULL>"} ({Text})\n{ex}");
-                ParserParams = BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), SettingsErrorViewResourcePath), ViewController.gameObject);
+                ParserParams = BSMLParser.Instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), SettingsErrorViewResourcePath), ViewController.gameObject);
             }
         }
     }

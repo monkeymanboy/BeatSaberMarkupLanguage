@@ -15,7 +15,7 @@ namespace BeatSaberMarkupLanguage.MenuButtons
     internal class MenuButtonsViewController : BSMLAutomaticViewController
     {
         [UIValue("buttons")]
-        public IList Buttons { get; } = MenuButtons.instance.Buttons;
+        public IList Buttons { get; internal set; }
 
         [UIValue("any-buttons")]
         private bool AnyButtons => Buttons.Count > 0;

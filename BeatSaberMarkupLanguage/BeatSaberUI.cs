@@ -396,10 +396,10 @@ namespace BeatSaberMarkupLanguage
                 stateUpdater.Image = image;
                 if (loadingAnimation)
                 {
-                    stateUpdater.ControllerData = AnimationController.instance.LoadingAnimation;
+                    stateUpdater.ControllerData = AnimationController.Instance.LoadingAnimation;
                 }
 
-                if (AnimationController.instance.RegisteredAnimations.TryGetValue(location, out AnimationControllerData animControllerData))
+                if (AnimationController.Instance.RegisteredAnimations.TryGetValue(location, out AnimationControllerData animControllerData))
                 {
                     stateUpdater.ControllerData = animControllerData;
                 }
@@ -419,7 +419,7 @@ namespace BeatSaberMarkupLanguage
                             animationData = await AnimationLoader.ProcessApngAsync(data);
                         }
 
-                        AnimationControllerData controllerData = AnimationController.instance.Register(location, animationData);
+                        AnimationControllerData controllerData = AnimationController.Instance.Register(location, animationData);
                         stateUpdater.ControllerData = controllerData;
                         callback?.Invoke();
                     }).ContinueWith((task) => Logger.Log.Error($"Failed to load animation '{location}'\n{task.Exception}"), TaskContinuationOptions.OnlyOnFaulted);
@@ -434,7 +434,7 @@ namespace BeatSaberMarkupLanguage
 
                 if (loadingAnimation)
                 {
-                    stateUpdater.ControllerData = AnimationController.instance.LoadingAnimation;
+                    stateUpdater.ControllerData = AnimationController.Instance.LoadingAnimation;
                 }
 
                 UnityMainThreadTaskScheduler.Factory.StartNew(async () =>
@@ -503,10 +503,10 @@ namespace BeatSaberMarkupLanguage
                 stateUpdater.Image = image;
                 if (loadingAnimation)
                 {
-                    stateUpdater.ControllerData = AnimationController.instance.LoadingAnimation;
+                    stateUpdater.ControllerData = AnimationController.Instance.LoadingAnimation;
                 }
 
-                if (AnimationController.instance.RegisteredAnimations.TryGetValue(location, out AnimationControllerData animControllerData))
+                if (AnimationController.Instance.RegisteredAnimations.TryGetValue(location, out AnimationControllerData animControllerData))
                 {
                     stateUpdater.ControllerData = animControllerData;
                 }
@@ -524,7 +524,7 @@ namespace BeatSaberMarkupLanguage
                         animationData = await AnimationLoader.ProcessApngAsync(data);
                     }
 
-                    AnimationControllerData controllerData = AnimationController.instance.Register(location, animationData);
+                    AnimationControllerData controllerData = AnimationController.Instance.Register(location, animationData);
                     stateUpdater.ControllerData = controllerData;
 
                     return;
@@ -537,7 +537,7 @@ namespace BeatSaberMarkupLanguage
 
                 if (loadingAnimation)
                 {
-                    stateUpdater.ControllerData = AnimationController.instance.LoadingAnimation;
+                    stateUpdater.ControllerData = AnimationController.Instance.LoadingAnimation;
                 }
 
                 byte[] data = await Utilities.GetDataAsync(location);

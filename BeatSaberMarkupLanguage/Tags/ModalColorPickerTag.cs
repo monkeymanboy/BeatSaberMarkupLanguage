@@ -67,7 +67,7 @@ namespace BeatSaberMarkupLanguage.Tags
             imageRectTransform.sizeDelta = new Vector2(6, 6);
             colorPicker.ColorImage = colorImage;
 
-            BSMLParser.instance.Parse(@"<horizontal anchor-pos-y='-28' spacing='2' horizontal-fit='PreferredSize'><button text-key='BUTTON_CANCEL' on-click='cancel' pref-width='34' pref-height='10' /><action-button text-key='BUTTON_OK' on-click='done' pref-width='34' pref-height='10' /></horizontal>", gameObject, colorPicker);
+            BSMLParser.Instance.Parse(@"<horizontal anchor-pos-y='-28' spacing='2' horizontal-fit='PreferredSize'><button text-key='BUTTON_CANCEL' on-click='cancel' pref-width='34' pref-height='10' /><action-button text-key='BUTTON_OK' on-click='done' pref-width='34' pref-height='10' /></horizontal>", gameObject, colorPicker);
 
             return gameObject;
         }

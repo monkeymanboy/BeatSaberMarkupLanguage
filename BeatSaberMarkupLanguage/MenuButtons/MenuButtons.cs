@@ -1,16 +1,22 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using BeatSaberMarkupLanguage.Util;
 using Zenject;
 
 namespace BeatSaberMarkupLanguage.MenuButtons
 {
-    public class MenuButtons : PersistentSingleton<MenuButtons>, ILateDisposable
+    public class MenuButtons : ZenjectSingleton<MenuButtons>
     {
         private static readonly IComparer<MenuButton> MenuButtonComparer = Comparer<MenuButton>.Create((a, b) => a.StrippedText.CompareTo(b.StrippedText));
 
-        private MenuButtonsViewController menuButtonsViewController;
+        private readonly MenuButtonsViewController menuButtonsViewController;
+
+        [Inject]
+        private MenuButtons(MenuButtonsViewController menuButtonsViewController)
+        {
+            this.menuButtonsViewController = menuButtonsViewController;
+            this.menuButtonsViewController.Buttons = Buttons;
+        }
 
         internal SortedList<MenuButton> Buttons { get; } = new(MenuButtonComparer);
 
@@ -31,11 +37,6 @@ namespace BeatSaberMarkupLanguage.MenuButtons
             Refresh();
         }
 
-        public void LateDispose()
-        {
-            menuButtonsViewController = null;
-        }
-
         internal void Refresh()
         {
             if (menuButtonsViewController == null)
@@ -44,13 +45,6 @@ namespace BeatSaberMarkupLanguage.MenuButtons
             }
 
             menuButtonsViewController.RefreshView();
-        }
-
-        [Inject]
-        [SuppressMessage("CodeQuality", "IDE0051", Justification = "Used by Zenject")]
-        private void Construct(MenuButtonsViewController menuButtonsViewController)
-        {
-            this.menuButtonsViewController = menuButtonsViewController;
         }
     }
 }

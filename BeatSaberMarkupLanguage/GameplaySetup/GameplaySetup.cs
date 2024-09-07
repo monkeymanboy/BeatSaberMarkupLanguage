@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.Util;
@@ -13,13 +15,13 @@ using Object = UnityEngine.Object;
 
 namespace BeatSaberMarkupLanguage.GameplaySetup
 {
-    public class GameplaySetup : NotifiableSingleton<GameplaySetup>, TableView.IDataSource, IInitializable, IDisposable, ILateDisposable
+    public class GameplaySetup : ZenjectSingleton<GameplaySetup>, TableView.IDataSource, IInitializable, IDisposable, INotifyPropertyChanged
     {
         public const string ReuseIdentifier = "GameplaySetupCell";
 
-        private MainFlowCoordinator mainFlowCoordinator;
-        private GameplaySetupViewController gameplaySetupViewController;
-        private HierarchyManager hierarchyManager;
+        private readonly MainFlowCoordinator mainFlowCoordinator;
+        private readonly GameplaySetupViewController gameplaySetupViewController;
+        private readonly HierarchyManager hierarchyManager;
 
         private LayoutGroup layoutGroup;
         private bool listParsed;
@@ -48,6 +50,15 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
 
         [UIValue("mod-menus")]
         private List<GameplaySetupMenu> menus = new();
+
+        private GameplaySetup(MainFlowCoordinator mainFlowCoordinator, GameplaySetupViewController gameplaySetupViewController, HierarchyManager hierarchyManager)
+        {
+            this.mainFlowCoordinator = mainFlowCoordinator;
+            this.gameplaySetupViewController = gameplaySetupViewController;
+            this.hierarchyManager = hierarchyManager;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public event Action TabsCreatedEvent;
 
@@ -152,19 +163,16 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
             Object.Destroy(rootObject);
         }
 
-        public void LateDispose()
+        protected void NotifyPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            mainFlowCoordinator = null;
-            gameplaySetupViewController = null;
-            hierarchyManager = null;
-        }
-
-        [Inject]
-        private void Construct(MainFlowCoordinator mainFlowCoordinator, GameplaySetupViewController gameplaySetupViewController, HierarchyManager hierarchyManager)
-        {
-            this.mainFlowCoordinator = mainFlowCoordinator;
-            this.gameplaySetupViewController = gameplaySetupViewController;
-            this.hierarchyManager = hierarchyManager;
+            try
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            }
+            catch (Exception ex)
+            {
+                Logger.Log?.Error($"Error invoking PropertyChanged for property '{propertyName}' on {GetType().FullName}\n{ex}");
+            }
         }
 
         private void RefreshView()
@@ -177,7 +185,7 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
 
             Object.Destroy(rootObject);
 
-            BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), "BeatSaberMarkupLanguage.Views.gameplay-setup.bsml"), gameplaySetupViewController.gameObject, this);
+            BSMLParser.Instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), "BeatSaberMarkupLanguage.Views.gameplay-setup.bsml"), gameplaySetupViewController.gameObject, this);
 
             listParsed = false;
         }
@@ -208,7 +216,7 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
                 tableCell.interactable = true;
 
                 tableCell.reuseIdentifier = ReuseIdentifier;
-                BSMLParser.instance.Parse(
+                BSMLParser.Instance.Parse(
                 Utilities.GetResourceContent(
                     Assembly.GetExecutingAssembly(),
                     "BeatSaberMarkupLanguage.Views.gameplay-setup-cell.bsml"),

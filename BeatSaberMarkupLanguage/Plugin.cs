@@ -3,7 +3,6 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using BeatSaberMarkupLanguage.Animations;
 using BeatSaberMarkupLanguage.Harmony_Patches;
 using BeatSaberMarkupLanguage.Util;
 using HarmonyLib;
@@ -46,7 +45,6 @@ namespace BeatSaberMarkupLanguage
         public void OnStart()
         {
             LoadAndSetUpFontFallbacksAsync().ContinueWith((task) => Logger.Log.Error($"Failed to set up fallback fonts\n{task.Exception}"), TaskContinuationOptions.OnlyOnFaulted);
-            AnimationController.instance.InitializeLoadingAnimation().ContinueWith((task) => Logger.Log.Error($"Failed to initialize loading animation\n{task.Exception}"), TaskContinuationOptions.OnlyOnFaulted);
         }
 
         [OnExit]
