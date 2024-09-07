@@ -407,11 +407,6 @@ namespace BeatSaberMarkupLanguage.Components
             key.Keyboard.KeyboardText.text = string.Empty;
         }
 
-        [Obsolete("Calling this method is no longer necessary. The cursor is redrawn by Unity UI directly.")]
-        public void DrawCursor()
-        {
-        }
-
         private KEY AddKey(string keylabel, float width = 12, float height = 10, int color = 0xffffff)
         {
             Vector2 position = currentPosition;

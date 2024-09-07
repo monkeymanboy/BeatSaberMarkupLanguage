@@ -53,18 +53,6 @@ namespace BeatSaberMarkupLanguage
             return reader.ReadToEnd();
         }
 
-        [Obsolete]
-        public static List<T> GetListOfType<T>(params object[] constructorArgs)
-        {
-            List<T> objects = new();
-            foreach (Type type in Assembly.GetAssembly(typeof(T)).GetTypes().Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(typeof(T))))
-            {
-                objects.Add((T)Activator.CreateInstance(type, constructorArgs));
-            }
-
-            return objects;
-        }
-
         // yoinked from https://answers.unity.com/questions/530178/how-to-get-a-component-from-an-object-and-add-it-t.html
         public static T GetCopyOf<T>(this Component comp, T other)
             where T : Component
