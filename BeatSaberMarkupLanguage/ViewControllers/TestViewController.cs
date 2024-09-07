@@ -118,17 +118,17 @@ namespace BeatSaberMarkupLanguage.ViewControllers
 
         private class TestListObject
         {
-            [UIValue("title")]
-            public string Title;
-
-            [UIValue("should-glow")]
-            public bool ShouldGlow;
-
             public TestListObject(string title, bool shouldGlow)
             {
                 this.Title = title;
                 this.ShouldGlow = shouldGlow;
             }
+
+            [UIValue("title")]
+            public string Title { get; }
+
+            [UIValue("should-glow")]
+            public bool ShouldGlow { get; }
 
             [UIAction("button-click")]
             private void ClickedButton()

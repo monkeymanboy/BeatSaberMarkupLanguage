@@ -185,16 +185,18 @@ namespace BeatSaberMarkupLanguage.Components
 
         public class CustomCellInfo
         {
-            public string Text;
-            public string Subtext;
-            public Sprite Icon;
-
             public CustomCellInfo(string text, string subtext = null, Sprite icon = null)
             {
                 this.Text = text;
                 this.Subtext = subtext;
                 this.Icon = icon;
             }
+
+            public string Text { get; }
+
+            public string Subtext { get; }
+
+            public Sprite Icon { get; }
         }
     }
 }

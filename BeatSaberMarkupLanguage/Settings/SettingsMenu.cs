@@ -9,14 +9,6 @@ namespace BeatSaberMarkupLanguage.Settings
 {
     internal class SettingsMenu : CustomCellInfo
     {
-        public ViewController ViewController;
-        public BSMLParserParams ParserParams;
-        public bool DidSetup;
-
-        public string Resource;
-        public object Host;
-        public Assembly Assembly;
-
         private const string SettingsErrorViewResourcePath = "BeatSaberMarkupLanguage.Views.settings-error.bsml";
 
         public SettingsMenu(string name, string resource, object host, Assembly assembly)
@@ -26,6 +18,18 @@ namespace BeatSaberMarkupLanguage.Settings
             this.Host = host;
             this.Assembly = assembly;
         }
+
+        public ViewController ViewController { get; private set; }
+
+        public BSMLParserParams ParserParams { get; private set; }
+
+        public bool DidSetup { get; private set; }
+
+        public string Resource { get; }
+
+        public object Host { get; }
+
+        public Assembly Assembly { get; }
 
         public static void SetupViewControllerTransform(ViewController viewController)
         {

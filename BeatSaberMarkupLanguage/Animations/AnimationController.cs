@@ -11,15 +11,16 @@ namespace BeatSaberMarkupLanguage.Animations
 {
     public class AnimationController : ZenjectSingleton<AnimationController>, IInitializable, ITickable
     {
-        public ReadOnlyDictionary<string, AnimationControllerData> RegisteredAnimations;
-        public AnimationControllerData LoadingAnimation;
-
         private readonly Dictionary<string, AnimationControllerData> registeredAnimations = new();
 
         private AnimationController()
         {
             RegisteredAnimations = new ReadOnlyDictionary<string, AnimationControllerData>(registeredAnimations);
         }
+
+        public ReadOnlyDictionary<string, AnimationControllerData> RegisteredAnimations { get; }
+
+        public AnimationControllerData LoadingAnimation { get; private set; }
 
         public AnimationControllerData Register(string identifier, AnimationData animationData)
         {

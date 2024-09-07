@@ -18,9 +18,6 @@ namespace BeatSaberMarkupLanguage
 {
     public static class Utilities
     {
-        public static Dictionary<string, Sprite> SpriteCache = new();
-        public static Dictionary<string, Texture> TextureCache = new();
-
         // this is technically wrong because TMP will only parse tags it recognizes but whatever
         private static readonly Regex HtmlTagsRegex = new(@"<([a-z\-]+(=""?([a-z]+|[\+\-]?[0-9\.]+[%pe]?)""?)?)( ([a-z\-]+(=""?([a-z]+|[\+\-]?[0-9\.]+[%pe]?)""?)?))*>", RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.IgnoreCase);
 
@@ -38,6 +35,10 @@ namespace BeatSaberMarkupLanguage
                 return editIcon;
             }
         }
+
+        public static Dictionary<string, Sprite> SpriteCache { get; } = new();
+
+        public static Dictionary<string, Texture> TextureCache { get; } = new();
 
         /// <summary>
         /// Gets the content of a resource as a string.

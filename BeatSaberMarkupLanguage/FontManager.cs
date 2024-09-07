@@ -410,14 +410,15 @@ namespace BeatSaberMarkupLanguage
 
         private class FontInfo
         {
-            public string Path;
-            public OpenTypeFont Info;
-
             public FontInfo(string path, OpenTypeFont info)
             {
                 Path = path;
                 Info = info;
             }
+
+            public string Path { get; }
+
+            public OpenTypeFont Info { get; }
         }
     }
 }

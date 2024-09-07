@@ -86,12 +86,6 @@ namespace BeatSaberMarkupLanguage.Components
 [SHIFT] (;:) (qQ) (jJ) (kK) (xX) (bB) (mM) (wW) (vV) (zZ) [CLEAR]/28
 /23 (!!) (@@) [SPACE]/40 (##) (__)";
 
-        public List<KEY> Keys = new();
-
-        public TextMeshProUGUI KeyboardText;
-        public TextMeshProUGUI KeyboardCursor;
-        public Button BaseButton;
-
         private readonly KEY dummy = new(); // This allows for some lazy programming, since unfound key searches will point to this instead of null. It still logs an error though
         private readonly RectTransform keyboardTextContainer;
 
@@ -173,6 +167,14 @@ namespace BeatSaberMarkupLanguage.Components
         }
 
         public event Action<string> EnterPressed;
+
+        public List<KEY> Keys { get; } = new();
+
+        public TextMeshProUGUI KeyboardText { get; }
+
+        public TextMeshProUGUI KeyboardCursor { get; }
+
+        public Button BaseButton { get; set; }
 
         public KEY this[string index]
         {
@@ -526,13 +528,6 @@ namespace BeatSaberMarkupLanguage.Components
 
         public class KEY
         {
-            public string Name = string.Empty;
-            public string Value = string.Empty;
-            public string Shifted = string.Empty;
-            public Button MyButton;
-            public KEYBOARD Keyboard;
-            public Action<KEY> KeyAction = null;
-
             private readonly Graphic[] graphicsToColor;
             private readonly Color[] defaultColors;
             private readonly Color[] highlightedColors;
@@ -548,11 +543,11 @@ namespace BeatSaberMarkupLanguage.Components
                 Value = text;
                 this.Keyboard = kb;
 
-                MyButton = Object.Instantiate(kb.BaseButton, kb.container, false);
-                MyButton.name = Name;
-                Object.DestroyImmediate(MyButton.GetComponent<UIKeyboardKey>());
+                Button button = Object.Instantiate(kb.BaseButton, kb.container, false);
+                button.name = Name;
+                Object.DestroyImmediate(button.GetComponent<UIKeyboardKey>());
 
-                graphicsToColor = MyButton.GetComponentsInChildren<Graphic>();
+                graphicsToColor = button.GetComponentsInChildren<Graphic>();
                 defaultColors = new Color[graphicsToColor.Length];
                 highlightedColors = new Color[graphicsToColor.Length];
 
@@ -564,22 +559,22 @@ namespace BeatSaberMarkupLanguage.Components
                     highlightedColors[i] = new Color(0.1f, 1, 0.1f, graphicColor.a);
                 }
 
-                LocalizedTextMeshProUGUI localizer = MyButton.GetComponentInChildren<LocalizedTextMeshProUGUI>(true);
+                LocalizedTextMeshProUGUI localizer = button.GetComponentInChildren<LocalizedTextMeshProUGUI>(true);
                 if (localizer != null)
                 {
                     Object.Destroy(localizer);
                 }
 
-                buttonText = MyButton.GetComponentInChildren<TextMeshProUGUI>();
+                buttonText = button.GetComponentInChildren<TextMeshProUGUI>();
                 buttonText.richText = true;
                 buttonText.enableWordWrapping = false;
                 buttonText.fontSize = 5f;
                 buttonText.text = text;
 
-                ExternalComponents externalComponents = MyButton.gameObject.AddComponent<ExternalComponents>();
+                ExternalComponents externalComponents = button.gameObject.AddComponent<ExternalComponents>();
                 externalComponents.Components.Add(buttonText);
 
-                RectTransform buttonTransform = (RectTransform)MyButton.transform;
+                RectTransform buttonTransform = (RectTransform)button.transform;
                 buttonTransform.anchorMin = new Vector2(0.5f, 0.5f);
                 buttonTransform.anchorMax = new Vector2(0.5f, 0.5f);
                 buttonTransform.localScale = new Vector3(kb.scale, kb.scale, 1.0f);
@@ -595,15 +590,15 @@ namespace BeatSaberMarkupLanguage.Components
                 // Adjust starting position so button aligns to upper left of current drawing position
                 position.x += kb.scale * width / 2;
                 position.y -= kb.scale * height / 2;
-                (MyButton.transform as RectTransform).anchoredPosition = position;
+                (button.transform as RectTransform).anchoredPosition = position;
 
-                (MyButton.transform as RectTransform).sizeDelta = new Vector2(width, height);
+                (button.transform as RectTransform).sizeDelta = new Vector2(width, height);
 
                 kb.currentPosition.x += (width * kb.scale) + kb.padding;
 
-                MyButton.onClick.RemoveAllListeners();
+                button.onClick.RemoveAllListeners();
 
-                MyButton.onClick.AddListener(() =>
+                button.onClick.AddListener(() =>
                 {
                     if (KeyAction != null)
                     {
@@ -622,13 +617,23 @@ namespace BeatSaberMarkupLanguage.Components
                     kb.SHIFT(this, false);
                 });
 
-                HoverHint myHintText = BeatSaberUI.DiContainer.InstantiateComponent<HoverHint>(MyButton.gameObject);
+                HoverHint myHintText = BeatSaberUI.DiContainer.InstantiateComponent<HoverHint>(button.gameObject);
                 myHintText.text = Value switch
                 {
                     "\u2B05" => "Backspace",
                     _ => Value,
                 };
             }
+
+            public string Name { get; } = string.Empty;
+
+            public string Value { get; set; } = string.Empty;
+
+            public string Shifted { get; set; } = string.Empty;
+
+            public KEYBOARD Keyboard { get; }
+
+            public Action<KEY> KeyAction { get; set; }
 
             internal string TextForCurrentState
             {

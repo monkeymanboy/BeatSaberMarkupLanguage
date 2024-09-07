@@ -4,11 +4,9 @@ namespace BeatSaberMarkupLanguage.Parser
 {
     public class BSMLAction
     {
-        protected object host;
-
         public BSMLAction(object host, MethodInfo methodInfo, bool fromUiAction = true)
         {
-            this.host = host;
+            this.Host = host;
             this.MethodInfo = methodInfo;
             FromUIAction = fromUiAction;
         }
@@ -19,9 +17,11 @@ namespace BeatSaberMarkupLanguage.Parser
 
         internal MethodInfo MethodInfo { get; set; }
 
+        protected object Host { get; }
+
         public object Invoke(params object[] parameters)
         {
-            return MethodInfo.Invoke(host, parameters);
+            return MethodInfo.Invoke(Host, parameters);
         }
     }
 }

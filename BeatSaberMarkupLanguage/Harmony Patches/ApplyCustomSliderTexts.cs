@@ -8,7 +8,7 @@ namespace BeatSaberMarkupLanguage.Harmony_Patches
     [HarmonyPatch(typeof(CustomFormatRangeValuesSlider), "TextForValue")]
     internal static class ApplyCustomSliderTexts
     {
-        public static ConditionalWeakTable<RangeValuesTextSlider, SliderSetting> Remappers = new();
+        public static ConditionalWeakTable<RangeValuesTextSlider, SliderSetting> Remappers { get; } = new();
 
         private static bool Prefix(RangeValuesTextSlider __instance, float value, ref string __result)
         {

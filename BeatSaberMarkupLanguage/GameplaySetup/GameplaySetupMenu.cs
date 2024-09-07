@@ -8,14 +8,6 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
 {
     internal class GameplaySetupMenu
     {
-        public string Resource;
-        public object Host;
-        public Assembly Assembly;
-        public MenuType MenuType;
-
-        [UIValue("tab-name")]
-        public string Name;
-
         private const string ErrorViewResourcePath = "BeatSaberMarkupLanguage.Views.gameplay-tab-error.bsml";
 
         [UIObject("root-tab")]
@@ -32,6 +24,17 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
             this.Assembly = assembly;
             this.MenuType = menuType;
         }
+
+        public string Resource { get; }
+
+        public object Host { get; }
+
+        public Assembly Assembly { get; }
+
+        public MenuType MenuType { get; }
+
+        [UIValue("tab-name")]
+        public string Name { get; }
 
         public bool Visible
         {

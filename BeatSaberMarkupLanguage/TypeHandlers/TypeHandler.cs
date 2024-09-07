@@ -104,11 +104,11 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 
     public class ComponentHandler : Attribute
     {
-        public Type Type;
-
         public ComponentHandler(Type type)
         {
             this.Type = type;
         }
+
+        public Type Type { get; }
     }
 }

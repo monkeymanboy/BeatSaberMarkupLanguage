@@ -7,16 +7,7 @@ namespace BeatSaberMarkupLanguage.Animations
 {
     public class AnimationControllerData
     {
-        public Sprite Sprite;
-
-        public int UvIndex = 0;
-        public DateTime LastSwitch = DateTime.UtcNow;
-        public Rect[] Uvs;
-        public float[] Delays;
-        public Sprite[] Sprites;
-        public Material AnimMaterial;
-        public List<Image> ActiveImages = new();
-
+        private readonly Rect[] uvs;
         private readonly bool isDelayConsistent = true;
 
         public AnimationControllerData(Texture2D tex, Rect[] uvs, float[] delays)
@@ -38,8 +29,7 @@ namespace BeatSaberMarkupLanguage.Animations
                 }
             }
 
-            Sprite = Utilities.LoadSpriteFromTexture(tex);
-            this.Uvs = uvs;
+            this.uvs = uvs;
             this.Delays = delays;
         }
 
@@ -47,6 +37,16 @@ namespace BeatSaberMarkupLanguage.Animations
             : this(animationData.Atlas, animationData.Uvs, animationData.Delays)
         {
         }
+
+        public int UvIndex { get; private set; } = 0;
+
+        public DateTime LastSwitch { get; private set; } = DateTime.UtcNow;
+
+        public float[] Delays { get; }
+
+        public Sprite[] Sprites { get; }
+
+        public List<Image> ActiveImages { get; set; } = new();
 
         public bool IsPlaying { get; set; } = true;
 
@@ -73,7 +73,7 @@ namespace BeatSaberMarkupLanguage.Animations
             do
             {
                 UvIndex++;
-                if (UvIndex >= Uvs.Length)
+                if (UvIndex >= uvs.Length)
                 {
                     UvIndex = 0;
                 }

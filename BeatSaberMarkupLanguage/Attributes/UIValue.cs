@@ -2,13 +2,8 @@
 
 namespace BeatSaberMarkupLanguage.Attributes
 {
-    public class UIValue : Attribute
+    public class UIValue(string id) : Attribute
     {
-        public string Id;
-
-        public UIValue(string id)
-        {
-            this.Id = id;
-        }
+        public string Id { get; } = id;
     }
 }

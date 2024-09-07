@@ -2,13 +2,8 @@
 
 namespace BeatSaberMarkupLanguage.Attributes
 {
-    public class UIAction : Attribute
+    public class UIAction(string id) : Attribute
     {
-        public string Id;
-
-        public UIAction(string id)
-        {
-            this.Id = id;
-        }
+        public string Id { get; } = id;
     }
 }

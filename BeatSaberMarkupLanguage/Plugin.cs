@@ -19,9 +19,9 @@ namespace BeatSaberMarkupLanguage
     [Plugin(RuntimeOptions.SingleStartInit)]
     public class Plugin
     {
-        public static Config Config;
-
         private static readonly string[] FontNamesToRemove = { "NotoSansJP-Medium SDF", "NotoSansKR-Medium SDF", "SourceHanSansCN-Bold-SDF-Common-1(2k)", "SourceHanSansCN-Bold-SDF-Common-2(2k)", "SourceHanSansCN-Bold-SDF-Uncommon(2k)" };
+
+        internal static Config Config { get; private set; }
 
         [Init]
         public void Init(Conf conf, IPALogger logger)
