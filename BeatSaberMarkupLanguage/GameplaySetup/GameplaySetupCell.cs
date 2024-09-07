@@ -11,7 +11,7 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
         public event PropertyChangedEventHandler PropertyChanged;
 
         [UIValue("tab-name")]
-        private string Name => tab?.name;
+        private string Name => tab?.Name;
 
         [UIValue("tab-visible")]
         private bool Visible

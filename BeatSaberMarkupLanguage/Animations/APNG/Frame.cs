@@ -26,13 +26,13 @@ namespace BeatSaberMarkupLanguage.Animations
         {
             get
             {
-                int frameRate = fcTLChunk.DelayNumerator;
-                double denominatorOffset = 1000 / fcTLChunk.DelayDenominator;
+                int frameRate = FcTLChunk.DelayNumerator;
+                double denominatorOffset = 1000 / FcTLChunk.DelayDenominator;
 
                 // If not millisecond based make it so for easier processing
                 if ((int)Math.Round(denominatorOffset) != 1)
                 {
-                    frameRate = (int)(fcTLChunk.DelayNumerator * denominatorOffset);
+                    frameRate = (int)(FcTLChunk.DelayNumerator * denominatorOffset);
                 }
 
                 return frameRate;
@@ -41,8 +41,8 @@ namespace BeatSaberMarkupLanguage.Animations
             internal set
             {
                 // Standardize to milliseconds.
-                fcTLChunk.DelayNumerator = (ushort)value;
-                fcTLChunk.DelayDenominator = 1000;
+                FcTLChunk.DelayNumerator = (ushort)value;
+                FcTLChunk.DelayDenominator = 1000;
             }
         }
 
@@ -54,7 +54,7 @@ namespace BeatSaberMarkupLanguage.Animations
         /// <summary>
         /// Gets or sets the fcTL chunk.
         /// </summary>
-        internal fcTLChunk fcTLChunk { get; set; }
+        internal FcTLChunk FcTLChunk { get; set; }
 
         /// <summary>
         /// Gets or sets the IEND chunk.
@@ -78,11 +78,11 @@ namespace BeatSaberMarkupLanguage.Animations
         public MemoryStream GetStream()
         {
             IHDRChunk ihdrChunk = new(IHDRChunk);
-            if (fcTLChunk != null)
+            if (FcTLChunk != null)
             {
                 // Fix frame size with fcTL data.
-                ihdrChunk.ModifyChunkData(0, Helper.ConvertEndian(fcTLChunk.Width));
-                ihdrChunk.ModifyChunkData(4, Helper.ConvertEndian(fcTLChunk.Height));
+                ihdrChunk.ModifyChunkData(0, Helper.ConvertEndian(FcTLChunk.Width));
+                ihdrChunk.ModifyChunkData(4, Helper.ConvertEndian(FcTLChunk.Height));
             }
 
             // Write image data
@@ -112,7 +112,7 @@ namespace BeatSaberMarkupLanguage.Animations
             g.CompositingMode = CompositingMode.SourceOver;
             g.CompositingQuality = CompositingQuality.GammaCorrected;
             g.Clear(Color.FromArgb(0x00000000));
-            g.DrawImage(b, fcTLChunk.XOffset, fcTLChunk.YOffset, fcTLChunk.Width, fcTLChunk.Height);
+            g.DrawImage(b, FcTLChunk.XOffset, FcTLChunk.YOffset, FcTLChunk.Width, FcTLChunk.Height);
 
             return final;
         }

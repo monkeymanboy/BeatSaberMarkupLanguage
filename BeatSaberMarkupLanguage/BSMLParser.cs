@@ -45,7 +45,7 @@ namespace BeatSaberMarkupLanguage
             typeHandlers.AddRange(Utilities.GetInstancesOfDescendants<TypeHandler>());
             foreach (TypeHandler typeHandler in typeHandlers.ToArray())
             {
-                Type type = typeHandler.GetType().GetCustomAttribute<ComponentHandler>(true)?.type;
+                Type type = typeHandler.GetType().GetCustomAttribute<ComponentHandler>(true)?.Type;
                 if (type == null)
                 {
                     Logger.Log.Warn($"TypeHandler {typeHandler.GetType().FullName} does not have the [ComponentHandler] attribute and will be ignored.");
@@ -59,10 +59,10 @@ namespace BeatSaberMarkupLanguage
             foreach (BSMLTag tag in tags.Values.Distinct())
             {
 #pragma warning disable CS0612, CS0618
-                if (!tag.isInitialized)
+                if (!tag.IsInitialized)
                 {
                     tag.Setup();
-                    tag.isInitialized = true;
+                    tag.IsInitialized = true;
                 }
 #pragma warning restore CS0612, CS0618
 
@@ -102,7 +102,7 @@ namespace BeatSaberMarkupLanguage
             }
 
             Type typeHandlerType = typeHandler.GetType();
-            Type targetType = typeHandlerType.GetCustomAttribute<ComponentHandler>()?.type;
+            Type targetType = typeHandlerType.GetCustomAttribute<ComponentHandler>()?.Type;
 
             if (targetType == null)
             {
@@ -110,7 +110,7 @@ namespace BeatSaberMarkupLanguage
                 return;
             }
 
-            foreach (TypeHandler otherTypeHandler in typeHandlers.Where(th => th.GetType().GetCustomAttribute<ComponentHandler>().type == targetType))
+            foreach (TypeHandler otherTypeHandler in typeHandlers.Where(th => th.GetType().GetCustomAttribute<ComponentHandler>().Type == targetType))
             {
                 List<string> conflictingProps = typeHandler.Props.Keys.Intersect(otherTypeHandler.Props.Keys).ToList();
 
@@ -161,8 +161,8 @@ namespace BeatSaberMarkupLanguage
                     string uiActionName = null;
                     if (methodInfo.GetCustomAttribute<UIAction>(true) is UIAction uiaction)
                     {
-                        uiActionName = uiaction.id;
-                        if (parserParams.actions.TryGetValue(uiActionName, out BSMLAction existing))
+                        uiActionName = uiaction.Id;
+                        if (parserParams.Actions.TryGetValue(uiActionName, out BSMLAction existing))
                         {
                             if (existing.FromUIAction)
                             {
@@ -174,19 +174,19 @@ namespace BeatSaberMarkupLanguage
                         }
                         else
                         {
-                            parserParams.actions.Add(uiActionName, new BSMLAction(host, methodInfo, true));
+                            parserParams.Actions.Add(uiActionName, new BSMLAction(host, methodInfo, true));
                         }
 
-                        if (methodAccessOptions == MethodAccessOption.AllowBoth && methodName != uiActionName && !parserParams.actions.ContainsKey(methodName))
+                        if (methodAccessOptions == MethodAccessOption.AllowBoth && methodName != uiActionName && !parserParams.Actions.ContainsKey(methodName))
                         {
-                            parserParams.actions.Add(methodName, new BSMLAction(host, methodInfo, false));
+                            parserParams.Actions.Add(methodName, new BSMLAction(host, methodInfo, false));
                         }
                     }
                     else if (methodAccessOptions != MethodAccessOption.OptIn)
                     {
-                        if (!parserParams.actions.ContainsKey(methodName))
+                        if (!parserParams.Actions.ContainsKey(methodName))
                         {
-                            parserParams.actions.Add(methodName, new BSMLAction(host, methodInfo));
+                            parserParams.Actions.Add(methodName, new BSMLAction(host, methodInfo));
                         }
                     }
                 }
@@ -199,8 +199,8 @@ namespace BeatSaberMarkupLanguage
                     string uiValueName = null;
                     if (fieldInfo.GetCustomAttribute<UIValue>(true) is UIValue uivalue)
                     {
-                        uiValueName = uivalue.id;
-                        if (parserParams.values.TryGetValue(uiValueName, out BSMLValue existing))
+                        uiValueName = uivalue.Id;
+                        if (parserParams.Values.TryGetValue(uiValueName, out BSMLValue existing))
                         {
                             if (existing.FromUIValue)
                             {
@@ -215,17 +215,17 @@ namespace BeatSaberMarkupLanguage
                         }
                         else
                         {
-                            parserParams.values.Add(uiValueName, new BSMLFieldValue(host, fieldInfo));
+                            parserParams.Values.Add(uiValueName, new BSMLFieldValue(host, fieldInfo));
                         }
 
-                        if (fieldAccessOptions == FieldAccessOption.AllowBoth && fieldName != uiValueName && !parserParams.values.ContainsKey(fieldName))
+                        if (fieldAccessOptions == FieldAccessOption.AllowBoth && fieldName != uiValueName && !parserParams.Values.ContainsKey(fieldName))
                         {
-                            parserParams.values.Add(fieldName, new BSMLFieldValue(host, fieldInfo, false));
+                            parserParams.Values.Add(fieldName, new BSMLFieldValue(host, fieldInfo, false));
                         }
                     }
-                    else if (fieldAccessOptions != FieldAccessOption.OptIn && !parserParams.values.ContainsKey(fieldName))
+                    else if (fieldAccessOptions != FieldAccessOption.OptIn && !parserParams.Values.ContainsKey(fieldName))
                     {
-                        parserParams.values.Add(fieldName, new BSMLFieldValue(host, fieldInfo, false));
+                        parserParams.Values.Add(fieldName, new BSMLFieldValue(host, fieldInfo, false));
                     }
 
                     if (fieldInfo.GetCustomAttribute<UIParams>(true) != null)
@@ -240,8 +240,8 @@ namespace BeatSaberMarkupLanguage
                     string uiValueName = null;
                     if (propertyInfo.GetCustomAttribute<UIValue>(true) is UIValue uivalue)
                     {
-                        uiValueName = uivalue.id;
-                        if (parserParams.values.TryGetValue(uiValueName, out BSMLValue existing))
+                        uiValueName = uivalue.Id;
+                        if (parserParams.Values.TryGetValue(uiValueName, out BSMLValue existing))
                         {
                             if (existing.FromUIValue)
                             {
@@ -256,17 +256,17 @@ namespace BeatSaberMarkupLanguage
                         }
                         else
                         {
-                            parserParams.values.Add(uiValueName, new BSMLPropertyValue(host, propertyInfo));
+                            parserParams.Values.Add(uiValueName, new BSMLPropertyValue(host, propertyInfo));
                         }
 
-                        if (propertyAccessOptions == PropertyAccessOption.AllowBoth && propName != uiValueName && !parserParams.values.ContainsKey(propName))
+                        if (propertyAccessOptions == PropertyAccessOption.AllowBoth && propName != uiValueName && !parserParams.Values.ContainsKey(propName))
                         {
-                            parserParams.values.Add(propName, new BSMLPropertyValue(host, propertyInfo, false));
+                            parserParams.Values.Add(propName, new BSMLPropertyValue(host, propertyInfo, false));
                         }
                     }
-                    else if (propertyAccessOptions != PropertyAccessOption.OptIn && !parserParams.values.ContainsKey(propName))
+                    else if (propertyAccessOptions != PropertyAccessOption.OptIn && !parserParams.Values.ContainsKey(propName))
                     {
-                        parserParams.values.Add(propName, new BSMLPropertyValue(host, propertyInfo, false));
+                        parserParams.Values.Add(propName, new BSMLPropertyValue(host, propertyInfo, false));
                     }
                 }
             }
@@ -278,7 +278,7 @@ namespace BeatSaberMarkupLanguage
                 componentInfo = componentInfo.Concat(components);
             }
 
-            foreach (KeyValuePair<string, BSMLAction> action in parserParams.actions.Where(x => x.Key.StartsWith(SubscribeEventActionPrefix, StringComparison.Ordinal)))
+            foreach (KeyValuePair<string, BSMLAction> action in parserParams.Actions.Where(x => x.Key.StartsWith(SubscribeEventActionPrefix, StringComparison.Ordinal)))
             {
                 parserParams.AddEvent(action.Key.Substring(1), () => action.Value.Invoke());
             }
@@ -287,11 +287,11 @@ namespace BeatSaberMarkupLanguage
             {
                 try
                 {
-                    component.typeHandler.HandleTypeAfterParse(component, parserParams);
+                    component.TypeHandler.HandleTypeAfterParse(component, parserParams);
                 }
                 catch (Exception ex)
                 {
-                    throw new TypeHandlerException(component.typeHandler, ex);
+                    throw new TypeHandlerException(component.TypeHandler, ex);
                 }
             }
 
@@ -325,7 +325,7 @@ namespace BeatSaberMarkupLanguage
 
             if (gameObject.TryGetComponent(out ExternalComponents externalComponents))
             {
-                foreach (Component externalComponent in externalComponents.components)
+                foreach (Component externalComponent in externalComponents.Components)
                 {
                     if (type.IsAssignableFrom(externalComponent.GetType()))
                     {
@@ -354,7 +354,7 @@ namespace BeatSaberMarkupLanguage
             List<ComponentTypeWithData> componentTypes = new();
             foreach (TypeHandler typeHandler in typeHandlers)
             {
-                Type type = typeHandler.GetType().GetCustomAttribute<ComponentHandler>(true)?.type;
+                Type type = typeHandler.GetType().GetCustomAttribute<ComponentHandler>(true)?.Type;
                 if (type == null)
                 {
                     continue;
@@ -364,10 +364,10 @@ namespace BeatSaberMarkupLanguage
                 if (component != null)
                 {
                     ComponentTypeWithData componentType;
-                    componentType.data = GetParameters(element, typeHandler.CachedProps, parserParams, out Dictionary<string, BSMLValue> valueMap);
-                    componentType.valueMap = valueMap;
-                    componentType.typeHandler = typeHandler;
-                    componentType.component = component;
+                    componentType.Data = GetParameters(element, typeHandler.CachedProps, parserParams, out Dictionary<string, BSMLValue> valueMap);
+                    componentType.ValueMap = valueMap;
+                    componentType.TypeHandler = typeHandler;
+                    componentType.Component = component;
                     componentTypes.Add(componentType);
                 }
             }
@@ -376,26 +376,26 @@ namespace BeatSaberMarkupLanguage
             {
                 try
                 {
-                    componentType.typeHandler.HandleType(componentType, parserParams);
+                    componentType.TypeHandler.HandleType(componentType, parserParams);
                 }
                 catch (Exception ex) when (ex is not TypeHandlerException)
                 {
-                    throw new TypeHandlerException(componentType.typeHandler, ex);
+                    throw new TypeHandlerException(componentType.TypeHandler, ex);
                 }
             }
 
-            object host = parserParams.host;
+            object host = parserParams.Host;
             XAttribute id = element.Attribute("id");
             if (host != null && id != null)
             {
                 foreach (FieldInfo fieldInfo in host.GetType().GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public))
                 {
-                    if (fieldInfo.GetCustomAttribute<UIComponent>(true)?.id == id.Value)
+                    if (fieldInfo.GetCustomAttribute<UIComponent>(true)?.Id == id.Value)
                     {
                         fieldInfo.SetValue(host, GetExternalComponent(currentNode, fieldInfo.FieldType));
                     }
 
-                    if (fieldInfo.GetCustomAttribute<UIObject>(true)?.id == id.Value)
+                    if (fieldInfo.GetCustomAttribute<UIObject>(true)?.Id == id.Value)
                     {
                         fieldInfo.SetValue(host, currentNode);
                     }
@@ -423,11 +423,11 @@ namespace BeatSaberMarkupLanguage
             {
                 try
                 {
-                    componentType.typeHandler.HandleTypeAfterChildren(componentType, parserParams);
+                    componentType.TypeHandler.HandleTypeAfterChildren(componentType, parserParams);
                 }
                 catch (Exception ex)
                 {
-                    throw new TypeHandlerException(componentType.typeHandler, ex);
+                    throw new TypeHandlerException(componentType.TypeHandler, ex);
                 }
             }
 
@@ -466,9 +466,9 @@ namespace BeatSaberMarkupLanguage
                         if (value.StartsWith(RetrieveValuePrefix, StringComparison.Ordinal))
                         {
                             string valueID = value.Substring(1);
-                            if (!parserParams.values.TryGetValue(valueID, out BSMLValue uiValue) || uiValue == null)
+                            if (!parserParams.Values.TryGetValue(valueID, out BSMLValue uiValue) || uiValue == null)
                             {
-                                throw new ValueNotFoundException(valueID, parserParams.host);
+                                throw new ValueNotFoundException(valueID, parserParams.Host);
                             }
 
                             parameters.Add(propertyAliases.Key, uiValue.GetValue()?.InvariantToString());
@@ -505,10 +505,10 @@ namespace BeatSaberMarkupLanguage
 
         public struct ComponentTypeWithData
         {
-            public TypeHandler typeHandler;
-            public Component component;
-            public Dictionary<string, string> data;
-            public Dictionary<string, BSMLValue> valueMap;
+            public TypeHandler TypeHandler;
+            public Component Component;
+            public Dictionary<string, string> Data;
+            public Dictionary<string, BSMLValue> ValueMap;
         }
     }
 }

@@ -22,15 +22,15 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
         {
             try
             {
-                ModalView modalView = componentType.component as ModalView;
+                ModalView modalView = componentType.Component as ModalView;
                 Transform originalParent = modalView.transform.parent;
                 bool moveToCenter = true;
-                if (componentType.data.TryGetValue("moveToCenter", out string moveToCenterString))
+                if (componentType.Data.TryGetValue("moveToCenter", out string moveToCenterString))
                 {
                     moveToCenter = Parse.Bool(moveToCenterString);
                 }
 
-                if (componentType.data.TryGetValue("showEvent", out string showEvent))
+                if (componentType.Data.TryGetValue("showEvent", out string showEvent))
                 {
                     parserParams.AddEvent(showEvent, () =>
                     {
@@ -38,7 +38,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                     });
                 }
 
-                if (componentType.data.TryGetValue("hideEvent", out string hideEvent))
+                if (componentType.Data.TryGetValue("hideEvent", out string hideEvent))
                 {
                     parserParams.AddEvent(hideEvent, () =>
                     {
@@ -46,7 +46,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                     });
                 }
 
-                if (componentType.data.TryGetValue("clickOffCloses", out string clickOffCloses) && Parse.Bool(clickOffCloses))
+                if (componentType.Data.TryGetValue("clickOffCloses", out string clickOffCloses) && Parse.Bool(clickOffCloses))
                 {
                     modalView.blockerClickedEvent += () =>
                     {

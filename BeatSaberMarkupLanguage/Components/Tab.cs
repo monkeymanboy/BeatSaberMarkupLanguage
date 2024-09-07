@@ -4,7 +4,7 @@ namespace BeatSaberMarkupLanguage.Components
 {
     public class Tab : MonoBehaviour
     {
-        public TabSelector selector;
+        public TabSelector Selector;
 
         private string tabName;
         private string tabKey;
@@ -42,9 +42,9 @@ namespace BeatSaberMarkupLanguage.Components
 
         private void RefreshSelector()
         {
-            if (selector != null)
+            if (Selector != null)
             {
-                selector.Refresh();
+                Selector.Refresh();
             }
         }
     }

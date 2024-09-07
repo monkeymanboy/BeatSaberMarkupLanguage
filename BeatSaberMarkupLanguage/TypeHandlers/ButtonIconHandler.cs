@@ -24,14 +24,14 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 
         public override void HandleType(BSMLParser.ComponentTypeWithData componentType, BSMLParserParams parserParams)
         {
-            ButtonIconImage buttonIconImage = (ButtonIconImage)componentType.component;
+            ButtonIconImage buttonIconImage = (ButtonIconImage)componentType.Component;
 
-            if (componentType.valueMap.TryGetValue("icon", out BSMLValue value))
+            if (componentType.ValueMap.TryGetValue("icon", out BSMLValue value))
             {
                 SetIcon(buttonIconImage, value.GetValue());
                 BindValue(componentType, parserParams, value, val => SetIcon(buttonIconImage, val));
             }
-            else if (componentType.data.TryGetValue("icon", out string str))
+            else if (componentType.Data.TryGetValue("icon", out string str))
             {
                 buttonIconImage.SetIcon(str);
             }
@@ -41,7 +41,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
         {
             if (value is Sprite sprite)
             {
-                buttonIconImage.image.sprite = sprite;
+                buttonIconImage.Image.sprite = sprite;
             }
             else
             {

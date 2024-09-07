@@ -21,45 +21,45 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
         {
             try
             {
-                ModalColorPicker colorPicker = componentType.component as ModalColorPicker;
-                if (componentType.data.TryGetValue("value", out string value))
+                ModalColorPicker colorPicker = componentType.Component as ModalColorPicker;
+                if (componentType.Data.TryGetValue("value", out string value))
                 {
-                    if (!parserParams.values.TryGetValue(value, out BSMLValue associatedValue))
+                    if (!parserParams.Values.TryGetValue(value, out BSMLValue associatedValue))
                     {
-                        throw new ValueNotFoundException(value, parserParams.host);
+                        throw new ValueNotFoundException(value, parserParams.Host);
                     }
 
-                    colorPicker.associatedValue = associatedValue;
+                    colorPicker.AssociatedValue = associatedValue;
                 }
 
-                if (componentType.data.TryGetValue("onCancel", out string onCancel))
+                if (componentType.Data.TryGetValue("onCancel", out string onCancel))
                 {
-                    if (!parserParams.actions.TryGetValue(onCancel, out BSMLAction action))
+                    if (!parserParams.Actions.TryGetValue(onCancel, out BSMLAction action))
                     {
-                        throw new ActionNotFoundException(onCancel, parserParams.host);
+                        throw new ActionNotFoundException(onCancel, parserParams.Host);
                     }
 
-                    colorPicker.onCancel = action;
+                    colorPicker.OnCancel = action;
                 }
 
-                if (componentType.data.TryGetValue("onDone", out string onDone))
+                if (componentType.Data.TryGetValue("onDone", out string onDone))
                 {
-                    if (!parserParams.actions.TryGetValue(onDone, out BSMLAction action))
+                    if (!parserParams.Actions.TryGetValue(onDone, out BSMLAction action))
                     {
-                        throw new ActionNotFoundException(onDone, parserParams.host);
+                        throw new ActionNotFoundException(onDone, parserParams.Host);
                     }
 
-                    colorPicker.onDone = action;
+                    colorPicker.OnDone = action;
                 }
 
-                if (componentType.data.TryGetValue("onChange", out string onChange))
+                if (componentType.Data.TryGetValue("onChange", out string onChange))
                 {
-                    if (!parserParams.actions.TryGetValue(onChange, out BSMLAction action))
+                    if (!parserParams.Actions.TryGetValue(onChange, out BSMLAction action))
                     {
-                        throw new ActionNotFoundException(onChange, parserParams.host);
+                        throw new ActionNotFoundException(onChange, parserParams.Host);
                     }
 
-                    colorPicker.onChange = action;
+                    colorPicker.OnChange = action;
                 }
             }
             catch (Exception ex)

@@ -53,7 +53,7 @@ namespace BeatSaberMarkupLanguage.Tags
 
             TableView tableView = gameObject.AddComponent<BSMLTableView>();
             CustomListTableData tableData = containerObject.AddComponent<CustomListTableData>();
-            tableData.tableView = tableView;
+            tableData.TableView = tableView;
 
             tableView._preallocatedCells = new TableView.CellsGroup[0];
             tableView._isInitialized = false;

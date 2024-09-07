@@ -23,9 +23,9 @@ namespace BeatSaberMarkupLanguage.Tags
             parentTransform.localScale *= 1.4f;
 
             ModalKeyboard modalKeyboard = gameObject.AddComponent<ModalKeyboard>();
-            modalKeyboard.keyboard = keyboard;
-            modalKeyboard.modalView = gameObject.GetComponent<ModalView>();
-            keyboard.EnterPressed += (value) => modalKeyboard.OnEnter(value);
+            modalKeyboard.Keyboard = keyboard;
+            modalKeyboard.ModalView = gameObject.GetComponent<ModalView>();
+            keyboard.EnterPressed += (value) => modalKeyboard.OnEnterKeyPressed(value);
 
             return gameObject;
         }

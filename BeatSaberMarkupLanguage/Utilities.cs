@@ -18,8 +18,8 @@ namespace BeatSaberMarkupLanguage
 {
     public static class Utilities
     {
-        public static Dictionary<string, Sprite> spriteCache = new();
-        public static Dictionary<string, Texture> textureCache = new();
+        public static Dictionary<string, Sprite> SpriteCache = new();
+        public static Dictionary<string, Texture> TextureCache = new();
 
         // this is technically wrong because TMP will only parse tags it recognizes but whatever
         private static readonly Regex HtmlTagsRegex = new(@"<([a-z\-]+(=""?([a-z]+|[\+\-]?[0-9\.]+[%pe]?)""?)?)( ([a-z\-]+(=""?([a-z]+|[\+\-]?[0-9\.]+[%pe]?)""?)?))*>", RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.IgnoreCase);
@@ -432,7 +432,7 @@ namespace BeatSaberMarkupLanguage
 
         internal static Sprite FindSpriteCached(string name)
         {
-            if (spriteCache.TryGetValue(name, out Sprite sprite) && sprite != null)
+            if (SpriteCache.TryGetValue(name, out Sprite sprite) && sprite != null)
             {
                 return sprite;
             }
@@ -444,9 +444,9 @@ namespace BeatSaberMarkupLanguage
                     continue;
                 }
 
-                if (!spriteCache.TryGetValue(x.name, out Sprite a) || a == null)
+                if (!SpriteCache.TryGetValue(x.name, out Sprite a) || a == null)
                 {
-                    spriteCache[x.name] = x;
+                    SpriteCache[x.name] = x;
                 }
 
                 if (x.name == name)
@@ -460,7 +460,7 @@ namespace BeatSaberMarkupLanguage
 
         internal static Texture FindTextureCached(string name)
         {
-            if (textureCache.TryGetValue(name, out Texture texture) && texture != null)
+            if (TextureCache.TryGetValue(name, out Texture texture) && texture != null)
             {
                 return texture;
             }
@@ -472,9 +472,9 @@ namespace BeatSaberMarkupLanguage
                     continue;
                 }
 
-                if (!textureCache.TryGetValue(x.name, out Texture a) || a == null)
+                if (!TextureCache.TryGetValue(x.name, out Texture a) || a == null)
                 {
-                    textureCache[x.name] = x;
+                    TextureCache[x.name] = x;
                 }
 
                 if (x.name == name)

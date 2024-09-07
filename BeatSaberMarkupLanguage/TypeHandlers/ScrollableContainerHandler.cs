@@ -21,25 +21,25 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 
         public override void HandleType(BSMLParser.ComponentTypeWithData componentType, BSMLParserParams parserParams)
         {
-            BSMLScrollableContainer scrollView = componentType.component as BSMLScrollableContainer;
+            BSMLScrollableContainer scrollView = componentType.Component as BSMLScrollableContainer;
 
-            if (componentType.data.TryGetValue("id", out string id))
+            if (componentType.Data.TryGetValue("id", out string id))
             {
                 parserParams.AddEvent(id + "#PageUp", scrollView.PageUpButtonPressed);
                 parserParams.AddEvent(id + "#PageDown", scrollView.PageDownButtonPressed);
             }
 
-            if (componentType.data.TryGetValue("maskOverflow", out string value))
+            if (componentType.Data.TryGetValue("maskOverflow", out string value))
             {
                 scrollView.MaskOverflow = bool.TryParse(value, out bool bval) ? bval : true;
             }
 
-            if (componentType.data.TryGetValue("alignBottom", out value))
+            if (componentType.Data.TryGetValue("alignBottom", out value))
             {
                 scrollView.AlignBottom = bool.TryParse(value, out bool bval) ? bval : false;
             }
 
-            if (componentType.data.TryGetValue("scrollToBottomOnUpdate", out value))
+            if (componentType.Data.TryGetValue("scrollToBottomOnUpdate", out value))
             {
                 scrollView.ScrollToBottomOnUpdate = bool.TryParse(value, out bool bval) ? bval : false;
             }
@@ -55,9 +55,9 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 
         public override void HandleTypeAfterParse(BSMLParser.ComponentTypeWithData componentType, BSMLParserParams parserParams)
         {
-            BSMLScrollableContainer scrollView = componentType.component as BSMLScrollableContainer;
+            BSMLScrollableContainer scrollView = componentType.Component as BSMLScrollableContainer;
 
-            if (componentType.data.TryGetValue("id", out string id))
+            if (componentType.Data.TryGetValue("id", out string id))
             {
                 scrollView.PageUpButton = parserParams.GetObjectsWithTag("PageUpFor:" + id)
                     .Select(o => o.GetComponent<Button>())

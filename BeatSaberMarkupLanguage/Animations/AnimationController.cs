@@ -12,7 +12,7 @@ namespace BeatSaberMarkupLanguage.Animations
     public class AnimationController : PersistentSingleton<AnimationController>, ITickable
     {
         public ReadOnlyDictionary<string, AnimationControllerData> RegisteredAnimations;
-        public AnimationControllerData loadingAnimation;
+        public AnimationControllerData LoadingAnimation;
 
         private readonly Dictionary<string, AnimationControllerData> registeredAnimations = new();
 
@@ -23,7 +23,7 @@ namespace BeatSaberMarkupLanguage.Animations
 
         public AnimationControllerData Register(string identifier, AnimationData animationData)
         {
-            return Register(identifier, animationData.atlas, animationData.uvs, animationData.delays);
+            return Register(identifier, animationData.Atlas, animationData.Uvs, animationData.Delays);
         }
 
         public AnimationControllerData Register(string identifier, Texture2D tex, Rect[] uvs, float[] delays)
@@ -56,8 +56,8 @@ namespace BeatSaberMarkupLanguage.Animations
         internal async Task InitializeLoadingAnimation()
         {
             AnimationData animationData = await AnimationLoader.ProcessApngAsync(await Utilities.GetResourceAsync(Assembly.GetExecutingAssembly(), "BeatSaberMarkupLanguage.Resources.loading.apng"));
-            loadingAnimation = new AnimationControllerData(animationData);
-            registeredAnimations.Add("LOADING_ANIMATION", loadingAnimation);
+            LoadingAnimation = new AnimationControllerData(animationData);
+            registeredAnimations.Add("LOADING_ANIMATION", LoadingAnimation);
         }
     }
 }

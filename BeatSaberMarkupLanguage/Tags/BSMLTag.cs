@@ -10,7 +10,7 @@ namespace BeatSaberMarkupLanguage.Tags
     public abstract class BSMLTag
     {
         [Obsolete]
-        public bool isInitialized = false;
+        public bool IsInitialized = false;
 
         public abstract string[] Aliases { get; }
 

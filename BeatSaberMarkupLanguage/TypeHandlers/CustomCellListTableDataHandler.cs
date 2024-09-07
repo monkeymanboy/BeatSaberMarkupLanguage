@@ -33,53 +33,53 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 
         public override void HandleType(ComponentTypeWithData componentType, BSMLParserParams parserParams)
         {
-            CustomCellListTableData tableData = componentType.component as CustomCellListTableData;
-            ScrollView scrollView = tableData.tableView._scrollView;
+            CustomCellListTableData tableData = componentType.Component as CustomCellListTableData;
+            ScrollView scrollView = tableData.TableView._scrollView;
 
-            if (componentType.data.TryGetValue("selectCell", out string selectCell))
+            if (componentType.Data.TryGetValue("selectCell", out string selectCell))
             {
-                tableData.tableView.didSelectCellWithIdxEvent += (TableView table, int index) =>
+                tableData.TableView.didSelectCellWithIdxEvent += (TableView table, int index) =>
                 {
-                    if (!parserParams.actions.TryGetValue(selectCell, out BSMLAction action))
+                    if (!parserParams.Actions.TryGetValue(selectCell, out BSMLAction action))
                     {
-                        throw new ActionNotFoundException(selectCell, parserParams.host);
+                        throw new ActionNotFoundException(selectCell, parserParams.Host);
                     }
 
-                    action.Invoke(table, (table.dataSource as CustomCellListTableData).data[index]);
+                    action.Invoke(table, (table.dataSource as CustomCellListTableData).Data[index]);
                 };
             }
 
             bool verticalList = true;
 
-            if (componentType.data.TryGetValue("listDirection", out string listDirection))
+            if (componentType.Data.TryGetValue("listDirection", out string listDirection))
             {
-                tableData.tableView._tableType = (TableView.TableType)Enum.Parse(typeof(TableView.TableType), listDirection);
+                tableData.TableView._tableType = (TableView.TableType)Enum.Parse(typeof(TableView.TableType), listDirection);
                 scrollView._scrollViewDirection = (ScrollView.ScrollViewDirection)Enum.Parse(typeof(ScrollView.ScrollViewDirection), listDirection);
                 verticalList = !listDirection.Equals("horizontal", StringComparison.OrdinalIgnoreCase);
             }
 
-            if (componentType.data.TryGetValue("cellSize", out string cellSize))
+            if (componentType.Data.TryGetValue("cellSize", out string cellSize))
             {
-                tableData.cellSize = Parse.Float(cellSize);
+                tableData.CellSizeValue = Parse.Float(cellSize);
             }
 
-            if (componentType.data.TryGetValue("cellTemplate", out string cellTemplate))
+            if (componentType.Data.TryGetValue("cellTemplate", out string cellTemplate))
             {
-                tableData.cellTemplate = $"<bg>{cellTemplate}</bg>";
+                tableData.CellTemplate = $"<bg>{cellTemplate}</bg>";
             }
 
-            if (componentType.data.TryGetValue("cellClickable", out string cellClickable))
+            if (componentType.Data.TryGetValue("cellClickable", out string cellClickable))
             {
-                tableData.clickableCells = Parse.Bool(cellClickable);
+                tableData.ClickableCells = Parse.Bool(cellClickable);
             }
 
-            if (componentType.data.TryGetValue("alignCenter", out string alignCenter))
+            if (componentType.Data.TryGetValue("alignCenter", out string alignCenter))
             {
-                tableData.tableView._alignToCenter = Parse.Bool(alignCenter);
+                tableData.TableView._alignToCenter = Parse.Bool(alignCenter);
             }
 
             // We can only show the scroll bar for vertical lists
-            if (verticalList && componentType.data.TryGetValue("showScrollbar", out string showScrollbar) && Parse.Bool(showScrollbar))
+            if (verticalList && componentType.Data.TryGetValue("showScrollbar", out string showScrollbar) && Parse.Bool(showScrollbar))
             {
                 TextPageScrollView textScrollView = Object.Instantiate(ScrollViewTag.ScrollViewTemplate);
 
@@ -94,36 +94,36 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                 scrollView._pageUpButton = pageUpButton;
                 scrollView._pageDownButton = pageDownButton;
                 scrollView._verticalScrollIndicator = verticalScrollIndicator;
-                scrollBar.SetParent(componentType.component.transform, false);
+                scrollBar.SetParent(componentType.Component.transform, false);
                 Object.Destroy(textScrollView.gameObject);
             }
 
-            if (componentType.data.TryGetValue("data", out string value))
+            if (componentType.Data.TryGetValue("data", out string value))
             {
-                if (!parserParams.values.TryGetValue(value, out BSMLValue contents))
+                if (!parserParams.Values.TryGetValue(value, out BSMLValue contents))
                 {
-                    throw new ValueNotFoundException(value, parserParams.host);
+                    throw new ValueNotFoundException(value, parserParams.Host);
                 }
 
-                tableData.data = contents.GetValueAs<IList>();
-                tableData.tableView.ReloadData();
+                tableData.Data = contents.GetValueAs<IList>();
+                tableData.TableView.ReloadData();
             }
 
-            Vector2 preferredSize = tableData.tableView.tableType switch
+            Vector2 preferredSize = tableData.TableView.tableType switch
             {
-                TableView.TableType.Vertical => new Vector2(componentType.data.TryGetValue("listWidth", out string vListWidth) ? Parse.Float(vListWidth) : 60, tableData.cellSize * (componentType.data.TryGetValue("visibleCells", out string vVisibleCells) ? Parse.Float(vVisibleCells) : 7)),
-                TableView.TableType.Horizontal => new Vector2(tableData.cellSize * (componentType.data.TryGetValue("visibleCells", out string hVisibleCells) ? Parse.Float(hVisibleCells) : 4), componentType.data.TryGetValue("listHeight", out string hListHeight) ? Parse.Float(hListHeight) : 40),
-                _ => throw new ArgumentException("Unexpected table type " + tableData.tableView.tableType),
+                TableView.TableType.Vertical => new Vector2(componentType.Data.TryGetValue("listWidth", out string vListWidth) ? Parse.Float(vListWidth) : 60, tableData.CellSizeValue * (componentType.Data.TryGetValue("visibleCells", out string vVisibleCells) ? Parse.Float(vVisibleCells) : 7)),
+                TableView.TableType.Horizontal => new Vector2(tableData.CellSizeValue * (componentType.Data.TryGetValue("visibleCells", out string hVisibleCells) ? Parse.Float(hVisibleCells) : 4), componentType.Data.TryGetValue("listHeight", out string hListHeight) ? Parse.Float(hListHeight) : 40),
+                _ => throw new ArgumentException("Unexpected table type " + tableData.TableView.tableType),
             };
 
-            LayoutElement layoutElement = componentType.component.GetComponent<LayoutElement>();
+            LayoutElement layoutElement = componentType.Component.GetComponent<LayoutElement>();
             layoutElement.preferredHeight = preferredSize.y;
             layoutElement.preferredWidth = preferredSize.x;
 
-            tableData.tableView.gameObject.SetActive(true);
-            tableData.tableView.LazyInit();
+            tableData.TableView.gameObject.SetActive(true);
+            tableData.TableView.LazyInit();
 
-            if (componentType.data.TryGetValue("id", out string id))
+            if (componentType.Data.TryGetValue("id", out string id))
             {
                 parserParams.AddEvent(id + "#PageUp", scrollView.PageUpButtonPressed);
                 parserParams.AddEvent(id + "#PageDown", scrollView.PageDownButtonPressed);

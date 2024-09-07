@@ -17,7 +17,7 @@ namespace BeatSaberMarkupLanguage.Animations
         {
             AnimationInfo animationInfo = new();
             Task.Run(() => ProcessingThread(apngData, animationInfo));
-            yield return new WaitUntil(() => { return animationInfo.initialized; });
+            yield return new WaitUntil(() => { return animationInfo.Initialized; });
             callback?.Invoke(animationInfo);
         }
 
@@ -36,11 +36,11 @@ namespace BeatSaberMarkupLanguage.Animations
             APNG.APNG apng = APNG.APNG.FromStream(new System.IO.MemoryStream(apngData));
             int frameCount = apng.FrameCount;
 #pragma warning disable CS0612, CS0618
-            animationInfo.frameCount = frameCount;
-            animationInfo.initialized = true;
+            animationInfo.FrameCount = frameCount;
+            animationInfo.Initialized = true;
 #pragma warning restore CS0612, CS0618
 
-            animationInfo.frames = new System.Collections.Generic.List<FrameInfo>(frameCount);
+            animationInfo.Frames = new System.Collections.Generic.List<FrameInfo>(frameCount);
 
             FrameInfo prevFrame = default;
 
@@ -57,17 +57,17 @@ namespace BeatSaberMarkupLanguage.Animations
 
                     BitmapData frame = bitmap.LockBits(new Rectangle(Point.Empty, apng.ActualSize), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
 
-                    Marshal.Copy(frame.Scan0, frameInfo.colors, 0, frameInfo.colors.Length);
+                    Marshal.Copy(frame.Scan0, frameInfo.Colors, 0, frameInfo.Colors.Length);
 
                     bitmap.UnlockBits(frame);
 
-                    if (apngFrame.fcTLChunk.BlendOp == APNG.Chunks.BlendOps.APNGBlendOpOver && i > 0)
+                    if (apngFrame.FcTLChunk.BlendOp == APNG.Chunks.BlendOps.APNGBlendOpOver && i > 0)
                     {
                         // BGRA
-                        byte[] last = prevFrame.colors;
-                        byte[] src = frameInfo.colors;
+                        byte[] last = prevFrame.Colors;
+                        byte[] src = frameInfo.Colors;
 
-                        for (int clri = frameInfo.colors.Length - 1; i > 2; i -= 4)
+                        for (int clri = frameInfo.Colors.Length - 1; i > 2; i -= 4)
                         {
                             float srcA = src[clri - 3] * ByteInverse;
                             float lastA = last[clri - 3] * ByteInverse;
@@ -85,8 +85,8 @@ namespace BeatSaberMarkupLanguage.Animations
                         }
                     }
 
-                    frameInfo.delay = apngFrame.FrameRate;
-                    animationInfo.frames.Add(frameInfo);
+                    frameInfo.Delay = apngFrame.FrameRate;
+                    animationInfo.Frames.Add(frameInfo);
                     prevFrame = frameInfo;
                 }
             }

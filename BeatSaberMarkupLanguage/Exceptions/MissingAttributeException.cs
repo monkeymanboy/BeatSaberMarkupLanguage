@@ -13,7 +13,7 @@ namespace BeatSaberMarkupLanguage
         }
 
         internal MissingAttributeException(TypeHandler sender, string attributeName)
-            : base($"Attribute '{attributeName}' missing for type handler {sender.GetType().GetCustomAttribute<ComponentHandler>()?.type.Name ?? "<null>"}")
+            : base($"Attribute '{attributeName}' missing for type handler {sender.GetType().GetCustomAttribute<ComponentHandler>()?.Type.Name ?? "<null>"}")
         {
             this.AttributeName = attributeName;
         }

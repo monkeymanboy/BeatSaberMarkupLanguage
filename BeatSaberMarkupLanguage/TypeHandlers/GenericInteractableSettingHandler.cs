@@ -19,7 +19,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 
         public static void SetInteractable(GenericInteractableSetting interactable, string flag)
         {
-            interactable.interactable = Parse.Bool(flag);
+            interactable.Interactable = Parse.Bool(flag);
         }
     }
 }

@@ -46,7 +46,7 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
             buttonBackgroundImageView.sprite = Utilities.FindSpriteCached("RoundRect10Thin");
 
             Object.Destroy(valuePick.GetComponentsInChildren<TextMeshProUGUI>().First().gameObject);
-            colorSetting.editButton = editButtonTransform.GetComponent<Button>();
+            colorSetting.EditButton = editButtonTransform.GetComponent<Button>();
 
             GameObject nameText = gameObject.transform.Find("NameText").gameObject;
             LocalizedTextMeshProUGUI localizedText = ConfigureLocalizedText(nameText);
@@ -54,7 +54,7 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
             TextMeshProUGUI text = nameText.GetComponent<TextMeshProUGUI>();
             text.text = "Default Text";
 
-            List<Component> externalComponents = gameObject.AddComponent<ExternalComponents>().components;
+            List<Component> externalComponents = gameObject.AddComponent<ExternalComponents>().Components;
             externalComponents.Add(text);
             externalComponents.Add(localizedText);
 
@@ -72,17 +72,17 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
             imageTransform.sizeDelta = new Vector2(5, 5);
             imageTransform.anchorMin = new Vector2(0.25f, 0.5f);
             imageTransform.anchorMax = new Vector2(0.25f, 0.5f);
-            colorSetting.colorImage = instance;
+            colorSetting.ColorImage = instance;
 
-            Image icon = colorSetting.editButton.transform.Find("Icon").GetComponent<Image>();
+            Image icon = colorSetting.EditButton.transform.Find("Icon").GetComponent<Image>();
             icon.name = "EditIcon";
             icon.sprite = Utilities.EditIcon;
             icon.rectTransform.sizeDelta = new Vector2(4, 4);
-            colorSetting.editButton.interactable = true;
+            colorSetting.EditButton.interactable = true;
 
-            ((RectTransform)colorSetting.editButton.transform).anchorMin = new Vector2(0, 0);
+            ((RectTransform)colorSetting.EditButton.transform).anchorMin = new Vector2(0, 0);
 
-            colorSetting.modalColorPicker = base.CreateObject(gameObject.transform).GetComponent<ModalColorPicker>();
+            colorSetting.ModalColorPicker = base.CreateObject(gameObject.transform).GetComponent<ModalColorPicker>();
 
             gameObject.SetActive(true);
             return gameObject;

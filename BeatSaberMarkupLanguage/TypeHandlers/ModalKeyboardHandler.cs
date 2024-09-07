@@ -21,33 +21,33 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
         {
             try
             {
-                ModalKeyboard modalKeyboard = componentType.component as ModalKeyboard;
-                if (componentType.data.TryGetValue("clearOnOpen", out string clearOnOpen))
+                ModalKeyboard modalKeyboard = componentType.Component as ModalKeyboard;
+                if (componentType.Data.TryGetValue("clearOnOpen", out string clearOnOpen))
                 {
-                    modalKeyboard.clearOnOpen = Parse.Bool(clearOnOpen);
+                    modalKeyboard.ClearOnOpen = Parse.Bool(clearOnOpen);
                 }
 
-                if (componentType.data.TryGetValue("value", out string value))
+                if (componentType.Data.TryGetValue("value", out string value))
                 {
-                    if (!parserParams.values.TryGetValue(value, out BSMLValue associatedValue))
+                    if (!parserParams.Values.TryGetValue(value, out BSMLValue associatedValue))
                     {
-                        throw new ValueNotFoundException(value, parserParams.host);
+                        throw new ValueNotFoundException(value, parserParams.Host);
                     }
 
-                    modalKeyboard.associatedValue = associatedValue;
+                    modalKeyboard.AssociatedValue = associatedValue;
                 }
 
-                if (componentType.data.TryGetValue("onEnter", out string onEnter))
+                if (componentType.Data.TryGetValue("onEnter", out string onEnter))
                 {
-                    if (!parserParams.actions.TryGetValue(onEnter, out BSMLAction onEnterAction))
+                    if (!parserParams.Actions.TryGetValue(onEnter, out BSMLAction onEnterAction))
                     {
-                        throw new ActionNotFoundException(onEnter, parserParams.host);
+                        throw new ActionNotFoundException(onEnter, parserParams.Host);
                     }
 
-                    modalKeyboard.onEnter = onEnterAction;
+                    modalKeyboard.OnEnter = onEnterAction;
                 }
 
-                if (componentType.data.TryGetValue("showEvent", out string showEvent))
+                if (componentType.Data.TryGetValue("showEvent", out string showEvent))
                 {
                     parserParams.AddEvent(showEvent, () => modalKeyboard.ReceiveValue());
                 }

@@ -4,10 +4,10 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 {
     public class IncrementSetting : IncDecSetting
     {
-        public bool isInt;
-        public float minValue = float.MinValue;
-        public float maxValue = float.MaxValue;
-        public float increments = 1;
+        public bool IsInt;
+        public float MinValue = float.MinValue;
+        public float MaxValue = float.MaxValue;
+        public float Increments = 1;
 
         private float currentValue;
 
@@ -21,7 +21,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 
             set
             {
-                if (isInt)
+                if (IsInt)
                 {
                     currentValue = Convert.ToInt32(value);
                 }
@@ -38,74 +38,74 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         {
             ReceiveValue();
 
-            if (isInt)
+            if (IsInt)
             {
-                minValue = ConvertToInt(minValue);
-                maxValue = ConvertToInt(maxValue);
-                increments = ConvertToInt(increments);
+                MinValue = ConvertToInt(MinValue);
+                MaxValue = ConvertToInt(MaxValue);
+                Increments = ConvertToInt(Increments);
             }
         }
 
         public override void DecButtonPressed()
         {
-            currentValue -= increments;
+            currentValue -= Increments;
             EitherPressed();
         }
 
         public override void IncButtonPressed()
         {
-            currentValue += increments;
+            currentValue += Increments;
             EitherPressed();
         }
 
         public override void ApplyValue()
         {
-            if (associatedValue != null)
+            if (AssociatedValue != null)
             {
-                if (isInt)
+                if (IsInt)
                 {
-                    associatedValue.SetValue(Convert.ToInt32(Value));
+                    AssociatedValue.SetValue(Convert.ToInt32(Value));
                 }
                 else
                 {
-                    associatedValue.SetValue(Value);
+                    AssociatedValue.SetValue(Value);
                 }
             }
         }
 
         public override void ReceiveValue()
         {
-            if (associatedValue != null)
+            if (AssociatedValue != null)
             {
-                Value = isInt ? Convert.ToInt32(associatedValue.GetValue()) : Convert.ToSingle(associatedValue.GetValue());
+                Value = IsInt ? Convert.ToInt32(AssociatedValue.GetValue()) : Convert.ToSingle(AssociatedValue.GetValue());
             }
         }
 
         protected string TextForValue(float value)
         {
-            if (isInt)
+            if (IsInt)
             {
-                return formatter == null ? ConvertToInt(value).ToString() : (formatter.Invoke(ConvertToInt(value)) as string);
+                return Formatter == null ? ConvertToInt(value).ToString() : (Formatter.Invoke(ConvertToInt(value)) as string);
             }
             else
             {
-                return formatter == null ? value.ToString("N2") : (formatter.Invoke(value) as string);
+                return Formatter == null ? value.ToString("N2") : (Formatter.Invoke(value) as string);
             }
         }
 
         private void EitherPressed()
         {
             UpdateState();
-            if (isInt)
+            if (IsInt)
             {
-                onChange?.Invoke(Convert.ToInt32(Value));
+                OnChange?.Invoke(Convert.ToInt32(Value));
             }
             else
             {
-                onChange?.Invoke(Value);
+                OnChange?.Invoke(Value);
             }
 
-            if (updateOnChange)
+            if (UpdateOnChange)
             {
                 ApplyValue();
             }
@@ -113,13 +113,13 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 
         private void ValidateRange()
         {
-            if (currentValue < minValue)
+            if (currentValue < MinValue)
             {
-                currentValue = minValue;
+                currentValue = MinValue;
             }
-            else if (currentValue > maxValue)
+            else if (currentValue > MaxValue)
             {
-                currentValue = maxValue;
+                currentValue = MaxValue;
             }
         }
 
@@ -127,8 +127,8 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         {
             ValidateRange();
 
-            EnableDec = currentValue > minValue;
-            EnableInc = currentValue < maxValue;
+            EnableDec = currentValue > MinValue;
+            EnableInc = currentValue < MaxValue;
             Text = TextForValue(currentValue);
         }
 

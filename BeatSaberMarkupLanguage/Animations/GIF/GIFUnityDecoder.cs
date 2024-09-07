@@ -24,7 +24,7 @@ namespace BeatSaberMarkupLanguage.Animations
         {
             AnimationInfo animationInfo = new();
             Task.Run(() => ProcessingThread(gifData, animationInfo));
-            yield return new WaitUntil(() => { return animationInfo.initialized; });
+            yield return new WaitUntil(() => { return animationInfo.Initialized; });
             callback?.Invoke(animationInfo);
         }
 
@@ -45,10 +45,10 @@ namespace BeatSaberMarkupLanguage.Animations
             int frameCount = gifImage.GetFrameCount(dimension);
 
 #pragma warning disable CS0612, CS0618
-            animationInfo.frameCount = frameCount;
-            animationInfo.initialized = true;
+            animationInfo.FrameCount = frameCount;
+            animationInfo.Initialized = true;
 #pragma warning restore CS0612, CS0618
-            animationInfo.frames = new List<FrameInfo>(frameCount);
+            animationInfo.Frames = new List<FrameInfo>(frameCount);
 
             // TODO: detect static GIFs earlier so we don't create all the animation stuff for no reason
             // FF FF FF 7F is int.MaxValue (little endian)
@@ -66,11 +66,11 @@ namespace BeatSaberMarkupLanguage.Animations
                     BitmapData frame = bitmap.LockBits(rect, ImageLockMode.ReadOnly, bitmap.PixelFormat);
                     FrameInfo currentFrame = new(frame.Width, frame.Height);
 
-                    Marshal.Copy(frame.Scan0, currentFrame.colors, 0, currentFrame.colors.Length);
+                    Marshal.Copy(frame.Scan0, currentFrame.Colors, 0, currentFrame.Colors.Length);
 
                     int delayPropertyValue = BitConverter.ToInt32(delays, i * 4);
-                    currentFrame.delay = delayPropertyValue * FrameDelayToMillisecondsRatio;
-                    animationInfo.frames.Add(currentFrame);
+                    currentFrame.Delay = delayPropertyValue * FrameDelayToMillisecondsRatio;
+                    animationInfo.Frames.Add(currentFrame);
                 }
             }
         }

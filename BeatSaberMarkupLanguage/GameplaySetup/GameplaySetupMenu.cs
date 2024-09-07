@@ -8,13 +8,13 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
 {
     internal class GameplaySetupMenu
     {
-        public string resource;
-        public object host;
-        public Assembly assembly;
-        public MenuType menuType;
+        public string Resource;
+        public object Host;
+        public Assembly Assembly;
+        public MenuType MenuType;
 
         [UIValue("tab-name")]
-        public string name;
+        public string Name;
 
         private const string ErrorViewResourcePath = "BeatSaberMarkupLanguage.Views.gameplay-tab-error.bsml";
 
@@ -26,25 +26,25 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
 
         public GameplaySetupMenu(string name, string resource, object host, Assembly assembly, MenuType menuType)
         {
-            this.name = name;
-            this.resource = resource;
-            this.host = host;
-            this.assembly = assembly;
-            this.menuType = menuType;
+            this.Name = name;
+            this.Resource = resource;
+            this.Host = host;
+            this.Assembly = assembly;
+            this.MenuType = menuType;
         }
 
         public bool Visible
         {
-            get => !Plugin.config.HiddenTabs.Contains(name);
+            get => !Plugin.Config.HiddenTabs.Contains(Name);
             set
             {
                 if (value)
                 {
-                    Plugin.config.HiddenTabs.Remove(name);
+                    Plugin.Config.HiddenTabs.Remove(Name);
                 }
                 else if (Visible)
                 {
-                    Plugin.config.HiddenTabs.Add(name);
+                    Plugin.Config.HiddenTabs.Add(Name);
                 }
             }
         }
@@ -54,11 +54,11 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
         {
             try
             {
-                BSMLParser.instance.Parse(Utilities.GetResourceContent(assembly, resource), tabObject, host);
+                BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly, Resource), tabObject, Host);
             }
             catch (Exception ex)
             {
-                Logger.Log.Error($"Error adding gameplay settings tab for {assembly?.GetName().Name ?? "<NULL>"} ({name})\n{ex}");
+                Logger.Log.Error($"Error adding gameplay settings tab for {Assembly?.GetName().Name ?? "<NULL>"} ({Name})\n{ex}");
                 BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), ErrorViewResourcePath), tabObject);
             }
         }
@@ -70,7 +70,7 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
 
         public bool IsMenuType(MenuType toCheck)
         {
-            return (menuType & toCheck) == toCheck;
+            return (MenuType & toCheck) == toCheck;
         }
     }
 }

@@ -17,102 +17,102 @@ namespace BeatSaberMarkupLanguage.Settings
 {
     public class BSMLSettings : PersistentSingleton<BSMLSettings>, IInitializable, ILateDisposable
     {
-        private SettingsMenu _settingsMenu;
-        private MainFlowCoordinator _mainFlowCoordinator;
-        private ModSettingsFlowCoordinator _modSettingsFlowCoordinator;
+        private SettingsMenu settingsMenu;
+        private MainFlowCoordinator mainFlowCoordinator;
+        private ModSettingsFlowCoordinator modSettingsFlowCoordinator;
 
-        private bool _isInitialized;
-        private Button _button;
-        private Sprite _normal;
-        private Sprite _hover;
+        private bool isInitialized;
+        private Button button;
+        private Sprite normal;
+        private Sprite hover;
 
         public BSMLSettings()
         {
-            settingsMenus = new SortedList<CustomCellInfo>(Comparer<CustomCellInfo>.Create(CompareSettingsMenu));
+            SettingsMenus = new SortedList<CustomCellInfo>(Comparer<CustomCellInfo>.Create(CompareSettingsMenu));
         }
 
-        public IList<CustomCellInfo> settingsMenus { get; }
+        public IList<CustomCellInfo> SettingsMenus { get; }
 
         [UIValue("thumbstick-value")]
         private bool ThumbstickValue
         {
-            get => Plugin.config.DisableThumbstickScroll;
+            get => Plugin.Config.DisableThumbstickScroll;
             set
             {
-                Plugin.config.DisableThumbstickScroll = value;
+                Plugin.Config.DisableThumbstickScroll = value;
             }
         }
 
         public void AddSettingsMenu(string name, string resource, object host)
         {
-            if (settingsMenus.Any(x => x.text == name))
+            if (SettingsMenus.Any(x => x.Text == name))
             {
                 return;
             }
 
-            if (settingsMenus.Count == 0)
+            if (SettingsMenus.Count == 0)
             {
-                _settingsMenu = new SettingsMenu("BSML", "BeatSaberMarkupLanguage.Views.settings-about.bsml", this, Assembly.GetExecutingAssembly());
-                settingsMenus.Add(_settingsMenu);
+                this.settingsMenu = new SettingsMenu("BSML", "BeatSaberMarkupLanguage.Views.settings-about.bsml", this, Assembly.GetExecutingAssembly());
+                SettingsMenus.Add(this.settingsMenu);
             }
 
             SettingsMenu settingsMenu = new(name, resource, host, Assembly.GetCallingAssembly());
-            settingsMenus.Add(settingsMenu);
+            SettingsMenus.Add(settingsMenu);
 
-            if (_isInitialized)
+            if (isInitialized)
             {
                 settingsMenu.Setup();
             }
 
-            if (_button != null)
+            if (button != null)
             {
-                _button.gameObject.SetActive(true);
+                button.gameObject.SetActive(true);
             }
         }
 
         public void RemoveSettingsMenu(object host)
         {
-            CustomCellInfo menu = settingsMenus.Cast<SettingsMenu>().Where(x => x.host == host).FirstOrDefault();
+            CustomCellInfo menu = SettingsMenus.Cast<SettingsMenu>().Where(x => x.Host == host).FirstOrDefault();
             if (menu != null)
             {
-                settingsMenus.Remove(menu);
+                SettingsMenus.Remove(menu);
             }
         }
 
         public void Initialize()
         {
-            foreach (SettingsMenu menu in settingsMenus)
+            foreach (SettingsMenu menu in SettingsMenus)
             {
-                menu.didSetup = false;
+                menu.DidSetup = false;
             }
 
             AddButtonToMainScreen().ContinueWith(task => Logger.Log.Error($"Failed to add button to main screen\n{task.Exception}"), TaskContinuationOptions.OnlyOnFaulted);
 
-            _isInitialized = true;
+            isInitialized = true;
         }
 
         public void LateDispose()
         {
-            _mainFlowCoordinator = null;
-            _modSettingsFlowCoordinator = null;
+            mainFlowCoordinator = null;
+            modSettingsFlowCoordinator = null;
 
-            _isInitialized = false;
+            isInitialized = false;
         }
 
         private int CompareSettingsMenu(CustomCellInfo a, CustomCellInfo b)
         {
             // BSML's menu should always be at the top
-            if (a == _settingsMenu)
+            if (a == settingsMenu)
             {
                 return int.MinValue;
             }
-            else if (b == _settingsMenu)
+            else if (b == settingsMenu)
             {
                 return int.MaxValue;
             }
             else
             {
-                return Utilities.StripHtmlTags(a.text).CompareTo(Utilities.StripHtmlTags(b.text));
+                return Utilities.StripHtmlTags(a.Text).CompareTo(Utilities.StripHtmlTags(b.Text));
             }
         }
 
@@ -126,41 +126,41 @@ namespace BeatSaberMarkupLanguage.Settings
         [SuppressMessage("CodeQuality", "IDE0051", Justification = "Used by Zenject")]
         private void Construct(MainFlowCoordinator mainFlowCoordinator, ModSettingsFlowCoordinator flowCoordinator)
         {
-            _mainFlowCoordinator = mainFlowCoordinator;
-            _modSettingsFlowCoordinator = flowCoordinator;
+            this.mainFlowCoordinator = mainFlowCoordinator;
+            modSettingsFlowCoordinator = flowCoordinator;
         }
 
         private async Task AddButtonToMainScreen()
         {
             OptionsViewController optionsViewController = BeatSaberUI.DiContainer.Resolve<OptionsViewController>();
-            _button = UnityEngine.Object.Instantiate(optionsViewController._settingsButton, optionsViewController.transform.Find("Wrapper"));
-            _button.GetComponentInChildren<LocalizedTextMeshProUGUI>().Key = "BSML_MOD_SETTINGS_BUTTON";
-            _button.onClick.RemoveAllListeners();
-            _button.onClick.AddListener(PresentSettings);
+            button = UnityEngine.Object.Instantiate(optionsViewController._settingsButton, optionsViewController.transform.Find("Wrapper"));
+            button.GetComponentInChildren<LocalizedTextMeshProUGUI>().Key = "BSML_MOD_SETTINGS_BUTTON";
+            button.onClick.RemoveAllListeners();
+            button.onClick.AddListener(PresentSettings);
 
-            if (settingsMenus.Count == 0)
+            if (SettingsMenus.Count == 0)
             {
-                _button.gameObject.SetActive(false);
+                button.gameObject.SetActive(false);
             }
 
-            _normal = await Utilities.LoadSpriteFromAssemblyAsync("BeatSaberMarkupLanguage.Resources.mods_idle.png");
-            _normal.texture.wrapMode = TextureWrapMode.Clamp;
+            normal = await Utilities.LoadSpriteFromAssemblyAsync("BeatSaberMarkupLanguage.Resources.mods_idle.png");
+            normal.texture.wrapMode = TextureWrapMode.Clamp;
 
-            _hover = await Utilities.LoadSpriteFromAssemblyAsync("BeatSaberMarkupLanguage.Resources.mods_selected.png");
-            _hover.texture.wrapMode = TextureWrapMode.Clamp;
+            hover = await Utilities.LoadSpriteFromAssemblyAsync("BeatSaberMarkupLanguage.Resources.mods_selected.png");
+            hover.texture.wrapMode = TextureWrapMode.Clamp;
 
-            _button.SetButtonStates(_normal, _hover);
+            button.SetButtonStates(normal, hover);
         }
 
         private void PresentSettings()
         {
-            _modSettingsFlowCoordinator.isAnimating = true;
-            _mainFlowCoordinator.PresentFlowCoordinator(
-                _modSettingsFlowCoordinator,
+            modSettingsFlowCoordinator.IsAnimating = true;
+            mainFlowCoordinator.PresentFlowCoordinator(
+                modSettingsFlowCoordinator,
                 new Action(() =>
                 {
-                    _modSettingsFlowCoordinator.ShowInitial();
-                    _modSettingsFlowCoordinator.isAnimating = false;
+                    modSettingsFlowCoordinator.ShowInitial();
+                    modSettingsFlowCoordinator.IsAnimating = false;
                 }),
                 ViewController.AnimationDirection.Vertical);
         }

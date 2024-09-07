@@ -50,9 +50,9 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
             valueText.richText = true;
 
             StringSetting stringSetting = gameObject.AddComponent<StringSetting>();
-            stringSetting.text = valueText;
-            stringSetting.editButton = editButtonTransform.GetComponent<Button>();
-            stringSetting.boundingBox = (RectTransform)valuePickerTransform;
+            stringSetting.TextMesh = valueText;
+            stringSetting.EditButton = editButtonTransform.GetComponent<Button>();
+            stringSetting.BoundingBox = (RectTransform)valuePickerTransform;
 
             GameObject nameText = gameObject.transform.Find("NameText").gameObject;
             LocalizedTextMeshProUGUI localizedText = ConfigureLocalizedText(nameText);
@@ -60,23 +60,23 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
             TextMeshProUGUI text = nameText.GetComponent<TextMeshProUGUI>();
             text.text = "Default Text";
 
-            List<Component> externalComponents = gameObject.AddComponent<ExternalComponents>().components;
+            List<Component> externalComponents = gameObject.AddComponent<ExternalComponents>().Components;
             externalComponents.Add(text);
             externalComponents.Add(localizedText);
 
             gameObject.GetComponent<LayoutElement>().preferredWidth = 90;
-            stringSetting.text.alignment = TextAlignmentOptions.MidlineRight;
-            stringSetting.text.enableWordWrapping = false;
+            stringSetting.TextMesh.alignment = TextAlignmentOptions.MidlineRight;
+            stringSetting.TextMesh.enableWordWrapping = false;
 
-            Image icon = stringSetting.editButton.transform.Find("Icon").GetComponent<Image>();
+            Image icon = stringSetting.EditButton.transform.Find("Icon").GetComponent<Image>();
             icon.name = "EditIcon";
             icon.sprite = Utilities.EditIcon;
             icon.rectTransform.sizeDelta = new Vector2(4, 4);
-            stringSetting.editButton.interactable = true;
+            stringSetting.EditButton.interactable = true;
 
-            ((RectTransform)stringSetting.editButton.transform).anchorMin = new Vector2(0, 0);
+            ((RectTransform)stringSetting.EditButton.transform).anchorMin = new Vector2(0, 0);
 
-            stringSetting.modalKeyboard = base.CreateObject(gameObject.transform).GetComponent<ModalKeyboard>();
+            stringSetting.ModalKeyboard = base.CreateObject(gameObject.transform).GetComponent<ModalKeyboard>();
 
             gameObject.SetActive(true);
             return gameObject;

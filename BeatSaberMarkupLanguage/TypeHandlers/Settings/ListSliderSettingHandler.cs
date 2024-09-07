@@ -17,25 +17,25 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
 
         public override void HandleType(ComponentTypeWithData componentType, BSMLParserParams parserParams)
         {
-            ListSliderSetting listSetting = componentType.component as ListSliderSetting;
+            ListSliderSetting listSetting = componentType.Component as ListSliderSetting;
 
-            if (componentType.data.TryGetValue("options", out string options))
+            if (componentType.Data.TryGetValue("options", out string options))
             {
-                if (!parserParams.values.TryGetValue(options, out BSMLValue values))
+                if (!parserParams.Values.TryGetValue(options, out BSMLValue values))
                 {
-                    throw new ValueNotFoundException(options, parserParams.host);
+                    throw new ValueNotFoundException(options, parserParams.Host);
                 }
 
-                listSetting.values = values.GetValueAs<IList>();
+                listSetting.Values = values.GetValueAs<IList>();
             }
             else
             {
                 throw new MissingAttributeException(this, "options");
             }
 
-            if (componentType.data.TryGetValue("showButtons", out string showButtons))
+            if (componentType.Data.TryGetValue("showButtons", out string showButtons))
             {
-                listSetting.showButtons = Parse.Bool(showButtons);
+                listSetting.ShowButtons = Parse.Bool(showButtons);
             }
         }
     }

@@ -43,7 +43,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
     /// <summary>
     /// Animated PNG Frame Control chunk.
     /// </summary>
-    internal class fcTLChunk : Chunk
+    internal class FcTLChunk : Chunk
     {
         private uint sequenceNumber;
         private uint width;
@@ -56,36 +56,36 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         private BlendOps blendOp;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="fcTLChunk"/> class.
+        /// Initializes a new instance of the <see cref="FcTLChunk"/> class.
         /// </summary>
         /// <param name="bytes">Byte Array of chunk data.</param>
-        public fcTLChunk(byte[] bytes)
+        public FcTLChunk(byte[] bytes)
             : base(bytes)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="fcTLChunk"/> class.
+        /// Initializes a new instance of the <see cref="FcTLChunk"/> class.
         /// </summary>
         /// <param name="ms">Memory Stream of chunk data.</param>
-        public fcTLChunk(MemoryStream ms)
+        public FcTLChunk(MemoryStream ms)
             : base(ms)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="fcTLChunk"/> class.
+        /// Initializes a new instance of the <see cref="FcTLChunk"/> class.
         /// </summary>
         /// <param name="chunk">Chunk data.</param>
-        public fcTLChunk(Chunk chunk)
+        public FcTLChunk(Chunk chunk)
             : base(chunk)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="fcTLChunk"/> class.
+        /// Initializes a new instance of the <see cref="FcTLChunk"/> class.
         /// </summary>
-        internal fcTLChunk()
+        internal FcTLChunk()
         {
             Length = 26;
             ChunkType = "fcTL";

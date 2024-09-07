@@ -5,21 +5,21 @@ namespace BeatSaberMarkupLanguage.Animations
 {
     public class AnimationStateUpdater : MonoBehaviour
     {
-        public Image image;
+        public Image Image;
 
-        private AnimationControllerData _controllerData;
+        private AnimationControllerData controllerData;
 
-        public AnimationControllerData controllerData
+        public AnimationControllerData ControllerData
         {
-            get => _controllerData;
+            get => controllerData;
             set
             {
-                if (_controllerData != null)
+                if (controllerData != null)
                 {
                     OnDisable();
                 }
 
-                _controllerData = value;
+                controllerData = value;
 
                 if (isActiveAndEnabled)
                 {
@@ -30,21 +30,21 @@ namespace BeatSaberMarkupLanguage.Animations
 
         private void OnEnable()
         {
-            if (controllerData != null)
+            if (ControllerData != null)
             {
-                controllerData.activeImages.Add(image);
-                image.sprite = controllerData.sprites[controllerData.uvIndex];
+                ControllerData.ActiveImages.Add(Image);
+                Image.sprite = ControllerData.Sprites[ControllerData.UvIndex];
             }
         }
 
         private void OnDisable()
         {
-            controllerData?.activeImages.Remove(image);
+            ControllerData?.ActiveImages.Remove(Image);
         }
 
         private void OnDestroy()
         {
-            controllerData?.activeImages.Remove(image);
+            ControllerData?.ActiveImages.Remove(Image);
         }
     }
 }

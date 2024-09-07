@@ -29,12 +29,12 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
 
             T sliderSetting = gameObject.AddComponent<T>();
 
-            sliderSetting.slider = baseSetting.GetComponentInChildren<CustomFormatRangeValuesSlider>();
-            sliderSetting.slider.name = "BSMLSlider";
-            sliderSetting.slider.GetComponentInChildren<TextMeshProUGUI>().enableWordWrapping = false;
-            sliderSetting.slider._enableDragging = true;
+            sliderSetting.Slider = baseSetting.GetComponentInChildren<CustomFormatRangeValuesSlider>();
+            sliderSetting.Slider.name = "BSMLSlider";
+            sliderSetting.Slider.GetComponentInChildren<TextMeshProUGUI>().enableWordWrapping = false;
+            sliderSetting.Slider._enableDragging = true;
 
-            RectTransform rectTransform = (RectTransform)sliderSetting.slider.transform;
+            RectTransform rectTransform = (RectTransform)sliderSetting.Slider.transform;
             rectTransform.anchorMin = new Vector2(1, 0);
             rectTransform.anchorMax = new Vector2(1, 1);
             rectTransform.sizeDelta = new Vector2(52, 0);
@@ -48,7 +48,7 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
             text.text = "Default Text";
             text.rectTransform.anchorMax = Vector2.one;
 
-            List<Component> externalComponents = gameObject.AddComponent<ExternalComponents>().components;
+            List<Component> externalComponents = gameObject.AddComponent<ExternalComponents>().Components;
             externalComponents.Add(text);
             externalComponents.Add(localizedText);
 

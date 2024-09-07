@@ -45,7 +45,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG
         /// Gets the frame count.
         /// </summary>
         /// <value>The frame count.</value>
-        public int FrameCount => (int)(acTLChunk?.FrameCount ?? 1);
+        public int FrameCount => (int)(AcTLChunk?.FrameCount ?? 1);
 
         /// <summary>
         /// Gets or sets the framerate.
@@ -94,8 +94,8 @@ namespace BeatSaberMarkupLanguage.Animations.APNG
         /// <value>The play count.</value>
         public int PlayCount
         {
-            get => (int)(acTLChunk?.PlayCount ?? 0);
-            set => this.acTLChunk.PlayCount = (uint)value;
+            get => (int)(AcTLChunk?.PlayCount ?? 0);
+            set => this.AcTLChunk.PlayCount = (uint)value;
         }
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG
         /// <summary>
         /// Gets the acTL Chunk.
         /// </summary>
-        internal acTLChunk acTLChunk { get; private set; }
+        internal AcTLChunk AcTLChunk { get; private set; }
 
         /// <summary>
         /// Gets the bitmap at the specified index.
@@ -204,10 +204,10 @@ namespace BeatSaberMarkupLanguage.Animations.APNG
             writer.Write(this.IHDRChunk.RawData);
 
             // If acTL exists
-            if (acTLChunk != null)
+            if (AcTLChunk != null)
             {
                 // write actl.
-                writer.Write(acTLChunk.RawData);
+                writer.Write(AcTLChunk.RawData);
             }
 
             // Write all other chunks. (NOTE: These should be consistently the same for all frames)
@@ -226,10 +226,10 @@ namespace BeatSaberMarkupLanguage.Animations.APNG
             }
             else
             {
-                frames[0].fcTLChunk.SequenceNumber = sequenceNumber++;
+                frames[0].FcTLChunk.SequenceNumber = sequenceNumber++;
 
                 // Write fcTL
-                writer.Write(frames[0].fcTLChunk.RawData);
+                writer.Write(frames[0].FcTLChunk.RawData);
 
                 // Write IDAT of first frame.
                 frames[0].IDATChunks.ForEach(i => writer.Write(i.RawData));
@@ -241,15 +241,15 @@ namespace BeatSaberMarkupLanguage.Animations.APNG
             // Foreach frame
             for (int i = frameWriteStartIndex; i < frames.Count; ++i)
             {
-                frames[i].fcTLChunk.SequenceNumber = sequenceNumber++;
+                frames[i].FcTLChunk.SequenceNumber = sequenceNumber++;
 
                 // write fcTL
-                writer.Write(frames[i].fcTLChunk.RawData);
+                writer.Write(frames[i].FcTLChunk.RawData);
 
                 // Write fDAT
                 for (int j = 0; j < frames[i].IDATChunks.Count; ++j)
                 {
-                    fdATChunk fdat = fdATChunk.FromIDATChunk(frames[i].IDATChunks[j], sequenceNumber++);
+                    FdATChunk fdat = FdATChunk.FromIDATChunk(frames[i].IDATChunks[j], sequenceNumber++);
 
                     writer.Write(fdat.RawData);
                 }
@@ -268,7 +268,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG
         /// <param name="index">Index.</param>
         public DisposeOps GetDisposeOperationFor(int index)
         {
-            return IsSimplePNG ? DisposeOps.APNGDisposeOpNone : this.frames[index].fcTLChunk.DisposeOp;
+            return IsSimplePNG ? DisposeOps.APNGDisposeOpNone : this.frames[index].FcTLChunk.DisposeOp;
         }
 
         /// <summary>
@@ -278,7 +278,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG
         /// <param name="index">Index.</param>
         public BlendOps GetBlendOperationFor(int index)
         {
-            return IsSimplePNG ? BlendOps.APNGBlendOpSource : this.frames[index].fcTLChunk.BlendOp;
+            return IsSimplePNG ? BlendOps.APNGBlendOpSource : this.frames[index].FcTLChunk.BlendOp;
         }
 
         /// <summary>
@@ -351,16 +351,16 @@ namespace BeatSaberMarkupLanguage.Animations.APNG
             IHDRChunk ??= apng.IHDRChunk;
 
             // Create acTL Chunk.
-            if (acTLChunk == null)
+            if (AcTLChunk == null)
             {
-                acTLChunk = new acTLChunk();
-                acTLChunk.PlayCount = 0;
+                AcTLChunk = new AcTLChunk();
+                AcTLChunk.PlayCount = 0;
             }
 
-            uint sequenceNumber = (frames.Count == 0) ? 0 : (uint)(frames[frames.Count - 1].fcTLChunk.SequenceNumber + frames[frames.Count - 1].IDATChunks.Count);
+            uint sequenceNumber = (frames.Count == 0) ? 0 : (uint)(frames[frames.Count - 1].FcTLChunk.SequenceNumber + frames[frames.Count - 1].IDATChunks.Count);
 
             // Create fcTL Chunk
-            fcTLChunk fctl = new()
+            FcTLChunk fctl = new()
             {
                 SequenceNumber = sequenceNumber,
                 Width = (uint)image.Width,
@@ -377,7 +377,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG
             if (DefaultImage.IDATChunks.Count == 0)
             {
                 DefaultImage = apng.DefaultImage;
-                DefaultImage.fcTLChunk = fctl;
+                DefaultImage.FcTLChunk = fctl;
                 DefaultImageIsAnimated = true;
             }
 
@@ -385,7 +385,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG
             if (apng.IsSimplePNG)
             {
                 Frame frame = apng.DefaultImage;
-                frame.fcTLChunk = fctl;
+                frame.FcTLChunk = fctl;
 
                 foreach (OtherChunk chunk in frame.OtherChunks)
                 {
@@ -403,7 +403,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG
                 for (int i = 0; i < apng.FrameCount; ++i)
                 {
                     Frame frame = apng.Frames[i];
-                    frame.fcTLChunk.SequenceNumber = sequenceNumber;
+                    frame.FcTLChunk.SequenceNumber = sequenceNumber;
                     foreach (OtherChunk chunk in frame.OtherChunks)
                     {
                         if (!DefaultImage.OtherChunks.Contains(chunk))
@@ -432,7 +432,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG
                 }
             }
 
-            acTLChunk.FrameCount = (uint)frames.Count;
+            AcTLChunk.FrameCount = (uint)frames.Count;
         }
 
         /// <summary>
@@ -516,12 +516,12 @@ namespace BeatSaberMarkupLanguage.Animations.APNG
                             throw new APNGException("acTL chunk must located before any IDAT and fdAT");
                         }
 
-                        acTLChunk = new acTLChunk(chunk);
+                        AcTLChunk = new AcTLChunk(chunk);
                         break;
 
                     case "IDAT":
                         // To be an APNG, acTL must located before any IDAT and fdAT.
-                        if (acTLChunk == null)
+                        if (AcTLChunk == null)
                         {
                             IsSimplePNG = true;
                         }
@@ -557,13 +557,13 @@ namespace BeatSaberMarkupLanguage.Animations.APNG
                             frame = new Frame
                             {
                                 IHDRChunk = IHDRChunk,
-                                fcTLChunk = new fcTLChunk(chunk),
+                                FcTLChunk = new FcTLChunk(chunk),
                             };
                         }
                         else
                         {
                             // Otherwise this fcTL is used by the DEFAULT IMAGE.
-                            DefaultImage.fcTLChunk = new fcTLChunk(chunk);
+                            DefaultImage.FcTLChunk = new FcTLChunk(chunk);
                         }
 
                         break;
@@ -575,12 +575,12 @@ namespace BeatSaberMarkupLanguage.Animations.APNG
                         }
 
                         // fdAT is only used by frame image.
-                        if (frame == null || frame.fcTLChunk == null)
+                        if (frame == null || frame.FcTLChunk == null)
                         {
                             throw new APNGException("fcTL chunk expected.");
                         }
 
-                        frame.AddIDATChunk(new fdATChunk(chunk).ToIDATChunk());
+                        frame.AddIDATChunk(new FdATChunk(chunk).ToIDATChunk());
                         break;
 
                     case "IEND":
@@ -612,7 +612,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG
             // We have one more thing to do:
             // If the default image is part of the animation,
             // we should insert it into frames list.
-            if (DefaultImage.fcTLChunk != null)
+            if (DefaultImage.FcTLChunk != null)
             {
                 frames.Insert(0, DefaultImage);
                 DefaultImageIsAnimated = true;

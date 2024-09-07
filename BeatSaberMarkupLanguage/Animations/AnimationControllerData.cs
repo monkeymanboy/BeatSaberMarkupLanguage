@@ -7,25 +7,25 @@ namespace BeatSaberMarkupLanguage.Animations
 {
     public class AnimationControllerData
     {
-        public Sprite sprite;
+        public Sprite Sprite;
 
-        public int uvIndex = 0;
-        public DateTime lastSwitch = DateTime.UtcNow;
-        public Rect[] uvs;
-        public float[] delays;
-        public Sprite[] sprites;
-        public Material animMaterial;
-        public List<Image> activeImages = new();
+        public int UvIndex = 0;
+        public DateTime LastSwitch = DateTime.UtcNow;
+        public Rect[] Uvs;
+        public float[] Delays;
+        public Sprite[] Sprites;
+        public Material AnimMaterial;
+        public List<Image> ActiveImages = new();
 
         private readonly bool isDelayConsistent = true;
 
         public AnimationControllerData(Texture2D tex, Rect[] uvs, float[] delays)
         {
-            sprites = new Sprite[uvs.Length];
+            Sprites = new Sprite[uvs.Length];
             float firstDelay = -1;
             for (int i = 0; i < uvs.Length; i++)
             {
-                sprites[i] = Sprite.Create(tex, new Rect(uvs[i].x * tex.width, uvs[i].y * tex.height, uvs[i].width * tex.width, uvs[i].height * tex.height), new Vector2(0, 0), 100f);
+                Sprites[i] = Sprite.Create(tex, new Rect(uvs[i].x * tex.width, uvs[i].y * tex.height, uvs[i].width * tex.width, uvs[i].height * tex.height), new Vector2(0, 0), 100f);
 
                 if (i == 0)
                 {
@@ -38,13 +38,13 @@ namespace BeatSaberMarkupLanguage.Animations
                 }
             }
 
-            sprite = Utilities.LoadSpriteFromTexture(tex);
-            this.uvs = uvs;
-            this.delays = delays;
+            Sprite = Utilities.LoadSpriteFromTexture(tex);
+            this.Uvs = uvs;
+            this.Delays = delays;
         }
 
         internal AnimationControllerData(AnimationData animationData)
-            : this(animationData.atlas, animationData.uvs, animationData.delays)
+            : this(animationData.Atlas, animationData.Uvs, animationData.Delays)
         {
         }
 
@@ -52,37 +52,37 @@ namespace BeatSaberMarkupLanguage.Animations
 
         internal void CheckFrame(DateTime now)
         {
-            if (activeImages.Count == 0)
+            if (ActiveImages.Count == 0)
             {
                 return;
             }
 
-            double differenceMs = (now - lastSwitch).TotalMilliseconds;
-            if (differenceMs < delays[uvIndex])
+            double differenceMs = (now - LastSwitch).TotalMilliseconds;
+            if (differenceMs < Delays[UvIndex])
             {
                 return;
             }
 
-            if (isDelayConsistent && delays[uvIndex] <= 10 && differenceMs < 100)
+            if (isDelayConsistent && Delays[UvIndex] <= 10 && differenceMs < 100)
             {
                 // Bump animations with consistently 10ms or lower frame timings to 100ms
                 return;
             }
 
-            lastSwitch = now;
+            LastSwitch = now;
             do
             {
-                uvIndex++;
-                if (uvIndex >= uvs.Length)
+                UvIndex++;
+                if (UvIndex >= Uvs.Length)
                 {
-                    uvIndex = 0;
+                    UvIndex = 0;
                 }
             }
-            while (!isDelayConsistent && delays[uvIndex] == 0);
+            while (!isDelayConsistent && Delays[UvIndex] == 0);
 
-            foreach (Image image in activeImages)
+            foreach (Image image in ActiveImages)
             {
-                image.sprite = sprites[uvIndex];
+                image.sprite = Sprites[UvIndex];
             }
         }
     }

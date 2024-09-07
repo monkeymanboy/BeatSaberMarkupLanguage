@@ -2,6 +2,6 @@
 {
     public abstract class GenericInteractableSetting : GenericSetting
     {
-        public abstract bool interactable { get; set; }
+        public abstract bool Interactable { get; set; }
     }
 }

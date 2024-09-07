@@ -7,24 +7,24 @@ namespace BeatSaberMarkupLanguage.Components
 {
     public class ButtonIconImage : MonoBehaviour
     {
-        public Image image;
+        public Image Image;
 
-        internal NoTransitionsButton button;
-        internal GameObject underline;
+        internal NoTransitionsButton Button;
+        internal GameObject Underline;
 
         public void SetIcon(string path)
         {
-            if (image == null)
+            if (Image == null)
             {
                 return;
             }
 
-            image.SetImageAsync(path).ContinueWith((task) => Logger.Log.Error($"Failed to load image\n{task.Exception}"), TaskContinuationOptions.OnlyOnFaulted);
+            Image.SetImageAsync(path).ContinueWith((task) => Logger.Log.Error($"Failed to load image\n{task.Exception}"), TaskContinuationOptions.OnlyOnFaulted);
         }
 
         internal void SetSkew(float value)
         {
-            if (image is not ImageView imageView)
+            if (Image is not ImageView imageView)
             {
                 return;
             }
@@ -35,27 +35,27 @@ namespace BeatSaberMarkupLanguage.Components
 
         internal void SetUnderlineActive(bool active)
         {
-            if (underline != null)
+            if (Underline != null)
             {
-                underline.SetActive(active);
+                Underline.SetActive(active);
             }
         }
 
         private void OnEnable()
         {
-            button.selectionStateDidChangeEvent += OnSelectionStateDidChange;
+            Button.selectionStateDidChangeEvent += OnSelectionStateDidChange;
         }
 
         private void OnDisable()
         {
-            button.selectionStateDidChangeEvent -= OnSelectionStateDidChange;
+            Button.selectionStateDidChangeEvent -= OnSelectionStateDidChange;
         }
 
         private void OnSelectionStateDidChange(NoTransitionsButton.SelectionState state)
         {
-            Color color = image.color;
+            Color color = Image.color;
             color.a = state is NoTransitionsButton.SelectionState.Disabled ? 0.25f : 1;
-            image.color = color;
+            Image.color = color;
         }
     }
 }

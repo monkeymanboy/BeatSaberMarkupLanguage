@@ -5,10 +5,10 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 {
     public abstract class GenericSetting : MonoBehaviour
     {
-        public BSMLAction formatter;
-        public BSMLAction onChange;
-        public BSMLValue associatedValue;
-        public bool updateOnChange;
+        public BSMLAction Formatter;
+        public BSMLAction OnChange;
+        public BSMLValue AssociatedValue;
+        public bool UpdateOnChange;
 
         public abstract void Setup();
 

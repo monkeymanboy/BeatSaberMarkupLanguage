@@ -7,21 +7,21 @@ namespace BeatSaberMarkupLanguage.Components
 {
     public class ButtonArtworkImage : MonoBehaviour
     {
-        public Image image;
+        public Image Image;
 
         public void SetArtwork(string path)
         {
-            if (image == null)
+            if (Image == null)
             {
-                image = GetComponentsInChildren<Image>().Where(x => x.name == "BGArtwork").FirstOrDefault();
+                Image = GetComponentsInChildren<Image>().Where(x => x.name == "BGArtwork").FirstOrDefault();
             }
 
-            if (image == null)
+            if (Image == null)
             {
                 throw new BSMLException("Unable to find BG artwork image!");
             }
 
-            image.SetImageAsync(path).ContinueWith((task) => Logger.Log.Error($"Failed to load image\n{task.Exception}"), TaskContinuationOptions.OnlyOnFaulted);
+            Image.SetImageAsync(path).ContinueWith((task) => Logger.Log.Error($"Failed to load image\n{task.Exception}"), TaskContinuationOptions.OnlyOnFaulted);
         }
     }
 }

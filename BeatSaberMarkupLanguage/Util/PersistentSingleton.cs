@@ -6,6 +6,8 @@
     public class PersistentSingleton<T>
         where T : class, new()
     {
+#pragma warning disable IDE1006, SA1300
         public static T instance { get; } = new();
+#pragma warning restore IDE1006, SA1300
     }
 }

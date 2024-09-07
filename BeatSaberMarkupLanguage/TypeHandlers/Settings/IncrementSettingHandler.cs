@@ -18,26 +18,26 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
 
         public override void HandleType(ComponentTypeWithData componentType, BSMLParserParams parserParams)
         {
-            IncrementSetting incrementSetting = componentType.component as IncrementSetting;
+            IncrementSetting incrementSetting = componentType.Component as IncrementSetting;
 
-            if (componentType.data.TryGetValue("isInt", out string isInt))
+            if (componentType.Data.TryGetValue("isInt", out string isInt))
             {
-                incrementSetting.isInt = Parse.Bool(isInt);
+                incrementSetting.IsInt = Parse.Bool(isInt);
             }
 
-            if (componentType.data.TryGetValue("increment", out string increment))
+            if (componentType.Data.TryGetValue("increment", out string increment))
             {
-                incrementSetting.increments = Parse.Float(increment);
+                incrementSetting.Increments = Parse.Float(increment);
             }
 
-            if (componentType.data.TryGetValue("minValue", out string minValue))
+            if (componentType.Data.TryGetValue("minValue", out string minValue))
             {
-                incrementSetting.minValue = Parse.Float(minValue);
+                incrementSetting.MinValue = Parse.Float(minValue);
             }
 
-            if (componentType.data.TryGetValue("maxValue", out string maxValue))
+            if (componentType.Data.TryGetValue("maxValue", out string maxValue))
             {
-                incrementSetting.maxValue = Parse.Float(maxValue);
+                incrementSetting.MaxValue = Parse.Float(maxValue);
             }
         }
     }

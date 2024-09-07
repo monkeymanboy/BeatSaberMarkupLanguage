@@ -26,22 +26,22 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
         {
             try
             {
-                Button button = componentType.component as Button;
+                Button button = componentType.Component as Button;
 
-                if (componentType.data.TryGetValue("onClick", out string onClick))
+                if (componentType.Data.TryGetValue("onClick", out string onClick))
                 {
                     button.onClick.AddListener(() =>
                     {
-                        if (!parserParams.actions.TryGetValue(onClick, out BSMLAction onClickAction))
+                        if (!parserParams.Actions.TryGetValue(onClick, out BSMLAction onClickAction))
                         {
-                            throw new ActionNotFoundException(onClick, parserParams.host);
+                            throw new ActionNotFoundException(onClick, parserParams.Host);
                         }
 
                         onClickAction.Invoke();
                     });
                 }
 
-                if (componentType.data.TryGetValue("clickEvent", out string clickEvent))
+                if (componentType.Data.TryGetValue("clickEvent", out string clickEvent))
                 {
                     button.onClick.AddListener(() =>
                     {

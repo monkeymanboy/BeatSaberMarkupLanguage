@@ -7,14 +7,14 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 {
     public class ListSliderSetting : GenericSliderSetting
     {
-        public IList values { get; set; } = Array.Empty<object>();
+        public IList Values { get; set; } = Array.Empty<object>();
 
         public object Value
         {
-            get => values[(int)Math.Round(slider.value)];
+            get => Values[(int)Math.Round(Slider.value)];
             set
             {
-                slider.value = values.IndexOf(value) * 1f;
+                Slider.value = Values.IndexOf(value) * 1f;
                 text.text = TextForValue(Value);
             }
         }
@@ -22,14 +22,14 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         public override void Setup()
         {
             base.Setup();
-            slider.minValue = 0;
-            slider.maxValue = values.Count - 1;
-            text = slider.GetComponentInChildren<TextMeshProUGUI>();
-            slider.numberOfSteps = values.Count;
-            slider.valueDidChangeEvent += OnChange;
+            Slider.minValue = 0;
+            Slider.maxValue = Values.Count - 1;
+            text = Slider.GetComponentInChildren<TextMeshProUGUI>();
+            Slider.numberOfSteps = Values.Count;
+            Slider.valueDidChangeEvent += OnValueChanged;
 
             // TextSlider.UpdateVisuals doesn't work properly when disabled
-            if (slider.gameObject.activeInHierarchy)
+            if (Slider.gameObject.activeInHierarchy)
             {
                 ReceiveValue();
             }
@@ -37,20 +37,20 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 
         public override void ApplyValue()
         {
-            associatedValue?.SetValue(Value);
+            AssociatedValue?.SetValue(Value);
         }
 
         public override void ReceiveValue()
         {
-            if (associatedValue != null)
+            if (AssociatedValue != null)
             {
-                Value = associatedValue.GetValue();
+                Value = AssociatedValue.GetValue();
             }
         }
 
         protected string TextForValue(object value)
         {
-            return formatter == null ? value.ToString() : (formatter.Invoke(value) as string);
+            return Formatter == null ? value.ToString() : (Formatter.Invoke(value) as string);
         }
 
         private void Awake()
@@ -58,11 +58,11 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             ReceiveValue();
         }
 
-        private void OnChange(TextSlider textSlider, float val)
+        private void OnValueChanged(TextSlider textSlider, float val)
         {
             text.text = TextForValue(Value);
-            onChange?.Invoke(Value);
-            if (updateOnChange)
+            OnChange?.Invoke(Value);
+            if (UpdateOnChange)
             {
                 ApplyValue();
             }

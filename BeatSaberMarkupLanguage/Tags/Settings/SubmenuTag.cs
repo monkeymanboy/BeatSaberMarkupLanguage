@@ -49,9 +49,9 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
             };
 
             ExternalComponents externalComponents = submenuController.gameObject.AddComponent<ExternalComponents>();
-            externalComponents.components.Add(clickableText);
-            externalComponents.components.Add(clickableText.rectTransform);
-            externalComponents.components.Add(localizedText);
+            externalComponents.Components.Add(clickableText);
+            externalComponents.Components.Add(clickableText.rectTransform);
+            externalComponents.Components.Add(localizedText);
 
             gameObj.SetActive(true);
             return submenuController.gameObject;

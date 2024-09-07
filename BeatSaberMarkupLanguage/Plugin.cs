@@ -20,7 +20,7 @@ namespace BeatSaberMarkupLanguage
     [Plugin(RuntimeOptions.SingleStartInit)]
     public class Plugin
     {
-        public static Config config;
+        public static Config Config;
 
         private static readonly string[] FontNamesToRemove = { "NotoSansJP-Medium SDF", "NotoSansKR-Medium SDF", "SourceHanSansCN-Bold-SDF-Common-1(2k)", "SourceHanSansCN-Bold-SDF-Common-2(2k)", "SourceHanSansCN-Bold-SDF-Uncommon(2k)" };
 
@@ -39,7 +39,7 @@ namespace BeatSaberMarkupLanguage
                 Logger.Log.Error($"Failed to apply Harmony patches\n{ex}");
             }
 
-            config = conf.Generated<Config>();
+            Config = conf.Generated<Config>();
         }
 
         [OnStart]

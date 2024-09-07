@@ -5,8 +5,8 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 {
     public class ToggleSetting : GenericInteractableSetting
     {
-        public Toggle toggle;
-        public TextMeshProUGUI text;
+        public Toggle Toggle;
+        public TextMeshProUGUI TextMesh;
 
         private bool currentValue;
 
@@ -16,20 +16,20 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             set
             {
                 currentValue = value;
-                toggle.isOn = value;
+                Toggle.isOn = value;
             }
         }
 
         public string Text
         {
-            get => text.text;
-            set => text.text = value;
+            get => TextMesh.text;
+            set => TextMesh.text = value;
         }
 
-        public override bool interactable
+        public override bool Interactable
         {
-            get => toggle.interactable;
-            set => toggle.interactable = value;
+            get => Toggle.interactable;
+            set => Toggle.interactable = value;
         }
 
         public override void Setup()
@@ -39,35 +39,35 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 
         public override void ApplyValue()
         {
-            associatedValue?.SetValue(Value);
+            AssociatedValue?.SetValue(Value);
         }
 
         public override void ReceiveValue()
         {
-            if (associatedValue != null)
+            if (AssociatedValue != null)
             {
-                Value = (bool)associatedValue.GetValue();
+                Value = (bool)AssociatedValue.GetValue();
             }
         }
 
         private void OnEnable()
         {
-            toggle.onValueChanged.AddListener(OnValueChanged);
-            toggle.isOn = currentValue;
+            Toggle.onValueChanged.AddListener(OnValueChanged);
+            Toggle.isOn = currentValue;
         }
 
         private void OnDisable()
         {
-            toggle.onValueChanged.RemoveListener(OnValueChanged);
+            Toggle.onValueChanged.RemoveListener(OnValueChanged);
         }
 
         private void OnValueChanged(bool value)
         {
             Value = value;
 
-            onChange?.Invoke(Value);
+            OnChange?.Invoke(Value);
 
-            if (updateOnChange)
+            if (UpdateOnChange)
             {
                 ApplyValue();
             }

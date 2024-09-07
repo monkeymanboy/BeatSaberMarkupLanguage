@@ -7,29 +7,29 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 {
     public class SliderSetting : GenericSliderSetting
     {
-        public bool isInt = false;
-        public float increments;
+        public bool IsInt = false;
+        public float Increments;
 
         private float lastValue = float.NegativeInfinity;
 
         public float Value
         {
-            get => slider.value;
-            set => slider.value = value;
+            get => Slider.value;
+            set => Slider.value = value;
         }
 
         public override void Setup()
         {
             base.Setup();
 
-            ApplyCustomSliderTexts.remappers.Add(slider, this);
+            ApplyCustomSliderTexts.Remappers.Add(Slider, this);
 
-            text = slider.GetComponentInChildren<TextMeshProUGUI>();
-            slider.numberOfSteps = (int)Math.Round((slider.maxValue - slider.minValue) / increments) + 1;
-            slider.valueDidChangeEvent += OnChange;
+            text = Slider.GetComponentInChildren<TextMeshProUGUI>();
+            Slider.numberOfSteps = (int)Math.Round((Slider.maxValue - Slider.minValue) / Increments) + 1;
+            Slider.valueDidChangeEvent += OnValueChanged;
 
             // TextSlider.UpdateVisuals doesn't work properly when disabled
-            if (slider.gameObject.activeInHierarchy)
+            if (Slider.gameObject.activeInHierarchy)
             {
                 ReceiveValue();
             }
@@ -37,36 +37,36 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 
         public override void ApplyValue()
         {
-            if (associatedValue != null)
+            if (AssociatedValue != null)
             {
-                if (isInt)
+                if (IsInt)
                 {
-                    associatedValue.SetValue((int)Math.Round(slider.value));
+                    AssociatedValue.SetValue((int)Math.Round(Slider.value));
                 }
                 else
                 {
-                    associatedValue.SetValue(slider.value);
+                    AssociatedValue.SetValue(Slider.value);
                 }
             }
         }
 
         public override void ReceiveValue()
         {
-            if (associatedValue != null)
+            if (AssociatedValue != null)
             {
-                slider.value = isInt ? (int)associatedValue.GetValue() : (float)associatedValue.GetValue();
+                Slider.value = IsInt ? (int)AssociatedValue.GetValue() : (float)AssociatedValue.GetValue();
             }
         }
 
         internal string TextForValue(float value)
         {
-            if (isInt)
+            if (IsInt)
             {
-                return formatter == null ? ((int)Math.Round(value)).ToString() : (formatter.Invoke((int)Math.Round(value)) as string);
+                return Formatter == null ? ((int)Math.Round(value)).ToString() : (Formatter.Invoke((int)Math.Round(value)) as string);
             }
             else
             {
-                return formatter == null ? value.ToString("N2") : (formatter.Invoke(value) as string);
+                return Formatter == null ? value.ToString("N2") : (Formatter.Invoke(value) as string);
             }
         }
 
@@ -75,9 +75,9 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             ReceiveValue();
         }
 
-        private void OnChange(TextSlider textSlider, float val)
+        private void OnValueChanged(TextSlider textSlider, float val)
         {
-            if (isInt)
+            if (IsInt)
             {
                 val = (int)Math.Round(val);
             }
@@ -89,16 +89,16 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 
             lastValue = val;
 
-            if (isInt)
+            if (IsInt)
             {
-                onChange?.Invoke((int)val);
+                OnChange?.Invoke((int)val);
             }
             else
             {
-                onChange?.Invoke(val);
+                OnChange?.Invoke(val);
             }
 
-            if (updateOnChange)
+            if (UpdateOnChange)
             {
                 ApplyValue();
             }

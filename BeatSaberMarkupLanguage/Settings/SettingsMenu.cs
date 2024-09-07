@@ -9,22 +9,22 @@ namespace BeatSaberMarkupLanguage.Settings
 {
     internal class SettingsMenu : CustomCellInfo
     {
-        public ViewController viewController;
-        public BSMLParserParams parserParams;
-        public bool didSetup;
+        public ViewController ViewController;
+        public BSMLParserParams ParserParams;
+        public bool DidSetup;
 
-        public string resource;
-        public object host;
-        public Assembly assembly;
+        public string Resource;
+        public object Host;
+        public Assembly Assembly;
 
         private const string SettingsErrorViewResourcePath = "BeatSaberMarkupLanguage.Views.settings-error.bsml";
 
         public SettingsMenu(string name, string resource, object host, Assembly assembly)
             : base(name)
         {
-            this.resource = resource;
-            this.host = host;
-            this.assembly = assembly;
+            this.Resource = resource;
+            this.Host = host;
+            this.Assembly = assembly;
         }
 
         public static void SetupViewControllerTransform(ViewController viewController)
@@ -38,15 +38,15 @@ namespace BeatSaberMarkupLanguage.Settings
         {
             try
             {
-                viewController = BeatSaberUI.CreateViewController<ViewController>();
-                SetupViewControllerTransform(viewController);
-                parserParams = BSMLParser.instance.Parse(Utilities.GetResourceContent(assembly, resource), viewController.gameObject, host);
-                didSetup = true;
+                ViewController = BeatSaberUI.CreateViewController<ViewController>();
+                SetupViewControllerTransform(ViewController);
+                ParserParams = BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly, Resource), ViewController.gameObject, Host);
+                DidSetup = true;
             }
             catch (Exception ex)
             {
-                Logger.Log.Error($"Error adding settings menu for {assembly?.GetName().Name ?? "<NULL>"} ({text})\n{ex}");
-                parserParams = BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), SettingsErrorViewResourcePath), viewController.gameObject);
+                Logger.Log.Error($"Error adding settings menu for {Assembly?.GetName().Name ?? "<NULL>"} ({Text})\n{ex}");
+                ParserParams = BSMLParser.instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), SettingsErrorViewResourcePath), ViewController.gameObject);
             }
         }
     }

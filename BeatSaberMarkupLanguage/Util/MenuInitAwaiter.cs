@@ -6,18 +6,18 @@ namespace BeatSaberMarkupLanguage.Util
 {
     internal class MenuInitAwaiter : IInitializable, IDisposable
     {
-        private static TaskCompletionSource<VoidResult> _taskCompletionSource = new();
+        private static TaskCompletionSource<VoidResult> taskCompletionSource = new();
 
         public void Initialize()
         {
-            _taskCompletionSource.SetResult(default);
+            taskCompletionSource.SetResult(default);
         }
 
         public void Dispose()
         {
-            _taskCompletionSource = new();
+            taskCompletionSource = new();
         }
 
-        internal static Task WaitForMainMenuAsync() => _taskCompletionSource.Task;
+        internal static Task WaitForMainMenuAsync() => taskCompletionSource.Task;
     }
 }

@@ -24,54 +24,54 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
 
         public override void HandleType(ComponentTypeWithData componentType, BSMLParserParams parserParams)
         {
-            GenericSetting genericSetting = componentType.component as GenericSetting;
+            GenericSetting genericSetting = componentType.Component as GenericSetting;
 
-            if (componentType.data.TryGetValue("formatter", out string formatterId))
+            if (componentType.Data.TryGetValue("formatter", out string formatterId))
             {
-                if (!parserParams.actions.TryGetValue(formatterId, out BSMLAction formatter))
+                if (!parserParams.Actions.TryGetValue(formatterId, out BSMLAction formatter))
                 {
-                    throw new ActionNotFoundException(formatterId, parserParams.host);
+                    throw new ActionNotFoundException(formatterId, parserParams.Host);
                 }
 
-                genericSetting.formatter = formatter;
+                genericSetting.Formatter = formatter;
             }
 
-            if (componentType.data.TryGetValue("applyOnChange", out string applyOnChange))
+            if (componentType.Data.TryGetValue("applyOnChange", out string applyOnChange))
             {
-                genericSetting.updateOnChange = Parse.Bool(applyOnChange);
+                genericSetting.UpdateOnChange = Parse.Bool(applyOnChange);
             }
 
-            if (componentType.data.TryGetValue("onChange", out string onChange))
+            if (componentType.Data.TryGetValue("onChange", out string onChange))
             {
-                if (!parserParams.actions.TryGetValue(onChange, out BSMLAction onChangeAction))
+                if (!parserParams.Actions.TryGetValue(onChange, out BSMLAction onChangeAction))
                 {
-                    throw new ActionNotFoundException(onChange, parserParams.host);
+                    throw new ActionNotFoundException(onChange, parserParams.Host);
                 }
 
-                genericSetting.onChange = onChangeAction;
+                genericSetting.OnChange = onChangeAction;
             }
 
-            if (componentType.data.TryGetValue("value", out string value))
+            if (componentType.Data.TryGetValue("value", out string value))
             {
-                if (!parserParams.values.TryGetValue(value, out BSMLValue associatedValue))
+                if (!parserParams.Values.TryGetValue(value, out BSMLValue associatedValue))
                 {
-                    throw new ValueNotFoundException(value, parserParams.host);
+                    throw new ValueNotFoundException(value, parserParams.Host);
                 }
 
-                genericSetting.associatedValue = associatedValue;
-                if (componentType.data.TryGetValue("bindValue", out string bindValue) && Parse.Bool(bindValue))
+                genericSetting.AssociatedValue = associatedValue;
+                if (componentType.Data.TryGetValue("bindValue", out string bindValue) && Parse.Bool(bindValue))
                 {
                     BindValue(componentType, parserParams, associatedValue, _ => genericSetting.ReceiveValue());
                 }
             }
 
-            parserParams.AddEvent(componentType.data.TryGetValue("setEvent", out string setEvent) ? setEvent : "apply", genericSetting.ApplyValue);
-            parserParams.AddEvent(componentType.data.TryGetValue("getEvent", out string getEvent) ? getEvent : "cancel", genericSetting.ReceiveValue);
+            parserParams.AddEvent(componentType.Data.TryGetValue("setEvent", out string setEvent) ? setEvent : "apply", genericSetting.ApplyValue);
+            parserParams.AddEvent(componentType.Data.TryGetValue("getEvent", out string getEvent) ? getEvent : "cancel", genericSetting.ReceiveValue);
         }
 
         public override void HandleTypeAfterChildren(ComponentTypeWithData componentType, BSMLParserParams parserParams)
         {
-            (componentType.component as GenericSetting).Setup();
+            (componentType.Component as GenericSetting).Setup();
         }
     }
 }

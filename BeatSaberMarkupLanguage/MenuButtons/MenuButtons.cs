@@ -8,49 +8,49 @@ namespace BeatSaberMarkupLanguage.MenuButtons
 {
     public class MenuButtons : PersistentSingleton<MenuButtons>, ILateDisposable
     {
-        private static readonly IComparer<MenuButton> _menuButtonComparer = Comparer<MenuButton>.Create((a, b) => a.StrippedText.CompareTo(b.StrippedText));
+        private static readonly IComparer<MenuButton> MenuButtonComparer = Comparer<MenuButton>.Create((a, b) => a.StrippedText.CompareTo(b.StrippedText));
 
-        private MenuButtonsViewController _menuButtonsViewController;
+        private MenuButtonsViewController menuButtonsViewController;
 
-        internal SortedList<MenuButton> buttons { get; } = new(_menuButtonComparer);
+        internal SortedList<MenuButton> Buttons { get; } = new(MenuButtonComparer);
 
         public void RegisterButton(MenuButton menuButton)
         {
-            if (buttons.Any(mb => mb.Text == menuButton.Text))
+            if (Buttons.Any(mb => mb.Text == menuButton.Text))
             {
                 return;
             }
 
-            buttons.Add(menuButton);
+            Buttons.Add(menuButton);
             Refresh();
         }
 
         public void UnregisterButton(MenuButton menuButton)
         {
-            buttons.Remove(menuButton);
+            Buttons.Remove(menuButton);
             Refresh();
         }
 
         public void LateDispose()
         {
-            _menuButtonsViewController = null;
+            menuButtonsViewController = null;
         }
 
         internal void Refresh()
         {
-            if (_menuButtonsViewController == null)
+            if (menuButtonsViewController == null)
             {
                 return;
             }
 
-            _menuButtonsViewController.RefreshView();
+            menuButtonsViewController.RefreshView();
         }
 
         [Inject]
         [SuppressMessage("CodeQuality", "IDE0051", Justification = "Used by Zenject")]
         private void Construct(MenuButtonsViewController menuButtonsViewController)
         {
-            _menuButtonsViewController = menuButtonsViewController;
+            this.menuButtonsViewController = menuButtonsViewController;
         }
     }
 }

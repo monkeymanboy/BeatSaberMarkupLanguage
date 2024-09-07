@@ -80,7 +80,7 @@ namespace BeatSaberMarkupLanguage.Tags
             rectTransform.anchorMax = new Vector2(1, 1);
             rectTransform.sizeDelta = new Vector2(0, 0);
             rectTransform.pivot = new Vector2(0.5f, 1);
-            parentObj.AddComponent<ScrollViewContent>().scrollView = scrollView;
+            parentObj.AddComponent<ScrollViewContent>().ScrollView = scrollView;
 
             GameObject child = new("BSMLScrollViewContentContainer")
             {
@@ -96,9 +96,9 @@ namespace BeatSaberMarkupLanguage.Tags
             layoutGroup.spacing = 0.5f;
 
             ExternalComponents externalComponents = child.AddComponent<ExternalComponents>();
-            externalComponents.components.Add(scrollView);
-            externalComponents.components.Add(scrollView.transform);
-            externalComponents.components.Add(gameObject.AddComponent<LayoutElement>());
+            externalComponents.Components.Add(scrollView);
+            externalComponents.Components.Add(scrollView.transform);
+            externalComponents.Components.Add(gameObject.AddComponent<LayoutElement>());
 
             (child.transform as RectTransform).sizeDelta = new Vector2(0, -1);
 

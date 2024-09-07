@@ -21,11 +21,11 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
         public override Dictionary<string, Action<Backgroundable, string>> Setters => new()
         {
             { "background", new Action<Backgroundable, string>((component, value) => component.ApplyBackground(value)) },
-            { "backgroundColor", new Action<Backgroundable, string>((component, value) => component.background.color = Parse.Color(value, component.background.color.a)) },
+            { "backgroundColor", new Action<Backgroundable, string>((component, value) => component.Background.color = Parse.Color(value, component.Background.color.a)) },
             {
                 "backgroundColor0", new Action<Backgroundable, string>((component, value) =>
                 {
-                    if (component.background is ImageView imageView)
+                    if (component.Background is ImageView imageView)
                     {
                         imageView.color0 = Parse.Color(value, imageView.color0.a);
                     }
@@ -34,7 +34,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             {
                 "backgroundColor1", new Action<Backgroundable, string>((component, value) =>
                 {
-                    if (component.background is ImageView imageView)
+                    if (component.Background is ImageView imageView)
                     {
                         imageView.color1 = Parse.Color(value, imageView.color1.a);
                     }
@@ -43,7 +43,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             {
                 "backgroundGradient", new Action<Backgroundable, string>((component, value) =>
                 {
-                    if (component.background is ImageView imageView)
+                    if (component.Background is ImageView imageView)
                     {
                         imageView.gradient = Parse.Bool(value);
                     }

@@ -19,31 +19,31 @@ namespace BeatSaberMarkupLanguage.TypeHandlers.Settings
 
         public override void HandleType(ComponentTypeWithData componentType, BSMLParserParams parserParams)
         {
-            SliderSetting sliderSetting = componentType.component as SliderSetting;
+            SliderSetting sliderSetting = componentType.Component as SliderSetting;
 
-            if (componentType.data.TryGetValue("isInt", out string isInt))
+            if (componentType.Data.TryGetValue("isInt", out string isInt))
             {
-                sliderSetting.isInt = Parse.Bool(isInt);
+                sliderSetting.IsInt = Parse.Bool(isInt);
             }
 
-            if (componentType.data.TryGetValue("increment", out string increment))
+            if (componentType.Data.TryGetValue("increment", out string increment))
             {
-                sliderSetting.increments = Parse.Float(increment);
+                sliderSetting.Increments = Parse.Float(increment);
             }
 
-            if (componentType.data.TryGetValue("minValue", out string minValue))
+            if (componentType.Data.TryGetValue("minValue", out string minValue))
             {
-                sliderSetting.slider.minValue = Parse.Float(minValue);
+                sliderSetting.Slider.minValue = Parse.Float(minValue);
             }
 
-            if (componentType.data.TryGetValue("maxValue", out string maxValue))
+            if (componentType.Data.TryGetValue("maxValue", out string maxValue))
             {
-                sliderSetting.slider.maxValue = Parse.Float(maxValue);
+                sliderSetting.Slider.maxValue = Parse.Float(maxValue);
             }
 
-            if (componentType.data.TryGetValue("showButtons", out string showButtons))
+            if (componentType.Data.TryGetValue("showButtons", out string showButtons))
             {
-                sliderSetting.showButtons = Parse.Bool(showButtons);
+                sliderSetting.ShowButtons = Parse.Bool(showButtons);
             }
         }
     }

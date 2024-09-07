@@ -10,11 +10,11 @@ namespace BeatSaberMarkupLanguage.Components
 {
     public class TabSelector : MonoBehaviour
     {
-        public TextSegmentedControl textSegmentedControl;
-        public BSMLParserParams parserParams;
-        public string tabTag;
-        public string leftButtonTag;
-        public string rightButtonTag;
+        public TextSegmentedControl TextSegmentedControl;
+        public BSMLParserParams ParserParams;
+        public string TabTag;
+        public string LeftButtonTag;
+        public string RightButtonTag;
         private readonly List<Tab> tabs = new();
 
         private int pageCount = -1;
@@ -41,16 +41,16 @@ namespace BeatSaberMarkupLanguage.Components
         public void Setup()
         {
             tabs.Clear();
-            foreach (GameObject gameObject in parserParams.GetObjectsWithTag(tabTag))
+            foreach (GameObject gameObject in ParserParams.GetObjectsWithTag(TabTag))
             {
                 Tab tab = gameObject.GetComponent<Tab>();
                 tabs.Add(tab);
-                tab.selector = this;
+                tab.Selector = this;
             }
 
-            if (leftButtonTag != null)
+            if (LeftButtonTag != null)
             {
-                leftButton = parserParams.GetObjectsWithTag(leftButtonTag).FirstOrDefault().GetComponent<Button>();
+                leftButton = ParserParams.GetObjectsWithTag(LeftButtonTag).FirstOrDefault().GetComponent<Button>();
             }
 
             if (leftButton != null)
@@ -58,9 +58,9 @@ namespace BeatSaberMarkupLanguage.Components
                 leftButton.onClick.AddListener(PageLeft);
             }
 
-            if (rightButtonTag != null)
+            if (RightButtonTag != null)
             {
-                rightButton = parserParams.GetObjectsWithTag(rightButtonTag).FirstOrDefault().GetComponent<Button>();
+                rightButton = ParserParams.GetObjectsWithTag(RightButtonTag).FirstOrDefault().GetComponent<Button>();
             }
 
             if (rightButton != null)
@@ -69,10 +69,10 @@ namespace BeatSaberMarkupLanguage.Components
             }
 
             Refresh();
-            textSegmentedControl.didSelectCellEvent -= TabSelected;
-            textSegmentedControl.didSelectCellEvent += TabSelected;
-            textSegmentedControl.SelectCellWithNumber(0);
-            TabSelected(textSegmentedControl, 0);
+            TextSegmentedControl.didSelectCellEvent -= TabSelected;
+            TextSegmentedControl.didSelectCellEvent += TabSelected;
+            TextSegmentedControl.SelectCellWithNumber(0);
+            TabSelected(TextSegmentedControl, 0);
         }
 
         public void Refresh()
@@ -154,7 +154,7 @@ namespace BeatSaberMarkupLanguage.Components
                 }
             }
 
-            textSegmentedControl.SetTexts(texts);
+            TextSegmentedControl.SetTexts(texts);
         }
 
         private void PageLeft()

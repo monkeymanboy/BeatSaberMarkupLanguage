@@ -11,14 +11,14 @@ namespace BeatSaberMarkupLanguage.Parser
 
         internal BSMLParserParams(object host)
         {
-            this.host = host;
+            this.Host = host;
         }
 
-        public object host { get; }
+        public object Host { get; }
 
-        public Dictionary<string, BSMLAction> actions { get; } = new();
+        public Dictionary<string, BSMLAction> Actions { get; } = new();
 
-        public Dictionary<string, BSMLValue> values { get; } = new();
+        public Dictionary<string, BSMLValue> Values { get; } = new();
 
         public void AddEvent(string ids, Action action)
         {

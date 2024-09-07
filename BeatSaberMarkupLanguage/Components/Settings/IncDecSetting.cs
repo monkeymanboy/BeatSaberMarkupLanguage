@@ -5,25 +5,25 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 {
     public abstract class IncDecSetting : GenericInteractableSetting
     {
-        public TextMeshProUGUI text;
-        public Button decButton;
-        public Button incButton;
+        public TextMeshProUGUI TextMesh;
+        public Button DecButton;
+        public Button IncButton;
 
-        private bool _interactable = true;
+        private bool interactable = true;
         private bool decEnabled;
         private bool incEnabled;
 
-        public override bool interactable
+        public override bool Interactable
         {
-            get => _interactable;
+            get => interactable;
             set
             {
-                if (_interactable == value)
+                if (interactable == value)
                 {
                     return;
                 }
 
-                _interactable = value;
+                interactable = value;
                 EnableDec = decEnabled;
                 EnableInc = incEnabled;
             }
@@ -34,7 +34,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             set
             {
                 decEnabled = value;
-                decButton.interactable = value && interactable;
+                DecButton.interactable = value && Interactable;
             }
         }
 
@@ -43,13 +43,13 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             set
             {
                 incEnabled = value;
-                incButton.interactable = value && interactable;
+                IncButton.interactable = value && Interactable;
             }
         }
 
         public string Text
         {
-            set => text.text = value;
+            set => TextMesh.text = value;
         }
 
         public abstract void IncButtonPressed();
@@ -58,14 +58,14 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 
         protected virtual void OnEnable()
         {
-            incButton.onClick.AddListener(IncButtonPressed);
-            decButton.onClick.AddListener(DecButtonPressed);
+            IncButton.onClick.AddListener(IncButtonPressed);
+            DecButton.onClick.AddListener(DecButtonPressed);
         }
 
         protected void OnDisable()
         {
-            incButton.onClick.RemoveListener(IncButtonPressed);
-            decButton.onClick.RemoveListener(DecButtonPressed);
+            IncButton.onClick.RemoveListener(IncButtonPressed);
+            DecButton.onClick.RemoveListener(DecButtonPressed);
         }
     }
 }

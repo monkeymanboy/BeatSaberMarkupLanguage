@@ -26,9 +26,9 @@ namespace BeatSaberMarkupLanguage.Macros
                     valueId = valueId.Substring(1);
                 }
 
-                if (!parserParams.values.TryGetValue(valueId, out BSMLValue value))
+                if (!parserParams.Values.TryGetValue(valueId, out BSMLValue value))
                 {
-                    throw new ValueNotFoundException(valueId, parserParams.host);
+                    throw new ValueNotFoundException(valueId, parserParams.Host);
                 }
 
                 bool boolValue = (bool)value.GetValue();

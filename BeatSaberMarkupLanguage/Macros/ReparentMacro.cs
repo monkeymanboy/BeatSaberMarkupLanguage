@@ -21,9 +21,9 @@ namespace BeatSaberMarkupLanguage.Macros
             components = Enumerable.Empty<BSMLParser.ComponentTypeWithData>();
             if (data.TryGetValue("transform", out string transformId))
             {
-                if (!parserParams.values.TryGetValue(transformId, out BSMLValue value))
+                if (!parserParams.Values.TryGetValue(transformId, out BSMLValue value))
                 {
-                    throw new ValueNotFoundException(transformId, parserParams.host);
+                    throw new ValueNotFoundException(transformId, parserParams.Host);
                 }
 
                 ((Transform)value.GetValue()).SetParent(parent.transform, false);
@@ -31,9 +31,9 @@ namespace BeatSaberMarkupLanguage.Macros
 
             if (data.TryGetValue("transforms", out string transformsId))
             {
-                if (!parserParams.values.TryGetValue(transformsId, out BSMLValue value))
+                if (!parserParams.Values.TryGetValue(transformsId, out BSMLValue value))
                 {
-                    throw new ValueNotFoundException(transformsId, parserParams.host);
+                    throw new ValueNotFoundException(transformsId, parserParams.Host);
                 }
 
                 foreach (Transform transform in value.GetValue() as List<Transform>)

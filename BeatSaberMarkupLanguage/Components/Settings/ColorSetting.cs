@@ -5,9 +5,9 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 {
     public class ColorSetting : GenericInteractableSetting
     {
-        public Button editButton;
-        public ModalColorPicker modalColorPicker;
-        public Image colorImage;
+        public Button EditButton;
+        public ModalColorPicker ModalColorPicker;
+        public Image ColorImage;
 
         private Color currentColor = Color.white;
 
@@ -17,43 +17,43 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             set
             {
                 currentColor = value;
-                if (colorImage != null)
+                if (ColorImage != null)
                 {
-                    colorImage.color = currentColor;
+                    ColorImage.color = currentColor;
                 }
             }
         }
 
-        public override bool interactable
+        public override bool Interactable
         {
-            get => editButton != null && editButton.interactable;
+            get => EditButton != null && EditButton.interactable;
             set
             {
-                if (editButton != null)
+                if (EditButton != null)
                 {
-                    editButton.interactable = value;
+                    EditButton.interactable = value;
                 }
             }
         }
 
         public override void Setup()
         {
-            modalColorPicker.onChange = onChange;
-            modalColorPicker.doneEvent += DonePressed;
-            modalColorPicker.cancelEvent += CancelPressed;
+            ModalColorPicker.OnChange = OnChange;
+            ModalColorPicker.DoneEvent += DonePressed;
+            ModalColorPicker.CancelEvent += CancelPressed;
             ReceiveValue();
         }
 
         public void EditButtonPressed()
         {
-            modalColorPicker.CurrentColor = CurrentColor;
-            modalColorPicker.modalView.Show(true, true);
+            ModalColorPicker.CurrentColor = CurrentColor;
+            ModalColorPicker.ModalView.Show(true, true);
         }
 
         public void DonePressed(Color color)
         {
             CurrentColor = color;
-            if (updateOnChange)
+            if (UpdateOnChange)
             {
                 ApplyValue();
             }
@@ -61,30 +61,30 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 
         public void CancelPressed()
         {
-            onChange?.Invoke(CurrentColor);
+            OnChange?.Invoke(CurrentColor);
         }
 
         public override void ApplyValue()
         {
-            associatedValue?.SetValue(CurrentColor);
+            AssociatedValue?.SetValue(CurrentColor);
         }
 
         public override void ReceiveValue()
         {
-            if (associatedValue != null)
+            if (AssociatedValue != null)
             {
-                CurrentColor = (Color)associatedValue.GetValue();
+                CurrentColor = (Color)AssociatedValue.GetValue();
             }
         }
 
         protected virtual void OnEnable()
         {
-            editButton.onClick.AddListener(EditButtonPressed);
+            EditButton.onClick.AddListener(EditButtonPressed);
         }
 
         protected void OnDisable()
         {
-            editButton.onClick.RemoveListener(EditButtonPressed);
+            EditButton.onClick.RemoveListener(EditButtonPressed);
         }
     }
 }

@@ -11,7 +11,7 @@ namespace BeatSaberMarkupLanguage.Settings
 {
     internal class ModSettingsFlowCoordinator : FlowCoordinator
     {
-        public bool isAnimating;
+        public bool IsAnimating;
 
         protected SettingsMenuListViewController settingsMenuListViewController;
         protected NavigationController navigationController;
@@ -25,13 +25,13 @@ namespace BeatSaberMarkupLanguage.Settings
 
         public void OpenMenu(SettingsMenu menu)
         {
-            if (!menu.didSetup)
+            if (!menu.DidSetup)
             {
                 menu.Setup();
-                menu.parserParams.AddEvent("back", Back);
+                menu.ParserParams.AddEvent("back", Back);
             }
 
-            OpenMenu(menu.viewController, false, false);
+            OpenMenu(menu.ViewController, false, false);
         }
 
         public void OpenMenu(ViewController viewController, bool isSubmenu, bool isBack)
@@ -83,8 +83,8 @@ namespace BeatSaberMarkupLanguage.Settings
                 return;
             }
 
-            settingsMenuListViewController.list.tableView.SelectCellWithIdx(0);
-            OpenMenu(BSMLSettings.instance.settingsMenus.First() as SettingsMenu);
+            settingsMenuListViewController.List.TableView.SelectCellWithIdx(0);
+            OpenMenu(BSMLSettings.instance.SettingsMenus.First() as SettingsMenu);
             isPresenting = true;
         }
 
@@ -105,7 +105,7 @@ namespace BeatSaberMarkupLanguage.Settings
                 navigationController._controllersContainer = container;
 
                 settingsMenuListViewController = BeatSaberUI.CreateViewController<SettingsMenuListViewController>();
-                settingsMenuListViewController.clickedMenu += OpenMenu;
+                settingsMenuListViewController.ClickedMenu += OpenMenu;
 
                 RectTransform viewControllerTransform = (RectTransform)settingsMenuListViewController.transform;
                 viewControllerTransform.sizeDelta = new Vector2(0, -12);
@@ -126,7 +126,7 @@ namespace BeatSaberMarkupLanguage.Settings
         [UIAction("cancel-click")]
         private void Cancel()
         {
-            if (isPresenting || isAnimating)
+            if (isPresenting || IsAnimating)
             {
                 return;
             }
@@ -145,11 +145,11 @@ namespace BeatSaberMarkupLanguage.Settings
 
         private void EmitEventToAll(string ev)
         {
-            foreach (SettingsMenu menu in BSMLSettings.instance.settingsMenus)
+            foreach (SettingsMenu menu in BSMLSettings.instance.SettingsMenus)
             {
-                if (menu.didSetup)
+                if (menu.DidSetup)
                 {
-                    menu.parserParams.EmitEvent(ev);
+                    menu.ParserParams.EmitEvent(ev);
                 }
             }
         }

@@ -25,7 +25,7 @@ namespace BeatSaberMarkupLanguage.Tags
                 Object.Destroy(transform.gameObject);
             }
 
-            textSegmentedControl.gameObject.AddComponent<TabSelector>().textSegmentedControl = textSegmentedControl;
+            textSegmentedControl.gameObject.AddComponent<TabSelector>().TextSegmentedControl = textSegmentedControl;
             return textSegmentedControl.gameObject;
         }
     }

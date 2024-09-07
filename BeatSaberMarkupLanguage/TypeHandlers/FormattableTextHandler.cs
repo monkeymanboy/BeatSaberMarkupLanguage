@@ -23,31 +23,31 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
         public override void HandleType(BSMLParser.ComponentTypeWithData componentType, BSMLParserParams parserParams)
         {
             base.HandleType(componentType, parserParams);
-            FormattableText formattableText = componentType.component as FormattableText;
+            FormattableText formattableText = componentType.Component as FormattableText;
 
-            if (componentType.data.TryGetValue("data", out string dataStr))
+            if (componentType.Data.TryGetValue("data", out string dataStr))
             {
-                if (parserParams.values.TryGetValue(dataStr, out BSMLValue dataValue))
+                if (parserParams.Values.TryGetValue(dataStr, out BSMLValue dataValue))
                 {
                     formattableText.Data = dataValue.GetValue();
                     BindValue(componentType, parserParams, dataValue, val => formattableText.Data = val);
                 }
                 else
                 {
-                    throw new ValueNotFoundException(dataStr, parserParams.host);
+                    throw new ValueNotFoundException(dataStr, parserParams.Host);
                 }
             }
 
-            if (componentType.data.TryGetValue("dataFormatter", out string formatterStr))
+            if (componentType.Data.TryGetValue("dataFormatter", out string formatterStr))
             {
-                if (parserParams.values.TryGetValue(formatterStr, out BSMLValue formatterValue))
+                if (parserParams.Values.TryGetValue(formatterStr, out BSMLValue formatterValue))
                 {
                     formattableText.SetFormatter(formatterValue.GetValue());
                     BindValue(componentType, parserParams, formatterValue, val => formattableText.SetFormatter(val));
                 }
                 else
                 {
-                    throw new ValueNotFoundException(formatterStr, parserParams.host);
+                    throw new ValueNotFoundException(formatterStr, parserParams.Host);
                 }
             }
         }

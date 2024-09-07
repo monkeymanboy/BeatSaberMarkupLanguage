@@ -22,9 +22,9 @@ namespace BeatSaberMarkupLanguage.Macros
             components = Enumerable.Empty<BSMLParser.ComponentTypeWithData>();
             if (data.TryGetValue("hosts", out string hosts))
             {
-                if (!parserParams.values.TryGetValue(hosts, out BSMLValue values))
+                if (!parserParams.Values.TryGetValue(hosts, out BSMLValue values))
                 {
-                    throw new ValueNotFoundException(hosts, parserParams.host);
+                    throw new ValueNotFoundException(hosts, parserParams.Host);
                 }
 
                 bool passTags = false;

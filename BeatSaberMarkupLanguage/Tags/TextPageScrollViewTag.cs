@@ -22,9 +22,9 @@ namespace BeatSaberMarkupLanguage.Tags
 
             LocalizedTextMeshProUGUI localizedText = CreateLocalizableText(textMesh.gameObject);
 
-            textMesh.gameObject.AddComponent<TextPageScrollViewRefresher>().scrollView = scrollView;
+            textMesh.gameObject.AddComponent<TextPageScrollViewRefresher>().ScrollView = scrollView;
 
-            List<Component> components = scrollView.gameObject.AddComponent<ExternalComponents>().components;
+            List<Component> components = scrollView.gameObject.AddComponent<ExternalComponents>().Components;
             components.Add(textMesh);
             components.Add(localizedText);
 

@@ -30,13 +30,13 @@ namespace BeatSaberMarkupLanguage.Macros
                 throw new MissingAttributeException(this, "value");
             }
 
-            if (parserParams.values.TryGetValue(name, out BSMLValue existingValue))
+            if (parserParams.Values.TryGetValue(name, out BSMLValue existingValue))
             {
                 existingValue.SetValue(value);
             }
             else
             {
-                parserParams.values.Add(name, new BSMLStringValue(value, name));
+                parserParams.Values.Add(name, new BSMLStringValue(value, name));
             }
         }
     }

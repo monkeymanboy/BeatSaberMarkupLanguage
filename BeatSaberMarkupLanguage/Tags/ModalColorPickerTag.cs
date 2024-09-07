@@ -21,7 +21,7 @@ namespace BeatSaberMarkupLanguage.Tags
             windowTransform.sizeDelta = new Vector2(135, 70);
 
             ModalColorPicker colorPicker = gameObject.AddComponent<ModalColorPicker>();
-            colorPicker.modalView = gameObject.GetComponent<ModalView>();
+            colorPicker.ModalView = gameObject.GetComponent<ModalView>();
 
             EditColorSchemeController editColorSchemeController = DiContainer.Resolve<GameplaySetupViewController>().GetComponentInChildren<EditColorSchemeController>(true);
 
@@ -46,8 +46,8 @@ namespace BeatSaberMarkupLanguage.Tags
             rgbTransform.anchoredPosition = new Vector2(0, 3);
             rgbTransform.anchorMin = new Vector2(0, 0.25f);
             rgbTransform.anchorMax = new Vector2(0, 0.25f);
-            colorPicker.rgbPanel = rgbController;
-            rgbController.colorDidChangeEvent += colorPicker.OnChange;
+            colorPicker.RgbPanel = rgbController;
+            rgbController.colorDidChangeEvent += colorPicker.OnValueChanged;
 
             HSVPanelController hsvController = Object.Instantiate(hsvTemplate, gameObject.transform, false);
             hsvController.name = "BSMLHSVPanel";
@@ -55,8 +55,8 @@ namespace BeatSaberMarkupLanguage.Tags
             hsvTransform.anchoredPosition = new Vector2(0, 3);
             hsvTransform.anchorMin = new Vector2(0.6f, 0.15f);
             hsvTransform.anchorMax = new Vector2(0.6f, 0.15f);
-            colorPicker.hsvPanel = hsvController;
-            hsvController.colorDidChangeEvent += colorPicker.OnChange;
+            colorPicker.HsvPanel = hsvController;
+            hsvController.colorDidChangeEvent += colorPicker.OnValueChanged;
 
             Image colorImage = Object.Instantiate(currentColorTemplate, gameObject.transform, false);
             colorImage.name = "BSMLCurrentColor";
@@ -65,7 +65,7 @@ namespace BeatSaberMarkupLanguage.Tags
             imageRectTransform.anchorMin = new Vector2(0.53f, 0.53f);
             imageRectTransform.anchorMax = new Vector2(0.53f, 0.53f);
             imageRectTransform.sizeDelta = new Vector2(6, 6);
-            colorPicker.colorImage = colorImage;
+            colorPicker.ColorImage = colorImage;
 
             BSMLParser.instance.Parse(@"<horizontal anchor-pos-y='-28' spacing='2' horizontal-fit='PreferredSize'><button text-key='BUTTON_CANCEL' on-click='cancel' pref-width='34' pref-height='10' /><action-button text-key='BUTTON_OK' on-click='done' pref-width='34' pref-height='10' /></horizontal>", gameObject, colorPicker);
 

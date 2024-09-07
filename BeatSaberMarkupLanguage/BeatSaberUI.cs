@@ -393,15 +393,15 @@ namespace BeatSaberMarkupLanguage
             if (IsAnimated(location) || (isURL && IsAnimated(uri.LocalPath)))
             {
                 AnimationStateUpdater stateUpdater = image.gameObject.AddComponent<AnimationStateUpdater>();
-                stateUpdater.image = image;
+                stateUpdater.Image = image;
                 if (loadingAnimation)
                 {
-                    stateUpdater.controllerData = AnimationController.instance.loadingAnimation;
+                    stateUpdater.ControllerData = AnimationController.instance.LoadingAnimation;
                 }
 
                 if (AnimationController.instance.RegisteredAnimations.TryGetValue(location, out AnimationControllerData animControllerData))
                 {
-                    stateUpdater.controllerData = animControllerData;
+                    stateUpdater.ControllerData = animControllerData;
                 }
                 else
                 {
@@ -420,7 +420,7 @@ namespace BeatSaberMarkupLanguage
                         }
 
                         AnimationControllerData controllerData = AnimationController.instance.Register(location, animationData);
-                        stateUpdater.controllerData = controllerData;
+                        stateUpdater.ControllerData = controllerData;
                         callback?.Invoke();
                     }).ContinueWith((task) => Logger.Log.Error($"Failed to load animation '{location}'\n{task.Exception}"), TaskContinuationOptions.OnlyOnFaulted);
 
@@ -430,11 +430,11 @@ namespace BeatSaberMarkupLanguage
             else
             {
                 AnimationStateUpdater stateUpdater = image.gameObject.AddComponent<AnimationStateUpdater>();
-                stateUpdater.image = image;
+                stateUpdater.Image = image;
 
                 if (loadingAnimation)
                 {
-                    stateUpdater.controllerData = AnimationController.instance.loadingAnimation;
+                    stateUpdater.ControllerData = AnimationController.instance.LoadingAnimation;
                 }
 
                 UnityMainThreadTaskScheduler.Factory.StartNew(async () =>
@@ -500,15 +500,15 @@ namespace BeatSaberMarkupLanguage
             if (IsAnimated(location) || (isURL && IsAnimated(uri.LocalPath)))
             {
                 AnimationStateUpdater stateUpdater = image.gameObject.AddComponent<AnimationStateUpdater>();
-                stateUpdater.image = image;
+                stateUpdater.Image = image;
                 if (loadingAnimation)
                 {
-                    stateUpdater.controllerData = AnimationController.instance.loadingAnimation;
+                    stateUpdater.ControllerData = AnimationController.instance.LoadingAnimation;
                 }
 
                 if (AnimationController.instance.RegisteredAnimations.TryGetValue(location, out AnimationControllerData animControllerData))
                 {
-                    stateUpdater.controllerData = animControllerData;
+                    stateUpdater.ControllerData = animControllerData;
                 }
                 else
                 {
@@ -525,7 +525,7 @@ namespace BeatSaberMarkupLanguage
                     }
 
                     AnimationControllerData controllerData = AnimationController.instance.Register(location, animationData);
-                    stateUpdater.controllerData = controllerData;
+                    stateUpdater.ControllerData = controllerData;
 
                     return;
                 }
@@ -533,11 +533,11 @@ namespace BeatSaberMarkupLanguage
             else
             {
                 AnimationStateUpdater stateUpdater = image.gameObject.AddComponent<AnimationStateUpdater>();
-                stateUpdater.image = image;
+                stateUpdater.Image = image;
 
                 if (loadingAnimation)
                 {
-                    stateUpdater.controllerData = AnimationController.instance.loadingAnimation;
+                    stateUpdater.ControllerData = AnimationController.instance.LoadingAnimation;
                 }
 
                 byte[] data = await Utilities.GetDataAsync(location);

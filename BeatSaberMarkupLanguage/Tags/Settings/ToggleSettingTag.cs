@@ -34,22 +34,22 @@ namespace BeatSaberMarkupLanguage.Tags
             ToggleSetting toggleSetting = gameObject.AddComponent<ToggleSetting>();
             AnimatedSwitchView animatedSwitchView = switchView.GetComponent<AnimatedSwitchView>();
 
-            toggleSetting.toggle = switchView.GetComponent<Toggle>();
-            toggleSetting.toggle.onValueChanged.RemoveAllListeners();
-            toggleSetting.toggle.onValueChanged.AddListener(animatedSwitchView.HandleOnValueChanged);
-            toggleSetting.toggle.interactable = true;
-            toggleSetting.toggle.isOn = false;
+            toggleSetting.Toggle = switchView.GetComponent<Toggle>();
+            toggleSetting.Toggle.onValueChanged.RemoveAllListeners();
+            toggleSetting.Toggle.onValueChanged.AddListener(animatedSwitchView.HandleOnValueChanged);
+            toggleSetting.Toggle.interactable = true;
+            toggleSetting.Toggle.isOn = false;
             animatedSwitchView.enabled = true; // force refresh the UI state
 
             LocalizedTextMeshProUGUI localizedText = ConfigureLocalizedText(nameText);
 
-            toggleSetting.text = nameText.GetComponent<TextMeshProUGUI>();
-            toggleSetting.text.text = "Default Text";
-            toggleSetting.text.richText = true;
-            toggleSetting.text.overflowMode = TextOverflowModes.Ellipsis;
+            toggleSetting.TextMesh = nameText.GetComponent<TextMeshProUGUI>();
+            toggleSetting.TextMesh.text = "Default Text";
+            toggleSetting.TextMesh.richText = true;
+            toggleSetting.TextMesh.overflowMode = TextOverflowModes.Ellipsis;
 
-            List<Component> externalComponents = gameObject.AddComponent<ExternalComponents>().components;
-            externalComponents.Add(toggleSetting.text);
+            List<Component> externalComponents = gameObject.AddComponent<ExternalComponents>().Components;
+            externalComponents.Add(toggleSetting.TextMesh);
             externalComponents.Add(localizedText);
 
             gameObject.GetComponent<LayoutElement>().preferredWidth = 90;

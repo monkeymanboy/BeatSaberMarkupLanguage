@@ -8,8 +8,10 @@ namespace BeatSaberMarkupLanguage.ViewControllers
 {
     public abstract class BSMLViewController : ViewController, INotifyPropertyChanged
     {
+#pragma warning disable IDE1006, SA1307
         [Obsolete("Use the base class' didActivateEvent instead.")]
         public Action<bool, bool, bool> didActivate;
+#pragma warning restore IDE1006, SA1307
 
         private GameObject contentObject;
         private bool destroyed;

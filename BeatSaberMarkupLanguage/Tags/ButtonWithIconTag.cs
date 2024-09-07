@@ -28,7 +28,7 @@ namespace BeatSaberMarkupLanguage.Tags
 
             Object.Destroy(button.GetComponent<HoverHint>());
             Object.Destroy(button.GetComponent<LocalizedHoverHint>());
-            gameObject.AddComponent<ExternalComponents>().components.Add(button.GetComponentsInChildren<LayoutGroup>().Where(x => x.name == "Content").First());
+            gameObject.AddComponent<ExternalComponents>().Components.Add(button.GetComponentsInChildren<LayoutGroup>().Where(x => x.name == "Content").First());
 
             Transform contentTransform = button.transform.Find("Content");
             Object.Destroy(contentTransform.Find("Text").gameObject);
@@ -40,9 +40,9 @@ namespace BeatSaberMarkupLanguage.Tags
             iconImage.preserveAspect = true;
 
             ButtonIconImage btnIcon = gameObject.AddComponent<ButtonIconImage>();
-            btnIcon.button = button;
-            btnIcon.image = iconImage;
-            btnIcon.underline = button.transform.Find("Underline").gameObject;
+            btnIcon.Button = button;
+            btnIcon.Image = iconImage;
+            btnIcon.Underline = button.transform.Find("Underline").gameObject;
             btnIcon.SetSkew(button.transform.Find("BG").GetComponent<ImageView>().skew);
 
             Object.Destroy(button.transform.Find("Content").GetComponent<LayoutElement>());

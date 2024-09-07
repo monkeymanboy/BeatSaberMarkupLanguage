@@ -16,25 +16,25 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 
         public override void HandleType(ComponentTypeWithData componentType, BSMLParserParams parserParams)
         {
-            IconSegmentedControl iconControl = componentType.component as IconSegmentedControl;
+            IconSegmentedControl iconControl = componentType.Component as IconSegmentedControl;
 
-            if (componentType.data.TryGetValue("data", out string value))
+            if (componentType.Data.TryGetValue("data", out string value))
             {
-                if (!parserParams.values.TryGetValue(value, out BSMLValue contents))
+                if (!parserParams.Values.TryGetValue(value, out BSMLValue contents))
                 {
-                    throw new ValueNotFoundException(value, parserParams.host);
+                    throw new ValueNotFoundException(value, parserParams.Host);
                 }
 
                 iconControl.SetData((contents.GetValue() as List<IconSegmentedControl.DataItem>).ToArray());
             }
 
-            if (componentType.data.TryGetValue("selectCell", out string selectCell))
+            if (componentType.Data.TryGetValue("selectCell", out string selectCell))
             {
                 iconControl.didSelectCellEvent += (SegmentedControl control, int index) =>
                 {
-                    if (!parserParams.actions.TryGetValue(selectCell, out BSMLAction action))
+                    if (!parserParams.Actions.TryGetValue(selectCell, out BSMLAction action))
                     {
-                        throw new ActionNotFoundException(selectCell, parserParams.host);
+                        throw new ActionNotFoundException(selectCell, parserParams.Host);
                     }
 
                     action.Invoke(control, index);

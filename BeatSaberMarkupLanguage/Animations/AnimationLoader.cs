@@ -29,11 +29,11 @@ namespace BeatSaberMarkupLanguage.Animations
                 {
                     case AnimationType.GIF:
                         animationData = await ProcessGifAsync(data);
-                        callback?.Invoke(animationData.atlas, animationData.uvs, animationData.delays, animationData.width, animationData.height);
+                        callback?.Invoke(animationData.Atlas, animationData.Uvs, animationData.Delays, animationData.Width, animationData.Height);
                         break;
                     case AnimationType.APNG:
                         animationData = await ProcessApngAsync(data);
-                        callback?.Invoke(animationData.atlas, animationData.uvs, animationData.delays, animationData.width, animationData.height);
+                        callback?.Invoke(animationData.Atlas, animationData.Uvs, animationData.Delays, animationData.Width, animationData.Height);
                         break;
                 }
             });
@@ -42,27 +42,27 @@ namespace BeatSaberMarkupLanguage.Animations
         [Obsolete]
         public static IEnumerator ProcessAnimationInfo(AnimationInfo animationInfo, Action<Texture2D, Rect[], float[], int, int> callback)
         {
-            Texture2D[] textures = new Texture2D[animationInfo.frames.Count];
-            float[] delays = new float[animationInfo.frames.Count];
+            Texture2D[] textures = new Texture2D[animationInfo.Frames.Count];
+            float[] delays = new float[animationInfo.Frames.Count];
 
             float lastThrottleTime = Time.realtimeSinceStartup;
 
-            for (int i = 0; i < animationInfo.frames.Count; i++)
+            for (int i = 0; i < animationInfo.Frames.Count; i++)
             {
-                if ((animationInfo.frames?.Count ?? 0) <= i)
+                if ((animationInfo.Frames?.Count ?? 0) <= i)
                 {
-                    yield return new WaitUntil(() => { return (animationInfo.frames?.Count ?? 0) > i; });
+                    yield return new WaitUntil(() => { return (animationInfo.Frames?.Count ?? 0) > i; });
                     lastThrottleTime = Time.realtimeSinceStartup;
                 }
 
-                FrameInfo currentFrameInfo = animationInfo.frames[i];
-                delays[i] = currentFrameInfo.delay;
+                FrameInfo currentFrameInfo = animationInfo.Frames[i];
+                delays[i] = currentFrameInfo.Delay;
 
-                Texture2D frameTexture = new(currentFrameInfo.width, currentFrameInfo.height, TextureFormat.BGRA32, false);
+                Texture2D frameTexture = new(currentFrameInfo.Width, currentFrameInfo.Height, TextureFormat.BGRA32, false);
                 frameTexture.wrapMode = TextureWrapMode.Clamp;
                 try
                 {
-                    frameTexture.LoadRawTextureData(currentFrameInfo.colors);
+                    frameTexture.LoadRawTextureData(currentFrameInfo.Colors);
                 }
                 catch
                 {
@@ -91,8 +91,8 @@ namespace BeatSaberMarkupLanguage.Animations
                 Object.Destroy(texture);
             }
 
-            FrameInfo firstFrame = animationInfo.frames[0];
-            callback?.Invoke(atlasTexture, atlas, delays, firstFrame.width, firstFrame.height);
+            FrameInfo firstFrame = animationInfo.Frames[0];
+            callback?.Invoke(atlasTexture, atlas, delays, firstFrame.Width, firstFrame.Height);
         }
 
         public static async Task<AnimationData> ProcessApngAsync(byte[] data)
@@ -109,19 +109,19 @@ namespace BeatSaberMarkupLanguage.Animations
 
         private static async Task<AnimationData> ProcessAnimationInfoAsync(AnimationInfo animationInfo)
         {
-            Texture2D[] textures = new Texture2D[animationInfo.frames.Count];
-            float[] delays = new float[animationInfo.frames.Count];
+            Texture2D[] textures = new Texture2D[animationInfo.Frames.Count];
+            float[] delays = new float[animationInfo.Frames.Count];
 
             float lastThrottleTime = Time.realtimeSinceStartup;
 
-            for (int i = 0; i < animationInfo.frames.Count; i++)
+            for (int i = 0; i < animationInfo.Frames.Count; i++)
             {
-                FrameInfo currentFrameInfo = animationInfo.frames[i];
-                delays[i] = currentFrameInfo.delay;
+                FrameInfo currentFrameInfo = animationInfo.Frames[i];
+                delays[i] = currentFrameInfo.Delay;
 
-                Texture2D frameTexture = new(currentFrameInfo.width, currentFrameInfo.height, TextureFormat.BGRA32, false);
+                Texture2D frameTexture = new(currentFrameInfo.Width, currentFrameInfo.Height, TextureFormat.BGRA32, false);
                 frameTexture.wrapMode = TextureWrapMode.Clamp;
-                frameTexture.LoadRawTextureData(currentFrameInfo.colors);
+                frameTexture.LoadRawTextureData(currentFrameInfo.Colors);
 
                 textures[i] = frameTexture;
 
@@ -145,8 +145,8 @@ namespace BeatSaberMarkupLanguage.Animations
                 Object.Destroy(texture);
             }
 
-            FrameInfo firstFrame = animationInfo.frames[0];
-            return new AnimationData(atlasTexture, atlas, delays, firstFrame.width, firstFrame.height);
+            FrameInfo firstFrame = animationInfo.Frames[0];
+            return new AnimationData(atlasTexture, atlas, delays, firstFrame.Width, firstFrame.Height);
         }
     }
 }

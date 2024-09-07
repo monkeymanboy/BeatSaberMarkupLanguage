@@ -8,11 +8,11 @@ namespace BeatSaberMarkupLanguage.Components
 {
     public class CustomListTableData : MonoBehaviour, TableView.IDataSource
     {
-        public float cellSize = 8.5f;
-        public string reuseIdentifier = "BSMLListTableCell";
-        public TableView tableView;
+        public float CellSizeValue = 8.5f;
+        public string ReuseIdentifier = "BSMLListTableCell";
+        public TableView TableView;
 
-        public bool expandCell = false;
+        public bool ExpandCell = false;
 
         private LevelListTableCell songListTableCellPrefab;
         private LevelPackCell levelPackTableCellPrefab;
@@ -35,13 +35,13 @@ namespace BeatSaberMarkupLanguage.Components
                 switch (value)
                 {
                     case ListStyle.List:
-                        cellSize = 8.5f;
+                        CellSizeValue = 8.5f;
                         break;
                     case ListStyle.Box:
-                        cellSize = tableView.tableType == TableView.TableType.Horizontal ? 30f : 35f;
+                        CellSizeValue = TableView.tableType == TableView.TableType.Horizontal ? 30f : 35f;
                         break;
                     case ListStyle.Simple:
-                        cellSize = 8f;
+                        CellSizeValue = 8f;
                         break;
                 }
 
@@ -49,11 +49,11 @@ namespace BeatSaberMarkupLanguage.Components
             }
         }
 
-        public IList<CustomCellInfo> data { get; set; } = new List<CustomCellInfo>();
+        public IList<CustomCellInfo> Data { get; set; } = new List<CustomCellInfo>();
 
         public LevelListTableCell GetTableCell()
         {
-            LevelListTableCell tableCell = (LevelListTableCell)tableView.DequeueReusableCellForIdentifier(reuseIdentifier);
+            LevelListTableCell tableCell = (LevelListTableCell)TableView.DequeueReusableCellForIdentifier(ReuseIdentifier);
             if (!tableCell)
             {
                 if (songListTableCellPrefab == null)
@@ -66,13 +66,13 @@ namespace BeatSaberMarkupLanguage.Components
 
             tableCell._notOwned = false;
             tableCell.name = $"BSML{nameof(LevelListTableCell)}";
-            tableCell.reuseIdentifier = reuseIdentifier;
+            tableCell.reuseIdentifier = ReuseIdentifier;
             return tableCell;
         }
 
         public BSMLBoxTableCell GetBoxTableCell()
         {
-            BSMLBoxTableCell tableCell = (BSMLBoxTableCell)tableView.DequeueReusableCellForIdentifier(reuseIdentifier);
+            BSMLBoxTableCell tableCell = (BSMLBoxTableCell)TableView.DequeueReusableCellForIdentifier(ReuseIdentifier);
             if (!tableCell)
             {
                 if (levelPackTableCellPrefab == null)
@@ -84,7 +84,7 @@ namespace BeatSaberMarkupLanguage.Components
             }
 
             tableCell.name = nameof(BSMLBoxTableCell);
-            tableCell.reuseIdentifier = reuseIdentifier;
+            tableCell.reuseIdentifier = ReuseIdentifier;
             return tableCell;
         }
 
@@ -114,7 +114,7 @@ namespace BeatSaberMarkupLanguage.Components
 
         public SimpleTextTableCell GetSimpleTextTableCell()
         {
-            SimpleTextTableCell tableCell = (SimpleTextTableCell)tableView.DequeueReusableCellForIdentifier(reuseIdentifier);
+            SimpleTextTableCell tableCell = (SimpleTextTableCell)TableView.DequeueReusableCellForIdentifier(ReuseIdentifier);
             if (!tableCell)
             {
                 if (simpleTextTableCellPrefab == null)
@@ -126,7 +126,7 @@ namespace BeatSaberMarkupLanguage.Components
             }
 
             tableCell.name = $"BSML{nameof(SimpleTextTableCell)}";
-            tableCell.reuseIdentifier = reuseIdentifier;
+            tableCell.reuseIdentifier = ReuseIdentifier;
             return tableCell;
         }
 
@@ -145,27 +145,27 @@ namespace BeatSaberMarkupLanguage.Components
                     tableCell._updatedBadgeGo.SetActive(false);
                     tableCell._favoritesBadgeImage.gameObject.SetActive(false);
                     tableCell.transform.Find("BpmIcon").gameObject.SetActive(false);
-                    if (expandCell)
+                    if (ExpandCell)
                     {
                         nameText.rectTransform.anchorMax = new Vector3(2, 0.5f, 0);
                         authorText.rectTransform.anchorMax = new Vector3(2, 0.5f, 0);
                     }
 
-                    nameText.text = data[idx].text;
-                    authorText.text = data[idx].subtext;
-                    tableCell._coverImage.sprite = data[idx].icon == null ? Utilities.ImageResources.BlankSprite : data[idx].icon;
+                    nameText.text = Data[idx].Text;
+                    authorText.text = Data[idx].Subtext;
+                    tableCell._coverImage.sprite = Data[idx].Icon == null ? Utilities.ImageResources.BlankSprite : Data[idx].Icon;
 
                     return tableCell;
                 case ListStyle.Box:
                     BSMLBoxTableCell cell = GetBoxTableCell();
-                    cell.SetData(data[idx].icon == null ? Utilities.ImageResources.BlankSprite : data[idx].icon);
+                    cell.SetData(Data[idx].Icon == null ? Utilities.ImageResources.BlankSprite : Data[idx].Icon);
 
                     return cell;
                 case ListStyle.Simple:
                     SimpleTextTableCell simpleCell = GetSimpleTextTableCell();
                     simpleCell._text.richText = true;
                     simpleCell._text.enableWordWrapping = true;
-                    simpleCell.text = data[idx].text;
+                    simpleCell.text = Data[idx].Text;
 
                     return simpleCell;
             }
@@ -175,25 +175,25 @@ namespace BeatSaberMarkupLanguage.Components
 
         public float CellSize(int idx)
         {
-            return cellSize;
+            return CellSizeValue;
         }
 
         public int NumberOfCells()
         {
-            return data.Count;
+            return Data.Count;
         }
 
         public class CustomCellInfo
         {
-            public string text;
-            public string subtext;
-            public Sprite icon;
+            public string Text;
+            public string Subtext;
+            public Sprite Icon;
 
             public CustomCellInfo(string text, string subtext = null, Sprite icon = null)
             {
-                this.text = text;
-                this.subtext = subtext;
-                this.icon = icon;
+                this.Text = text;
+                this.Subtext = subtext;
+                this.Icon = icon;
             }
         }
     }

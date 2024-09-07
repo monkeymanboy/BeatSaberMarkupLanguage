@@ -40,14 +40,14 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
             layoutElement.preferredHeight = 8;
             layoutElement.preferredWidth = 90;
 
-            List<Component> externalComponents = dropdown.gameObject.AddComponent<ExternalComponents>().components;
+            List<Component> externalComponents = dropdown.gameObject.AddComponent<ExternalComponents>().Components;
             externalComponents.Add(textMesh);
             externalComponents.Add(localizedText);
             externalComponents.Add(layoutElement);
 
             DropDownListSetting dropDownListSetting = dropdown.gameObject.AddComponent<DropDownListSetting>();
 
-            dropDownListSetting.dropdown = dropdown;
+            dropDownListSetting.Dropdown = dropdown;
             dropdown.gameObject.SetActive(true);
             gameObject.SetActive(true);
             return dropdown.gameObject;

@@ -9,18 +9,18 @@ namespace BeatSaberMarkupLanguage.Components
 {
     public class ModalColorPicker : MonoBehaviour
     {
-        public ModalView modalView;
-        public RGBPanelController rgbPanel;
-        public HSVPanelController hsvPanel;
-        public Image colorImage;
+        public ModalView ModalView;
+        public RGBPanelController RgbPanel;
+        public HSVPanelController HsvPanel;
+        public Image ColorImage;
 
-        public BSMLValue associatedValue;
-        public BSMLAction onCancel;
-        public BSMLAction onDone;
-        public BSMLAction onChange;
+        public BSMLValue AssociatedValue;
+        public BSMLAction OnCancel;
+        public BSMLAction OnDone;
+        public BSMLAction OnChange;
 
-        public Action<Color> doneEvent;
-        public Action cancelEvent;
+        public Action<Color> DoneEvent;
+        public Action CancelEvent;
 
         private Color currentColor;
 
@@ -30,20 +30,20 @@ namespace BeatSaberMarkupLanguage.Components
             set
             {
                 currentColor = value;
-                if (rgbPanel != null)
+                if (RgbPanel != null)
                 {
-                    rgbPanel.color = currentColor;
+                    RgbPanel.color = currentColor;
                 }
 
                 // If you're wondering why we check this for HSV it's so that if color is one where changing hue has no effect it won't lock up the hue slider
-                if (hsvPanel != null && hsvPanel.color != currentColor)
+                if (HsvPanel != null && HsvPanel.color != currentColor)
                 {
-                    hsvPanel.color = currentColor;
+                    HsvPanel.color = currentColor;
                 }
 
-                if (colorImage != null)
+                if (ColorImage != null)
                 {
-                    colorImage.color = currentColor;
+                    ColorImage.color = currentColor;
                 }
             }
         }
@@ -51,31 +51,31 @@ namespace BeatSaberMarkupLanguage.Components
         [UIAction("cancel")]
         public void CancelPressed()
         {
-            onCancel?.Invoke();
-            cancelEvent?.Invoke();
-            modalView.Hide(true);
+            OnCancel?.Invoke();
+            CancelEvent?.Invoke();
+            ModalView.Hide(true);
         }
 
         [UIAction("done")]
         public void DonePressed()
         {
-            associatedValue?.SetValue(CurrentColor);
-            onDone?.Invoke(CurrentColor);
-            doneEvent?.Invoke(CurrentColor);
-            modalView.Hide(true);
+            AssociatedValue?.SetValue(CurrentColor);
+            OnDone?.Invoke(CurrentColor);
+            DoneEvent?.Invoke(CurrentColor);
+            ModalView.Hide(true);
         }
 
-        public void OnChange(Color color, ColorChangeUIEventType type)
+        public void OnValueChanged(Color color, ColorChangeUIEventType type)
         {
-            onChange?.Invoke(color);
+            OnChange?.Invoke(color);
             CurrentColor = color;
         }
 
         private void OnEnable()
         {
-            if (associatedValue != null)
+            if (AssociatedValue != null)
             {
-                CurrentColor = (Color)associatedValue.GetValue();
+                CurrentColor = (Color)AssociatedValue.GetValue();
             }
         }
     }

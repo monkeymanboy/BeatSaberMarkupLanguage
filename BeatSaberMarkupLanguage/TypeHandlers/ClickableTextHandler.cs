@@ -26,21 +26,21 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
         public override void HandleType(ComponentTypeWithData componentType, BSMLParserParams parserParams)
         {
             base.HandleType(componentType, parserParams);
-            ClickableText clickableText = componentType.component as ClickableText;
-            if (componentType.data.TryGetValue("onClick", out string onClick))
+            ClickableText clickableText = componentType.Component as ClickableText;
+            if (componentType.Data.TryGetValue("onClick", out string onClick))
             {
                 clickableText.OnClickEvent += (eventData) =>
                 {
-                    if (!parserParams.actions.TryGetValue(onClick, out BSMLAction onClickAction))
+                    if (!parserParams.Actions.TryGetValue(onClick, out BSMLAction onClickAction))
                     {
-                        throw new ActionNotFoundException(onClick, parserParams.host);
+                        throw new ActionNotFoundException(onClick, parserParams.Host);
                     }
 
                     onClickAction.Invoke();
                 };
             }
 
-            if (componentType.data.TryGetValue("clickEvent", out string clickEvent))
+            if (componentType.Data.TryGetValue("clickEvent", out string clickEvent))
             {
                 clickableText.OnClickEvent += (eventData) =>
                 {

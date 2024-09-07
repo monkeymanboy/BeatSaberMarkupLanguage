@@ -8,18 +8,18 @@ namespace BeatSaberMarkupLanguage.Components.Settings
     {
         private int index;
 
-        public IList values { get; set; } = Array.Empty<object>();
+        public IList Values { get; set; } = Array.Empty<object>();
 
         public object Value
         {
             get
             {
-                return values.Count > 0 ? values[Mathf.Clamp(index, 0, values.Count - 1)] : null;
+                return Values.Count > 0 ? Values[Mathf.Clamp(index, 0, Values.Count - 1)] : null;
             }
 
             set
             {
-                index = values.IndexOf(value);
+                index = Values.IndexOf(value);
                 if (index < 0)
                 {
                     index = 0;
@@ -48,22 +48,22 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 
         public override void ApplyValue()
         {
-            associatedValue?.SetValue(Value);
+            AssociatedValue?.SetValue(Value);
         }
 
         public override void ReceiveValue()
         {
-            if (associatedValue != null)
+            if (AssociatedValue != null)
             {
-                Value = associatedValue.GetValue();
+                Value = AssociatedValue.GetValue();
             }
         }
 
         private void EitherPressed()
         {
             UpdateState();
-            onChange?.Invoke(Value);
-            if (updateOnChange)
+            OnChange?.Invoke(Value);
+            if (UpdateOnChange)
             {
                 ApplyValue();
             }
@@ -72,8 +72,8 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         private void UpdateState()
         {
             EnableDec = index > 0;
-            EnableInc = index < values.Count - 1;
-            Text = Value != null ? (formatter == null ? Value?.ToString() : (formatter.Invoke(Value) as string)) : string.Empty;
+            EnableInc = index < Values.Count - 1;
+            Text = Value != null ? (Formatter == null ? Value?.ToString() : (Formatter.Invoke(Value) as string)) : string.Empty;
         }
     }
 }

@@ -4,11 +4,11 @@ namespace BeatSaberMarkupLanguage.Attributes
 {
     public class UIAction : Attribute
     {
-        public string id;
+        public string Id;
 
         public UIAction(string id)
         {
-            this.id = id;
+            this.Id = id;
         }
     }
 }

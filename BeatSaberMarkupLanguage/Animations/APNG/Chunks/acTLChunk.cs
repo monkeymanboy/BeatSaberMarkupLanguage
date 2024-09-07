@@ -5,42 +5,42 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
     /// <summary>
     /// Animation Control chunk.
     /// </summary>
-    internal class acTLChunk : Chunk
+    internal class AcTLChunk : Chunk
     {
         private uint frameCount;
         private uint playCount;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="acTLChunk"/> class.
+        /// Initializes a new instance of the <see cref="AcTLChunk"/> class.
         /// </summary>
         /// <param name="bytes">Byte array of chunk data.</param>
-        public acTLChunk(byte[] bytes)
+        public AcTLChunk(byte[] bytes)
             : base(bytes)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="acTLChunk"/> class.
+        /// Initializes a new instance of the <see cref="AcTLChunk"/> class.
         /// </summary>
         /// <param name="ms">Memory stream of chunk data.</param>
-        public acTLChunk(MemoryStream ms)
+        public AcTLChunk(MemoryStream ms)
             : base(ms)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="acTLChunk"/> class.
+        /// Initializes a new instance of the <see cref="AcTLChunk"/> class.
         /// </summary>
         /// <param name="chunk">Chunk object.</param>
-        public acTLChunk(Chunk chunk)
+        public AcTLChunk(Chunk chunk)
             : base(chunk)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="acTLChunk"/> class.
+        /// Initializes a new instance of the <see cref="AcTLChunk"/> class.
         /// </summary>
-        internal acTLChunk()
+        internal AcTLChunk()
         {
             Length = 8;
             ChunkType = "acTL";

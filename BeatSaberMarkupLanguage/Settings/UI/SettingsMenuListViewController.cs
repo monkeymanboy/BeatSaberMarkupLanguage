@@ -11,9 +11,9 @@ namespace BeatSaberMarkupLanguage.Settings.UI.ViewControllers
     internal class SettingsMenuListViewController : BSMLAutomaticViewController
     {
         [UIComponent("list")]
-        public CustomListTableData list;
+        public CustomListTableData List;
 
-        public Action<SettingsMenu> clickedMenu;
+        public Action<SettingsMenu> ClickedMenu;
 
         protected override void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
         {
@@ -26,19 +26,19 @@ namespace BeatSaberMarkupLanguage.Settings.UI.ViewControllers
                 rectTransform.anchorMax = new Vector2(0.5f, 1);
             }
 
-            list.data = BSMLSettings.instance.settingsMenus;
+            List.Data = BSMLSettings.instance.SettingsMenus;
 
-            if (list.tableView != null)
+            if (List.TableView != null)
             {
-                list.tableView.ReloadData();
+                List.TableView.ReloadData();
             }
         }
 
         [UIAction("settings-click")]
         private void SettingsClick(TableView tableView, int index)
         {
-            SettingsMenu settingsMenu = (SettingsMenu)list.data[index];
-            clickedMenu?.Invoke(settingsMenu);
+            SettingsMenu settingsMenu = (SettingsMenu)List.Data[index];
+            ClickedMenu?.Invoke(settingsMenu);
         }
     }
 }

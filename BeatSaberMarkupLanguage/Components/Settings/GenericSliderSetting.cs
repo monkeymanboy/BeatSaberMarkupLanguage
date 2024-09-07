@@ -7,23 +7,23 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 {
     public abstract class GenericSliderSetting : GenericInteractableSetting
     {
-        public RangeValuesTextSlider slider;
-        public bool showButtons = false;
+        public RangeValuesTextSlider Slider;
+        public bool ShowButtons = false;
 
         protected TextMeshProUGUI text;
 
         private Button incButton;
         private Button decButton;
 
-        public override bool interactable
+        public override bool Interactable
         {
-            get => slider != null && slider.interactable;
+            get => Slider != null && Slider.interactable;
             set
             {
-                if (slider != null)
+                if (Slider != null)
                 {
-                    slider.interactable = value;
-                    if (showButtons)
+                    Slider.interactable = value;
+                    if (ShowButtons)
                     {
                         incButton.interactable = value;
                         decButton.interactable = value;
@@ -34,17 +34,17 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 
         public override void Setup()
         {
-            incButton = slider._incButton;
-            decButton = slider._decButton;
+            incButton = Slider._incButton;
+            decButton = Slider._decButton;
 
-            if (!showButtons)
+            if (!ShowButtons)
             {
-                slider.image.sprite = Utilities.FindSpriteCached("RoundRect10");
+                Slider.image.sprite = Utilities.FindSpriteCached("RoundRect10");
                 Destroy(incButton.gameObject);
                 Destroy(decButton.gameObject);
-                (slider.transform.Find("BG") as RectTransform).sizeDelta = new Vector2(0, 6);
-                (slider.transform as RectTransform).sizeDelta = new Vector2(38, 0);
-                (slider.transform.Find("SlidingArea") as RectTransform).sizeDelta = new Vector2(-4, -4);
+                (Slider.transform.Find("BG") as RectTransform).sizeDelta = new Vector2(0, 6);
+                (Slider.transform as RectTransform).sizeDelta = new Vector2(38, 0);
+                (Slider.transform.Find("SlidingArea") as RectTransform).sizeDelta = new Vector2(-4, -4);
             }
         }
     }

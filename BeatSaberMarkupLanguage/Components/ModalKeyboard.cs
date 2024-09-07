@@ -12,33 +12,33 @@ namespace BeatSaberMarkupLanguage.Components
 {
     public class ModalKeyboard : MonoBehaviour
     {
-        public ModalView modalView;
-        public KEYBOARD keyboard;
+        public ModalView ModalView;
+        public KEYBOARD Keyboard;
 
-        public BSMLValue associatedValue;
-        public BSMLAction onEnter;
-        public bool clearOnOpen;
+        public BSMLValue AssociatedValue;
+        public BSMLAction OnEnter;
+        public bool ClearOnOpen;
 
-        public void OnEnter(string value)
+        public void OnEnterKeyPressed(string value)
         {
-            associatedValue?.SetValue(value);
-            onEnter?.Invoke(value);
-            modalView.Hide(true);
+            AssociatedValue?.SetValue(value);
+            OnEnter?.Invoke(value);
+            ModalView.Hide(true);
         }
 
         public void SetText(string text)
         {
-            keyboard.KeyboardText.text = text;
+            Keyboard.KeyboardText.text = text;
         }
 
         internal void ReceiveValue()
         {
-            if (associatedValue != null)
+            if (AssociatedValue != null)
             {
-                SetText(associatedValue.GetValue() as string);
+                SetText(AssociatedValue.GetValue() as string);
             }
 
-            if (clearOnOpen)
+            if (ClearOnOpen)
             {
                 SetText(string.Empty);
             }
@@ -86,7 +86,7 @@ namespace BeatSaberMarkupLanguage.Components
 [SHIFT] (;:) (qQ) (jJ) (kK) (xX) (bB) (mM) (wW) (vV) (zZ) [CLEAR]/28
 /23 (!!) (@@) [SPACE]/40 (##) (__)";
 
-        public List<KEY> keys = new();
+        public List<KEY> Keys = new();
 
         public TextMeshProUGUI KeyboardText;
         public TextMeshProUGUI KeyboardCursor;
@@ -178,9 +178,9 @@ namespace BeatSaberMarkupLanguage.Components
         {
             get
             {
-                foreach (KEY key in keys)
+                foreach (KEY key in Keys)
                 {
-                    if (key.name == index)
+                    if (key.Name == index)
                     {
                         return key;
                     }
@@ -200,22 +200,22 @@ namespace BeatSaberMarkupLanguage.Components
 
         public void SetValue(string keylabel, string value)
         {
-            foreach (KEY key in keys)
+            foreach (KEY key in Keys)
             {
-                if (key.name == keylabel)
+                if (key.Name == keylabel)
                 {
-                    key.value = value;
+                    key.Value = value;
                 }
             }
         }
 
         public void SetAction(string keyname, Action<KEY> action)
         {
-            foreach (KEY key in keys)
+            foreach (KEY key in Keys)
             {
-                if (key.name == keyname)
+                if (key.Name == keyname)
                 {
-                    key.keyaction = action;
+                    key.KeyAction = action;
                 }
             }
         }
@@ -397,14 +397,14 @@ namespace BeatSaberMarkupLanguage.Components
 
         public void Clear(KEY key)
         {
-            key.kb.KeyboardText.text = string.Empty;
+            key.Keyboard.KeyboardText.text = string.Empty;
         }
 
         public void Enter(KEY key)
         {
-            string typedtext = key.kb.KeyboardText.text;
+            string typedtext = key.Keyboard.KeyboardText.text;
             EnterPressed?.Invoke(typedtext);
-            key.kb.KeyboardText.text = string.Empty;
+            key.Keyboard.KeyboardText.text = string.Empty;
         }
 
         [Obsolete("Calling this method is no longer necessary. The cursor is redrawn by Unity UI directly.")]
@@ -422,7 +422,7 @@ namespace BeatSaberMarkupLanguage.Components
             co.b = (float)((color >> 16) & 0xff) / 255;
 
             KEY key = new(this, position, keylabel, width, height, co);
-            keys.Add(key);
+            Keys.Add(key);
 
             return key;
         }
@@ -430,7 +430,7 @@ namespace BeatSaberMarkupLanguage.Components
         private KEY AddKey(string keylabel, string shifted, float width = 12, float height = 10)
         {
             KEY key = AddKey(keylabel, width, height);
-            key.shifted = shifted;
+            key.Shifted = shifted;
             return key;
         }
 
@@ -490,39 +490,39 @@ namespace BeatSaberMarkupLanguage.Components
 
         private void Backspace(KEY key)
         {
-            int length = key.kb.KeyboardText.text.Length;
+            int length = key.Keyboard.KeyboardText.text.Length;
             if (length > 0)
             {
-                key.kb.KeyboardText.text = key.kb.KeyboardText.text.Remove(length - 1);
+                key.Keyboard.KeyboardText.text = key.Keyboard.KeyboardText.text.Remove(length - 1);
             }
         }
 
-        private void SHIFT(KEY key) => SHIFT(key, !key.kb.shift);
+        private void SHIFT(KEY key) => SHIFT(key, !key.Keyboard.shift);
 
         private void SHIFT(KEY key, bool state)
         {
-            key.kb.shift = state;
-            UpdateKeyText(key.kb);
+            key.Keyboard.shift = state;
+            UpdateKeyText(key.Keyboard);
         }
 
         private void CAPS(KEY key)
         {
-            key.kb.caps = !key.kb.caps;
-            UpdateKeyText(key.kb);
+            key.Keyboard.caps = !key.Keyboard.caps;
+            UpdateKeyText(key.Keyboard);
         }
 
         private void UpdateKeyText(KEYBOARD keyboard)
         {
-            foreach (KEY key in keyboard.keys)
+            foreach (KEY key in keyboard.Keys)
             {
                 key.UpdateText();
 
-                if (key.name == "SHIFT")
+                if (key.Name == "SHIFT")
                 {
                     key.SetHighlighted(keyboard.shift);
                 }
 
-                if (key.name == "CAPS")
+                if (key.Name == "CAPS")
                 {
                     key.SetHighlighted(keyboard.caps);
                 }
@@ -531,12 +531,12 @@ namespace BeatSaberMarkupLanguage.Components
 
         public class KEY
         {
-            public string name = string.Empty;
-            public string value = string.Empty;
-            public string shifted = string.Empty;
-            public Button mybutton;
-            public KEYBOARD kb;
-            public Action<KEY> keyaction = null;
+            public string Name = string.Empty;
+            public string Value = string.Empty;
+            public string Shifted = string.Empty;
+            public Button MyButton;
+            public KEYBOARD Keyboard;
+            public Action<KEY> KeyAction = null;
 
             private readonly Graphic[] graphicsToColor;
             private readonly Color[] defaultColors;
@@ -549,15 +549,15 @@ namespace BeatSaberMarkupLanguage.Components
 
             public KEY(KEYBOARD kb, Vector2 position, string text, float width, float height, Color color)
             {
-                name = text;
-                value = text;
-                this.kb = kb;
+                Name = text;
+                Value = text;
+                this.Keyboard = kb;
 
-                mybutton = Object.Instantiate(kb.BaseButton, kb.container, false);
-                mybutton.name = name;
-                Object.DestroyImmediate(mybutton.GetComponent<UIKeyboardKey>());
+                MyButton = Object.Instantiate(kb.BaseButton, kb.container, false);
+                MyButton.name = Name;
+                Object.DestroyImmediate(MyButton.GetComponent<UIKeyboardKey>());
 
-                graphicsToColor = mybutton.GetComponentsInChildren<Graphic>();
+                graphicsToColor = MyButton.GetComponentsInChildren<Graphic>();
                 defaultColors = new Color[graphicsToColor.Length];
                 highlightedColors = new Color[graphicsToColor.Length];
 
@@ -569,22 +569,22 @@ namespace BeatSaberMarkupLanguage.Components
                     highlightedColors[i] = new Color(0.1f, 1, 0.1f, graphicColor.a);
                 }
 
-                LocalizedTextMeshProUGUI localizer = mybutton.GetComponentInChildren<LocalizedTextMeshProUGUI>(true);
+                LocalizedTextMeshProUGUI localizer = MyButton.GetComponentInChildren<LocalizedTextMeshProUGUI>(true);
                 if (localizer != null)
                 {
                     Object.Destroy(localizer);
                 }
 
-                buttonText = mybutton.GetComponentInChildren<TextMeshProUGUI>();
+                buttonText = MyButton.GetComponentInChildren<TextMeshProUGUI>();
                 buttonText.richText = true;
                 buttonText.enableWordWrapping = false;
                 buttonText.fontSize = 5f;
                 buttonText.text = text;
 
-                ExternalComponents externalComponents = mybutton.gameObject.AddComponent<ExternalComponents>();
-                externalComponents.components.Add(buttonText);
+                ExternalComponents externalComponents = MyButton.gameObject.AddComponent<ExternalComponents>();
+                externalComponents.Components.Add(buttonText);
 
-                RectTransform buttonTransform = (RectTransform)mybutton.transform;
+                RectTransform buttonTransform = (RectTransform)MyButton.transform;
                 buttonTransform.anchorMin = new Vector2(0.5f, 0.5f);
                 buttonTransform.anchorMax = new Vector2(0.5f, 0.5f);
                 buttonTransform.localScale = new Vector3(kb.scale, kb.scale, 1.0f);
@@ -600,25 +600,25 @@ namespace BeatSaberMarkupLanguage.Components
                 // Adjust starting position so button aligns to upper left of current drawing position
                 position.x += kb.scale * width / 2;
                 position.y -= kb.scale * height / 2;
-                (mybutton.transform as RectTransform).anchoredPosition = position;
+                (MyButton.transform as RectTransform).anchoredPosition = position;
 
-                (mybutton.transform as RectTransform).sizeDelta = new Vector2(width, height);
+                (MyButton.transform as RectTransform).sizeDelta = new Vector2(width, height);
 
                 kb.currentPosition.x += (width * kb.scale) + kb.padding;
 
-                mybutton.onClick.RemoveAllListeners();
+                MyButton.onClick.RemoveAllListeners();
 
-                mybutton.onClick.AddListener(() =>
+                MyButton.onClick.AddListener(() =>
                 {
-                    if (keyaction != null)
+                    if (KeyAction != null)
                     {
-                        keyaction(this);
+                        KeyAction(this);
                         return;
                     }
 
-                    if (value.EndsWith("%CR%", StringComparison.Ordinal))
+                    if (Value.EndsWith("%CR%", StringComparison.Ordinal))
                     {
-                        kb.KeyboardText.text += value.Substring(0, value.Length - 4);
+                        kb.KeyboardText.text += Value.Substring(0, Value.Length - 4);
                         kb.Enter(this);
                         return;
                     }
@@ -627,11 +627,11 @@ namespace BeatSaberMarkupLanguage.Components
                     kb.SHIFT(this, false);
                 });
 
-                HoverHint myHintText = BeatSaberUI.DiContainer.InstantiateComponent<HoverHint>(mybutton.gameObject);
-                myHintText.text = value switch
+                HoverHint myHintText = BeatSaberUI.DiContainer.InstantiateComponent<HoverHint>(MyButton.gameObject);
+                myHintText.text = Value switch
                 {
                     "\u2B05" => "Backspace",
-                    _ => value,
+                    _ => Value,
                 };
             }
 
@@ -639,13 +639,13 @@ namespace BeatSaberMarkupLanguage.Components
             {
                 get
                 {
-                    if (value.ToUpper() != value)
+                    if (Value.ToUpper() != Value)
                     {
-                        return kb.shift ^ kb.caps ? value.ToUpper() : value;
+                        return Keyboard.shift ^ Keyboard.caps ? Value.ToUpper() : Value;
                     }
                     else
                     {
-                        return kb.shift ? shifted : value;
+                        return Keyboard.shift ? Shifted : Value;
                     }
                 }
             }
@@ -654,7 +654,7 @@ namespace BeatSaberMarkupLanguage.Components
             {
                 if (!string.IsNullOrEmpty(value))
                 {
-                    this.value = value;
+                    this.Value = value;
                 }
 
                 return this;
@@ -670,9 +670,9 @@ namespace BeatSaberMarkupLanguage.Components
 
             internal void UpdateText()
             {
-                if (string.IsNullOrEmpty(shifted))
+                if (string.IsNullOrEmpty(Shifted))
                 {
-                    buttonText.text = name;
+                    buttonText.text = Name;
                 }
                 else
                 {

@@ -6,34 +6,34 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
     /// <summary>
     /// Animated PNG FDAT Chunk.
     /// </summary>
-    internal class fdATChunk : Chunk
+    internal class FdATChunk : Chunk
     {
         private uint sequenceNumber;
         private byte[] frameData;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="fdATChunk"/> class.
+        /// Initializes a new instance of the <see cref="FdATChunk"/> class.
         /// </summary>
         /// <param name="bytes">Byte array of chunk data.</param>
-        public fdATChunk(byte[] bytes)
+        public FdATChunk(byte[] bytes)
             : base(bytes)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="fdATChunk"/> class.
+        /// Initializes a new instance of the <see cref="FdATChunk"/> class.
         /// </summary>
         /// <param name="ms">Memory stream of chunk data.</param>
-        public fdATChunk(MemoryStream ms)
+        public FdATChunk(MemoryStream ms)
             : base(ms)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="fdATChunk"/> class.
+        /// Initializes a new instance of the <see cref="FdATChunk"/> class.
         /// </summary>
         /// <param name="chunk">Chunk data.</param>
-        public fdATChunk(Chunk chunk)
+        public FdATChunk(Chunk chunk)
             : base(chunk)
         {
         }
@@ -72,11 +72,11 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
         /// <returns>The FDAT chunk.</returns>
         /// <param name="idatChunk">IDAT chunk.</param>
         /// <param name="sequenceNumber">Sequence number.</param>
-        public static fdATChunk FromIDATChunk(IDATChunk idatChunk, uint sequenceNumber)
+        public static FdATChunk FromIDATChunk(IDATChunk idatChunk, uint sequenceNumber)
         {
             uint newCrc;
             byte[] frameData;
-            fdATChunk fdat = null;
+            FdATChunk fdat = null;
 
             using (MemoryStream msCrc = new())
             {
@@ -98,7 +98,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
                 ms.WriteUInt32(Helper.ConvertEndian(newCrc));
                 ms.Position = 0;
 
-                fdat = new fdATChunk(ms);
+                fdat = new FdATChunk(ms);
             }
 
             return fdat;

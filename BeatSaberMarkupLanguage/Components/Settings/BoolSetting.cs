@@ -37,21 +37,21 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 
         public override void ApplyValue()
         {
-            associatedValue?.SetValue(Value);
+            AssociatedValue?.SetValue(Value);
         }
 
         public override void ReceiveValue()
         {
-            if (associatedValue != null)
+            if (AssociatedValue != null)
             {
-                Value = (bool)associatedValue.GetValue();
+                Value = (bool)AssociatedValue.GetValue();
             }
         }
 
         private void EitherPressed()
         {
-            onChange?.Invoke(Value);
-            if (updateOnChange)
+            OnChange?.Invoke(Value);
+            if (UpdateOnChange)
             {
                 ApplyValue();
             }
@@ -61,9 +61,9 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         {
             EnableDec = currentValue;
             EnableInc = !currentValue;
-            if (formatter != null)
+            if (Formatter != null)
             {
-                Text = formatter.Invoke(currentValue) as string;
+                Text = Formatter.Invoke(currentValue) as string;
             }
             else
             {

@@ -9,17 +9,17 @@ namespace BeatSaberMarkupLanguage.Components
 {
     public class CustomCellListTableData : MonoBehaviour, TableView.IDataSource
     {
-        public string cellTemplate;
-        public float cellSize = 8.5f;
-        public TableView tableView;
-        public bool clickableCells = true;
+        public string CellTemplate;
+        public float CellSizeValue = 8.5f;
+        public TableView TableView;
+        public bool ClickableCells = true;
 
-        public IList data { get; set; } = Array.Empty<object>();
+        public IList Data { get; set; } = Array.Empty<object>();
 
         public virtual TableCell CellForIdx(TableView tableView, int idx)
         {
             CustomCellTableCell tableCell = new GameObject().AddComponent<CustomCellTableCell>();
-            if (clickableCells)
+            if (ClickableCells)
             {
                 tableCell.gameObject.AddComponent<Touchable>();
                 tableCell.interactable = true;
@@ -27,47 +27,47 @@ namespace BeatSaberMarkupLanguage.Components
 
             tableCell.reuseIdentifier = "BSMLCustomCellListCell";
             tableCell.name = "BSMLCustomTableCell";
-            tableCell.parserParams = BSMLParser.instance.Parse(cellTemplate, tableCell.gameObject, data[idx]);
+            tableCell.ParserParams = BSMLParser.instance.Parse(CellTemplate, tableCell.gameObject, Data[idx]);
             tableCell.SetupPostParse();
             return tableCell;
         }
 
         public float CellSize(int idx)
         {
-            return cellSize;
+            return CellSizeValue;
         }
 
         public int NumberOfCells()
         {
-            return data.Count;
+            return Data.Count;
         }
     }
 
     public class CustomCellTableCell : TableCell
     {
-        public BSMLParserParams parserParams;
-        public List<GameObject> selectedTags;
-        public List<GameObject> hoveredTags;
-        public List<GameObject> neitherTags;
+        public BSMLParserParams ParserParams;
+        public List<GameObject> SelectedTags;
+        public List<GameObject> HoveredTags;
+        public List<GameObject> NeitherTags;
 
         public virtual void RefreshVisuals()
         {
-            foreach (GameObject gameObject in selectedTags)
+            foreach (GameObject gameObject in SelectedTags)
             {
                 gameObject.SetActive(selected);
             }
 
-            foreach (GameObject gameObject in hoveredTags)
+            foreach (GameObject gameObject in HoveredTags)
             {
                 gameObject.SetActive(highlighted);
             }
 
-            foreach (GameObject gameObject in neitherTags)
+            foreach (GameObject gameObject in NeitherTags)
             {
                 gameObject.SetActive(!(selected || highlighted));
             }
 
-            if (parserParams.actions.TryGetValue("refresh-visuals", out BSMLAction action))
+            if (ParserParams.Actions.TryGetValue("refresh-visuals", out BSMLAction action))
             {
                 action.Invoke(selected, highlighted);
             }
@@ -75,9 +75,9 @@ namespace BeatSaberMarkupLanguage.Components
 
         internal void SetupPostParse()
         {
-            selectedTags = parserParams.GetObjectsWithTag("selected");
-            hoveredTags = parserParams.GetObjectsWithTag("hovered");
-            neitherTags = parserParams.GetObjectsWithTag("un-selected-un-hovered");
+            SelectedTags = ParserParams.GetObjectsWithTag("selected");
+            HoveredTags = ParserParams.GetObjectsWithTag("hovered");
+            NeitherTags = ParserParams.GetObjectsWithTag("un-selected-un-hovered");
         }
 
         protected override void SelectionDidChange(TransitionType transitionType)

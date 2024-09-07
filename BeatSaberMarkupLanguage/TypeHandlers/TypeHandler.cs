@@ -38,14 +38,14 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 
         public override void HandleType(ComponentTypeWithData componentType, BSMLParserParams parserParams)
         {
-            if (componentType.component is not T obj)
+            if (componentType.Component is not T obj)
             {
                 return;
             }
 
             NotifyUpdater updater = null;
 
-            foreach (KeyValuePair<string, string> pair in componentType.data)
+            foreach (KeyValuePair<string, string> pair in componentType.Data)
             {
                 if (!CachedSetters.TryGetValue(pair.Key, out Action<T, string> action))
                 {
@@ -61,7 +61,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
                     throw new TypeHandlerException(this, pair.Key, ex);
                 }
 
-                if (componentType.valueMap.TryGetValue(pair.Key, out BSMLValue value))
+                if (componentType.ValueMap.TryGetValue(pair.Key, out BSMLValue value))
                 {
                     updater = BindValue(componentType, parserParams, value, val => action.Invoke(obj, val.InvariantToString()), updater);
                 }
@@ -72,9 +72,9 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
         {
             NotifyUpdater updater = null;
 
-            if (parserParams.host is System.ComponentModel.INotifyPropertyChanged notifyHost && !componentType.component.gameObject.TryGetComponent(out updater))
+            if (parserParams.Host is System.ComponentModel.INotifyPropertyChanged notifyHost && !componentType.Component.gameObject.TryGetComponent(out updater))
             {
-                updater = componentType.component.gameObject.AddComponent<NotifyUpdater>();
+                updater = componentType.Component.gameObject.AddComponent<NotifyUpdater>();
                 updater.NotifyHost = notifyHost;
             }
 
@@ -104,11 +104,11 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
 
     public class ComponentHandler : Attribute
     {
-        public Type type;
+        public Type Type;
 
         public ComponentHandler(Type type)
         {
-            this.type = type;
+            this.Type = type;
         }
     }
 }

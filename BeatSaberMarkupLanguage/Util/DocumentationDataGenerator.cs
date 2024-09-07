@@ -19,7 +19,7 @@ namespace BeatSaberMarkupLanguage.Util
 
         internal DocumentationDataGenerator(IEnumerable<Type> typeHandlers)
         {
-            this.typeHandlerTypes = typeHandlers.Select(t => t.GetCustomAttribute<ComponentHandler>(true).type).OrderBy(t => t.Name).ToList();
+            this.typeHandlerTypes = typeHandlers.Select(t => t.GetCustomAttribute<ComponentHandler>(true).Type).OrderBy(t => t.Name).ToList();
         }
 
         internal void Generate()
@@ -106,7 +106,7 @@ namespace BeatSaberMarkupLanguage.Util
 
             foreach (TypeHandler typeHandler in Utilities.GetInstancesOfDescendants<TypeHandler>().ToList())
             {
-                string typeName = typeHandler.GetType().GetCustomAttribute<ComponentHandler>().type.Name;
+                string typeName = typeHandler.GetType().GetCustomAttribute<ComponentHandler>().Type.Name;
                 TypeHandlerDefinition def = typeHandlers.FirstOrDefault(thd => thd.Type == typeName);
 
                 if (def == null)

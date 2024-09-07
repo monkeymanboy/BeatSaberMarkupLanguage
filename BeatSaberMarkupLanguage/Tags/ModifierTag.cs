@@ -40,14 +40,14 @@ namespace BeatSaberMarkupLanguage.Tags
             LocalizedTextMeshProUGUI localizedText = CreateLocalizableText(nameText);
             localizedText.maintainTextAlignment = true;
 
-            List<Component> externalComponents = gameObject.AddComponent<ExternalComponents>().components;
+            List<Component> externalComponents = gameObject.AddComponent<ExternalComponents>().Components;
             externalComponents.Add(text);
             externalComponents.Add(localizedText);
             externalComponents.Add(gameObject.transform.Find("Icon").GetComponent<Image>());
 
             ToggleSetting toggleSetting = gameObject.AddComponent<ToggleSetting>();
-            toggleSetting.toggle = gameObject.GetComponent<Toggle>();
-            toggleSetting.toggle.onValueChanged.RemoveAllListeners();
+            toggleSetting.Toggle = gameObject.GetComponent<Toggle>();
+            toggleSetting.Toggle.onValueChanged.RemoveAllListeners();
 
             gameObject.SetActive(true);
 

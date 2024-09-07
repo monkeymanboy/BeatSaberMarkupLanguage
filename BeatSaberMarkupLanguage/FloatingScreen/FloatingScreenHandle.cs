@@ -13,23 +13,23 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
 
         private static Shader shader;
 
-        private FloatingScreen _floatingScreen;
-        private Material _material;
-        private VRController _grabbingController;
-        private Vector3 _grabPos;
-        private Quaternion _grabRot;
+        private FloatingScreen floatingScreen;
+        private Material material;
+        private VRController grabbingController;
+        private Vector3 grabPos;
+        private Quaternion grabRot;
 
-        private bool _isHovering;
+        private bool isHovering;
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            _isHovering = true;
+            isHovering = true;
             UpdateMaterial();
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            _isHovering = false;
+            isHovering = false;
             UpdateMaterial();
         }
 
@@ -49,10 +49,10 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
 
             VRPointer vrPointer = vrInputModule._vrPointer;
             VRController vrController = vrPointer.lastSelectedVrController;
-            _grabbingController = vrController;
-            _grabPos = vrController.transform.InverseTransformPoint(_floatingScreen.transform.position);
-            _grabRot = Quaternion.Inverse(vrController.transform.rotation) * _floatingScreen.transform.rotation;
-            _floatingScreen.OnHandleGrab(vrPointer);
+            grabbingController = vrController;
+            grabPos = vrController.transform.InverseTransformPoint(floatingScreen.transform.position);
+            grabRot = Quaternion.Inverse(vrController.transform.rotation) * floatingScreen.transform.rotation;
+            floatingScreen.OnHandleGrab(vrPointer);
 
             UpdateMaterial();
         }
@@ -64,15 +64,15 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
                 return;
             }
 
-            _grabbingController = null;
-            _floatingScreen.OnHandleReleased(vrInputModule._vrPointer);
+            grabbingController = null;
+            floatingScreen.OnHandleReleased(vrInputModule._vrPointer);
 
             UpdateMaterial();
         }
 
         internal void Init(FloatingScreen floatingScreen)
         {
-            _floatingScreen = floatingScreen;
+            this.floatingScreen = floatingScreen;
         }
 
         private void Awake()
@@ -82,37 +82,37 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
                 shader = Resources.FindObjectsOfTypeAll<Shader>().First(s => s.name == "Custom/Glowing");
             }
 
-            _material = GetComponent<MeshRenderer>().material;
-            _material.shader = shader;
-            _material.SetColor(ColorId, DefaultColor);
+            material = GetComponent<MeshRenderer>().material;
+            material.shader = shader;
+            material.SetColor(ColorId, DefaultColor);
         }
 
         private void Update()
         {
-            if (_grabbingController == null)
+            if (grabbingController == null)
             {
                 return;
             }
 
-            _grabPos -= Vector3.forward * (_grabbingController.thumbstick.y * Time.unscaledDeltaTime);
+            grabPos -= Vector3.forward * (grabbingController.thumbstick.y * Time.unscaledDeltaTime);
 
-            Vector3 targetPosition = _grabbingController.transform.TransformPoint(_grabPos);
-            Quaternion targetRotation = _grabbingController.transform.rotation * _grabRot;
+            Vector3 targetPosition = grabbingController.transform.TransformPoint(grabPos);
+            Quaternion targetRotation = grabbingController.transform.rotation * grabRot;
 
-            _floatingScreen.transform.SetPositionAndRotation(
-                Vector3.Lerp(_floatingScreen.transform.position, targetPosition, 10 * Time.unscaledDeltaTime),
-                Quaternion.Slerp(_floatingScreen.transform.rotation, targetRotation, 5 * Time.unscaledDeltaTime));
+            floatingScreen.transform.SetPositionAndRotation(
+                Vector3.Lerp(floatingScreen.transform.position, targetPosition, 10 * Time.unscaledDeltaTime),
+                Quaternion.Slerp(floatingScreen.transform.rotation, targetRotation, 5 * Time.unscaledDeltaTime));
         }
 
         private void UpdateMaterial()
         {
-            if (_floatingScreen.HighlightHandle && (_isHovering || _grabbingController != null))
+            if (floatingScreen.HighlightHandle && (isHovering || grabbingController != null))
             {
-                _material.SetColor(ColorId, HoverColor);
+                material.SetColor(ColorId, HoverColor);
             }
             else
             {
-                _material.SetColor(ColorId, DefaultColor);
+                material.SetColor(ColorId, DefaultColor);
             }
         }
     }

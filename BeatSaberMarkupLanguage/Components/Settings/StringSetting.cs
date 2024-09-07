@@ -6,22 +6,22 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 {
     public class StringSetting : GenericInteractableSetting
     {
-        public TextMeshProUGUI text;
-        public Button editButton;
+        public TextMeshProUGUI TextMesh;
+        public Button EditButton;
 
-        public RectTransform boundingBox;
-        public ModalKeyboard modalKeyboard;
+        public RectTransform BoundingBox;
+        public ModalKeyboard ModalKeyboard;
 
         private string currentValue;
 
-        public override bool interactable
+        public override bool Interactable
         {
-            get => editButton != null && editButton.interactable;
+            get => EditButton != null && EditButton.interactable;
             set
             {
-                if (editButton != null)
+                if (EditButton != null)
                 {
-                    editButton.interactable = value;
+                    EditButton.interactable = value;
                 }
             }
         }
@@ -32,27 +32,27 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             set
             {
                 currentValue = value;
-                text.text = formatter == null ? value : formatter.Invoke(value) as string;
+                TextMesh.text = Formatter == null ? value : Formatter.Invoke(value) as string;
             }
         }
 
         public override void Setup()
         {
-            modalKeyboard.clearOnOpen = false;
+            ModalKeyboard.ClearOnOpen = false;
             ReceiveValue();
         }
 
         public void EditButtonPressed()
         {
-            modalKeyboard.modalView.Show(true, true);
-            modalKeyboard.SetText(Text);
+            ModalKeyboard.ModalView.Show(true, true);
+            ModalKeyboard.SetText(Text);
         }
 
         public void EnterPressed(string text)
         {
             Text = text;
-            onChange?.Invoke(Text);
-            if (updateOnChange)
+            OnChange?.Invoke(Text);
+            if (UpdateOnChange)
             {
                 ApplyValue();
             }
@@ -60,27 +60,27 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 
         public override void ApplyValue()
         {
-            associatedValue?.SetValue(Text);
+            AssociatedValue?.SetValue(Text);
         }
 
         public override void ReceiveValue()
         {
-            if (associatedValue != null)
+            if (AssociatedValue != null)
             {
-                Text = (string)associatedValue.GetValue();
+                Text = (string)AssociatedValue.GetValue();
             }
         }
 
         protected virtual void OnEnable()
         {
-            editButton.onClick.AddListener(EditButtonPressed);
-            modalKeyboard.keyboard.EnterPressed += EnterPressed;
+            EditButton.onClick.AddListener(EditButtonPressed);
+            ModalKeyboard.Keyboard.EnterPressed += EnterPressed;
         }
 
         protected void OnDisable()
         {
-            editButton.onClick.RemoveListener(EditButtonPressed);
-            modalKeyboard.keyboard.EnterPressed -= EnterPressed;
+            EditButton.onClick.RemoveListener(EditButtonPressed);
+            ModalKeyboard.Keyboard.EnterPressed -= EnterPressed;
         }
     }
 }

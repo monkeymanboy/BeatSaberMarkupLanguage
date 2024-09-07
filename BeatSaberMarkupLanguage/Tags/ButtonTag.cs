@@ -32,12 +32,12 @@ namespace BeatSaberMarkupLanguage.Tags
             GameObject textObject = button.transform.Find("Content/Text").gameObject;
 
             LocalizedTextMeshProUGUI localizedText = ConfigureLocalizedText(textObject);
-            externalComponents.components.Add(localizedText);
+            externalComponents.Components.Add(localizedText);
 
             TextMeshProUGUI textMesh = textObject.GetComponent<TextMeshProUGUI>();
             textMesh.text = "Default Text";
             textMesh.richText = true;
-            externalComponents.components.Add(textMesh);
+            externalComponents.Components.Add(textMesh);
 
             Object.Destroy(button.transform.Find("Content").GetComponent<LayoutElement>());
 
@@ -48,7 +48,7 @@ namespace BeatSaberMarkupLanguage.Tags
             LayoutGroup stackLayoutGroup = button.GetComponentInChildren<LayoutGroup>();
             if (stackLayoutGroup != null)
             {
-                externalComponents.components.Add(stackLayoutGroup);
+                externalComponents.Components.Add(stackLayoutGroup);
             }
 
             return gameObject;

@@ -16,7 +16,7 @@ namespace BeatSaberMarkupLanguage.Attributes
         OptIn = 1,
 
         /// <summary>
-        /// Fields marked with <see cref="UIValue"/> can be accessed by both the <see cref="UIValue.id"/> and their field name.
+        /// Fields marked with <see cref="UIValue"/> can be accessed by both the <see cref="UIValue.Id"/> and their field name.
         /// </summary>
         AllowBoth = 2,
     }
@@ -35,7 +35,7 @@ namespace BeatSaberMarkupLanguage.Attributes
         OptIn = 1,
 
         /// <summary>
-        /// Properties marked with <see cref="UIValue"/> can be accessed by both the <see cref="UIValue.id"/> and their property name.
+        /// Properties marked with <see cref="UIValue"/> can be accessed by both the <see cref="UIValue.Id"/> and their property name.
         /// </summary>
         AllowBoth = 2,
     }
@@ -54,7 +54,7 @@ namespace BeatSaberMarkupLanguage.Attributes
         OptIn = 1,
 
         /// <summary>
-        /// Methods marked with <see cref="UIAction"/> can be accessed by both the <see cref="UIAction.id"/> and their method name.
+        /// Methods marked with <see cref="UIAction"/> can be accessed by both the <see cref="UIAction.Id"/> and their method name.
         /// </summary>
         AllowBoth = 2,
     }
