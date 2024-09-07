@@ -52,14 +52,6 @@ namespace BeatSaberMarkupLanguage
         {
             foreach (BSMLTag tag in tags.Values.Distinct())
             {
-#pragma warning disable CS0612, CS0618
-                if (!tag.IsInitialized)
-                {
-                    tag.Setup();
-                    tag.IsInitialized = true;
-                }
-#pragma warning restore CS0612, CS0618
-
                 tag.Initialize();
             }
 

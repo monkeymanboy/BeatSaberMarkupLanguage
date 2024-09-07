@@ -39,9 +39,6 @@ namespace BeatSaberMarkupLanguage.Util
 
             foreach (BSMLTag tag in Utilities.GetInstancesOfDescendants<BSMLTag>())
             {
-#pragma warning disable CS0618
-                tag.Setup();
-#pragma warning restore CS0618
                 tag.Initialize();
 
                 GameObject currentNode = tag.CreateObject(dummy.transform);
