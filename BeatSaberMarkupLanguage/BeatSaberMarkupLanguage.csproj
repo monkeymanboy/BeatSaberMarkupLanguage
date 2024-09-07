@@ -7,12 +7,37 @@
     <RootNamespace>BeatSaberMarkupLanguage</RootNamespace>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
+  
+  <PropertyGroup>
+    <PackageId>BeatSaberMarkupLanguage</PackageId>
+    <Title>BeatSaberMarkupLanguage</Title>
+    <Authors>monkeymanboy</Authors>
+    <PluginIcon>BeatSaberMarkupLanguage.Resources.icon.png</PluginIcon>
+    <Copyright>Copyright © monkeymanboy 2019-2024</Copyright>
+    <Description>An XML-based UI system.</Description>
+    <GameVersion>1.37.4</GameVersion>
+    <Version>1.11.5</Version>
+    <RepositoryUrl>https://github.com/monkeymanboy/BeatSaberMarkupLanguage</RepositoryUrl>
+    <PluginFeatures>
+      {
+        "SiraLocalizer.LocalizedPlugin": {
+          "id": "beat-saber-markup-language",
+          "resourcePath": "BeatSaberMarkupLanguage.Resources.beat-saber-markup-language.csv"
+        }
+      }
+    </PluginFeatures>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <DependsOn Include="BSIPA" Version="^4.3.0" />
+  </ItemGroup>
 
   <PropertyGroup Condition="'$(CI)' != ''">
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
   <ItemGroup>
+    <Reference Include="System.Drawing" />
     <Reference Include="0Harmony">
       <HintPath>$(BeatSaberDir)\Libs\0Harmony.dll</HintPath>
       <Private>False</Private>
@@ -50,10 +75,6 @@
     </Reference>
     <Reference Include="Interactable">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\Interactable.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="IPA.Loader">
-      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\IPA.Loader.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Main">
@@ -181,23 +202,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.CodeStyle" Version="4.8.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.Unity.Analyzers" Version="1.19.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.556">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
     <PackageReference Include="YamlDotNet" Version="15.1.2" Condition="'$(Configuration)' == 'Debug'" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <AdditionalFiles Include="stylecop.json" />
   </ItemGroup>
 
   <ItemGroup>

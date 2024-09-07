@@ -4,24 +4,23 @@ on:
   push:
     paths:
     - .github/workflows/build.yml
-    - .github/workflows/set_up_env.ps1
     - BeatSaberMarkupLanguage/**
     - BeatSaberMarkupLanguage.sln
   pull_request:
 
 jobs:
   build:
-    name: Build
+    name: BeatSaberMarkupLanguage
     runs-on: windows-latest
     steps:
     - name: Check out
       uses: actions/checkout@v4
 
     - name: Set up Beat Saber
-      uses: nicoco007/setup-beat-saber@main
+      uses: nicoco007/setup-beat-saber@v1
       with:
         access-token: ${{ secrets.BEAT_SABER_BINDINGS_TOKEN }}
-        manifest: ${{ github.workspace }}\BeatSaberMarkupLanguage\manifest.json
+        project-path: ${{ github.workspace }}\BeatSaberMarkupLanguage\BeatSaberMarkupLanguage.csproj
 
     - name: Add NuGet source
       run: dotnet nuget update source "nicoco007 GH Packages" --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text
