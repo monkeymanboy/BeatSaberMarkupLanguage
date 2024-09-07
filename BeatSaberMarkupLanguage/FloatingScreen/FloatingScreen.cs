@@ -98,7 +98,7 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
 
         public bool ShowHandle
         {
-            get => Handle != null ? Handle.activeInHierarchy : false;
+            get => Handle != null && Handle.activeInHierarchy;
             set
             {
                 if (Handle == null)

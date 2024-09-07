@@ -88,8 +88,8 @@ dotnet_style_prefer_inferred_tuple_names = true:warning
 dotnet_diagnostic.IDE0041.severity = warning
 dotnet_style_prefer_is_null_check_over_reference_equality_method = true:warning
 
-dotnet_diagnostic.IDE0075.severity = warning
-dotnet_style_prefer_simplified_boolean_expressions = true:warning
+dotnet_diagnostic.IDE0075.severity = suggestion
+dotnet_style_prefer_simplified_boolean_expressions = true:suggestion
 
 dotnet_diagnostic.IDE0071.severity = warning
 dotnet_style_prefer_simplified_interpolation = true
