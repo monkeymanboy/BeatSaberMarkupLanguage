@@ -272,6 +272,8 @@ namespace BeatSaberMarkupLanguage
                 throw new ArgumentNullException(nameof(stream));
             }
 
+            EnsureRunningOnMainThread();
+
             (int width, int height, byte[] data) = await Task.Factory.StartNew(
                 () =>
                 {
