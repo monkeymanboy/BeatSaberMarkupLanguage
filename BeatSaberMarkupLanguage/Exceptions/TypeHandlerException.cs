@@ -2,7 +2,7 @@
 using System.Reflection;
 using BeatSaberMarkupLanguage.TypeHandlers;
 
-namespace BeatSaberMarkupLanguage.Exceptions
+namespace BeatSaberMarkupLanguage
 {
     public class TypeHandlerException : BSMLException
     {

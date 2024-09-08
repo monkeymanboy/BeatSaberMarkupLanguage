@@ -6,7 +6,6 @@ using System.Xml;
 using System.Xml.Linq;
 using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components;
-using BeatSaberMarkupLanguage.Exceptions;
 using BeatSaberMarkupLanguage.Macros;
 using BeatSaberMarkupLanguage.Parser;
 using BeatSaberMarkupLanguage.Tags;

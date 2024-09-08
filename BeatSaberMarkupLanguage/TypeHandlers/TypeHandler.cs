@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using BeatSaberMarkupLanguage.Components;
-using BeatSaberMarkupLanguage.Exceptions;
 using BeatSaberMarkupLanguage.Parser;
 using UnityEngine;
 using static BeatSaberMarkupLanguage.BSMLParser;

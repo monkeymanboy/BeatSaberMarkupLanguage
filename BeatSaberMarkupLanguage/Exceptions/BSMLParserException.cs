@@ -2,7 +2,7 @@
 using System.Xml;
 using System.Xml.Linq;
 
-namespace BeatSaberMarkupLanguage.Exceptions
+namespace BeatSaberMarkupLanguage
 {
     public class BSMLParserException : BSMLException
     {
