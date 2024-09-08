@@ -8,7 +8,6 @@ using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using IPA.Utilities;
-using IPA.Utilities.Async;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
@@ -346,40 +345,6 @@ namespace BeatSaberMarkupLanguage
         public static T? AsNullable<T>(this T item)
             where T : struct
             => item;
-
-        /// <summary>
-        /// Get data from either a resource path, a file path, or a url.
-        /// </summary>
-        /// <param name="location">Resource path, file path, or url. May need to prefix resource paths with 'AssemblyName:'.</param>
-        /// <param name="callback">Received data.</param>
-        [Obsolete]
-        public static void GetData(string location, Action<byte[]> callback)
-        {
-            try
-            {
-                if (location.StartsWith("http://", StringComparison.OrdinalIgnoreCase) || location.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
-                {
-                    UnityMainThreadTaskScheduler.Factory.StartNew(async () =>
-                    {
-                        byte[] data = await GetWebDataAsync(location);
-                        callback?.Invoke(data);
-                    });
-                }
-                else if (File.Exists(location))
-                {
-                    callback?.Invoke(File.ReadAllBytes(location));
-                }
-                else
-                {
-                    AssemblyFromPath(location, out Assembly asm, out string newPath);
-                    callback?.Invoke(GetResource(asm, newPath));
-                }
-            }
-            catch
-            {
-                Logger.Log.Error($"Error getting data from '{location}'; either the path is invalid or the file does not exist");
-            }
-        }
 
         internal static void EnsureRunningOnMainThread()
         {
