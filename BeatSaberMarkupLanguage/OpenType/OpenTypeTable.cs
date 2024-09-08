@@ -4,12 +4,12 @@ using System.Text;
 
 namespace BeatSaberMarkupLanguage.OpenType
 {
-    public abstract class OpenTypeTable
+    internal abstract class OpenTypeTable
     {
         public abstract void ReadFrom(OpenTypeReader reader, uint length);
     }
 
-    public class OpenTypeNameTable : OpenTypeTable
+    internal class OpenTypeNameTable : OpenTypeTable
     {
         public enum FormatEnum : ushort
         {
@@ -114,7 +114,7 @@ namespace BeatSaberMarkupLanguage.OpenType
             return list;
         }
 
-        public class NameRecord
+        internal class NameRecord
         {
             public const uint Size = 12;
             public const ushort USEnglishLangID = 0x0409;
@@ -177,7 +177,7 @@ namespace BeatSaberMarkupLanguage.OpenType
             public string Value { get; set; }
         }
 
-        public class LangTagRecord
+        internal class LangTagRecord
         {
             public const uint Size = 4;
 

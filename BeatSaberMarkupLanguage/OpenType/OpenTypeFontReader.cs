@@ -4,7 +4,7 @@ using System.Text;
 namespace BeatSaberMarkupLanguage.OpenType
 {
     // TODO: this shit is a mess, clean it up
-    public class OpenTypeFontReader : OpenTypeReader
+    internal class OpenTypeFontReader : OpenTypeReader
     {
         public OpenTypeFontReader(Stream input)
             : base(input)

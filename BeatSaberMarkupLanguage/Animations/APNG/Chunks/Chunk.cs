@@ -7,7 +7,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG.Chunks
     /// <summary>
     /// Base PNG Chunk object.
     /// </summary>
-    public class Chunk
+    internal class Chunk
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Chunk"/> class.

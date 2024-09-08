@@ -9,7 +9,7 @@ namespace BeatSaberMarkupLanguage.Animations.APNG
     /// <summary>
     /// Animated PNG class.
     /// </summary>
-    public class APNG : IAnimatedImage
+    internal class APNG : IAnimatedImage
     {
         private readonly List<Frame> frames = new();
         private MemoryStream ms;

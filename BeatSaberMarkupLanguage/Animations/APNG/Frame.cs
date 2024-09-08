@@ -10,7 +10,7 @@ namespace BeatSaberMarkupLanguage.Animations
     /// <summary>
     ///     Describe a single frame.
     /// </summary>
-    public class Frame
+    internal class Frame
     {
         /// <summary>
         /// The chunk signature.
@@ -18,7 +18,7 @@ namespace BeatSaberMarkupLanguage.Animations
         public static readonly byte[] Signature = [0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A];
 
         /// <summary>
-        /// Gets the frame rate.
+        /// Gets or sets the frame rate.
         /// </summary>
         /// <value>The frame rate in milliseconds.</value>
         /// <remarks>Should not be less than 10 ms or animation will not occur.</remarks>

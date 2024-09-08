@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace BeatSaberMarkupLanguage.OpenType
 {
-    public class OpenTypeCollection : IEnumerable<OpenTypeFont>, IDisposable
+    internal class OpenTypeCollection : IEnumerable<OpenTypeFont>, IDisposable
     {
         private readonly CollectionHeader header;
         private readonly bool lazy;

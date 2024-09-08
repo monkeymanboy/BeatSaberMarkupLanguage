@@ -2,7 +2,7 @@
 
 namespace BeatSaberMarkupLanguage.ViewControllers
 {
-    public class LocalizationTestViewController : BSMLResourceViewController
+    internal class LocalizationTestViewController : BSMLResourceViewController
     {
         [UIValue("contents")]
         public string[] Contents = new[] { "one", "two", "three" };

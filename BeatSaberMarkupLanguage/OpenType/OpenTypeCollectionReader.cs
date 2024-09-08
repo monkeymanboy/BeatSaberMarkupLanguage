@@ -3,7 +3,7 @@ using System.Text;
 
 namespace BeatSaberMarkupLanguage.OpenType
 {
-    public class OpenTypeCollectionReader : OpenTypeFontReader
+    internal class OpenTypeCollectionReader : OpenTypeFontReader
     {
         public OpenTypeCollectionReader(Stream input)
             : base(input)

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.Settings
 {
-    public class SettingsTest : NotifiableBase
+    internal class SettingsTest : NotifiableBase
     {
         [UIParams]
         private BSMLParserParams parserParams;

@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace BeatSaberMarkupLanguage.OpenType
 {
-    public class OpenTypeFont : IDisposable
+    internal class OpenTypeFont : IDisposable
     {
         private readonly OffsetTable offsetTable;
 
