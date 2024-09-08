@@ -57,13 +57,13 @@ public class UIAttributeSuppressor : DiagnosticSuppressor
     /// <inheritdoc />
     public override void ReportSuppressions(SuppressionAnalysisContext context)
     {
-        foreach (var diagnostic in context.ReportedDiagnostics)
+        foreach (Diagnostic diagnostic in context.ReportedDiagnostics)
         {
             this.AnalyzeDiagnosticField(diagnostic, context);
         }
     }
 
-    private static bool IsSuppressable(ISymbol fieldSymbol)
+    private static bool IsSuppressible(ISymbol fieldSymbol)
     {
         if (fieldSymbol.GetAttributes().Any(a => a.AttributeClass != null && a.AttributeClass.Matches(typeof(UIAction), typeof(UIComponent), typeof(UIObject), typeof(UIParams), typeof(UIValue))))
         {
@@ -75,26 +75,26 @@ public class UIAttributeSuppressor : DiagnosticSuppressor
 
     private void AnalyzeDiagnosticField(Diagnostic diagnostic, SuppressionAnalysisContext context)
     {
-        var fieldDeclarationSyntax = context.GetSuppressibleNode<SyntaxNode>(diagnostic, n => n is VariableDeclaratorSyntax or MethodDeclarationSyntax or PropertyDeclarationSyntax);
-        if (fieldDeclarationSyntax == null)
+        SyntaxNode? syntaxNode = context.GetSuppressibleNode<SyntaxNode>(diagnostic, n => n is VariableDeclaratorSyntax or MethodDeclarationSyntax or PropertyDeclarationSyntax);
+        if (syntaxNode == null)
         {
             return;
         }
 
-        var syntaxTree = diagnostic.Location.SourceTree;
+        SyntaxTree? syntaxTree = diagnostic.Location.SourceTree;
         if (syntaxTree == null)
         {
             return;
         }
 
-        var model = context.GetSemanticModel(syntaxTree);
-        var declaredSymbol = model.GetDeclaredSymbol(fieldDeclarationSyntax)!;
-        if (!IsSuppressable(declaredSymbol))
+        SemanticModel model = context.GetSemanticModel(syntaxTree);
+        ISymbol? declaredSymbol = model.GetDeclaredSymbol(syntaxNode)!;
+        if (!IsSuppressible(declaredSymbol))
         {
             return;
         }
 
-        foreach (var descriptor in this.SupportedSuppressions.Where(d => d.SuppressedDiagnosticId == diagnostic.Id))
+        foreach (SuppressionDescriptor descriptor in this.SupportedSuppressions.Where(d => d.SuppressedDiagnosticId == diagnostic.Id))
         {
             context.ReportSuppression(Suppression.Create(descriptor, diagnostic));
         }
