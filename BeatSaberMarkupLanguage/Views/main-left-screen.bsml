@@ -1,26 +1,22 @@
 <bg id='root-object'
-    size-delta-x='-50'
-    anchor-pos-x='-10'
     xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
-    xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://monkeymanboy.github.io/BSML-Docs/BSMLSchema.xsd'>
-  <vertical child-control-height='false'>
-    <horizontal bg='panel-top' pad-left='10' pad-right='10' horizontal-fit='PreferredSize'>
-      <text text-key='BSML_MODS_PANE_TITLE' align='Center' font-size='10' />
-    </horizontal>
-    <macro.if value='any-buttons'>
-      <horizontal>
-        <scroll-view pref-width='143' pref-height='59' child-control-height='true' child-control-width='false'>
-          <grid horizontal-fit='Unconstrained' size-delta-x='124' cell-size='40 9' spacing='2 2'>
-            <macro.for-each items='buttons'>
-              <button id='menu-button' pref-width='40' pref-height='9' text='~text' hover-hint='~hover-hint' interactable='~interactable' on-click='button-click' pad='0' enable-auto-sizing='true' font-size-min='2' font-size-max='4' />
-            </macro.for-each>
-          </grid>
-        </scroll-view>
-      </horizontal>
-    </macro.if>
-  </vertical>
+    xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://monkeymanboy.github.io/BSML-Docs/BSMLSchema.xsd'
+    size-delta-x='14'> <!-- size-delta-x is 124 (grid view width) + 8 (scroll view indicator width) - 120 (default view controller width) + 2 (padding because button skew causes a bit of overflow) -->
+  <bg background="title-gradient" size-delta="90 8" anchor-min="0.5 1" anchor-max="0.5 1" background-color="#FFF3" background-color0="#FFF0" background-color1="#FFFF" pivot="0.5 1">
+    <text text-key="BSML_MODS_PANE_TITLE" anchor-min="0 0" anchor-max="1 1" size-delta="0 0" font-size="6" italics="true" all-uppercase="true" align="Midline" />
+  </bg>
+  <macro.if value='any-buttons'>
+    <scroll-view child-control-height='true' child-control-width='false' anchored-position-y='-4' size-delta-y='-8'>
+      <!-- size delta x is 3 * 40 (cell size) + 2 * 2 (spacing) -->
+      <grid horizontal-fit='Unconstrained' size-delta-x='124' cell-size='40 9' spacing='2 2'>
+        <macro.for-each items='buttons'>
+          <button id='menu-button' pref-width='40' pref-height='9' text='~text' hover-hint='~hover-hint' interactable='~interactable' on-click='button-click' pad='0' enable-auto-sizing='true' font-size-min='2' font-size-max='4' />
+        </macro.for-each>
+      </grid>
+    </scroll-view>
+  </macro.if>
   <macro.if value='!any-buttons'>
-    <text anchor-pos-y='6' size-delta-x='82' text-key='BSML_NO_MODS' font-align='Center' font-size='5'/>
+    <text anchor-pos-y='6' size-delta-x='82' text-key='BSML_NO_MODS' font-align='Center' font-size='5' italics='true' />
   </macro.if>
   <!--<modal show-event='show-pins' hide-event='close-modals' size-delta-x='35' size-delta-y='65' click-off-closes='true'>
     <vertical>
