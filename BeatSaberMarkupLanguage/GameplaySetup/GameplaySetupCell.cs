@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using BeatSaberMarkupLanguage.Attributes;
 using HMUI;
 
@@ -8,6 +9,7 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
     {
         private GameplaySetupMenu tab;
 
+        /// <inheritdoc />
         public event PropertyChangedEventHandler PropertyChanged;
 
         [UIValue("tab-name")]
@@ -22,17 +24,24 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
                 if (tab != null)
                 {
                     tab.Visible = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Visible)));
+                    NotifyPropertyChanged();
                 }
             }
         }
 
-        public GameplaySetupCell PopulateCell(GameplaySetupMenu tab)
+        internal GameplaySetupCell PopulateCell(GameplaySetupMenu tab)
         {
             this.tab = tab;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Name)));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Visible)));
+
+            NotifyPropertyChanged(nameof(Name));
+            NotifyPropertyChanged(nameof(Visible));
+
             return this;
+        }
+
+        protected void NotifyPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

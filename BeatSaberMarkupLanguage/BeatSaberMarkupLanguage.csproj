@@ -60,6 +60,10 @@
       <Private>False</Private>
       <Publicize>True</Publicize>
     </Reference>
+    <Reference Include="BGLib.UnityExtension">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\BGLib.UnityExtension.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="GameInit">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\GameInit.dll</HintPath>
       <Private>False</Private>

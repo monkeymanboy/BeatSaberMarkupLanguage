@@ -1,13 +1,13 @@
 ﻿<bg id='root-object'
     xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
     xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://monkeymanboy.github.io/BSML-Docs/BSMLSchema.xsd'
-    anchored-position-y='-4'
-    size-delta-y='-8'>
-  <tab-selector id='new-tab-selector' tab-tag='new-tab' anchor-pos-y='8' size-delta='-20 6' child-expand-width='true' child-control-width='true' />
+    anchored-position-y='~anchored-position'
+    size-delta-y='~size-delta'>
+  <tab-selector id='new-tab-selector' tab-tag='new-tab' anchor-pos-y='8' size-delta='-20 6' child-expand-width='true' child-control-width='true' active='~has-menus' />
   <tab id='vanilla-tab' tags='new-tab' tab-name-key='BSML_GAMEPLAY_SETUP_BASE_GAME_TAB'>
     <macro.reparent transforms='vanilla-items'/>
   </tab>
-  <tab id='mods-tab' tags='new-tab' tab-name-key='BSML_GAMEPLAY_SETUP_MODS_TAB' anchored-position-y='-5' size-delta-y='-10'>
+  <tab id='mods-tab' tags='new-tab' tab-name-key='BSML_GAMEPLAY_SETUP_MODS_TAB' anchored-position-y='-5' size-delta-y='-10' active='~has-menus'>
     <horizontal vertical-fit='Unconstrained' child-expand-width='false' anchor-min='0 1' anchor-max='1 1' anchored-position='0 10' pivot='0.5 1' size-delta='-6 6' spacing='1'>
       <page-button direction='Left' pref-width='4' pref-height='4' tags='left-button'/>
       <tab-selector tab-tag='mod-tab' child-expand-width='true' child-control-width='true' page-count='3' left-button-tag='left-button' right-button-tag='right-button' />
@@ -18,8 +18,7 @@
       <tab tags='mod-tab' tab-name='~tab-name' id='root-tab' />
     </macro.for-each>
     <modal id='list-modal' clickerino-offerino-closerino='true' size-delta='65 35'>
-      <loading-indicator active='~is-loading' preserve-aspect='true' />
-      <list id='mods-list' active='~loaded' show-scrollbar='true' size-delta='-10 -4' anchored-position='-3 0' />
+      <list id='mods-list' show-scrollbar='true' size-delta='-10 -4' anchored-position='-3 0' />
     </modal>
   </tab>
 </bg>
