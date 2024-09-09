@@ -66,7 +66,7 @@ namespace BeatSaberMarkupLanguage
 
             Logger.Log.Debug("Waiting for default font presence");
 
-            await MenuInitAwaiter.WaitForMainMenuAsync();
+            await MainMenuAwaiter.WaitForMainMenuAsync();
 
             Logger.Log.Debug("Setting up default font fallbacks");
 

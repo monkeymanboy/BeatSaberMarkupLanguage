@@ -60,7 +60,7 @@ namespace BeatSaberMarkupLanguage.Harmony_Patches
                 container.Bind<TypeHandler>().To(type).AsSingle();
             }
 
-            container.Bind(typeof(IInitializable), typeof(IDisposable)).To<MenuInitAwaiter>().AsSingle();
+            container.Bind(typeof(IInitializable), typeof(IDisposable)).To<MainMenuAwaiter>().AsSingle();
 
 #if DEBUG
             container.Bind(typeof(IInitializable)).To<TestPresenter>().AsSingle();
