@@ -188,6 +188,11 @@ namespace BeatSaberMarkupLanguage.ViewControllers
 
         private void DestroyWatcher()
         {
+            if (Watcher == null)
+            {
+                return;
+            }
+
 #if HRVC_DEBUG
             Logger.Log.Debug($"Destroying FileSystemWatcher for {ContentDirectory}");
 #endif
