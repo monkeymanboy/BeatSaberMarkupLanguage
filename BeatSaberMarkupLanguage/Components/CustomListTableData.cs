@@ -215,11 +215,11 @@ namespace BeatSaberMarkupLanguage.Components
                 this.Icon = icon;
             }
 
-            public string Text { get; }
+            public string Text { get; set; }
 
-            public string Subtext { get; }
+            public string Subtext { get; set; }
 
-            public Sprite Icon { get; }
+            public Sprite Icon { get; set; }
         }
     }
 }
