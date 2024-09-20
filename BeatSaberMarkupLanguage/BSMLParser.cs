@@ -380,6 +380,8 @@ namespace BeatSaberMarkupLanguage
 
             object host = parserParams.Host;
             XAttribute id = element.Attribute("id");
+
+            // TODO: iterating over fields/properties for every tag is very inefficient
             if (host != null && id != null)
             {
                 foreach (FieldInfo fieldInfo in host.GetType().GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public))
@@ -387,6 +389,19 @@ namespace BeatSaberMarkupLanguage
                     if (fieldInfo.GetCustomAttribute<UIComponent>(true)?.Id == id.Value)
                     {
                         fieldInfo.SetValue(host, GetExternalComponent(currentNode, fieldInfo.FieldType));
+                    }
+
+                    if (fieldInfo.GetCustomAttribute<UIObject>(true)?.Id == id.Value)
+                    {
+                        fieldInfo.SetValue(host, currentNode);
+                    }
+                }
+
+                foreach (PropertyInfo fieldInfo in host.GetType().GetProperties(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public))
+                {
+                    if (fieldInfo.GetCustomAttribute<UIComponent>(true)?.Id == id.Value)
+                    {
+                        fieldInfo.SetValue(host, GetExternalComponent(currentNode, fieldInfo.PropertyType));
                     }
 
                     if (fieldInfo.GetCustomAttribute<UIObject>(true)?.Id == id.Value)
