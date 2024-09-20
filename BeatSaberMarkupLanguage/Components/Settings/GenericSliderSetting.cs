@@ -7,23 +7,39 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 {
     public abstract class GenericSliderSetting : GenericInteractableSetting
     {
-        public RangeValuesTextSlider Slider;
-        public bool ShowButtons = false;
+        [SerializeField]
+        private RangeValuesTextSlider slider;
 
-        protected TextMeshProUGUI text;
+        [SerializeField]
+        private bool showButtons = false;
+
+        [SerializeField]
+        private TextMeshProUGUI text;
 
         private Button incButton;
         private Button decButton;
 
+        public RangeValuesTextSlider Slider
+        {
+            get => slider;
+            set => slider = value;
+        }
+
+        public bool ShowButtons
+        {
+            get => showButtons;
+            set => showButtons = value;
+        }
+
         public override bool Interactable
         {
-            get => Slider != null && Slider.interactable;
+            get => slider != null && slider.interactable;
             set
             {
-                if (Slider != null)
+                if (slider != null)
                 {
-                    Slider.interactable = value;
-                    if (ShowButtons)
+                    slider.interactable = value;
+                    if (showButtons)
                     {
                         incButton.interactable = value;
                         decButton.interactable = value;
@@ -32,19 +48,25 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             }
         }
 
+        protected TextMeshProUGUI Text
+        {
+            get => text;
+            set => text = value;
+        }
+
         public override void Setup()
         {
-            incButton = Slider._incButton;
-            decButton = Slider._decButton;
+            incButton = slider._incButton;
+            decButton = slider._decButton;
 
-            if (!ShowButtons)
+            if (!showButtons)
             {
-                Slider.image.sprite = Utilities.FindSpriteCached("RoundRect10");
+                slider.image.sprite = Utilities.FindSpriteCached("RoundRect10");
                 Destroy(incButton.gameObject);
                 Destroy(decButton.gameObject);
-                (Slider.transform.Find("BG") as RectTransform).sizeDelta = new Vector2(0, 6);
-                (Slider.transform as RectTransform).sizeDelta = new Vector2(38, 0);
-                (Slider.transform.Find("SlidingArea") as RectTransform).sizeDelta = new Vector2(-4, -4);
+                (slider.transform.Find("BG") as RectTransform).sizeDelta = new Vector2(0, 6);
+                (slider.transform as RectTransform).sizeDelta = new Vector2(38, 0);
+                (slider.transform.Find("SlidingArea") as RectTransform).sizeDelta = new Vector2(-4, -4);
             }
         }
     }

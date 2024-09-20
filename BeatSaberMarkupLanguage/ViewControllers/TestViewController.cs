@@ -10,12 +10,6 @@ namespace BeatSaberMarkupLanguage.ViewControllers
 {
     internal class TestViewController : BSMLResourceViewController
     {
-        [UIComponent("test-external")]
-        public TextMeshProUGUI ButtonText;
-
-        [UIComponent("list")]
-        public CustomListTableData TableData;
-
         [UIValue("lorem-ipsum")]
         private string loremIpsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Tincidunt augue interdum velit euismod in pellentesque. A iaculis at erat pellentesque adipiscing commodo elit at imperdiet. Ultrices sagittis orci a scelerisque purus semper eget. Semper risus in hendrerit gravida rutrum quisque non tellus orci. Rhoncus mattis rhoncus urna neque. Quisque sagittis purus sit amet. Eleifend quam adipiscing vitae proin. Pharetra et ultrices neque ornare aenean euismod elementum nisi. Quis hendrerit dolor magna eget est lorem ipsum dolor. Venenatis lectus magna fringilla urna porttitor rhoncus dolor purus. Lectus magna fringilla urna porttitor. Mi eget mauris pharetra et ultrices neque ornare aenean. Facilisi etiam dignissim diam quis enim lobortis scelerisque. Morbi tempus iaculis urna id volutpat lacus laoreet non. In hac habitasse platea dictumst quisque sagittis purus sit amet. Ultricies integer quis auctor elit sed vulputate mi. In tellus integer feugiat scelerisque. " +
             "Aliquet nec ullamcorper sit amet risus nullam eget felis eget.Nunc eget lorem dolor sed viverra ipsum nunc aliquet bibendum.Malesuada proin libero nunc consequat interdum varius sit amet mattis. Augue eget arcu dictum varius duis. Tempor nec feugiat nisl pretium fusce id velit ut.Feugiat in fermentum posuere urna nec tincidunt praesent semper feugiat. Tincidunt ornare massa eget egestas purus. Aliquet lectus proin nibh nisl condimentum id venenatis a.Tincidunt praesent semper feugiat nibh sed pulvinar proin. Viverra tellus in hac habitasse. Eget mi proin sed libero enim sed faucibus. Sed augue lacus viverra vitae congue eu consequat ac.Semper eget duis at tellus at urna condimentum. Sagittis orci a scelerisque purus semper eget duis at tellus. Placerat in egestas erat imperdiet sed. Amet est placerat in egestas erat." +
@@ -25,6 +19,12 @@ namespace BeatSaberMarkupLanguage.ViewControllers
 
         private string headerText = "Header comes from code!";
         private int someNumber = 2342531;
+
+        [UIComponent("test-external")]
+        public TextMeshProUGUI ButtonText { get; set; }
+
+        [UIComponent("list")]
+        public CustomListTableData TableData { get; set; }
 
         public override string ResourceName => "BeatSaberMarkupLanguage.Views.test.bsml";
 

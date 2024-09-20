@@ -6,22 +6,29 @@ namespace BeatSaberMarkupLanguage.Components
 {
     internal class TextPageScrollViewRefresher : MonoBehaviour
     {
-        public TextPageScrollView ScrollView;
+        [SerializeField]
+        private TextPageScrollView scrollView;
 
         private Coroutine coroutine;
 
+        public TextPageScrollView ScrollView
+        {
+            get => scrollView;
+            set => scrollView = value;
+        }
+
         protected void OnEnable()
         {
-            if (ScrollView != null)
+            if (scrollView != null)
             {
-                ScrollView.SetText(ScrollView._text.text);
-                ScrollView.RefreshButtons();
+                scrollView.SetText(scrollView._text.text);
+                scrollView.RefreshButtons();
             }
         }
 
         protected void OnRectTransformDimensionsChange()
         {
-            if (isActiveAndEnabled && ScrollView != null && coroutine == null)
+            if (isActiveAndEnabled && scrollView != null && coroutine == null)
             {
                 // SetText can eventually enable/disable GameObjects which isn't allowed at this point (UI rebuild) so we delay our update
                 coroutine = StartCoroutine(UpdateLayoutCoroutine());
@@ -31,8 +38,8 @@ namespace BeatSaberMarkupLanguage.Components
         private IEnumerator UpdateLayoutCoroutine()
         {
             yield return null;
-            ScrollView.SetText(ScrollView._text.text);
-            ScrollView.RefreshButtons();
+            scrollView.SetText(scrollView._text.text);
+            scrollView.RefreshButtons();
             coroutine = null;
         }
     }

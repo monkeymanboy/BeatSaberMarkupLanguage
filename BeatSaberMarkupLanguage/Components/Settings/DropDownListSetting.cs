@@ -8,9 +8,16 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 {
     public class DropDownListSetting : GenericInteractableSetting
     {
-        public SimpleTextDropdown Dropdown;
+        [SerializeField]
+        private SimpleTextDropdown dropdown;
 
         private int index;
+
+        public SimpleTextDropdown Dropdown
+        {
+            get => dropdown;
+            set => dropdown = value;
+        }
 
         public IList Values { get; set; } = Array.Empty<object>();
 
@@ -29,7 +36,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
                     index = 0;
                 }
 
-                Dropdown.SelectCellWithIdx(index);
+                dropdown.SelectCellWithIdx(index);
 
                 UpdateState();
             }
@@ -37,13 +44,13 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 
         public override bool Interactable
         {
-            get => Dropdown._button.interactable;
-            set => Dropdown._button.interactable = value;
+            get => dropdown._button.interactable;
+            set => dropdown._button.interactable = value;
         }
 
         public override void Setup()
         {
-            Dropdown.didSelectCellWithIdxEvent += OnSelectIndex;
+            dropdown.didSelectCellWithIdxEvent += OnSelectIndex;
             ReceiveValue();
             UpdateChoices();
             gameObject.SetActive(true);
@@ -53,11 +60,11 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         {
             if (Formatter != null)
             {
-                Dropdown.SetTexts(Values.Cast<object>().Select(o => Formatter.Invoke(o) as string).ToList());
+                dropdown.SetTexts(Values.Cast<object>().Select(o => Formatter.Invoke(o) as string).ToList());
             }
             else
             {
-                Dropdown.SetTexts(Values.Cast<object>().Select(o => o.ToString()).ToList());
+                dropdown.SetTexts(Values.Cast<object>().Select(o => o.ToString()).ToList());
             }
         }
 
@@ -88,7 +95,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 
         private void UpdateState()
         {
-            Dropdown._text.text = Value != null ? (Formatter == null ? Value?.ToString() : (Formatter.Invoke(Value) as string)) : string.Empty;
+            dropdown._text.text = Value != null ? (Formatter == null ? Value?.ToString() : (Formatter.Invoke(Value) as string)) : string.Empty;
         }
     }
 }

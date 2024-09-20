@@ -1,14 +1,30 @@
 ﻿using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.Components.Settings
 {
     public class ToggleSetting : GenericInteractableSetting
     {
-        public Toggle Toggle;
-        public TextMeshProUGUI TextMesh;
+        [SerializeField]
+        private Toggle toggle;
+
+        [SerializeField]
+        private TextMeshProUGUI textMesh;
 
         private bool currentValue;
+
+        public Toggle Toggle
+        {
+            get => toggle;
+            set => toggle = value;
+        }
+
+        public TextMeshProUGUI TextMesh
+        {
+            get => textMesh;
+            set => textMesh = value;
+        }
 
         public bool Value
         {
@@ -16,20 +32,20 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             set
             {
                 currentValue = value;
-                Toggle.isOn = value;
+                toggle.isOn = value;
             }
         }
 
         public string Text
         {
-            get => TextMesh.text;
-            set => TextMesh.text = value;
+            get => textMesh.text;
+            set => textMesh.text = value;
         }
 
         public override bool Interactable
         {
-            get => Toggle.interactable;
-            set => Toggle.interactable = value;
+            get => toggle.interactable;
+            set => toggle.interactable = value;
         }
 
         public override void Setup()
@@ -52,13 +68,13 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 
         protected void OnEnable()
         {
-            Toggle.onValueChanged.AddListener(OnValueChanged);
-            Toggle.isOn = currentValue;
+            toggle.onValueChanged.AddListener(OnValueChanged);
+            toggle.isOn = currentValue;
         }
 
         protected void OnDisable()
         {
-            Toggle.onValueChanged.RemoveListener(OnValueChanged);
+            toggle.onValueChanged.RemoveListener(OnValueChanged);
         }
 
         private void OnValueChanged(bool value)

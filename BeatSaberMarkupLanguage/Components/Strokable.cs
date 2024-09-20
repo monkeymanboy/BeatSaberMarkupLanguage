@@ -5,7 +5,8 @@ namespace BeatSaberMarkupLanguage.Components
 {
     public class Strokable : MonoBehaviour
     {
-        public Image Image;
+        [SerializeField]
+        private Image image;
 
         public enum StrokeType
         {
@@ -14,9 +15,15 @@ namespace BeatSaberMarkupLanguage.Components
             Regular,
         }
 
+        public Image Image
+        {
+            get => image;
+            set => image = value;
+        }
+
         public void SetType(StrokeType strokeType)
         {
-            if (Image == null)
+            if (image == null)
             {
                 return;
             }
@@ -24,28 +31,28 @@ namespace BeatSaberMarkupLanguage.Components
             switch (strokeType)
             {
                 case StrokeType.None:
-                    Image.enabled = false;
+                    image.enabled = false;
                     break;
                 case StrokeType.Clean:
-                    Image.enabled = true;
-                    Image.sprite = Utilities.FindSpriteCached("RoundRectSmallStroke");
+                    image.enabled = true;
+                    image.sprite = Utilities.FindSpriteCached("RoundRectSmallStroke");
                     break;
                 case StrokeType.Regular:
-                    Image.enabled = true;
-                    Image.sprite = Utilities.FindSpriteCached("RoundRectBigStroke");
+                    image.enabled = true;
+                    image.sprite = Utilities.FindSpriteCached("RoundRectBigStroke");
                     break;
             }
         }
 
         public void SetColor(string strokeColor)
         {
-            if (Image == null)
+            if (image == null)
             {
                 return;
             }
 
-            Image.color = Parse.Color(strokeColor);
-            Image.enabled = true;
+            image.color = Parse.Color(strokeColor);
+            image.enabled = true;
         }
     }
 }

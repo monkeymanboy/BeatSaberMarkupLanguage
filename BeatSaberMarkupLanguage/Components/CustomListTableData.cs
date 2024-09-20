@@ -8,11 +8,16 @@ namespace BeatSaberMarkupLanguage.Components
 {
     public class CustomListTableData : MonoBehaviour, TableView.IDataSource
     {
-        public float CellSizeValue = 8.5f;
-        public string ReuseIdentifier = "BSMLListTableCell";
-        public TableView TableView;
+        private const string ReuseIdentifier = "BSMLListTableCell";
 
-        public bool ExpandCell = false;
+        [SerializeField]
+        private float cellSizeValue = 8.5f;
+
+        [SerializeField]
+        private TableView tableView;
+
+        [SerializeField]
+        private bool expandCell = false;
 
         private LevelListTableCell songListTableCellPrefab;
         private LevelPackCell levelPackTableCellPrefab;
@@ -26,6 +31,24 @@ namespace BeatSaberMarkupLanguage.Components
             Simple,
         }
 
+        public float CellSizeValue
+        {
+            get => cellSizeValue;
+            set => cellSizeValue = value;
+        }
+
+        public TableView TableView
+        {
+            get => tableView;
+            set => tableView = value;
+        }
+
+        public bool ExpandCell
+        {
+            get => expandCell;
+            set => expandCell = value;
+        }
+
         public ListStyle Style
         {
             get => listStyle;
@@ -35,13 +58,13 @@ namespace BeatSaberMarkupLanguage.Components
                 switch (value)
                 {
                     case ListStyle.List:
-                        CellSizeValue = 8.5f;
+                        cellSizeValue = 8.5f;
                         break;
                     case ListStyle.Box:
-                        CellSizeValue = TableView.tableType == TableView.TableType.Horizontal ? 30f : 35f;
+                        cellSizeValue = tableView.tableType == TableView.TableType.Horizontal ? 30f : 35f;
                         break;
                     case ListStyle.Simple:
-                        CellSizeValue = 8f;
+                        cellSizeValue = 8f;
                         break;
                 }
 
@@ -53,7 +76,7 @@ namespace BeatSaberMarkupLanguage.Components
 
         public LevelListTableCell GetTableCell()
         {
-            LevelListTableCell tableCell = (LevelListTableCell)TableView.DequeueReusableCellForIdentifier(ReuseIdentifier);
+            LevelListTableCell tableCell = (LevelListTableCell)tableView.DequeueReusableCellForIdentifier(ReuseIdentifier);
             if (!tableCell)
             {
                 if (songListTableCellPrefab == null)
@@ -72,7 +95,7 @@ namespace BeatSaberMarkupLanguage.Components
 
         public BSMLBoxTableCell GetBoxTableCell()
         {
-            BSMLBoxTableCell tableCell = (BSMLBoxTableCell)TableView.DequeueReusableCellForIdentifier(ReuseIdentifier);
+            BSMLBoxTableCell tableCell = (BSMLBoxTableCell)tableView.DequeueReusableCellForIdentifier(ReuseIdentifier);
             if (!tableCell)
             {
                 if (levelPackTableCellPrefab == null)
@@ -114,7 +137,7 @@ namespace BeatSaberMarkupLanguage.Components
 
         public SimpleTextTableCell GetSimpleTextTableCell()
         {
-            SimpleTextTableCell tableCell = (SimpleTextTableCell)TableView.DequeueReusableCellForIdentifier(ReuseIdentifier);
+            SimpleTextTableCell tableCell = (SimpleTextTableCell)tableView.DequeueReusableCellForIdentifier(ReuseIdentifier);
             if (!tableCell)
             {
                 if (simpleTextTableCellPrefab == null)
@@ -145,7 +168,7 @@ namespace BeatSaberMarkupLanguage.Components
                     tableCell._updatedBadgeGo.SetActive(false);
                     tableCell._favoritesBadgeImage.gameObject.SetActive(false);
                     tableCell.transform.Find("BpmIcon").gameObject.SetActive(false);
-                    if (ExpandCell)
+                    if (expandCell)
                     {
                         nameText.rectTransform.anchorMax = new Vector3(2, 0.5f, 0);
                         authorText.rectTransform.anchorMax = new Vector3(2, 0.5f, 0);
@@ -175,7 +198,7 @@ namespace BeatSaberMarkupLanguage.Components
 
         public float CellSize(int idx)
         {
-            return CellSizeValue;
+            return cellSizeValue;
         }
 
         public int NumberOfCells()

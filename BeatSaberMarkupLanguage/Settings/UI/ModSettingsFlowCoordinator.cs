@@ -11,17 +11,19 @@ namespace BeatSaberMarkupLanguage.Settings
 {
     internal class ModSettingsFlowCoordinator : FlowCoordinator
     {
-        public bool IsAnimating;
-
-        protected SettingsMenuListViewController settingsMenuListViewController;
-        protected NavigationController navigationController;
-        protected ViewController activeController;
-
         private readonly Stack<ViewController> submenuStack = new();
         private bool isPresenting;
 
         [UIComponent("bottom-buttons")]
         private Transform bottomButtons;
+
+        public bool IsAnimating { get; internal set; }
+
+        protected SettingsMenuListViewController SettingsMenuListViewController { get; private set; }
+
+        protected NavigationController NavigationController { get; private set; }
+
+        protected ViewController ActiveController { get; private set; }
 
         public void OpenMenu(SettingsMenu menu)
         {
@@ -45,7 +47,7 @@ namespace BeatSaberMarkupLanguage.Settings
             {
                 if (isSubmenu)
                 {
-                    submenuStack.Push(activeController);
+                    submenuStack.Push(ActiveController);
                 }
                 else
                 {
@@ -53,14 +55,14 @@ namespace BeatSaberMarkupLanguage.Settings
                 }
             }
 
-            bool wasActive = activeController != null;
+            bool wasActive = ActiveController != null;
             if (wasActive)
             {
-                PopViewControllerFromNavigationController(navigationController, null, immediately: true);
+                PopViewControllerFromNavigationController(NavigationController, null, immediately: true);
             }
 
             PushViewControllerToNavigationController(
-                navigationController,
+                NavigationController,
                 viewController,
                 () =>
                 {
@@ -73,17 +75,17 @@ namespace BeatSaberMarkupLanguage.Settings
                 },
                 wasActive);
 
-            activeController = viewController;
+            ActiveController = viewController;
         }
 
         public void ShowInitial()
         {
-            if (activeController != null)
+            if (ActiveController != null)
             {
                 return;
             }
 
-            settingsMenuListViewController.List.TableView.SelectCellWithIdx(0);
+            SettingsMenuListViewController.List.TableView.SelectCellWithIdx(0);
             OpenMenu(BSMLSettings.Instance.SettingsMenus.First() as SettingsMenu);
             isPresenting = true;
         }
@@ -93,26 +95,26 @@ namespace BeatSaberMarkupLanguage.Settings
             if (firstActivation)
             {
                 SetTitle(Localization.Get("BSML_MOD_SETTINGS_TITLE"));
-                navigationController = BeatSaberUI.CreateViewController<NavigationController>();
-                BSMLParser.Instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), "BeatSaberMarkupLanguage.Views.settings-buttons.bsml"), navigationController.gameObject, this);
+                NavigationController = BeatSaberUI.CreateViewController<NavigationController>();
+                BSMLParser.Instance.Parse(Utilities.GetResourceContent(Assembly.GetExecutingAssembly(), "BeatSaberMarkupLanguage.Views.settings-buttons.bsml"), NavigationController.gameObject, this);
 
                 RectTransform container = new GameObject("Container").AddComponent<RectTransform>();
-                container.SetParent(navigationController.transform, false);
+                container.SetParent(NavigationController.transform, false);
                 container.anchorMin = Vector2.zero;
                 container.anchorMax = Vector2.one;
                 container.sizeDelta = new Vector2(0, -12);
                 container.anchoredPosition = new Vector2(0, 6);
-                navigationController._controllersContainer = container;
+                NavigationController._controllersContainer = container;
 
-                settingsMenuListViewController = BeatSaberUI.CreateViewController<SettingsMenuListViewController>();
-                settingsMenuListViewController.ClickedMenu += OpenMenu;
+                SettingsMenuListViewController = BeatSaberUI.CreateViewController<SettingsMenuListViewController>();
+                SettingsMenuListViewController.ClickedMenu += OpenMenu;
 
-                RectTransform viewControllerTransform = (RectTransform)settingsMenuListViewController.transform;
+                RectTransform viewControllerTransform = (RectTransform)SettingsMenuListViewController.transform;
                 viewControllerTransform.sizeDelta = new Vector2(0, -12);
                 viewControllerTransform.anchoredPosition = new Vector2(0, 6);
 
-                SetViewControllerToNavigationController(navigationController, settingsMenuListViewController);
-                ProvideInitialViewControllers(navigationController);
+                SetViewControllerToNavigationController(NavigationController, SettingsMenuListViewController);
+                ProvideInitialViewControllers(NavigationController);
             }
         }
 

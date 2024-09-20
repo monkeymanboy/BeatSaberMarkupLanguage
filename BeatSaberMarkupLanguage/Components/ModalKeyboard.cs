@@ -12,18 +12,28 @@ namespace BeatSaberMarkupLanguage.Components
 {
     public class ModalKeyboard : MonoBehaviour
     {
-        public ModalView ModalView;
-        public KEYBOARD Keyboard;
+        [SerializeField]
+        private ModalView modalView;
 
-        public BSMLValue AssociatedValue;
-        public BSMLAction OnEnter;
-        public bool ClearOnOpen;
+        public ModalView ModalView
+        {
+            get => modalView;
+            set => modalView = value;
+        }
+
+        public KEYBOARD Keyboard { get; set; }
+
+        public BSMLValue AssociatedValue { get; set; }
+
+        public BSMLAction OnEnter { get; set; }
+
+        public bool ClearOnOpen { get; set; }
 
         public void OnEnterKeyPressed(string value)
         {
             AssociatedValue?.SetValue(value);
             OnEnter?.Invoke(value);
-            ModalView.Hide(true);
+            modalView.Hide(true);
         }
 
         public void SetText(string text)

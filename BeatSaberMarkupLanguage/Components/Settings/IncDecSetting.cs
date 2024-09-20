@@ -1,17 +1,41 @@
 ﻿using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace BeatSaberMarkupLanguage.Components.Settings
 {
     public abstract class IncDecSetting : GenericInteractableSetting
     {
-        public TextMeshProUGUI TextMesh;
-        public Button DecButton;
-        public Button IncButton;
+        [SerializeField]
+        private TextMeshProUGUI textMesh;
+
+        [SerializeField]
+        private Button decButton;
+
+        [SerializeField]
+        private Button incButton;
 
         private bool interactable = true;
         private bool decEnabled;
         private bool incEnabled;
+
+        public TextMeshProUGUI TextMesh
+        {
+            get => textMesh;
+            set => textMesh = value;
+        }
+
+        public Button DecButton
+        {
+            get => decButton;
+            set => decButton = value;
+        }
+
+        public Button IncButton
+        {
+            get => incButton;
+            set => incButton = value;
+        }
 
         public override bool Interactable
         {
@@ -34,7 +58,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             set
             {
                 decEnabled = value;
-                DecButton.interactable = value && Interactable;
+                decButton.interactable = value && Interactable;
             }
         }
 
@@ -43,13 +67,13 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             set
             {
                 incEnabled = value;
-                IncButton.interactable = value && Interactable;
+                incButton.interactable = value && Interactable;
             }
         }
 
         public string Text
         {
-            set => TextMesh.text = value;
+            set => textMesh.text = value;
         }
 
         public abstract void IncButtonPressed();
@@ -58,14 +82,14 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 
         protected virtual void OnEnable()
         {
-            IncButton.onClick.AddListener(IncButtonPressed);
-            DecButton.onClick.AddListener(DecButtonPressed);
+            incButton.onClick.AddListener(IncButtonPressed);
+            decButton.onClick.AddListener(DecButtonPressed);
         }
 
         protected void OnDisable()
         {
-            IncButton.onClick.RemoveListener(IncButtonPressed);
-            DecButton.onClick.RemoveListener(DecButtonPressed);
+            incButton.onClick.RemoveListener(IncButtonPressed);
+            decButton.onClick.RemoveListener(DecButtonPressed);
         }
     }
 }

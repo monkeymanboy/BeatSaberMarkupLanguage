@@ -10,10 +10,10 @@ namespace BeatSaberMarkupLanguage.Settings.UI.ViewControllers
     [ViewDefinition("BeatSaberMarkupLanguage.Views.settings-list.bsml")]
     internal class SettingsMenuListViewController : BSMLAutomaticViewController
     {
-        [UIComponent("list")]
-        public CustomListTableData List;
-
         public event Action<SettingsMenu> ClickedMenu;
+
+        [UIComponent("list")]
+        public CustomListTableData List { get; set; }
 
         protected override void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
         {

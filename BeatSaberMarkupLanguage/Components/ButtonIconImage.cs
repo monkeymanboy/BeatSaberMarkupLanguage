@@ -7,24 +7,46 @@ namespace BeatSaberMarkupLanguage.Components
 {
     public class ButtonIconImage : MonoBehaviour
     {
-        public Image Image;
+        [SerializeField]
+        private Image image;
 
-        internal NoTransitionsButton Button;
-        internal GameObject Underline;
+        [SerializeField]
+        private NoTransitionsButton button;
+
+        [SerializeField]
+        private GameObject underline;
+
+        public Image Image
+        {
+            get => image;
+            set => image = value;
+        }
+
+        internal NoTransitionsButton Button
+        {
+            get => button;
+            set => button = value;
+        }
+
+        internal GameObject Underline
+        {
+            get => underline;
+            set => underline = value;
+        }
 
         public void SetIcon(string path)
         {
-            if (Image == null)
+            if (image == null)
             {
                 return;
             }
 
-            Image.SetImageAsync(path).ContinueWith((task) => Logger.Log.Error($"Failed to load image\n{task.Exception}"), TaskContinuationOptions.OnlyOnFaulted);
+            image.SetImageAsync(path).ContinueWith((task) => Logger.Log.Error($"Failed to load image\n{task.Exception}"), TaskContinuationOptions.OnlyOnFaulted);
         }
 
         internal void SetSkew(float value)
         {
-            if (Image is not ImageView imageView)
+            if (image is not ImageView imageView)
             {
                 return;
             }
@@ -35,27 +57,27 @@ namespace BeatSaberMarkupLanguage.Components
 
         internal void SetUnderlineActive(bool active)
         {
-            if (Underline != null)
+            if (underline != null)
             {
-                Underline.SetActive(active);
+                underline.SetActive(active);
             }
         }
 
         protected void OnEnable()
         {
-            Button.selectionStateDidChangeEvent += OnSelectionStateDidChange;
+            button.selectionStateDidChangeEvent += OnSelectionStateDidChange;
         }
 
         protected void OnDisable()
         {
-            Button.selectionStateDidChangeEvent -= OnSelectionStateDidChange;
+            button.selectionStateDidChangeEvent -= OnSelectionStateDidChange;
         }
 
         private void OnSelectionStateDidChange(NoTransitionsButton.SelectionState state)
         {
-            Color color = Image.color;
+            Color color = image.color;
             color.a = state is NoTransitionsButton.SelectionState.Disabled ? 0.25f : 1;
-            Image.color = color;
+            image.color = color;
         }
     }
 }

@@ -6,22 +6,45 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 {
     public class StringSetting : GenericInteractableSetting
     {
-        public TextMeshProUGUI TextMesh;
-        public Button EditButton;
+        [SerializeField]
+        private TextMeshProUGUI textMesh;
 
-        public RectTransform BoundingBox;
-        public ModalKeyboard ModalKeyboard;
+        [SerializeField]
+        private Button editButton;
+
+        [SerializeField]
+        private RectTransform boundingBox;
 
         private string currentValue;
 
+        public TextMeshProUGUI TextMesh
+        {
+            get => textMesh;
+            set => textMesh = value;
+        }
+
+        public Button EditButton
+        {
+            get => editButton;
+            set => editButton = value;
+        }
+
+        public RectTransform BoundingBox
+        {
+            get => boundingBox;
+            set => boundingBox = value;
+        }
+
+        public ModalKeyboard ModalKeyboard { get; set; }
+
         public override bool Interactable
         {
-            get => EditButton != null && EditButton.interactable;
+            get => editButton != null && editButton.interactable;
             set
             {
-                if (EditButton != null)
+                if (editButton != null)
                 {
-                    EditButton.interactable = value;
+                    editButton.interactable = value;
                 }
             }
         }
@@ -32,7 +55,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             set
             {
                 currentValue = value;
-                TextMesh.text = Formatter == null ? value : Formatter.Invoke(value) as string;
+                textMesh.text = Formatter == null ? value : Formatter.Invoke(value) as string;
             }
         }
 
@@ -73,13 +96,13 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 
         protected virtual void OnEnable()
         {
-            EditButton.onClick.AddListener(EditButtonPressed);
+            editButton.onClick.AddListener(EditButtonPressed);
             ModalKeyboard.Keyboard.EnterPressed += EnterPressed;
         }
 
         protected void OnDisable()
         {
-            EditButton.onClick.RemoveListener(EditButtonPressed);
+            editButton.onClick.RemoveListener(EditButtonPressed);
             ModalKeyboard.Keyboard.EnterPressed -= EnterPressed;
         }
     }

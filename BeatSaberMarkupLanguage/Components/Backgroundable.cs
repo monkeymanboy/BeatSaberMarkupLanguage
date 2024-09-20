@@ -7,10 +7,17 @@ namespace BeatSaberMarkupLanguage.Components
 {
     public class Backgroundable : MonoBehaviour
     {
-        // TODO: this should be an ImageView
-        public Image Background;
-
         private static readonly Dictionary<string, ImageView> BackgroundCache = new();
+
+        // TODO: this should be an ImageView
+        [SerializeField]
+        private Image background;
+
+        public Image Background
+        {
+            get => background;
+            set => background = value;
+        }
 
         private static Dictionary<string, string> Backgrounds => new()
         {
@@ -41,7 +48,7 @@ namespace BeatSaberMarkupLanguage.Components
 
         public void ApplyBackground(string name)
         {
-            if (Background != null)
+            if (background != null)
             {
                 throw new BSMLException("Cannot add multiple backgrounds");
             }
@@ -64,8 +71,8 @@ namespace BeatSaberMarkupLanguage.Components
                     BackgroundCache.Add(name, bgTemplate);
                 }
 
-                Background = gameObject.AddComponent(bgTemplate);
-                Background.enabled = true;
+                background = gameObject.AddComponent(bgTemplate);
+                background.enabled = true;
             }
             catch
             {
@@ -75,15 +82,15 @@ namespace BeatSaberMarkupLanguage.Components
 
         public void ApplyColor(Color color)
         {
-            if (Background == null)
+            if (background == null)
             {
                 throw new BSMLException("Can't set color on null background!");
             }
 
-            color.a = Background.color.a;
-            Background.color = color;
+            color.a = background.color.a;
+            background.color = color;
 
-            if (Background is ImageView imageView)
+            if (background is ImageView imageView)
             {
                 Color color0 = new(1, 1, 1, imageView.color0.a);
                 Color color1 = new(1, 1, 1, imageView.color1.a);
@@ -96,12 +103,12 @@ namespace BeatSaberMarkupLanguage.Components
 
         public void ApplyGradient(Color color0, Color color1)
         {
-            if (Background is not ImageView imageView)
+            if (background is not ImageView imageView)
             {
                 throw new BSMLException("Can't set gradient on null background!");
             }
 
-            Color color = new(1, 1, 1, Background.color.a);
+            Color color = new(1, 1, 1, background.color.a);
 
             imageView.gradient = true;
             imageView.color = color;
@@ -111,7 +118,7 @@ namespace BeatSaberMarkupLanguage.Components
 
         public void ApplyColor0(Color color0)
         {
-            if (Background is not ImageView imageView)
+            if (background is not ImageView imageView)
             {
                 throw new BSMLException("Can't set gradient on null background!");
             }
@@ -121,7 +128,7 @@ namespace BeatSaberMarkupLanguage.Components
 
         public void ApplyColor1(Color color1)
         {
-            if (Background is not ImageView imageView)
+            if (background is not ImageView imageView)
             {
                 throw new BSMLException("Can't set gradient on null background!");
             }
@@ -131,14 +138,14 @@ namespace BeatSaberMarkupLanguage.Components
 
         public void ApplyAlpha(float alpha)
         {
-            if (Background == null)
+            if (background == null)
             {
                 throw new BSMLException("Can't set gradient on null background!");
             }
 
-            Color color = Background.color;
+            Color color = background.color;
             color.a = alpha;
-            Background.color = color;
+            background.color = color;
         }
 
         private static ImageView FindTemplate(string name, string backgroundName)

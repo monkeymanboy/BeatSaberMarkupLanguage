@@ -5,11 +5,27 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 {
     public class ColorSetting : GenericInteractableSetting
     {
-        public Button EditButton;
-        public ModalColorPicker ModalColorPicker;
-        public Image ColorImage;
+        [SerializeField]
+        private Button editButton;
+
+        [SerializeField]
+        private Image colorImage;
 
         private Color currentColor = Color.white;
+
+        public ModalColorPicker ModalColorPicker { get; set; }
+
+        public Button EditButton
+        {
+            get => editButton;
+            set => editButton = value;
+        }
+
+        public Image ColorImage
+        {
+            get => colorImage;
+            set => colorImage = value;
+        }
 
         public Color CurrentColor
         {
@@ -17,21 +33,21 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             set
             {
                 currentColor = value;
-                if (ColorImage != null)
+                if (colorImage != null)
                 {
-                    ColorImage.color = currentColor;
+                    colorImage.color = currentColor;
                 }
             }
         }
 
         public override bool Interactable
         {
-            get => EditButton != null && EditButton.interactable;
+            get => editButton != null && editButton.interactable;
             set
             {
-                if (EditButton != null)
+                if (editButton != null)
                 {
-                    EditButton.interactable = value;
+                    editButton.interactable = value;
                 }
             }
         }
@@ -79,12 +95,12 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 
         protected virtual void OnEnable()
         {
-            EditButton.onClick.AddListener(EditButtonPressed);
+            editButton.onClick.AddListener(EditButtonPressed);
         }
 
         protected void OnDisable()
         {
-            EditButton.onClick.RemoveListener(EditButtonPressed);
+            editButton.onClick.RemoveListener(EditButtonPressed);
         }
     }
 }

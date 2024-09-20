@@ -7,8 +7,16 @@ namespace BeatSaberMarkupLanguage.Components
 {
     public class ScrollViewContent : MonoBehaviour
     {
-        public ScrollView ScrollView;
+        [SerializeField]
+        private ScrollView scrollView;
+
         private bool dirty = false;
+
+        public ScrollView ScrollView
+        {
+            get => scrollView;
+            set => scrollView = value;
+        }
 
         protected void Start()
         {
@@ -45,8 +53,8 @@ namespace BeatSaberMarkupLanguage.Components
 
         private void UpdateScrollView()
         {
-            ScrollView.SetContentSize((transform.GetChild(0) as RectTransform).rect.height);
-            ScrollView.RefreshButtons();
+            scrollView.SetContentSize((transform.GetChild(0) as RectTransform).rect.height);
+            scrollView.RefreshButtons();
         }
     }
 }

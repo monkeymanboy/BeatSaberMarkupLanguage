@@ -5,7 +5,7 @@ namespace BeatSaberMarkupLanguage.Components
 {
     public class ExternalComponents : MonoBehaviour
     {
-        public List<Component> Components = new(); // Components added to this list will be handled as if they are part of this object while parsing even if they aren't
+        public List<Component> Components { get; } = new(); // Components added to this list will be handled as if they are part of this object while parsing even if they aren't
 
         public T Get<T>()
             where T : Component

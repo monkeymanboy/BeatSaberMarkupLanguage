@@ -5,23 +5,30 @@ namespace BeatSaberMarkupLanguage.Components
 {
     public class Glowable : MonoBehaviour
     {
-        public Image Image;
+        [SerializeField]
+        private Image image;
+
+        public Image Image
+        {
+            get => image;
+            set => image = value;
+        }
 
         public void SetGlow(string colorString)
         {
-            if (Image == null)
+            if (image == null)
             {
                 return;
             }
 
             if (colorString != "none")
             {
-                Image.color = Parse.Color(colorString);
-                Image.gameObject.SetActive(true);
+                image.color = Parse.Color(colorString);
+                image.gameObject.SetActive(true);
             }
             else
             {
-                Image.gameObject.SetActive(false);
+                image.gameObject.SetActive(false);
             }
         }
     }

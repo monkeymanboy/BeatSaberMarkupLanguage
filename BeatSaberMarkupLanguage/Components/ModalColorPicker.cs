@@ -9,15 +9,17 @@ namespace BeatSaberMarkupLanguage.Components
 {
     public class ModalColorPicker : MonoBehaviour
     {
-        public ModalView ModalView;
-        public RGBPanelController RgbPanel;
-        public HSVPanelController HsvPanel;
-        public Image ColorImage;
+        [SerializeField]
+        private ModalView modalView;
 
-        public BSMLValue AssociatedValue;
-        public BSMLAction OnCancel;
-        public BSMLAction OnDone;
-        public BSMLAction OnChange;
+        [SerializeField]
+        private RGBPanelController rgbPanel;
+
+        [SerializeField]
+        private HSVPanelController hsvPanel;
+
+        [SerializeField]
+        private Image colorImage;
 
         private Color currentColor;
 
@@ -25,26 +27,58 @@ namespace BeatSaberMarkupLanguage.Components
 
         public event Action CancelEvent;
 
+        public BSMLValue AssociatedValue { get; set; }
+
+        public BSMLAction OnCancel { get; set; }
+
+        public BSMLAction OnDone { get; set; }
+
+        public BSMLAction OnChange { get; set; }
+
+        public ModalView ModalView
+        {
+            get => modalView;
+            set => modalView = value;
+        }
+
+        public RGBPanelController RgbPanel
+        {
+            get => rgbPanel;
+            set => rgbPanel = value;
+        }
+
+        public HSVPanelController HsvPanel
+        {
+            get => hsvPanel;
+            set => hsvPanel = value;
+        }
+
+        public Image ColorImage
+        {
+            get => colorImage;
+            set => colorImage = value;
+        }
+
         public Color CurrentColor
         {
             get => currentColor;
             set
             {
                 currentColor = value;
-                if (RgbPanel != null)
+                if (rgbPanel != null)
                 {
-                    RgbPanel.color = currentColor;
+                    rgbPanel.color = currentColor;
                 }
 
                 // If you're wondering why we check this for HSV it's so that if color is one where changing hue has no effect it won't lock up the hue slider
-                if (HsvPanel != null && HsvPanel.color != currentColor)
+                if (hsvPanel != null && hsvPanel.color != currentColor)
                 {
-                    HsvPanel.color = currentColor;
+                    hsvPanel.color = currentColor;
                 }
 
-                if (ColorImage != null)
+                if (colorImage != null)
                 {
-                    ColorImage.color = currentColor;
+                    colorImage.color = currentColor;
                 }
             }
         }
@@ -54,7 +88,7 @@ namespace BeatSaberMarkupLanguage.Components
         {
             OnCancel?.Invoke();
             CancelEvent?.Invoke();
-            ModalView.Hide(true);
+            modalView.Hide(true);
         }
 
         [UIAction("done")]
@@ -63,7 +97,7 @@ namespace BeatSaberMarkupLanguage.Components
             AssociatedValue?.SetValue(CurrentColor);
             OnDone?.Invoke(CurrentColor);
             DoneEvent?.Invoke(CurrentColor);
-            ModalView.Hide(true);
+            modalView.Hide(true);
         }
 
         public void OnValueChanged(Color color, ColorChangeUIEventType type)

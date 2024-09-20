@@ -5,9 +5,16 @@ namespace BeatSaberMarkupLanguage.Animations
 {
     public class AnimationStateUpdater : MonoBehaviour
     {
-        public Image Image;
+        [SerializeField]
+        private Image image;
 
         private AnimationControllerData controllerData;
+
+        public Image Image
+        {
+            get => image;
+            set => image = value;
+        }
 
         public AnimationControllerData ControllerData
         {
@@ -32,19 +39,19 @@ namespace BeatSaberMarkupLanguage.Animations
         {
             if (ControllerData != null)
             {
-                ControllerData.ActiveImages.Add(Image);
-                Image.sprite = ControllerData.Sprites[ControllerData.UvIndex];
+                ControllerData.ActiveImages.Add(image);
+                image.sprite = ControllerData.Sprites[ControllerData.UvIndex];
             }
         }
 
         protected void OnDisable()
         {
-            ControllerData?.ActiveImages.Remove(Image);
+            ControllerData?.ActiveImages.Remove(image);
         }
 
         protected void OnDestroy()
         {
-            ControllerData?.ActiveImages.Remove(Image);
+            ControllerData?.ActiveImages.Remove(image);
         }
     }
 }

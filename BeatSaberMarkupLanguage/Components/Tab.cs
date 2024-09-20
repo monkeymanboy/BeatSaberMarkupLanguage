@@ -4,11 +4,11 @@ namespace BeatSaberMarkupLanguage.Components
 {
     public class Tab : MonoBehaviour
     {
-        public TabSelector Selector;
-
         private string tabName;
         private string tabKey;
         private bool isVisible = true;
+
+        public TabSelector Selector { get; set; }
 
         public string TabName
         {

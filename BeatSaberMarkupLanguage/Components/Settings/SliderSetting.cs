@@ -2,15 +2,31 @@
 using BeatSaberMarkupLanguage.Harmony_Patches;
 using HMUI;
 using TMPro;
+using UnityEngine;
 
 namespace BeatSaberMarkupLanguage.Components.Settings
 {
     public class SliderSetting : GenericSliderSetting
     {
-        public bool IsInt = false;
-        public float Increments;
+        [SerializeField]
+        private bool isInt = false;
+
+        [SerializeField]
+        private float increments;
 
         private float lastValue = float.NegativeInfinity;
+
+        public bool IsInt
+        {
+            get => isInt;
+            set => isInt = value;
+        }
+
+        public float Increments
+        {
+            get => increments;
+            set => increments = value;
+        }
 
         public float Value
         {
@@ -24,8 +40,8 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 
             ApplyCustomSliderTexts.Remappers.Add(Slider, this);
 
-            text = Slider.GetComponentInChildren<TextMeshProUGUI>();
-            Slider.numberOfSteps = (int)Math.Round((Slider.maxValue - Slider.minValue) / Increments) + 1;
+            Text = Slider.GetComponentInChildren<TextMeshProUGUI>();
+            Slider.numberOfSteps = (int)Math.Round((Slider.maxValue - Slider.minValue) / increments) + 1;
             Slider.valueDidChangeEvent += OnValueChanged;
 
             // TextSlider.UpdateVisuals doesn't work properly when disabled
@@ -39,7 +55,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         {
             if (AssociatedValue != null)
             {
-                if (IsInt)
+                if (isInt)
                 {
                     AssociatedValue.SetValue((int)Math.Round(Slider.value));
                 }
@@ -54,13 +70,13 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         {
             if (AssociatedValue != null)
             {
-                Slider.value = IsInt ? (int)AssociatedValue.GetValue() : (float)AssociatedValue.GetValue();
+                Slider.value = isInt ? (int)AssociatedValue.GetValue() : (float)AssociatedValue.GetValue();
             }
         }
 
         internal string TextForValue(float value)
         {
-            if (IsInt)
+            if (isInt)
             {
                 return Formatter == null ? ((int)Math.Round(value)).ToString() : (Formatter.Invoke((int)Math.Round(value)) as string);
             }
@@ -77,7 +93,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 
         private void OnValueChanged(TextSlider textSlider, float val)
         {
-            if (IsInt)
+            if (isInt)
             {
                 val = (int)Math.Round(val);
             }
@@ -89,7 +105,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 
             lastValue = val;
 
-            if (IsInt)
+            if (isInt)
             {
                 OnChange?.Invoke((int)val);
             }

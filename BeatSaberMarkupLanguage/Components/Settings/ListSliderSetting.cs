@@ -15,7 +15,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             set
             {
                 Slider.value = Values.IndexOf(value) * 1f;
-                text.text = TextForValue(Value);
+                Text.text = TextForValue(Value);
             }
         }
 
@@ -24,7 +24,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             base.Setup();
             Slider.minValue = 0;
             Slider.maxValue = Values.Count - 1;
-            text = Slider.GetComponentInChildren<TextMeshProUGUI>();
+            Text = Slider.GetComponentInChildren<TextMeshProUGUI>();
             Slider.numberOfSteps = Values.Count;
             Slider.valueDidChangeEvent += OnValueChanged;
 
@@ -60,7 +60,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
 
         private void OnValueChanged(TextSlider textSlider, float val)
         {
-            text.text = TextForValue(Value);
+            Text.text = TextForValue(Value);
             OnChange?.Invoke(Value);
             if (UpdateOnChange)
             {

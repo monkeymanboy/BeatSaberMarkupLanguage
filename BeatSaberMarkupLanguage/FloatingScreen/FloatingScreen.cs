@@ -8,18 +8,20 @@ using Screen = HMUI.Screen;
 
 namespace BeatSaberMarkupLanguage.FloatingScreen
 {
-    public struct FloatingScreenHandleEventArgs
+    public class FloatingScreenHandleEventArgs
     {
-        public readonly VRPointer Pointer;
-        public readonly Vector3 Position;
-        public readonly Quaternion Rotation;
-
         public FloatingScreenHandleEventArgs(VRPointer vrPointer, Vector3 position, Quaternion rotation)
         {
             Pointer = vrPointer;
             Position = position;
             Rotation = rotation;
         }
+
+        public VRPointer Pointer { get; }
+
+        public Vector3 Position { get; }
+
+        public Quaternion Rotation { get; }
 
         public static bool operator ==(FloatingScreenHandleEventArgs left, FloatingScreenHandleEventArgs right)
         {
@@ -49,9 +51,10 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
 
     public class FloatingScreen : Screen
     {
-        public GameObject Handle;
-
         private static Material fogMaterial;
+
+        [SerializeField]
+        private GameObject handle;
 
         private Side handleSide = Side.Left;
 
@@ -66,6 +69,12 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
             Bottom,
             Top,
             Full,
+        }
+
+        public GameObject Handle
+        {
+            get => handle;
+            set => handle = value;
         }
 
         public Vector2 ScreenSize
@@ -98,15 +107,15 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
 
         public bool ShowHandle
         {
-            get => Handle != null && Handle.activeInHierarchy;
+            get => handle != null && handle.activeInHierarchy;
             set
             {
-                if (Handle == null)
+                if (handle == null)
                 {
                     CreateHandle();
                 }
 
-                Handle.SetActive(value);
+                handle.SetActive(value);
             }
         }
 
@@ -190,7 +199,7 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
 
         public void UpdateHandle()
         {
-            if (Handle == null)
+            if (handle == null)
             {
                 return;
             }
@@ -198,28 +207,28 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
             switch (HandleSide)
             {
                 case Side.Left:
-                    Handle.transform.localPosition = new Vector3(-ScreenSize.x / 2f, 0f, 0f);
-                    Handle.transform.localScale = new Vector3(ScreenSize.x / 15f, ScreenSize.y * 0.8f, ScreenSize.x / 15f);
+                    handle.transform.localPosition = new Vector3(-ScreenSize.x / 2f, 0f, 0f);
+                    handle.transform.localScale = new Vector3(ScreenSize.x / 15f, ScreenSize.y * 0.8f, ScreenSize.x / 15f);
                     break;
                 case Side.Right:
-                    Handle.transform.localPosition = new Vector3(ScreenSize.x / 2f, 0f, 0f);
-                    Handle.transform.localScale = new Vector3(ScreenSize.x / 15f, ScreenSize.y * 0.8f, ScreenSize.x / 15f);
+                    handle.transform.localPosition = new Vector3(ScreenSize.x / 2f, 0f, 0f);
+                    handle.transform.localScale = new Vector3(ScreenSize.x / 15f, ScreenSize.y * 0.8f, ScreenSize.x / 15f);
                     break;
                 case Side.Top:
-                    Handle.transform.localPosition = new Vector3(0f, ScreenSize.y / 2f, 0f);
-                    Handle.transform.localScale = new Vector3(ScreenSize.x * 0.8f, ScreenSize.y / 15f, ScreenSize.y / 15f);
+                    handle.transform.localPosition = new Vector3(0f, ScreenSize.y / 2f, 0f);
+                    handle.transform.localScale = new Vector3(ScreenSize.x * 0.8f, ScreenSize.y / 15f, ScreenSize.y / 15f);
                     break;
                 case Side.Bottom:
-                    Handle.transform.localPosition = new Vector3(0f, -ScreenSize.y / 2f, 0f);
-                    Handle.transform.localScale = new Vector3(ScreenSize.x * 0.8f, ScreenSize.y / 15f, ScreenSize.y / 15f);
+                    handle.transform.localPosition = new Vector3(0f, -ScreenSize.y / 2f, 0f);
+                    handle.transform.localScale = new Vector3(ScreenSize.x * 0.8f, ScreenSize.y / 15f, ScreenSize.y / 15f);
                     break;
                 case Side.Full:
-                    Handle.transform.localPosition = Vector3.zero;
-                    Handle.transform.localScale = new Vector3(ScreenSize.x, ScreenSize.y, ScreenSize.x / 15f);
+                    handle.transform.localPosition = Vector3.zero;
+                    handle.transform.localScale = new Vector3(ScreenSize.x, ScreenSize.y, ScreenSize.x / 15f);
                     break;
             }
 
-            Handle.GetComponent<MeshRenderer>().enabled = HandleSide != Side.Full;
+            handle.GetComponent<MeshRenderer>().enabled = HandleSide != Side.Full;
         }
 
         internal void OnHandleGrab(VRPointer vrPointer)
@@ -234,17 +243,17 @@ namespace BeatSaberMarkupLanguage.FloatingScreen
 
         private void CreateHandle()
         {
-            if (Handle != null)
+            if (handle != null)
             {
                 return;
             }
 
-            Handle = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            Handle.name = nameof(FloatingScreenHandle);
-            Handle.layer = 5;
-            Handle.transform.SetParent(transform, false);
+            handle = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            handle.name = nameof(FloatingScreenHandle);
+            handle.layer = 5;
+            handle.transform.SetParent(transform, false);
             UpdateHandle();
-            FloatingScreenHandle floatingScreenHandle = BeatSaberUI.DiContainer.InstantiateComponent<FloatingScreenHandle>(Handle);
+            FloatingScreenHandle floatingScreenHandle = BeatSaberUI.DiContainer.InstantiateComponent<FloatingScreenHandle>(handle);
             floatingScreenHandle.Init(this);
         }
     }
