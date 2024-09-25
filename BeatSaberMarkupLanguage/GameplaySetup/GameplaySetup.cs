@@ -130,12 +130,14 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
 
             QueueRefreshView();
 
+            gameplaySetupViewController.didActivateEvent += GameplaySetupDidActivate;
             gameplaySetupViewController.didDeactivateEvent += GameplaySetupDidDeactivate;
         }
 
         /// <inheritdoc />
         public void Dispose()
         {
+            gameplaySetupViewController.didActivateEvent -= GameplaySetupDidActivate;
             gameplaySetupViewController.didDeactivateEvent -= GameplaySetupDidDeactivate;
         }
 
@@ -198,6 +200,11 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
             {
                 QueueRefreshView();
             }
+        }
+
+        private void GameplaySetupDidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
+        {
+            UpdateTabsVisibility();
         }
 
         private void GameplaySetupDidDeactivate(bool removedFromHierarchy, bool screenSystemDisabling)
