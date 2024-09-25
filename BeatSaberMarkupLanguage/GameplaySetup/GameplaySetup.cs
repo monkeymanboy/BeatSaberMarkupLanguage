@@ -46,7 +46,7 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
         private List<Transform> vanillaItems = [];
 
         [UIValue("mod-menus")]
-        private List<GameplaySetupMenu> menus = [];
+        private SortedList<GameplaySetupMenu> menus = new(Comparer<GameplaySetupMenu>.Create((a, b) => a.Name.CompareTo(b.Name)));
 
         private GameplaySetup(MainFlowCoordinator mainFlowCoordinator, GameplaySetupViewController gameplaySetupViewController, HierarchyManager hierarchyManager, ICoroutineStarter coroutineStarter)
         {

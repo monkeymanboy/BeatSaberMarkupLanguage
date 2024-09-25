@@ -65,6 +65,8 @@ namespace BeatSaberMarkupLanguage.Util
 
         public void CopyTo(Array array, int index) => ((IList)list).CopyTo(array, index);
 
+        public void RemoveAll(Predicate<T> match) => list.RemoveAll(match);
+
         private int AddInternal(T item)
         {
             int index = list.BinarySearch(item, comparer);
