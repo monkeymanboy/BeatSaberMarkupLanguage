@@ -29,8 +29,8 @@ namespace BeatSaberMarkupLanguage.Settings
         {
             if (!menu.DidSetup)
             {
-                menu.Setup();
                 menu.ParserParams.AddEvent("back", Back);
+                menu.DidSetup = true;
             }
 
             OpenMenu(menu.ViewController, false, false);
@@ -149,10 +149,7 @@ namespace BeatSaberMarkupLanguage.Settings
         {
             foreach (SettingsMenu menu in BSMLSettings.Instance.SettingsMenus)
             {
-                if (menu.DidSetup)
-                {
-                    menu.ParserParams.EmitEvent(ev);
-                }
+                menu.ParserParams.EmitEvent(ev);
             }
         }
     }

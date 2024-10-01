@@ -23,7 +23,7 @@ namespace BeatSaberMarkupLanguage.Settings
 
         public BSMLParserParams ParserParams { get; private set; }
 
-        public bool DidSetup { get; private set; }
+        public bool DidSetup { get; internal set; }
 
         public string Resource { get; }
 
@@ -45,7 +45,6 @@ namespace BeatSaberMarkupLanguage.Settings
                 ViewController = BeatSaberUI.CreateViewController<ViewController>();
                 SetupViewControllerTransform(ViewController);
                 ParserParams = BSMLParser.Instance.Parse(Utilities.GetResourceContent(Assembly, Resource), ViewController.gameObject, Host);
-                DidSetup = true;
             }
             catch (Exception ex)
             {

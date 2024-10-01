@@ -85,6 +85,11 @@ namespace BeatSaberMarkupLanguage.Settings
         {
             AddButtonToMainScreen().ContinueWith(task => Logger.Log.Error($"Failed to add button to main screen\n{task.Exception}"), TaskContinuationOptions.OnlyOnFaulted);
 
+            foreach (SettingsMenu settingsMenu in SettingsMenus)
+            {
+                settingsMenu.Setup();
+            }
+
             isInitialized = true;
         }
 

@@ -37,10 +37,10 @@ namespace BeatSaberMarkupLanguage.Harmony_Patches
             container.Bind(typeof(GameplaySetup.GameplaySetup), typeof(IInitializable), typeof(IDisposable)).To<GameplaySetup.GameplaySetup>().AsSingle().NonLazy();
 
             // initialize early & dispose late
-            container.BindExecutionOrder<AnimationController>(-1000);
-            container.BindExecutionOrder<BSMLSettings>(-1000);
+            container.BindExecutionOrder<AnimationController>(-900);
+            container.BindExecutionOrder<BSMLSettings>(-900);
             container.BindExecutionOrder<BSMLParser>(-1000);
-            container.BindExecutionOrder<GameplaySetup.GameplaySetup>(-1000);
+            container.BindExecutionOrder<GameplaySetup.GameplaySetup>(-900);
 
             container.Bind(typeof(ModSettingsFlowCoordinator)).FromInstance(BeatSaberUI.CreateFlowCoordinator<ModSettingsFlowCoordinator>());
             container.Bind(typeof(MenuButtonsViewController)).FromInstance(BeatSaberUI.CreateViewController<MenuButtonsViewController>());
