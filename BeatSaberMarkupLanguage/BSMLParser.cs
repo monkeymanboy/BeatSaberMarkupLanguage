@@ -12,9 +12,6 @@ using BeatSaberMarkupLanguage.Tags;
 using BeatSaberMarkupLanguage.TypeHandlers;
 using BeatSaberMarkupLanguage.Util;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
-using UnityEngine.ResourceManagement.ResourceProviders;
 using Zenject;
 
 namespace BeatSaberMarkupLanguage
@@ -127,11 +124,6 @@ namespace BeatSaberMarkupLanguage
             if (!isInitialized)
             {
                 throw new InvalidOperationException($"{nameof(BSMLParser)} has not initialized.");
-            }
-
-            if (!IsMainMenuSceneLoaded())
-            {
-                throw new InvalidOperationException($"MainMenu scene is not loaded.");
             }
 
             BSMLParserParams parserParams = new(host);
@@ -501,15 +493,6 @@ namespace BeatSaberMarkupLanguage
             }
 
             return parameters;
-        }
-
-        private bool IsMainMenuSceneLoaded()
-        {
-            // Unity tends to unload all asset bundles before calling OnDestroy on everything when shutting down.
-            // Since scenes are now loaded through Addressables, we need to make sure asset bundles haven't been
-            // unloaded before parsing. Without this check, weird instantiation errors can pop up.
-            AsyncOperationHandle instance = Addressables.Instance.m_SceneInstances.FirstOrDefault(si => ((SceneInstance)si.Result).Scene.name == "MainMenu");
-            return instance.IsValid() && ((SceneProvider.SceneOp)instance.m_InternalOp).m_DepOp.Result.Select(op => op.Result).OfType<AssetBundleResource>().All(ab => ab.m_AssetBundle != null);
         }
 
         public struct ComponentTypeWithData
