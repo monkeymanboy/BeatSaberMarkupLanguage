@@ -497,10 +497,12 @@ namespace BeatSaberMarkupLanguage.Components
 
         private void Backspace(KEY key)
         {
-            int length = key.Keyboard.KeyboardText.text.Length;
-            if (length > 0)
+            TextMeshProUGUI textMesh = key.Keyboard.KeyboardText;
+            string text = textMesh.text;
+
+            if (!string.IsNullOrEmpty(text))
             {
-                key.Keyboard.KeyboardText.text = key.Keyboard.KeyboardText.text.Remove(length - 1);
+                textMesh.text = text[..^1];
             }
         }
 
