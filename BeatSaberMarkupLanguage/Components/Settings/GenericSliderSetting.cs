@@ -69,5 +69,13 @@ namespace BeatSaberMarkupLanguage.Components.Settings
                 (slider.transform.Find("SlidingArea") as RectTransform).sizeDelta = new Vector2(-4, -4);
             }
         }
+
+        protected void Awake()
+        {
+            if (Slider != null)
+            {
+                Slider.Refresh();
+            }
+        }
     }
 }

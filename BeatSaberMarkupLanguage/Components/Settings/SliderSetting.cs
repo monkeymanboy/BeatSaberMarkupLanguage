@@ -44,11 +44,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             Slider.numberOfSteps = (int)Math.Round((Slider.maxValue - Slider.minValue) / increments) + 1;
             Slider.valueDidChangeEvent += OnValueChanged;
 
-            // TextSlider.UpdateVisuals doesn't work properly when disabled
-            if (Slider.gameObject.activeInHierarchy)
-            {
-                ReceiveValue();
-            }
+            ReceiveValue();
         }
 
         public override void ApplyValue()
@@ -84,11 +80,6 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             {
                 return Formatter == null ? value.ToString("N2") : (Formatter.Invoke(value) as string);
             }
-        }
-
-        protected void Awake()
-        {
-            ReceiveValue();
         }
 
         private void OnValueChanged(TextSlider textSlider, float val)

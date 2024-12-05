@@ -22,17 +22,14 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         public override void Setup()
         {
             base.Setup();
+
             Slider.minValue = 0;
             Slider.maxValue = Values.Count - 1;
             Text = Slider.GetComponentInChildren<TextMeshProUGUI>();
             Slider.numberOfSteps = Values.Count;
             Slider.valueDidChangeEvent += OnValueChanged;
 
-            // TextSlider.UpdateVisuals doesn't work properly when disabled
-            if (Slider.gameObject.activeInHierarchy)
-            {
-                ReceiveValue();
-            }
+            ReceiveValue();
         }
 
         public override void ApplyValue()
@@ -51,11 +48,6 @@ namespace BeatSaberMarkupLanguage.Components.Settings
         protected string TextForValue(object value)
         {
             return Formatter == null ? value.ToString() : (Formatter.Invoke(value) as string);
-        }
-
-        protected void Awake()
-        {
-            ReceiveValue();
         }
 
         private void OnValueChanged(TextSlider textSlider, float val)
