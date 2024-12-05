@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.Util;
@@ -20,9 +20,8 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
         private readonly MainFlowCoordinator mainFlowCoordinator;
         private readonly GameplaySetupViewController gameplaySetupViewController;
         private readonly HierarchyManager hierarchyManager;
-        private readonly ICoroutineStarter coroutineStarter;
 
-        private Coroutine debounceCoroutine;
+        private Task debounceTask;
 
         [UIObject("root-object")]
         private GameObject rootObject;
@@ -48,12 +47,11 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
         [UIValue("mod-menus")]
         private SortedList<GameplaySetupMenu> menus = new(Comparer<GameplaySetupMenu>.Create((a, b) => a.Name.CompareTo(b.Name)));
 
-        private GameplaySetup(MainFlowCoordinator mainFlowCoordinator, GameplaySetupViewController gameplaySetupViewController, HierarchyManager hierarchyManager, ICoroutineStarter coroutineStarter)
+        private GameplaySetup(MainFlowCoordinator mainFlowCoordinator, GameplaySetupViewController gameplaySetupViewController, HierarchyManager hierarchyManager)
         {
             this.mainFlowCoordinator = mainFlowCoordinator;
             this.gameplaySetupViewController = gameplaySetupViewController;
             this.hierarchyManager = hierarchyManager;
-            this.coroutineStarter = coroutineStarter;
         }
 
         [UIValue("has-menus")]
@@ -143,14 +141,14 @@ namespace BeatSaberMarkupLanguage.GameplaySetup
 
         private void QueueRefreshView()
         {
-            debounceCoroutine ??= coroutineStarter.StartCoroutine(RefreshViewCoroutine());
+            debounceTask ??= RefreshViewCoroutine();
         }
 
-        private IEnumerator RefreshViewCoroutine()
+        private async Task RefreshViewCoroutine()
         {
-            yield return new WaitForEndOfFrame();
+            await Task.Yield(); // wait for next frame
             RefreshView();
-            debounceCoroutine = null;
+            debounceTask = null;
         }
 
         private void RefreshView()
