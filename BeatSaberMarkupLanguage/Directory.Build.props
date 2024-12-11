@@ -26,7 +26,7 @@
 
   <ItemGroup>
     <Reference Include="IPA.Loader">
-      <HintPath>$(BeatSaberDir)Beat Saber_Data\Managed\IPA.Loader.dll</HintPath>
+      <HintPath>$(BeatSaberDir)IPA\IPA.Loader.dll</HintPath>
       <Private>False</Private>
     </Reference>
 
