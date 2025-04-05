@@ -38,7 +38,7 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             {
                 if (slider != null)
                 {
-                    slider.interactable = value;
+                    ((TextSlider)slider).interactable = value;
                     if (showButtons)
                     {
                         incButton.interactable = value;
