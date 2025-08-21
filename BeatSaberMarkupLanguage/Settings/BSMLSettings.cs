@@ -128,13 +128,18 @@ namespace BeatSaberMarkupLanguage.Settings
                 button.gameObject.SetActive(false);
             }
 
+            ButtonSpriteSwap swap = button.GetComponent<ButtonSpriteSwap>();
+
             normal = await Utilities.LoadSpriteFromAssemblyAsync("BeatSaberMarkupLanguage.Resources.mods_idle.png");
             normal.texture.wrapMode = TextureWrapMode.Clamp;
 
             hover = await Utilities.LoadSpriteFromAssemblyAsync("BeatSaberMarkupLanguage.Resources.mods_selected.png");
             hover.texture.wrapMode = TextureWrapMode.Clamp;
 
-            button.SetButtonStates(normal, hover);
+            swap._disabledStateSprite = normal;
+            swap._normalStateSprite = normal;
+            swap._highlightStateSprite = hover;
+            swap._pressedStateSprite = hover;
         }
 
         private void PresentSettings()

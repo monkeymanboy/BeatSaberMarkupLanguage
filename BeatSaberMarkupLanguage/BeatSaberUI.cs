@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using BeatSaberMarkupLanguage.Animations;
 using BGLib.Polyglot;
 using HMUI;
-using IPA.Utilities.Async;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -54,7 +53,7 @@ namespace BeatSaberMarkupLanguage
             {
                 if (basicUIAudioManager == null)
                 {
-                    basicUIAudioManager = Object.FindObjectOfType<BasicUIAudioManager>();
+                    basicUIAudioManager = Object.FindAnyObjectByType<BasicUIAudioManager>();
                 }
 
                 return basicUIAudioManager;
@@ -77,6 +76,12 @@ namespace BeatSaberMarkupLanguage
             }
         }
 
+        /// <summary>
+        /// Gets the main font material used by the game for UI text.
+        /// </summary>
+        /// <remarks>
+        /// This material is meant to be used on curved canvases. Usage on non-curved canvases may result in unexpected behavior.
+        /// </remarks>
         internal static Material MainUIFontMaterial
         {
             get
@@ -205,6 +210,7 @@ namespace BeatSaberMarkupLanguage
         /// <param name="anchoredPosition">The position the button should be anchored to.</param>
         /// <returns>The newly created TextMeshProUGUI component.</returns>
         /// <remarks>Proxied to the generic method, but kept for binary compatibility.</remarks>
+        [Obsolete("This method never worked properly for flat text. Use CreateCurvedUIText instead.")]
         public static TextMeshProUGUI CreateText(RectTransform parent, string text, Vector2 anchoredPosition)
         {
             return CreateText<CurvedTextMeshPro>(parent, text, anchoredPosition, new Vector2(60f, 10f));
@@ -219,6 +225,7 @@ namespace BeatSaberMarkupLanguage
         /// <param name="sizeDelta">The size of the text components RectTransform.</param>
         /// <returns>The newly created <see cref="TextMeshProUGUI"/> component.</returns>
         /// <remarks>Proxied to the generic method, but kept for binary compatibility.</remarks>
+        [Obsolete("This method never worked properly for flat text. Use CreateCurvedUIText instead.")]
         public static TextMeshProUGUI CreateText(RectTransform parent, string text, Vector2 anchoredPosition, Vector2 sizeDelta)
         {
             return CreateText<CurvedTextMeshPro>(parent, text, anchoredPosition, sizeDelta);
@@ -232,6 +239,7 @@ namespace BeatSaberMarkupLanguage
         /// <param name="anchoredPosition">The position the button should be anchored to.</param>
         /// <typeparam name="T">The type of <see cref="TMP_Text"/> to create.</typeparam>
         /// <returns>The newly created text component.</returns>
+        [Obsolete("This method never worked properly for flat text. Use CreateCurvedUIText instead.")]
         public static T CreateText<T>(RectTransform parent, string text, Vector2 anchoredPosition)
             where T : TMP_Text
         {
@@ -247,6 +255,7 @@ namespace BeatSaberMarkupLanguage
         /// <param name="sizeDelta">The size of the text components RectTransform.</param>
         /// <typeparam name="T">The type of <see cref="TMP_Text"/> to create.</typeparam>
         /// <returns>The newly created text component.</returns>
+        [Obsolete("This method never worked properly for flat text. Use CreateCurvedUIText instead.")]
         public static T CreateText<T>(RectTransform parent, string text, Vector2 anchoredPosition, Vector2 sizeDelta)
             where T : TMP_Text
         {
@@ -274,6 +283,76 @@ namespace BeatSaberMarkupLanguage
             return textComponent;
         }
 
+        /// <summary>
+        /// Create a CurvedTextMeshPro component.
+        /// </summary>
+        /// <param name="parent">The parent <see cref="RectTransform"/>. Must have a <see cref="Canvas"/> in the hierarchy with <see cref="AdditionalCanvasShaderChannels.TexCoord2"/> added to <see cref="Canvas.additionalShaderChannels"/>.</param>
+        /// <param name="text">The text to display.</param>
+        /// <returns>The created <see cref="CurvedTextMeshPro"/> object.</returns>
+        public static CurvedTextMeshPro CreateCurvedUIText(RectTransform parent, string text) => CreateCurvedUIText<CurvedTextMeshPro>(parent, text);
+
+        /// <summary>
+        /// Create a CurvedTextMeshPro component.
+        /// </summary>
+        /// <param name="parent">The parent <see cref="RectTransform"/>. Must have a <see cref="Canvas"/> in the hierarchy with <see cref="AdditionalCanvasShaderChannels.TexCoord2"/> added to <see cref="Canvas.additionalShaderChannels"/>.</param>
+        /// <param name="text">The text to display.</param>
+        /// <typeparam name="T">The type of <see cref="CurvedTextMeshPro"/> to create.</typeparam>
+        /// <returns>The created <see cref="CurvedTextMeshPro"/> object.</returns>
+        public static T CreateCurvedUIText<T>(RectTransform parent, string text)
+            where T : CurvedTextMeshPro => CreateCurvedUIText<T>(parent, text, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, Vector2.zero);
+
+        /// <summary>
+        /// Create a CurvedTextMeshPro component.
+        /// </summary>
+        /// <param name="parent">The parent <see cref="RectTransform"/>. Must have a <see cref="Canvas"/> in the hierarchy with <see cref="AdditionalCanvasShaderChannels.TexCoord2"/> added to <see cref="Canvas.additionalShaderChannels"/>.</param>
+        /// <param name="text">The text to display.</param>
+        /// <param name="anchorMin">The <see cref="RectTransform.anchorMin"/> value.</param>
+        /// <param name="anchorMax">The <see cref="RectTransform.anchorMax"/> value.</param>
+        /// <param name="anchoredPosition">The <see cref="RectTransform.anchoredPosition"/> value.</param>
+        /// <param name="sizeDelta">The <see cref="RectTransform.sizeDelta"/> value.</param>
+        /// <returns>The created <see cref="CurvedTextMeshPro"/> object.</returns>
+        public static CurvedTextMeshPro CreateCurvedUIText(RectTransform parent, string text, Vector2 anchorMin, Vector2 anchorMax, Vector2 anchoredPosition, Vector2 sizeDelta) => CreateCurvedUIText<CurvedTextMeshPro>(parent, text, anchorMin, anchorMax, anchoredPosition, sizeDelta);
+
+        /// <summary>
+        /// Create a CurvedTextMeshPro component.
+        /// </summary>
+        /// <param name="parent">The parent <see cref="RectTransform"/>. Must have a <see cref="Canvas"/> in the hierarchy with <see cref="AdditionalCanvasShaderChannels.TexCoord2"/> added to <see cref="Canvas.additionalShaderChannels"/>.</param>
+        /// <param name="text">The text to display.</param>
+        /// <param name="anchorMin">The <see cref="RectTransform.anchorMin"/> value.</param>
+        /// <param name="anchorMax">The <see cref="RectTransform.anchorMax"/> value.</param>
+        /// <param name="anchoredPosition">The <see cref="RectTransform.anchoredPosition"/> value.</param>
+        /// <param name="sizeDelta">The <see cref="RectTransform.sizeDelta"/> value.</param>
+        /// <typeparam name="T">The type of <see cref="CurvedTextMeshPro"/> to create.</typeparam>
+        /// <returns>The created <see cref="CurvedTextMeshPro"/> object.</returns>
+        public static T CreateCurvedUIText<T>(RectTransform parent, string text, Vector2 anchorMin, Vector2 anchorMax, Vector2 anchoredPosition, Vector2 sizeDelta)
+             where T : CurvedTextMeshPro
+        {
+            GameObject gameObj = new("CustomCurvedUIText")
+            {
+                layer = 5,
+            };
+
+            gameObj.SetActive(false);
+
+            T textComponent = gameObj.AddComponent<T>();
+            textComponent.font = MainTextFont;
+            textComponent.fontSharedMaterial = MainUIFontMaterial;
+            textComponent.rectTransform.SetParent(parent, false);
+            textComponent.text = text;
+            textComponent.fontSize = 4;
+            textComponent.color = Color.white;
+
+            textComponent.rectTransform.anchorMin = anchorMin;
+            textComponent.rectTransform.anchorMax = anchorMax;
+            textComponent.rectTransform.sizeDelta = sizeDelta;
+            textComponent.rectTransform.anchoredPosition = anchoredPosition;
+
+            gameObj.SetActive(true);
+
+            return textComponent;
+        }
+
+        [Obsolete]
         public static void SetButtonText(this Button button, string text)
         {
             LocalizedTextMeshProUGUI localizer = button.GetComponentInChildren<LocalizedTextMeshProUGUI>(true);
@@ -289,6 +368,7 @@ namespace BeatSaberMarkupLanguage
             }
         }
 
+        [Obsolete]
         public static void SetButtonTextSize(this Button button, float fontSize)
         {
             TextMeshProUGUI textMesh = button.GetComponentInChildren<TextMeshProUGUI>();
@@ -298,15 +378,17 @@ namespace BeatSaberMarkupLanguage
             }
         }
 
+        [Obsolete]
         public static void ToggleWordWrapping(this Button button, bool enableWordWrapping)
         {
             TextMeshProUGUI textMesh = button.GetComponentInChildren<TextMeshProUGUI>();
             if (textMesh != null)
             {
-                textMesh.enableWordWrapping = enableWordWrapping;
+                textMesh.textWrappingMode = enableWordWrapping ? TextWrappingModes.Normal : TextWrappingModes.NoWrap;
             }
         }
 
+        [Obsolete]
         public static void SetButtonIcon(this Button button, Sprite icon)
         {
             Image image = button.GetComponentsInChildren<Image>().Where(x => x.name == "Icon").First();
@@ -316,6 +398,7 @@ namespace BeatSaberMarkupLanguage
             }
         }
 
+        [Obsolete]
         public static void SetButtonBackground(this Button button, Sprite background)
         {
             Image image = button.GetComponentInChildren<Image>();
@@ -325,6 +408,7 @@ namespace BeatSaberMarkupLanguage
             }
         }
 
+        [Obsolete]
         public static void SetButtonStates(this Button button, Sprite normal, Sprite hover)
         {
             ButtonSpriteSwap swap = button.GetComponent<ButtonSpriteSwap>();
@@ -372,99 +456,17 @@ namespace BeatSaberMarkupLanguage
         [Obsolete]
         public static void SetImage(this Image image, string location, bool loadingAnimation, ScaleOptions scaleOptions, Action callback)
         {
-            if (image.TryGetComponent(out AnimationStateUpdater oldStateUpdater))
-            {
-                Object.DestroyImmediate(oldStateUpdater);
-            }
-
-            if (location.Length > 1 && location[0] == '#')
-            {
-                string imgName = location.Substring(1);
-                image.sprite = Utilities.FindSpriteCached(imgName);
-                if (image.sprite == null)
+            SetImageAsync(image, location, loadingAnimation, scaleOptions).ContinueWith(
+                t =>
                 {
-                    Logger.Log.Error($"Could not find Sprite with image name {imgName}");
-                }
-
-                return;
-            }
-
-            bool isURL = Uri.TryCreate(location, UriKind.Absolute, out Uri uri);
-            if (IsAnimated(location) || (isURL && IsAnimated(uri.LocalPath)))
-            {
-                AnimationStateUpdater stateUpdater = image.gameObject.AddComponent<AnimationStateUpdater>();
-                stateUpdater.Image = image;
-                if (loadingAnimation)
-                {
-                    stateUpdater.ControllerData = AnimationController.Instance.LoadingAnimation;
-                }
-
-                if (AnimationController.Instance.RegisteredAnimations.TryGetValue(location, out AnimationControllerData animControllerData))
-                {
-                    stateUpdater.ControllerData = animControllerData;
-                }
-                else
-                {
-                    UnityMainThreadTaskScheduler.Factory.StartNew(async () =>
+                    if (t.IsFaulted)
                     {
-                        byte[] data = await Utilities.GetDataAsync(location);
-                        AnimationData animationData;
-
-                        if (location.EndsWith(".gif", StringComparison.OrdinalIgnoreCase) || (isURL && uri.LocalPath.EndsWith(".gif", StringComparison.OrdinalIgnoreCase)))
-                        {
-                            animationData = await AnimationLoader.ProcessGifAsync(data);
-                        }
-                        else
-                        {
-                            animationData = await AnimationLoader.ProcessApngAsync(data);
-                        }
-
-                        AnimationControllerData controllerData = AnimationController.Instance.Register(location, animationData);
-                        stateUpdater.ControllerData = controllerData;
-                        callback?.Invoke();
-                    }).ContinueWith((task) => Logger.Log.Error($"Failed to load animation '{location}'\n{task.Exception}"), TaskContinuationOptions.OnlyOnFaulted);
-
-                    return;
-                }
-            }
-            else
-            {
-                AnimationStateUpdater stateUpdater = image.gameObject.AddComponent<AnimationStateUpdater>();
-                stateUpdater.Image = image;
-
-                if (loadingAnimation)
-                {
-                    stateUpdater.ControllerData = AnimationController.Instance.LoadingAnimation;
-                }
-
-                UnityMainThreadTaskScheduler.Factory.StartNew(async () =>
-                {
-                    byte[] data = await Utilities.GetDataAsync(location);
-
-                    if (stateUpdater != null)
-                    {
-                        Object.DestroyImmediate(stateUpdater);
-                    }
-
-                    if (scaleOptions.ShouldScale)
-                    {
-                        byte[] imageBytes = await Task.Run(() => DownscaleImage(data, scaleOptions.Width, scaleOptions.Height, scaleOptions.MaintainRatio));
-                        image.sprite = Utilities.LoadSpriteRaw(imageBytes);
-                        image.sprite.texture.wrapMode = TextureWrapMode.Clamp;
-                    }
-                    else
-                    {
-                        image.sprite = Utilities.LoadSpriteRaw(data);
-                        image.sprite.texture.wrapMode = TextureWrapMode.Clamp;
+                        Logger.Log.Error(t.Exception);
                     }
 
                     callback?.Invoke();
-                }).ContinueWith((task) => Logger.Log.Error($"Failed to load image '{location}'\n{task.Exception}"), TaskContinuationOptions.OnlyOnFaulted);
-
-                return;
-            }
-
-            callback?.Invoke();
+                },
+                TaskScheduler.FromCurrentSynchronizationContext());
         }
 
         /// <summary>

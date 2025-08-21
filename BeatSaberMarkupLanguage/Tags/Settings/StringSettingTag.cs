@@ -66,7 +66,7 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
 
             gameObject.GetComponent<LayoutElement>().preferredWidth = 90;
             stringSetting.TextMesh.alignment = TextAlignmentOptions.MidlineRight;
-            stringSetting.TextMesh.enableWordWrapping = false;
+            stringSetting.TextMesh.textWrappingMode = TextWrappingModes.NoWrap;
 
             Image icon = stringSetting.EditButton.transform.Find("Icon").GetComponent<Image>();
             icon.name = "EditIcon";

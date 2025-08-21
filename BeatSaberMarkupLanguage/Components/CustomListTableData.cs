@@ -187,7 +187,7 @@ namespace BeatSaberMarkupLanguage.Components
                 case ListStyle.Simple:
                     SimpleTextTableCell simpleCell = GetSimpleTextTableCell();
                     simpleCell._text.richText = true;
-                    simpleCell._text.enableWordWrapping = true;
+                    simpleCell._text.textWrappingMode = TextWrappingModes.Normal;
                     simpleCell.text = Data[idx].Text;
 
                     return simpleCell;

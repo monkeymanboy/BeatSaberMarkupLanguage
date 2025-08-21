@@ -146,22 +146,22 @@ namespace BeatSaberMarkupLanguage.Components
             layoutGroup.childAlignment = TextAnchor.MiddleCenter;
 
             // BUG: Make this an input field maybe
-            KeyboardText = BeatSaberUI.CreateText<WhitespaceIncludingCurvedTextMeshPro>(keyboardTextContainer, string.Empty, new Vector2(0, 0));
+            KeyboardText = BeatSaberUI.CreateCurvedUIText<WhitespaceIncludingCurvedTextMeshPro>(keyboardTextContainer, string.Empty, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(60f, 10f));
             KeyboardText.name = "Text";
             KeyboardText.fontSize = 6f;
             KeyboardText.overflowMode = TextOverflowModes.Masking;
             KeyboardText.color = Color.white;
             KeyboardText.alignment = TextAlignmentOptions.BaselineRight;
-            KeyboardText.enableWordWrapping = false;
+            KeyboardText.textWrappingMode = TextWrappingModes.NoWrap;
             KeyboardText.text = string.Empty;
             KeyboardText.enabled = this.enableInputField;
 
-            KeyboardCursor = BeatSaberUI.CreateText(keyboardTextContainer, "|", new Vector2(0, 0));
+            KeyboardCursor = BeatSaberUI.CreateCurvedUIText(keyboardTextContainer, "|", new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(60f, 10f));
             KeyboardCursor.name = "Cursor";
             KeyboardCursor.fontSize = 6f;
             KeyboardCursor.color = new Color(0.60f, 0.80f, 1);
             KeyboardCursor.alignment = TextAlignmentOptions.Baseline;
-            KeyboardCursor.enableWordWrapping = false;
+            KeyboardCursor.textWrappingMode = TextWrappingModes.NoWrap;
             KeyboardCursor.enabled = this.enableInputField;
 
             // We protect this since setting nonexistent keys will throw.
@@ -579,7 +579,7 @@ namespace BeatSaberMarkupLanguage.Components
 
                 buttonText = button.GetComponentInChildren<TextMeshProUGUI>();
                 buttonText.richText = true;
-                buttonText.enableWordWrapping = false;
+                buttonText.textWrappingMode = TextWrappingModes.NoWrap;
                 buttonText.fontSize = 5f;
                 buttonText.text = text;
 

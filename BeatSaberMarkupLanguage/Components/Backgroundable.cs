@@ -152,7 +152,7 @@ namespace BeatSaberMarkupLanguage.Components
         {
             string objectName = ObjectNames[name];
             string parentName = ObjectParentNames[name];
-            ImageView[] images = FindObjectsOfType<ImageView>(true);
+            ImageView[] images = FindObjectsByType<ImageView>(FindObjectsInactive.Include, FindObjectsSortMode.None);
             for (int i = 0; i < images.Length; i++)
             {
                 ImageView image = images[i];

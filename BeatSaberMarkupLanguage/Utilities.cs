@@ -97,44 +97,6 @@ namespace BeatSaberMarkupLanguage
 
         public static string EscapeXml(string source) => System.Security.SecurityElement.Escape(source);
 
-        [Obsolete("Use LoadTextureFromAssemblyAsync(Assembly, string) instead.")]
-        public static Texture2D FindTextureInAssembly(string path)
-        {
-            try
-            {
-                AssemblyFromPath(path, out Assembly asm, out string newPath);
-                if (asm.GetManifestResourceNames().Contains(newPath))
-                {
-                    return LoadTextureRaw(GetResource(asm, newPath));
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Log?.Error("Unable to find texture in assembly! (You must prefix path with 'assembly name:' if the assembly and root namespace don't have the same name) Exception: " + ex);
-            }
-
-            return null;
-        }
-
-        [Obsolete("Use LoadSpriteFromAssemblyAsync(Assembly, string) instead.")]
-        public static Sprite FindSpriteInAssembly(string path)
-        {
-            try
-            {
-                AssemblyFromPath(path, out Assembly asm, out string newPath);
-                if (asm.GetManifestResourceNames().Contains(newPath))
-                {
-                    return LoadSpriteRaw(GetResource(asm, newPath));
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Log?.Error("Unable to find sprite in assembly! (You must prefix path with 'assembly name:' if the assembly and root namespace don't have the same name) Exception: " + ex);
-            }
-
-            return null;
-        }
-
         public static void AssemblyFromPath(string inputPath, out Assembly assembly, out string path)
         {
             string[] parameters = inputPath.Split(':');
@@ -151,27 +113,6 @@ namespace BeatSaberMarkupLanguage
                 default:
                     throw new BSMLException($"Could not process resource path {inputPath}");
             }
-        }
-
-        [Obsolete("Use LoadImageAsync(byte[]) instead.")]
-        public static Texture2D LoadTextureRaw(byte[] file)
-        {
-            if (file.Length > 0)
-            {
-                Texture2D tex2D = new(0, 0, TextureFormat.RGBA32, false, false);
-                if (tex2D.LoadImage(file))
-                {
-                    return tex2D;
-                }
-            }
-
-            return null;
-        }
-
-        [Obsolete("Use LoadSpriteAsync(byte[], float) instead.")]
-        public static Sprite LoadSpriteRaw(byte[] image, float pixelsPerUnit = 100.0f)
-        {
-            return LoadSpriteFromTexture(LoadTextureRaw(image), pixelsPerUnit);
         }
 
         /// <summary>
@@ -317,6 +258,7 @@ namespace BeatSaberMarkupLanguage
             return sprite;
         }
 
+        [Obsolete("Use GetResourceAsync instead")]
         public static byte[] GetResource(Assembly asm, string resourceName)
         {
             using Stream resourceStream = asm.GetManifestResourceStream(resourceName);

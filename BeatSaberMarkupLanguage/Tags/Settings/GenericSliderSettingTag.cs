@@ -38,7 +38,7 @@ namespace BeatSaberMarkupLanguage.Tags.Settings
 
             sliderSetting.Slider = baseSetting.GetComponentInChildren<CustomFormatRangeValuesSlider>();
             sliderSetting.Slider.name = "BSMLSlider";
-            sliderSetting.Slider.GetComponentInChildren<TextMeshProUGUI>().enableWordWrapping = false;
+            sliderSetting.Slider.GetComponentInChildren<TextMeshProUGUI>().textWrappingMode = TextWrappingModes.NoWrap;
             sliderSetting.Slider._enableDragging = true;
 
             RectTransform sliderTransform = (RectTransform)sliderSetting.Slider.transform;

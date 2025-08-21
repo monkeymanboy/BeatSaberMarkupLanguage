@@ -122,7 +122,7 @@ namespace BeatSaberMarkupLanguage.Settings
         private void Ok()
         {
             EmitEventToAll("apply");
-            FindObjectOfType<MenuTransitionsHelper>().RestartGame();
+            BeatSaberUI.DiContainer.Resolve<MenuTransitionsHelper>().RestartGame();
         }
 
         [UIAction("cancel-click")]

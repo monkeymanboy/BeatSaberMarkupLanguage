@@ -46,7 +46,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "richText", new Action<TextMeshProUGUI, string>((textMesh, value) => textMesh.richText = Parse.Bool(value)) },
             { "alignment", new Action<TextMeshProUGUI, string>((textMesh, value) => textMesh.alignment = (TextAlignmentOptions)Enum.Parse(typeof(TextAlignmentOptions), value)) },
             { "overflowMode", new Action<TextMeshProUGUI, string>((textMesh, value) => textMesh.overflowMode = (TextOverflowModes)Enum.Parse(typeof(TextOverflowModes), value)) },
-            { "wordWrapping", new Action<TextMeshProUGUI, string>((textMesh, value) => textMesh.enableWordWrapping = Parse.Bool(value)) },
+            { "wordWrapping", new Action<TextMeshProUGUI, string>((textMesh, value) => textMesh.textWrappingMode = Parse.Bool(value) ? TextWrappingModes.Normal : TextWrappingModes.NoWrap) },
             { "bold", new Action<TextMeshProUGUI, string>((textMesh, value) => textMesh.fontStyle = SetStyle(textMesh.fontStyle, FontStyles.Bold, value)) },
             { "italics", new Action<TextMeshProUGUI, string>((textMesh, value) => textMesh.fontStyle = SetStyle(textMesh.fontStyle, FontStyles.Italic, value)) },
             { "underlined", new Action<TextMeshProUGUI, string>((textMesh, value) => textMesh.fontStyle = SetStyle(textMesh.fontStyle, FontStyles.Underline, value)) },
