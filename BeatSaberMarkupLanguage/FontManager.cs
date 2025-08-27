@@ -215,7 +215,11 @@ namespace BeatSaberMarkupLanguage
             for (int i = 0; i < fontInfos.Count; i++)
             {
                 FontInfo fontInfo = fontInfos[i];
-                fontAssets[i] = BeatSaberUI.CreateTMPFont(GetFontFromCacheOrLoad(fontInfo), fontInfo.FullName);
+                TMP_FontAsset fontAsset = BeatSaberUI.CreateTMPFont(GetFontFromCacheOrLoad(fontInfo), fontInfo.FullName);
+                FaceInfo faceInfo = fontAsset.faceInfo;
+                faceInfo.scale = 0.85f;
+                fontAsset.faceInfo = faceInfo;
+                fontAssets[i] = fontAsset;
             }
 
             return fontAssets;
