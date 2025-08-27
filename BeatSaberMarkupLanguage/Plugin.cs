@@ -3,12 +3,14 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using BeatSaberMarkupLanguage.Harmony_Patches;
 using BeatSaberMarkupLanguage.Util;
 using HarmonyLib;
 using IPA;
 using IPA.Config.Stores;
 using TMPro;
+using UnityEngine;
+using UnityEngine.TextCore;
+using UnityEngine.TextCore.LowLevel;
 using Conf = IPA.Config.Config;
 using IPALogger = IPA.Logging.Logger;
 
@@ -58,18 +60,6 @@ namespace BeatSaberMarkupLanguage
         private async Task LoadAndSetUpFontFallbacksAsync()
         {
             await FontManager.AsyncLoadSystemFonts();
-            await MainSystemInitAwaiter.WaitForMainSystemInitAsync();
-
-            TMP_FontAsset[] fontAssets = FontManager.CreateFallbackFonts(FontNamesToLoad);
-
-            if (fontAssets.Length == 0)
-            {
-                Logger.Log.Error("Failed to find any fallback fonts");
-                return;
-            }
-
-            Logger.Log.Debug("Waiting for default font presence");
-
             await MainMenuAwaiter.WaitForMainMenuAsync();
 
             Logger.Log.Debug("Setting up default font fallbacks");
@@ -78,8 +68,20 @@ namespace BeatSaberMarkupLanguage
             TMP_FontAsset mainTextFont = BeatSaberUI.MainTextFont;
             mainTextFont.fallbackFontAssets.RemoveAll((asset) => FontNamesToRemove.Contains(asset.name));
             mainTextFont.fallbackFontAssetTable.RemoveAll((asset) => FontNamesToRemove.Contains(asset.name));
-            mainTextFont.fallbackFontAssetTable.AddRange(fontAssets);
             mainTextFont.boldSpacing = 2.2f; // default bold spacing is rather  w i d e
+
+            if (Config.UseColoredEmoji && FontManager.TryGetFontByFullName("Segoe UI Emoji", out Font font))
+            {
+                TMP_FontAsset emoji = TMP_FontAsset.CreateFontAsset(font, 90, 9, GlyphRenderMode.COLOR, 4096, 4096);
+                emoji.name = "Segoe UI Emoji (Color)";
+                FaceInfo faceInfo = emoji.faceInfo;
+                faceInfo.scale = 0.85f;
+                emoji.faceInfo = faceInfo;
+
+                mainTextFont.fallbackFontAssetTable.Add(emoji);
+            }
+
+            mainTextFont.fallbackFontAssetTable.AddRange(FontManager.CreateFallbackFonts(FontNamesToLoad));
         }
     }
 }
