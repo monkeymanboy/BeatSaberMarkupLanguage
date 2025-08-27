@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Util;
 using BGLib.Polyglot;
 using HMUI;
@@ -40,16 +39,6 @@ namespace BeatSaberMarkupLanguage.Settings
         }
 
         internal IList<CustomCellInfo> SettingsMenus { get; }
-
-        [UIValue("thumbstick-value")]
-        private bool ThumbstickValue
-        {
-            get => Plugin.Config.DisableThumbstickScroll;
-            set
-            {
-                Plugin.Config.DisableThumbstickScroll = value;
-            }
-        }
 
         public void AddSettingsMenu(string name, string resource, object host)
         {
@@ -108,12 +97,6 @@ namespace BeatSaberMarkupLanguage.Settings
             {
                 return Utilities.StripHtmlTags(a.Text).CompareTo(Utilities.StripHtmlTags(b.Text));
             }
-        }
-
-        [UIAction("set-thumbstick")]
-        private void SetThumbstick(bool value)
-        {
-            ThumbstickValue = value;
         }
 
         private async Task AddButtonToMainScreen()

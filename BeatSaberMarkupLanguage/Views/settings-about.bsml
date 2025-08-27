@@ -9,5 +9,4 @@
     <horizontal>
         <text text="---" font-color="#00000000"/>
     </horizontal>
-    <checkbox-setting value="thumbstick-value" on-change="set-thumbstick" text-key="BSML_THUMBSTICK_SETTING_NAME" hover-hint-key="BSML_THUMBSTICK_SETTING_HINT"/>
 </settings-container>

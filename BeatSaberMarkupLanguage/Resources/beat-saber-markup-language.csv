@@ -9,5 +9,3 @@ BSML_GAMEPLAY_SETUP_BASE_GAME_TAB,Base game tab name in the gameplay setup pane.
 BSML_GAMEPLAY_SETUP_MODS_TAB,Mods tab name in the gameplay setup pane.,Mods,,,,,,,,,,,,,,,,,,,,,,,,,,,
 BSML_GAMEPLAY_SETUP_EDIT_VISIBLE_TABS_HINT,Hover hint of the edit tab visibility (eye) button in the gameplay setup pane.,Edit Tab Visibility,,,,,,,,,,,,,,,,,,,,,,,,,,,
 BSML_GAMEPLAY_SETUP_LOAD_ERROR,Error message shown when the gameplay setup tab can't be loaded.,Error loading gameplay tab.,,,,,,,,,,,,,,,,,,,,,,,,,,,
-BSML_THUMBSTICK_SETTING_NAME,,Disable thumbstick scrolling in Mod Settings,,,,,,,,,,,,,,,,,,,,,,,,,,,
-BSML_THUMBSTICK_SETTING_HINT,,Limit control to the scroll bar in mod list to the left of this page. Prevents autoscrolling if you have stick drift.,,,,,,,,,,,,,,,,,,,,,,,,,,,

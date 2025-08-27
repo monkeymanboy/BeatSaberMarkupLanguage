@@ -13,7 +13,5 @@ namespace BeatSaberMarkupLanguage
         [NonNullable]
         [UseConverter(typeof(ListConverter<string>))]
         public virtual List<string> HiddenTabs { get; set; } = new List<string>();
-
-        public virtual bool DisableThumbstickScroll { get; set; } = false;
     }
 }
