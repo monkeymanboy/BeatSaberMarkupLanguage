@@ -220,7 +220,7 @@ namespace BeatSaberMarkupLanguage
             for (int i = 0; i < fontInfos.Count; i++)
             {
                 FontInfo fontInfo = fontInfos[i];
-                fontAssets[i] = BeatSaberUI.CreateTMPFont(GetFontFromCacheOrLoad(fontInfo), fontInfo.Info.FullName);
+                fontAssets[i] = BeatSaberUI.CreateTMPFont(GetFontFromCacheOrLoad(fontInfo), fontInfo.FullName);
             }
 
             return fontAssets;
@@ -256,8 +256,8 @@ namespace BeatSaberMarkupLanguage
             // This should be on the main thread.
             string[] paths = await UnityMainThreadTaskScheduler.Factory.StartNew(Font.GetPathsToOSFonts);
 
-            Dictionary<string, List<FontInfo>> families = new(paths.Length, StringComparer.InvariantCultureIgnoreCase);
-            Dictionary<string, FontInfo> fullNames = new(paths.Length, StringComparer.InvariantCultureIgnoreCase);
+            Dictionary<string, List<FontInfo>> families = new(paths.Length, StringComparer.OrdinalIgnoreCase);
+            Dictionary<string, FontInfo> fullNames = new(paths.Length, StringComparer.OrdinalIgnoreCase);
 
             foreach (string path in paths)
             {
@@ -283,7 +283,7 @@ namespace BeatSaberMarkupLanguage
 #if DEBUG
                 Logger.Log.Debug($"'{path}' = '{font.Family}' '{font.Subfamily}' ({font.FullName})");
 #endif
-                FontInfo fontInfo = new(path, font);
+                FontInfo fontInfo = new(path, font.FullName, font.Subfamily);
 
                 List<FontInfo> list = GetListForFamily(cache, font.Family);
                 list.Add(fontInfo);
@@ -305,18 +305,18 @@ namespace BeatSaberMarkupLanguage
             using OpenTypeReader reader = OpenTypeReader.For(fileStream);
             if (reader is OpenTypeCollectionReader colReader)
             {
-                OpenTypeCollection collection = new(colReader, lazyLoad: false);
+                using OpenTypeCollection collection = new(colReader, lazyLoad: false);
                 return collection.Select(AddFont).ToList();
             }
             else if (reader is OpenTypeFontReader fontReader)
             {
-                OpenTypeFont font = new(fontReader, lazyLoad: false);
+                using OpenTypeFont font = new(fontReader, lazyLoad: false);
                 return Utilities.SingleEnumerable(AddFont(font));
             }
             else
             {
                 Logger.Log.Warn($"Font file '{path}' is not an OpenType file");
-                return Enumerable.Empty<FontInfo>();
+                return [];
             }
         }
 
@@ -345,7 +345,7 @@ namespace BeatSaberMarkupLanguage
             {
                 if (fontInfoLookup.TryGetValue(family, out List<FontInfo> fonts))
                 {
-                    info = fonts.Where(p => p?.Info.Subfamily == subfamily).FirstOrDefault();
+                    info = fonts.Where(p => p.Subfamily.Equals(subfamily, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
                     if (info == null)
                     {
                         if (!fallbackIfNoSubfamily)
@@ -382,11 +382,14 @@ namespace BeatSaberMarkupLanguage
         {
             lock (LoadedFontsCache)
             {
-                if (!LoadedFontsCache.TryGetValue(info.Path, out Font font))
+                if (!LoadedFontsCache.TryGetValue(info.Path, out Font font) || font == null)
                 {
-                    font = new Font(info.Path);
-                    font.name = info.Info.FullName;
-                    LoadedFontsCache.Add(info.Path, font);
+                    font = new Font(info.Path)
+                    {
+                        name = info.FullName,
+                    };
+
+                    LoadedFontsCache[info.Path] = font;
                 }
 
                 return font;
@@ -397,12 +400,12 @@ namespace BeatSaberMarkupLanguage
         {
             // don't lock on this because this is mutually recursive with TryGetTMPFontByFullName
             Font font = GetFontFromCacheOrLoad(info);
-            TMP_FontAsset tmpFont = BeatSaberUI.CreateTMPFont(font, info.Info.FullName);
+            TMP_FontAsset tmpFont = BeatSaberUI.CreateTMPFont(font, info.FullName);
 
             if (setupOsFallbacks)
             {
-                Logger.Log.Debug($"Reading fallbacks for '{info.Info.FullName}'");
-                foreach (string fallback in GetOSFontFallbackList(info.Info.FullName))
+                Logger.Log.Debug($"Reading fallbacks for '{info.FullName}'");
+                foreach (string fallback in GetOSFontFallbackList(info.FullName))
                 {
                     Logger.Log.Debug($"Reading fallback '{fallback}'");
                     if (TryGetTMPFontByFullName(fallback, out TMP_FontAsset fallbackFont, false))
@@ -429,7 +432,7 @@ namespace BeatSaberMarkupLanguage
         private static IReadOnlyList<FontInfo> CollectFontInfos(string[] fontNames)
         {
             Queue<string> fontsToSearch = new(fontNames);
-            Dictionary<string, FontInfo> fontInfos = new(StringComparer.InvariantCultureIgnoreCase);
+            Dictionary<string, FontInfo> fontInfos = new(StringComparer.OrdinalIgnoreCase);
 
             while (fontsToSearch.Count > 0)
             {
@@ -456,6 +459,6 @@ namespace BeatSaberMarkupLanguage
             return [.. fontInfos.Values];
         }
 
-        private record FontInfo(string Path, OpenTypeFont Info);
+        private record FontInfo(string Path, string FullName, string Subfamily);
     }
 }
