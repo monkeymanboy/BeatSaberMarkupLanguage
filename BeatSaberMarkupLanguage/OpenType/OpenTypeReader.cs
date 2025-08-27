@@ -43,8 +43,7 @@ namespace BeatSaberMarkupLanguage.OpenType
             return tag switch
             {
                 CollectionHeader.TTCTagBEInt => new OpenTypeCollectionReader(stream, enc, leaveOpen),
-                OffsetTable.OpenTypeCFFVersion => new OpenTypeFontReader(stream, enc, leaveOpen),
-                OffsetTable.TrueTypeOnlyVersion => new OpenTypeFontReader(stream, enc, leaveOpen),
+                OffsetTable.OpenTypeCFFVersion or OffsetTable.TrueTypeOnlyVersion => new OpenTypeFontReader(stream, enc, leaveOpen),
                 _ => null,
             };
         }

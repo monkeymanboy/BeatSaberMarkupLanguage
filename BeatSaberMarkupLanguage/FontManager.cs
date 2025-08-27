@@ -86,13 +86,8 @@ namespace BeatSaberMarkupLanguage
 
             lock (fontInfoLookup)
             {
-                IEnumerable<FontInfo> set = AddFontFileToCache(fontInfoLookup, fontInfoLookupFullName, path);
-                if (!set.Any())
-                {
-                    throw new ArgumentException("File is not an OpenType font or collection", nameof(path));
-                }
-
-                return GetFontFromCacheOrLoad(set.First());
+                FontInfo[] fontInfos = AddFontFileToCache(fontInfoLookup, fontInfoLookupFullName, path);
+                return GetFontFromCacheOrLoad(fontInfos[0]);
             }
         }
 
@@ -276,7 +271,7 @@ namespace BeatSaberMarkupLanguage
             return (families, fullNames);
         }
 
-        private static IEnumerable<FontInfo> AddFontFileToCache(Dictionary<string, List<FontInfo>> cache, Dictionary<string, FontInfo> fullCache, string path)
+        private static FontInfo[] AddFontFileToCache(Dictionary<string, List<FontInfo>> cache, Dictionary<string, FontInfo> fullCache, string path)
         {
             FontInfo AddFont(OpenTypeFont font)
             {
@@ -287,36 +282,38 @@ namespace BeatSaberMarkupLanguage
 
                 List<FontInfo> list = GetListForFamily(cache, font.Family);
                 list.Add(fontInfo);
-                string name = font.FullName;
-                if (fullCache.ContainsKey(name))
-                {
-                    // Beat Saber 1.13.4 includes well over 100+ fonts that most systems have, this completely blows up the console on game launch.
-                    // Logger.log.Warn($"Duplicate font with full name '{name}' at {path}");
-                }
-                else
-                {
-                    fullCache.Add(name, fontInfo);
-                }
+                fullCache.TryAdd(font.FullName, fontInfo);
 
                 return fontInfo;
             }
 
             using FileStream fileStream = new(path, FileMode.Open, FileAccess.Read);
             using OpenTypeReader reader = OpenTypeReader.For(fileStream);
-            if (reader is OpenTypeCollectionReader colReader)
+
+            switch (reader)
             {
-                using OpenTypeCollection collection = new(colReader, lazyLoad: false);
-                return collection.Select(AddFont).ToList();
-            }
-            else if (reader is OpenTypeFontReader fontReader)
-            {
-                using OpenTypeFont font = new(fontReader, lazyLoad: false);
-                return Utilities.SingleEnumerable(AddFont(font));
-            }
-            else
-            {
-                Logger.Log.Warn($"Font file '{path}' is not an OpenType file");
-                return [];
+                case OpenTypeCollectionReader colReader:
+                    using (OpenTypeCollection collection = new(colReader, lazyLoad: false))
+                    {
+                        IReadOnlyList<OpenTypeFont> fonts = collection.Fonts;
+                        FontInfo[] fontInfos = new FontInfo[fonts.Count];
+
+                        for (int i = 0; i < fonts.Count; i++)
+                        {
+                            fontInfos[i] = AddFont(fonts[i]);
+                        }
+
+                        return fontInfos;
+                    }
+
+                case OpenTypeFontReader fontReader:
+                    using (OpenTypeFont font = new(fontReader, lazyLoad: false))
+                    {
+                        return [AddFont(font)];
+                    }
+
+                default:
+                    throw new ArgumentException("File is not a supported OpenType font or collection", nameof(path));
             }
         }
 

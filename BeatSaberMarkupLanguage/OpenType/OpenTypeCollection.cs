@@ -33,7 +33,7 @@ namespace BeatSaberMarkupLanguage.OpenType
 
         public OpenTypeCollectionReader Reader { get; }
 
-        public IEnumerable<OpenTypeFont> Fonts
+        public IReadOnlyList<OpenTypeFont> Fonts
             => fonts ??= ReadFonts(Reader);
 
         public IEnumerator<OpenTypeFont> GetEnumerator()
