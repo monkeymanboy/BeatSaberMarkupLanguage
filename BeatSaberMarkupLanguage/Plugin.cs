@@ -19,7 +19,8 @@ namespace BeatSaberMarkupLanguage
     [Plugin(RuntimeOptions.SingleStartInit)]
     public class Plugin
     {
-        private static readonly string[] FontNamesToRemove = { "NotoSansJP-Medium SDF", "NotoSansKR-Medium SDF", "SourceHanSansCN-Bold-SDF-Common-1(2k)", "SourceHanSansCN-Bold-SDF-Common-2(2k)", "SourceHanSansCN-Bold-SDF-Uncommon(2k)" };
+        private static readonly string[] FontNamesToLoad = ["Segoe UI", "Segoe UI Emoji", "Segoe UI Historic", "Gadugi", "Nirmala UI", "Arial"];
+        private static readonly string[] FontNamesToRemove = ["NotoSansJP-Medium SDF", "NotoSansKR-Medium SDF", "SourceHanSansCN-Bold-SDF-Common-1(2k)", "SourceHanSansCN-Bold-SDF-Common-2(2k)", "SourceHanSansCN-Bold-SDF-Uncommon(2k)"];
 
         internal static Config Config { get; private set; }
 
@@ -57,10 +58,11 @@ namespace BeatSaberMarkupLanguage
             await FontManager.AsyncLoadSystemFonts();
             await MainSystemInitAwaiter.WaitForMainSystemInitAsync();
 
-            if (!FontManager.TryGetTMPFontByFullName("Segoe UI", out TMP_FontAsset fallback) &&
-                !FontManager.TryGetTMPFontByFamily("Arial", out fallback))
+            TMP_FontAsset[] fontAssets = FontManager.CreateFallbackFonts(FontNamesToLoad);
+
+            if (fontAssets.Length == 0)
             {
-                Logger.Log.Error("Could not find fonts for either Segoe UI or Arial to set up fallbacks");
+                Logger.Log.Error("Failed to find any fallback fonts");
                 return;
             }
 
@@ -74,7 +76,7 @@ namespace BeatSaberMarkupLanguage
             TMP_FontAsset mainTextFont = BeatSaberUI.MainTextFont;
             mainTextFont.fallbackFontAssets.RemoveAll((asset) => FontNamesToRemove.Contains(asset.name));
             mainTextFont.fallbackFontAssetTable.RemoveAll((asset) => FontNamesToRemove.Contains(asset.name));
-            mainTextFont.fallbackFontAssetTable.Add(fallback);
+            mainTextFont.fallbackFontAssetTable.AddRange(fontAssets);
             mainTextFont.boldSpacing = 2.2f; // default bold spacing is rather  w i d e
         }
     }

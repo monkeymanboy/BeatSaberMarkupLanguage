@@ -153,19 +153,17 @@ namespace BeatSaberMarkupLanguage
             using RegistryKey syslinkKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\FontLink\SystemLink");
             if (syslinkKey == null)
             {
-                return Enumerable.Empty<string>();
+                return [];
             }
 
             object keyVal = syslinkKey.GetValue(fullname);
             if (keyVal is string[] names)
             {
                 // the format in this is '<filename>,<font full name>[,<some other stuff>]'
-                return names.Select(s => s.Split(','))
-                            .Select(a => a.Length > 1 ? a[1] : null)
-                            .Where(s => s != null);
+                return names.Select(s => s.Split(',').ElementAtOrDefault(1)?.Trim()).Where(s => !string.IsNullOrEmpty(s));
             }
 
-            return Enumerable.Empty<string>();
+            return [];
         }
 
         /// <summary>
@@ -206,6 +204,26 @@ namespace BeatSaberMarkupLanguage
 
             font = GetOrSetupTMPFontFor(info, setupOsFallbacks);
             return true;
+        }
+
+        /// <summary>
+        /// Create <see cref="TMP_FontAsset"/>s for each font passed in <paramref name="fontNames"/> and their system fallbacks.
+        /// </summary>
+        /// <param name="fontNames">The font names.</param>
+        /// <returns>A list of <see cref="TMP_FontAsset"/>s containing all the fonts specified by <paramref name="fontNames"/> and their system fallbacks.</returns>
+        internal static TMP_FontAsset[] CreateFallbackFonts(string[] fontNames)
+        {
+            IReadOnlyList<FontInfo> fontInfos = CollectFontInfos(fontNames);
+
+            TMP_FontAsset[] fontAssets = new TMP_FontAsset[fontInfos.Count];
+
+            for (int i = 0; i < fontInfos.Count; i++)
+            {
+                FontInfo fontInfo = fontInfos[i];
+                fontAssets[i] = BeatSaberUI.CreateTMPFont(GetFontFromCacheOrLoad(fontInfo), fontInfo.Info.FullName);
+            }
+
+            return fontAssets;
         }
 
         internal static Task Destroy()
@@ -408,17 +426,36 @@ namespace BeatSaberMarkupLanguage
             return tmpFont;
         }
 
-        private class FontInfo
+        private static IReadOnlyList<FontInfo> CollectFontInfos(string[] fontNames)
         {
-            public FontInfo(string path, OpenTypeFont info)
+            Queue<string> fontsToSearch = new(fontNames);
+            Dictionary<string, FontInfo> fontInfos = new(StringComparer.InvariantCultureIgnoreCase);
+
+            while (fontsToSearch.Count > 0)
             {
-                Path = path;
-                Info = info;
+                string fontName = fontsToSearch.Dequeue();
+
+                if (fontInfos.ContainsKey(fontName))
+                {
+                    continue;
+                }
+
+                if (!TryGetFontInfoByFullName(fontName, out FontInfo fontInfo))
+                {
+                    continue;
+                }
+
+                fontInfos.Add(fontName, fontInfo);
+
+                foreach (string fallbackName in GetOSFontFallbackList(fontName))
+                {
+                    fontsToSearch.Enqueue(fallbackName);
+                }
             }
 
-            public string Path { get; }
-
-            public OpenTypeFont Info { get; }
+            return [.. fontInfos.Values];
         }
+
+        private record FontInfo(string Path, OpenTypeFont Info);
     }
 }
