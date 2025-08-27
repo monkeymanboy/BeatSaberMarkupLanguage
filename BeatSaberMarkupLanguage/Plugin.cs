@@ -19,7 +19,9 @@ namespace BeatSaberMarkupLanguage
     [Plugin(RuntimeOptions.SingleStartInit)]
     public class Plugin
     {
-        private static readonly string[] FontNamesToLoad = ["Segoe UI", "Segoe UI Emoji", "Segoe UI Historic", "Gadugi", "Nirmala UI", "Arial"];
+        // All of these fonts are included by default with Windows 10+ https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list
+        // Older versions of Windows only include a subset of these fonts, so some Unicode characters may not show up properly in-game.
+        private static readonly string[] FontNamesToLoad = ["Segoe UI", "Segoe UI Emoji", "Segoe UI Symbol", "Segoe UI Historic", "Microsoft Sans Serif", "Microsoft Himalaya", "Microsoft JhengHei UI", "Microsoft New Tai Lue", "Microsoft PhagsPa", "Microsoft Tai Le", "Microsoft Uighur", "Microsoft YaHei UI", "Microsoft Yi Baiti", "Gadugi", "Nirmala UI"];
         private static readonly string[] FontNamesToRemove = ["NotoSansJP-Medium SDF", "NotoSansKR-Medium SDF", "SourceHanSansCN-Bold-SDF-Common-1(2k)", "SourceHanSansCN-Bold-SDF-Common-2(2k)", "SourceHanSansCN-Bold-SDF-Uncommon(2k)"];
 
         internal static Config Config { get; private set; }
