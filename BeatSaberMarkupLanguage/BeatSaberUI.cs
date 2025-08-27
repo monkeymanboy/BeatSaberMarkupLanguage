@@ -162,6 +162,7 @@ namespace BeatSaberMarkupLanguage
         /// </summary>
         /// <param name="font">The font to clone and fix.</param>
         /// <returns>The fixed clone.</returns>
+        [Obsolete("This method is dangerous as it can cause separate TMP_FontAssets to overwrite each others' textures. Consider using CreateTMPFont and adding the font as a fallback to an existing TMP_FontAsset.")]
         public static TMP_FontAsset CreateFixedUIFontClone(TMP_FontAsset font)
         {
             Shader noglowShader = MainTextFont.material.shader;
@@ -188,10 +189,6 @@ namespace BeatSaberMarkupLanguage
         /// <summary>
         /// Creates a <see cref="TMP_FontAsset"/> from a Unity <see cref="Font"/>.
         /// </summary>
-        /// <remarks>
-        /// The <see cref="TMP_FontAsset"/> returned is not usable for UI text. Use <see cref="CreateFixedUIFontClone(TMP_FontAsset)"/>
-        /// to get a usable font.
-        /// </remarks>
         /// <param name="font">The Unity font to use.</param>
         /// <param name="nameOverride">The name to use for the <see cref="TMP_FontAsset"/>. Defaults to the name of <paramref name="font"/>.</param>
         /// <returns>The new <see cref="TMP_FontAsset"/>.</returns>
