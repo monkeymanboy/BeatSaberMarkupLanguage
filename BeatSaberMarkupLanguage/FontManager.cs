@@ -10,6 +10,7 @@ using Microsoft.Win32;
 using TMPro;
 using UnityEngine;
 using UnityEngine.TextCore;
+using UnityEngine.TextCore.LowLevel;
 
 namespace BeatSaberMarkupLanguage
 {
@@ -206,31 +207,28 @@ namespace BeatSaberMarkupLanguage
         /// </summary>
         /// <param name="fontNames">The font names.</param>
         /// <returns>A list of <see cref="TMP_FontAsset"/>s containing all the fonts specified by <paramref name="fontNames"/> and their system fallbacks.</returns>
-        internal static TMP_FontAsset[] CreateFallbackFonts(string[] fontNames)
+        internal static List<TMP_FontAsset> CreateFallbackFonts(TMPFontCreationArgs[] fontNames)
         {
-            IReadOnlyList<FontInfo> fontInfos = CollectFontInfos(fontNames);
+            List<TMP_FontAsset> fontAssets = new(fontNames.Length);
 
-            TMP_FontAsset[] fontAssets = new TMP_FontAsset[fontInfos.Count];
-
-            for (int i = 0; i < fontInfos.Count; i++)
+            foreach (TMPFontCreationArgs config in fontNames)
             {
-                FontInfo fontInfo = fontInfos[i];
-                TMP_FontAsset fontAsset = BeatSaberUI.CreateTMPFont(GetFontFromCacheOrLoad(fontInfo), fontInfo.FullName);
+                if (!TryGetFontInfoByFullName(config.FullName, out FontInfo fontInfo))
+                {
+                    Logger.Log.Warn($"Could not find font '{config.FullName}'; some Unicode characters may not display properly");
+                    continue;
+                }
+
+                TMP_FontAsset fontAsset = TMP_FontAsset.CreateFontAsset(GetFontFromCacheOrLoad(fontInfo), config.SamplingPointSize, config.AtlasPadding, config.RenderMode, config.AtlasWidth, config.AtlasHeight);
+                fontAsset.name = fontInfo.FullName;
                 FaceInfo faceInfo = fontAsset.faceInfo;
-                faceInfo.scale = 0.85f;
+                faceInfo.scale = config.Scale;
                 fontAsset.faceInfo = faceInfo;
-                fontAssets[i] = fontAsset;
+
+                fontAssets.Add(fontAsset);
             }
 
             return fontAssets;
-        }
-
-        internal static Task Destroy()
-        {
-            fontInfoLookup = null;
-            fontInfoLookupFullName = null;
-            return UnityMainThreadTaskScheduler.Factory.StartNew(() => DestroyObjects(LoadedFontsCache.Select(p => p.Value))).Unwrap()
-                .ContinueWith(_ => LoadedFontsCache.Clear());
         }
 
         private static void ThrowIfNotInitialized()
@@ -238,15 +236,6 @@ namespace BeatSaberMarkupLanguage
             if (!IsInitialized)
             {
                 throw new InvalidOperationException("FontManager not initialized");
-            }
-        }
-
-        private static async Task DestroyObjects(IEnumerable<UnityEngine.Object> objects)
-        {
-            foreach (UnityEngine.Object obj in objects)
-            {
-                UnityEngine.Object.Destroy(obj);
-                await Task.Yield(); // yield back to the scheduler to allow more things to happen
             }
         }
 
@@ -430,35 +419,7 @@ namespace BeatSaberMarkupLanguage
             return tmpFont;
         }
 
-        private static IReadOnlyList<FontInfo> CollectFontInfos(string[] fontNames)
-        {
-            Queue<string> fontsToSearch = new(fontNames);
-            Dictionary<string, FontInfo> fontInfos = new(StringComparer.OrdinalIgnoreCase);
-
-            while (fontsToSearch.Count > 0)
-            {
-                string fontName = fontsToSearch.Dequeue();
-
-                if (fontInfos.ContainsKey(fontName))
-                {
-                    continue;
-                }
-
-                if (!TryGetFontInfoByFullName(fontName, out FontInfo fontInfo))
-                {
-                    continue;
-                }
-
-                fontInfos.Add(fontName, fontInfo);
-
-                foreach (string fallbackName in GetOSFontFallbackList(fontName))
-                {
-                    fontsToSearch.Enqueue(fallbackName);
-                }
-            }
-
-            return [.. fontInfos.Values];
-        }
+        internal record TMPFontCreationArgs(string FullName, int SamplingPointSize = 90, int AtlasPadding = 9, GlyphRenderMode RenderMode = GlyphRenderMode.SDFAA, int AtlasWidth = 1024, int AtlasHeight = 1024, float Scale = 0.85f);
 
         private record FontInfo(string Path, string FullName, string Subfamily);
     }

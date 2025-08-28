@@ -9,7 +9,6 @@ using IPA;
 using IPA.Config.Stores;
 using TMPro;
 using UnityEngine;
-using UnityEngine.TextCore;
 using UnityEngine.TextCore.LowLevel;
 using Conf = IPA.Config.Config;
 using IPALogger = IPA.Logging.Logger;
@@ -23,7 +22,25 @@ namespace BeatSaberMarkupLanguage
     {
         // All of these fonts are included by default with Windows 10+ https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list
         // Older versions of Windows only include a subset of these fonts, so some Unicode characters may not show up properly in-game.
-        private static readonly string[] FontNamesToLoad = ["Segoe UI", "Segoe UI Emoji", "Segoe UI Symbol", "Segoe UI Historic", "Microsoft Sans Serif", "Microsoft Himalaya", "Microsoft JhengHei UI", "Microsoft New Tai Lue", "Microsoft PhagsPa", "Microsoft Tai Le", "Microsoft Uighur", "Microsoft YaHei UI", "Microsoft Yi Baiti", "Gadugi", "Nirmala UI"];
+        private static readonly FontManager.TMPFontCreationArgs[] FontNamesToLoad =
+        [
+            new("Segoe UI"),
+            new("Segoe UI Emoji", RenderMode: GlyphRenderMode.COLOR),
+            new("Segoe UI Symbol"),
+            new("Segoe UI Historic"),
+            new("Microsoft Sans Serif"),
+            new("Microsoft Himalaya"),
+            new("Microsoft JhengHei UI"),
+            new("Microsoft New Tai Lue"),
+            new("Microsoft PhagsPa"),
+            new("Microsoft Tai Le"),
+            new("Microsoft Uighur"),
+            new("Microsoft YaHei UI"),
+            new("Microsoft Yi Baiti"),
+            new("Gadugi"),
+            new("Nirmala UI"),
+        ];
+
         private static readonly string[] FontNamesToRemove = ["NotoSansJP-Medium SDF", "NotoSansKR-Medium SDF", "SourceHanSansCN-Bold-SDF-Common-1(2k)", "SourceHanSansCN-Bold-SDF-Common-2(2k)", "SourceHanSansCN-Bold-SDF-Uncommon(2k)"];
 
         internal static Config Config { get; private set; }
@@ -68,20 +85,8 @@ namespace BeatSaberMarkupLanguage
             TMP_FontAsset mainTextFont = BeatSaberUI.MainTextFont;
             mainTextFont.fallbackFontAssets.RemoveAll((asset) => FontNamesToRemove.Contains(asset.name));
             mainTextFont.fallbackFontAssetTable.RemoveAll((asset) => FontNamesToRemove.Contains(asset.name));
-            mainTextFont.boldSpacing = 2.2f; // default bold spacing is rather  w i d e
-
-            if (Config.UseColoredEmoji && FontManager.TryGetFontByFullName("Segoe UI Emoji", out Font font))
-            {
-                TMP_FontAsset emoji = TMP_FontAsset.CreateFontAsset(font, 90, 9, GlyphRenderMode.COLOR, 4096, 4096);
-                emoji.name = "Segoe UI Emoji (Color)";
-                FaceInfo faceInfo = emoji.faceInfo;
-                faceInfo.scale = 0.85f;
-                emoji.faceInfo = faceInfo;
-
-                mainTextFont.fallbackFontAssetTable.Add(emoji);
-            }
-
             mainTextFont.fallbackFontAssetTable.AddRange(FontManager.CreateFallbackFonts(FontNamesToLoad));
+            mainTextFont.boldSpacing = 2.2f; // default bold spacing is rather  w i d e
         }
     }
 }
