@@ -34,11 +34,12 @@ namespace BeatSaberMarkupLanguage
             new("Microsoft New Tai Lue"),
             new("Microsoft PhagsPa"),
             new("Microsoft Tai Le"),
-            new("Microsoft Uighur"),
             new("Microsoft YaHei UI"),
             new("Microsoft Yi Baiti"),
             new("Gadugi"),
             new("Nirmala UI"),
+            new("Malgun Gothic"),
+            new("SimSun"),
         ];
 
         private static readonly string[] FontNamesToRemove = ["NotoSansJP-Medium SDF", "NotoSansKR-Medium SDF", "SourceHanSansCN-Bold-SDF-Common-1(2k)", "SourceHanSansCN-Bold-SDF-Common-2(2k)", "SourceHanSansCN-Bold-SDF-Uncommon(2k)"];
