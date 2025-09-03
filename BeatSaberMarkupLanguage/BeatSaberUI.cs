@@ -24,6 +24,7 @@ namespace BeatSaberMarkupLanguage
         private static BasicUIAudioManager basicUIAudioManager;
         private static TMP_FontAsset mainTextFont;
         private static Material mainUIFontMaterial;
+        private static Material mainFlatUIFontMaterial;
 
         public static DiContainer DiContainer
         {
@@ -92,6 +93,26 @@ namespace BeatSaberMarkupLanguage
                 }
 
                 return mainUIFontMaterial;
+            }
+        }
+
+        /// <summary>
+        /// Gets a material derived from the main font material used by the game for UI text that can be used on regular (non curved) <see cref="TextMeshProUGUI"/> and <see cref="TextMeshPro"/>.
+        /// </summary>
+        /// <remarks>
+        /// Usage on curved canvases may result in unexpected behavior.
+        /// </remarks>
+        internal static Material MainFlatUIFontMaterial
+        {
+            get
+            {
+                if (mainFlatUIFontMaterial == null && TryGetUITextTemplate(out TextMeshProUGUI textMesh))
+                {
+                    mainFlatUIFontMaterial = new Material(textMesh.fontSharedMaterial);
+                    mainFlatUIFontMaterial.DisableKeyword("CURVED");
+                }
+
+                return mainFlatUIFontMaterial;
             }
         }
 
