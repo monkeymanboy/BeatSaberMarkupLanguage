@@ -692,7 +692,7 @@ namespace BeatSaberMarkupLanguage
 
             // 1 × 1 texture causes TMP to reinitialize the texture
             Texture2D newTexture = new(shouldCopy ? texture.width : 1, shouldCopy ? texture.height : 1, texture.graphicsFormat, texture.mipmapCount, TextureCreationFlags.DontInitializePixels | TextureCreationFlags.DontUploadUponCreate)
-        {
+            {
                 name = newName,
             };
 

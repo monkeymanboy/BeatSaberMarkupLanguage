@@ -30,6 +30,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "lineSpacing", new[] { "line-spacing" } },
             { "lineSpacingAdjustment", new[] { "line-spacing-adjustment" } },
             { "paragraphSpacing", new[] { "paragraph-spacing" } },
+            { "monochrome", new[] { "monochrome" } },
         };
 
         public override Dictionary<string, Action<TextMeshProUGUI, string>> Setters => new()
@@ -55,6 +56,7 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             { "lineSpacing", new Action<TextMeshProUGUI, string>((textMesh, value) => textMesh.lineSpacing = Parse.Float(value)) },
             { "lineSpacingAdjustment", new Action<TextMeshProUGUI, string>((textMesh, value) => textMesh.lineSpacingAdjustment = Parse.Float(value)) },
             { "paragraphSpacing", new Action<TextMeshProUGUI, string>((textMesh, value) => textMesh.paragraphSpacing = Parse.Float(value)) },
+            { "monochrome", new Action<TextMeshProUGUI, string>((textMesh, value) => textMesh.font = Parse.Bool(value) ? BeatSaberUI.MonochromeTextFont : BeatSaberUI.MainTextFont) },
         };
 
         private static FontStyles SetStyle(FontStyles existing, FontStyles modifyStyle, string flag)

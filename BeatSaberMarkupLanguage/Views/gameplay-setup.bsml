@@ -12,7 +12,7 @@
       <page-button direction='Left' pref-width='4' pref-height='4' tags='left-button'/>
       <tab-selector tab-tag='mod-tab' child-expand-width='true' child-control-width='true' page-count='3' left-button-tag='left-button' right-button-tag='right-button' />
       <page-button direction='Right' pref-width='4' pref-height='4' tags='right-button'/>
-      <clickable-text text='👁' align='Midline' hover-hint-key='BSML_GAMEPLAY_SETUP_EDIT_VISIBLE_TABS_HINT' on-click='show-modal' />
+      <clickable-text text='👁' align='Midline' hover-hint-key='BSML_GAMEPLAY_SETUP_EDIT_VISIBLE_TABS_HINT' on-click='show-modal' monochrome='true' />
     </horizontal>
     <macro.for-each items='mod-menus' pass-back-tags='true'>
       <tab tags='mod-tab' tab-name='~tab-name' id='root-tab' />
