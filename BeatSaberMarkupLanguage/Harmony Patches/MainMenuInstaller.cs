@@ -28,7 +28,7 @@ namespace BeatSaberMarkupLanguage.Harmony_Patches
         {
             DiContainer container = __instance.Container;
 
-            BeatSaberUI.DiContainer = container;
+            BeatSaberUI.Init(container);
 
             container.Bind(typeof(AnimationController), typeof(IInitializable), typeof(ITickable)).To<AnimationController>().AsSingle().NonLazy();
             container.Bind(typeof(BSMLSettings), typeof(IInitializable)).To<BSMLSettings>().AsSingle().NonLazy();

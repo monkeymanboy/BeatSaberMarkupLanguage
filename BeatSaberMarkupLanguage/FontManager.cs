@@ -17,7 +17,9 @@ namespace BeatSaberMarkupLanguage
     public static class FontManager
     {
         // path → loaded font object
-        private static readonly Dictionary<string, Font> LoadedFontsCache = new();
+        private static readonly Dictionary<string, Font> LoadedFontsCache = [];
+
+        private static readonly Dictionary<(FontInfo, GlyphRenderMode), TMP_FontAsset> CachedFontAssets = [];
 
         // family → list of fonts in family
         private static Dictionary<string, List<FontInfo>> fontInfoLookup;
@@ -212,8 +214,9 @@ namespace BeatSaberMarkupLanguage
         /// Create <see cref="TMP_FontAsset"/>s for each font passed in <paramref name="fontNames"/> and their system fallbacks.
         /// </summary>
         /// <param name="fontNames">The font names.</param>
+        /// <param name="monochrome">Use the <see cref="TMPFontCreationArgs.MonochromeRenderMode"/> rather than the <see cref="TMPFontCreationArgs.RenderMode"/>.</param>
         /// <returns>A list of <see cref="TMP_FontAsset"/>s containing all the fonts specified by <paramref name="fontNames"/> and their system fallbacks.</returns>
-        internal static List<TMP_FontAsset> CreateFallbackFonts(TMPFontCreationArgs[] fontNames)
+        internal static List<TMP_FontAsset> CreateFallbackFonts(TMPFontCreationArgs[] fontNames, bool monochrome)
         {
             List<TMP_FontAsset> fontAssets = new(fontNames.Length);
 
@@ -225,11 +228,17 @@ namespace BeatSaberMarkupLanguage
                     continue;
                 }
 
-                TMP_FontAsset fontAsset = TMP_FontAsset.CreateFontAsset(GetFontFromCacheOrLoad(fontInfo), config.SamplingPointSize, config.AtlasPadding, config.RenderMode, config.AtlasWidth, config.AtlasHeight);
-                fontAsset.name = fontInfo.FullName;
-                FaceInfo faceInfo = fontAsset.faceInfo;
-                faceInfo.scale = config.Scale;
-                fontAsset.faceInfo = faceInfo;
+                GlyphRenderMode renderMode = monochrome ? config.MonochromeRenderMode : config.RenderMode;
+
+                if (!CachedFontAssets.TryGetValue((fontInfo, renderMode), out TMP_FontAsset fontAsset))
+                {
+                    fontAsset = TMP_FontAsset.CreateFontAsset(GetFontFromCacheOrLoad(fontInfo), config.SamplingPointSize, config.AtlasPadding, renderMode, config.AtlasWidth, config.AtlasHeight);
+                    fontAsset.name = $"{fontInfo.FullName} {renderMode}";
+                    FaceInfo faceInfo = fontAsset.faceInfo;
+                    faceInfo.scale = config.Scale;
+                    fontAsset.faceInfo = faceInfo;
+                    CachedFontAssets[(fontInfo, renderMode)] = fontAsset;
+                }
 
                 fontAssets.Add(fontAsset);
             }
@@ -426,7 +435,7 @@ namespace BeatSaberMarkupLanguage
             return tmpFont;
         }
 
-        internal record TMPFontCreationArgs(string FullName, int SamplingPointSize = 90, int AtlasPadding = 9, GlyphRenderMode RenderMode = GlyphRenderMode.SDFAA, int AtlasWidth = 1024, int AtlasHeight = 1024, float Scale = 0.85f);
+        internal record TMPFontCreationArgs(string FullName, int SamplingPointSize = 90, int AtlasPadding = 9, GlyphRenderMode RenderMode = GlyphRenderMode.SDFAA, GlyphRenderMode MonochromeRenderMode = GlyphRenderMode.SDFAA, int AtlasWidth = 1024, int AtlasHeight = 1024, float Scale = 0.85f);
 
         private record FontInfo(string Path, string FullName, string Subfamily);
     }

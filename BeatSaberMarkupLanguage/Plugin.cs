@@ -8,7 +8,6 @@ using HarmonyLib;
 using IPA;
 using IPA.Config.Stores;
 using TMPro;
-using UnityEngine;
 using UnityEngine.TextCore.LowLevel;
 using Conf = IPA.Config.Config;
 using IPALogger = IPA.Logging.Logger;
@@ -82,12 +81,19 @@ namespace BeatSaberMarkupLanguage
 
             Logger.Log.Debug("Setting up default font fallbacks");
 
+            ProcessFont(BeatSaberUI.MainTextFont, false);
+            ProcessFont(BeatSaberUI.MonochromeTextFont, true);
+        }
+
+        private void ProcessFont(TMP_FontAsset fontAsset, bool monochrome)
+        {
             // remove built-in fallback fonts to avoid inconsistencies between CJK characters
-            TMP_FontAsset mainTextFont = BeatSaberUI.MainTextFont;
-            mainTextFont.fallbackFontAssets.RemoveAll((asset) => FontNamesToRemove.Contains(asset.name));
-            mainTextFont.fallbackFontAssetTable.RemoveAll((asset) => FontNamesToRemove.Contains(asset.name));
-            mainTextFont.fallbackFontAssetTable.AddRange(FontManager.CreateFallbackFonts(FontNamesToLoad));
-            mainTextFont.boldSpacing = 2.2f; // default bold spacing is rather  w i d e
+            fontAsset.fallbackFontAssets.RemoveAll((asset) => FontNamesToRemove.Contains(asset.name));
+            fontAsset.fallbackFontAssetTable.RemoveAll((asset) => FontNamesToRemove.Contains(asset.name));
+            fontAsset.fallbackFontAssetTable.AddRange(FontManager.CreateFallbackFonts(FontNamesToLoad, monochrome));
+
+            // default bold spacing is rather  w i d e
+            fontAsset.boldSpacing = 2.2f;
         }
     }
 }

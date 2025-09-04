@@ -7,6 +7,7 @@ using BGLib.Polyglot;
 using HMUI;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Experimental.Rendering;
 using UnityEngine.UI;
 using VRUIControls;
 using Zenject;
@@ -22,9 +23,6 @@ namespace BeatSaberMarkupLanguage
     {
         private static DiContainer diContainer;
         private static BasicUIAudioManager basicUIAudioManager;
-        private static TMP_FontAsset mainTextFont;
-        private static Material mainUIFontMaterial;
-        private static Material mainFlatUIFontMaterial;
 
         public static DiContainer DiContainer
         {
@@ -37,7 +35,6 @@ namespace BeatSaberMarkupLanguage
 
                 return diContainer;
             }
-            internal set => diContainer = value;
         }
 
         public static MainFlowCoordinator MainFlowCoordinator => DiContainer.Resolve<MainFlowCoordinator>();
@@ -64,18 +61,12 @@ namespace BeatSaberMarkupLanguage
         /// <summary>
         /// Gets the main font used by the game for UI text.
         /// </summary>
-        public static TMP_FontAsset MainTextFont
-        {
-            get
-            {
-                if (mainTextFont == null && TryGetUITextTemplate(out TextMeshProUGUI textMesh))
-                {
-                    mainTextFont = textMesh.font;
-                }
+        public static TMP_FontAsset MainTextFont { get; private set; }
 
-                return mainTextFont;
-            }
-        }
+        /// <summary>
+        /// Gets the main font used by the game for UI text.
+        /// </summary>
+        public static TMP_FontAsset MonochromeTextFont { get; private set; }
 
         /// <summary>
         /// Gets the main font material used by the game for UI text.
@@ -83,18 +74,7 @@ namespace BeatSaberMarkupLanguage
         /// <remarks>
         /// This material is meant to be used on curved canvases. Usage on non-curved canvases may result in unexpected behavior.
         /// </remarks>
-        internal static Material MainUIFontMaterial
-        {
-            get
-            {
-                if (mainUIFontMaterial == null && TryGetUITextTemplate(out TextMeshProUGUI textMesh))
-                {
-                    mainUIFontMaterial = textMesh.fontSharedMaterial;
-                }
-
-                return mainUIFontMaterial;
-            }
-        }
+        internal static Material MainUIFontMaterial { get; private set; }
 
         /// <summary>
         /// Gets a material derived from the main font material used by the game for UI text that can be used on regular (non curved) <see cref="TextMeshProUGUI"/> and <see cref="TextMeshPro"/>.
@@ -102,19 +82,7 @@ namespace BeatSaberMarkupLanguage
         /// <remarks>
         /// Usage on curved canvases may result in unexpected behavior.
         /// </remarks>
-        internal static Material MainFlatUIFontMaterial
-        {
-            get
-            {
-                if (mainFlatUIFontMaterial == null && TryGetUITextTemplate(out TextMeshProUGUI textMesh))
-                {
-                    mainFlatUIFontMaterial = new Material(textMesh.fontSharedMaterial);
-                    mainFlatUIFontMaterial.DisableKeyword("CURVED");
-                }
-
-                return mainFlatUIFontMaterial;
-            }
-        }
+        internal static Material MainFlatUIFontMaterial { get; private set; }
 
         /// <summary>
         /// Creates a ViewController of type T, and marks it to not be destroyed.
@@ -638,6 +606,27 @@ namespace BeatSaberMarkupLanguage
         public static void DismissFlowCoordinator(this FlowCoordinator current, FlowCoordinator flowCoordinator, Action finishedCallback = null, ViewController.AnimationDirection animationDirection = ViewController.AnimationDirection.Horizontal, bool immediately = false)
             => current.DismissFlowCoordinator(flowCoordinator, animationDirection, finishedCallback, immediately);
 
+        internal static void Init(DiContainer container)
+        {
+            diContainer = container;
+
+            if (!TryGetSoloButton(out Button soloButton))
+            {
+                Logger.Log.Error("Failed to get Solo button. Fonts will not be set up.");
+                return;
+            }
+
+            TextMeshProUGUI textMesh = soloButton.transform.Find("Text").GetComponent<TextMeshProUGUI>();
+
+            MainTextFont = textMesh.font;
+            MainUIFontMaterial = textMesh.fontSharedMaterial;
+
+            MonochromeTextFont = CopyFontAsset(MainTextFont, MainUIFontMaterial, $"{MainTextFont.name} Monochrome");
+
+            MainFlatUIFontMaterial = new Material(MainUIFontMaterial);
+            MainFlatUIFontMaterial.DisableKeyword("CURVED");
+        }
+
         internal static bool TryGetSoloButton(out Button soloButton)
         {
             if (DiContainer == null)
@@ -650,16 +639,69 @@ namespace BeatSaberMarkupLanguage
             return soloButton != null;
         }
 
-        internal static bool TryGetUITextTemplate(out TextMeshProUGUI textMesh)
+        private static TMP_FontAsset CopyFontAsset(TMP_FontAsset original, Material referenceMaterial, string newName)
         {
-            if (!TryGetSoloButton(out Button soloButton))
+            TMP_FontAsset copy = Object.Instantiate(original);
+
+            // Unity doesn't copy textures when using Object.Instantiate so we have to do it manually
+            Texture2D[] newTextures = CopyTextures(original.atlasTextures);
+
+            Texture2D texture = original.m_AtlasTexture;
+            Texture2D newTexture;
+            int index = Array.IndexOf(original.atlasTextures, texture);
+
+            if (index >= 0)
             {
-                textMesh = null;
-                return false;
+                newTexture = newTextures[index];
+            }
+            else
+            {
+                newTexture = CopyTexture(texture, $"{texture.name} Atlas");
             }
 
-            textMesh = soloButton.transform.Find("Text").GetComponent<TextMeshProUGUI>();
-            return textMesh != null;
+            Material material = new(referenceMaterial)
+            {
+                name = $"{newName} Atlas Material",
+            };
+
+            material.SetTexture("_MainTex", newTexture);
+
+            copy.m_AtlasTexture = newTexture;
+            copy.name = newName;
+            copy.atlasTextures = newTextures;
+            copy.material = material;
+
+            return copy;
+        }
+
+        private static Texture2D[] CopyTextures(Texture2D[] textures)
+        {
+            Texture2D[] newTextures = new Texture2D[textures.Length];
+
+            for (int i = 0; i < textures.Length; i++)
+            {
+                newTextures[i] = CopyTexture(textures[i], $"{textures[i].name} Atlas {i}");
+            }
+
+            return newTextures;
+        }
+
+        private static Texture2D CopyTexture(Texture2D texture, string newName)
+        {
+            bool shouldCopy = texture != null && texture.width > 0 && texture.height > 0;
+
+            // 1 × 1 texture causes TMP to reinitialize the texture
+            Texture2D newTexture = new(shouldCopy ? texture.width : 1, shouldCopy ? texture.height : 1, texture.graphicsFormat, texture.mipmapCount, TextureCreationFlags.DontInitializePixels | TextureCreationFlags.DontUploadUponCreate)
+        {
+                name = newName,
+            };
+
+            if (shouldCopy)
+            {
+                Graphics.CopyTexture(texture, newTexture);
+            }
+
+            return newTexture;
         }
 
         private static bool IsAnimated(string str)
