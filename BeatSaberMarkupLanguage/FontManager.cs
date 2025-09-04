@@ -88,6 +88,12 @@ namespace BeatSaberMarkupLanguage
             lock (fontInfoLookup)
             {
                 FontInfo[] fontInfos = AddFontFileToCache(fontInfoLookup, fontInfoLookupFullName, path);
+
+                if (fontInfos.Length == 0)
+                {
+                    throw new ArgumentException("File is not an OpenType font or collection", nameof(path));
+                }
+
                 return GetFontFromCacheOrLoad(fontInfos[0]);
             }
         }
@@ -306,7 +312,8 @@ namespace BeatSaberMarkupLanguage
                     }
 
                 default:
-                    throw new ArgumentException("File is not a supported OpenType font or collection", nameof(path));
+                    Logger.Log.Debug($"Font file '{path}' is not an OpenType file");
+                    return [];
             }
         }
 
