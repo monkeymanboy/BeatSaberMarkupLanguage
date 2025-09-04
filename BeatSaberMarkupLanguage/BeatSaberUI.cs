@@ -74,7 +74,7 @@ namespace BeatSaberMarkupLanguage
         /// <remarks>
         /// This material is meant to be used on curved canvases. Usage on non-curved canvases may result in unexpected behavior.
         /// </remarks>
-        internal static Material MainUIFontMaterial { get; private set; }
+        public static Material MainUIFontMaterial { get; private set; }
 
         /// <summary>
         /// Gets a material derived from the main font material used by the game for UI text that can be used on regular (non curved) <see cref="TextMeshProUGUI"/> and <see cref="TextMeshPro"/>.
@@ -82,7 +82,7 @@ namespace BeatSaberMarkupLanguage
         /// <remarks>
         /// Usage on curved canvases may result in unexpected behavior.
         /// </remarks>
-        internal static Material MainFlatUIFontMaterial { get; private set; }
+        public static Material MainFlatUIFontMaterial { get; private set; }
 
         /// <summary>
         /// Creates a ViewController of type T, and marks it to not be destroyed.
