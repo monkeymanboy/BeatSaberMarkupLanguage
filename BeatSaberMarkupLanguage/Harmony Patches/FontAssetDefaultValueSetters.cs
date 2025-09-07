@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using HarmonyLib;
 using TMPro;
 using UnityEngine;
@@ -21,14 +23,20 @@ namespace BeatSaberMarkupLanguage.Harmony_Patches
         }
     }
 
-    [HarmonyPatch(typeof(TMP_Settings), nameof(TMP_Settings.instance), MethodType.Getter)]
-    internal static class TMP_Settings_GetFontAsset
+    [HarmonyPatch]
+    internal static class TextMeshPro_LoadFontAsset
     {
-        public static void Postfix()
+        public static IEnumerable<MethodBase> TargetMethods()
         {
-            if (TMP_Settings.s_Instance.m_defaultFontAsset == null)
+            yield return AccessTools.DeclaredMethod(typeof(TextMeshPro), "LoadFontAsset");
+            yield return AccessTools.DeclaredMethod(typeof(TextMeshProUGUI), "LoadFontAsset");
+        }
+
+        public static void Prefix(TMP_Text __instance)
+        {
+            if (__instance.font == null)
             {
-                TMP_Settings.s_Instance.m_defaultFontAsset = Resources.FindObjectsOfTypeAll<TMP_FontAsset>().FirstOrDefault(f => f.name == "Teko-Medium SDF");
+                __instance.font = BeatSaberUI.MainTextFont;
             }
         }
     }
