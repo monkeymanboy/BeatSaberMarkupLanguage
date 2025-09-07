@@ -18,6 +18,15 @@
         "SteamAppId": "620980"
       }
     },
+    "Beat Saber (No VR)": {
+      "commandName": "Executable",
+      "executablePath": "$(BeatSaberDir)Beat Saber.exe",
+      "commandLineArgs": "fpfc --verbose --debug -vrmode none",
+      "workingDirectory": "$(BeatSaberDir)",
+      "environmentVariables": {
+        "SteamAppId": "620980"
+      }
+    },
     "Beat Saber (generate docs data)": {
       "commandName": "Executable",
       "executablePath": "$(BeatSaberDir)\\Beat Saber.exe",
