@@ -57,6 +57,10 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             {
                 Value = AssociatedValue.GetValue();
             }
+            else
+            {
+                UpdateState();
+            }
         }
 
         private void EitherPressed()

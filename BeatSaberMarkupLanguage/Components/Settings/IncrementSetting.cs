@@ -111,6 +111,10 @@ namespace BeatSaberMarkupLanguage.Components.Settings
             {
                 Value = isInt ? Convert.ToInt32(AssociatedValue.GetValue()) : Convert.ToSingle(AssociatedValue.GetValue());
             }
+            else
+            {
+                UpdateState();
+            }
         }
 
         protected string TextForValue(float value)
