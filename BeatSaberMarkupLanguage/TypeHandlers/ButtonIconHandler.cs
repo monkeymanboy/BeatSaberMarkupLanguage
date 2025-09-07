@@ -35,6 +35,8 @@ namespace BeatSaberMarkupLanguage.TypeHandlers
             {
                 buttonIconImage.SetIcon(str);
             }
+
+            base.HandleType(componentType, parserParams);
         }
 
         private static void SetIcon(ButtonIconImage buttonIconImage, object value)
