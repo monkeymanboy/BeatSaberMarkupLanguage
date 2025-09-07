@@ -93,7 +93,8 @@ namespace BeatSaberMarkupLanguage
             fontAsset.fallbackFontAssetTable.AddRange(FontManager.CreateFallbackFonts(FontNamesToLoad, monochrome));
 
             // default bold spacing is rather  w i d e
-            fontAsset.boldSpacing = 2.2f;
+            // 2 seems to match the spacing of the MISS text in-game
+            fontAsset.boldSpacing = 2f;
         }
     }
 }
