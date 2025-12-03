@@ -15,8 +15,8 @@
     <PluginIcon>BeatSaberMarkupLanguage.Resources.icon.png</PluginIcon>
     <Copyright>Copyright © monkeymanboy 2019-2024</Copyright>
     <Description>An XML-based UI system.</Description>
-    <GameVersion>1.40.9</GameVersion>
-    <Version>1.14.0</Version>
+    <GameVersion>1.41.1</GameVersion>
+    <Version>1.14.1</Version>
     <RepositoryUrl>https://github.com/monkeymanboy/BeatSaberMarkupLanguage</RepositoryUrl>
     <PluginFeatures>
       {
