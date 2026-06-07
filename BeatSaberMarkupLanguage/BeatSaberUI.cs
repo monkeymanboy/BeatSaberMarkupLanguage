@@ -8,6 +8,7 @@ using HMUI;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering;
+using UnityEngine.TextCore.LowLevel;
 using UnityEngine.UI;
 using VRUIControls;
 using Zenject;
@@ -21,6 +22,30 @@ namespace BeatSaberMarkupLanguage
 
     public static class BeatSaberUI
     {
+        // All of these fonts are included by default with Windows 10+ https://learn.microsoft.com/en-us/typography/fonts/windows_10_font_list
+        // Older versions of Windows only include a subset of these fonts, so some Unicode characters may not show up properly in-game.
+        private static readonly FontManager.TMPFontCreationArgs[] FontNamesToLoad =
+        [
+            new("Segoe UI"),
+            new("Segoe UI Emoji", RenderMode: GlyphRenderMode.COLOR),
+            new("Segoe UI Symbol"),
+            new("Segoe UI Historic"),
+            new("Microsoft Sans Serif"),
+            new("Microsoft Himalaya"),
+            new("Microsoft JhengHei UI"),
+            new("Microsoft New Tai Lue"),
+            new("Microsoft PhagsPa"),
+            new("Microsoft Tai Le"),
+            new("Microsoft YaHei UI"),
+            new("Microsoft Yi Baiti"),
+            new("Gadugi"),
+            new("Nirmala UI"),
+            new("Malgun Gothic"),
+            new("SimSun"),
+        ];
+
+        private static readonly string[] FontNamesToRemove = ["NotoSansJP-Medium SDF", "NotoSansKR-Medium SDF", "SourceHanSansCN-Bold-SDF-Common-1(2k)", "SourceHanSansCN-Bold-SDF-Common-2(2k)", "SourceHanSansCN-Bold-SDF-Uncommon(2k)"];
+
         private static DiContainer diContainer;
         private static BasicUIAudioManager basicUIAudioManager;
 
@@ -610,21 +635,7 @@ namespace BeatSaberMarkupLanguage
         {
             diContainer = container;
 
-            if (!TryGetSoloButton(out Button soloButton))
-            {
-                Logger.Log.Error("Failed to get Solo button. Fonts will not be set up.");
-                return;
-            }
-
-            TextMeshProUGUI textMesh = soloButton.transform.Find("Text").GetComponent<TextMeshProUGUI>();
-
-            MainTextFont = textMesh.font;
-            MainUIFontMaterial = textMesh.fontSharedMaterial;
-
-            MonochromeTextFont = CopyFontAsset(MainTextFont, MainUIFontMaterial, $"{MainTextFont.name} Monochrome");
-
-            MainFlatUIFontMaterial = new Material(MainUIFontMaterial);
-            MainFlatUIFontMaterial.DisableKeyword("CURVED");
+            SetUpFontFallbacksAsync().ContinueWith((task) => Logger.Log.Error($"Failed to set up fallback fonts\n{task.Exception}"), TaskContinuationOptions.OnlyOnFaulted);
         }
 
         internal static bool TryGetSoloButton(out Button soloButton)
@@ -707,6 +718,65 @@ namespace BeatSaberMarkupLanguage
         private static bool IsAnimated(string str)
         {
             return str.EndsWith(".gif", StringComparison.OrdinalIgnoreCase) || str.EndsWith(".apng", StringComparison.OrdinalIgnoreCase);
+        }
+
+        private static async Task SetUpFontFallbacksAsync()
+        {
+            if (!TryGetSoloButton(out Button soloButton))
+            {
+                Logger.Log.Error("Failed to get Solo button. Fonts will not be set up.");
+                return;
+            }
+
+            TextMeshProUGUI textMesh = soloButton.transform.Find("Text").GetComponent<TextMeshProUGUI>();
+
+            // this should always be true after an internal restart as the font asset is persistent
+            if (MainTextFont == textMesh.font)
+            {
+                return;
+            }
+
+            if (MainTextFont != null)
+            {
+                Logger.Log.Warn("Main text font has changed; resetting derived fonts/materials");
+            }
+
+            MainTextFont = textMesh.font;
+            MainUIFontMaterial = textMesh.fontSharedMaterial;
+
+            if (MainFlatUIFontMaterial != null)
+            {
+                Object.Destroy(MainFlatUIFontMaterial);
+            }
+
+            MainFlatUIFontMaterial = new Material(MainUIFontMaterial);
+            MainFlatUIFontMaterial.DisableKeyword("CURVED");
+
+            await FontManager.AsyncLoadSystemFonts();
+
+            Logger.Log.Debug("Setting up default font fallbacks");
+
+            if (MonochromeTextFont != null)
+            {
+                Object.Destroy(MonochromeTextFont);
+            }
+
+            MonochromeTextFont = CopyFontAsset(MainTextFont, MainUIFontMaterial, $"{MainTextFont.name} Monochrome");
+
+            ProcessFont(MainTextFont, false);
+            ProcessFont(MonochromeTextFont, true);
+        }
+
+        private static void ProcessFont(TMP_FontAsset fontAsset, bool monochrome)
+        {
+            // remove built-in fallback fonts to avoid inconsistencies between CJK characters
+            fontAsset.fallbackFontAssets.RemoveAll((asset) => FontNamesToRemove.Contains(asset.name));
+            fontAsset.fallbackFontAssetTable.RemoveAll((asset) => FontNamesToRemove.Contains(asset.name));
+            fontAsset.fallbackFontAssetTable.AddRange(FontManager.CreateFallbackFonts(FontNamesToLoad, monochrome));
+
+            // default bold spacing is rather  w i d e
+            // 2 seems to match the spacing of the MISS text in-game
+            fontAsset.boldSpacing = 2f;
         }
 
         public struct ScaleOptions
