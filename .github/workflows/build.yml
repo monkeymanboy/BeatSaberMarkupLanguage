@@ -14,12 +14,11 @@ jobs:
     runs-on: windows-latest
     steps:
     - name: Check out
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
 
     - name: Set up Beat Saber
       uses: nicoco007/setup-beat-saber@v1
       with:
-        access-token: ${{ secrets.BEAT_SABER_BINDINGS_TOKEN }}
         project-path: ${{ github.workspace }}\BeatSaberMarkupLanguage\BeatSaberMarkupLanguage.csproj
 
     - name: Add NuGet source
@@ -30,7 +29,7 @@ jobs:
       run: dotnet build ${{ github.workspace }}\BeatSaberMarkupLanguage\BeatSaberMarkupLanguage.csproj -c Debug
 
     - name: Upload Debug
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: ${{ steps.build-debug.outputs.artifact-name }}
         path: ${{ steps.build-debug.outputs.artifact-path }}
@@ -40,7 +39,7 @@ jobs:
       run: dotnet build ${{ github.workspace }}\BeatSaberMarkupLanguage\BeatSaberMarkupLanguage.csproj -c Release
 
     - name: Upload Release
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: ${{ steps.build-release.outputs.artifact-name }}
         path: ${{ steps.build-release.outputs.artifact-path }}
