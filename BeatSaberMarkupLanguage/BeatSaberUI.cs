@@ -42,6 +42,9 @@ namespace BeatSaberMarkupLanguage
             new("Nirmala UI"),
             new("Malgun Gothic"),
             new("SimSun"),
+
+            // Wine/Proton ship none of the Segoe fonts above; their Arial (Liberation Sans) covers common symbols such as arrows.
+            new("Arial"),
         ];
 
         private static readonly string[] FontNamesToRemove = ["NotoSansJP-Medium SDF", "NotoSansKR-Medium SDF", "SourceHanSansCN-Bold-SDF-Common-1(2k)", "SourceHanSansCN-Bold-SDF-Common-2(2k)", "SourceHanSansCN-Bold-SDF-Uncommon(2k)"];
